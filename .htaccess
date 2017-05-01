@@ -1,0 +1,29 @@
+Options -Indexes -MultiViews
+
+RewriteEngine On
+#RewriteBase /
+
+# Page parser
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([A-Za-z0-9-_']+)\.png/?$ tools/signature/index.php?name=$1 [L]
+RewriteRule ^images/items/([0-9]+)\.gif$ tools/item.php?id=$1
+RewriteRule ^characters/([A-Za-z0-9-_+']+)$ index.php?subtopic=characters&name=$1
+RewriteRule ^guilds/([A-Za-z0-9-_+']+)$ index.php?subtopic=guilds&action=show&guild=$1
+RewriteRule ^forum/board/([0-9]+)$ index.php?subtopic=forum&action=show_board&id=$1
+RewriteRule ^account/manage$ index.php?subtopic=accountmanagement
+RewriteRule ^account/create$ index.php?subtopic=createaccount
+RewriteRule ^account/lost$ index.php?subtopic=lostaccount
+RewriteRule ^account/logout$ index.php?subtopic=accountmanagement&action=logout
+RewriteRule ^news/archive/([0-9]+)$ index.php?subtopic=news&archive=true&id=$1
+RewriteRule ^news/archive$ index.php?subtopic=news&archive=true
+RewriteRule ^highscores/([A-Za-z0-9-_]+)/([A-Za-z0-9-_]+)?$ index.php?subtopic=highscores&list=$1&vocation=$2
+RewriteRule ^highscores/([A-Za-z0-9-_']+)$ index.php?subtopic=highscores&list=$1
+RewriteRule ^admin/$ admin/index.php
+RewriteRule ^install/$ install/index.php
+
+# temp solution >.>
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([A-Za-z0-9-_]+)/?$ index.php?p=$1  [L]
+RewriteRule ^([A-Za-z0-9-_]+)/([A-Za-z0-9-_]+)?$ index.php?p=$1&action=$2  [L]

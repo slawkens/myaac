@@ -1,0 +1,136 @@
+*{
+	margin:0;
+	padding:0;
+}
+body {
+	font-family: Helvetica;
+	color: #313334;
+	background: /*#f9f9f9 #EEEEEE*/#F7F6F1;
+}
+
+img {border: none;}
+
+a:link		{color: #000; text-decoration: none;}
+a:visited	{color: #000; text-decoration: none;}
+a:focus		{color: #000; text-decoration: none;}
+a:active	{color: #000; text-decoration: underline;}
+a:hover		{color: #000; text-decoration: underline;}
+a.current	{font-weight: bold;}
+
+h5.blue		{color: #6b7b95;}
+h5.red		{color: #c17878;}
+h5.green	{color: #78ba91;}
+h5.purple	{color: #a87aad;}
+
+h1, h2, h3, h4, h5, h6 {color: #313334; font-weight: bold;}
+.separator {color:#BCE}
+.margin-left{
+	margin-left:5px;
+}
+
+.button { background:#eee url(images/button.gif) repeat-x 0 0; border:solid 1px #b1a874; color:#7f7f7f; font-size:11px; padding:2px 6px 2px 6px; cursor:pointer; line-height:14px !important; }
+.button:hover { color:#333; border-color:#857b42; }
+
+.field, .button { -moz-border-radius:4px; -webkit-border-radius:4px; }
+.small-field, .button, .pagging a { -moz-border-radius:3px; -webkit-border-radius:3px; }
+
+.table th {
+    background-color: #4CAF50;
+    color: white;
+	text-align: left;
+}
+
+.table tr:nth-child(odd) {background-color: #d1d1d1}
+
+a.ico { color:#9d9c9a; font-size:10px; text-decoration: none; padding:0 0 0 14px; background-repeat:no-repeat; background-position:0 0; }
+a.ico:hover { color:#333;}
+
+#container{
+	width:960px;
+	margin-left:auto;
+	margin-right:auto;
+}
+#header {
+	/*width: 960px;*/
+	padding-left: auto;
+	padding-right: auto;
+	border-bottom: 1px dotted black;
+	margin-top: 40px;
+}
+#header h1 {
+	margin: 0;
+	padding-top: 20px;
+	text-align: center;
+}
+#sidebar{
+	background: #FFF;
+	width: 170px;
+	float: left;
+	margin: 10px 0 10px 0;
+	padding: 10px;
+	border: 1px solid #CCC;
+}
+#content {
+	width: 740px;
+	float: right;
+	margin: 20px 0 10px 0;
+	padding: 10px;
+}
+#footer {
+	margin-top: 20px;
+	border-top: 1px dotted black;
+	text-align: center;
+	clear: both;
+}
+/*********************
+	Sidebar
+*********************/
+#sidebar ul{
+	list-style:none;
+	line-height:22px;
+}
+#sidebar ul li a,#sidebar ul li a:visited{
+	padding-left:19px;
+	text-decoration:none;
+	margin:0 3px;
+	display:block;
+}
+#sidebar ul li a:hover{
+	text-decoration:underline;
+}
+#sidebar ul li ul{
+	margin-left:10px;
+}
+#sidebar h3{
+	padding:2px;
+	font-size:14px;
+}
+/*********************
+	Status & version boxes
+*********************/
+#status {
+	position: absolute; top: 10px; left: 10px;
+	margin: 0px;
+	float: right;
+	font-size: 12px;
+}
+#status .success {
+  margin: 0px:
+}
+#version {
+	position: absolute; top: 10px; right: 10px;
+	float: right;
+	text-align: right;
+	font-size: 12px;
+}
+/*********************
+	Infobox
+*********************/
+#infobox{
+	border:1px solid #e9e8e3;
+}
+#infobox h3{
+	background:#f7f6f1;
+	border-bottom:1px solid #e9e8e3;
+	color:#654322;
+}
