@@ -7,6 +7,9 @@ Official website: http://my-aac.org
 
 	- PHP 5.1.0 or later
 	- MySQL database
+	- PDO PHP Extension
+	- XML PHP Extension
+	- ZIP PHP Extension
 	- (optional) mod_rewrite to use friendly_urls
 
 ### INSTALLATION AND CONFIGURATION
