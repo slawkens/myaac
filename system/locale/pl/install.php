@@ -14,6 +14,9 @@ $locale['next'] = 'Następny';
 $locale['on'] = 'Włączone';
 $locale['off'] = 'Wyłączone';
 
+$locale['loaded'] = 'Załadowane';
+$locale['not_loaded'] = 'Nie załadowane';
+
 $locale['please_fill_all'] = 'Proszę wypełnić wszystkie pola!';
 $locale['already_installed'] = 'MyAAC został już zainstalowany. Proszę usunąć katalog <b>install/</b>.';
 
@@ -32,6 +35,7 @@ $locale['step_requirements_title'] = 'Sprawdzanie wymagań';
 $locale['step_requirements_php_version'] = 'Wersja PHP';
 $locale['step_requirements_write_perms'] = 'Uprawnienia do zapisu';
 $locale['step_requirements_failed'] = 'Instalacja zostanie zablokowana dopóki te wymagania nie zostaną spełnione.</b><br/>Po więcej informacji zasięgnij do pliku <b>README</b>.';
+$locale['step_requirements_extension'] = 'Rozszerzenie PHP - $EXTENSION$';
 
 // config
 $locale['step_config'] = 'Konfiguracja';

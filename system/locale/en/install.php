@@ -14,6 +14,9 @@ $locale['next'] = 'Next';
 $locale['on'] = 'On';
 $locale['off'] = 'Off';
 
+$locale['loaded'] = 'Loaded';
+$locale['not_loaded'] = 'Not loaded';
+
 $locale['please_fill_all'] = 'Please fill all inputs!';
 $locale['already_installed'] = 'MyAAC has been already installed. Please delete <b>install/<b/> directory.';
 
@@ -32,6 +35,7 @@ $locale['step_requirements_title'] = 'Requirements check';
 $locale['step_requirements_php_version'] = 'PHP Version';
 $locale['step_requirements_write_perms'] = 'Write permissions';
 $locale['step_requirements_failed'] = 'Installation will be disabled until these requirements will be passed.</b><br/>For more informations see <b>README</b> file.';
+$locale['step_requirements_extension'] = '$EXTENSION$ PHP extension';
 
 // config
 $locale['step_config'] = 'Configuration';
