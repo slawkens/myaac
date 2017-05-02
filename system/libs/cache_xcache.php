@@ -47,6 +47,10 @@ class Cache_XCache
 		return true;
 	}
 
+	public function delete($key) {
+		xcache_unset($key);
+	}
+
 	public function enabled() {
 		return $this->enabled;
 	}

@@ -36,7 +36,9 @@ if($config['template_allow_change'])
 }
 $template_path = 'templates/' . $template_name;
 
-if(!file_exists($template_path . '/config.php'))
+if(!file_exists($template_path . '/index.php') &&
+	!file_exists($template_path . '/template.php') &&
+	!file_exists($template_path . '/layout.php'))
 {
 	$template_name = 'kathrine';
 	$template_path = 'templates/' . $template_name;
@@ -66,7 +68,7 @@ if($exists || ($config['backward_support'] && file_exists($template_path . '/lay
 	foreach($template_ini as $key => $value)
 		$config[$key] = $value;
 }
-else
+else if(file_exists($template_path . '/config.php'))
 	require($template_path . '/config.php');
 
 $template = array();
@@ -76,7 +78,7 @@ $template['link_account_lost'] = internalLayoutLink(($config['friendly_urls'] ? 
 $template['link_account_logout'] = internalLayoutLink(($config['friendly_urls'] ? 'account' : 'accountmanagement'), 'logout');
 
 $template['link_news'] = internalLayoutLink('news');
-$template['link_news_archive'] = internalLayoutLink('news' . ($config['friendly_urls'] ? '' : '') . 'archive');
+$template['link_news_archive'] = internalLayoutLink('news' . ($config['friendly_urls'] ? '/' : '') . 'archive');
 $template['link_changelog'] = internalLayoutLink('changelog');
 $template['link_rules'] = internalLayoutLink('rules');
 $template['link_downloads'] = internalLayoutLink('downloads');

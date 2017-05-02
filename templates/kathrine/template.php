@@ -51,9 +51,9 @@
 
             <div id="mainsubmenu">
             	<div id="news-submenu">
-                    <a href="<?php echo internalLayoutLink('news'); ?>">Latest News</a>
+                    <a href="<?php echo $template['link_news']; ?>">Latest News</a>
                     <span class="separator"></span>
-                    <a href="<?php echo internalLayoutLink('news' . ($config['friendly_urls'] ? '' : '') . 'archive')?>">News Archives</a>
+                    <a href="<?php echo $template['link_news_archive']; ?>">News Archives</a>
                 </div>
 
                 <div id="account-submenu">
@@ -159,7 +159,7 @@
             	<div id="margins">
                 	<table cellpadding="0" cellspacing="0" border="0" width="100%">
                 		<tr>
-                        	<td><a href="<?php echo internalLayoutLink('news'); ?>"><?php echo $config['lua']['serverName']; ?></a> &raquo; <?php echo $title; ?></td>
+                        	<td><a href="<?php echo $template['link_news']; ?>"><?php echo $config['lua']['serverName']; ?></a> &raquo; <?php echo $title; ?></td>
                             <td>
                             <?php
 							if($status['online'])

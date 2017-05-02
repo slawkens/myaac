@@ -91,6 +91,15 @@ else if(isset($config['lua']['data_directory'][0]))
 	if($tmp[strlen($tmp) - 1] != '/') // do not forget about trailing slash
 		$tmp .= '/';
 }
+else if(isset($config['lua']['datadir'][0]))
+{
+	$tmp = $config['lua']['datadir'];
+	if($tmp[0] != '/')
+		$tmp = $config['server_path'] . $tmp;
+
+	if($tmp[strlen($tmp) - 1] != '/') // do not forget about trailing slash
+		$tmp .= '/';
+}
 else
 	$tmp = $config['server_path'] . 'data/';
 

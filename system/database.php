@@ -65,12 +65,16 @@ defined('MYAAC') or die('Direct access not allowed!');
 		);
 	}
 	catch(PDOException $error) {
+		if($cache->enabled()) {
+			$cache->delete('config_lua');
+		}
 		die('ERROR: Cannot connect to MySQL database.<br/>' .
 			'Possible reasons:' .
 			'<ul>' .
 				'<li>MySQL is not configured propertly in <i>config.lua</i>.</li>' .
 				'<li>MySQL server is not running.</li>' .
-			'</ul>');
+			'</ul>' . $error);
+
 	}
 	$db = POT::getInstance()->getDBHandle();
 ?>

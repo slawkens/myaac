@@ -234,7 +234,7 @@ if(!$error) {
 				$account_db->save();
 			}
 			else {
-				$new_account = $ots->createObject('Account');
+				$new_account = new OTS_Account();
 				$new_account->create('dummy_account', 1);
 				$account_db->setPassword('for sample characters. ' . generateRandomString(10));
 			}

@@ -3,14 +3,14 @@
  * 
  * @param string $name
  * @param boolean $ok
- * @param mixed $version
+ * @param mixed $info
  */
-function version_check($name, $ok, $version = '', $warning = false)
+function version_check($name, $ok, $info = '', $warning = false)
 {
 	global $failed;
 	echo '<p class="' . ($ok ? 'success' : ($warning ? 'warning' : 'error')) . '">' . $name;
-	if(!empty($version))
-		echo ': <b>' . $version . '</b>';
+	if(!empty($info))
+		echo ': <b>' . $info . '</b>';
 
 	echo '</p>';
 	if(!$ok && !$warning)
@@ -33,8 +33,9 @@ version_check('register_long_arrays', !$ini_register_globals, $ini_register_glob
 $ini_safe_mode = ini_get_bool('safe_mode');
 version_check('safe_mode', !$ini_safe_mode, $ini_safe_mode ? $locale['on'] : $locale['off'], true);
 
-version_check('PDO extension loaded', extension_loaded('pdo'), '', false);
-version_check('zip extension loaded', extension_loaded('zip'), '', false);
+version_check(str_replace('$EXTENSION$', 'PDO', $locale['step_requirements_extension']) , extension_loaded('pdo'), extension_loaded('pdo') ? $locale['loaded'] : $locale['not_loaded']);
+version_check(str_replace('$EXTENSION$', 'XML', $locale['step_requirements_extension']), extension_loaded('xml'), extension_loaded('xml') ? $locale['loaded'] : $locale['not_loaded']);
+version_check(str_replace('$EXTENSION$', 'ZIP', $locale['step_requirements_extension']), extension_loaded('zip'), extension_loaded('zip') ? $locale['loaded'] : $locale['not_loaded']);
 
 if($failed)
 {

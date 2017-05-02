@@ -12,6 +12,11 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Guilds';
 
+if(tableExist('guild_members'))
+	define('GUILD_MEMBERS_TABLE', 'guild_members');
+else
+	define('GUILD_MEMBERS_TABLE', 'guild_membership');
+	
 if($action == 'login')
 {
 	if(check_guild_name($_REQUEST['guild']))
@@ -261,7 +266,7 @@ if($action == 'show')
 			if(fieldExist('rank_id', 'players'))
 				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 			else
-				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` ORDER BY `name`;');
+				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
 
 			$players_with_rank_number = $players_with_rank->rowCount();
 			if($players_with_rank_number > 0)
@@ -491,7 +496,7 @@ if($action == 'changerank')
 				if(fieldExist('rank_id', 'players'))
 					$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 				else
-					$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` ORDER BY `name`;');
+					$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
 
 				$players_with_rank_number = $players_with_rank->rowCount();
 				if(count($players_with_rank) > 0)
@@ -573,7 +578,7 @@ if($action == 'changerank')
 						if(fieldExist('rank_id', 'players'))
 							$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 						else
-							$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` ORDER BY `name`;');
+							$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
 
 						$players_with_rank_number = $players_with_rank->rowCount();
 						if(count($players_with_rank) > 0)
@@ -1598,7 +1603,7 @@ else
 	if(fieldExist('rank_id', 'players'))
 		$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 	else
-		$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` ORDER BY `name`;');
+		$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
 
 	$players_with_rank_number = $players_with_rank->rowCount();
 	if($players_with_rank_number > 0) {

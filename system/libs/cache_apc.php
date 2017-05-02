@@ -42,6 +42,10 @@ class Cache_APC
 		return ($var = apc_fetch($this->prefix . $key)) !== false;
 	}
 
+	public function delete($key) {
+		apc_delete($key);
+	}
+
 	public function enabled() {
 		return $this->enabled;
 	}

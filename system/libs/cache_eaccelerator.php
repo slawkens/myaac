@@ -41,6 +41,10 @@ class Cache_eAccelerator
 		return ($var = eaccelerator_get($this->prefix . $key)) !== null;
 	}
 
+	public function delete($key) {
+		eaccelerator_rm($key);
+	}
+
 	public function enabled() {
 		return $this->enabled;
 	}

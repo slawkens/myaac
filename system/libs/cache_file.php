@@ -51,6 +51,13 @@ class Cache_File
 		return true;
 	}
 
+	public function delete($key)
+	{
+		$file = $this->_name($key);
+		if(file_exists($file))
+			unlink($file);
+	}
+
 	public function enabled() {
 		return $this->enabled;
 	}
