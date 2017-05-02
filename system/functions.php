@@ -45,6 +45,32 @@ function getPageLink($page, $action = null)
 }
 function internalLayoutLink($page, $action = null) {return getPageLink($page, $action);}
 
+function getForumThreadLink($thread_id, $page = NULL)
+{
+	global $config;
+
+	$url = '';
+	if($config['friendly_urls'])
+		$url = BASE_URL . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
+	else
+		$url = BASE_URL . '?subtopic=forum&action=show_thread&id=' . (int)$thread_id . (isset($page) ? '&page=' . $page : '');
+
+	return $url;
+}
+
+function getForumBoardLink($board_id, $page = NULL)
+{
+	global $config;
+
+	$url = '';
+	if($config['friendly_urls'])
+		$url = BASE_URL . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
+	else
+		$url = BASE_URL . '?subtopic=forum&action=show_board&id=' . (int)$board_id . (isset($page) ? '&page=' . $page : '');
+
+	return $url;
+}
+
 function getPlayerLink($name, $generate = true)
 {
 	global $ots, $config;
@@ -455,7 +481,7 @@ function check_account_name($name, &$error = '')
 }
 
 //is it valid nick for new char?
-function check_name_new_char($name)
+function check_name_new_char($name, &$error = '')
 {
 	global $db, $config;
 
@@ -464,92 +490,127 @@ function check_name_new_char($name)
 	$first_words_blocked = array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ', "'", '-');
 	foreach($first_words_blocked as $word)
 	{
-		if($word == substr($name_lower, 0, strlen($word)))
+		if($word == substr($name_lower, 0, strlen($word))) {
+			$error = 'Your name contains blocked words.';
 			return false;
+		}
 	}
 
-	if(substr($name_lower, -1) == "'" || substr($name_lower, -1) == "-")
+	if(substr($name_lower, -1) == "'" || substr($name_lower, -1) == "-") {
+		$error = 'Your name contains illegal characters.';
 		return false;
+	}
 
-	if(substr($name_lower, 1, 1) == ' ')
+	if(substr($name_lower, 1, 1) == ' ') {
+		$error = 'Your name contains illegal space.';
 		return false;
+	}
 
-	if(substr($name_lower, -2, 1) == " ")
+	if(substr($name_lower, -2, 1) == " ") {
+		$error = 'Your name contains illegal space.';
 		return false;
+	}
 
-	if(strtolower($config['lua']['serverName']) == $name_lower)
+	if(strtolower($config['lua']['serverName']) == $name_lower) {
+		$error = 'Your name cannot be same as server name.';
 		return false;
+	}
 
 	$names_blocked = array('admin', 'administrator', 'gm', 'cm', 'god', 'tutor');
 	foreach($names_blocked as $word)
 	{
-		if($word == $name_lower)
+		if($word == $name_lower) {
+			$error = 'Your name contains blocked words.';
 			return false;
-	}
-
-	$name_length = strlen($name_lower);
-	for($i = 0; $i < $name_length; $i++)
-	{
-		if(isset($name_lower[$i - 1]) && $name_lower[$i - 1] == ' ' && isset($name_lower[$i + 1]) && $name_lower[$i + 1] == ' ')
-			return false;
+		}
 	}
 
 	$words_blocked = array('admin', 'administrator', 'gamemaster', 'game master', 'game-master', "game'master", '--', "''","' ", " '", '- ', ' -', "-'", "'-", 'fuck', 'sux', 'suck', 'noob', 'tutor');
 	foreach($words_blocked as $word)
 	{
-		if(!(strpos($name_lower, $word) === false))
+		if(!(strpos($name_lower, $word) === false)) {
+			$error = 'Your name contains illegal words.';
 			return false;
+		}
+	}
+
+	$name_length = strlen($name_lower);
+	for($i = 0; $i < $name_length; $i++)
+	{
+		if(isset($name_lower[$i]) && isset($name_lower[$i + 1]) && $name_lower[$i] == $name_lower[$i + 1] && isset($name_lower[$i + 2]) && $name_lower[$i] == $name_lower[$i + 2]) {
+			$error = 'Your name is invalid.';
+			return false;
+		}
 	}
 
 	for($i = 0; $i < $name_length; $i++)
 	{
-		if(isset($name_lower[$i]) && isset($name_lower[$i + 1]) && $name_lower[$i] == $name_lower[$i + 1] && isset($name_lower[$i + 2]) && $name_lower[$i] == $name_lower[$i + 2])
+		if(isset($name_lower[$i - 1]) && $name_lower[$i - 1] == ' ' && isset($name_lower[$i + 1]) && $name_lower[$i + 1] == ' ') {
+			$error = 'Your name contains too many spaces.';
 			return false;
-	}
-
-	for($i = 0; $i < $name_length; $i++)
-	{
-		if(isset($name_lower[$i - 1]) && $name_lower[$i - 1] == ' ' && isset($name_lower[$i + 1]) && $name_lower[$i + 1] == ' ')
-			return false;
+		}
 	}
 
 	if(isset($config['monsters']))
 	{
-		if(in_array($name_lower, $config['monsters']))
+		if(in_array($name_lower, $config['monsters'])) {
+			$error = 'Your name cannot contains monster name.';
 			return false;
+		}
 	}
 
 	$monsters = $db->query(
 			'SELECT ' . $db->fieldName('name') .
 			' FROM ' . $db->tableName(TABLE_PREFIX . 'monsters') .
 			' WHERE ' . $db->fieldName('name') . ' LIKE ' . $db->quote($name_lower));
-	if($monsters->rowCount() > 0)
+	if($monsters->rowCount() > 0) {
+		$error = 'Your name cannot contains monster name.';
 		return false;
+	}
 
 	$spells_name = $db->query(
 			'SELECT ' . $db->fieldName('name') .
 			' FROM ' . $db->tableName(TABLE_PREFIX . 'spells') .
 			' WHERE ' . $db->fieldName('name') . ' LIKE ' . $db->quote($name_lower));
-	if($spells_name->rowCount() > 0)
+	if($spells_name->rowCount() > 0) {
+		$error = 'Your name cannot contains spell name.';
 		return false;
+	}
 	
 	$spells_words = $db->query(
 			'SELECT ' . $db->fieldName('words') .
 			' FROM ' . $db->tableName(TABLE_PREFIX . 'spells') .
 			' WHERE ' . $db->fieldName('words') . ' = ' . $db->quote($name_lower));
-	if($spells_words->rowCount() > 0)
+	if($spells_words->rowCount() > 0) {
+		$error = 'Your name cannot contains spell name.';
 		return false;
-	
-	if(isset($config['npc']))
-	{
-		if(in_array($name_lower, $config['npc']))
-			return false;
 	}
 
-	if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- '") != $name_length)
-		return false;
+	if(isset($config['npc']))
+	{
+		if(in_array($name_lower, $config['npc'])) {
+			$error = 'Your name cannot contains NPC name.';
+			return false;
+		}
+	}
 
-	return preg_match("/[A-z ']{3,28}/", $name);
+	if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- '") != $name_length) {
+		$error = 'This name contains invalid letters, words or format. Please use only a-Z, - , \' and space.';
+		return false;
+	}
+
+	if($name_length < 3 || $name_length  > 28) {
+		$error = 'Your name cannot be shorter than 3 characters and longer than 28 characters.';
+		return false;
+	}
+	
+	
+	if(!preg_match("/[A-z ']{3,28}/", $name)) {
+		$error = 'Your name containst illegal characters.';
+		return false;
+	}
+
+	return true;
 }
 
 function check_rank_name($name)
@@ -778,7 +839,7 @@ function template_form()
 		else
 		{
 			$templates = get_templates();
-			$cache->set('templates', serialize($templates), 120);
+			$cache->set('templates', serialize($templates), 30);
 		}
 	}
 	else
@@ -815,7 +876,7 @@ function getCreatureName($killer, $showStatus = false, $extendedInfo = false)
 			if(!$showStatus)
 				return $str.'<b>'.$player->getName().'</b></a>';
 
-			$str .= '<font color="'.($player->isOnline() ? 'green' : 'red').'">'.$player->getName().'</font></b></a>';
+			$str .= '<font color="'.($player->isOnline() ? 'green' : 'red').'">' . $player->getName() . '</font></b></a>';
 			if($extendedInfo) {
 				$str .= '<br><small>'.$player->getLevel().' '.$config['vocations'][$player->getVocation()].'</small>';
 			}

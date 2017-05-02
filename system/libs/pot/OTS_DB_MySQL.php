@@ -92,16 +92,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
             $this->prefix = $params['prefix'];
         }
 
-		// PDO constructor
-		try
-		{
-			parent::__construct('mysql:' . implode(';', $dns), $user, $password);
-		}
-		catch(PDOException $error)
-		{
-			echo 'Can\'t connect to MySQL database.';
-				exit;
-		}
+		parent::__construct('mysql:' . implode(';', $dns), $user, $password);
     }
 
 /**

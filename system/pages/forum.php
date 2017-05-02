@@ -138,7 +138,7 @@ if(empty($action))
 	foreach($sections as $id => $section)
 	{
 		$last_post = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`section` = ".(int) $id." AND `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` ORDER BY `post_date` DESC LIMIT 1")->fetch();
-		echo '<tr bgcolor="'.getStyle(++$number_of_rows).'"><td><a href="?subtopic=forum&action=show_board&id='.$id.'">'.$section['name'].'</a><br /><small>'.$section['description'].'</small></td><td>'.(int) (isset($counters[$id]['posts']) ? $counters[$id]['posts'] : 0).'</td><td>'.(int) (isset($counters[$id]['threads']) ? $counters[$id]['threads'] : 0).'</td><td>';
+		echo '<tr bgcolor="'.getStyle(++$number_of_rows).'"><td><a href="' . getForumBoardLink($id) . '">'.$section['name'].'</a><br /><small>'.$section['description'].'</small></td><td>'.(int) (isset($counters[$id]['posts']) ? $counters[$id]['posts'] : 0).'</td><td>'.(int) (isset($counters[$id]['threads']) ? $counters[$id]['threads'] : 0).'</td><td>';
 		if(isset($last_post['name']))
 			echo date('d.m.y H:i:s', $last_post['post_date']).'<br />by ' . getPlayerLink($last_post['name']);
 		else
@@ -158,11 +158,11 @@ if($action == 'show_board')
 	for($i = 0; $i < $threads_count['threads_count'] / $config['forum_threads_per_page']; $i++)
 	{
 		if($i != $_page)
-			$links_to_pages .= '<a href="?subtopic=forum&action=show_board&id='.$section_id.'&page='.$i.'">'.($i + 1).'</a> ';
+			$links_to_pages .= '<a href="' . getForumBoardLink($section_id, $i) . '">'.($i + 1).'</a> ';
 		else
 			$links_to_pages .= '<b>'.($i + 1).' </b>';
 	}
-	echo '<a href="?subtopic=forum">Boards</a> >> <b>'.$sections[$section_id]['name'].'</b>';
+	echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <b>'.$sections[$section_id]['name'].'</b>';
 	if(!$sections[$section_id]['closed'] || Forum::isModerator())
 	{
 		echo '<br /><br />
@@ -182,7 +182,7 @@ if($action == 'show_board')
 				echo '<a href="?subtopic=forum&action=move_thread&id='.$thread['id'].'"\')"><span style="color:darkgreen">[MOVE]</span></a>';
 				echo '<a href="?subtopic=forum&action=remove_post&id='.$thread['id'].'" onclick="return confirm(\'Are you sure you want remove thread > '.$thread['post_topic'].' <?\')"><font color="red">[REMOVE]</font></a>  ';
 			}
-			echo '<a href="?subtopic=forum&action=show_thread&id='.$thread['id'].'">'.htmlspecialchars($thread['post_topic']).'</a><br /><small>'.htmlspecialchars(substr($thread['post_text'], 0, 50)).'...</small></td><td>' . getPlayerLink($thread['name']) . '</td><td>'.(int) $thread['replies'].'</td><td>'.(int) $thread['views'].'</td><td>';
+			echo '<a href="' . getForumThreadLink($thread['id']) . '">'.htmlspecialchars($thread['post_topic']).'</a><br /><small>'.htmlspecialchars(substr($thread['post_text'], 0, 50)).'...</small></td><td>' . getPlayerLink($thread['name']) . '</td><td>'.(int) $thread['replies'].'</td><td>'.(int) $thread['views'].'</td><td>';
 			if($thread['last_post'] > 0)
 			{
 				$last_post = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id']." AND `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` ORDER BY `post_date` DESC LIMIT 1")->fetch();
@@ -214,14 +214,14 @@ if($action == 'show_thread')
 		for($i = 0; $i < $posts_count['posts_count'] / $config['forum_threads_per_page']; $i++)
 		{
 			if($i != $_page)
-				$links_to_pages .= '<a href="?subtopic=forum&action=show_thread&id='.$thread_id.'&page='.$i.'">'.($i + 1).'</a> ';
+				$links_to_pages .= '<a href="' . getForumThreadLink($thread_id, $i) . '">'.($i + 1).'</a> ';
 			else
 				$links_to_pages .= '<b>'.($i + 1).' </b>';
 		}
 		$threads = $db->query("SELECT `players`.`id` as `player_id`, `players`.`name`, `players`.`account_id`, `players`.`vocation`" . (fieldExist('promotion', 'players') ? ", `players`.`promotion`" : "") . ", `players`.`level`, `" . TABLE_PREFIX . "forum`.`id`,`" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`section`,`" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_date`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`last_edit_aid`, `" . TABLE_PREFIX . "forum`.`edit_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` LIMIT ".$config['forum_posts_per_page']." OFFSET ".($_page * $config['forum_posts_per_page']))->fetchAll();
 		if(isset($threads[0]['name']))
 			$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `views`=`views`+1 WHERE `id` = ".(int) $thread_id);
-		echo '<a href="?subtopic=forum">Boards</a> >> <a href="?subtopic=forum&action=show_board&id='.$threads[0]['section'].'">'.$sections[$threads[0]['section']]['name'].'</a> >> <b>'.$thread_name['post_topic'].'</b>';
+		echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($threads[0]['section']) . '">'.$sections[$threads[0]['section']]['name'].'</a> >> <b>'.$thread_name['post_topic'].'</b>';
 		echo '<br /><br /><a href="?subtopic=forum&action=new_post&thread_id='.$thread_id.'"><img src="images/forum/post.gif" border="0" /></a><br /><br />Page: '.$links_to_pages.'<br /><table width="100%"><tr bgcolor="'.$config['lightborder'].'" width="100%"><td colspan="2"><font size="4"><b>'.htmlspecialchars($thread_name['post_topic']).'</b></font><font size="1"><br />by ' . getPlayerLink($thread_name['name']) . '</font></td></tr><tr bgcolor="'.$config['vdarkborder'].'"><td width="200"><font color="white" size="1"><b>Author</b></font></td><td>&nbsp;</td></tr>';
 		$player = $ots->createObject('Player');
 		foreach($threads as $thread)
@@ -296,14 +296,14 @@ if($action == 'remove_post')
 			if($post['id'] == $post['first_post'])
 			{
 				$db->query("DELETE FROM `" . TABLE_PREFIX . "forum` WHERE `first_post` = ".$post['id']);
-				header('Location: ?subtopic=forum&action=show_board&id='.$post['section']);
+				header('Location: ' . getForumBoardLink($post['section']));
 			}
 			else
 			{
 				$post_page = $db->query("SELECT COUNT(`" . TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`id` < ".$id." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $post['first_post'])->fetch();
 				$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
 				$db->query("DELETE FROM `" . TABLE_PREFIX . "forum` WHERE `id` = ".$post['id']);
-				header('Location: ?subtopic=forum&action=show_thread&id='.$post['first_post'].'&page='.(int) $_page);
+				header('Location: ' . getForumThreadLink($post['first_post'], (int) $_page));
 			}
 		}
 		else
@@ -319,7 +319,7 @@ if($action == 'new_post')
 		$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
 		$thread_id = (int) $_REQUEST['thread_id'];
 		$thread = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." LIMIT 1")->fetch();
-		echo '<a href="?subtopic=forum">Boards</a> >> <a href="?subtopic=forum&action=show_board&id='.$thread['section'].'">'.$sections[$thread['section']]['name'].'</a> >> <a href="?subtopic=forum&action=show_thread&id='.$thread_id.'">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
+		echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
 		if(isset($thread['id']))
 		{
 			$quote = isset($_REQUEST['quote']) ? (int) $_REQUEST['quote'] : NULL;
@@ -374,8 +374,8 @@ if($action == 'new_post')
 					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".(int) $thread_id);
 					$post_page = $db->query("SELECT COUNT(`" . TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`post_date` <= ".time()." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id'])->fetch();
 					$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
-					header('Location: ?subtopic=forum&action=show_thread&id='.$thread_id.'&page='.$_page);
-					echo '<br />Thank you for posting.<br /><a href="?subtopic=forum&action=show_thread&id='.$thread_id.'">GO BACK TO LAST THREAD</a>';
+					header('Location: ' . getForumThreadLink($thread_id, $_page));
+					echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id, $_page) . '">GO BACK TO LAST THREAD</a>';
 				}
 			}
 			if(!$saved)
@@ -435,7 +435,7 @@ if($action == 'edit_post')
 		if(isset($thread['id']))
 		{
 			$first_post = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread['first_post']." LIMIT 1")->fetch();
-			echo '<a href="?subtopic=forum">Boards</a> >> <a href="?subtopic=forum&action=show_board&id='.$thread['section'].'">'.$sections[$thread['section']]['name'].'</a> >> <a href="?subtopic=forum&action=show_thread&id='.$thread['first_post'].'">'.$first_post['post_topic'].'</a> >> <b>Edit post</b>';
+			echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread['first_post']) . '">'.$first_post['post_topic'].'</a> >> <b>Edit post</b>';
 			if($account_logged->getId() == $thread['author_aid'] || Forum::isModerator())
 			{
 				$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
@@ -483,8 +483,8 @@ if($action == 'edit_post')
 						$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $char_id.", `post_text` = ".$db->quote($text).", `post_topic` = ".$db->quote($post_topic).", `post_smile` = ".(int) $smile.", `last_edit_aid` = ".(int) $account_logged->getId().",`edit_date` = ".time()." WHERE `id` = ".(int) $thread['id']);
 						$post_page = $db->query("SELECT COUNT(`" . TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`post_date` <= ".$thread['post_date']." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['first_post'])->fetch();
 						$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
-						header('Location: ?subtopic=forum&action=show_thread&id='.$thread['first_post'].'&page='.$_page);
-						echo '<br />Thank you for editing post.<br /><a href="?subtopic=forum&action=show_thread&id='.$thread['first_post'].'">GO BACK TO LAST THREAD</a>';
+						header('Location: ' . getForumThreadLink($thread['first_post'], $_page));
+						echo '<br />Thank you for editing post.<br /><a href="' . getForumThreadLink($thread['first_post'], $_page) . '">GO BACK TO LAST THREAD</a>';
 					}
 				}
 				else
@@ -531,7 +531,7 @@ if($action == 'new_topic')
 	{
 		$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
 		$section_id = (int) $_REQUEST['section_id'];
-		echo '<a href="?subtopic=forum">Boards</a> >> <a href="?subtopic=forum&action=show_board&id='.$section_id.'">'.$sections[$section_id]['name'].'</a> >> <b>Post new thread</b><br />';
+		echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($section_id) . '">'.$sections[$section_id]['name'].'</a> >> <b>Post new thread</b><br />';
 		if(isset($sections[$section_id]['name']))
 		{
 			if($sections[$section_id]['closed'] && !Forum::isModerator())
@@ -590,8 +590,8 @@ if($action == 'new_topic')
 					$db->query("INSERT INTO `" . TABLE_PREFIX . "forum` (`id` ,`first_post` ,`last_post` ,`section` ,`replies` ,`views` ,`author_aid` ,`author_guid` ,`post_text` ,`post_topic` ,`post_smile` ,`post_date` ,`last_edit_aid` ,`edit_date`, `post_ip`) VALUES ('null', '0', '".time()."', '".(int) $section_id."', '0', '0', '".$account_logged->getId()."', '".(int) $char_id."', ".$db->quote($text).", ".$db->quote($post_topic).", '".(int) $smile."', '".time()."', '0', '0', '".$_SERVER['REMOTE_ADDR']."')");
 					$thread_id = $db->lastInsertId();
 					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `first_post`=".(int) $thread_id." WHERE `id` = ".(int) $thread_id);
-					header('Location: ?subtopic=forum&action=show_thread&id='.$thread_id);
-					echo '<br />Thank you for posting.<br /><a href="?subtopic=forum&action=show_thread&id='.$thread_id.'">GO BACK TO LAST THREAD</a>';
+					header('Location: ' . getForumThreadLink($thread_id));
+					echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id) . '">GO BACK TO LAST THREAD</a>';
 				}
 			}
 			if(!$saved)
@@ -648,7 +648,7 @@ if($action == 'move_thread')
 				<br/><strong>Select the new board:&nbsp;</strong><SELECT NAME=sektion>';
 				foreach($sections as $id => $section) { echo '<OPTION value="'.$id.'">'.$section['name'].'</OPTION>'; } echo '</SELECT>
 				<INPUT TYPE="submit" VALUE="Move Thread"></FORM>
-				<form action="?subtopic=forum&action=show_board&id='.$post['section'].'" method="POST">
+				<form action="' . getForumBoardLink($post['section']) . '" method="POST">
 				<input type="submit" value="Cancel"></form></td></tr></table></td></tr></table>';
 			}
 		}
@@ -672,7 +672,7 @@ if($action == 'moved_thread')
 			{
 				$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `section` = ".$board." WHERE `id` = ".$post['id']."") or die(mysql_error());
 				$nPost = $db->query( 'SELECT `section` FROM `' . TABLE_PREFIX . 'forum` WHERE `id` = \''.$id.'\' LIMIT 1;' )->fetch();
-				header('Location: ?subtopic=forum&action=show_board&id='.$nPost['section']);
+				header('Location: ' . getForumBoardLink($nPost['section']));
 			}
 		}
 		else

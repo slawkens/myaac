@@ -11,6 +11,9 @@ RewriteRule ^images/items/([0-9]+)\.gif$ tools/item.php?id=$1
 RewriteRule ^characters/([A-Za-z0-9-_+']+)$ index.php?subtopic=characters&name=$1
 RewriteRule ^guilds/([A-Za-z0-9-_+']+)$ index.php?subtopic=guilds&action=show&guild=$1
 RewriteRule ^forum/board/([0-9]+)$ index.php?subtopic=forum&action=show_board&id=$1
+RewriteRule ^forum/board/([0-9]+)/([0-9]+)$ index.php?subtopic=forum&action=show_board&id=$1&page=$2
+RewriteRule ^forum/thread/([0-9]+)$ index.php?subtopic=forum&action=show_thread&id=$1
+RewriteRule ^forum/board/([0-9]+)/([0-9]+)$ index.php?subtopic=forum&action=show_thread&id=$1&page=$2
 RewriteRule ^account/manage$ index.php?subtopic=accountmanagement
 RewriteRule ^account/create$ index.php?subtopic=createaccount
 RewriteRule ^account/lost$ index.php?subtopic=lostaccount

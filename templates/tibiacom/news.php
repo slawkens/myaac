@@ -3,10 +3,13 @@ function news_parse($title, $content, $date, $icon = 0, $author = '', $comments 
 {
 	global $template_path;
 
-	$tmp = $template_path.'/images/letters/'.$content[0].'.gif';
-	if(file_exists($tmp)) {
-		$firstLetter = '<img src="' . $tmp . '" alt="'.$content[0].'" BORDER=0 ALIGN=bottom>';
-		$content[0] = '';
+	if($content[0] != '<')
+	{
+		$tmp = $template_path.'/images/letters/'.$content[0].'.gif';
+		if(file_exists($tmp)) {
+			$firstLetter = '<img src="' . $tmp . '" alt="'.$content[0].'" BORDER=0 ALIGN=bottom>';
+			$content[0] = '';
+		}
 	}
 
 	return '
@@ -21,7 +24,7 @@ function news_parse($title, $content, $date, $icon = 0, $author = '', $comments 
 	</div>
 	<table style="clear:both" border=0 cellpadding=0 cellspacing=0 width="100%" >
 		<tr>
-			<td style="padding-left:10px;padding-right:10px;" >' . $firstLetter.$content . '</td>
+			<td style="padding-left:10px;padding-right:10px;" >' . (isset($firstLetter) ? $firstLetter : '').$content . '</td>
 		</tr>'
 		. (isset($comments[0]) ? '
 		<tr>

@@ -167,7 +167,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function load($id)
     {
         // SELECT query on database
-        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('salt') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('rlname') . ', ' . $this->db->fieldName('location') . ', ' . $this->db->fieldName('web_flags') . ', ' . $this->db->fieldName('premdays') . ', ' . $this->db->fieldName('lastday') . ', ' . $this->db->fieldName('created') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('password') . ', ' . $this->db->fieldName('email') . ', ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('rlname') . ', ' . $this->db->fieldName('location') . ', ' . $this->db->fieldName('web_flags') . ', ' . $this->db->fieldName('premdays') . ', ' . $this->db->fieldName('lastday') . ', ' . $this->db->fieldName('created') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
     }
 
 /**
@@ -247,13 +247,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         }
 
         // UPDATE query on database
-<<<<<<< .mine
         $this->db->query('UPDATE `accounts` SET `name` = ' . $this->db->quote($this->data['name']) . ', `password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `blocked` = ' . (int) $this->data['blocked'] . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', `premdays` = ' . (int) $this->data['premdays'] . ', `lastday` = ' . (int) $this->data['lastday'] . ' WHERE `id` = ' . $this->data['id']);
-||||||| .r19
-        $this->db->query('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName('password') . ' = ' . $this->db->quote($this->data['password']) . ', ' . $this->db->fieldName('email') . ' = ' . $this->db->quote($this->data['email']) . ', ' . $this->db->fieldName('blocked') . ' = ' . (int) $this->data['blocked'] . ', ' . $this->db->fieldName('rlname') . ' = ' . $this->db->quote($this->data['rlname']) . ', ' . $this->db->fieldName('location') . ' = ' . $this->db->quote($this->data['location']) . ', ' . $this->db->fieldName('web_flags') . ' = ' . (int) $this->data['web_flags'] . ', ' . $this->db->fieldName('premdays') . ' = ' . (int) $this->data['premdays'] . ', ' . $this->db->fieldName('lastday') . ' = ' . (int) $this->data['lastday'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
-=======
-        $this->db->query('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName('password') . ' = ' . $this->db->quote($this->data['password']) . ', ' . $this->db->fieldName('salt') . ' = ' . $this->db->quote($this->data['salt']) . ', ' . $this->db->fieldName('email') . ' = ' . $this->db->quote($this->data['email']) . ', ' . $this->db->fieldName('blocked') . ' = ' . (int) $this->data['blocked'] . ', ' . $this->db->fieldName('rlname') . ' = ' . $this->db->quote($this->data['rlname']) . ', ' . $this->db->fieldName('location') . ' = ' . $this->db->quote($this->data['location']) . ', ' . $this->db->fieldName('web_flags') . ' = ' . (int) $this->data['web_flags'] . ', ' . $this->db->fieldName('premdays') . ' = ' . (int) $this->data['premdays'] . ', ' . $this->db->fieldName('lastday') . ' = ' . (int) $this->data['lastday'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
->>>>>>> .r40
     }
 
 /**
@@ -447,16 +441,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function setPassword($password)
     {
         $this->data['password'] = (string) $password;
-    }
-
-	public function getSalt()
-    {
-        if( !isset($this->data['salt']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
-
-        return $this->data['salt'];
     }
 
     public function setSalt($salt)
@@ -801,20 +785,20 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getAccess()
     {
+		global $groups;
+		if(!isset($groups))
+			$groups = new OTS_Groups_List();
+
 		// by default
 		$access = 0;
 		if(fieldExist('group_id', 'accounts')) {
 			$query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
 			// if anything was found
-			if(isset($query['group_id']))
-				$access = $query['group_id'];
-	
-			return $access;
-		}
 
-		global $groups;
-		if(!isset($groups))
-			$groups = new OTS_Groups_List();
+			$group = $groups->getGroup($query['group_id']);
+			if(!$group) return 0;
+			return $group->getAccess();
+		}
 
         // finds groups of all characters
         foreach( $this->getPlayersList() as $player)
@@ -830,6 +814,35 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
         return $access;
     }
+
+	public function getGroupId()
+	{
+		global $groups;
+		if(!isset($groups))
+			$groups = new OTS_Groups_List();
+
+		$group_id = 0;
+		if(fieldExist('group_id', 'accounts')) {
+			$query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
+			// if anything was found
+			if(isset($query['group_id']))
+				return $query['group_id'];
+		}
+		
+        // finds groups of all characters
+        foreach( $this->getPlayersList() as $player)
+        {
+            $group = $player->getGroup();
+
+            // checks if group's access level is higher then previouls found highest
+            if( $group->getId() > $group_id)
+            {
+                $group_id = $group->getId();
+            }
+        }
+		
+		return $group_id;
+	}
 
 /**
  * Checks highest access level of account in given guild.

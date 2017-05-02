@@ -3,7 +3,6 @@ defined('MYAAC') or die('Direct access not allowed!');
 function news_parse($title, $content, $date, $icon = 0, $author = '', $comments = '')
 {
 	global $template_path, $config;
-
 	//$tmp = $template_path.'/images/letters/'.$content[0].'.gif';
 	//if(file_exists($tmp)) {
 	//	$firstLetter = '<img src="' . $tmp . '" alt="'.$content[0].'" BORDER=0 ALIGN=bottom>';

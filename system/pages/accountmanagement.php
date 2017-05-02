@@ -833,8 +833,9 @@ function checkName()
 
 			if(empty($newchar_errors))
 			{
-				if(!check_name_new_char($newchar_name))
-					$newchar_errors[] = 'This name contains invalid letters, words or format. Please use only a-Z, - , \' and space.';
+				$error = '';
+				if(!check_name_new_char($newchar_name, $error))
+					$newchar_errors[] = $error;
 				if($newchar_sex != 1 && $newchar_sex != "0")
 					$newchar_errors[] = 'Sex must be equal <b>0 (female)</b> or <b>1 (male)</b>.';
 				if(!in_array($newchar_town, $config['character_towns']))

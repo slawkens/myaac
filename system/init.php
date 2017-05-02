@@ -121,10 +121,10 @@ else {
 	$config['vocations'] = array();
 	foreach($vocations->getElementsByTagName('vocation') as $vocation) {
 		$id = $vocation->getAttribute('id');
-		if($id == $vocation->getAttribute('fromvoc'))
+		//if($id == $vocation->getAttribute('fromvoc'))
 			$config['vocations'][$id] = $vocation->getAttribute('name');
-		else
-			$config['vocations'][$id + 4] = $vocation->getAttribute('name');
+		//else
+		//	$config['vocations'][$id] = $vocation->getAttribute('name');
 	}
 
 	if($cache->enabled()) {

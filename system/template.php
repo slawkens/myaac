@@ -26,13 +26,21 @@ if($config['template_allow_change'])
 	}
 	else if(isset($_SESSION['template']))
 	{
-		if(!preg_match("/[^A-z0-9_\-]/", $_SESSION['template']))
+		if(!preg_match("/[^A-z0-9_\-]/", $_SESSION['template'])) {
 			$template_name = $_SESSION['template'];
-		else
+		}
+		else {
 			$template_name = $config['template'];
+		}
 	}
 }
 $template_path = 'templates/' . $template_name;
+
+if(!file_exists($template_path . '/config.php'))
+{
+	$template_name = 'kathrine';
+	$template_path = 'templates/' . $template_name;
+}
 
 $file = $template_path . '/config.ini';
 $exists = file_exists($file);
@@ -92,6 +100,7 @@ $template['link_screenshots'] = internalLayoutLink('screenshots');
 $template['link_movies'] = internalLayoutLink('movies');
 $template['link_serverInfo'] = internalLayoutLink('serverInfo');
 $template['link_experienceTable'] = internalLayoutLink('experienceTable');
+$template['link_faq'] = internalLayoutLink('faq');
 $template['link_points'] = internalLayoutLink('points');
 $template['link_gifts'] = internalLayoutLink('gifts');
 $template['link_gifts_history'] = internalLayoutLink('gifts', 'show_history');

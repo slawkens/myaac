@@ -22,6 +22,7 @@ if(isset($_POST['reload_spells']) && $canEdit)
 	foreach($config_vocations as $voc_id => $voc_name) {
 		$vocations_ids[$voc_name] = $voc_id;
 	}
+
 	$allspells = new OTS_SpellsList($config['data_path'].'spells/spells.xml');
 	//add conjure spells
 	$conjurelist = $allspells->getConjuresList();
@@ -89,8 +90,12 @@ if(isset($_POST['reload_spells']) && $canEdit)
 		$nr_of_vocations = count($vocations);
 		$vocations_to_db = "";
 		$voc_nr = 0;
-		foreach($vocations as $vocation_to_add_name) {
-			$vocations_to_db .= $vocation_to_add_name;
+		foreach($vocations as $vocation_to_add) {
+			if(check_number($vocation_to_add)) {
+				$vocations_to_db .= $vocation_to_add;
+			}
+			else
+				$vocations_to_db .= $vocations_ids[$vocation_to_add];
 			$voc_nr++;
 			
 			if($voc_nr != $nr_of_vocations) {
@@ -234,8 +239,10 @@ else
 		$showed_vocations = 0;
 		foreach($spell_vocations as $spell_vocation)
 		{
-			echo $config_vocations[$spell_vocation];
-			$showed_vocations++;
+			if(isset($config_vocations[$spell_vocation])) {
+				echo $config_vocations[$spell_vocation];
+				$showed_vocations++;
+			}
 			if($showed_vocations != count($spell_vocations))
 				echo '<br/>';
 		}

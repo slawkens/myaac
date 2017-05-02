@@ -75,16 +75,16 @@ if(isset($config['boxes']))
 		function LoginButtonAction()
 		{
 		  if(loginStatus == "false") {
-			window.location = "<?php echo internalLayoutLink('accountmanagement'); ?>";
+			window.location = "<?php echo $template['link_account_manage']; ?>";
 		  } else {
-			window.location = "<?php echo internalLayoutLink('accountmanagement'); ?>";
+			window.location = "<?php echo $template['link_account_manage']; ?>";
 		  }
 		}
 		function LoginstatusTextAction(source) {
 		  if(loginStatus == "false") {
-			window.location = "<?php echo internalLayoutLink('createaccount'); ?>";
+			window.location = "<?php echo $template['link_account_create']; ?>";
 		  } else {
-			window.location = "<?php echo internalLayoutLink('createaccount'); ?>&action=logout";
+			window.location = "<?php echo $template['link_account_logout']; ?>";
 		  }
 		}
 
@@ -204,7 +204,7 @@ if(isset($config['boxes']))
 </head>
 <body onBeforeUnLoad="SaveMenu();" onUnload="SaveMenu();">
 	<?php echo template_place_holder('body_start'); ?>
-  <a name="top" ></a>
+  <div id="top"></div>
   <div id="ArtworkHelper" style="background-image:url(<?php echo $template_path; ?>/images/header/<?php echo $config['background_image']; ?>);" >
     <div id="Bodycontainer">
       <div id="ContentRow">
@@ -268,7 +268,7 @@ if(isset($config['boxes']))
   </div>
 </span>
 <div id='news_Submenu' class='Submenu'>
-<a href='<?php echo internalLayoutLink('news')?>'>
+<a href='<?php echo $template['link_news']; ?>'>
   <div id='submenu_news' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_news' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -276,7 +276,7 @@ if(isset($config['boxes']))
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink('news' . ($config['friendly_urls'] ? '' : '') . 'archive')?>'>
+<a href='<?php echo $template['link_news_archive'];?>'>
   <div id='submenu_newsarchive' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_newsarchive' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -284,7 +284,7 @@ if(isset($config['boxes']))
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<!--a href='<?php echo internalLayoutLink('changelog')?>'>
+<!--a href='<?php echo $template['link_changelog'];?>'>
   <div id='submenu_changelog' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_changelog' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -314,7 +314,7 @@ if(isset($config['boxes']))
   </div>
 </span>
 <div id='account_Submenu' class='Submenu'>
-<a href='<?php echo internalLayoutLink('account' . ($config['friendly_urls'] ? '/manage' : 'management')); ?>'>
+<a href='<?php echo $template['link_account_manage']; ?>'>
   <div id='submenu_accountmanagement' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_accountmanagement' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -322,7 +322,7 @@ if(isset($config['boxes']))
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink(($config['friendly_urls'] ? 'account/create' : 'createaccount')); ?>'>
+<a href='<?php echo $template['link_account_create']; ?>'>
   <div id='submenu_createaccount' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_createaccount' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -330,7 +330,7 @@ if(isset($config['boxes']))
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink(($config['friendly_urls'] ? 'account/lost' : 'lostaccount')); ?>'>
+<a href='<?php echo $template['link_account_lost']; ?>'>
   <div id='submenu_lostaccount' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_lostaccount' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -338,7 +338,7 @@ if(isset($config['boxes']))
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink('rules')?>'>
+<a href='<?php echo $template['link_rules']; ?>'>
   <div id='submenu_rules' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_rules' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -347,7 +347,7 @@ if(isset($config['boxes']))
   </div>
 </a>
 <?php
-echo "<a href='" . internalLayoutLink('downloads') . "'>
+echo "<a href='" . $template['link_downloads'] . "'>
   <div id='submenu_downloads' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_downloads' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
@@ -377,7 +377,7 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
   </div>
 </span>
 <div id='community_Submenu' class='Submenu'>
-<a href='<?php echo internalLayoutLink('characters')?>'>
+<a href='<?php echo $template['link_characters']; ?>'>
   <div id='submenu_characters' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_characters' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -386,7 +386,7 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
 
   </div>
 </a>
-<a href='<?php echo internalLayoutLink('online')?>'>
+<a href='<?php echo $template['link_online']; ?>'>
   <div id='submenu_online' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_online' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -394,7 +394,7 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink('highscores')?>'>
+<a href='<?php echo $template['link_highscores']; ?>'>
   <div id='submenu_highscores' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_highscores' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -403,7 +403,7 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
   </div>
 </a>
 <?php if(isset($config['powergamers'])): ?>
-<a href='<?php echo internalLayoutLink('powergamers')?>'>
+<a href='<?php echo $template['link_powergamers']; ?>'>
   <div id='submenu_powergamers' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_powergamers' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -412,7 +412,7 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
   </div>
 </a>
 <?php endif; ?>
-<a href='<?php echo internalLayoutLink('lastkills')?>'>
+<a href='<?php echo $template['link_lastkills']; ?>'>
   <div id='submenu_lastkills' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_lastkills' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -420,7 +420,7 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink('houses')?>'>
+<a href='<?php echo $template['link_houses']; ?>'>
   <div id='submenu_houses' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_houses' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -428,7 +428,7 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink('guilds')?>'>
+<a href='<?php echo $template['link_guilds']; ?>'>
   <div id='submenu_guilds' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 
@@ -438,7 +438,7 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
   </div>
 </a>
 <?php if(isset($config['wars'])): ?>
-<a href='<?php echo internalLayoutLink('wars')?>'>
+<a href='<?php echo $template['link_wars']; ?>'>
   <div id='submenu_wars' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 
@@ -449,7 +449,7 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
 </a>
 <?php endif; ?>
 <?php if(isset($config['polls'])): ?>
-<a href='<?php echo internalLayoutLink('polls')?>'>
+<a href='<?php echo $template['link_polls']; ?>'>
   <div id='submenu_polls' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 
@@ -459,7 +459,8 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
   </div>
 </a>
 <?php endif; ?>
-<a href='<?php echo internalLayoutLink('bans')?>'>
+<?php if(tableExist('bans')): ?>
+<a href='<?php echo $template['link_bans']; ?>'>
   <div id='submenu_bans' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 
@@ -468,7 +469,8 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink('team')?>'>
+<?php endif; ?>
+<a href='<?php echo $template['link_team']; ?>'>
   <div id='submenu_team' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_team' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -478,15 +480,6 @@ echo "<a href='" . internalLayoutLink('downloads') . "'>
 </a>
 </div>
 </div>
-
-<?php
-if($config['forum'] != '')
-{
-	if(strtolower($config['forum']) == 'site')
-		$forum_link = "<a href='" . internalLayoutLink('forum') . "'>";
-	else
-		$forum_link = "<a href='" . $config['forum'] . "' target='_blank'>";
-?>
 
 <div id='forum' class='menuitem'>
 <span onClick="MenuItemAction('forum')">
@@ -506,7 +499,7 @@ if($config['forum'] != '')
 </span>
 
         <div id='forum_Submenu' class='Submenu'>
-          <?php echo $forum_link; ?>
+          <?php echo $template['link_forum']; ?>
            <div id='submenu_forum' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
              <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
              <div id='ActiveSubmenuItemIcon_forum' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -516,9 +509,6 @@ if($config['forum'] != '')
           </a>
         </div>
 		 </div>
-<?php
-}
-?>
 <div id='library' class='menuitem'>
 <span onClick="MenuItemAction('library')">
   <div class='MenuButton' style='background-image:url(<?php echo $template_path; ?>/images/menu/button-background.gif);'>
@@ -535,7 +525,7 @@ if($config['forum'] != '')
   </div>
 </span>
 <div id='library_Submenu' class='Submenu'>
-<a href='<?php echo internalLayoutLink('creatures')?>'>
+<a href='<?php echo $template['link_creatures']; ?>'>
   <div id='submenu_creatures' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_creatures' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -543,7 +533,7 @@ if($config['forum'] != '')
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink('spells')?>'>
+<a href='<?php echo $template['link_spells']; ?>'>
   <div id='submenu_spells' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_spells' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -551,7 +541,7 @@ if($config['forum'] != '')
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='<?php echo internalLayoutLink('commands')?>'>
+<a href='<?php echo $template['link_commands']; ?>'>
   <div id='submenu_commands' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_commands' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -559,10 +549,7 @@ if($config['forum'] != '')
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<?php
-if(getBoolean($config['lua']['experienceStages'])):
-?>
-<a href='<?php echo internalLayoutLink('experienceStages')?>'>
+<a href='<?php echo  $template['link_experienceStages']; ?>'>
   <div id='submenu_experiencestages' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_experiencestages' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -571,10 +558,9 @@ if(getBoolean($config['lua']['experienceStages'])):
   </div>
 </a>
 <?php
-endif;
 
 if(isset($config['freehouses'])): ?>
-<a href='<?php echo internalLayoutLink('freehouses')?>'>
+<a href='<?php echo $template['link_freehouses']; ?>'>
   <div id='submenu_freehouses' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_freehouses' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -587,7 +573,7 @@ endif;
 ?>
 
 <?php
-echo "<a href='" . internalLayoutLink('screenshots') . "'>
+echo "<a href='" . $template['link_screenshots'] . "'>
   <div id='submenu_screenshots' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_screenshots' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
@@ -596,7 +582,7 @@ echo "<a href='" . internalLayoutLink('screenshots') . "'>
   </div>
 </a>";
 if(isset($config['movies']))
-echo "<a href='" . internalLayoutLink('movies') . "'>
+echo "<a href='" . $template['link_movies'] . "'>
   <div id='submenu_movies' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_movies' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
@@ -605,7 +591,7 @@ echo "<a href='" . internalLayoutLink('movies') . "'>
   </div>
 </a>";
 
-echo "<a href='" . internalLayoutLink('serverInfo') . "'>
+echo "<a href='" . $template['link_serverInfo'] . "'>
   <div id='submenu_serverinfo' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_serverinfo' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
@@ -614,7 +600,7 @@ echo "<a href='" . internalLayoutLink('serverInfo') . "'>
   </div>
 </a>";
 ?>
-<a href='<?php echo internalLayoutLink('experienceTable')?>'>
+<a href='<?php echo $template['link_experienceTable']; ?>'>
   <div id='submenu_experiencetable' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_experiencetable' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -644,7 +630,7 @@ echo "<div id='shops' class='menuitem'>
 </span>
 </div>
 <div id='shops_Submenu' class='Submenu'>
-<a href='" . internalLayoutLink('points') . "'>
+<a href='" . $template['link_points'] . "'>
   <div id='submenu_points' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_points' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
@@ -652,7 +638,7 @@ echo "<div id='shops' class='menuitem'>
     <div class='RightChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='" . internalLayoutLink('gifts') . "'>
+<a href='" . $template['link_gifts'] . "'>
   <div id='submenu_gifts' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_gifts' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
@@ -661,7 +647,7 @@ echo "<div id='shops' class='menuitem'>
   </div>
 </a>";
 if($logged)
-echo "<a href='?subtopic=gifts&action=show_history'>
+echo "<a href='" . $template['link_gifts_history'] . "'>
   <div id='submenu_gifts' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_gifts' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
@@ -726,7 +712,7 @@ echo "</div>";
 		</table>
 	</div>
 	<?php
-		if($db->query('SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = ' . $db->quote($config['lua']['sqlDatabase']) . ' AND TABLE_NAME = ' . $db->quote('wodz_exphistory'))->rowCount())
+		if(tableExist('wodz_exphistory'))
 		{
 			$top_enabled = true;
 				function write_top($name, $list, $colspan = 2)
@@ -858,7 +844,7 @@ echo "</div>";
 		  ?>
             <img id="Monster" src="images/monsters/<?php echo logo_monster() ?>.gif" onClick="window.location = '?subtopic=creatures&creature=<?php echo $config['logo_monster'] ?>';" alt="Monster of the Week" />
             <img id="PedestalAndOnline" src="<?php echo $template_path; ?>/images/header/pedestal-and-online.gif" alt="Monster Pedestal and Players Online Box"/>
-          <div id="PlayersOnline" onClick="window.location = '<?php echo internalLayoutLink('online')?>'">
+          <div id="PlayersOnline" onClick="window.location = '<?php echo $template['link_online']; ?>'">
 		  <?php
 			if($status['online'])
 				echo '<div id="players" style="display: inline;">' . $status['players'] . '</div><br>Players Online';
@@ -870,7 +856,7 @@ echo "</div>";
         <div id="Themeboxes">
 			<?php if(in_array("newcomer", $config['boxes'])): ?>
 			<div id="NewcomerBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/newcomer/newcomerbox.gif);">
-				<a class="ThemeboxButton" href="<?php echo internalLayoutLink('createaccount'); ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton.gif);">
+				<a class="ThemeboxButton" href="<?php echo $template['link_account_create']; ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton.gif);">
 					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton_over.gif);"></div>
 					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/buttons/_sbutton_jointibia.gif);"></div>
 				</a>
@@ -895,7 +881,7 @@ echo "</div>";
 			</div>
 			<?php endif; ?>
 			<?php if(PAGE == 'news' && in_array("poll", $config['boxes'])):
-				$poll = $db->query('SELECT id, question FROM '.$db->tableName('z_polls') . ' WHERE end > ' . time() . ' ORDER BY end LIMIT 1');
+				$poll = $db->query('SELECT id, question FROM '.$db->tableName(TABLE_PREFIX . 'polls') . ' WHERE end > ' . time() . ' ORDER BY end LIMIT 1');
 				if($poll->rowCount() > 0)
 				{
 					$poll = $poll->fetch();
@@ -914,7 +900,7 @@ echo "</div>";
 <br/><br/>
  <?php
 	if($config['template_allow_change'])
-		 echo '<font color="white">Template:</font><br/>' . template_language_form();
+		 echo '<font color="white">Template:</font><br/>' . template_form();
  ?>
         </div>
       </div>

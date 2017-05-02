@@ -48,7 +48,7 @@ $config = array(
 	'site_closed_title' => 'Closed',
 	'site_closed_message' => 'Server is under maintance, please visit later.<br/><br/>',
 
-	'debug_level' => 0, // 0 - disabled, 1 - show load time, 2 - show db query counter, 3 - both
+	'debug_level' => 0, // 0 - disabled, 1 - show load time, 2 - show db query counter, 3 - both, 4 - memory usage, 5 - load time & load time, 6 - queries & memory usage, 7 - all
 
 	'language' => 'en', // default language (currently only 'en' available)
 	'language_allow_change' => false,
