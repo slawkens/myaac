@@ -1206,7 +1206,7 @@ function load_config_lua($filename)
 	// TODO: new parser that will also load dofile() includes
 
 	// strip lua comments to prevent parsing errors
-	fwrite($file, preg_replace('/(-)(-) (.*)/', '', file_get_contents($config_file)));
+	fwrite($file, preg_replace('/(-)(-)(.*)/', '', file_get_contents($config_file)));
 	fclose($file);
 
 	$result = array_merge(parse_ini_file($tempFile, true), isset($config['lua']) ? $config['lua'] : array());
