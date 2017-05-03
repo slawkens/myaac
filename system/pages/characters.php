@@ -227,6 +227,8 @@ if(check_name($name))
 				$town_field = 'town';
 				if(fieldExist('town_id', 'houses'))
 					$town_field = 'town_id';
+				else if(fieldExist('townid', 'houses'))
+					$town_field = 'townid';
 				
 				$house = $db->query('SELECT `id`, `paid`, `name`, `' . $town_field . '` FROM `houses` WHERE `owner` = '.$player->getId())->fetch();
 				if(isset($house['id']))

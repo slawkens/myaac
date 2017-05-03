@@ -13,6 +13,7 @@ RewriteRule ^guilds/([A-Za-z0-9-_+']+)$ index.php?subtopic=guilds&action=show&gu
 RewriteRule ^forum/board/([0-9]+)$ index.php?subtopic=forum&action=show_board&id=$1
 RewriteRule ^forum/board/([0-9]+)/([0-9]+)$ index.php?subtopic=forum&action=show_board&id=$1&page=$2
 RewriteRule ^forum/thread/([0-9]+)$ index.php?subtopic=forum&action=show_thread&id=$1
+RewriteRule ^forum/thread/([0-9]+)/([0-9]+)$ index.php?subtopic=forum&action=show_thread&id=$1&page=$2
 RewriteRule ^forum/board/([0-9]+)/([0-9]+)$ index.php?subtopic=forum&action=show_thread&id=$1&page=$2
 RewriteRule ^account/manage$ index.php?subtopic=accountmanagement
 RewriteRule ^account/create$ index.php?subtopic=createaccount

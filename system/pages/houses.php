@@ -180,7 +180,7 @@ $type = '';
 
 					echo '</TR>';
 
-					$players_info = $db->query("SELECT `houses`.`id` AS `houseid` , `players`.`name` AS `ownername` , `accounts`.`premdays` AS `premdays` , `accounts`.`lastday` AS `lastlogin` FROM `houses` , `players` , `accounts` WHERE `players`.`id` = `houses`.`owner` AND `accounts`.`id` = `players`.`account_id`");
+					$players_info = $db->query("SELECT `houses`.`id` AS `houseid` , `players`.`name` AS `ownername` FROM `houses` , `players` , `accounts` WHERE `players`.`id` = `houses`.`owner` AND `accounts`.`id` = `players`.`account_id`");
 					$players = array();
 					foreach($players_info->fetchAll() as $player)
 						$players[$player['houseid']] = array('name' => $player['ownername']);

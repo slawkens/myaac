@@ -445,6 +445,43 @@ function check_name($name, &$error = '')
 }
 
 /**
+ * Validate account id
+ * Id lenght must be 6-10 chars
+ *
+ * @param string $name Account name to check
+ * @param string $error Error description will be placed here
+ * @return bool Is account name valid?
+ */
+function check_account_id($id, &$error = '')
+{
+	if(!isset($id[0]))
+	{
+		$error = 'Please enter an account.';
+		return false;
+	}
+
+	if(!check_number($id)) {
+		$error = 'Invalid account name format. Use only numbers 0-9.';
+		return false;
+	}
+
+	$length = strlen($id);
+	if($length < 6)
+	{
+		$error = 'Account is too short (min. 6 chars).';
+		return false;
+	}
+
+	if($length > 10)
+	{
+		$error = 'Account is too long (max. 10 chars).';
+		return false;
+	}
+
+	return true;
+}
+
+/**
  * Validate account name
  * Name lenght must be 3-32 chars
  *

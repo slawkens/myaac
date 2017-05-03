@@ -103,10 +103,16 @@ if($action == '')
 			}
 			else
 				echo '<TR BGCOLOR='.$config['lightborder'].'><TD ALIGN="CENTER">-</TD><TD><IMG SRC="images/guilds/' . 'default.gif" WIDTH=64 HEIGHT=64></TD>
-					<TD valign="top" align="center"><B>Create guild</B><BR/>Actually there is no guild on server. Create first! Press button "Create Guild".</TD>
-					<TD colspan="4"><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=createguild" METHOD=post><TR><TD>
+					<TD valign="top" align="center"><B>Create guild</B><BR/>Actually there is no guild on server.' . ($logged ? ' Create first! Press button "Create Guild".' : '') . '</TD>
+					<TD colspan="4">';
+					if($logged)
+						echo '
+					<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=createguild" METHOD=post><TR><TD>
 					<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
-					</TD></TR></FORM></TABLE></TD></TR>';
+					</TD></TR></FORM></TABLE>';
+					
+					echo '
+					</TD></TR>';
 		}
 		else
 		{
@@ -135,10 +141,14 @@ if($action == '')
 			}
 			else
 				echo '<TR BGCOLOR='.$config['lightborder'].'><TD><IMG SRC="images/guilds/' . 'default.gif" WIDTH=64 HEIGHT=64></TD>
-					<TD valign="top"><B>Create guild</B><BR/>Actually there is no guild on server. Create first! Press button "Create Guild".</TD>
-					<TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=createguild" METHOD=post><TR><TD>
+					<TD valign="top"><B>Create guild</B><BR/>Actually there is no guild on server.' . ($logged ? ' Create first! Press button "Create Guild".' : '') . '</TD>
+					<TD>';
+					if($logged)
+						echo '<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=createguild" METHOD=post><TR><TD>
 					<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
-					</TD></TR></FORM></TABLE></TD></TR>';
+					</TD></TR></FORM></TABLE>';
+					echo '
+					</TD></TR>';
 		}
 
 
@@ -151,7 +161,7 @@ if($action == '')
 		<BR /><a href="?subtopic=guilds&action=cleanup_players">Cleanup players</a> - can\'t join guild/be invited? Can\'t create guild? Try cleanup players.
 		<BR /><a href="?subtopic=guilds&action=cleanup_guilds">Cleanup guilds</a> - made guild, you are a leader, but you are not on players list? Cleanup guilds!';
 	else
-		echo 'Before you can create guild you must login.<br><TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD><TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode(getPageLink('guilds')) . '" METHOD=post><TR><TD>
+		echo 'Before you can create guild you must login.<br><TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD><TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=accountmanagement&redirect=' . getPageLink('guilds') . '" METHOD=post><TR><TD>
 		<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 		</TD></TR></FORM></TABLE></TD><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD></TR></TABLE>';
 }
@@ -263,11 +273,11 @@ if($action == 'show')
 		$showed_players = 1;
 		foreach($rank_list as $rank)
 		{
-			if(fieldExist('rank_id', 'players'))
-				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
-			else
+			if(tableExist(GUILD_MEMBERS_TABLE))
 				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
-
+			else if(fieldExist('rank_id', 'players'))
+				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
+			
 			$players_with_rank_number = $players_with_rank->rowCount();
 			if($players_with_rank_number > 0)
 			{

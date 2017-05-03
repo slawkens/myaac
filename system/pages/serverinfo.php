@@ -11,12 +11,17 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Server info';
+
+if(isset($config['lua']['experience_stages']))
+	$config['lua']['experienceStages'] = $config['lua']['experience_stages'];
 ?>
 
 <center>
 	<h1><?php echo $config['lua']['serverName']; ?></h1>
 	<h3>
+		<?php if(isset($config['lua']['experienceStages']) && getBoolean($config['lua']['experienceStages'])): ?>
 		Experience stages: <a href="<?php echo getPageLink('experienceStages'); ?>">Look here</a><br/>
+		<?php endif; ?>
 		Commands: <a href="<?php echo getPageLink('commands'); ?>">Look here</a><br/>
 		Team: <a href="<?php echo getPageLink('team'); ?>">Look here</a><br/>
 	</h3>
@@ -34,9 +39,15 @@ $title = 'Server info';
 	if(isset($config['lua']['globalSaveEnabled']) && getBoolean($config['lua']['globalSaveEnabled']))
 		echo '<li>Global save: <b>' . $config['lua']['globalSaveHour'] . ':00</b></li>';
 
+	if(isset($config['lua']['min_pvp_level'])){
+		$config['lua']['protectionLevel'] = $config['lua']['min_pvp_level'];
+	}
+	
+	if(isset($config['lua']['protectionLevel'])):
 ?>
 	<li>World type: <b>PVP <i>(Protection level: ><?php echo $config['lua']['protectionLevel']; ?>)</i></b></li>
 <?php
+	endif;
 	$rent = trim(strtolower($config['lua']['houseRentPeriod']));
 	if($rent != 'yearly' && $rent != 'monthly' && $rent != 'weekly' && $rent != 'daily')
 		$rent = 'never';
@@ -48,14 +59,31 @@ $title = 'Server info';
 		if($cleanOld > 0)
 			echo '<li>Houses with inactive owners are cleaned after 30 days.</li>';
 	}
+	
+	if(isset($config['lua']['rate_mag']))
+		$config['lua']['rateMagic'] = $config['lua']['rate_mag'];
+	if(isset($config['lua']['rate_skill']))
+		$config['lua']['rateSkill'] = $config['lua']['rate_skill'];
+	if(isset($config['lua']['rate_loot']))
+		$config['lua']['rateLoot'] = $config['lua']['rate_loot'];
+	if(isset($config['lua']['rate_spawn']))
+		$config['lua']['rateSpawn'] = $config['lua']['rate_spawn'];
 ?>
 	<br/>
 
 	<h2>Rates</h2>
+	<?php if(isset($config['lua']['rateMagic'])): ?>
 	<li>Magic Level: <b>x<?php echo $config['lua']['rateMagic']; ?></b></li>
+	<?php endif;
+	if(isset($config['lua']['rateSkill'])): ?>
 	<li>Skills: <b>x<?php echo $config['lua']['rateSkill']; ?></b></li>
+	<?php endif;
+	if(isset($config['lua']['rateLoot'])): ?>
 	<li>Loot: <b>x<?php echo $config['lua']['rateLoot']; ?></b></li>
+	<?php endif;
+	if(isset($config['lua']['rateSpawn'])): ?>
 	<li>Spawn: <b>x<?php echo $config['lua']['rateSpawn']; ?></b></li>
+	<?php endif; ?>
 <?php
 	$house_level = NULL;
 	if(isset($config['lua']['levelToBuyHouse']))
@@ -65,12 +93,15 @@ $title = 'Server info';
 
 	if(isset($house_level)):
 ?>
-	<li>Houses: <b><?php echo $config['lua']['levelToBuyHouse']; ?> level</b></li>
+	<li>Houses: <b><?php echo $house_level; ?> level</b></li>
 	<?php endif; ?>
 	<li>Guilds: <b><?php echo $config['guild_need_level']; ?> level</b> (Create via website)</li>
 	<br>
 
 <?php
+	if(isset($config['lua']['in_fight_duration']))
+		$config['lua']['pzLocked'] = $config['lua']['in_fight_duration'];
+
 	$pzLocked = eval('return ' . $config['lua']['pzLocked'] . ';');
 	$whiteSkullTime = isset($config['lua']['whiteSkullTime']) ? $config['lua']['whiteSkullTime'] : NULL;
 	if(!isset($whiteSkullTime) && isset($config['lua']['unjust_skull_duration']))
@@ -138,13 +169,13 @@ $title = 'Server info';
 	<?php
 	endif;
 	if(isset($config['lua']['banishment_length'])): ?>
-	<li>Banishment length: <b><?php echo eval('return ' . $config['lua']['banishment_length'] / (24 * 60 * 60) . ';'); ?> days</b></li>
+	<li>Banishment length: <b><?php echo eval('return (' . $config['lua']['banishment_length'] . ') / (24 * 60 * 60);'); ?> days</b></li>
 	<?php endif;
 	if(isset($config['lua']['final_banishment_length'])): ?>
-	<li>Final banishment length: <b><?php echo eval('return ' . $config['lua']['final_banishment_length'] / (24 * 60 * 60) . ';'); ?> days</b></li>
+	<li>Final banishment length: <b><?php echo eval('return (' . $config['lua']['final_banishment_length'] . ') / (24 * 60 * 60);'); ?> days</b></li>
 	<?php endif;
 	if(isset($config['lua']['ip_banishment_length'])): ?>
-	<li>IP banishment length: <b><?php echo eval('return ' . $config['lua']['ip_banishment_length'] / (24 * 60 * 60) . ';'); ?> days</b></li>
+	<li>IP banishment length: <b><?php echo eval('return (' . $config['lua']['ip_banishment_length'] . ') / (24 * 60 * 60);'); ?> days</b></li>
 	<?php endif; ?>
 	<br/>
 	<h2>Other</h2>

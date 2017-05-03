@@ -16,11 +16,13 @@ if(!isset($config['lua']['experienceStages']) || !getBoolean($config['lua']['exp
 {
 	$enabled = false;
 
-	$stages = new DOMDocument();
-	$stages->load($config['data_path'] . 'XML/stages.xml');
-	foreach($stages->getElementsByTagName('config') as $node) {
-		if($node->getAttribute('enabled'))
-			$enabled = true;
+	if(file_exists($config['data_path'] . 'XML/stages.xml')) {
+		$stages = new DOMDocument();
+		$stages->load($config['data_path'] . 'XML/stages.xml');
+		foreach($stages->getElementsByTagName('config') as $node) {
+			if($node->getAttribute('enabled'))
+				$enabled = true;
+		}
 	}
 	
 	if(!$enabled) {

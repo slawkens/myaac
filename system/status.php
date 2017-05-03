@@ -21,9 +21,15 @@ $status['monsters'] = 0;
 $status_ip = $config['lua']['ip'];
 if(isset($config['lua']['statusProtocolPort'])) {
 	$config['lua']['loginPort'] = $config['lua']['statusProtocolPort'];
+	$config['lua']['statusPort'] = $config['lua']['statusProtocolPort'];
 	$status_port = $config['lua']['statusProtocolPort'];
 }
-else
+else if(isset($config['lua']['status_port'])) {
+	$config['lua']['loginPort'] = $config['lua']['status_port'];
+	$config['lua']['statusPort'] = $config['lua']['status_port'];
+	$status_port = $config['lua']['status_port'];
+}
+
 $status_port = $config['lua']['statusPort'];
 
 if(isset($config['status_ip'][0]))
@@ -63,6 +69,9 @@ if($fetch_from_db)
 			$status[str_replace('status_', '', $tmp['name'])] = $tmp['value'];
 	}
 }
+
+if(isset($config['lua']['statustimeout']))
+	$config['lua']['statusTimeout'] = $config['lua']['statustimeout'];
 
 // get status timeout from server config
 $status_timeout = eval('return ' . $config['lua']['statusTimeout'] . ';') / 1000 + 1;

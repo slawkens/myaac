@@ -19,23 +19,32 @@ require(SYSTEM . 'init.php');
 echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
 if(isset($_GET['account']))
 {
-	$account = trim($_GET['account']);
+	$account = $_GET['account'];
 	$tmp = strtoupper($account);
 
 	$error = '';
-	if(!check_account_name($tmp, $error))
+	if(USE_ACCOUNT_NAME)
+	{
+		if(!check_account_name($tmp, $error))
+			error_($error);
+	}
+	else if(!check_account_id($account, $error))
 		error_($error);
 
 	$_account = new OTS_Account();
-	$_account->find($tmp);
+	if(USE_ACCOUNT_NAME)
+		$_account->find($tmp);
+	else
+		$_account->load($tmp);
+
 	if($_account->isLoaded())
 		error_('Account with this name already exist.');
 
-	success_('Good account name ( ' . $account . ' ).');
+	success_('Good account' . (USE_ACCOUNT_NAME ? ' name' : '') . ' ( ' . $account . ' ).');
 }
 else if(isset($_GET['email']))
 {
-	$email = trim($_GET['email']);
+	$email = $_GET['email'];
 	if(strlen($email) >= 255)
 		error_('E-mail is too long (max. 255 chars).');
 
@@ -54,7 +63,7 @@ else if(isset($_GET['email']))
 }
 else if(isset($_GET['name']))
 {
-	$name = strtolower(stripslashes(trim($_GET['name'])));
+	$name = strtolower(stripslashes($_GET['name']));
 	$error = '';
 	if(!check_name($name, $error))
 		error_($error);

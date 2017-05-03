@@ -490,7 +490,10 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
         // creates filter
         $filter = new OTS_SQLFilter();
         $filter->compareField('group_id', (int) $this->data['id']);
-        $filter->compareField('deleted', 0);
+		if(fieldExist('deletion', 'players'))
+			$filter->compareField('deletion', 0);
+		else
+      	  $filter->compareField('deleted', 0);
 
         // creates list object
         $list = new OTS_Players_List();

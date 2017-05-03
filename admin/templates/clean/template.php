@@ -22,7 +22,7 @@
 				<?php endif; ?>
 			</div>
 			<div id="version">Version: <?php echo MYAAC_VERSION; ?> (<a id="update" href="?p=version">Check for updates</a>)<br/>
-				Logged in as: <b><?php echo $account_logged->getName(); ?></b><br/>
+				Logged in as: <b><?php echo (USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()); ?></b><br/>
 				<a href="<?php echo BASE_URL; ?>" target="_blank">Preview</a> <span class="separator">|</span> <a href="?action=logout">Log out<img src="<?php echo BASE_URL; ?>images/icons/logout.png" alt="" title="Log out" /></a>
 			</div>
 			<?php endif; ?>

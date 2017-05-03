@@ -58,7 +58,10 @@ else
 			}
 
 			$account_logged = $ots->createObject('Account');
-			$account_logged->find($login_account);
+			if(USE_ACCOUNT_NAME)
+				$account_logged->find($login_account);
+			else
+				$account_logged->load($login_account);
 	
 			$config_salt_enabled = fieldExist('salt', 'accounts');
 			if($account_logged->isLoaded() && encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password) == $account_logged->getPassword()

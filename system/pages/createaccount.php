@@ -24,17 +24,28 @@ if($logged)
 $step = isset($_POST['step']) ? $_POST['step'] : '';
 if($step == 'save')
 {
-	$account_name = $_POST['account_name'];
-	$account_name_up = strtoupper($account_name);
+	if(USE_ACCOUNT_NAME) {
+		$account_name = $_POST['account'];
+		$account_name_up = strtoupper($account_name);
+	}
+	else
+		$account_id = $_POST['account'];
+
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 	$password2 = $_POST['password2'];
 
 	// account
-	if(empty($account_name))
-		$errors['account_name'] = 'Please enter your account name!';
-	elseif(!check_account_name($account_name_up))
-		$errors['account_name'] = 'Invalid account name format. Please use only A-Z and numbers 0-9.';
+	if(isset($account_id)) {
+		if(!check_number($account_id))
+			$errors['account'] = 'Invalid account number format. Please use only numbers 0-9.';
+	}
+	else {
+		if(empty($account_name))
+			$errors['account'] = 'Please enter your account name!';
+		elseif(!check_account_name($account_name_up))
+			$errors['account'] = 'Invalid account name format. Please use only A-Z and numbers 0-9.';
+	}
 
 	// email
 	if(empty($email))
@@ -81,7 +92,7 @@ if($step == 'save')
 	}
 
 	// check if account name is not equal to password
-	if($account_name_up == strtoupper($password))
+	if(USE_ACCOUNT_NAME && $account_name_up == strtoupper($password))
 	{
 		$errors['password'] = 'Password may not be the same as account name.';
 	}
@@ -97,9 +108,17 @@ if($step == 'save')
 		}
 
 		$account_db = new OTS_Account();
-		$account_db->find($account_name);
-		if($account_db->isLoaded())
-			$errors['account_name'] = 'Account with this name already exist.';
+		if(USE_ACCOUNT_NAME)
+			$account_db->find($account_name);
+		else
+			$account_db->load($account_id);
+
+		if($account_db->isLoaded()) {
+			if(USE_ACCOUNT_NAME)
+				$errors['account'] = 'Account with this name already exist.';
+			else
+				$errors['account'] = 'Account with this id already exist.';
+		}
 	}
 
 	if(!isset($_POST['accept_rules']) || $_POST['accept_rules'] != 'true')
@@ -108,7 +127,10 @@ if($step == 'save')
 	if(empty($errors))
 	{
 		$new_account = $ots->createObject('Account');
-		$new_account->create($account_name);
+		if(USE_ACCOUNT_NAME)
+			$new_account->create($account_name);
+		else
+			$new_account->create(NULL, $account_id);
 
 		$config_salt_enabled = fieldExist('salt', 'accounts');
 		if($config_salt_enabled)
@@ -137,7 +159,8 @@ if($step == 'save')
 		if($config['account_premium_points']) {
 			$new_account->setCustomField('premium_points', $config['account_premium_points']);
 		}
-
+	
+		$tmp_account = (USE_ACCOUNT_NAME ? $account_name : $account_id);
 		if($config['mail_enabled'] && $config['account_mail_verify'])
 		{
 			$hash = md5(generateRandomString(16, true, true) . $email);
@@ -145,12 +168,13 @@ if($step == 'save')
 
 			$verify_url = BASE_URL . '?p=account&action=confirm_email&v=' . $hash;
 			$server_name = $config['lua']['serverName'];
+			
 			$body_plain = "Hello!
 
 Thank you for registering on $server_name!
 
 Here are the details of your account:
-Name: $account_name
+Account" . (USE_ACCOUNT_NAME ? ' Name' : '') . ": $tmp_account
 Password: ************ (hidden for security reasons)
 
 To verify your email address please click the link below:
@@ -162,7 +186,7 @@ If you haven't registered on $server_name please ignore this email.";
 Thank you for registering on ' . $config['lua']['serverName'] . '!<br/>
 <br/>
 Here are the details of your account:<br/>
-Name: ' . $account_name . '<br/>
+Account' . (USE_ACCOUNT_NAME ? ' Name' : '') . ': ' . $tmp_account . '<br/>
 Password: ************ (hidden for security reasons)<br/>
 <br/>
 To verify your email address please click the link below:<br/>
@@ -177,11 +201,11 @@ If you haven\'t registered on ' . $config['lua']['serverName'] . ' please ignore
 					<tr><td bgcolor="<?php echo $config['vdarkborder']; ?>" class="white"><b>Account Created</b></td></tr>
 					<tr><td bgcolor="<?php echo $config['darkborder']; ?>'">
 				  <table border="0" cellpadding="1"><tr><td>
-				    <br/>Your account name is <b><?php echo $account_name; ?></b>.
+				    <br/>Your account<?php (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> is <b><?php echo $tmp_account; ?></b>.
 
-				You will need the account name and your password to play on <?php echo $config['lua']['serverName']; ?>.
-				    Please keep your account name and password in a safe place and
-				    never give your account name or password to anybody.<br/><br/>
+				You will need the account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> and your password to play on <?php echo $config['lua']['serverName']; ?>.
+				    Please keep your account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> and password in a safe place and
+				    never give your account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> or password to anybody.<br/><br/>
 <?php
 			}
 			else
@@ -197,23 +221,23 @@ If you haven\'t registered on ' . $config['lua']['serverName'] . ' please ignore
 			<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Account Created</B></TD></TR>
 			<TR><TD BGCOLOR="'.$config['darkborder'].'">
 			  <TABLE BORDER=0 CELLPADDING=1><TR><TD>
-			    <br/>Your account name is <b>'.$account_name.'</b><br/>You will need the account name and your password to play on '.$config['lua']['serverName'].'.
-			    Please keep your account name and password in a safe place and
-			    never give your account name or password to anybody.<br/><br/>';
+			    <br/>Your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' is <b>'.$tmp_account.'</b><br/>You will need the account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' and your password to play on '.$config['lua']['serverName'].'.
+			    Please keep your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' and password in a safe place and
+			    never give your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' or password to anybody.<br/><br/>';
 
 			if($config['mail_enabled'] && $config['account_welcome_mail'])
 			{
 				$mailBody = '
 					<h3>Dear player,</h3>
-					<p>Thanks for your registration at <a href=" ' . BASE_URL . '"><b>'.$config['lua']['serverName'].'</b></a></p>
+					<p>Thanks for your registration at <a href=" ' . BASE_URL . '"><b>' . $config['lua']['serverName'] . '</b></a></p>
 					<br/><br/>
 					Your login details:
-					<p>Account name: <b>' . $account_name . '</b></p>
+					<p>Account' . (USE_ACCOUNT_NAME ? ' name' : '') . ': <b>' . $tmp_account . '</b></p>
 					<p>Password: <b>' . str_repeat('*', strlen(trim($password))) . '</b> (hidden for security reasons)</p>
 					<p>Kind Regards,</p>';
 
 				if(_mail($email, 'Your account on ' . $config['lua']['serverName'], $mailBody))
-					echo '<br /><small>These informations were send on email address <b>'.$email.'</b>.';
+					echo '<br /><small>These informations were send on email address <b>' . $email . '</b>.';
 				else
 					echo '<br /><p class="error">An error occorred while sending email (<b>' . $email . '</b>)! Error:<br/>' . $mailer->ErrorInfo . '</p>';
 			}
@@ -241,9 +265,9 @@ function checkAccount()
 		eventId = 0;
 	}
 
-	if(document.getElementById("account_name").value == "")
+	if(document.getElementById("account_input").value == "")
 	{
-		document.getElementById("acc_name_check").innerHTML = '<b><font color="red">Please enter account name.</font></b>';
+		document.getElementById("acc_check").innerHTML = '<b><font color="red">Please enter account<?php echo (USE_ACCOUNT_NAME ? ' name' : ''); ?>.</font></b>';
 		return;
 	}
 
@@ -260,10 +284,10 @@ function checkAccount()
 		}
 	}
 
-	account = document.getElementById("account_name").value;
+	account = document.getElementById("account_input").value;
 	$.get("tools/validate.php", { account: account, uid: Math.random() },
 		function(data){
-			document.getElementById("acc_name_check").innerHTML = data;
+			document.getElementById("acc_check").innerHTML = data;
 			lastSend = timeNow;
 	});
 }
@@ -296,7 +320,6 @@ function checkEmail()
 	}
 
 	email = document.getElementById("email").value;
-	account = document.getElementById("account_name").value;
 	$.get("tools/validate.php", { email: email, uid: Math.random() },
 		function(data){
 			document.getElementById("email_check").innerHTML = data;
@@ -338,8 +361,8 @@ function validate_form(thisform)
 {
 	with (thisform)
 	{
-		if (validate_required(account_name,"Please enter name of new account!")==false)
-			{account_name.focus();return false;}
+		if (validate_required(account_input,"Please enter name of new account!")==false)
+			{account_input.focus();return false;}
 		if (validate_required(email,"Please enter your e-mail!")==false)
 		  {email.focus();return false;}
 		if (validate_email(email,"Invalid e-mail format!")==false)
@@ -362,11 +385,11 @@ function validate_form(thisform)
 		output_errors($errors);
 ?>
 To play on <?php echo $config['lua']['serverName']; ?> you need an account.
-All you have to do to create your new account is to enter an account name, password<?php
+All you have to do to create your new account is to enter an account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?>, password<?php
 	if($config['recaptcha_enabled']) echo ', confirm reCAPTCHA';
 	if($config['account_country']) echo ', country';
 ?> and your email address.
-Also you have to agree to the terms presented below. If you have done so, your account name will be shown on the following page and your account password will be sent to your email address along with further instructions. If you do not receive the email with your password, please check your spam filter.<br/><br/>
+Also you have to agree to the terms presented below. If you have done so, your account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> will be shown on the following page and your account password will be sent to your email address along with further instructions. If you do not receive the email with your password, please check your spam filter.<br/><br/>
 <form action="?subtopic=createaccount" method="post" >
 	<div class="TableContainer" >
 		<table class="Table1" cellpadding="0" cellspacing="0" >
@@ -389,14 +412,14 @@ Also you have to agree to the terms presented below. If you have done so, your a
 						<table style="width:100%;" >
 							<tr>
 								<td class="LabelV" >
-									<span<?php echo (isset($errors['account_name'][0]) ? ' class="red"' : ''); ?>>Account Name:</span>
+									<span<?php echo (isset($errors['account'][0]) ? ' class="red"' : ''); ?>>Account <?php echo (USE_ACCOUNT_NAME ? 'Name' : 'Number'); ?>:</span>
 								</td>
 								<td>
-									<input type="text" name="account_name" id="account_name" onkeyup="checkAccount();" id="account-name-input" size="30" maxlength="30" value="<?php echo (isset($_POST['account_name']) ? $_POST['account_name'] : ''); ?>" />
-									<small id="acc_name_check"></small>
+									<input type="text" name="account" id="account_input" onkeyup="checkAccount();" size="30" maxlength="<?php echo (USE_ACCOUNT_NAME ? '30' : '10'); ?>" value="<?php echo (isset($_POST['account']) ? $_POST['account'] : ''); ?>" />
+									<small id="acc_check"></small>
 								</td>
 							</tr>
-							<?php write_if_error('account_name'); ?>
+							<?php write_if_error('account'); ?>
 							<tr>
 								<td class="LabelV" >
 									<span<?php echo (isset($errors['email'][0]) ? ' class="red"' : ''); ?>>Email Address:</span>
@@ -522,7 +545,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 				</table>
 				<script type="text/javascript">
 					$(function() {
-						$('#account-name-input').focus();
+						$('#account_input').focus();
 					});
 				</script>
 <?php

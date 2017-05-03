@@ -80,7 +80,7 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 					<table style="width:100%;" >
 						<tr>
 							<td class="LabelV" >
-								<span<?php echo (isset($errors[0]) ? ' class="red"' : ''); ?>>Account Name:</span>
+								<span<?php echo (isset($errors[0]) ? ' class="red"' : ''); ?>>Account <?php echo (USE_ACCOUNT_NAME ? 'Name' : 'Number'); ?>:</span>
 							</td>
 							<td style="width:100%;" ><input type="password" name="account_login" id="account-name-input" size="30" maxlength="30" ></td>
 						</tr>
@@ -132,7 +132,7 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 
 	if(isset($_REQUEST['redirect']))
 	{
-		$redirect = urldecode(trim($_REQUEST['redirect']));
+		$redirect = urldecode($_REQUEST['redirect']);
 ?>
 	<div class="TableContainer">
 		<table class="Table1" cellpadding="0" cellspacing="0">
@@ -887,10 +887,18 @@ function checkName()
 				if(fieldExist('promotion', 'players'))
 					$player->setPromotion($char_to_copy->getPromotion());
 			
+				if(fieldExist('direction', 'players'))
+					$player->setDirection($char_to_copy->getDirection());
+				
 			    $player->setConditions($char_to_copy->getConditions());
-				if(fieldExist('rank_id', 'players'))
+				$rank = $char_to_copy->getRank();
+				if($rank->isLoaded()) {
 					$player->setRank($char_to_copy->getRank());
+				}
+				
+				if(fieldExist('lookaddons', 'players'))
 			    $player->setLookAddons($char_to_copy->getLookAddons());
+	
 			    $player->setTownId($newchar_town);
 			    $player->setExperience($char_to_copy->getExperience());
 			    $player->setLevel($char_to_copy->getLevel());
@@ -901,8 +909,6 @@ function checkName()
 			    $player->setManaMax($char_to_copy->getManaMax());
 			    $player->setManaSpent($char_to_copy->getManaSpent());
 			    $player->setSoul($char_to_copy->getSoul());
-				if(fieldExist('direction', 'players'))
-					$player->setDirection($char_to_copy->getDirection());
 
 			    $player->setLookBody($char_to_copy->getLookBody());
 			    $player->setLookFeet($char_to_copy->getLookFeet());

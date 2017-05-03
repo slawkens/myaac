@@ -72,6 +72,10 @@ unset($tmp);
 if(isset($config['lua']['servername']))
 	$config['lua']['serverName'] = $config['lua']['servername'];
 
+
+if(isset($config['lua']['houserentperiod']))
+	$config['lua']['houseRentPeriod'] = $config['lua']['houserentperiod'];
+
 // localize data/ directory
 if(isset($config['lua']['dataDirectory'][0]))
 {
@@ -111,6 +115,7 @@ require_once(SYSTEM . 'libs/pot/OTS.php');
 $ots = POT::getInstance();
 require_once(SYSTEM . 'database.php');
 
+define('USE_ACCOUNT_NAME', fieldExist('name', 'accounts'));
 // load vocation names
 $tmp = '';
 if($cache->enabled() && $cache->fetch('vocations', $tmp)) {

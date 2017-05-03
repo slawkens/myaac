@@ -31,9 +31,9 @@ class OTS_Groups_List implements IteratorAggregate, Countable
  */
     public function __construct($file = '')
     {
-		global $cache;
-
 		if(tableExist('groups')) { // read groups from database
+			global $db;
+
 			foreach($db->query('SELECT `id`, `name`, `access` FROM `groups`;') as $group)
 			{
 				$info = array();
@@ -51,6 +51,8 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			global $config;
 			$file = $config['data_path'] . 'XML/groups.xml';
 		}
+
+		global $cache;
 
 		$data = array();
 		if($cache->enabled())
@@ -134,6 +136,17 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 
         throw new OutOfBoundsException();
     }
+
+	public function getHighestId()
+	{
+		$group_id = 0;
+		foreach($this->groups as $id => $group) {
+			if($id > $group_id)
+				$group_id = $id;
+		}
+		
+		return $group_id;
+	}
 
 /**
  * Returns string representation of object.

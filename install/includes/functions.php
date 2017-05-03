@@ -1,4 +1,5 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
 function query($query)
 {
 	global $db, $error;

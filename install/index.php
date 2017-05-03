@@ -16,7 +16,7 @@ if(isset($_POST['vars']))
 		$_SESSION['var_' . $key] = $value;
 }
 
-$steps = array(1 => 'welcome', 2 => 'license', 3 => 'requirements', 4 => 'config', 5 => 'database', 6 => 'finish');
+$steps = array(1 => 'welcome', 2 => 'license', 3 => 'requirements', 4 => 'config', 5 => 'database', 6 => 'admin', 7 => 'finish');
 if(!in_array($step, $steps)) // check if step is valid
 	die('ERROR: Unknown step.');
 
@@ -32,6 +32,8 @@ if($step == 'database')
 		}
 	}
 }
+
+$error = false;
 
 // step include
 ob_start();

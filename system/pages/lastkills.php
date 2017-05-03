@@ -16,7 +16,7 @@ $players_deaths_count = 0;
 $players_rows = '';
 if(tableExist('player_killers')) // tfs 0.3
 {
-	$players_deaths = $db->query('SELECT `player_deaths`.`id`, `player_deaths`.`date`, `player_deaths`.`level`, `players`.`name`, `players`.`world_id` FROM `player_deaths` LEFT JOIN `players` ON `player_deaths`.`player_id` = `players`.`id` ORDER BY `date` DESC LIMIT 0, ' . $config['last_kills_limit']);
+	$players_deaths = $db->query('SELECT `player_deaths`.`id`, `player_deaths`.`date`, `player_deaths`.`level`, `players`.`name`' . (fieldExist('world_id', 'players') ? ', `players`.`world_id`' : '') . ' FROM `player_deaths` LEFT JOIN `players` ON `player_deaths`.`player_id` = `players`.`id` ORDER BY `date` DESC LIMIT 0, ' . $config['last_kills_limit']);
 	if(!empty($players_deaths))
 	{
 		foreach($players_deaths as $death)

@@ -1,4 +1,5 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
 if(isset($_POST['lang']))
 {
 	setcookie('locale', $_POST['lang']);

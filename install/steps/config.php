@@ -1,4 +1,6 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
+
 $clients = array(
 	710,
 	740,
@@ -68,7 +70,7 @@ $clients = array(
 	<input type="hidden" name="step" id="step" value="database" />
 	<table>
 <?php
-	foreach(array('server_path', 'account', 'password', 'mail_admin', 'mail_address') as $value)
+	foreach(array('server_path', 'mail_admin', 'mail_address') as $value)
 		echo '
 	<tr>
 		<td>

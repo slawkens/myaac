@@ -48,7 +48,7 @@ if(isset($_GET['archive']))
 				$author = $query['name'];
 			}
 
-			echo news_parse($news['title'], $news['body'], $news['date'], $categories[$news['category']]['icon_id'], $config['news_author'] ? $author : '', getForumThreadLink($news['comments']));
+			echo news_parse($news['title'], $news['body'], $news['date'], $categories[$news['category']]['icon_id'], $config['news_author'] ? $author : '', $news['comments'] != 0 ? getForumThreadLink($news['comments']) : NULL);
 		}
 		else
 			echo 'This news doesn\'t exist or is hidden.<br>';
@@ -444,7 +444,7 @@ if(!$news_cached)
 				</a>';
 			}
 
-			echo news_parse($news['title'], $news['body'] . $admin_options, $news['date'], $categories[$news['category']]['icon_id'], $config['news_author'] ? $author : '', getForumThreadLink($news['comments']));
+			echo news_parse($news['title'], $news['body'] . $admin_options, $news['date'], $categories[$news['category']]['icon_id'], $config['news_author'] ? $author : '', $news['comments'] != 0 ? getForumThreadLink($news['comments']) : NULL);
 		}
 	}
 

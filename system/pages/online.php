@@ -21,13 +21,16 @@ if($config['account_country'])
 		<td class="white"><b>Server Status</b></td>
 	</tr>
 <?php
+$promotion = '';
+if(fieldExist('promotion', 'players'))
+	$promotion = '`promotion`,';
 $order = isset($_GET['order']) ? $_GET['order'] : 'name';
 if(!in_array($order, array('country', 'name', 'level', 'vocation')))
 	$order = $db->fieldName('name');
 else if($order == 'country')
 	$order = $db->tableName('accounts') . '.' . $db->fieldName('country');
 else if($order == 'vocation')
-	$order = 'promotion, vocation ASC';
+	$order = $promotion . 'vocation ASC';
 
 $skull_type = 'skull';
 if(fieldExist('skull_type', 'players')) {
@@ -43,7 +46,7 @@ $vocs = array(0, 0, 0, 0, 0);
 if(tableExist('players_online')) // tfs 1.0
 	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`, `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 else
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`, `promotion`, `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`, ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 
 $players = 0;
 $data = '';
@@ -116,11 +119,11 @@ if(!$players): ?>
 					' ORDER BY ' . $db->fieldName('record') . ' DESC LIMIT 1');
 					$timestamp = true;
 			}
-			else{ // tfs 1.0
+			else if(tableExist('server_config')) { // tfs 1.0
 				$query = $db->query('SELECT `value` as `record` FROM `server_config` WHERE `config` = ' . $db->quote('players_record'));
 			}
 
-			if($query->rowCount() > 0)
+			if(isset($query) && $query->rowCount() > 0)
 			{
 				$result = $query->fetch();
 				echo 'The maximum on this game world was ' . $result['record'] . ' players' . ($timestamp ? ' on ' . date("M d Y, H:i:s", $result['timestamp']) . '.' : '.');

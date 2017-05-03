@@ -1,8 +1,10 @@
 <?php
-if(isset($config['installed']) && $config['installed'])
+defined('MYAAC') or die('Direct access not allowed!');
+if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['saved'])) {
 	echo '<p class="warning">' . $locale['already_installed'] . '</p>';
-else
-{
+}
+else {
+	unset($_SESSION['saved']);
 ?>
 <form action="<?php echo BASE_URL; ?>install/" method="post">
 	<input type="hidden" name="step" id="step" value="license" />

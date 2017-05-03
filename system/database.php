@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 		$config['database_name'] = $config['lua']['sqlDatabase'];
 
 		$config['database_encryption'] = $config['lua']['encryptionType'];
-		if(!isset($encryptionType)/* || empty($encryptionType)*/) // before 0.3.6
+		if(!isset($config['database_encryption']) || empty($config['database_encryption'])) // before 0.3.6
 			$config['database_encryption'] = $config['lua']['passwordType'];
 	}
 	else if(isset($config['lua']['mysqlHost'])) // tfs 0.2/1.0
@@ -65,7 +65,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 		);
 	}
 	catch(PDOException $error) {
-		if($cache->enabled()) {
+		if(isset($cache) && $cache->enabled()) {
 			$cache->delete('config_lua');
 		}
 		die('ERROR: Cannot connect to MySQL database.<br/>' .
