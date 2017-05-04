@@ -213,10 +213,10 @@ if(!$error) {
 		if(!$error && (!isset($_SESSION['saved']))) {
 			$content .= '$config[\'installed\'] = true;';
 			$content .= PHP_EOL;
-			if(strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false) {
-				$content .= '$config[\'friendly_urls\'] = true;';
-				$content .= PHP_EOL;
-			}
+		//	if(strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false) {
+		//		$content .= '$config[\'friendly_urls\'] = true;';
+		//		$content .= PHP_EOL;
+		//	}
 
 			$content .= '$config[\'mail_enabled\'] = true;';
 			$content .= PHP_EOL;

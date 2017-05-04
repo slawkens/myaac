@@ -28,7 +28,7 @@ $config = array(
 	// used for the Downloads page and some templates aswell
 	'client' => 1098, // 954 = client 9.54
 
-	'friendly_urls' => false, // mod_rewrite is required for this, it makes links looks more elegant to eye, and also are SEO friendly (example: http://my-aac.org/guilds/Testing instead of http://my-aac.org/?subtopic=guilds&name=Testing)
+	'friendly_urls' => false, // mod_rewrite is required for this, it makes links looks more elegant to eye, and also are SEO friendly (example: http://my-aac.org/guilds/Testing instead of http://my-aac.org/?subtopic=guilds&name=Testing). Remember to rename .htaccess.dist to .htaccess
 	'gzip_output' => false, // gzip page content before sending it to the browser, uses less bandwidth but more cpu cycles
 
 	// gesior backward support (templates & pages)
@@ -59,7 +59,7 @@ $config = array(
 
 	// cache system. by default file cache is used
 	'cache_engine' => 'auto', // apc, eaccelerator, xcache, file, auto, or blank to disable.
-	'cache_prefix' => 'myaac_', // have to be unique if running more MyAAC instances on the same server, ignored when using file cache.
+	'cache_prefix' => 'myaac_', // have to be unique if running more MyAAC instances on the same server
 
 	// database details (leave blank for auto detect from config.lua)
 	'database_host' => '',
@@ -90,8 +90,8 @@ $config = array(
 	'mail_address' => 'no-reply@your-server.org', // server e-mail address (from:)
 	'mail_admin' => 'your-address@your-server.org', // admin email address, where mails from contact form will be sent
 	'mail_signature' => array( // signature that will be included at the end of every message sent using _mail function
-		'plain' => "--\nMy Server,\nhttp://www.myserver.com",
-		'html' => '<br/>My Server,\n<a href="http://www.myserver.com">myserver.com</a>'
+		'plain' => ''/*'--\nMy Server,\nhttp://www.myserver.com'*/,
+		'html' => ''/*'<br/>My Server,\n<a href="http://www.myserver.com">myserver.com</a>'*/
 	),
 	'smtp_enabled' => false, // send by smtp or mail function (set false if use mail function)
 	'smtp_host' => '', // mail host
