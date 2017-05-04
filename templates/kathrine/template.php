@@ -9,15 +9,13 @@
 				if(in_array(PAGE, array('news', 'newsarchive')))
 					echo 'news';
 				elseif(in_array(PAGE, array('creatures', 'spells', 'online', 'serverinfo', 'downloads', 'commands',
-					'movies', 'screenshots', 'experiencetable')))
+					'movies', 'screenshots', 'experiencetable', 'faq')))
 						echo 'library';
 				elseif(in_array(PAGE, array('characters', 'guilds', 'highscores', 'wars', 'lastkills', 'houses', 'bans',
 					'forum', 'team')))
 						echo 'community';
 				elseif(in_array(PAGE, array('account', 'accountmanagement', 'createaccount', 'lostaccount', 'rules')))
 					echo 'account';
-				elseif(in_array(PAGE, array('faq')))
-					echo 'about';
 				elseif(in_array(PAGE, array('points', 'gifts')))
 					echo 'shops';
 				?>';
@@ -40,7 +38,6 @@
                 <span id="account" onclick="menuSwitch('account');" class="tab">Account</span>
                 <span id="community" onclick="menuSwitch('community');" class="tab">Community</span>
                 <span id="library" onclick="menuSwitch('library');" class="tab">Library</span>
-				<span id="about" onclick="menuSwitch('about');" class="tab">About</span>
                 <?php
                 if($config['gifts_system'])
 				{
@@ -131,13 +128,6 @@
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_experienceTable']; ?>">Experience Table</a>
                 </div>
-
-				<div id="about-submenu">
-					<a href="<?php echo $template['link_faq']; ?>">FAQ</a>
-					<!--a href="<?php echo internalLayoutLink('about'); ?>">About us</a>
-					<a href="<?php echo internalLayoutLink('contact'); ?>">Contact</a-->
-				</div>
-
     			<?php
 				if($config['gifts_system'])
 				{
@@ -146,8 +136,8 @@
 						<a href="' . $template['link_points'] . '">Buy Premium Points</a>
 						<span class="separator"></span>
 						<a href="' . $template['link_gifts'] . '">Shop Offer</a>';
-						if($account_logged)
-							echo '<span class="separator"></span><a href="?subtopic=shopsystem&action=show_history">Shop History</a>';
+						if($logged)
+							echo '<span class="separator"></span><a href="' . $template['link_gifts_history'] . '">Shop History</a>';
 					echo '</div>';
 				}
 				?>

@@ -3,7 +3,7 @@ list[0] = 'news';
 list[1] = 'account';
 list[2] = 'community';
 list[3] = 'library';
-list[4] = 'about';
+list[4] = 'shops';
 
 function initMenu()
 {
