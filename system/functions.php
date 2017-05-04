@@ -1199,7 +1199,7 @@ function load_config_lua($filename)
 	if(!@file_exists($config_file))
 		die('ERROR: Cannot find ' . $filename . ' file.');
 
-	$tempFile = tempnam('/tmp', 'lua');
+	$tempFile = @tempnam('/tmp', 'lua');
 	$file = fopen($tempFile, 'w');
 	if(!$file) die('Cannot load server config!');
 

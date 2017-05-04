@@ -9,7 +9,7 @@ function news_parse($title, $content, $date, $icon = 0, $author = '', $comments 
 		$tmp = $template_path.'/images/letters/'.$content[0].'.gif';
 		if(file_exists($tmp)) {
 			$firstLetter = '<img src="' . $tmp . '" alt="'.$content[0].'" BORDER=0 ALIGN=bottom>';
-			$content[0] = '';
+			$content = substr($content, 1);
 		}
 	}
 
