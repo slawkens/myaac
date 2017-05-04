@@ -176,7 +176,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
         if( !isset($this->data['guild_id']) )
         {
-            throw new E_OTS_NotLoaded();
+            return new OTS_Guild();
         }
 
         $guild = new OTS_Guild();

@@ -254,20 +254,22 @@ if(check_name($name))
 				}
 
 				$rank_of_player = $player->getRank();
-				if($rank_of_player->isLoaded())
-				{
-					$guild_name = $rank_of_player->getGuild()->getName();
-					echo
-					'<TR BGCOLOR="'.getStyle(++$rows).'">'.
-						'<TD>Guild membership:</TD><TD>'.$rank_of_player->getName().' of the ' . getGuildLink($guild_name) . '</TD>'.
-					'</TR>';
+				if($rank_of_player->isLoaded()) {
+					$guild = $rank_of_player->getGuild();
+					if($guild->isLoaded()) {
+						$guild_name = $guild->getName();
+						echo
+						'<TR BGCOLOR="'.getStyle(++$rows).'">'.
+							'<TD>Guild membership:</TD><TD>'.$rank_of_player->getName().' of the ' . getGuildLink($guild_name) . '</TD>'.
+						'</TR>';
+					}
 				}
 
 				echo
 					'<TR BGCOLOR="'.getStyle(++$rows).'"><TD>Last login:</TD><TD>';
 				$lastlogin = $player->getLastLogin();
 				if(empty($lastlogin))
-					echo'Never logged in.';
+					echo 'Never logged in.';
 				else
 					echo date("M d Y, H:i:s", $lastlogin).' CEST';
 

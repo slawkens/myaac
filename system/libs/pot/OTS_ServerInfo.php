@@ -75,7 +75,10 @@ class OTS_ServerInfo
             fwrite($socket, $packet);
 
             // reads respond
-            $data = stream_get_contents($socket);
+            //$data = stream_get_contents($socket);
+			$data = ''; 
+			while (!feof($socket))
+				$data .= fgets($socket, 1024);
 
             // closing connection to current server
             fclose($socket);
@@ -121,7 +124,9 @@ class OTS_ServerInfo
         {
             // loads respond XML
             $info = new OTS_InfoRespond();
-            $info->loadXML( $status->getBuffer() );
+            if(!$info->loadXML( $status->getBuffer()))
+				return false;
+
             return $info;
         }
 

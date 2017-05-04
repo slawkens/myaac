@@ -1026,7 +1026,7 @@ if($action == 'kickplayer') {
 		}
 		else
 		{
-			if($player->getRank()->isLoaded() && $player->getRank()->getGuild()->getName() != $guild->getName()) {
+			if($player->getRank()->isLoaded() && $player->getRank()->getGuild()->isLoaded() && $player->getRank()->getGuild()->getName() != $guild->getName()) {
 				$guild_errors[] = 'Character <b>'.$name.'</b> isn\'t from your guild.';
 			}
 		}
