@@ -927,8 +927,12 @@ function checkName()
 					$player->setLossExperience($char_to_copy->getLossExperience());
 					$player->setLossMana($char_to_copy->getLossMana());
 					$player->setLossSkills($char_to_copy->getLossSkills());
-					$player->setLossItems($char_to_copy->getLossItems());
 				}
+				if(fieldExist('loss_items', 'players')) {
+					$player->setLossItems($char_to_copy->getLossItems());
+					$player->setLossContainerse($char_to_copy->getLossContainers());
+				}
+					
 				$player->save();
 				$player->setCustomField("created", time());
 				

@@ -756,10 +756,17 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			$this->data['banned'] = isset($ban['expires_at']);
 			$this->data['banned_time'] = $ban['expires_at'];
 		}
-		else {
-			$ban = $this->db->query('SELECT `active`, `expires` FROM `bans` WHERE (`type` = 3 OR `type` = 5) AND `active` = 1 AND `value` = ' . $this->data['id'] . ' AND (`expires` > ' . time() .' OR `expires` = -1) ORDER BY `expires` DESC')->fetch();
-			$this->data['banned'] = $ban['active'];
-			$this->data['banned_time'] = $ban['expires'];
+		else if(tableExist('bans')) {
+			if(fieldExist('active', 'bans')) {
+				$ban = $this->db->query('SELECT `active`, `expires` FROM `bans` WHERE (`type` = 3 OR `type` = 5) AND `active` = 1 AND `value` = ' . $this->data['id'] . ' AND (`expires` > ' . time() .' OR `expires` = -1) ORDER BY `expires` DESC')->fetch();
+				$this->data['banned'] = $ban['active'];
+				$this->data['banned_time'] = $ban['expires'];
+			}
+			else { // tfs 0.2
+				$ban = $this->db->query('SELECT `time` FROM `bans` WHERE (`type` = 3 OR `type` = 5) AND `account` = ' . $this->data['id'] . ' AND (`time` > ' . time() .' OR `time` = -1) ORDER BY `time` DESC')->fetch();
+				$this->data['banned'] = $ban['time'] == -1 || $ban['time'] > 0;
+				$this->data['banned_time'] = $ban['time'];
+			}
 		}
     }
 

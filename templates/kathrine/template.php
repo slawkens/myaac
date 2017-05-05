@@ -93,8 +93,10 @@
                     <a href="<?php echo $template['link_highscores']; ?>">Highscores</a>
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_lastkills']; ?>">Last Deaths</a>
+					<?php if(fieldExist('name', 'houses')): ?>
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_houses']; ?>">Houses</a>
+					<?php endif; ?>
                     <span class="separator"></span>
 					<?php if($config['otserv_version'] == TFS_03): ?>
                     <a href="<?php echo $template['link_bans']; ?>">Bans</a>
@@ -127,6 +129,8 @@
                     <a href="<?php echo $template['link_screenshots']; ?>">Screenshots</a>
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_experienceTable']; ?>">Experience Table</a>
+                    <span class="separator"></span>
+                    <a href="<?php echo $template['link_faq']; ?>">FAQ</a>
                 </div>
     			<?php
 				if($config['gifts_system'])
@@ -156,7 +160,7 @@
 								echo '
 								<font color="green"><b>Server Online</b></font> &raquo;
 								Players Online: ' . $status['players'] . ' / ' . $status['playersMax'] . ' &raquo;
-								Monsters: ' . $status['monsters'] . ' &raquo; Uptime: ' . $status['uptimeReadable'] . '';
+								Monsters: ' . $status['monsters'] . ' &raquo; Uptime: ' . (isset($status['uptimeReadable']) ? $status['uptimeReadable'] : 'Unknown') . '';
 							else
 								echo '<font color="red"><b>Server Offline</b></font>';
 							?>

@@ -12,6 +12,10 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Houses';
 
+if(!fieldExist('name', 'houses')) {
+	echo 'Houses list is not available on this server.';
+	return;
+}
 $rent = trim(strtolower($config['lua']['houseRentPeriod']));
 if($rent != 'yearly' && $rent != 'monthly' && $rent != 'weekly' && $rent != 'daily')
 	$rent = 'never';
@@ -29,7 +33,8 @@ $type = '';
 		{
 			$beds = array("", "one", "two", "three", "fourth", "fifth");
 			$houseName = $_REQUEST['house'];
-			$house = $db->query('SELECT * FROM ' . $db->tableName('houses') . ' WHERE ' . $db->fieldName('name') . ' LIKE ' . $db->quote($houseName));
+			$houseId = (check_number($_REQUEST['house']) ? $_REQUEST['house'] : -1);
+			$house = $db->query('SELECT * FROM ' . $db->tableName('houses') . ' WHERE ' . $db->fieldName('name') . ' LIKE ' . $db->quote($houseName) . ' OR `id` = ' . $db->quote($houseId));
 
 			if($house->rowCount() > 0)
 			{

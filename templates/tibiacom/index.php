@@ -420,6 +420,7 @@ echo "<a href='" . $template['link_downloads'] . "'>
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
+<?php if(fieldExist('name', 'houses')): ?>
 <a href='<?php echo $template['link_houses']; ?>'>
   <div id='submenu_houses' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
@@ -428,6 +429,7 @@ echo "<a href='" . $template['link_downloads'] . "'>
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
+<?php endif; ?>
 <a href='<?php echo $template['link_guilds']; ?>'>
   <div id='submenu_guilds' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>

@@ -227,28 +227,33 @@ if($player->isLoaded() && !$player->isDeleted())
 				$town_field = 'town_id';
 			else if(fieldExist('townid', 'houses'))
 				$town_field = 'townid';
+			else if(!fieldExist('town', 'houses'))
+				$town_field = false;
 			
-			$house = $db->query('SELECT `id`, `paid`, `name`, `' . $town_field . '` FROM `houses` WHERE `owner` = '.$player->getId())->fetch();
-			if(isset($house['id']))
-			{
-				if($house['paid'] > 0)
-					$add = ' is paid until '.date("M d Y", $house['paid']);
+			if(fieldExist('name', 'houses')) {
+				$house = $db->query('SELECT `id`, `paid`, `name`' . ($town_field != false ? ', `' . $town_field . '` as `town`' : '') . ' FROM `houses` WHERE `owner` = '.$player->getId())->fetch();
+				if(isset($house['id']))
+				{
+					$add = '';
+					if($house['paid'] > 0)
+						$add = ' is paid until '.date("M d Y", $house['paid']);
 
-				echo
-				'<TR BGCOLOR="'.getStyle(++$rows).'">
-					<TD>House:</TD>
-					<TD>
-						<TABLE BORDER=0><TR>
-							<TD>'.$house['name'].' ('.$config['towns'][$house[$town_field]].')'.$add.'</TD>
-							<TD>
-								<FORM ACTION="?subtopic=houses&page=view" METHOD=post>
-									<INPUT TYPE=hidden NAME=house VALUE="'.$house['name'].'">
-									<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/buttons/sbutton_view.gif" BORDER=0 WIDTH=120>
-								</FORM>
-							</TD>
-						</TR></TABLE>
-					</TD>
-				</TR>';
+					echo
+					'<TR BGCOLOR="'.getStyle(++$rows).'">
+						<TD>House:</TD>
+						<TD>
+							<TABLE BORDER=0><TR>
+								<TD>' . (isset($house['name']) ? $house['name'] : $house['id']) . (isset($house['town']) ? ' (' . $config['towns'][$house[$town_field]] . ')' : '') . $add . '</TD>
+								<TD>
+									<FORM ACTION="?subtopic=houses&page=view" METHOD=post>
+										<INPUT TYPE=hidden NAME=house VALUE="'. (isset($house['name']) ? $house['name'] : $house['id']) . '">
+										<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/buttons/sbutton_view.gif" BORDER=0 WIDTH=120>
+									</FORM>
+								</TD>
+							</TR></TABLE>
+						</TD>
+					</TR>';
+				}
 			}
 
 			$rank_of_player = $player->getRank();
@@ -452,9 +457,11 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			}
 		}
 		else {
+			$mostdamage = '';
+			if(fieldExist('mostdamage_by', 'player_deaths'))
+				$mostdamage = ', `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`';
 			$deaths = $db->query('SELECT 
-				`player_id`, `time`, `level`, `killed_by`, `is_player`, 
-				`mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified` 
+				`player_id`, `time`, `level`, `killed_by`, `is_player`' . $mostdamage . ' 
 				FROM `player_deaths` 
 				WHERE `player_id` = ' . $player->getId() . ' ORDER BY `time` DESC LIMIT 10;');
 
@@ -613,13 +620,17 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				'<TR BGCOLOR='.getStyle(++$rows).'>
 					<TD WIDTH=20%>Created:</TD>';
 					$bannedUntil = '';
+					$banned = array();
 					if(tableExist('account_bans'))
 						$banned = $db->query('SELECT `expires_at` as `expires` FROM `account_bans` WHERE `account_id` = '.$account->getId().' and `expires_at` > ' . time());
+					else if(tableExist('bans')) {
+						if(fieldExist('expires', 'bans'))
+							$banned = $db->query('SELECT `expires` FROM `bans` WHERE (`value` = '.$account->getId().' or `value` = '.$player->getId().') and `active` = 1 and `type` != 2 and `type` != 4 and `expires` > ' . time());
 					else
-						$banned = $db->query('SELECT `expires` FROM `bans` WHERE (`value` = '.$account->getId().' or `value` = '.$player->getId().') and `active` = 1 and `type` != 2 and `type` != 4 and `expires` > ' . time());
+							$banned = $db->query('SELECT `time` as `time` FROM `bans` WHERE (`account` = '.$account->getId().' or `player` = '.$player->getId().') and `type` != 2 and `type` != 4 and `time` > ' . time());
+					}
 					foreach($banned as $ban)
 					{
-						if($ban['type'] != 2 and $ban['type'] != 4)
 						$bannedUntil = ' <font color="red">[Banished '.($ban['expires'] == "-1" ? 'forever' : 'until '.date("d F Y, h:s", $ban['expires'])).']</font>';
 					}
 					echo '<TD>'.date("j F Y, g:i a", $account->getCustomField("created")).$bannedUntil.'</TD>
