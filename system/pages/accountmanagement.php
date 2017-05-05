@@ -6,7 +6,7 @@
  * @author    Gesior <jerzyskalski@wp.pl>
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.0.3
+ * @version   0.0.5
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
@@ -796,8 +796,6 @@ function checkName()
 		$newchar_vocation = isset($_POST['newcharvocation']) ? $_POST['newcharvocation'] : NULL;
 		$newchar_town = isset($_POST['newchartown']) ? $_POST['newchartown'] : NULL;
 		$newchar_errors = array();
-		
-		$newchar_created = false;
 		if(isset($_POST['savecharacter']) && $_POST['savecharacter'] == 1) {
 			if(empty($newchar_name))
 				$newchar_errors[] = 'Please enter a name for your character!';
@@ -899,7 +897,7 @@ function checkName()
 				}
 				
 				if(fieldExist('lookaddons', 'players'))
-					$player->setLookAddons($char_to_copy->getLookAddons());
+			    $player->setLookAddons($char_to_copy->getLookAddons());
 	
 			    $player->setTownId($newchar_town);
 			    $player->setExperience($char_to_copy->getExperience());
@@ -931,8 +929,6 @@ function checkName()
 				}
 				$player->save();
 				$player->setCustomField("created", time());
-				
-				$newchar_created = true;
 				$account_logged->logAction('Created character <b>' . $player->getName() . '</b>.');
 				unset($player);
 				$player = $ots->createObject('Player');
@@ -962,16 +958,15 @@ function checkName()
 				}
 			}
 		}
-
-		if(count($newchar_errors) > 0) {
-			echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div>';
-			echo '<b>The Following Errors Have Occurred:</b><br/>';
-			foreach($newchar_errors as $newchar_error)
-				echo '<li>'.$newchar_error . '</li>';
-			echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
-		}
-		
-		if(!$newchar_created) {
+		else
+		{
+			if(count($newchar_errors) > 0) {
+				echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div>';
+				echo '<b>The Following Errors Have Occurred:</b><br/>';
+				foreach($newchar_errors as $newchar_error)
+					echo '<li>'.$newchar_error . '</li>';
+				echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+			}
 			echo 'Please choose a name';
 			if(count($config['character_samples']) > 1)
 				echo ', vocation';

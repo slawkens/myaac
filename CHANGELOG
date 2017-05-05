@@ -1,3 +1,16 @@
+[0.0.5 - 05.05.2017]
+	- fixed bug when creating character (not showing errors)
+	- Fixed characters loading with names that has been created with other AAC
+	- fixed links to shop in default template
+	- fixed some weird PHP 7.1 warnings/notices
+	- Fixed config loading with some weird comments
+	- fixed bug with status info utf8 encoding (https://otland.net/threads/myaac-v0-0-1.251454/page-2#post-2440259)
+	- fixed when ip in log_action is NULL (https://otland.net/threads/myaac-v0-0-1.251454/page-2#post-2440357)
+	- fixed bug when guild doesn't exist on characters page (https://otland.net/threads/myaac-v0-0-1.251454/page-2#post-2440320)
+	- disabled friendly_urls by default
+	- fixes when $config['database_*'] is set
+	- added CHANGELOG
+
 [0.0.3 - 03.05.2017]
 	- Full support for OTHire 0.0.3
 	- added support for otservers that doesn't use account.name field, instead just account number will be used
