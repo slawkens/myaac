@@ -1,6 +1,6 @@
 <?php
 /**
- * Changelog
+ * CHANGELOG viewer
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
@@ -9,19 +9,18 @@
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-$title = 'MyAAC - CHANGELOG';
+$title = 'MyAAC Changelog';
 
-$data = file_get_contents(SYSTEM . 'docs/CHANGELOG');
+if(!file_exists(BASE . 'CHANGELOG')) {
+	echo 'File CHANGELOG doesn\'t exist.';
+	return;
+}
 
-// replace special characters with HTML entities
-// replace line breaks with <br />
-$data = nl2br(htmlspecialchars($data));
-
-// replace multiple spaces with single spaces
-$data = preg_replace('/\s\s+/', ' ', $data);
+$changelog = file_get_contents(BASE . 'CHANGELOG');
+$changelog = nl2br(htmlspecialchars($changelog));
 
 // replace URLs with <a href...> elements
-$data = preg_replace('/\s(\w+:\/\/)(\S+)/', ' <a href="\\1\\2" target="_blank">\\1\\2</a>', $data);
+$changelog = preg_replace('/\s(\w+:\/\/)(\S+)/', ' <a href="\\1\\2" target="_blank">\\1\\2</a>', $changelog);
 
-echo '<div>' . $data . '</div>';
+echo '<div>' . $changelog . '</div>';
 ?>

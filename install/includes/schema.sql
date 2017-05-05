@@ -1,9 +1,9 @@
 CREATE TABLE `myaac_account_actions`
 (
   `account_id` INT(11) NOT NULL,
-  `ip` INT(11) NOT NULL,
-  `date` INT(11) NOT NULL,
-  `action` VARCHAR(255) NOT NULL,
+  `ip` INT(11) NOT NULL DEFAULT '',
+  `date` INT(11) NOT NULL DEFAULT 0,
+  `action` VARCHAR(255) NOT NULL DEFAULT '',
   KEY (`account_id`)
 ) ENGINE = MyISAM;
 

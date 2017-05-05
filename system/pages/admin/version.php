@@ -18,7 +18,8 @@ $myaac_version = file_get_contents('http://my-aac.org/VERSION');
 
 // compare them
 if(version_compare($myaac_version, MYAAC_VERSION) <= 0)
-	echo '<p class="success">MyAAC latest version is ' . $myaac_version . '. You\'re using the latest version.</p>';
+	echo '<p class="success">MyAAC latest version is ' . $myaac_version . '. You\'re using the latest version.
+	<br/>View CHANGELOG ' . generateLink(ADMIN_URL . '?p=changelog', 'here') . '</p>';
 else
 	echo '<p class="warning">You\'re using outdated version.<br/>
 		Your version: <b>' . MYAAC_VERSION . '</b><br/>

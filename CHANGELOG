@@ -1,0 +1,27 @@
+[0.0.3 - 03.05.2017]
+	- Full support for OTHire 0.0.3
+	- added support for otservers that doesn't use account.name field, instead just account number will be used
+	- fixed encryption detection on TFS 0.3
+	- fixed bug when server_config table doesn't exist
+	- (install) moved admin account creation to new step
+	- fixed news comment link
+	- by default, the installer creates now the Admin player, for admin account
+	- fixed installation errors
+	- fixed config.lua loading with some weird comments
+
+[0.0.2 - 02.05.2017]
+	- updated forum links to use friendly_urls
+	- some more info will be shown when cannot connect to database
+	- show more error infos when creating character
+	- fixed forum link on newses
+	- fixed spells loading when there's vocation name instead of id
+	- fixed bug when you have changed template but it doesn't exist anymore
+	- fixed vocations with promotion loading
+	- fixed support for gesior pages and templates
+	- added function OTS_Acount:getGroupId()
+
+[0.0.1 - 01.05.2017]
+	This is first official release of MyAAC.
+	Features are listed here
+
+	For more information, see the release announcement on OTLand: https://otland.net/threads/myaac-v0-0-1.251454/
