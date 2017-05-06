@@ -1,3 +1,9 @@
+[0.0.6 - 06.05.2017]
+	- fixed bug while installing (https://otland.net/threads/myaac-v0-0-1.251454/page-3#post-2440543)
+	- fixed bug when creating character (not showing errors) (one more time)
+	- fixed support for TFS 0.2 series
+	- added FAQ link
+	
 [0.0.5 - 05.05.2017]
 	- fixed bug when creating character (not showing errors)
 	- Fixed characters loading with names that has been created with other AAC
