@@ -21,13 +21,13 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.0.5
+ * @version   0.0.6
  * @link      http://my-aac.org
  */
 session_start();
 
 define('MYAAC', true);
-define('MYAAC_VERSION', '0.0.5');
+define('MYAAC_VERSION', '0.0.6');
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
 define('MYAAC_OS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'WINDOWS' : 'LINUX');

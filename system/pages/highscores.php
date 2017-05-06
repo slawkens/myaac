@@ -6,7 +6,7 @@
  * @author    Gesior <jerzyskalski@wp.pl>
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.0.5
+ * @version   0.0.6
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
