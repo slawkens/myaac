@@ -169,7 +169,7 @@ if($config['online_vocations']): ?>
 		<?php
 			for($i = 1; $i < 5; $i++)
 			echo '<tr bgcolor="' . getStyle($i) . '">
-				<td width="25%">' . $config['vocations'][0][$i] . '</td>
+				<td width="25%">' . $config['vocations'][$i] . '</td>
 				<td width="75%">' . $vocs[$i] . '</td>
 			</tr>';
 			?>

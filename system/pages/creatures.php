@@ -303,7 +303,7 @@ if(isset($monster['name']))
 	echo '</TABLE></td></tr>';
 
 	echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>';
-	$loot = simplexml_load_file($config['server_path'] . 'data/monster/' . $monster['file_path']); 
+	$loot = simplexml_load_file($config['data_path'] . 'monster/' . $monster['file_path']); 
 	if($loot)
 	{ 
 		if($item = $loot->loot->item)

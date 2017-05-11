@@ -137,14 +137,17 @@ if($step == 'save')
 		{
 			$salt = generateRandomString(10, false, true, true);
 			$password = $salt . $password;
-			$new_account->setSalt($salt);
 		}
 
 		$new_account->setPassword(encrypt($password));
 		$new_account->setEMail($email);
 		$new_account->unblock();
 		$new_account->save();
-		$new_account->setCustomField("created", time());
+		
+		if($config_salt_enabled)
+			$new_account->setCustomField('salt', $salt);
+
+		$new_account->setCustomField('created', time());
 		$new_account->logAction('Account created.');
 
 		if($config['account_country']) {

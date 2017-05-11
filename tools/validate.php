@@ -68,17 +68,8 @@ else if(isset($_GET['name']))
 	if(!check_name($name, $error))
 		error_($error);
 
-	// check if this name wasn't namelocked
-	if(tableExist('player_namelocks') && fieldExist('name', 'player_namelocks')) {
-		$query = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE name = ' . $db->quote($name));
-		if($query->rowCount() > 0)
-			error_('Character with this name has been namelocked.');
-	}
-
-	$player = new OTS_Player();
-	$player->find($name);
-	if($player->isLoaded())
-		error_('Player with this name already exist.</b>');
+	if(!check_name_new_char($name, $error))
+		error_($error);
 
 	success_('Good. Your name will be:<br /><b>' . ucwords($name) . '</b>');
 }

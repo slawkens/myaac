@@ -60,7 +60,7 @@ CREATE TABLE `myaac_faq`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`question` VARCHAR(255) NOT NULL DEFAULT '',
-	`answer` VARCHAR(1020) NOT NULL,
+	`answer` VARCHAR(1020) NOT NULL DEFAULT '',
 	`ordering` INT(11) NOT NULL DEFAULT 0,
 	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
@@ -105,6 +105,15 @@ CREATE TABLE `myaac_forum`
 	KEY `section` (`section`)
 ) ENGINE = MyISAM;
 
+CREATE TABLE `myaac_hooks`
+(
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(30) NOT NULL DEFAULT '',
+	`type` INT(2) NOT NULL DEFAULT 0,
+	`file` VARCHAR(100) NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE = MyISAM;
+
 CREATE TABLE `myaac_monsters` (
 	`hide_creature` tinyint(1) NOT NULL default '0',
 	`name` varchar(255) NOT NULL,
@@ -125,7 +134,7 @@ CREATE TABLE `myaac_monsters` (
 CREATE TABLE `myaac_movies`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`title` VARCHAR(50) NOT NULL DEFAULT '',
+	`title` VARCHAR(100) NOT NULL DEFAULT '',
 	`youtube_id` VARCHAR(20) NOT NULL,
 	`author` VARCHAR(50) NOT NULL DEFAULT '',
 	`ordering` INT(11) NOT NULL DEFAULT 0,

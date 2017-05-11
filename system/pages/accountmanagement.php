@@ -222,7 +222,21 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 				echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="Message" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div><table><tr><td class="LabelV" >Note:</td><td style="width:100%;" >A request has been submitted to change the email address of this account to <b>'.$account_email_new.'</b>. After <b>'.date("j F Y, G:i:s", $account_email_new_time).'</b> you can accept the new email address and finish the process. Please cancel the request if you do not want your email address to be changed! Also cancel the request if you have no access to the new email address!</td></tr></table><div align="center" ><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=changeemail" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Edit" alt="Edit" src="'.$template_path.'/images/buttons/_sbutton_edit.gif" ></div></div></td></tr></form></table></div>    </div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/><br/>';
 			}
 		}
-		echo '<a name="General+Information" ></a><div class="TopButtonContainer" ><div class="TopButton" ><a href="#top" >	<img style="border:0px;" src="'.$template_path.'/images/content/back-to-top.gif" /></a></div></div><div class="TableContainer" ><table class="Table3" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><div class="Text" >General Information</div><span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span></div>    </div><tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" ><div class="TableContentContainer" >    <table class="TableContent" width="100%" ><tr style="background-color:'.$config['darkborder'].';" ><td class="LabelV" >Email Address:</td><td style="width:90%;" >'.$account_email.''.$account_email_change.'</td></tr><tr style="background-color:'.$config['lightborder'].';" ><td class="LabelV" >Created:</td><td>'.date("j F Y, G:i:s", $account_created).'</td></td><tr style="background-color:'.$config['darkborder'].';" ><td class="LabelV" >Last Login:</td><td>'.date("j F Y, G:i:s", time()).'</td></tr><tr style="background-color:'.$config['lightborder'].';" ><td class="LabelV" >Account Status:</td><td>'.$account_status.'</td></tr><tr style="background-color:'.$config['darkborder'].';" ><td class="LabelV" >Registred:</td><td>'.$account_registred.'</td></tr></table></div></div><div class="TableShadowContainer" ><div class="TableBottomShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bm.gif);" ><div class="TableBottomLeftShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bl.gif);" ></div><div class="TableBottomRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-br.gif);" ></div>  </div></div></td></tr><tr><td><table class="InnerTableButtonRow" cellpadding="0" cellspacing="0" ><tr><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=changepassword" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Change Password" alt="Change Password" src="'.$template_path.'/images/buttons/_sbutton_changepassword.gif" ></div></div></td></tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=changeemail" method="post" ><tr><td style="border:0px;" ><input type="hidden" name=newemail value="" ><input type="hidden" name=newemaildate value=0 ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Change Email" alt="Change Email" src="'.$template_path.'/images/buttons/_sbutton_changeemail.gif" ></div></div></td></tr></form>	</table></td><td width="100%"></td>';
+		echo '<a name="General+Information" ></a><div class="TopButtonContainer" ><div class="TopButton" ><a href="#top" >	<img style="border:0px;" src="'.$template_path.'/images/content/back-to-top.gif" /></a></div></div><div class="TableContainer" ><table class="Table3" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><div class="Text" >General Information</div><span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span></div>    </div><tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" ><div class="TableContentContainer" >    <table class="TableContent" width="100%" >
+		<tr style="background-color:'.$config['lightborder'].';" >
+			<td class="LabelV" >Account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . ':</td>
+			<td style="width:90%;" >' . (USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()) . '</td>
+		</tr>
+		<tr style="background-color:'.$config['darkborder'].';" >
+			<td class="LabelV" >Email Address:</td>
+			<td style="width:90%;" >'.$account_email.''.$account_email_change.'</td>
+		</tr>
+		<tr style="background-color:'.$config['lightborder'].';" >
+			<td class="LabelV" >Created:</td>
+			<td>'.date("j F Y, G:i:s", $account_created).'</td>
+		</tr>
+		<tr style="background-color:'.$config['darkborder'].';" >
+		<td class="LabelV" >Last Login:</td><td>'.date("j F Y, G:i:s", time()).'</td></tr><tr style="background-color:'.$config['lightborder'].';" ><td class="LabelV" >Account Status:</td><td>'.$account_status.'</td></tr><tr style="background-color:'.$config['darkborder'].';" ><td class="LabelV" >Registred:</td><td>'.$account_registred.'</td></tr></table></div></div><div class="TableShadowContainer" ><div class="TableBottomShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bm.gif);" ><div class="TableBottomLeftShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bl.gif);" ></div><div class="TableBottomRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-br.gif);" ></div>  </div></div></td></tr><tr><td><table class="InnerTableButtonRow" cellpadding="0" cellspacing="0" ><tr><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=changepassword" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Change Password" alt="Change Password" src="'.$template_path.'/images/buttons/_sbutton_changepassword.gif" ></div></div></td></tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=changeemail" method="post" ><tr><td style="border:0px;" ><input type="hidden" name=newemail value="" ><input type="hidden" name=newemaildate value=0 ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Change Email" alt="Change Email" src="'.$template_path.'/images/buttons/_sbutton_changeemail.gif" ></div></div></td></tr></form>	</table></td><td width="100%"></td>';
 		//show button "register account"
 		if(empty($account_reckey))
 			echo '<td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=registeraccount" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Register Account" alt="Register Account" src="'.$template_path.'/images/buttons/_sbutton_registeraccount.gif" ></div></div></td></tr></form></table></td>';
@@ -258,7 +272,37 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 				echo '<td><font color="green"><b>Online</b></font></td>';
 			echo '<td>[<a href="?subtopic=accountmanagement&action=changecomment&name='.urlencode($account_player->getName()).'" >Edit</a>]</td></tr>';
 		}
-		echo '</table>  </div></div><div class="TableShadowContainer" >  <div class="TableBottomShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bm.gif);" >    <div class="TableBottomLeftShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bl.gif);" ></div>    <div class="TableBottomRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-br.gif);" ></div>  </div></div></td></tr><tr><td><table class="InnerTableButtonRow" cellpadding="0" cellspacing="0" ><tr><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=createcharacter" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Create Character" alt="Create Character" src="'.$template_path.'/images/buttons/_sbutton_createcharacter.gif" ></div></div></td></tr></form></table></td><td style="width:100%;" ></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=deletecharacter" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Delete Character" alt="Delete Character" src="'.$template_path.'/images/buttons/_sbutton_deletecharacter.gif" ></div></div></td></tr></form></table></td></tr></table></td></tr>          </table>        </div>  </table></td></div></tr><br/><br/>';
+		echo '</table>  </div></div><div class="TableShadowContainer" >  <div class="TableBottomShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bm.gif);" >    <div class="TableBottomLeftShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bl.gif);" ></div>    <div class="TableBottomRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-br.gif);" ></div>  </div></div></td></tr><tr><td><table class="InnerTableButtonRow" cellpadding="0" cellspacing="0" ><tr>
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0" >
+				<form action="?subtopic=accountmanagement&action=createcharacter" method="post" >
+					<tr>
+						<td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div>
+								<input class="ButtonText" type="image" name="Create Character" alt="Create Character" src="'.$template_path.'/images/buttons/_sbutton_createcharacter.gif" ></div>
+							</div>
+						</td>
+					</tr>
+				</form>
+			</table>
+		</td>';
+		if($config['account_change_character_name']) {
+			echo '
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0" >
+				<form action="?subtopic=accountmanagement&action=changename" method="post" >
+					<tr>
+						<td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div>
+								<input class="ButtonText" type="image" name="Change Name" alt="Change Name" src="'.$template_path.'/images/buttons/_sbutton_change_name.gif" ></div>
+							</div>
+						</td>
+					</tr>
+				</form>
+			</table>
+		</td>';
+		}
+		echo '
+		<td style="width:100%;" ></td>
+		<td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=deletecharacter" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Delete Character" alt="Delete Character" src="'.$template_path.'/images/buttons/_sbutton_deletecharacter.gif" ></div></div></td></tr></form></table></td></tr></table></td></tr>          </table>        </div>  </table></td></div></tr><br/><br/>';
 	}
 //########### CHANGE PASSWORD ##########
 	if($action == "changepassword") {
@@ -683,6 +727,105 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 	}
 
 //### DELETE character from account ###
+	if($action == "changename") {
+		echo '<script type="text/javascript" src="tools/check_name.js"></script>';
+		
+		$name_changed = false;
+		$player_id = isset($_POST['player_id']) ? $_POST['player_id'] : NULL;
+		$newcharname = isset($_POST['newcharname']) ? stripslashes(ucwords(strtolower($_POST['newcharname']))) : NULL;
+		if((!$config['account_change_character_name']))
+			echo 'You cant change your character name';
+		else
+		{
+			$points = $account_logged->getCustomField('premium_points');
+			if(isset($_POST['changenamesave']) && $_POST['changenamesave'] == 1) {
+				if($points < $config['account_change_character_name_points'])
+					$errors[] = 'You need ' . $config['account_change_character_name_points'] . ' premium points to change name. You have <b>'.$points.'<b> premium points.';
+	
+				if(empty($errors) && empty($newcharname))
+					$errors[] = 'Please enter a name for your character!';
+
+				if(empty($errors) && strlen($newcharname) > 25)
+					$errors[] = 'Name is too long. Max. lenght <b>25</b> letters.';
+				else if(empty($errors) && strlen($newcharname) < 3)
+					$errors[] = 'Name is too short. Min. lenght <b>25</b> letters.';
+				
+				if(empty($errors))
+				{
+					$error = '';
+					if(!admin() && !check_name_new_char($newcharname, $error))
+						$errors[] = $error;
+				}
+				
+				if(empty($errors)) {
+					$player = $ots->createObject('Player');
+					$player->load($player_id);
+					if($player->isLoaded()) {
+						$player_account = $player->getAccount();
+						if($account_logged->getId() == $player_account->getId()) {
+							if($player->isOnline()) {
+								$errors[] = 'This character is online.';
+							}
+							
+							if(empty($errors)) {
+								$name_changed = true;
+								$old_name = $player->getName();
+								$player->setName($newcharname);
+								$player->save();
+								$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
+								$account_logged->logAction('Changed name from <b>' . $old_name . '</b> to <b>' . $player->getName() . '</b>.');
+								echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Character Name Changed</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>The character <b>'.$old_name.'</b> name has been changed to <b>' . $player->getName() . '</b>.</td></tr>          </table>        </div>  </table></div></td></tr><br><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+							}
+							else
+							{
+								$errors[] = 'Character <b>'.$player_name.'</b> is not on your account.';
+							}
+						}
+					}
+					else
+					{
+						$errors[] = 'Character with this name doesn\'t exist.';
+					}
+				}
+			}
+
+			if(!$name_changed) {
+				if(!empty($errors)) {
+					echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
+					foreach($errors as $errors) {
+							echo '<li>'.$errors;
+					}
+					echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+				}
+				echo 'To change a name of character select player and choose a new name.<br/>
+				<font color="red">Change name cost ' . $config['account_change_character_name_points'] . ' premium points. You have ' . $points . ' premium points.</font><br/><br/><form action="?subtopic=accountmanagement&action=changename" method="post" ><input type="hidden" name="changenamesave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Change Name</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >
+				<table style="width:100%;" >
+					<tr>
+						<td class="LabelV" ><span >Character:</td>
+						<td style="width:90%;" >
+							<select name="player_id">';
+								$players = $account_logged->getPlayersList();
+								foreach($players as $player)
+									echo '<option value="' . $player->getId() . '">' . $player->getName() . '</option>';
+							echo '
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="LabelV" ><span >New Name:</td>
+						<td>
+							<input type="text" name="newcharname" id="newcharname" onkeyup="checkName();" size="25" maxlength="25" >
+							<font size="1" face="verdana,arial,helvetica">
+								<div id="name_check">Please enter your character name.</div>
+							</font>
+						</td>
+					</tr>
+				</table>        </div>  </table></div></td></tr><br/><table style="width:100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
+			}
+		}
+	}
+
+//### DELETE character from account ###
 	if($action == "deletecharacter") {
 		$player_name = isset($_POST['delete_name']) ? stripslashes($_POST['delete_name']) : NULL;
 		$password_verify = isset($_POST['delete_password']) ? $_POST['delete_password'] : NULL;
@@ -750,47 +893,7 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 
 //## CREATE CHARACTER on account ###
 	if($action == "createcharacter") {
-		echo '<script type="text/javascript">
-		eventId = 0;
-		lastSend = 0;
-
-function checkName()
-{
-	if(eventId != 0)
-	{
-		clearInterval(eventId)
-		eventId = 0;
-	}
-
-	if(document.getElementById("newcharname").value=="")
-	{
-		document.getElementById("name_check").innerHTML = \'<b><font color="red">Please enter new character name.</font></b>\';
-		return;
-	}
-
-	//anti flood
-	var date = new Date;
-	var timeNow = parseInt(date.getTime());
-
-	if(lastSend != 0)
-	{
-		if(timeNow - lastSend < 1100)
-		{
-			eventId = setInterval(\'checkName()\', 1100)
-			return;
-		}
-	}
-
-	var newcharname = document.getElementById("newcharname").value;
-	$.get("tools/validate.php", { name: newcharname, uid: Math.random() },
-		function(data){
-			document.getElementById("name_check").innerHTML = data;
-			lastSend = timeNow;
-	});
-	
-	lastSend = timeNow;
-}
-</script>';
+		echo '<script type="text/javascript" src="tools/check_name.js"></script>';
 		$newchar_name = isset($_POST['newcharname']) ? stripslashes(ucwords(strtolower($_POST['newcharname']))) : NULL;
 		$newchar_sex = isset($_POST['newcharsex']) ? $_POST['newcharsex'] : NULL;
 		$newchar_vocation = isset($_POST['newcharvocation']) ? $_POST['newcharvocation'] : NULL;
@@ -826,17 +929,10 @@ function checkName()
 			else
 				$newchar_town = $config['character_towns'][0];
 
-			//check if was namelocked previously
-			if(tableExist('player_namelocks') && fieldExist('name', 'player_namelocks')) {
-				$namelockSQL = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE `name` = ' . $db->quote($newchar_name));
-				if($namelockSQL->rowCount() > 0)
-					$newchar_errors[] = 'Character with this name has been namelocked.';
-			}
-
 			if(empty($newchar_errors))
 			{
 				$error = '';
-				if(!check_name_new_char($newchar_name, $error))
+				if(!admin() && !check_name_new_char($newchar_name, $error))
 					$newchar_errors[] = $error;
 				if($newchar_sex != 1 && $newchar_sex != "0")
 					$newchar_errors[] = 'Sex must be equal <b>0 (female)</b> or <b>1 (male)</b>.';
@@ -857,10 +953,6 @@ function checkName()
 
 			if(empty($newchar_errors))
 			{
-				$check_name_in_database = $ots->createObject('Player');
-				$check_name_in_database->find($newchar_name);
-				if($check_name_in_database->isLoaded())
-					$newchar_errors[] .= 'This name is already used. Please choose another name!';
 				$number_of_players_on_account = $account_logged->getPlayersList()->count();
 				if($number_of_players_on_account >= $config['characters_per_account'])
 					$newchar_errors[] .= 'You have too many characters on your account <b>('.$number_of_players_on_account.'/'.$config['characters_per_account'].')</b>!';
@@ -930,7 +1022,7 @@ function checkName()
 				}
 				if(fieldExist('loss_items', 'players')) {
 					$player->setLossItems($char_to_copy->getLossItems());
-					$player->setLossContainerse($char_to_copy->getLossContainers());
+					$player->setLossContainers($char_to_copy->getLossContainers());
 				}
 					
 				$player->save();
@@ -983,7 +1075,14 @@ function checkName()
 			if($account_logged->getPlayersList()->count() >= $config['characters_per_account']) {
 				echo '<b><font color="red"> You have maximum number of characters per account on your account. Delete one before you make new.</font></b>';
 			}
-			echo '<br/><br/><form action="?subtopic=accountmanagement&action=createcharacter" method="post" ><input type="hidden" name=savecharacter value="1" ><div class="TableContainer" >  <table class="Table3" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" ><span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><div class="Text" >Create Character</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span></div>    </div><tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" >  <div class="TableContentContainer" ><table class="TableContent" width="100%" ><tr class="LabelH" ><td style="width:50%;" ><span >Name</td><td><span >Sex</td></tr><tr class="Odd" ><td><input id="newcharname" name="newcharname" onkeyup="checkName();" value="'.$newchar_name.'" size="30" maxlength="29" ><BR><font size="1" face="verdana,arial,helvetica"><div id="name_check">Please enter your character name.</div></font></td><td>';
+			echo '<br/><br/><form action="?subtopic=accountmanagement&action=createcharacter" method="post" ><input type="hidden" name=savecharacter value="1" ><div class="TableContainer" >  <table class="Table3" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" ><span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><div class="Text" >Create Character</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span></div>    </div><tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" >  <div class="TableContentContainer" ><table class="TableContent" width="100%" ><tr class="LabelH" ><td style="width:50%;" ><span >Name</td><td><span >Sex</td></tr><tr class="Odd" >
+			<td>
+				<input id="newcharname" name="newcharname" onkeyup="checkName();" value="'.$newchar_name.'" size="25" maxlength="25" ><br/>
+				<font size="1" face="verdana,arial,helvetica">
+					<div id="name_check">Please enter your character name.</div>
+				</font>
+			</td>
+			<td>';
 			echo '<input type="radio" name="newcharsex" id="newcharsex" value="1" ';
 			if($newchar_sex == 1)
 				echo 'checked="checked" ';

@@ -45,9 +45,9 @@ $title = 'Statistics';
 		<td>
 			<table class="table">
 				<tr><th colspan="3">TOP 10 - Most wealth accounts</th></tr>
-				<tr><th>#</th><th>Account name</th><th>Premium points</th></tr>
+				<tr><th>#</th><th>Account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?></th><th>Premium points</th></tr>
 				<?php
-				$query = $db->query('SELECT premium_points, name FROM accounts ORDER BY premium_points DESC LIMIT 10;');
+				$query = $db->query('SELECT `premium_points`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
 				$i = 0;
 				foreach($query as $result)
 				{

@@ -84,6 +84,8 @@ $config = array(
 	'account_welcome_mail' => true, // send welcome email when user registers
 	'account_mail_change' => 2, // how many days user need to change email to account - block hackers
 	'account_country' => true, // user will be able to set country of origin when registering account, this information will be viewable in others places aswell
+	'account_change_character_name' => false, // can user change their character name for premium points?
+	'account_change_character_name_points' => 30, // cost of name change
 
 	// mail
 	'mail_enabled' => false, // is aac maker configured to send e-mails?

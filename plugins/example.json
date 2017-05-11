@@ -1,0 +1,14 @@
+{
+     "name": "Example Plugin",
+	 "description": "This is just an example of a Plugin for MyAAC.",
+     "version": "1.0",
+	 "author": "nobody",
+	 "contact": "nobody@example.org",
+	 "install": "plugins/example/install.php",
+	 "hooks": {
+		"Example Hook": {
+			"type": "BEFORE_PAGE",
+			"file": "plugins/example/before.php"
+		}
+	 }
+ }

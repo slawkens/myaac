@@ -93,8 +93,8 @@ if($id > 0) {
 		if(!check_name($name, $_error))
 			echo_error($_error);
 
-		//if(!check_name_new_char($name))
-		//	echo_error('This name contains invalid letters, words or format. Please use only a-Z, - , \' and space.');
+		//if(!check_name_new_char($name, $_error))
+		//	echo_error($_error);
 
 		$player_db = $ots->createObject('Player');
 		$player_db->find($name);
@@ -150,8 +150,10 @@ if($id > 0) {
 		verify_number($look_legs, 'Look legs', 11);
 		$look_type = $_POST['look_type'];
 		verify_number($look_type, 'Look type', 11);
-		$look_addons = $_POST['look_addons'];
-		verify_number($look_addons, 'Look addons', 11);
+		if(fieldExist('lookaddons', 'players')) {
+			$look_addons = $_POST['look_addons'];
+			verify_number($look_addons, 'Look addons', 11);
+		}
 
 		// pos
 		$pos_x = $_POST['pos_x'];
@@ -200,12 +202,16 @@ if($id > 0) {
 			verify_number($loss_items, 'Loss items', 11);
 		}
 		
-		$blessings = $_POST['blessings'];
-		verify_number($blessings, 'Blessings', 2);
+		if(fieldExist('blessings', 'players')) {
+			$blessings = $_POST['blessings'];
+			verify_number($blessings, 'Blessings', 2);
+		}
 		$balance = $_POST['balance'];
 		verify_number($balance, 'Balance', 20);
-		$stamina = $_POST['stamina'];
-		verify_number($stamina, 'Stamina', 20);
+		if(fieldExist('stamina', 'players')) {
+			$stamina = $_POST['stamina'];
+			verify_number($stamina, 'Stamina', 20);
+		}
 
 		$deleted = (isset($_POST['deleted']) && $_POST['deleted'] == 'true');
 		$hidden = (isset($_POST['hidden']) && $_POST['hidden'] == 'true');
@@ -238,7 +244,8 @@ if($id > 0) {
 			$player->setLookHead($look_head);
 			$player->setLookLegs($look_legs);
 			$player->setLookType($look_type);
-			$player->setLookAddons($look_addons);
+			if(fieldExist('lookaddons', 'players'))
+				$player->setLookAddons($look_addons);
 			$player->setPosX($pos_x);
 			$player->setPosY($pos_y);
 			$player->setPosZ($pos_z);
@@ -258,9 +265,11 @@ if($id > 0) {
 				$player->setLossContainers($loss_containers);
 				$player->setLossItems($loss_items);
 			}
-			$player->setBlessings($blessings);
+			if(fieldExist('blessings', 'players'))
+				$player->setBlessings($blessings);
 			$player->setBalance($balance);
-			$player->setStamina($stamina);
+			if(fieldExist('stamina', 'players'))
+				$player->setStamina($stamina);
 			if(fieldExist('deletion', 'players'))
 				$player->setCustomField('deletion', $deleted ? '1' : '0');
 			else
@@ -391,7 +400,9 @@ $account = $player->getAccount();
 			Head:<input type="text" name="look_head" size="2" maxlength="11" value="<?php echo $player->getLookHead(); ?>" />
 			Legs:<input type="text" name="look_legs" size="2" maxlength="11" value="<?php echo $player->getLookLegs(); ?>" />
 			Type:<input type="text" name="look_type" size="2" maxlength="11" value="<?php echo $player->getLookType(); ?>" />
+			<?php if(fieldExist('lookaddons', 'players')): ?>
 			Addons:<input type="text" name="look_addons" size="2" maxlength="11" value="<?php echo $player->getLookAddons(); ?>" />
+			<?php endif; ?>
 		</td>
 	</tr>
 	<tr>
@@ -468,19 +479,19 @@ $account = $player->getAccount();
 			<table>
 				<tr style="background-color: transparent;">
 					<td>Loss experience:</td>
-					<td><input type="text" name="lost_experience" size="8" maxlength="11" value="<?php echo $player->getLossExperience(); ?>" /></td>
+					<td><input type="text" name="loss_experience" size="8" maxlength="11" value="<?php echo $player->getLossExperience(); ?>" /></td>
 
 					<td>Loss mana:</td>
-					<td><input type="text" name="lost_mana" size="8" maxlength="11" value="<?php echo $player->getLossMana(); ?>" /></td>
+					<td><input type="text" name="loss_mana" size="8" maxlength="11" value="<?php echo $player->getLossMana(); ?>" /></td>
 					
 					<td>Loss skills:</td>
-					<td><input type="text" name="lost_skills" size="8" maxlength="11" value="<?php echo $player->getLossSkills(); ?>" /></td>
+					<td><input type="text" name="loss_skills" size="8" maxlength="11" value="<?php echo $player->getLossSkills(); ?>" /></td>
 					
 					<td>Loss containers:</td>
-					<td><input type="text" name="lost_containers" size="8" maxlength="11" value="<?php echo $player->getLossContainers(); ?>" /></td>
+					<td><input type="text" name="loss_containers" size="8" maxlength="11" value="<?php echo $player->getLossContainers(); ?>" /></td>
 					
 					<td>Loss items:</td>
-					<td><input type="text" name="lost_items" size="8" maxlength="11" value="<?php echo $player->getLossItems(); ?>" /></td>
+					<td><input type="text" name="loss_items" size="8" maxlength="11" value="<?php echo $player->getLossItems(); ?>" /></td>
 				</tr>
 			</table>
 		</td>
@@ -490,14 +501,17 @@ $account = $player->getAccount();
 		<td colspan="2">
 			<table>
 				<tr style="background-color: transparent;">
+					<?php if(fieldExist('blessings', 'players')): ?>
 					<td>Blessings:</td>
 					<td><input type="text" name="blessings" size="2" maxlength="2" value="<?php echo $player->getBlessings(); ?>" /></td>
-
+					<?php endif; ?>
 					<td>Balance:</td>
 					<td><input type="text" name="balance" size="16" maxlength="20" value="<?php echo $player->getBalance(); ?>" /></td>
 					
+					<?php if(fieldExist('stamina', 'players')): ?>
 					<td>Stamina:</td>
 					<td><input type="text" name="stamina" size="16" maxlength="20" value="<?php echo $player->getStamina(); ?>" /></td>
+					<?php endif; ?>
 				</tr>
 			</table>
 		</td>

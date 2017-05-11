@@ -1,4 +1,6 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
+
 function news_parse($title, $content, $date, $icon = 0, $author = '', $comments = '')
 {
 	global $template_path;

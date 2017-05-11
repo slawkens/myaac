@@ -187,9 +187,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function find($name)
     {
-		if(check_number($name))
-			$this->load((int)$name);
-		
         // finds player's ID
         $id = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($name) )->fetch();
 
@@ -310,6 +307,25 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
         return $this->data['web_flags'];
     }
+
+	public function hasFlag($flag)
+	{
+		if(!isset($this->data['web_flags'])) {
+			throw new E_OTS_NotLoaded();
+		}
+
+		return ($this->data['web_flags'] & $flag) == $flag;
+	}
+	
+	public function isAdmin()
+	{
+		return $this->hasFlag(FLAG_ADMIN) || $this->isSuperAdmin();
+	}
+
+	public function isSuperAdmin()
+	{
+		return $this->hasFlag(FLAG_SUPER_ADMIN);
+	}
 
     public function getPremDays()
     {

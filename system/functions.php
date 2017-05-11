@@ -598,6 +598,22 @@ function check_name_new_char($name, &$error = '')
 		}
 	}
 
+	$player = new OTS_Player();
+	$player->find($name);
+	if($player->isLoaded()) {
+		$error = 'Player with this name already exist.';
+		return false;
+	}
+
+	//check if was namelocked previously
+	if(tableExist('player_namelocks') && fieldExist('name', 'player_namelocks')) {
+		$namelock = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));
+		if($namelock->rowCount() > 0) {
+			$error =  'Character with this name has been namelocked.';
+			return false;
+		}
+	}
+			
 	$monsters = $db->query(
 			'SELECT ' . $db->fieldName('name') .
 			' FROM ' . $db->tableName(TABLE_PREFIX . 'monsters') .
@@ -808,8 +824,8 @@ function template_header($is_admin = false)
 	</noscript>
 ';
 	if(admin())
-		$ret .= '<script type="text/javascript" src="' . BASE_URL . 'tools/tiny_mce/tiny_mce.js"></script>
-	<!--script type="text/javascript" src="' . BASE_URL . 'tools/jquery.qtip.js" ></script>
+		$ret .= '<!--script type="text/javascript" src="' . BASE_URL . 'tools/tiny_mce/tiny_mce.js"></script>
+	<script type="text/javascript" src="' . BASE_URL . 'tools/jquery.qtip.js" ></script>
 	<script type="text/javascript" src="' . BASE_URL . 'tools/admin.js"></script-->
 ';
 	if($config['recaptcha_enabled'])
@@ -852,18 +868,17 @@ function template_ga_code()
 	if(!isset($config['google_analytics_id'][0]))
 		return '';
 
-	return '
-<script type="text/javascript">
-	var _gaq = _gaq || [];
-	_gaq.push([\'_setAccount\', \'' . $config['google_analytics_id'] . '\']);
-	_gaq.push([\'_trackPageview\']);
+	return "
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-	(function() {
-	var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true;
-	ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
-	var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-</script>';
+  ga('create', '" . $config['google_analytics_id'] . "', 'auto');
+  ga('send', 'pageview');
+
+</script>";
 }
 
 function template_form()

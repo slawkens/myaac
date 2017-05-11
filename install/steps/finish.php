@@ -72,6 +72,8 @@ else {
 			$account_db->setCustomField('country', 'us');
 			if(fieldExist('group_id', 'accounts'))
 				$account_db->setCustomField('group_id', $groups->getHighestId());
+			if(fieldExist('type', 'accounts'))
+				$account_db->setCustomField('type', 5);
 
 			if(!$player_db->isLoaded())
 				$player->setAccountId($account_db->getId());
@@ -96,6 +98,9 @@ else {
 			$new_account->setCustomField('country', 'us');
 			if(fieldExist('group_id', 'accounts'))
 				$new_account->setCustomField('group_id', $groups->getHighestId());
+			if(fieldExist('type', 'accounts'))
+				$new_account->setCustomField('type', 5);
+
 			$new_account->logAction('Account created.');
 			
 			if(!$player_db->isLoaded())

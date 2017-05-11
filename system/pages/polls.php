@@ -3,7 +3,7 @@
  * Polls
  *
  * @package   MyAAC
- * @author    Gesior <jerzyskalski@wp.pl>
+ * @author    Averatec <pervera.pl & otland.net>
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
  * @version   0.0.6
@@ -12,8 +12,10 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Polls';
 
-/* Polls System By Averatec from pervera.pl & otland.net
+/* Polls System By Averatec from pervera.pl & otland.net */
 
+if(!tableExist('z_polls'))
+	$db->query('
 CREATE TABLE `z_polls` (
   `id` int(11) NOT NULL auto_increment,
   `question` varchar(255) NOT NULL,
@@ -23,17 +25,19 @@ CREATE TABLE `z_polls` (
   `answers` int(11) NOT NULL,
   `votes_all` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;');
 
-CREATE TABLE `z_polls_answers` (
+if(!tableExist('z_polls_answers'))
+$db->query('
+	CREATE TABLE `z_polls_answers` (
   `poll_id` int(11) NOT NULL,
   `answer_id` int(11) NOT NULL,
   `answer` varchar(255) NOT NULL,
   `votes` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;');
 
-ALTER TABLE `accounts` ADD `vote` INT( 11 ) NOT NULL ;
-*/
+if(!fieldExist('vote', 'accounts'))
+	$db->query('ALTER TABLE `accounts` ADD `vote` INT( 11 ) NOT NULL ;');
 
 function getColorByPercent($percent)
 {
@@ -46,7 +50,8 @@ function getColorByPercent($percent)
 
 	return '';
 }
-
+	$number_of_rows = 0;
+	$showed = false;
     $link = "polls"; // your link to polls in index.php
     $dark = $config['darkborder'];
     $light = $config['lightborder'];
@@ -54,7 +59,7 @@ function getColorByPercent($percent)
     $POLLS = $db->query('SELECT * FROM '.$db->tableName('z_polls').'');
     $level = 20; // need level to vote
 
-    if(empty($_REQUEST['id']) and $_REQUEST['control'] != "true")  // list of polls
+    if(empty($_REQUEST['id']) and (!isset($_REQUEST['control']) || $_REQUEST['control'] != "true"))  // list of polls
     {
         $active = $db->query('SELECT * FROM `z_polls` where `end` > '.$time.''); // active polls
         $closed = $db->query('SELECT * FROM `z_polls` where `end` < '.$time.' order by `end` desc'); // closed polls
@@ -62,6 +67,7 @@ function getColorByPercent($percent)
         echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 class=white><B>Active Polls</B></TD></TR>';
         echo '<TR BGCOLOR="' . getStyle($number_of_rows++) . '"><td width=75%><b>Topic</b></td><td><b>End</b></td></tr>';
         $bgcolor = getStyle($number_of_rows++);
+		$empty_active = false;
         foreach($active as $poll)
         {
             echo '
@@ -90,6 +96,7 @@ function getColorByPercent($percent)
         echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 class=white><B>Closed Polls</B></TD></TR>';
         echo '<TR BGCOLOR="' . getStyle($number_of_rows++) . '"><td width=75%><b>Topic</b></td><td><b>End</b></td></tr>';
 		$bgcolor = getStyle($number_of_rows++);
+		$empty_closed = false;
         foreach($closed as $poll)
         {
             echo '
@@ -124,6 +131,7 @@ function getColorByPercent($percent)
 	}
 
     /* Checking Account */
+	$allow = false;
     $account_players = $account_logged->getPlayers();
     foreach($account_players as $player)
     {
@@ -132,7 +140,7 @@ function getColorByPercent($percent)
         $allow=true;
     }
 
-    if(!empty($_REQUEST['id']) and $_REQUEST['control'] != "true")
+    if(!empty($_REQUEST['id']) and (!isset($_REQUEST['control']) || $_REQUEST['control'] != "true"))
     {
         foreach($POLLS as $POLL)
         {
@@ -186,7 +194,7 @@ function getColorByPercent($percent)
 
                 if($POLL['end'] > $time) // active poll
                 {
-                    if($_REQUEST['vote'] == true and $allow == true)
+                    if(isset($_REQUEST['vote']) && $_REQUEST['vote'] == true and $allow == true)
                     {
                         if($account_logged->getCustomField('vote') < $_REQUEST['id'] and !empty($_POST['answer']))
                         {
@@ -305,15 +313,16 @@ function getColorByPercent($percent)
         }
     }
 
-    if(admin() and $_REQUEST['control'] != "true")
+    if(admin() && (!isset($_REQUEST['control']) || $_REQUEST['control'] != "true"))
     {
         echo '<br><a href="?subtopic='.$link.'&control=true"><b>Panel Control</b></a><br><br>';
     }
 
     /* Control Panel - Only Add Poll Function */
 
-    if(admin() and $_REQUEST['control'] == "true")
+    if(admin() && isset($_REQUEST['control']) && $_REQUEST['control'] == "true")
     {
+		$show = false;
         if(isset($_POST['submit']))
         {
             $_SESSION['answers'] = $_POST['answers'];

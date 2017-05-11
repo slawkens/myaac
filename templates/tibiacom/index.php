@@ -1,4 +1,6 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
+
 if(isset($config['boxes']))
 	$config['boxes'] = explode(",", $config['boxes']);
 ?>

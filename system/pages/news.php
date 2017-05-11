@@ -102,6 +102,8 @@ define('BODY_LIMIT', 10000); // maximum news body length
 
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 if($canEdit)
+	echo '<script type="text/javascript" src="' . BASE_URL . 'tools/tiny_mce/tiny_mce.js"></script>';
+if($canEdit)
 {
 	if(!empty($action))
 	{

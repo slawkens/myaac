@@ -28,7 +28,15 @@ foreach(scandir($aac_path_logs) as $f) {
 	$files[] = array($f, $aac_path_logs);
 }
 
+$server_path_logs = $config['server_path'] . 'logs/';
+if(!file_exists($server_path_logs))
 $server_path_logs = $config['data_path'] . 'logs/';
+
+if(!file_exists($server_path_logs)) {
+	echo '</table>Logs are not available on this server.';
+	return;
+}
+
 foreach(scandir($server_path_logs) as $f) {
 	if($f[0] == '.' || $f == '..')
 		continue;

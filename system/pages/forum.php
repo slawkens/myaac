@@ -170,10 +170,12 @@ if($action == 'show_board')
 	}
 
 	echo '<br /><br />Page: '.$links_to_pages.'<br />';
-	$last_threads = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`last_post`, `" . TABLE_PREFIX . "forum`.`replies`, `" . TABLE_PREFIX . "forum`.`views`, `" . TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`section` = ".(int) $section_id." AND `" . TABLE_PREFIX . "forum`.`first_post` = `" . TABLE_PREFIX . "forum`.`id` ORDER BY `" . TABLE_PREFIX . "forum`.`last_post` DESC LIMIT ".$config['forum_threads_per_page']." OFFSET ".($_page * $config['forum_threads_per_page']))->fetchAll();
+	$last_threads = $db->query("SELECT `players`.`id` as `player_id`, `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`last_post`, `" . TABLE_PREFIX . "forum`.`replies`, `" . TABLE_PREFIX . "forum`.`views`, `" . TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`section` = ".(int) $section_id." AND `" . TABLE_PREFIX . "forum`.`first_post` = `" . TABLE_PREFIX . "forum`.`id` ORDER BY `" . TABLE_PREFIX . "forum`.`last_post` DESC LIMIT ".$config['forum_threads_per_page']." OFFSET ".($_page * $config['forum_threads_per_page']))->fetchAll();
 	if(isset($last_threads[0]))
 	{
 		echo '<table width="100%"><tr bgcolor="'.$config['vdarkborder'].'" align="center"><td><font color="white" size="1"><b>Thread</b></font></td><td><font color="white" size="1"><b>Thread Starter</b></font></td><td><font color="white" size="1"><b>Replies</b></font></td><td><font color="white" size="1"><b>Views</b></font></td><td><font color="white" size="1"><b>Last Post</b></font></td></tr>';
+		
+		$player = $ots->createObject('Player');
 		foreach($last_threads as $thread)
 		{
 			echo '<tr bgcolor="' . getStyle($number_of_rows++) . '"><td>';
@@ -182,7 +184,17 @@ if($action == 'show_board')
 				echo '<a href="?subtopic=forum&action=move_thread&id='.$thread['id'].'"\')"><span style="color:darkgreen">[MOVE]</span></a>';
 				echo '<a href="?subtopic=forum&action=remove_post&id='.$thread['id'].'" onclick="return confirm(\'Are you sure you want remove thread > '.$thread['post_topic'].' <?\')"><font color="red">[REMOVE]</font></a>  ';
 			}
-			echo '<a href="' . getForumThreadLink($thread['id']) . '">'.htmlspecialchars($thread['post_topic']).'</a><br /><small>'.htmlspecialchars(substr($thread['post_text'], 0, 50)).'...</small></td><td>' . getPlayerLink($thread['name']) . '</td><td>'.(int) $thread['replies'].'</td><td>'.(int) $thread['views'].'</td><td>';
+			
+			$player->load($thread['player_id']);
+			if(!$player->isLoaded()) {
+				error('Forum error: Player not loaded.');
+				die();
+			}
+
+			$player_account = $player->getAccount();
+			$canEditForum = $player_account->hasFlag(FLAG_CONTENT_FORUM) || $player_account->isAdmin();
+			
+			echo '<a href="' . getForumThreadLink($thread['id']) . '">'.($canEditForum ? $thread['post_topic'] : htmlspecialchars($thread['post_topic'])) . '</a><br /><small>'.($canEditForum ? substr(strip_tags($thread['post_text']), 0, 50) : htmlspecialchars(substr($thread['post_text'], 0, 50))).'...</small></td><td>' . getPlayerLink($thread['name']) . '</td><td>'.(int) $thread['replies'].'</td><td>'.(int) $thread['views'].'</td><td>';
 			if($thread['last_post'] > 0)
 			{
 				$last_post = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id']." AND `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` ORDER BY `post_date` DESC LIMIT 1")->fetch();
@@ -226,18 +238,14 @@ if($action == 'show_thread')
 		$player = $ots->createObject('Player');
 		foreach($threads as $thread)
 		{
-			if(isset($thread['promotion'])) {
-				if((int)$thread['promotion'] > 0)
-					$thread['vocation'] + ($thread['promotion'] * 4);
-			}
-			echo '<tr bgcolor="' . getStyle($number_of_rows++) . '"><td valign="top">' . getPlayerLink($thread['name']) . '<br /><br /><font size="1">Profession: '.$config['vocations'][$thread['vocation']].'<br />Level: '.$thread['level'].'<br />';
-			
 			$player->load($thread['player_id']);
 			if(!$player->isLoaded()) {
-				error('Player not loaded');
+				error('Forum error: Player not loaded.');
 				die();
 			}
 		
+			echo '<tr bgcolor="' . getStyle($number_of_rows++) . '"><td valign="top">' . getPlayerLink($thread['name']) . '<br /><br /><font size="1">Profession: '.$config['vocations'][$player->getVocation()].'<br />Level: '.$thread['level'].'<br />';
+	
 			$rank = $player->getRank();
 			if($rank->isLoaded())
 			{
@@ -245,8 +253,11 @@ if($action == 'show_thread')
 				if($guild->isLoaded())
 					echo $rank->getName().' of <a href="'.getGuildLink($guild->getName(), false).'">'.$guild->getName().'</a><br />';
 			}
+			$player_account = $player->getAccount();
+			$canEditForum = $player_account->hasFlag(FLAG_CONTENT_FORUM) || $player_account->isAdmin();
+			
 			$posts = $db->query("SELECT COUNT(`id`) AS 'posts' FROM `" . TABLE_PREFIX . "forum` WHERE `author_aid`=".(int) $thread['account_id'])->fetch();
-			echo '<br />Posts: '.(int) $posts['posts'].'<br /></font></td><td valign="top">'.showPost(htmlspecialchars($thread['post_topic']), htmlspecialchars($thread['post_text']), $thread['post_smile']).'</td></tr>
+			echo '<br />Posts: '.(int) $posts['posts'].'<br /></font></td><td valign="top">'.showPost(($canEditForum ? $thread['post_topic'] : htmlspecialchars($thread['post_topic'])), ($canEditForum ? $thread['post_text'] : htmlspecialchars($thread['post_text'])), $thread['post_smile']).'</td></tr>
 			<tr bgcolor="'.getStyle($number_of_rows++).'"><td><font size="1">'.date('d.m.y H:i:s', $thread['post_date']);
 			if($thread['edit_date'] > 0)
 			{

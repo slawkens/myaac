@@ -317,11 +317,14 @@ if($config['mail_enabled'])
 								{
 									$salt = generateRandomString(10, false, true, true);
 									$new_pass_with_salt = $salt . $new_pass;
-									$account->setSalt($salt);
 								}
 								
 								$account->setPassword(encrypt($new_pass_with_salt));
 								$account->save();
+								
+								if($config_salt_enabled)
+									$account->setCustomField('salt', $salt);
+								
 								echo 'Your account name, new password and new e-mail.<BR>
 								<FORM ACTION="?subtopic=accountmanagement" onsubmit="return validate_form(this)" METHOD=post>
 								<INPUT TYPE=hidden NAME="character" VALUE="">
