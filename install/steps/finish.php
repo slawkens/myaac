@@ -62,12 +62,13 @@ else {
 		}
 
 		if($account_db->isLoaded()) {
-			if($config_salt_enabled)
-				$account_db->setSalt($salt);
-			
 			$account_db->setPassword(encrypt($password));
 			$account_db->setEMail($_SESSION['var_mail_admin']);
 			$account_db->save();
+			
+			if($config_salt_enabled)
+				$account_db->setCustomField('salt', $salt);
+			
 			$account_db->setCustomField('web_flags', 3);
 			$account_db->setCustomField('country', 'us');
 			if(fieldExist('group_id', 'accounts'))
@@ -86,13 +87,15 @@ else {
 			$new_account = $ots->createObject('Account');
 			$new_account->create($account);
 			
-			if($config_salt_enabled)
-				$new_account->setSalt($salt);
-			
 			$new_account->setPassword(encrypt($password));
 			$new_account->setEMail($_SESSION['var_mail_admin']);
+			
 			$new_account->unblock();
 			$new_account->save();
+			
+			if($config_salt_enabled)
+				$new_account->setCustomField('salt', $salt);
+			
 			$new_account->setCustomField('created', time());
 			$new_account->setCustomField('web_flags', 3);
 			$new_account->setCustomField('country', 'us');
