@@ -1,3 +1,37 @@
+[0.1.3 - 11.05.2017]
+	- this is just release to update version number
+
+[0.1.2 - 11.05.2017]
+	- forgot to update CHANGELOG and MYAAC_VERSION
+
+[0.1.1 - 11.05.2017]
+	- fixed updating myaac_config with database_version to 1
+	- fixed database updater
+
+[0.1.0 - 11.05.2017]
+	- added new feature: change character name for premium points (disabled by default, you can enable it in config under account_change_character_name in config.php)
+	- added automatic database updater (data migrations)
+	- renamed events to hooks
+	- moved hooks to database
+	- now you can use hooks in plugins
+	- set account.type field to 5 on install, if TFS 1.0+
+	- added example plugin
+	- new, latest google analytics code
+	- fixed bug with loading account.name that has numbers in it
+	- fixed many bugs in player editor in admin panel
+	- added error handling to plugin manager and some more verification in
+	- file has been correctly unpacked/uploaded
+	- fixed Statistics page in admin panel when using account.number
+	- fixed bug when creating/recovering account on servers with
+	- account.salt field (TFS 0.3 for example)
+	- fixed forum showing thread with html tags (added from news manager)
+	- new, latest code for youtube videos in movies page
+	- fixed showing vocation images when using $config['online_vocations_images']
+	- many fixes in polls (also importing proper schema)
+	- fixed hovering on buttons in kathrine template (on accountmanagement page)
+	- fixed signatures (many fixes)
+	- added missing gesior signature system
+
 [0.0.6 - 06.05.2017]
 	- fixed bug while installing (https://otland.net/threads/myaac-v0-0-1.251454/page-3#post-2440543)
 	- fixed bug when creating character (not showing errors) (one more time)
