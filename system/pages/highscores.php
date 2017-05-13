@@ -99,6 +99,10 @@ $deleted = 'deleted';
 if(fieldExist('deletion', 'players'))
 	$deleted = 'deletion';
 
+$outfit = '';
+if($config['highscores_outfit'])
+	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons';
+
 $offset = $_page * 100;
 if($skill <= POT::SKILL_LAST) { // skills
 	if(fieldExist('skill_fist', 'players')) {// tfs 1.0
@@ -112,14 +116,14 @@ if($skill <= POT::SKILL_LAST) { // skills
 			POT::SKILL_FISH => 'skill_fishing',
 		);
 
-		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . ', ' . $skill_ids[$skill] . ' as value FROM accounts,players WHERE players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id > 6 AND accounts.id = players.account_id ORDER BY ' . $skill_ids[$skill] . ' DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . $outfit . ', ' . $skill_ids[$skill] . ' as value FROM accounts,players WHERE players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id > 6 AND accounts.id = players.account_id ORDER BY ' . $skill_ids[$skill] . ' DESC LIMIT 101 OFFSET '.$offset);
 	}
 	else
-		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',value,level,vocation' . $promotion . ' FROM accounts,players,player_skills WHERE players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id > 6 AND players.id = player_skills.player_id AND player_skills.skillid = '.$skill.' AND accounts.id = players.account_id ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',value,level,vocation' . $promotion . $outfit . ' FROM accounts,players,player_skills WHERE players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id > 6 AND players.id = player_skills.player_id AND player_skills.skillid = '.$skill.' AND accounts.id = players.account_id ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset);
 }
 else if($skill == 666 && $config['otserv_version'] == TFS_03) // frags
 {
-	$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . ',COUNT(`player_killers`.`player_id`) as value' .
+	$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . $outfit . ',COUNT(`player_killers`.`player_id`) as value' .
 			' FROM `accounts`, `players`, `player_killers` ' .
 			' WHERE players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id = player_killers.player_id AND accounts.id = players.account_id' .
 			' GROUP BY `player_id`' .
@@ -129,10 +133,10 @@ else if($skill == 666 && $config['otserv_version'] == TFS_03) // frags
 else
 {
 	if($skill == POT::SKILL__MAGLEVEL) {
-		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',maglevel,level,vocation' . $promotion . ' FROM accounts, players WHERE players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND players.id > 6 AND accounts.id = players.account_id ORDER BY maglevel DESC, manaspent DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',maglevel,level,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND players.id > 6 AND accounts.id = players.account_id ORDER BY maglevel DESC, manaspent DESC LIMIT 101 OFFSET '.$offset);
 	}
 	else { // level
-		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,experience,vocation' . $promotion . ' FROM accounts, players WHERE players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND players.id > 6 AND accounts.id = players.account_id ORDER BY level DESC, experience DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,experience,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND players.id > 6 AND accounts.id = players.account_id ORDER BY level DESC, experience DESC LIMIT 101 OFFSET '.$offset);
 		$list = 'experience';
 	}
 }
@@ -150,6 +154,9 @@ else
 					<td width="11px" class="white">#</td>
 					<?php endif; ?>
 					<td width="10%" class="white"><b>Rank</b></td>
+					<?php if($config['highscores_outfit']): ?>
+					<td class="white"><b>Outfit</b></td>
+					<?php endif; ?>
 					<td width="75%" class="white"><b>Name</b></td>
 					<td width="15%" class="white"><b><?php echo ($skill != 666 ? 'Level' : 'Frags'); ?></b></td>
 					<?php if($skill == POT::SKILL__LEVEL): ?>
@@ -177,15 +184,18 @@ foreach($skills as $player)
 	{
 		if($skill == POT::SKILL__MAGIC)
 			$player['value'] = $player['maglevel'];
-
-		if($skill == POT::SKILL__LEVEL)
+		else if($skill == POT::SKILL__LEVEL)
 			$player['value'] = $player['level'];
 echo '
 		<tr bgcolor="' . getStyle($i) . '">';
 		if($config['account_country'])
 			echo '<td>' . getFlagImage($player['country']) . '</td>';
 echo '
-			<td>' . ($offset + $i) . '.</td>
+			<td>' . ($offset + $i) . '.</td>';
+			if($config['highscores_outfit'])
+			echo '<td><img style="position:absolute;margin-top:-45px;margin-left:-25px;" src="' . $config['outfit_images_url'] . '?id=' . $player['looktype'] . '&addons=' . $player['lookaddons'] . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" /></td>';
+		
+echo '
 			<td>
 				<a href="' . getPlayerLink($player['name'], false) . '">
 					<font color="' . ($player['online'] > 0 ? 'green' : 'red') . '">' . $player['name'] . '</font>

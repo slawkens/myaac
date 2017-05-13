@@ -75,6 +75,10 @@ $config = array(
 		//'2' => 'Your Second World Name'
 	),
 
+	// items
+	'outfit_images_url' => 'http://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
+	'item_images_url' => 'http://item-images.ots.me/960/', // set to images/items if you host your own items in images folder
+
 	// account
 	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)
 	'account_mail_verify' => false, // force users to confirm their email addresses when registering account
@@ -86,6 +90,7 @@ $config = array(
 	'account_country' => true, // user will be able to set country of origin when registering account, this information will be viewable in others places aswell
 	'account_change_character_name' => false, // can user change their character name for premium points?
 	'account_change_character_name_points' => 30, // cost of name change
+	'characters_per_account' => 10,	// max. number of characters per account
 
 	// mail
 	'mail_enabled' => false, // is aac maker configured to send e-mails?
@@ -133,8 +138,6 @@ $config = array(
 		1 => 'Sample town'
 	),
 
-	'characters_per_account' => 10,	// max. number of characters per account
-
 	// guilds
 	'guild_management' => true, // enable guild management system on the site?
 	'guild_need_level' => 1, // min. level to form a guild
@@ -155,6 +158,7 @@ $config = array(
 	'online_vocations' => false, // display vocation statistics?
 	'online_vocations_images' => false, // display vocation images?
 	'online_skulls' => false, // display skull images
+	'online_outfit' => true,
 	'online_afk' => false,
 
 	// support list page
@@ -171,6 +175,7 @@ $config = array(
 	'highscores_vocation_box' => true, // show 'Choose a vocation' box on the highscores (allowing peoples to sort highscores by vocation)?
 	'highscores_vocation' => true, // show player vocation under his nickname?
 	'highscores_frags' => false, // show 'Frags' tab (best fraggers on the server)? Only 0.3
+	'highscores_outfit' => true, // show player outfit?
 	'highscores_country_box' => false, // doesnt work yet! (not implemented)
 	'highscores_groups_hidden' => 4, // this group id and higher won't be shown on the highscores
 
@@ -181,6 +186,7 @@ $config = array(
 		'magic_level' => false,
 		'balance' => false,
 		'marriage_info' => true, // only 0.3
+		'outfit' => true,
 		'creation_date' => true,
 		'quests' => true,
 		'skills' => true,

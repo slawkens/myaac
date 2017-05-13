@@ -148,7 +148,7 @@ function getItemImage($id, $count = 1)
 		$file_name .= '-' . $count;
 
 	global $config;
-	return '<img src="images/items/' . $file_name . '.gif" width="32" height="32" border="0" alt=" ' .$id . '" />';
+	return '<img src="' . $config['item_images_url'] . $file_name . '.gif" width="32" height="32" border="0" alt=" ' .$id . '" />';
 }
 
 function getFlagImage($country)

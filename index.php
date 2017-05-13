@@ -217,10 +217,10 @@ if($load_it)
 	}
 
 	ob_start();
-	$hooks->trigger(HOOK_BEFORE_PAGE);
-
-	if(!$ignore)
-		require($file);
+	if($hooks->trigger(HOOK_BEFORE_PAGE)) {
+		if(!$ignore)
+			require($file);
+	}
 
 	if($config['backward_support'] && isset($main_content[0]))
 		$content .= $main_content;

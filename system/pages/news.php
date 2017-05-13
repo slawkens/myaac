@@ -98,7 +98,8 @@ define('NEWS', 1);
 define('TICKET', 2);
 define('ARTICLE', 3);
 
-define('BODY_LIMIT', 10000); // maximum news body length
+define('TITLE_LIMIT', 100);
+define('BODY_LIMIT', 65535); // maximum news body length
 
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 if($canEdit)
@@ -143,9 +144,10 @@ if($canEdit)
 				$player_id = $news['player_id'];
 			}
 			else {
-				News::update($id, $p_title, $body, $type, $category, $player_id, $comments);
-				$action = $p_title = $body = $comments = '';
-				$type = $category = $player_id = 0;
+				if(News::update($id, $p_title, $body, $type, $category, $player_id, $comments, $errors)) {
+					$action = $p_title = $body = $comments = '';
+					$type = $category = $player_id = 0;
+				}
 			}
 		}
 		else if($action == 'hide') {
@@ -214,7 +216,7 @@ if(!$news_cached)
 				  <span class="NewsTickerDate">'.date("j M Y", $news['date']).' -</span>
 				  <div id="TickerEntry-'.$rows.'-ShortText" class="NewsTickerShortText">';
 			//if admin show button to delete (hide) ticker
-			$tickers_to_add .= short_text($news['body'], 60).'</div>
+			$tickers_to_add .= short_text(strip_tags($news['body']), 100).'</div>
 				  <div id="TickerEntry-'.$rows.'-FullText" class="NewsTickerFullText">';
 			//if admin show button to delete (hide) ticker
 			$tickers_to_add .= $news['body'] . $admin_options . '</div>
@@ -300,7 +302,7 @@ if(!$news_cached)
 
 			<tr bgcolor="<?php echo getStyle($rows++); ?>">
 				<td><b>Title:</b></td>
-				<td><input name="title" value="<?php echo (isset($p_title) ? $p_title : ''); ?>" size="50" maxlength="50"/></td>
+				<td><input name="title" value="<?php echo (isset($p_title) ? $p_title : ''); ?>" size="50" maxlength="100"/></td>
 			</tr>
 
 			<tr bgcolor="<?php echo getStyle($rows++); ?>">
@@ -456,28 +458,41 @@ if(!$news_cached)
 	if($cache->enabled() && !$canEdit)
 		$cache->set('news_' . $template_name . '_' . NEWS, $tmp_content, 120);
 
-		echo $tmp_content;
+	echo $tmp_content;
 }
 else
 	echo $news_cached;
 
 class News
 {
+	static public function verify($title, $body, &$errors)
+	{
+		if(!isset($title[0]) || !isset($body[0])) {
+			$errors[] = 'Please fill all inputs.';
+			return false;
+		}
+
+		if(strlen($title) > TITLE_LIMIT) {
+			$errors[] = 'News title cannot be longer than ' . TITLE_LIMIT . ' characters.';
+			return false;
+		}
+	
+		if(strlen($body) > BODY_LIMIT) {
+			$errors[] = 'News content cannot be longer than ' . BODY_LIMIT . ' characters.';
+			return false;
+		}
+		
+		return true;
+	}
+
 	static public function add($title, $body, $type, $category, $player_id, $comments, &$errors)
 	{
 		global $db;
-		if(strlen($body) <= BODY_LIMIT)
-		{
-			if(isset($title[0]) && isset($body[0])) {
-				$db->insert(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'date' => time(), 'category' => $category, 'player_id' => isset($player_id) ? $player_id : 0, 'comments' => $comments));
-			}
-			else
-				$errors[] = 'Please fill all inputs.';
-		}
-		else
-			$errors[] = 'News content cannot be longer than ' . BODY_LIMIT . ' characters.';
+		if(!News::verify($title, $body, $errors))
+			return false;
 
-		return !count($errors);
+		$db->insert(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'date' => time(), 'category' => $category, 'player_id' => isset($player_id) ? $player_id : 0, 'comments' => $comments));
+		return true;
 	}
 
 	static public function get($id) {
@@ -485,9 +500,14 @@ class News
 		return $db->select(TABLE_PREFIX . 'news', array('id' => $id));
 	}
 
-	static public function update($id, $title, $body, $type, $category, $player_id, $comments) {
+	static public function update($id, $title, $body, $type, $category, $player_id, $comments, &$errors)
+	{
 		global $db;
+		if(!News::verify($title, $body, $errors))
+			return false;
+
 		$db->update(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'category' => $category, 'last_modified_by' => isset($player_id) ? $player_id : 0, 'last_modified_date' => time(), 'comments' => $comments), array('id' => $id));
+		return true;
 	}
 
 	static public function delete($id, &$errors)

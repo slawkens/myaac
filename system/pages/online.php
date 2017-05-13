@@ -42,11 +42,15 @@ if(fieldExist('skull_time', 'players')) {
 	$skull_time = 'skull_time';
 }
 	
+$outfit = '';
+if($config['online_outfit'])
+	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons';
+
 $vocs = array(0, 0, 0, 0, 0);
 if(tableExist('players_online')) // tfs 1.0
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`, `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 else
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`, ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 
 $players = 0;
 $data = '';
@@ -71,6 +75,9 @@ foreach($playersOnline as $player)
 	$data .= '<tr bgcolor="' . getStyle(++$players) . '">';
 	if($config['account_country'])
 		$data .= '<td>' . getFlagImage($player['country']) . '</td>';
+
+	if($config['online_outfit'])
+		$data .= '<TD WIDTH=5%><img style="position:absolute;margin-top:' . (in_array($player['looktype'], array(75, 266, 302)) ? '-20px;margin-left:-0px;' : '-45px;margin-left:-25px;') . '" src="' . $config['outfit_images_url'] . '?id=' . $player['looktype'] . '&addons=' . $player['lookaddons'] . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" /></td>';
 
 	$data .= '<td>' . getPlayerLink($player['name']) . $skull . '</td>
 		<td>'.$player['level'].'</td>
@@ -195,6 +202,9 @@ if($config['online_skulls']): ?>
 		<?php if($config['account_country']): ?>
 		<td width="11px"><a href="?subtopic=online&order=country" class="white">#</A></td>
 		<?php endif; ?>
+		<?php if($config['online_outfit']): ?>
+		<td class="white"><b>Outfit</b></td>
+		<?php endif; ?>
 		<td width="60%"><a href="?subtopic=online&order=name" class="white">Name</A></td>
 		<td width="20%"><a href="?subtopic=online&order=level" class="white">Level</A></td>
 		<td width="20%"><a href="?subtopic=online&order=vocation" class="white">Vocation</td>
@@ -205,7 +215,31 @@ if($config['online_skulls']): ?>
 endif;
 
 //search bar
-echo '<BR><FORM ACTION="?subtopic=characters" METHOD=post>  <TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=4><TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Search Character</B></TD></TR><TR><TD BGCOLOR="'.$config['darkborder'].'"><TABLE BORDER=0 CELLPADDING=1><TR><TD>Name:</TD><TD><INPUT NAME="name" VALUE=""SIZE=29 MAXLENGTH=29></TD><TD><INPUT TYPE=image NAME="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></TD></TR></TABLE></TD></TR></TABLE></FORM>';
+echo '<br/>
+<FORM ACTION="?subtopic=characters" METHOD=post>
+	<TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=4>
+		<TR>
+			<TD BGCOLOR="'.$config['vdarkborder'].'" class="white">
+				<B>Search Character</B>
+			</TD>
+		</TR>
+		<TR>
+			<TD BGCOLOR="'.$config['darkborder'].'">
+				<TABLE BORDER=0 CELLPADDING=1>
+					<TR>
+						<TD>Name:</TD>
+						<TD>
+							<INPUT NAME="name" VALUE=""SIZE=29 MAXLENGTH=29>
+						</TD>
+						<TD>
+							<INPUT TYPE=image NAME="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18>
+						</TD>
+					</TR>
+				</TABLE>
+			</TD>
+		</TR>
+	</TABLE>
+</FORM>';
 
 /* temporary disable it - shows server offline
 // update online players counter

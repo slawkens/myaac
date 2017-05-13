@@ -12,10 +12,10 @@ defined('MYAAC') or die('Direct access not allowed!');
 			var category = '<?php
 				if(in_array(PAGE, array('news', 'newsarchive')))
 					echo 'news';
-				elseif(in_array(PAGE, array('creatures', 'spells', 'online', 'serverinfo', 'downloads', 'commands',
+				elseif(in_array(PAGE, array('creatures', 'spells', 'serverinfo', 'downloads', 'commands',
 					'movies', 'screenshots', 'experiencetable', 'faq')))
 						echo 'library';
-				elseif(in_array(PAGE, array('characters', 'guilds', 'highscores', 'wars', 'lastkills', 'houses', 'bans',
+				elseif(in_array(PAGE, array('online', 'characters', 'guilds', 'highscores', 'wars', 'lastkills', 'houses', 'bans',
 					'forum', 'team')))
 						echo 'community';
 				elseif(in_array(PAGE, array('account', 'accountmanagement', 'createaccount', 'lostaccount', 'rules')))
@@ -84,6 +84,8 @@ defined('MYAAC') or die('Direct access not allowed!');
                 </div>
 
                 <div id="community-submenu">
+                    <a href="<?php echo $template['link_online']; ?>">Who is Online?</a>
+                    <span class="separator"></span>
                 	<a href="<?php echo $template['link_characters']; ?>">Characters</a>
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_guilds']; ?>">Guilds</a>
@@ -116,11 +118,9 @@ defined('MYAAC') or die('Direct access not allowed!');
                 </div>
 
                 <div id="library-submenu">
-                	<!--a href="<?php echo $template['link_creatures']; ?>">Monsters</a>
+                	<a href="<?php echo $template['link_creatures']; ?>">Monsters</a>
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_spells']; ?>">Spells</a>
-                    <span class="separator"></span-->
-                    <a href="<?php echo $template['link_online']; ?>">Who is Online?</a>
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_serverInfo']; ?>">Server Info</a>
                     <span class="separator"></span>

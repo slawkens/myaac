@@ -146,8 +146,8 @@ CREATE TABLE `myaac_movies`
 CREATE TABLE `myaac_news`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`title` VARCHAR(50) NOT NULL,
-	`body` VARCHAR(10000) NOT NULL,
+	`title` VARCHAR(100) NOT NULL,
+	`body` TEXT NOT NULL,
 	`type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 - news, 2 - ticket, 3 - article',
 	`date` INT(11) NOT NULL DEFAULT 0,
 	`category` TINYINT(1) NOT NULL DEFAULT 0,

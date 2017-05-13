@@ -60,29 +60,46 @@ function generate_player_lookup($player)
 			$player_eq[$i] = $empty_slots[$i];
 	}
 
-	//for($i = 1; $i < 11; $i++)
-	//{
-		//if(!itemImageExists($player_eq[$i]))
-		//	Items::generate($player_eq[$i]);
-	//}
+	if(PHP_VERSION_ID == NULL || PHP_VERSION_ID < 70000) {
+		for($i = 1; $i < 11; $i++)
+		{
+			if(!itemImageExists($player_eq[$i]))
+				Items::generate($player_eq[$i]);
+		}
+	}
+
+	for($i = 1; $i < 11; $i++)
+	{
+		if(check_number($player_eq[$i]))
+			$player_eq[$i] = getItemImage($player_eq[$i]);
+		else
+			$player_eq[$i] = '<img src="images/items/' . $player_eq[$i] . '.gif" width="32" height="32" border="0" alt=" ' . $player_eq[$i] . '" />';
+	}
+
+	$skulls = array(
+		1 => 'skull_yellow',
+		2 => 'skull_green',
+		3 => 'skull_white',
+		4 => 'skull_red',
+		5 => 'skull_black'
+	);
 
 	return '<table width="100" align="center" cellspacing="0" cellpadding="0" style="background: #808080; border:1px solid #808080;">
 		<tr>
 			<td>
 				<table cellspacing="0" style="background: #292929;">
-<tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[2]).'</td></tr><tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[6]).'</td></tr><tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[9]).'</td></tr>
-				<tr height="11px"><td>'.($player->getSkull() > 0 ? '<img src="images/red_skull.gif">' : '').'</td></tr>
+<tr><td style="border:1px solid #808080;">'.$player_eq[2].'</td></tr><tr><td style="border:1px solid #808080;">'.$player_eq[6].'</td></tr><tr><td style="border:1px solid #808080;">'.$player_eq[9].'</td></tr>
+				<tr height="11px"><td>'.($player->getSkullTime() > 0 && ($player->getSkull() == 4 || $player->getSkull() == 5) ? '<img src="images/' . $skulls[$player->getSkull()] . '.gif">' : '').'</td></tr>
 				</table>
 			</td>
 			<td>
 				<table cellspacing="0" style="background: #292929;">
-<tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[1]).'</td></tr><tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[4]).'</td></tr><tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[7]).'</td></tr><tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[8]).'</td></tr>
+<tr><td style="border:1px solid #808080;">'.$player_eq[1].'</td></tr><tr><td style="border:1px solid #808080;">'.$player_eq[4].'</td></tr><tr><td style="border:1px solid #808080;">'.$player_eq[7].'</td></tr><tr><td style="border:1px solid #808080;">'.$player_eq[8].'</td></tr>
 				</table>
-
 			</td>
 			<td>
 				<table cellspacing="0" style="background: #292929;">
-<tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[3]).'</td></tr><tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[5]).'</td></tr><tr><td style="border:1px solid #808080;">'.getItemImage($player_eq[10]).'</td></tr>
+<tr><td style="border:1px solid #808080;">'.$player_eq[3].'</td></tr><tr><td style="border:1px solid #808080;">'.$player_eq[5].'</td></tr><tr><td style="border:1px solid #808080;">'.$player_eq[10].'</td></tr>
 				</table>
 			</td>
 		</tr>
@@ -148,6 +165,9 @@ if($player->isLoaded() && !$player->isDeleted())
 		<td><img src="<?php echo $template_path; ?>/images/general/blank.gif" width="10" height="1" border="0"></td>
 		<td>
 			<table border="0" cellspacing="1" cellpadding="4" width="100%">
+				<?php if($config['characters']['outfit']): ?>
+				<div style="width:64px;height:64px;border:2px solid #F1E0C6; border-radius:50px; padding:13px; margin-top:38px;margin-left:376px;position:absolute;"><img style="margin-left:<?php echo (in_array($player->getLookType(), array(75, 266, 302)) ? '-0px;margin-top:-0px;width:64px;height:64px;' : '-60px;margin-top:-60px;width:128px;height:128px;'); ?>" src="<?php echo $config['outfit_images_url'] . '?id=' . $player->getLookType() . '&addons=' . $player->getLookAddons() . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet() . '"';?>></div>
+				<?php endif; ?>
 				<tr bgcolor="<?php echo $config['vdarkborder']; ?>">
 					<td colspan="2" class="white"><b>Character Information</b></td>
 				</tr>

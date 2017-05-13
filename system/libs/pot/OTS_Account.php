@@ -916,6 +916,9 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']))
 			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 			
+		if($ip == NULL)
+			$ip = '0';
+
 		return $this->db->query('INSERT INTO ' . $this->db->tableName(TABLE_PREFIX . 'account_actions') . ' (' . $this->db->fieldName('account_id') . ', ' . $this->db->fieldName('ip') . ', ' . $this->db->fieldName('date') . ', ' . $this->db->fieldName('action') . ') VALUES (' . $this->db->quote($this->getId()).', INET_ATON(' . $this->db->quote($ip) . '), UNIX_TIMESTAMP(NOW()), ' . $this->db->quote($action).')');
 	}
 

@@ -51,7 +51,7 @@ class Hook
 			require(BASE . $this->_file);
 		}
 
-		return false;
+		return true;
 	}
 
 	public function name() {return $this->_name;}
