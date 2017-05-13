@@ -908,7 +908,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
 	public function logAction($action)
 	{
-		$ip = '127.0.0.1';
+		$ip = '0';
 		if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
 			$ip = $_SERVER['REMOTE_ADDR'];
 		else if(isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP']))
@@ -916,18 +916,23 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']))
 			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 			
-		if($ip == NULL)
-			$ip = '0';
+		if(strpos($ip, ":") === false) {
+			$ipv6 = '0';
+		}
+		else {
+			$ipv6 = $ip;
+			$ip = '';
+		}
 
-		return $this->db->query('INSERT INTO ' . $this->db->tableName(TABLE_PREFIX . 'account_actions') . ' (' . $this->db->fieldName('account_id') . ', ' . $this->db->fieldName('ip') . ', ' . $this->db->fieldName('date') . ', ' . $this->db->fieldName('action') . ') VALUES (' . $this->db->quote($this->getId()).', INET_ATON(' . $this->db->quote($ip) . '), UNIX_TIMESTAMP(NOW()), ' . $this->db->quote($action).')');
+		return $this->db->query('INSERT INTO `' . TABLE_PREFIX . 'account_actions` (`account_id`, `ip`, `ipv6`, `date`, `action`) VALUES (' . $this->db->quote($this->getId()).', (' . $this->db->quote(ip2long($ip)) . '), (' . ($ipv6 == '0' ? $this->db->quote('') : $this->db->quote(inet_pton($ipv6))) . '), UNIX_TIMESTAMP(NOW()), ' . $this->db->quote($action).')');
 	}
 
 	public function getActionsLog($limit1, $limit2)
 	{
 		$actions = array();
 
-		foreach($this->db->query('SELECT ' . $this->db->fieldName('ip') . ', ' . $this->db->fieldName('date') . ', ' . $this->db->fieldName('action') . ' FROM ' . $this->db->tableName(TABLE_PREFIX . 'account_actions') . ' WHERE ' . $this->db->fieldName('account_id') . ' = ' . $this->data['id'] . ' ORDER by ' . $this->db->fieldName('date') . ' DESC LIMIT ' . $limit1 . ', ' . $limit2 . '')->fetchAll() as $a)
-			$actions[] = array('ip' => $a['ip'], 'date' => $a['date'], 'action' => $a['action']);
+		foreach($this->db->query('SELECT `ip`, `ipv6`, `date`, `action` FROM `' . TABLE_PREFIX . 'account_actions` WHERE `account_id` = ' . $this->data['id'] . ' ORDER by `date` DESC LIMIT ' . $limit1 . ', ' . $limit2 . '')->fetchAll() as $a)
+			$actions[] = array('ip' => $a['ip'], 'ipv6' => $a['ipv6'], 'date' => $a['date'], 'action' => $a['action']);
 
 		return $actions;
 	}

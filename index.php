@@ -21,7 +21,7 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.1.3
+ * @version   0.1.5
  * @link      http://my-aac.org
  */
 
@@ -68,8 +68,11 @@ if(fetchDatabaseConfig('database_version', $tmp)) { // we got version
 	}
 }
 else { // register first version
-	require(SYSTEM . 'migrations/1.php');
-	registerDatabaseConfig('database_version', 1);
+	for($i = 1; $i <= DATABASE_VERSION; $i++) {
+		require(SYSTEM . 'migrations/' . $i . '.php');
+	}
+
+	updateDatabaseConfig('database_version', DATABASE_VERSION);
 }
 
 // event system

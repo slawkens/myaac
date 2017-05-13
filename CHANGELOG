@@ -1,3 +1,15 @@
+[0.1.5 - 13.05.2017]
+	- fixed bug with "Integrity constraint violation: 1048 Column 'ip' cannot be null"
+
+[0.1.4 - 13.05.2017]
+	- added outfit shower, in characters, online, and highscores
+	- updated database to version 2
+	- fixed item images (now using item-images.ots.me host by default)
+	- fixed news ticket and posting long newses (https://otland.net/threads/myaac-v0-0-1.251454/page-5#post-2442026)
+	- news body limit increased to 65535 (mysql text field)
+	- removed some unused code from my old server
+	- added spells & monsters to kathrine template
+
 [0.1.3 - 11.05.2017]
 	- this is just release to update version number
 

@@ -6,7 +6,7 @@
  * @author    Averatec <pervera.pl & otland.net>
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.1.3
+ * @version   0.1.5
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');

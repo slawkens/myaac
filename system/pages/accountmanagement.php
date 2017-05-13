@@ -6,7 +6,7 @@
  * @author    Gesior <jerzyskalski@wp.pl>
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.1.3
+ * @version   0.1.5
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
@@ -248,7 +248,7 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 		foreach($account_logged->getActionsLog(0, 1000) as $action)
 		{
 			echo '<tr style="background-color:' . getStyle($player_number_counter++) . '"><td>'.$action['action'] . '</td><td>' . date("jS F Y H:i:s",$action['date']) . '</td>
-			<td>' . long2ip($action['ip']) . '</td></tr>';
+			<td>' . ($action['ip'] != 0 ? long2ip($action['ip']) : inet_ntop($action['ipv6'])) . '</td></tr>';
 		}
 		echo '</table>
 	
