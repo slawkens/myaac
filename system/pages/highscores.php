@@ -99,9 +99,15 @@ $deleted = 'deleted';
 if(fieldExist('deletion', 'players'))
 	$deleted = 'deletion';
 
+$outfit_addons = false;
 $outfit = '';
-if($config['highscores_outfit'])
-	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons';
+if($config['highscores_outfit']) {
+	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
+	if(fieldExist('lookaddons', 'players')) {
+		$outfit .= ', lookaddons';
+		$outfit_addons = true;
+	}
+}
 
 $offset = $_page * 100;
 if($skill <= POT::SKILL_LAST) { // skills
@@ -193,7 +199,7 @@ echo '
 echo '
 			<td>' . ($offset + $i) . '.</td>';
 			if($config['highscores_outfit'])
-			echo '<td><img style="position:absolute;margin-top:-45px;margin-left:-25px;" src="' . $config['outfit_images_url'] . '?id=' . $player['looktype'] . '&addons=' . $player['lookaddons'] . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" /></td>';
+			echo '<td><img style="position:absolute;margin-top:-45px;margin-left:-25px;" src="' . $config['outfit_images_url'] . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" /></td>';
 		
 echo '
 			<td>

@@ -41,10 +41,16 @@ $skull_time = 'skulltime';
 if(fieldExist('skull_time', 'players')) {
 	$skull_time = 'skull_time';
 }
-	
+
+$outfit_addons = false;
 $outfit = '';
-if($config['online_outfit'])
-	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons';
+if($config['online_outfit']) {
+	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
+	if(fieldExist('lookaddons', 'players')) {
+		$outfit .= ', lookaddons';
+		$outfit_addons = true;
+	}
+}
 
 $vocs = array(0, 0, 0, 0, 0);
 if(tableExist('players_online')) // tfs 1.0
@@ -77,7 +83,7 @@ foreach($playersOnline as $player)
 		$data .= '<td>' . getFlagImage($player['country']) . '</td>';
 
 	if($config['online_outfit'])
-		$data .= '<TD WIDTH=5%><img style="position:absolute;margin-top:' . (in_array($player['looktype'], array(75, 266, 302)) ? '-20px;margin-left:-0px;' : '-45px;margin-left:-25px;') . '" src="' . $config['outfit_images_url'] . '?id=' . $player['looktype'] . '&addons=' . $player['lookaddons'] . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" /></td>';
+		$data .= '<TD WIDTH=5%><img style="position:absolute;margin-top:' . (in_array($player['looktype'], array(75, 266, 302)) ? '-20px;margin-left:-0px;' : '-45px;margin-left:-25px;') . '" src="' . $config['outfit_images_url'] . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" /></td>';
 
 	$data .= '<td>' . getPlayerLink($player['name']) . $skull . '</td>
 		<td>'.$player['level'].'</td>

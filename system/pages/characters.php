@@ -166,7 +166,7 @@ if($player->isLoaded() && !$player->isDeleted())
 		<td>
 			<table border="0" cellspacing="1" cellpadding="4" width="100%">
 				<?php if($config['characters']['outfit']): ?>
-				<div style="width:64px;height:64px;border:2px solid #F1E0C6; border-radius:50px; padding:13px; margin-top:38px;margin-left:376px;position:absolute;"><img style="margin-left:<?php echo (in_array($player->getLookType(), array(75, 266, 302)) ? '-0px;margin-top:-0px;width:64px;height:64px;' : '-60px;margin-top:-60px;width:128px;height:128px;'); ?>" src="<?php echo $config['outfit_images_url'] . '?id=' . $player->getLookType() . '&addons=' . $player->getLookAddons() . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet() . '"';?>></div>
+				<div style="width:64px;height:64px;border:2px solid #F1E0C6; border-radius:50px; padding:13px; margin-top:38px;margin-left:376px;position:absolute;"><img style="margin-left:<?php echo (in_array($player->getLookType(), array(75, 266, 302)) ? '-0px;margin-top:-0px;width:64px;height:64px;' : '-60px;margin-top:-60px;width:128px;height:128px;'); ?>" src="<?php echo $config['outfit_images_url'] . '?id=' . $player->getLookType() . (fieldExist('lookaddons', 'players') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet() . '"';?>></div>
 				<?php endif; ?>
 				<tr bgcolor="<?php echo $config['vdarkborder']; ?>">
 					<td colspan="2" class="white"><b>Character Information</b></td>
