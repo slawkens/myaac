@@ -72,7 +72,7 @@ else { // register first version
 		require(SYSTEM . 'migrations/' . $i . '.php');
 	}
 
-	updateDatabaseConfig('database_version', DATABASE_VERSION);
+	registerDatabaseConfig('database_version', DATABASE_VERSION);
 }
 
 // event system

@@ -66,11 +66,11 @@ foreach($playersOnline as $player)
 	if($config['online_skulls'])
 	{
 		if($player['skulltime'] > 0 && $player['skull'] == 3)
-			$skull = ' <img style="border: 0;" src="images/whiteskull.gif"/>';
+			$skull = ' <img style="border: 0;" src="images/white_skull.gif"/>';
 		elseif($player['skulltime'] > 0 && $player['skull'] == 4)
-			$skull = ' <img style="border: 0;" src="images/redskull.gif"/>';
+			$skull = ' <img style="border: 0;" src="images/red_skull.gif"/>';
 		elseif($player['skulltime'] > 0 && $player['skull'] == 5)
-			$skull = ' <img style="border: 0;" src="images/blackskull.gif"/>';
+			$skull = ' <img style="border: 0;" src="images/black_skull.gif"/>';
 	}
 
 	if(isset($player['promotion'])) {
@@ -195,9 +195,9 @@ if($config['online_skulls']): ?>
 	<table width="100%" cellspacing="1">
 		<tr>
 			<td style="background: <?php echo $config['darkborder']; ?>;" align="center">
-				<img src="images/whiteskull.gif"/> - 1 - 6 Frags<br/>
-				<img src="images/redskull.gif"/> - 6+ Frags or Red Skull<br/>
-				<img src="images/blackskull.gif"/> - 10+ Frags or Black Skull
+				<img src="images/white_skull.gif"/> - 1 - 6 Frags<br/>
+				<img src="images/red_skull.gif"/> - 6+ Frags or Red Skull<br/>
+				<img src="images/black_skull.gif"/> - 10+ Frags or Black Skull
 			</td>
 		</tr>
 	</table>

@@ -55,7 +55,6 @@ CREATE TABLE `myaac_config`
 	PRIMARY KEY (`id`),
 	UNIQUE (`name`)
 ) ENGINE = MyISAM;
-INSERT INTO `myaac_config` (`id`, `name`, `value`) VALUES (NULL, 'database_version', '1');
 
 CREATE TABLE `myaac_faq`
 (

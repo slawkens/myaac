@@ -77,11 +77,11 @@ function generate_player_lookup($player)
 	}
 
 	$skulls = array(
-		1 => 'skull_yellow',
-		2 => 'skull_green',
-		3 => 'skull_white',
-		4 => 'skull_red',
-		5 => 'skull_black'
+		1 => 'yellow_skull',
+		2 => 'green_skull',
+		3 => 'white_skull',
+		4 => 'red_skull',
+		5 => 'black_skull'
 	);
 
 	return '<table width="100" align="center" cellspacing="0" cellpadding="0" style="background: #808080; border:1px solid #808080;">

@@ -115,7 +115,7 @@
 
 		// premium status
 		$account = $player->getAccount();
-		imagettftext($img, $fontsize, 0, 15, 140, $text, $font, $account->getCustomField('premdays') == 0 ? 'Free Account' : 'Premium Account');
+		imagettftext($img, $fontsize, 0, 15, 140, $text, $font, $account->getPremDays() > 0 ? 'Premium Account': 'Free Account');
 
 		imagefilledrectangle($img, 225, 40, 225, 130, $title); //seperator
 		$posy = 50;

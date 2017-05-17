@@ -66,6 +66,7 @@ if(!$error) {
 			}
 			
 			if(!$error) {
+				registerDatabaseConfig('database_version', DATABASE_VERSION);
 				$locale['step_database_success_schema'] = str_replace('$PREFIX$', TABLE_PREFIX, $locale['step_database_success_schema']);
 				success($locale['step_database_success_schema']);
 			}

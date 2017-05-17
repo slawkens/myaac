@@ -26,6 +26,6 @@ There are no movies added yet.
 <?php foreach($movies as $movie): ?>
 	<?php echo $movie['title']; ?><br/>
 	Author: <?php echo $movie['author']; ?><br/>
-	<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $movie['youtube_id']; ?>" frameborder="0" allowfullscreen></iframe><br/><br/>';
+	<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $movie['youtube_id']; ?>" frameborder="0" allowfullscreen></iframe><br/><br/>
 <?php endforeach; ?>
 </center>

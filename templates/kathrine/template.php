@@ -173,6 +173,7 @@ defined('MYAAC') or die('Direct access not allowed!');
                     </table>
                     <hr noshade="noshade" size="1" />
                     <div class="Content"><div id="ContentHelper">
+					<?php echo template_place_holder('center_top'); ?>
                     <?php echo $content; ?>
                     </div></div>
                 </div>
