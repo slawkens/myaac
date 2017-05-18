@@ -202,9 +202,9 @@ If you haven\'t registered on ' . $config['lua']['serverName'] . ' please ignore
 				Your account has been created.<br/><br/>
 				<table width="100%" border="0" cellspacing="1" cellpadding="4">
 					<tr><td bgcolor="<?php echo $config['vdarkborder']; ?>" class="white"><b>Account Created</b></td></tr>
-					<tr><td bgcolor="<?php echo $config['darkborder']; ?>'">
+					<tr><td bgcolor="<?php echo $config['darkborder']; ?>">
 				  <table border="0" cellpadding="1"><tr><td>
-				    <br/>Your account<?php (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> is <b><?php echo $tmp_account; ?></b>.
+				    <br/>Your account<?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> is <b><?php echo $tmp_account; ?></b>.
 
 				You will need the account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> and your password to play on <?php echo $config['lua']['serverName']; ?>.
 				    Please keep your account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> and password in a safe place and
@@ -270,7 +270,7 @@ function checkAccount()
 
 	if(document.getElementById("account_input").value == "")
 	{
-		document.getElementById("acc_check").innerHTML = '<b><font color="red">Please enter account<?php echo (USE_ACCOUNT_NAME ? ' name' : ''); ?>.</font></b>';
+		document.getElementById("acc_check").innerHTML = '<b><font color="red">Please enter account<?php echo (USE_ACCOUNT_NAME ? ' name' : 'number'); ?>.</font></b>';
 		return;
 	}
 

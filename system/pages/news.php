@@ -375,7 +375,9 @@ if(!$news_cached)
 					<?php endforeach; ?>
 				</td>
 			</tr>
-
+<?php
+			if($action == 'add'):
+?>
 			<tr bgcolor="<?php echo getStyle($rows++); ?>">
 				<td><b>Create forum thread in section:</b></td>
 				<td>
@@ -388,7 +390,9 @@ if(!$news_cached)
 					</select>
 				</td>
 			</tr>
-
+<?php
+			endif;
+?>
 			<tr bgcolor="<?php echo getStyle($rows++); ?>">
 				<td align="right">
 					<input type="submit" value="Submit"/>
