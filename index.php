@@ -141,7 +141,7 @@ if($config['backward_support']) {
 	if(!isset($config['lightborder']))
 		$config['lightborder'] = '#F1E0C6';
 
-	$config['site']['download_page'] = false;
+	$config['site']['download_page'] = true;
 	$config['site']['serverinfo_page'] = true;
 	$config['site']['screenshot_page'] = true;
 
