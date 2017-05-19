@@ -85,6 +85,8 @@ $config = array(
 	'account_country' => true, // user will be able to set country of origin when registering account, this information will be viewable in others places aswell
 	'account_change_character_name' => false, // can user change their character name for premium points?
 	'account_change_character_name_points' => 30, // cost of name change
+	'account_change_character_sex' => false, // can user change their character sex for premium points?
+	'account_change_character_sex_points' => 30, // cost of sex change
 	'characters_per_account' => 10,	// max. number of characters per account
 
 	// mail

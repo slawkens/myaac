@@ -293,7 +293,22 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 				<form action="?subtopic=accountmanagement&action=changename" method="post" >
 					<tr>
 						<td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div>
-								<input class="ButtonText" type="image" name="Change Name" alt="Change Name" src="'.$template_path.'/images/buttons/_sbutton_change_name.gif" ></div>
+								<input class="ButtonText" type="image" name="Change Name" alt="Change Name" src="images/buttons/_sbutton_change_name.gif" ></div>
+							</div>
+						</td>
+					</tr>
+				</form>
+			</table>
+		</td>';
+		}
+		if($config['account_change_character_sex']) {
+			echo '
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0" >
+				<form action="?subtopic=accountmanagement&action=changesex" method="post" >
+					<tr>
+						<td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div>
+								<input class="ButtonText" type="image" name="Change Sex" alt="Change Sex" src="images/buttons/_sbutton_change_sex.gif" ></div>
 							</div>
 						</td>
 					</tr>
@@ -697,14 +712,14 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 					{
 						echo 'Here you can see and edit the information about your character.<br/>If you do not want to specify a certain field, just leave it blank.<br/><br/><form action="?subtopic=accountmanagement&action=changecomment" method="post" ><div class="TableContainer" >  <table class="Table5" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Edit Character Information</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" >  <div class="TableContentContainer" >    <table class="TableContent" width="100%" ><tr><td class="LabelV" >Name:</td><td style="width:80%;" >'.$player_name.'</td></tr><tr><td class="LabelV" >Hide Account:</td><td>';
 						if($player->getCustomField("hidden") == 1) {
-							echo '<input type="checkbox" name="accountvisible"  value="1" checked="checked">';
+							echo '<input type="checkbox" name="accountvisible" id="accountvisible" value="1" checked="checked">';
 						}
 						else
 						{
-							echo '<input type="checkbox" name="accountvisible"  value="1" >';
+							echo '<input type="checkbox" name="accountvisible" id="accountvisible" value="1" >';
 						}
 
-						echo ' check to hide your account information';
+						echo '<label for="accountvisible"> check to hide your account information</label>';
 							if((int)$player->getCustomField('group_id') > 1)
 								echo ' (you will be also hidden on the Team page!)';
 
@@ -727,12 +742,11 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 		}
 	}
 
-//### DELETE character from account ###
 	if($action == "changename") {
 		echo '<script type="text/javascript" src="tools/check_name.js"></script>';
 		
 		$name_changed = false;
-		$player_id = isset($_POST['player_id']) ? $_POST['player_id'] : NULL;
+		$player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : NULL;
 		$newcharname = isset($_POST['newcharname']) ? stripslashes(ucwords(strtolower($_POST['newcharname']))) : NULL;
 		if((!$config['account_change_character_name']))
 			echo 'You cant change your character name';
@@ -777,10 +791,10 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 								$account_logged->logAction('Changed name from <b>' . $old_name . '</b> to <b>' . $player->getName() . '</b>.');
 								echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Character Name Changed</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>The character <b>'.$old_name.'</b> name has been changed to <b>' . $player->getName() . '</b>.</td></tr>          </table>        </div>  </table></div></td></tr><br><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
 							}
-							else
-							{
-								$errors[] = 'Character <b>'.$player_name.'</b> is not on your account.';
-							}
+						}
+						else
+						{
+							$errors[] = 'Character <b>'.$player_name.'</b> is not on your account.';
 						}
 					}
 					else
@@ -826,6 +840,93 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 		}
 	}
 
+	if($action == "changesex") {
+		$sex_changed = false;
+		$player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : NULL;
+		$new_sex = isset($_POST['new_sex']) ? (int)$_POST['new_sex'] : NULL;
+		if((!$config['account_change_character_sex']))
+			echo 'You cant change your character sex';
+		else
+		{
+			$points = $account_logged->getCustomField('premium_points');
+			if(isset($_POST['changesexsave']) && $_POST['changesexsave'] == 1) {
+				if($points < $config['account_change_character_sex_points'])
+					$errors[] = 'You need ' . $config['account_change_character_sex_points'] . ' premium points to change sex. You have <b>'.$points.'<b> premium points.';
+	
+				if(empty($errors) && $new_sex != 0 && $new_sex != 1)
+					$errors[] = 'This sex is invalid.';
+				
+				if(empty($errors)) {
+					$player = $ots->createObject('Player');
+					$player->load($player_id);
+					if($player->isLoaded()) {
+						$player_account = $player->getAccount();
+						if($account_logged->getId() == $player_account->getId()) {
+							if($player->isOnline()) {
+								$errors[] = 'This character is online.';
+							}
+							
+							if(empty($errors) && $player->getSex() == $new_sex)
+								$errors[] = 'Sex cannot be same';
+							
+							if(empty($errors)) {
+								$sex_changed = true;
+								$old_sex = $player->getSex();
+								$player->setSex($new_sex);
+								$sexes = array(0 => 'Female', 1 => 'Male');
+								$player->save();
+								$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
+								$account_logged->logAction('Changed sex on character <b>' . $player->getName() . '</b> from <b>' . $sexes[$old_sex] . '</b> to <b>' . $sexes[$new_sex] . '</b>.');
+								echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Character Sex Changed</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>The character <b>'.$player->getName().'</b> sex has been changed to <b>' . $sexes[$new_sex] . '</b>.</td></tr>          </table>        </div>  </table></div></td></tr><br><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+							}
+						}
+						else
+						{
+							$errors[] = 'Character <b>'.$player_name.'</b> is not on your account.';
+						}
+					}
+					else
+					{
+						$errors[] = 'Character with this name doesn\'t exist.';
+					}
+				}
+			}
+
+			if(!$sex_changed) {
+				if(!empty($errors)) {
+					echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
+					foreach($errors as $errors) {
+							echo '<li>'.$errors;
+					}
+					echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+				}
+				echo 'To change a sex of character select player and choose a new sex.<br/>
+				<font color="red">Change sex cost ' . $config['account_change_character_sex_points'] . ' premium points. You have ' . $points . ' premium points.</font><br/><br/><form action="?subtopic=accountmanagement&action=changesex" method="post" ><input type="hidden" name="changesexsave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Change sex</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >
+				<table style="width:100%;" >
+					<tr>
+						<td class="LabelV" ><span >Character:</td>
+						<td style="width:90%;" >
+							<select name="player_id">';
+								$players = $account_logged->getPlayersList();
+								foreach($players as $player)
+									echo '<option value="' . $player->getId() . '">' . $player->getName() . '</option>';
+							echo '
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="LabelV" ><span >New Sex:</td>
+						<td>
+							<select name="new_sex">
+								<option value="0"' . ($player->getSex() == 0 ? ' selected' : '') . '>Female</option>
+								<option value="1"' . ($player->getSex() == 1 ? ' selected' : '') . '>Male</option>
+							</select>
+						</td>
+					</tr>
+				</table>        </div>  </table></div></td></tr><br/><table style="width:100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
+			}
+		}
+	}
 //### DELETE character from account ###
 	if($action == "deletecharacter") {
 		$player_name = isset($_POST['delete_name']) ? stripslashes($_POST['delete_name']) : NULL;
