@@ -51,7 +51,7 @@ if(isset($_GET['maintenance'])) {
 }
 $is_closed = getDatabaseConfig('site_closed') == '1';
 
-$closed_message = 'Server is under maintance, please visit later.';
+$closed_message = 'Server is under maintenance, please visit later.';
 $tmp = '';
 if(fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
