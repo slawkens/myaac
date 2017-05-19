@@ -74,7 +74,7 @@ if(fetchDatabaseConfig('site_closed_message', $tmp))
 		<tr>
 			<td>Message: (only if closed)</td>
 			<td>
-				<textarea name="message" maxlength="255"><?php echo $closed_message; ?></textarea>
+				<textarea name="message" maxlength="255" cols="40" rows="5"><?php echo $closed_message; ?></textarea>
 			<td>
 		</tr>
 		<tr>

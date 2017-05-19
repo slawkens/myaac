@@ -177,11 +177,12 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 
 	if($action == "")
 	{
+		$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']);
 		$account_reckey = $account_logged->getCustomField("key");
 		if(!$account_logged->isPremium())
 			$account_status = '<b><font color="red">Free Account</font></b>';
 		else
-			$account_status = '<b><font color="green">Premium Account, '.$account_logged->getPremDays().' days left</font></b>';
+			$account_status = '<b><font color="green">Premium Account, ' . ($freePremium ? 'Unlimited' : $account_logged->getPremDays() . ' days left') . '</font></b>';
 		if(empty($account_reckey))
 			$account_registred = '<b><font color="red">No</font></b>';
 		else
