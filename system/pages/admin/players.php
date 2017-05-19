@@ -307,7 +307,7 @@ if(!isset($player) || !$player->isLoaded())
 
 $account = $player->getAccount();
 ?>
-<br/><br/>
+<br/>
 <form action="<?php echo $base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post">
 <table class="table" cellspacing="1" cellpadding="4">
 	<tr><th colspan="2">Edit player</th></tr>

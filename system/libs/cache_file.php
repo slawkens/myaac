@@ -63,7 +63,7 @@ class Cache_File
 	}
 
 	private function _name($key) {
-		return sprintf("%s/%s%s", $this->dir, $this->prefix, sha1($key));
+		return sprintf("%s%s%s", $this->dir, $this->prefix, sha1($key));
 	}
 }
 ?>

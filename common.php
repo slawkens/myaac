@@ -44,6 +44,11 @@ define('FLAG_CONTENT_COMMANDS', 64);
 define('FLAG_CONTENT_SPELLS', 128);
 define('FLAG_CONTENT_MONSTERS', 256);
 
+// news
+define('NEWS', 1);
+define('TICKET', 2);
+define('ARTICLE', 3);
+
 // directories
 define('BASE', dirname(__FILE__) . '/');
 define('ADMIN', BASE . 'admin/');

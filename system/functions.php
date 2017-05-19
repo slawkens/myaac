@@ -255,7 +255,7 @@ function fetchDatabaseConfig($name, &$value)
  */
 function getDatabaseConfig($name)
 {
-	$value = '';
+	$value = NULL;
 	fetchDatabaseConfig($name, $value);
 	return $value;
 }

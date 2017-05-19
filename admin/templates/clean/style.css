@@ -40,6 +40,17 @@ h1, h2, h3, h4, h5, h6 {color: #313334; font-weight: bold;}
 	text-align: left;
 }
 
+.table, .table td, .table th{
+	border: 1px solid #ddd;
+}
+
+.table th a:link {color: white; text-decoration: none;}
+.table th a:link		{color: white; text-decoration: none;}
+.table th a:visited	{color: white; text-decoration: none;}
+.table th a:focus		{color: white; text-decoration: none;}
+.table th a:active	{color: white; text-decoration: underline;}
+.table th a:hover		{color: white; text-decoration: underline;}
+
 .table tr:nth-child(odd) {background-color: #d1d1d1}
 
 a.ico { color:#9d9c9a; font-size:10px; text-decoration: none; padding:0 0 0 14px; background-repeat:no-repeat; background-position:0 0; }

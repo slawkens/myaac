@@ -96,24 +96,28 @@ if(!isset($content[0]))
 $load_it = true;
 
 // check if site has been closed
-if($config['site_closed'])
-{
-	if(!admin())
-	{
-		$title = $config['site_closed_title'];
-		$content .= $config['site_closed_message'];
-		$load_it = false;
-	}
+$site_closed = false;
+if(fetchDatabaseConfig('site_closed', $site_closed)) {
+	$site_closed = ($site_closed == 1);
+	if($site_closed) {
+		if(!admin())
+		{
+			$title = getDatabaseConfig('site_closed_title');
+			$content .= '<p class="note">' . getDatabaseConfig('site_closed_message') . '</p><br/>';
+			$load_it = false;
+		}
 
-	if(!$logged)
-	{
-		ob_start();
-		require(SYSTEM . 'pages/accountmanagement.php');
-		$content .= ob_get_contents();
-		ob_end_clean();
-		$load_it = false;
+		if(!$logged)
+		{
+			ob_start();
+			require(SYSTEM . 'pages/accountmanagement.php');
+			$content .= ob_get_contents();
+			ob_end_clean();
+			$load_it = false;
+		}
 	}
 }
+define('SITE_CLOSED', $site_closed);
 
 // backward support for gesior
 if($config['backward_support']) {
@@ -144,7 +148,7 @@ if($config['backward_support']) {
 	$config['site']['download_page'] = true;
 	$config['site']['serverinfo_page'] = true;
 	$config['site']['screenshot_page'] = true;
-
+	
 	if($config['forum'] != '')
 		$config['forum_link'] = (strtolower($config['forum']) == 'site' ? internalLayoutLink('forum') : $config['forum']);
 
@@ -154,7 +158,7 @@ if($config['backward_support']) {
 
 if($load_it)
 {
-	if($config['site_closed'] && admin())
+	if(SITE_CLOSED && admin())
 		$content .= '<p class="note">Site is under maintenance (closed mode). Only privileged users can see it.</p>';
 
 	if($config['backward_support'])

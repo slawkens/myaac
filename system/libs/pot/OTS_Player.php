@@ -1,4 +1,21 @@
 <?php
+$__load = array();
+/*
+	'loss_experience' => NULL,
+	'loss_items' => NULL,
+	'guild_info' => NULL,
+	'skull_type' => NULL,
+	'skull_time' => NULL,
+	'blessings' => NULL,
+	'direction' => NULL,
+	'stamina' => NULL,
+	'world_id' => NULL,
+	'online' => NULL,
+	'deletion' => NULL,
+	'promotion' => NULL,
+	'marriage' => NULL
+);*/
+
 /**#@+
  * @version 0.0.1
  */
@@ -91,7 +108,6 @@ class OTS_Player extends OTS_Row_DAO
 		POT::SKILL_SHIELD => array('value' => 0, 'tries' => 0),
 		POT::SKILL_FISH => array('value' => 0, 'tries' => 0)
 	);
-
 /**
  * Magic PHP5 method.
  *
@@ -115,33 +131,84 @@ class OTS_Player extends OTS_Row_DAO
  */
     public function load($id)
     {
-		$loss = '';
-		if(fieldExist('loss_experience', 'players')) {
-			$loss = ', `loss_experience`, `loss_mana`, `loss_skills`';
-		}
-		
-		$loss_items = '';
-		if(fieldExist('loss_items', 'players')) {
-			$loss_items = ', `loss_items`, `loss_containers`';
-		}
-		
-		$guild_info = '';
-		if(!tableExist('guild_members') && fieldExist('guildnick', 'players')) {
-			$guild_info = ', `guildnick`, `rank_id`';
+		global $__load;
+
+		if(!isset($__load['loss_experience']))
+		{
+			$loss = '';
+			if(fieldExist('loss_experience', 'players')) {
+				$loss = ', `loss_experience`, `loss_mana`, `loss_skills`';
+			}
+
+			$__load['loss_experience'] = $loss;
 		}
 
-		$skull_type = 'skull';
-		if(fieldExist('skull_type', 'players')) {
-			$skull_type = 'skull_type';
+		if(!isset($__load['loss_items']))
+		{
+			$loss_items = '';
+			if(fieldExist('loss_items', 'players')) {
+				$loss_items = ', `loss_items`, `loss_containers`';
+			}
+
+			$__load['loss_items'] = $loss_items;
 		}
 
-		$skull_time = 'skulltime';
-		if(fieldExist('skull_time', 'players')) {
-			$skull_time = 'skull_time';
+		if(!isset($__load['guild_info']))
+		{
+			$guild_info = '';
+			if(!tableExist('guild_members') && fieldExist('guildnick', 'players')) {
+				$guild_info = ', `guildnick`, `rank_id`';
+			}
+
+			$__load['guild_info'] = $guild_info;
 		}
-	
+		
+		if(!isset($__load['skull_type']))
+		{
+			$skull_type = 'skull';
+			if(fieldExist('skull_type', 'players')) {
+				$skull_type = 'skull_type';
+			}
+
+			$__load['skull_type'] = $skull_type;
+		}
+
+		if(!isset($__load['skull_time']))
+		{
+			$skull_time = 'skulltime';
+			if(fieldExist('skull_time', 'players')) {
+				$skull_time = 'skull_time';
+			}
+		
+			$__load['skull_time'] = $skull_time;
+		}
+
+		if(!isset($__load['blessings'])) {
+			$__load['blessings'] = fieldExist('blessings', 'players');
+		}
+		if(!isset($__load['direction'])) {
+			$__load['direction'] = fieldExist('direction', 'players');
+		}
+		if(!isset($__load['stamina'])) {
+			$__load['stamina'] = fieldExist('stamina', 'players');
+		}
+		if(!isset($__load['world_id'])) {
+			$__load['world_id'] = fieldExist('world_id', 'players');
+		}
+		if(!isset($__load['online'])) {
+			$__load['online'] = fieldExist('online', 'players');
+		}
+		if(!isset($__load['deletion'])) {
+			$__load['deletion'] = fieldExist('deletion', 'players');
+		}
+		if(!isset($__load['promotion'])) {
+			$__load['promotion'] = fieldExist('promotion', 'players');
+		}
+		if(!isset($__load['marriage'])) {
+			$__load['marriage'] = fieldExist('marriage', 'players');
+		}
         // SELECT query on database
-        $this->data = $this->db->query('SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . (fieldExist('lookaddons', 'players') ? ', `lookaddons`' : '') . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull`' . $guild_info . ', `town_id`' . $loss . $loss_items . ', `balance`' . (fieldExist('blessings', 'players') ? ', `blessings`' : '') . (fieldExist('direction', 'players') ? ', `direction`' : '') . (fieldExist('stamina', 'players') ? ', `stamina`' : '') . (fieldExist('world_id', 'players') ? ', `world_id`' : '') . (fieldExist('online', 'players') ? ', `online`' : '') . ', `' . (fieldExist('deletion', 'players') ? 'deletion' : 'deleted') . '`' . (fieldExist('promotion', 'players') ? ', `promotion`' : '') . (fieldExist('marriage', 'players') ? ', `marriage`' : '') . ', `comment`, `created`, `hidden` FROM `players` WHERE `id` = ' . (int)$id)->fetch();
+        $this->data = $this->db->query('SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . (fieldExist('lookaddons', 'players') ? ', `lookaddons`' : '') . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $__load['skull_time'] . '` as `skulltime`, `' . $__load['skull_type'] . '` as `skull`' . $__load['guild_info'] . ', `town_id`' . $__load['loss_experience'] . $__load['loss_items'] . ', `balance`' . ($__load['blessings'] ? ', `blessings`' : '') . ($__load['direction'] ? ', `direction`' : '') . ($__load['stamina'] ? ', `stamina`' : '') . ($__load['world_id'] ? ', `world_id`' : '') . ($__load['online'] ? ', `online`' : '') . ', `' . ($__load['deletion'] ? 'deletion' : 'deleted') . '`' . ($__load['promotion'] ? ', `promotion`' : '') . ($__load['marriage'] ? ', `marriage`' : '') . ', `comment`, `created`, `hidden` FROM `players` WHERE `id` = ' . (int)$id)->fetch();
 
 		if(!isset($this->data['guildnick']) || $this->data['guildnick'])
 			$this->data['guildnick'] = '';
@@ -335,7 +402,7 @@ class OTS_Player extends OTS_Row_DAO
 				$loss_items = ', `loss_items`, `loss_containers`';
 				$loss_items_data = ', ' . $this->data['loss_items'] . ', ' . $this->data['loss_containers'];
 			}
-			
+
 			$guild_info = '';
 			$guild_info_data = '';
 			if(!tableExist('guild_members') && fieldExist('guildnick', 'players')) {

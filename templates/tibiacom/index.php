@@ -681,17 +681,9 @@ echo "</div>";
     <div class="Border_1" style="background-image:url(<?php echo $template_path; ?>/images/content/border-1.gif);"></div>
     <div class="BorderTitleText" style="background-image:url(<?php echo $template_path; ?>/images/content/title-background-green.gif);"></div>
 	<?php
-	/*
-	<img class="Title" src="<?php echo $template_path; ?>/headline.php?p=<?php if(isset($_404)) echo '404'; else echo PAGE; ?>" alt="Contentbox headline" />
-*/
-	if($config['site_closed'])
-		$tmp_page = $config['site_closed_title'];
-	else
-		$tmp_page = (isset($_404) ? '404' : PAGE);
-
-	$headline = $template_path.'/images/header/headline-' . $tmp_page . '.gif';
+	$headline = $template_path.'/images/header/headline-' . PAGE . '.gif';
 	if(!file_exists($headline))
-		$headline = $template_path . '/headline.php?t=' . ucfirst($tmp_page);
+		$headline = $template_path . '/headline.php?t=' . ucfirst($title);
 ?>
 	<img class="Title" src="<?php echo $headline; ?>" alt="Contentbox headline" />
     <div class="Border_2">

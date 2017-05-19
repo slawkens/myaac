@@ -94,10 +94,6 @@ $title = 'Latest News';
 
 $news_cached = false;
 // some constants, used mainly by database (cannot by modified without schema changes)
-define('NEWS', 1);
-define('TICKET', 2);
-define('ARTICLE', 3);
-
 define('TITLE_LIMIT', 100);
 define('BODY_LIMIT', 65535); // maximum news body length
 

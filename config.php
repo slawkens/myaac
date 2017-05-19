@@ -43,11 +43,6 @@ $config = array(
 	// footer
 	'footer' => ''/*'<br/>Your Server &copy; 2016. All rights reserved.'*/,
 
-	// site closed
-	'site_closed' => false,
-	'site_closed_title' => 'Closed',
-	'site_closed_message' => 'Server is under maintance, please visit later.<br/><br/>',
-
 	'debug_level' => 0, // 0 - disabled, 1 - show load time, 2 - show db query counter, 3 - both, 4 - memory usage, 5 - load time & load time, 6 - queries & memory usage, 7 - all
 
 	'language' => 'en', // default language (currently only 'en' available)
@@ -220,7 +215,8 @@ $config = array(
 	// other
 	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam
 	'google_analytics_id' => '', // e.g.: UA-XXXXXXX-X
-	'experiencetable_columns' => 5, // how many columns to display in experience table page. * 100, 5 = 500 (will show up to 500 level)
+	'experiencetable_columns' => 5, // how many columns to display in experience table page. * experiencetable_rows, 5 = 500 (will show up to 500 level)
+	'experiencetable_rows' => 100, // till how many levels in one columt
 
 	'monsters' => array(),
 	'npc' => array()

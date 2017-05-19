@@ -12,8 +12,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Characters';
 
-require(SYSTEM . 'item.php');
-
+//require(SYSTEM . 'item.php');
 $groups = new OTS_Groups_List();
 function generate_search_table($script = false)
 {

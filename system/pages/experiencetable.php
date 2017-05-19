@@ -33,7 +33,7 @@ Remember you can also check the respective skill bar in your skill window of the
 					<td><b>Experience</b></td>
 				</tr>
 <?php
-		for($level = $i * 100 + 1; $level < $i * 100 + 101; $level++)
+		for($level = $i * $config['experiencetable_rows'] + 1; $level < $i * $config['experiencetable_rows'] + ($config['experiencetable_rows'] + 1); $level++)
 		{
 ?>
 				<tr bgcolor="<?php echo $config['lightborder']; ?>">

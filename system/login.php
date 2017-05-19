@@ -73,9 +73,6 @@ else
 				if(isset($_POST['remember_me']))
 					$_SESSION['remember_me'] = true;
 
-				//if(isset($_POST['admin']))
-				//	$_SESSION['admin'] = true;
-			
 				$logged = true;
 
 				$logged_flags = $account_logged->getWebFlags();

@@ -97,6 +97,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
     public function query($query)
     {
         $this->queries++;
+		//echo $query . PHP_EOL;
         return parent::query($query);
     }
 
