@@ -67,7 +67,7 @@
 
 		// vocation
 		imagettftext($img, $fontsize, 0, 15, 62, $text, $font, 'Vocation');
-		imagettftext($img, $fontsize, 0, 100, 62, $text, $font, $config['vocations'][$player->getPromotion()][$player->getVocation()]);
+		imagettftext($img, $fontsize, 0, 100, 62, $text, $font, $config['vocations'][$player->getVocation()]);
 
 		// hit points, Mana, Soul Points, Capacity
 		$health = $player->getHealth();
