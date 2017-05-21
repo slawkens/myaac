@@ -225,7 +225,7 @@ $config = array(
 );
 
 // download link to client.
-$config['client_download'] = 'http://clients.halfaway.net/windows.php?tibia='. $config['client'] .'';
-$config['client_download_linux'] = 'http://clients.halfaway.net/linux.php?tibia='. $config['client'] .'';
+$config['client_download'] = 'http://tibia-clients.com/clients/download/'. $config['client'] .'/exe/windows';
+$config['client_download_linux'] = 'http://tibia-clients.com/clients/download/'. $config['client'] .'/tar/linux';
 
 ?>

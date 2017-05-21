@@ -148,12 +148,14 @@ if(!$error) {
 				if(query("ALTER TABLE `accounts` ADD `email_code` VARCHAR(255) NOT NULL DEFAULT '' AFTER `email_new_time`;"))
 					success($locale['step_database_adding_field'] . ' accounts.email_code...');
 			}
-			
+
 			if(fieldExist('next_email', 'accounts')) {
-				if(query("ALTER TABLE `accounts` CHANGE `next_email` `email_next` INT(11) NOT NULL DEFAULT 0;")) {
-					$tmp = str_replace('$FIELD$', 'accounts.next_email', $locale['step_database_changing_field']);
-					$tmp = str_replace('$FIELD_NEW$', 'accounts.email_next', $tmp);
-					success($tmp);
+				if(!fieldExist('email_next', 'accounts')) {
+					if(query("ALTER TABLE `accounts` CHANGE `next_email` `email_next` INT(11) NOT NULL DEFAULT 0;")) {
+						$tmp = str_replace('$FIELD$', 'accounts.next_email', $locale['step_database_changing_field']);
+						$tmp = str_replace('$FIELD_NEW$', 'accounts.email_next', $tmp);
+						success($tmp);
+					}
 				}
 			}
 			else if(!fieldExist('email_next', 'accounts')) {
@@ -194,10 +196,12 @@ if(!$error) {
 			}
 
 			if(fieldExist('hide_char', 'players')) {
-				if(query("ALTER TABLE `players` CHANGE `hide_char` `hidden` TINYINT(1) NOT NULL DEFAULT 0;")) {
-					$tmp = str_replace('$FIELD$', 'players.hide_char', $locale['step_database_changing_field']);
-					$tmp = str_replace('$FIELD_NEW$', 'players.hidden', $tmp);
-					success($tmp);
+				if(!fieldExist('hidden', 'players')) {
+					if(query("ALTER TABLE `players` CHANGE `hide_char` `hidden` TINYINT(1) NOT NULL DEFAULT 0;")) {
+						$tmp = str_replace('$FIELD$', 'players.hide_char', $locale['step_database_changing_field']);
+						$tmp = str_replace('$FIELD_NEW$', 'players.hidden', $tmp);
+						success($tmp);
+					}
 				}
 			}
 			else if(!fieldExist('hidden', 'players')) {

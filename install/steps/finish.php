@@ -146,8 +146,8 @@ else {
 	<?php
 
 		if(!isset($_SESSION['installed'])) {
-			file_get_contents('http://my-aac.org/report_install.php?v=' . MYAAC_VERSION);
-			$_SESSION['installed'] = false;
+			file_get_contents('http://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL));
+			$_SESSION['installed'] = true;
 		}
 
 		foreach($_SESSION as $key => $value) {
