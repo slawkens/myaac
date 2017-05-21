@@ -13,7 +13,7 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.1.5
+ * @version   0.2.0
  * @link      http://my-aac.org
  */
 
@@ -218,7 +218,7 @@ $config = array(
 	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam
 	'google_analytics_id' => '', // e.g.: UA-XXXXXXX-X
 	'experiencetable_columns' => 5, // how many columns to display in experience table page. * experiencetable_rows, 5 = 500 (will show up to 500 level)
-	'experiencetable_rows' => 100, // till how many levels in one columt
+	'experiencetable_rows' => 100, // till how many levels in one column
 
 	'monsters' => array(),
 	'npc' => array()

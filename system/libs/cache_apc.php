@@ -6,7 +6,7 @@
  * @author    Slawkens <slawkens@gmail.com>
  * @author    Mark Samman (Talaturen) <marksamman@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.1.5
+ * @version   0.2.0
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');

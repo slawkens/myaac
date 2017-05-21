@@ -1,3 +1,23 @@
+[0.2.0 - 21.05.2017]
+	- added option to change character sex for premium points
+	- moved site_closed to database, now you can close your site through admin panel
+	- added option to admin panel: clear cache
+	- added experiencetable_rows configurable
+	- optimized OTS_Account->getGroupId(), now its using like 20 queries less
+	- optimized OTS_Player->load($id) function, should be much faster now
+	- fixed displaying on highscores special outfits
+	- fixed skull images displaying
+	- fixed displaying unlimited premium account
+	- fixed bug where players.lookaddons doesn't exist (OTHire etc.) (https://otland.net/threads/myaac-v0-0-1.251454/page-6#post-2442407)
+	- fixed signature tibian for OTHire and other servers that doesnt use accounts.premdays field
+	- fixed when player name in signature containst space
+	- don't show "Create forum thread" when editing
+	- fixed red color table after create account
+	- updated download links, as clients.halfaway.net isn't working anymore
+	- fixed some bugs while installing when field `email_next` or `hidden` already exist
+	- fixed movies unexpected comment
+	- added template_place_holder('center_top') to kathrine template
+
 [0.1.5 - 13.05.2017]
 	- fixed bug with "Integrity constraint violation: 1048 Column 'ip' cannot be null"
 
