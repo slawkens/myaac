@@ -68,15 +68,18 @@ $type = '';
 						$houseOwner = $house['owner'];
 						if($houseOwner > 0)
 						{
+							$guild = NULL;
 							echo '<br/><br/>The house has been rented by ';
-							if($house['guild'] == 1)
+							if(isset($house['guild']) && $house['guild'] == 1)
 							{
 								$guild = new OTS_Guild();
 								$guild->load($houseOwner);
 								echo getGuildLink($guild->getName());
 							}
 							else
-								echo getCreatureName($houseOwner) . '.';
+								echo getCreatureName($houseOwner);
+
+							echo '.';
 
 							if($rent != 'never' && $house['paid'] > 0)
 							{

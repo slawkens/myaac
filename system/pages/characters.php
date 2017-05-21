@@ -262,7 +262,7 @@ if($player->isLoaded() && !$player->isDeleted())
 						<TD>House:</TD>
 						<TD>
 							<TABLE BORDER=0><TR>
-								<TD>' . (isset($house['name']) ? $house['name'] : $house['id']) . (isset($house['town']) ? ' (' . $config['towns'][$house[$town_field]] . ')' : '') . $add . '</TD>
+								<TD>' . (isset($house['name']) ? $house['name'] : $house['id']) . (isset($house['town']) ? ' (' . $config['towns'][$house['town']] . ')' : '') . $add . '</TD>
 								<TD>
 									<FORM ACTION="?subtopic=houses&page=view" METHOD=post>
 										<INPUT TYPE=hidden NAME=house VALUE="'. (isset($house['name']) ? $house['name'] : $house['id']) . '">
