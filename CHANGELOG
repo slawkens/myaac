@@ -1,3 +1,7 @@
+[0.2.1 - 21.05.2017]
+	- added Swedish translation by Sizaro
+	- fixed some bugs with installlation & characters & houses
+
 [0.2.0 - 21.05.2017]
 	- added option to change character sex for premium points
 	- moved site_closed to database, now you can close your site through admin panel
