@@ -1,3 +1,7 @@
+[0.2.2 - 22.05.2017]
+	- added missing cache/signature directory
+	- fixed https://otland.net/threads/myaac-v0-0-1.251454/page-7#post-2443868
+
 [0.2.1 - 21.05.2017]
 	- added Swedish translation by Sizaro
 	- fixed some bugs with installlation & characters & houses

@@ -5,7 +5,7 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.2.1
+ * @version   0.2.2
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
