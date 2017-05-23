@@ -120,6 +120,7 @@ define('USE_ACCOUNT_NAME', fieldExist('name', 'accounts'));
 $tmp = '';
 if($cache->enabled() && $cache->fetch('vocations', $tmp)) {
 	$config['vocations'] = unserialize($tmp);
+	$config['vocation_last'] = $cache->get('vocation_last');
 }
 else {
 	$vocations = new DOMDocument();
@@ -135,14 +136,15 @@ else {
 	$config['vocations'] = array();
 	foreach($vocations->getElementsByTagName('vocation') as $vocation) {
 		$id = $vocation->getAttribute('id');
-		//if($id == $vocation->getAttribute('fromvoc'))
-			$config['vocations'][$id] = $vocation->getAttribute('name');
-		//else
-		//	$config['vocations'][$id] = $vocation->getAttribute('name');
+		if($id == $vocation->getAttribute('fromvoc'))
+			$config['vocation_last'] = $id;
+
+		$config['vocations'][$id] = $vocation->getAttribute('name');
 	}
 
 	if($cache->enabled()) {
 		$cache->set('vocations', serialize($config['vocations']), 120);
+		$cache->set('vocation_last', $config['vocation_last'], 120);
 	}
 }
 unset($tmp, $id, $vocation);

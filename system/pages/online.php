@@ -52,7 +52,12 @@ if($config['online_outfit']) {
 	}
 }
 
-$vocs = array(0, 0, 0, 0, 0);
+if($config['online_vocations']) {
+	$vocs = array();
+	foreach($config['vocations'] as $id => $name)
+		$vocs[$id] = 0;
+}
+
 if(tableExist('players_online')) // tfs 1.0
 	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 else
@@ -90,7 +95,8 @@ foreach($playersOnline as $player)
 		<td>'.$config['vocations'][$player['vocation']].'</td>
 	</tr>';
 
-	$vocs[$player['vocation']]++;
+	if($config['online_vocations'])
+		$vocs[$player['vocation']]++;
 }
 
 if(!$players): ?>
@@ -180,7 +186,7 @@ if($config['online_vocations']): ?>
 			</tr>
 
 		<?php
-			for($i = 1; $i < 5; $i++)
+			for($i = 1; $i <= $config['vocation_last']; $i++)
 			echo '<tr bgcolor="' . getStyle($i) . '">
 				<td width="25%">' . $config['vocations'][$i] . '</td>
 				<td width="75%">' . $vocs[$i] . '</td>

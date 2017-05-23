@@ -316,8 +316,8 @@ if($action == 'show')
 					if($level_in_guild > $rank->getLevel() || $guild_leader)
 						if($guild_leader_char->getName() != $player->getName())
 							echo '&nbsp;<font size=1>{<a href="?subtopic=guilds&action=kickplayer&guild='.urlencode($guild->getName()).'&name='.urlencode($player->getName()).'">KICK</a>}</font>';
-					if($player->isOnline())
-						$s_members_online++;
+					//if($player->isOnline())
+					//	$s_members_online++;
 					echo '</FORM></TD><TD align="right" width="10%">'.$player->getLevel().'</TD><TD align="right" width="20%"><font color="'.($player->isOnline() ? 'green"><b>Online' : 'red"><b>Offline').'</b></font></TD></TR>';
 				}
 				echo '</TABLE></TD></TR>';
