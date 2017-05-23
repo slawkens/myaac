@@ -52,7 +52,9 @@ if($action == '')
 
 	//echo 'Guilds needs to have atleast 4 members, otherwise it will be deleted automatically after 4 days.<BR/><BR/>Guild statistics are self-updated once per 3 days.<BR/><BR/>';
 
-	echo '<A HREF="?subtopic=guilds&preview=1">Normal preview</A> / <A HREF="?subtopic=guilds&preview=2">Advanced ranks & statistics</A><BR/><BR/><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>
+	//echo '<A HREF="?subtopic=guilds&preview=1">Normal preview</A> / <A HREF="?subtopic=guilds&preview=2">Advanced ranks & statistics</A><BR/><BR/>
+	echo '
+	<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>
 	<TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN='.($_REQUEST['preview'] == 2 ? '7' : '3').' class="white"><B>Active Guilds on '.$config['lua']['serverName'].'</B></TD></TR>
 	<TR BGCOLOR='.$config['darkborder'].' '.($_REQUEST['preview'] == 2 ? 'ALIGN="CENTER"' : '' ).'>';
 		if($_REQUEST['preview'] == 2) {
