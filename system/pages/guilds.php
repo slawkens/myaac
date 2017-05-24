@@ -299,7 +299,7 @@ if($action == 'show')
 
 					//$s_total_members++;
 					//$s_total_level += $player->getLevel();
-					echo '<TR><TD><FORM ACTION="?subtopic=guilds&action=change_nick&name='.$player->getName().'" METHOD=post>' . getPlayerLink($player->getName());
+					echo '<TR><TD>' . getPlayerLink($player->getName()) . '<FORM ACTION="?subtopic=guilds&action=change_nick&name='.$player->getName().'" METHOD=post>';
 					$guild_nick = $player->getGuildNick();
 					if($logged)
 					{
