@@ -58,7 +58,7 @@ function generate_player_lookup($player)
 		if(!isset($player_eq[$i]) || $player_eq[$i] == 0)
 			$player_eq[$i] = $empty_slots[$i];
 	}
-
+/*
 	if(PHP_VERSION_ID == NULL || PHP_VERSION_ID < 70000) {
 		for($i = 1; $i < 11; $i++)
 		{
@@ -66,7 +66,7 @@ function generate_player_lookup($player)
 				Items::generate($player_eq[$i]);
 		}
 	}
-
+	*/
 	for($i = 1; $i < 11; $i++)
 	{
 		if(check_number($player_eq[$i]))

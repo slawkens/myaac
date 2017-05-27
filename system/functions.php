@@ -1149,7 +1149,7 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	global $mailer, $config;
 	if(!$mailer)
 	{
-		require(SYSTEM . 'libs/phpmailer/class.phpmailer.php');
+		require(SYSTEM . 'libs/phpmailer/PHPMailerAutoload.php');
 		$mailer = new PHPMailer();
 	}
 
