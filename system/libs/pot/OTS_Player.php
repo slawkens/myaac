@@ -1868,13 +1868,13 @@ class OTS_Player extends OTS_Row_DAO
     public function setGuildNick($guildnick)
     {
         $this->data['guildnick'] = (string) $guildnick;
-		if(fieldExist('guildnick', 'players'))
-			$this->db->query('UPDATE `players` SET `guildnick` = ' . $this->db->quote($this->data['guildnick']) . ' WHERE `id` = ' . $this->getId());
-		else if(tableExist('guild_members'))
+		if(tableExist('guild_members'))
 			$this->db->query('UPDATE `guild_members` SET `nick` = ' . $this->db->quote($this->data['guildnick']) . ' WHERE `player_id` = ' . $this->getId());
-		else
+		else if(tableExist('guild_membership'))
 			$this->db->query('UPDATE `guild_membership` SET `nick` = ' . $this->db->quote($this->data['guildnick']) . ' WHERE `player_id` = ' . $this->getId());
-    }
+		else if(fieldExist('guildnick', 'players'))
+			$this->db->query('UPDATE `players` SET `guildnick` = ' . $this->db->quote($this->data['guildnick']) . ' WHERE `id` = ' . $this->getId());
+  }
 
 /**
  * @version 0.0.3
@@ -1907,23 +1907,29 @@ class OTS_Player extends OTS_Row_DAO
     public function getRank()
     {
 		$rank_id = 0;
-		if(fieldExist('rank_id', 'players')) {
-			$query = $this->db->query('SELECT `rank_id` FROM `players` WHERE `id`= ' . $this->data['id'] . ';')->fetch();
-			$rank_id = $query['rank_id'];
-		} else {
-			$table = 'guild_membership';
-			if(tableExist('guild_members'))
-				$table = 'guild_members';
-
-			$query = $this->db->query('SELECT `rank_id` FROM `' . $table . '` WHERE `player_id`= ' . $this->data['id'] . ' LIMIT 1;');
+		if(tableExist('guild_members')) {
+			$query = $this->db->query('SELECT `rank_id` FROM `guild_members` WHERE `player_id`= ' . $this->data['id'] . ' LIMIT 1;');
 			if($query->rowCount() == 1) {
 				$query = $query->fetch();
 				$rank_id = $query['rank_id'];
 			}
 		}
+		else if(tableExist('guild_membership')) {
+			$query = $this->db->query('SELECT `rank_id` FROM `guild_membership` WHERE `player_id`= ' . $this->data['id'] . ' LIMIT 1;');
+			if($query->rowCount() == 1) {
+				$query = $query->fetch();
+				$rank_id = $query['rank_id'];
+			}
+		}
+		else if(fieldExist('rank_id', 'players')) {
+			$query = $this->db->query('SELECT `rank_id` FROM `players` WHERE `id`= ' . $this->data['id'] . ';')->fetch();
+			$rank_id = $query['rank_id'];
+		}
 
-		if($rank_id == 0) return new OTS_GuildRank();;
-		
+		if($rank_id == 0) {
+			return new OTS_GuildRank();
+		}
+
         $guildRank = new OTS_GuildRank();
         $guildRank->load($rank_id);
         return $guildRank;

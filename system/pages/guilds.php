@@ -17,6 +17,7 @@ if(tableExist('guild_members'))
 else
 	define('GUILD_MEMBERS_TABLE', 'guild_membership');
 	
+define('MOTD_EXISTS', fieldExist('motd', 'guilds'));
 if($action == 'login')
 {
 	if(check_guild_name($_REQUEST['guild']))
@@ -1303,7 +1304,7 @@ if(isset($todo) && $todo == 'save')
 			$player->setRank($rank);
 		}
 	}
-	echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Create guild</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%><b>Congratulations!</b><br/>You have created guild <b>'.$guild_name.'</b>. <b>'.$player->getName().'</b> is leader of this guild. Now you can invite players, change picture, description and motd of guild. Press submit to open guild manager.</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_Submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+	echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Create guild</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%><b>Congratulations!</b><br/>You have created guild <b>'.$guild_name.'</b>. <b>'.$player->getName().'</b> is leader of this guild. Now you can invite players, change picture, description' . (MOTD_EXISTS ? ' and motd' : '') . ' of guild. Press submit to open guild manager.</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_Submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
 	/*$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "the Leader", 3)');
 	$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "a Vice-Leader", 2)');
 	$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "a Member", 1)');*/
@@ -1387,8 +1388,10 @@ echo '<br/><br/><table style=\'clear:both\' border=0 cellpadding=0 cellspacing=0
 <tr bgcolor='.$config['darkborder'].'><td width="170"><font color="red"><b>Option</b></font></td><td><font color="red"><b>Description</b></font></td></tr>
 <tr bgcolor='.$config['lightborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=passleadership">Pass Leadership</a></b></td><td><b>Pass leadership of guild to other guild member.</b></td></tr>
 <tr bgcolor='.$config['darkborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=deleteguild">Delete Guild</a></b></td><td><b>Delete guild, kick all members.</b></td></tr>
-<tr bgcolor='.$config['lightborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=changedescription">Change Description</a></b></td><td><b>Change description of guild.</b></td></tr>
-<tr bgcolor='.$config['darkborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=changemotd">Change MOTD</a></b></td><td><b>Change MOTD of guild.</b></td></tr>
+<tr bgcolor='.$config['lightborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=changedescription">Change Description</a></b></td><td><b>Change description of guild.</b></td></tr>';
+if(MOTD_EXISTS)
+	echo '<tr bgcolor='.$config['darkborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=changemotd">Change MOTD</a></b></td><td><b>Change MOTD of guild.</b></td></tr>';
+echo '
 <tr bgcolor='.$config['lightborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=changelogo">Change guild logo</a></b></td><td><b>Upload new guild logo.</b></td></tr>
 </table>';
 echo '<br><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Add new rank</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td width="120" valign="top">New rank name:</td><td> <form action="?subtopic=guilds&guild='.$guild->getName().'&action=addrank" method="POST"><input type="text" name="rank_name" size="20"><input type="submit" value="Add"></form></td></tr>          </table>        </div>  </table></div></td></tr>';
@@ -1416,8 +1419,10 @@ echo '<h3>Ranks info:</h3><b>0. Owner of guild</b> - it\'s highest rank, only on
 <li>Invite/Cancel Invitation/Kick Player from guild
 <li>Change ranks of all players in guild
 <li>Delete guild or pass leadership to other guild member
-<li>Change names, levels(leader,vice,member), add and delete ranks
-<li>Change MOTD, logo and description of guild<hr>
+<li>Change names, levels(leader,vice,member), add and delete ranks';
+if(MOTD_EXISTS)
+	echo '<li>Change MOTD, logo and description of guild<hr>';
+echo '
 <b>3. Leader</b> - it\'s second rank in guild. Player with this rank can:
 <li>Invite/Cancel Invitation/Kick Player from guild (only with lower rank than his)
 <li>Change ranks of players with lower rank level ("vice leader", "member") in guild<hr>
@@ -2062,7 +2067,7 @@ echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigBu
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
-if($action == 'changemotd') {
+if($action == 'changemotd' && MOTD_EXISTS) {
 	$guild_name = $_REQUEST['guild'];
 	if(!check_guild_name($guild_name)) {
 		$guild_errors[] = 'Invalid guild name format.';
