@@ -1,3 +1,15 @@
+[0.2.3 - 31.05.2017]
+	- fixed guild management on OTHire 0.0.3
+	- set default skills to 10 when creating new character
+	- fixed displaying of "Create forum thread" in newses
+	- fixed deleting guild on servers that use players.rank_id field
+	- fixed phpmailer class loading (https://otland.net/threads/myaac-v0-0-1.251454/page-8#post-2445222)
+	- fixed displaying vocation amount on online page
+	- better support for custom vocations, you just need to set in config vocations_amount to yours.
+	- fixed huge space in player name (https://otland.net/threads/myaac-v0-0-1.251454/page-7#post-2444328)
+	- fixed Undefined variable (https://otland.net/threads/myaac-v0-0-1.251454/page-7#post-2444034)
+	- fixed Undefined offset (https://otland.net/threads/myaac-v0-0-1.251454/page-7#post-2444035)
+
 [0.2.2 - 22.05.2017]
 	- added missing cache/signature directory
 	- fixed https://otland.net/threads/myaac-v0-0-1.251454/page-7#post-2443868

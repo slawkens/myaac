@@ -6,7 +6,7 @@
  * @author    Gesior <jerzyskalski@wp.pl>
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.2.2
+ * @version   0.2.3
  * @link      http://my-aac.org
  */
 $title = 'Downloads';

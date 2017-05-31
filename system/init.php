@@ -5,7 +5,7 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.2.2
+ * @version   0.2.3
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
@@ -125,7 +125,7 @@ else {
 	$vocations = new DOMDocument();
 	$file = $config['data_path'] . 'XML/vocations.xml';
 	if(!@file_exists($file))
-		$file = $config['data_path'] . 'vocations.xml'
+		$file = $config['data_path'] . 'vocations.xml';
 
 	$vocations->load($file);
 
