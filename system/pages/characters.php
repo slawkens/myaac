@@ -711,7 +711,7 @@ else
 		foreach($query as $player) {
 			if(isset($player['promotion'])) {
 				if((int)$player['promotion'] > 0)
-					$player['vocation'] + ($player['promotion'] * 4);
+					$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
 			}
 			echo '<li>' . getPlayerLink($player['name']) . ' (<small><strong>level ' . $player['level'] . ', ' . $config['vocations'][$player['vocation']] . '</strong></small>)</li>';
 		}

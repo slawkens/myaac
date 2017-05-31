@@ -217,8 +217,9 @@ class OTS_Player extends OTS_Row_DAO
 			$this->data['rank_id'] = 0;
 
 		if(isset($this->data['promotion'])) {
+			global $config;
 			if((int)$this->data['promotion'] > 0)
-				$this->data['vocation'] + ($this->data['promotion'] * 4);
+				$this->data['vocation'] += ($this->data['promotion'] * $config['vocations_amount']);
 		}
         // loads skills
         if( $this->isLoaded() )
@@ -472,7 +473,6 @@ class OTS_Player extends OTS_Row_DAO
 				
 				if($id != $i - 1)
 					$set .= ',';
-					
 			}
 
 			$skills = $this->db->query('UPDATE `players` SET ' . $set . ' WHERE `id` = ' . $this->data['id']);

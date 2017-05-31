@@ -379,12 +379,12 @@ function delete_guild($id)
 		
 		global $db, $ots;
 		foreach($rank_list as $rank_in_guild) {
-			if(fieldExist('rank_id', 'players'))
-				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
-			else if(tableExist('guild_members'))
+			if(tableExist('guild_members'))
 				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_members`.`rank_id` as `rank_id` FROM `players`, `guild_members` WHERE `guild_members`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_members`.`player_id` ORDER BY `name`;');
-			else
+			else if(tableExist('guild_membership'))
 				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` ORDER BY `name`;');
+			else
+				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank_in_guild->getId() . ' AND `deleted` = 0;');
 
 			$players_with_rank_number = $players_with_rank->rowCount();
 			if($players_with_rank_number > 0) {

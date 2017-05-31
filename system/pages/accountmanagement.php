@@ -1106,6 +1106,9 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 			    $player->setManaSpent($char_to_copy->getManaSpent());
 			    $player->setSoul($char_to_copy->getSoul());
 
+				for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++)
+					$player->setSkill($skill, 10);
+
 			    $player->setLookBody($char_to_copy->getLookBody());
 			    $player->setLookFeet($char_to_copy->getLookFeet());
 			    $player->setLookHead($char_to_copy->getLookHead());

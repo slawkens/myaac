@@ -80,9 +80,9 @@ foreach($playersOnline as $player)
 
 	if(isset($player['promotion'])) {
 		if((int)$player['promotion'] > 0)
-			$player['vocation'] + ($player['promotion'] * 4);
+			$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
 	}
-					
+
 	$data .= '<tr bgcolor="' . getStyle(++$players) . '">';
 	if($config['account_country'])
 		$data .= '<td>' . getFlagImage($player['country']) . '</td>';
@@ -96,7 +96,7 @@ foreach($playersOnline as $player)
 	</tr>';
 
 	if($config['online_vocations'])
-		$vocs[$player['vocation']]++;
+		$vocs[($player['vocation'] > $config['vocations_amount'] ? $player['vocation'] - $config['vocations_amount'] : $player['vocation'])]++;
 }
 
 if(!$players): ?>
@@ -141,6 +141,8 @@ if(!$players): ?>
 			else if(tableExist('server_config')) { // tfs 1.0
 				$query = $db->query('SELECT `value` as `record` FROM `server_config` WHERE `config` = ' . $db->quote('players_record'));
 			}
+			else
+				$query = NULL;
 
 			if(isset($query) && $query->rowCount() > 0)
 			{
@@ -186,7 +188,7 @@ if($config['online_vocations']): ?>
 			</tr>
 
 		<?php
-			for($i = 1; $i <= $config['vocation_last']; $i++)
+			for($i = 1; $i <= $config['vocations_amount']; $i++)
 			echo '<tr bgcolor="' . getStyle($i) . '">
 				<td width="25%">' . $config['vocations'][$i] . '</td>
 				<td width="75%">' . $vocs[$i] . '</td>

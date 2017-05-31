@@ -372,7 +372,7 @@ if(!$news_cached)
 				</td>
 			</tr>
 <?php
-			if($action == 'add'):
+			if($action == ''):
 ?>
 			<tr bgcolor="<?php echo getStyle($rows++); ?>">
 				<td><b>Create forum thread in section:</b></td>

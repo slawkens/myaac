@@ -120,15 +120,14 @@ define('USE_ACCOUNT_NAME', fieldExist('name', 'accounts'));
 $tmp = '';
 if($cache->enabled() && $cache->fetch('vocations', $tmp)) {
 	$config['vocations'] = unserialize($tmp);
-	$config['vocation_last'] = $cache->get('vocation_last');
 }
 else {
 	$vocations = new DOMDocument();
-	$path_extra = 'XML/';
-	if($config['otserv_version'] >= OTSERV_FIRST && $config['otserv_version'] <= OTSERV_LAST)
-		$path_extra = '';
+	$file = $config['data_path'] . 'XML/vocations.xml';
+	if(!@file_exists($file))
+		$file = $config['data_path'] . 'vocations.xml'
 
-	$vocations->load($config['data_path'] . $path_extra . 'vocations.xml');
+	$vocations->load($file);
 
 	if(!$vocations)
 		die('ERROR: Cannot load <i>vocations.xml</i> file.');
@@ -136,15 +135,11 @@ else {
 	$config['vocations'] = array();
 	foreach($vocations->getElementsByTagName('vocation') as $vocation) {
 		$id = $vocation->getAttribute('id');
-		if($id == $vocation->getAttribute('fromvoc'))
-			$config['vocation_last'] = $id;
-
 		$config['vocations'][$id] = $vocation->getAttribute('name');
 	}
 
 	if($cache->enabled()) {
 		$cache->set('vocations', serialize($config['vocations']), 120);
-		$cache->set('vocation_last', $config['vocation_last'], 120);
 	}
 }
 unset($tmp, $id, $vocation);

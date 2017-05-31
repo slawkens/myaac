@@ -24,6 +24,8 @@ $config = array(
 	'template' => 'kathrine', // template used by website (kathrine, tibiacom)
 	'template_allow_change' => true, // allow users to choose their own template while browsing website?
 
+	'vocations_amount' => 4, // how much basic vocations your server got (without promotion)
+
 	// what client version are you using on this OT?
 	// used for the Downloads page and some templates aswell
 	'client' => 1098, // 954 = client 9.54

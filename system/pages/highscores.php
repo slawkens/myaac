@@ -209,7 +209,7 @@ echo '
 				if($config['highscores_vocation']) {
 					if(isset($player['promotion'])) {
 						if((int)$player['promotion'] > 0)
-							$player['vocation'] + ($player['promotion'] * 4);
+							$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
 					}
 
 					echo '<br/><small>' . $config['vocations'][$player['vocation']] . '</small>';
