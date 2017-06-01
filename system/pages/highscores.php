@@ -221,7 +221,7 @@ echo '
 			</td>';
 
 		if($skill == POT::SKILL__LEVEL)
-			echo '<td><center>' . $player['experience'] . '</center></td>';
+			echo '<td><center>' . number_format($player['experience']) . '</center></td>';
 
 		echo '</tr>';
 	}

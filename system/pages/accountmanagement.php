@@ -1066,7 +1066,7 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 				$char_to_copy = new OTS_Player();
 				$char_to_copy->find($char_to_copy_name);
 				if(!$char_to_copy->isLoaded())
-					$newchar_errors[] .= 'Wrong characters configuration. Try again or contact with admin. ADMIN: Edit file config/config.php and set valid characters to copy names. Character to copy'.$char_to_copy_name.'</b> doesn\'t exist.';
+					$newchar_errors[] .= 'Wrong characters configuration. Try again or contact with admin. ADMIN: Edit file config/config.php and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
 			}
 
 			if(empty($newchar_errors))

@@ -2174,7 +2174,7 @@ class OTS_Player extends OTS_Row_DAO
             throw new E_OTS_NotLoaded();
         }
 
-        return $this->data['loss_items'];
+        return $this->data['loss_containers'];
     }
     public function setLossContainers($loss_containers)
     {
