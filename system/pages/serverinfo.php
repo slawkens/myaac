@@ -60,6 +60,8 @@ if(isset($config['lua']['experience_stages']))
 			echo '<li>Houses with inactive owners are cleaned after 30 days.</li>';
 	}
 	
+	if(isset($config['lua']['rate_exp']))
+		$config['lua']['rateExp'] = $config['lua']['rate_exp'];
 	if(isset($config['lua']['rate_mag']))
 		$config['lua']['rateMagic'] = $config['lua']['rate_mag'];
 	if(isset($config['lua']['rate_skill']))
@@ -72,7 +74,10 @@ if(isset($config['lua']['experience_stages']))
 	<br/>
 
 	<h2>Rates</h2>
-	<?php if(isset($config['lua']['rateMagic'])): ?>
+	<?php if(isset($config['lua']['rateExp'])): ?>
+	<li>Exp Rate: <b>x<?php echo $config['lua']['rateExp']; ?></b></li>
+	<?php endif;
+	if(isset($config['lua']['rateMagic'])): ?>
 	<li>Magic Level: <b>x<?php echo $config['lua']['rateMagic']; ?></b></li>
 	<?php endif;
 	if(isset($config['lua']['rateSkill'])): ?>
