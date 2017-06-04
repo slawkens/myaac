@@ -803,7 +803,7 @@ $guild_errors[] = 'Player with name <b>'.$name.'</b> doesn\'t exist.';
 else
 {
 $rank_of_player = $player->getRank();
-if($player_rank->isLoaded()) {
+if($rank_of_player->isLoaded()) {
 $guild_errors[] = 'Player with name <b>'.$name.'</b> is already in guild. He must leave guild before you can invite him.';
 }
 }
