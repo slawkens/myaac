@@ -137,10 +137,10 @@ if(isset($_POST['reload_monsters']) && $canEdit)
 		if(!in_array($name, $names_added)) {
 			try {
 				$db->query("INSERT INTO myaac_monsters (hide_creature, name, mana, exp, health, speed_lvl, use_haste, voices, immunities, summonable, convinceable, race, gfx_name, file_path) VALUES (0, ".$db->quote($name).", '".$mana."', '".$exp."', '".$health."', '".$speed_lvl."', '".$use_haste."', ".$db->quote($voices_string).", ".$db->quote($immunities_string).", '".$flags['summonable']."', '".$flags['convinceable']."', '".$race."', ".$db->quote($gfx_name).", " . $db->quote($allmonsters->currentFile()) . ")");
-				echo "Added: ".$name."<br/>";
+				success("Added: ".$name."<br/>");
 			}
 			catch(PDOException $error) {
-				echo 'Error while adding monster (' . $name . '): ' . $error->getMessage();
+				warning('Error while adding monster (' . $name . '): ' . $error->getMessage());
 			}
 
 			$names_added[] = $name;
