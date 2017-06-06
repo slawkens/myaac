@@ -505,7 +505,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 					if($mostdmg) 
 					{
 						$mostdmg = ($death['mostdamage_is_player']) ? getPlayerLink($death['mostdamage_by']) : $death['mostdamage_by'];
-						$dead_add_content .=  '<br>and by ' . $mostdmg;
+						$dead_add_content .=  ' and by ' . $mostdmg;
 						
 						if ($death['mostdamage_unjustified']) {
 							$dead_add_content .=  " <font color='red' style='font-style: italic;'>(unjustified)</font>";

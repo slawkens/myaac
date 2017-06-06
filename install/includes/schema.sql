@@ -116,6 +116,7 @@ CREATE TABLE `myaac_hooks`
 ) ENGINE = MyISAM;
 
 CREATE TABLE `myaac_monsters` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`hide_creature` tinyint(1) NOT NULL default '0',
 	`name` varchar(255) NOT NULL,
 	`mana` int(11) NOT NULL,
@@ -129,7 +130,8 @@ CREATE TABLE `myaac_monsters` (
 	`convinceable` tinyint(1) NOT NULL,
 	`race` varchar(255) NOT NULL,
 	`gfx_name` varchar(255) NOT NULL,
-	`file_path` varchar(255) NOT NULL
+	`file_path` varchar(255) NOT NULL,
+	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 
 CREATE TABLE `myaac_movies`
