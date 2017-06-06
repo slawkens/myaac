@@ -117,7 +117,8 @@ class OTS_MonstersList implements Iterator, Countable, ArrayAccess
         {
             // loads file
             $monster = new OTS_Monster();
-            $monster->load($this->monstersPath . $this->monsters[$name]);
+			//echo $this->monstersPath . $this->monsters[$name];
+            $monster->loadXML(trim(file_get_contents($this->monstersPath . $this->monsters[$name])));
             return $monster;
         }
 

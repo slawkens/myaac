@@ -72,6 +72,10 @@ if(isset($_POST['reload_monsters']) && $canEdit)
 	//add monsters
 	foreach($allmonsters as $lol) {
 		$monster = $allmonsters->current();
+		if(!$monster->loaded()) {
+			warning('Error while adding monster: ' . $allmonsters->currentFile());
+			continue;
+		}
 		//load monster mana needed to summon/convince
 		$mana = $monster->getManaCost();
 		//load monster experience

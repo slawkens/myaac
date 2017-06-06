@@ -39,6 +39,16 @@
  */
 class OTS_Monster extends DOMDocument
 {
+	private $loaded = false;
+	public function loadXML($source , $options = 0)
+	{
+		$this->loaded = parent::loadXML($source, $options);
+	}
+	
+	public function loaded()
+	{
+		return $this->loaded;
+	}
 /**
  * Returns monster name.
  * 
