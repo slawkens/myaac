@@ -21,7 +21,7 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.2.3
+ * @version   0.2.4
  * @link      http://my-aac.org
  */
 
