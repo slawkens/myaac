@@ -31,7 +31,7 @@ define('MYAAC_VERSION', '0.2.4');
 define('DATABASE_VERSION', 4);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
-define('MYAAC_OS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'WINDOWS' : 'LINUX');
+define('MYAAC_OS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'WINDOWS' : (strtoupper(PHP_OS) == 'DARWIN' ? 'MAC' : 'LINUX'));
 
 // account flags
 define('FLAG_ADMIN', 1);
