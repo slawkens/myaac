@@ -140,7 +140,8 @@ if(isset($_POST['reload_monsters']) && $canEdit)
 
 		if(!in_array($name, $names_added)) {
 			try {
-				$db->query("INSERT INTO myaac_monsters (hide_creature, name, mana, exp, health, speed_lvl, use_haste, voices, immunities, summonable, convinceable, race, gfx_name, file_path) VALUES (0, ".$db->quote($name).", '".$mana."', '".$exp."', '".$health."', '".$speed_lvl."', '".$use_haste."', ".$db->quote($voices_string).", ".$db->quote($immunities_string).", '".$flags['summonable']."', '".$flags['convinceable']."', '".$race."', ".$db->quote($gfx_name).", " . $db->quote($allmonsters->currentFile()) . ")");
+				$db->query("INSERT INTO `myaac_monsters` (`hide_creature`, `name`, `mana`, `exp`, `health`, `speed_lvl`, `use_haste`, `voices`, `immunities`, `summonable`, `convinceable`, `race`, `gfx_name`, `file_path`) VALUES (0, " . $db->quote($name) . ", " . $db->quote(empty($mana) ? 0 : $mana) . ", " . $db->quote($exp) . ", " . $db->quote($health) . ", " . $db->quote($speed_lvl) . ", " . $db->quote($use_haste) . ", " . $db->quote($voices_string) . ", " . $db->quote($immunities_string) . ", " . $db->quote($flags['summonable'] > 0 ? 1 : 0) . ", " . $db->quote($flags['convinceable'] > 0 ? 1 : 0) . ", ".$db->quote($race).", ".$db->quote($gfx_name).", " . $db->quote($allmonsters->currentFile()) . ")");
+
 				success("Added: ".$name."<br/>");
 			}
 			catch(PDOException $error) {
@@ -172,25 +173,25 @@ if(empty($_REQUEST['creature']))
 	$desc = " DESC";
 	}
 	if($order == 'name') {
-	$whereandorder = ' ORDER BY name'.$desc;
+		$whereandorder = ' ORDER BY name'.$desc;
 	}
 	elseif($order == 'exp') {
-	$whereandorder = ' ORDER BY exp'.$desc.', name';
+		$whereandorder = ' ORDER BY exp'.$desc.', name';
 	}
 	elseif($order == 'health') {
-	$whereandorder = ' ORDER BY health'.$desc.', name';
+		$whereandorder = ' ORDER BY health'.$desc.', name';
 	}
 	elseif($order == 'summonable') {
-	$whereandorder = ' AND summonable = 1 ORDER BY mana'.$desc;
+		$whereandorder = ' AND summonable = 1 ORDER BY mana'.$desc;
 	}
 	elseif($order == 'convinceable') {
-	$whereandorder = ' AND convinceable = 1 ORDER BY mana'.$desc;
+		$whereandorder = ' AND convinceable = 1 ORDER BY mana'.$desc;
 	}
 	elseif($order == 'race') {
-	$whereandorder = ' ORDER BY race'.$desc.', name';
+		$whereandorder = ' ORDER BY race'.$desc.', name';
 	}
 	else {
-	$whereandorder = ' ORDER BY name';
+		$whereandorder = ' ORDER BY name';
 	}
 	//send query to database
 	$monsters = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'monsters').' WHERE hide_creature != 1'.$whereandorder);
@@ -208,7 +209,7 @@ if(empty($_REQUEST['creature']))
 	if($order == 'exp' && !isset($_REQUEST['desc'])) {
 	echo '<TD class="white"><B><a href="?subtopic=creatures&order=exp&desc=1"><font class="white">Experience<br/>DESC</a></B></TD>';
 	} else {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=exp"><font class="white">Experience</a></B></TD>';
+		echo '<TD class="white"><B><a href="?subtopic=creatures&order=exp"><font class="white">Experience</a></B></TD>';
 	}
 	if($order == 'summonable' && !isset($_REQUEST['desc'])) {
 	echo '<TD class="white"><B><a href="?subtopic=creatures&order=summonable&desc=1"><font class="white">Summonable<br/>Mana DESC</a></B></TD>';

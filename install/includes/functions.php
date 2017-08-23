@@ -28,17 +28,17 @@ function ini_get_bool($a)
 
 	switch (strtolower($b))
 	{
-	case 'on':
-	case 'yes':
-	case 'true':
-		return 'assert.active' !== $a;
+		case 'on':
+		case 'yes':
+		case 'true':
+			return 'assert.active' !== $a;
 
-	case 'stdout':
-	case 'stderr':
-		return 'display_errors' === $a;
+		case 'stdout':
+		case 'stderr':
+			return 'display_errors' === $a;
 
-	default:
-		return (bool) (int) $b;
+		default:
+			return (bool) (int) $b;
 	}
 }
 

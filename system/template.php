@@ -77,34 +77,13 @@ $template['link_account_create'] = internalLayoutLink(($config['friendly_urls'] 
 $template['link_account_lost'] = internalLayoutLink(($config['friendly_urls'] ? 'account/lost' : 'lostaccount'));
 $template['link_account_logout'] = internalLayoutLink(($config['friendly_urls'] ? 'account' : 'accountmanagement'), 'logout');
 
-$template['link_news'] = internalLayoutLink('news');
 $template['link_news_archive'] = internalLayoutLink('news' . ($config['friendly_urls'] ? '/' : '') . 'archive');
-$template['link_changelog'] = internalLayoutLink('changelog');
-$template['link_rules'] = internalLayoutLink('rules');
-$template['link_downloads'] = internalLayoutLink('downloads');
-$template['link_characters'] = internalLayoutLink('characters');
-$template['link_online'] = internalLayoutLink('online');
-$template['link_highscores'] = internalLayoutLink('highscores');
-$template['link_powergamers'] = internalLayoutLink('powergamers');
-$template['link_lastkills'] = internalLayoutLink('lastkills');
-$template['link_houses'] = internalLayoutLink('houses');
-$template['link_guilds'] = internalLayoutLink('guilds');
-$template['link_wars'] = internalLayoutLink('wars');
-$template['link_polls'] = internalLayoutLink('polls');
-$template['link_bans'] = internalLayoutLink('bans');
-$template['link_team'] = internalLayoutLink('team');
-$template['link_creatures'] = internalLayoutLink('creatures');
-$template['link_spells'] = internalLayoutLink('spells');
-$template['link_commands'] = internalLayoutLink('commands');
-$template['link_experienceStages'] = internalLayoutLink('experienceStages');
-$template['link_freeHouses'] = internalLayoutLink('freeHouses');
-$template['link_screenshots'] = internalLayoutLink('screenshots');
-$template['link_movies'] = internalLayoutLink('movies');
-$template['link_serverInfo'] = internalLayoutLink('serverInfo');
-$template['link_experienceTable'] = internalLayoutLink('experienceTable');
-$template['link_faq'] = internalLayoutLink('faq');
-$template['link_points'] = internalLayoutLink('points');
-$template['link_gifts'] = internalLayoutLink('gifts');
+
+$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'screenshots', 'movies', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts');
+foreach($links as $link) {
+    $template['link_' . $link] = internalLayoutLink($link);
+}
+
 $template['link_gifts_history'] = internalLayoutLink('gifts', 'show_history');
 if($config['forum'] != '')
 {

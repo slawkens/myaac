@@ -176,15 +176,13 @@ INSERT INTO `myaac_news_categories` (`id`, `icon_id`) VALUES (NULL, 1);
 INSERT INTO `myaac_news_categories` (`id`, `icon_id`) VALUES (NULL, 2);
 INSERT INTO `myaac_news_categories` (`id`, `icon_id`) VALUES (NULL, 3);
 INSERT INTO `myaac_news_categories` (`id`, `icon_id`) VALUES (NULL, 4);
-INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '1', UNIX_TIMESTAMP(), '2', 'Hello!', 'MyAAC is just READY to use!', 'slawkens', 'http://my-aac.org', '0');
-INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '2', UNIX_TIMESTAMP(), '4', 'Hello tickets!', 'http://my-aac.org', 'slawkens', '', '0');
 
 CREATE TABLE `myaac_notepad`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`account_id` INT(11) NOT NULL,
 	/*`name` VARCHAR(30) NOT NULL,*/
-	`content` TEXT NOT NULL DEFAULT '',
+	`content` TEXT NOT NULL,
 	/*`public` TINYINT(1) NOT NULL DEFAULT 0*/
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
@@ -233,7 +231,6 @@ CREATE TABLE `myaac_spells`
 	`conjure_count` TINYINT(3) NOT NULL DEFAULT 0,
 	`premium` TINYINT(1) NOT NULL DEFAULT 0,
 	`vocations` VARCHAR(32) NOT NULL,
-	`cities` VARCHAR(32) NOT NULL,
 	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`),
 	UNIQUE (`spell`)

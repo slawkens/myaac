@@ -252,7 +252,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		$lastday = 'lastday';
 		if(fieldExist('premend', 'accounts'))
 			$lastday = 'premend';
-		
+
         // UPDATE query on database
         $this->db->query('UPDATE `accounts` SET ' . (fieldExist('name', 'accounts') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `blocked` = ' . (int) $this->data['blocked'] . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . (fieldExist('premdays', 'accounts') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $lastday . '` = ' . (int) $this->data['lastday'] . ' WHERE `id` = ' . $this->data['id']);
     }
@@ -316,7 +316,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
 		return ($this->data['web_flags'] & $flag) == $flag;
 	}
-	
+
 	public function isAdmin()
 	{
 		return $this->hasFlag(FLAG_ADMIN) || $this->isSuperAdmin();
@@ -766,7 +766,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         {
             throw new E_OTS_NotLoaded();
         }
-		
+
 		if(tableExist('account_bans')) {
 			$ban = $this->db->query('SELECT `expires_at` FROM `account_bans` WHERE `account_id` = ' . $this->data['id'] . ' AND (`expires_at` > ' . time() .' OR `expires_at` = -1) ORDER BY `expires_at` DESC')->fetch();
 			$this->data['banned'] = isset($ban['expires_at']);
@@ -859,11 +859,11 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			if(isset($query['group_id']))
 				return $query['group_id'];
 		}
-		
+
 		$db->query('SELECT `group_id` FROM `players` WHERE `account_id` = ' . $this->getId() . ' ORDER BY `group_id` DESC LIMIT 1')->fetch();
 		if(isset($query['group_id']))
 			return $query['group_id'];
-		
+
 		return 0;
 	}
 
@@ -903,7 +903,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			$ip = $_SERVER['HTTP_CLIENT_IP'];
 		else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']))
 			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-			
+
 		if(strpos($ip, ":") === false) {
 			$ipv6 = '0';
 		}
@@ -912,7 +912,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			$ip = '';
 		}
 
-		return $this->db->query('INSERT INTO `' . TABLE_PREFIX . 'account_actions` (`account_id`, `ip`, `ipv6`, `date`, `action`) VALUES (' . $this->db->quote($this->getId()).', (' . $this->db->quote(ip2long($ip)) . '), (' . ($ipv6 == '0' ? $this->db->quote('') : $this->db->quote(inet_pton($ipv6))) . '), UNIX_TIMESTAMP(NOW()), ' . $this->db->quote($action).')');
+		return $this->db->query('INSERT INTO `' . TABLE_PREFIX . 'account_actions` (`account_id`, `ip`, `ipv6`, `date`, `action`) VALUES (' . $this->db->quote($this->getId()).', ' . ($ip == '' ? '0' : $this->db->quote(ip2long($ip))) . ', (' . ($ipv6 == '0' ? $this->db->quote('') : $this->db->quote(inet_pton($ipv6))) . '), UNIX_TIMESTAMP(NOW()), ' . $this->db->quote($action).')');
 	}
 
 	public function getActionsLog($limit1, $limit2)

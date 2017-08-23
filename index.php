@@ -61,7 +61,10 @@ if(fetchDatabaseConfig('database_version', $tmp)) { // we got version
 	$tmp = (int)$tmp;
 	if($tmp < DATABASE_VERSION) { // import if older
 		for($i = $tmp + 1; $i <= DATABASE_VERSION; $i++) {
-			require(SYSTEM . 'migrations/' . $i . '.php');
+			$file = SYSTEM . 'migrations/' . $i . '.php';
+			if(file_exists($file)) {
+				require($file);
+			}
 		}
 		
 		updateDatabaseConfig('database_version', DATABASE_VERSION);

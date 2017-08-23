@@ -710,16 +710,11 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 					}
 					else
 					{
-						echo 'Here you can see and edit the information about your character.<br/>If you do not want to specify a certain field, just leave it blank.<br/><br/><form action="?subtopic=accountmanagement&action=changecomment" method="post" ><div class="TableContainer" >  <table class="Table5" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Edit Character Information</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" >  <div class="TableContentContainer" >    <table class="TableContent" width="100%" ><tr><td class="LabelV" >Name:</td><td style="width:80%;" >'.$player_name.'</td></tr><tr><td class="LabelV" >Hide Account:</td><td>';
-						if($player->getCustomField("hidden") == 1) {
-							echo '<input type="checkbox" name="accountvisible" id="accountvisible" value="1" checked="checked">';
-						}
-						else
-						{
-							echo '<input type="checkbox" name="accountvisible" id="accountvisible" value="1" >';
-						}
-
-						echo '<label for="accountvisible"> check to hide your account information</label>';
+						echo 'Here you can see and edit the information about your character.<br/>If you do not want to specify a certain field, just leave it blank.<br/><br/><form action="?subtopic=accountmanagement&action=changecomment" method="post" ><div class="TableContainer" >  <table class="Table5" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Edit Character Information</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" >  <div class="TableContentContainer" >    <table class="TableContent" width="100%" ><tr><td class="LabelV" >Name:</td><td style="width:80%;" >'.$player_name.'</td></tr><tr><td class="LabelV" >Hide Account:</td><td>
+						<input type="hidden" value="0" name="accountvisible">
+					
+						<input type="checkbox" name="accountvisible" id="accountvisible" value="1" ' . ($player->getCustomField("hidden") == 1 ? ' checked="checked"' : '') . '>
+						<label for="accountvisible"> check to hide your account information</label>';
 							if((int)$player->getCustomField('group_id') > 1)
 								echo ' (you will be also hidden on the Team page!)';
 
@@ -1023,19 +1018,25 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 			else
 				$newchar_vocation = $config['character_samples'][0];
 
-			if(count($config['character_towns']) > 1)
-			{
-				if(empty($newchar_town))
+			if(count($config['character_towns']) > 1) {
+				if(!isset($newchar_town))
 					$newchar_errors[] = 'Please select a town for your character.';
 			}
-			else
+			else {
 				$newchar_town = $config['character_towns'][0];
+			}
 
-			if(empty($newchar_errors))
-			{
+			$exist = new OTS_Player();
+			$exist->find($newchar_name);
+			if($exist->isLoaded()) {
+				$newchar_errors[] .= 'Character with this name already exist.';
+			}
+
+			if(empty($newchar_errors)) {
 				$error = '';
-				if(!admin() && !check_name_new_char($newchar_name, $error))
+				if(!admin() && !check_name_new_char($newchar_name, $error)) {
 					$newchar_errors[] = $error;
+				}
 				if($newchar_sex != 1 && $newchar_sex != "0")
 					$newchar_errors[] = 'Sex must be equal <b>0 (female)</b> or <b>1 (male)</b>.';
 				if(!in_array($newchar_town, $config['character_towns']))
@@ -1074,19 +1075,19 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 				if($newchar_sex == "0")
 					$char_to_copy->setLookType(136);
 				$player = $ots->createObject('Player');
-			    $player->setName($newchar_name);
-			    $player->setAccount($account_logged);
-			    //$player->setGroupId($char_to_copy->getGroup()->getId());
+				$player->setName($newchar_name);
+				$player->setAccount($account_logged);
+				//$player->setGroupId($char_to_copy->getGroup()->getId());
 				$player->setGroupId(1);
-			    $player->setSex($newchar_sex);
-			    $player->setVocation($char_to_copy->getVocation());
+				$player->setSex($newchar_sex);
+				$player->setVocation($char_to_copy->getVocation());
 				if(fieldExist('promotion', 'players'))
 					$player->setPromotion($char_to_copy->getPromotion());
 			
 				if(fieldExist('direction', 'players'))
 					$player->setDirection($char_to_copy->getDirection());
 				
-			    $player->setConditions($char_to_copy->getConditions());
+				$player->setConditions($char_to_copy->getConditions());
 				$rank = $char_to_copy->getRank();
 				if($rank->isLoaded()) {
 					$player->setRank($char_to_copy->getRank());
@@ -1095,26 +1096,26 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 				if(fieldExist('lookaddons', 'players'))
 					$player->setLookAddons($char_to_copy->getLookAddons());
 	
-			    $player->setTownId($newchar_town);
-			    $player->setExperience($char_to_copy->getExperience());
-			    $player->setLevel($char_to_copy->getLevel());
-			    $player->setMagLevel($char_to_copy->getMagLevel());
-			    $player->setHealth($char_to_copy->getHealth());
-			    $player->setHealthMax($char_to_copy->getHealthMax());
-			    $player->setMana($char_to_copy->getMana());
-			    $player->setManaMax($char_to_copy->getManaMax());
-			    $player->setManaSpent($char_to_copy->getManaSpent());
-			    $player->setSoul($char_to_copy->getSoul());
+				$player->setTownId($newchar_town);
+				$player->setExperience($char_to_copy->getExperience());
+				$player->setLevel($char_to_copy->getLevel());
+				$player->setMagLevel($char_to_copy->getMagLevel());
+				$player->setHealth($char_to_copy->getHealth());
+				$player->setHealthMax($char_to_copy->getHealthMax());
+				$player->setMana($char_to_copy->getMana());
+				$player->setManaMax($char_to_copy->getManaMax());
+				$player->setManaSpent($char_to_copy->getManaSpent());
+				$player->setSoul($char_to_copy->getSoul());
 
 				for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++)
 					$player->setSkill($skill, 10);
 
-			    $player->setLookBody($char_to_copy->getLookBody());
-			    $player->setLookFeet($char_to_copy->getLookFeet());
-			    $player->setLookHead($char_to_copy->getLookHead());
-			    $player->setLookLegs($char_to_copy->getLookLegs());
-			    $player->setLookType($char_to_copy->getLookType());
-			    $player->setCap($char_to_copy->getCap());
+				$player->setLookBody($char_to_copy->getLookBody());
+				$player->setLookFeet($char_to_copy->getLookFeet());
+				$player->setLookHead($char_to_copy->getLookHead());
+				$player->setLookLegs($char_to_copy->getLookLegs());
+				$player->setLookType($char_to_copy->getLookType());
+				$player->setCap($char_to_copy->getCap());
 				$player->setBalance(0);
 				$player->setPosX(0);
 				$player->setPosY(0);

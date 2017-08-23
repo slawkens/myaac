@@ -1,8 +1,8 @@
 <?php
 	defined('MYAAC') or die('Direct access not allowed!');
-	putenv('GDFONTPATH=' . dirname(__FILE__) . '/fonts');
+	putenv('GDFONTPATH=' . TOOLS . 'signature/fonts');
 
-	$font = "fonts/arialbd.ttf";
+	$font = "arialbd.ttf";
 	$fontsize = 8;
 
 	$name = stripslashes(ucwords(strtolower(trim($_REQUEST['name']))));

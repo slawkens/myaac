@@ -69,8 +69,8 @@ if(isset($_POST['reload_spells']) && $canEdit)
 		$type = 2;
 		$count = $spell->getConjureCount();
 		try {
-			$db->query("INSERT INTO myaac_spells (spell, name, words, type, mana, level, maglevel, soul, premium, vocations, conjure_count, hidden) VALUES ('".$spell_txt."', '".$name."', '".$spell_txt."', '".$type."', '".$mana."', '".$lvl."', '".$mlvl."', '".$soul."', '".$pacc."', '".$vocations_to_db."', '".$count."', '".$hide_spell."')");
-			success("Added: ".$name."<br>");
+			$db->query('INSERT INTO myaac_spells (spell, name, words, type, mana, level, maglevel, soul, premium, vocations, conjure_count, hidden) VALUES (' . $db->quote($spell_txt) . ', ' . $db-quote($name) . ', ' . $db->quote($spell_txt) , ', ' . $db->quote($type) . ', ' . $db->quote($mana) . ', ' . $db->quote($lvl) . ', ' . $db->quote($mlvl) . ', ' . $db->quote($soul) . ', ' . $db>quote($pacc) . ', ' . $db->quote($vocations_to_db) . ', ' . $db->quote($count) . ', ' . $db->quote($hide_spell) . ')');
+			success("Added: " . $name . "<br>");
 		}
 		catch(PDOException $error) {
 			warning('Error while adding spell (' . $name . '): ' . $error->getMessage());

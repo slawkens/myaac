@@ -73,6 +73,7 @@ $locale['step_database_modifying_field'] = 'Modyfikacja pola';
 $locale['step_database_changing_field'] = 'Zmiana $FIELD$ na $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Importowanie schematów graczy...';
 $locale['step_database_created_account'] = 'Utworzono konto admina...';
+$locale['step_database_created_news'] = 'Utworzono newsy...';
 
 // finish
 $locale['step_finish_admin_panel'] = 'Panelu Admina';

@@ -70,6 +70,7 @@ $locale['step_database_modifying_field'] = 'Modifying field';
 $locale['step_database_changing_field'] = 'Changing $FIELD$ to $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Imported player samples...';
 $locale['step_database_created_account'] = 'Created admin account...';
+$locale['step_database_created_news'] = 'Created newses...';
 
 // admin account
 $locale['step_admin'] = 'Admin Account';
