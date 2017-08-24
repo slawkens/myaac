@@ -384,6 +384,14 @@ function validate_form(thisform)
 }
 </script>
 <?php
+	$country_recognized = null;
+	if($config['account_country_recognize']) {
+		$info = json_decode(@file_get_contents('http://ispinfo.io/' . $_SERVER['REMOTE_ADDR'] . '/geo'), true);
+		if(isset($info['country'])) {
+			$country_recognized = strtolower($info['country']);
+		}
+	}
+
 	if(!empty($errors))
 		output_errors($errors);
 ?>
@@ -446,7 +454,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 
 										echo '<option value="">----------</option>';
 										foreach($config['countries'] as $code => $c)
-											echo '<option value="' . $code . '"' . ((isset($country) && $country == $code) ? ' selected' : '') . '>' . $c . '</option>';
+											echo '<option value="' . $code . '"' . (((isset($country) && $country == $code) || (!isset($country) && $country_recognized == $code)) ? ' selected' : '') . '>' . $c . '</option>';
 									?>
 									</select>
 									<img src="" id="account_country_img"/>

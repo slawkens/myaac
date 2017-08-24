@@ -85,6 +85,7 @@ $config = array(
 	'account_welcome_mail' => true, // send welcome email when user registers
 	'account_mail_change' => 2, // how many days user need to change email to account - block hackers
 	'account_country' => true, // user will be able to set country of origin when registering account, this information will be viewable in others places aswell
+	'account_country_recognize' => true, // should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io
 	'account_change_character_name' => false, // can user change their character name for premium points?
 	'account_change_character_name_points' => 30, // cost of name change
 	'account_change_character_sex' => false, // can user change their character sex for premium points?
