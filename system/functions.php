@@ -689,7 +689,7 @@ function check_password($pass)
 	if(strspn($pass, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890") != strlen($pass))
 		return false;
 
-	return preg_match("/[A-z0-9]{7,32}/", $pass);
+	return preg_match("/[A-z0-9]/", $pass);
 }
 
 function check_mail($email)

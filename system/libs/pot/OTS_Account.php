@@ -470,11 +470,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
         $this->data['password'] = (string) $password;
     }
-
-    public function setSalt($salt)
-    {
-        $this->data['salt'] = (string) $salt;
-    }
 /**
  * E-mail address.
  *
@@ -1030,10 +1025,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
             case 'password':
                 $this->setPassword($value);
-                break;
-
-            case 'salt':
-                $this->setSalt($value);
                 break;
 
             case 'eMail':

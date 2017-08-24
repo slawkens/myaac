@@ -333,9 +333,17 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 			if(empty($new_password) || empty($new_password2) || empty($old_password)){
 				$show_msgs[] = "Please fill in form.";
 			}
+			$password_strlen = strlen($new_password);
 			if($new_password != $new_password2) {
 				$show_msgs[] = "The new passwords do not match!";
 			}
+			else if($password_strlen < 8) {
+				$show_msgs[] = "New password minimal length is 8 characters.";
+			}
+			else if($password_strlen > 32) {
+				$show_msgs[] = "New password maximal length is 32 characters.";
+			}
+			
 			if(empty($show_msgs)) {
 				if(!check_password($new_password)) {
 					$show_msgs[] = "New password contains illegal chars (a-z, A-Z and 0-9 only!). Minimum password length is 7 characters and maximum 32.";
@@ -363,7 +371,7 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 				{
 					$salt = generateRandomString(10, false, true, true);
 					$new_password = $salt . $new_password;
-					$account_logged->setSalt($salt);
+					$account_logged->setCustomField('salt', $salt);
 				}
 		
 				$new_password = encrypt($new_password);

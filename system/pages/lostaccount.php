@@ -505,7 +505,7 @@ if($config['mail_enabled'])
 						{
 							$salt = generateRandomString(10, false, true, true);
 							$newpassword_with_salt = $salt . $newpassword;
-							$account->setSalt($salt);
+							$account->setCustomField('salt', $salt);
 						}
 						
 						$account->setPassword(encrypt($newpassword_with_salt));
