@@ -63,7 +63,7 @@ if($step == 'save')
 		$country = $_POST['country'];
 		if(!isset($country))
 			$errors['country'] = 'Country is not set';
-		elseif(!$config['countries'][$country])
+		elseif(!isset($config['countries'][$country]))
 			$errors['country'] = 'Country is invalid.';
 	}
 
