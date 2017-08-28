@@ -43,6 +43,8 @@ define('FLAG_CONTENT_FORUM', 32);
 define('FLAG_CONTENT_COMMANDS', 64);
 define('FLAG_CONTENT_SPELLS', 128);
 define('FLAG_CONTENT_MONSTERS', 256);
+define('FLAG_CONTENT_SCREENSHOTS', 512);
+define('FLAG_CONTENT_MOVIES', 1024);
 
 // news
 define('NEWS', 1);

@@ -35,6 +35,11 @@ $twig = new Twig_Environment($loader, array(
 	'cache' => CACHE . 'twig/',
 ));
 
+$function = new Twig_SimpleFunction('getStyle', function ($i) {
+	return getStyle($i);
+});
+$twig->addFunction($function);
+
 // trim values we receive
 if(isset($_POST))
 {

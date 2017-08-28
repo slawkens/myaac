@@ -22,7 +22,7 @@ function version_check($name, $ok, $info = '', $warning = false)
 $failed = false;
 
 // start validating
-version_check($locale['step_requirements_php_version'], (PHP_VERSION_ID >= 50102), PHP_VERSION);
+version_check($locale['step_requirements_php_version'], (PHP_VERSION_ID >= 50200), PHP_VERSION);
 foreach(array('config.local.php', 'images/guilds', 'images/houses', 'images/screenshots') as $value)
 {
 	$perms = (int) substr(decoct(fileperms(BASE . $value)), 2);

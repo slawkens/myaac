@@ -71,88 +71,33 @@ if($canEdit)
 		if(!empty($errors))
 			output_errors($errors);
 	}
-?>
-	<form method="post" action="<?php echo getPageLink('commands', ($action == 'edit' ? 'edit' : 'add')); ?>">
-		<?php if($action == 'edit'): ?>
-		<input type="hidden" name="id" value="<?php echo $id; ?>" />
-		<?php endif; ?>
-	<table width="100%" border="0" cellspacing="1" cellpadding="4">
-		<tr>
-			<td bgcolor="<?php echo $config['vdarkborder']; ?>" class="white"><b><?php echo ($action == 'edit' ? 'Edit' : 'Add'); ?> command</b></td>
-		</tr>
-		<tr>
-			<td bgcolor="<?php echo $config['darkborder']; ?>">
-				<table border="0" cellpadding="1">
-					<tr>
-						<td>Words:</td>
-						<td><input name="words" value="<?php echo (isset($words) ? $words : ''); ?>" size="29" maxlength="29"/></td>
-					<tr>
-						<td>Description:</td>
-						<td><textarea name="description" maxlength="300" cols="50" rows="5"><?php echo (isset($description) ? $description : ''); ?></textarea></td>
-					<tr/>
-					<tr>
-						<td colspan="2" align="center"><input type="submit" value="Submit"/>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
-	</form>
-<?php
+	
+	echo $twig->render('commands.form.html', array(
+		'link' => getPageLink('commands', ($action == 'edit' ? 'edit' : 'add')),
+		'action' => $action,
+		'id' => isset($id) ? $id : null,
+		'vdarkborder' => $config['vdarkborder'],
+		'darkborder' => $config['darkborder'],
+		'words' => isset($words) ? $words : null,
+		'description' => isset($description) ? $description : null
+	));
 }
-?>
-
-<table width="100%" border="0" cellspacing="1" cellpadding="4">
-	<tr>
-		<td bgcolor="<?php echo $config['vdarkborder']; ?>" class="white" width="150"><b>Words</b></td>
-		<td bgcolor="<?php echo $config['vdarkborder']; ?>" class="white"><b>Description</b></td>
-		<?php if($canEdit): ?>
-		<td bgcolor="<?php echo $config['vdarkborder']; ?>" class="white"><b>Options</b></td>
-		<?php endif; ?>
-	</tr>
-<?php
 
 $commands =
-	$db->query('SELECT ' . $db->fieldName('id') . ', ' . $db->fieldName('words') . ', ' . $db->fieldName('description') .
-				($canEdit ? ', ' . $db->fieldName('hidden') . ', ' . $db->fieldName('ordering') : '') .
-				' FROM ' . $db->tableName(TABLE_PREFIX . 'commands') .
-				(!$canEdit ? ' WHERE ' . $db->fieldName('hidden') . ' != 1' : '') .
-				' ORDER BY ' . $db->fieldName('ordering'));
+	$db->query('SELECT `id`, `words`, `description`' .
+		($canEdit ? ', `hidden`, `ordering`' : '') .
+		' FROM `' . TABLE_PREFIX . 'commands`' .
+		(!$canEdit ? ' WHERE `hidden` != 1' : '') .
+		' ORDER BY `ordering`;');
 
 $last = $commands->rowCount();
-$i = 0;
-foreach($commands as $command): ?>
-	<tr bgcolor="<?php echo getStyle(++$i); ?>">
-		<td><?php echo $command['words']; ?></td>
-		<td><i><?php echo $command['description']; ?></i></td>
-		<?php if($canEdit): ?>
-		<td>
-			<a href="?subtopic=commands&action=edit&id=<?php echo $command['id']; ?>" title="Edit">
-				<img src="images/edit.png"/>Edit
-			</a>
-			<a id="delete" href="<?php echo BASE_URL; ?>?subtopic=commands&action=delete&id=<?php echo $command['id']; ?>" onclick="return confirm('Are you sure?');" title="Delete">
-				<img src="images/del.png"/>Delete
-			</a>
-			<a href="?subtopic=commands&action=hide&id=<?php echo $command['id']; ?>" title="<?php echo ($command['hidden'] != 1 ? 'Hide' : 'Show'); ?>">
-				<img src="images/<?php echo ($command['hidden'] != 1 ? 'success' : 'error'); ?>.png"/><?php echo ($command['hidden'] != 1 ? 'Hide' : 'Show'); ?>
-			</a>
-			<?php if($i != 1): ?>
-			<a href="?subtopic=commands&action=moveup&id=<?php echo $command['id']; ?>" title="Move up">
-				<img src="images/icons/arrow_up.gif"/>Move up
-			</a>
-			<?php endif; ?>
-			<?php if($i != $last): ?>
-			<a href="?subtopic=commands&action=movedown&id=<?php echo $command['id']; ?>" title="Move down">
-				<img src="images/icons/arrow_down.gif"/>Move down
-			</a>
-			<?php endif; ?>
-		</td>
-		<?php endif; ?>
-	</tr>
-<?php endforeach; ?>
-</table>
+echo $twig->render('commands.html', array(
+	'commands' => $commands,
+	'last' => $last,
+	'canEdit' => $canEdit,
+	'vdarkborder' => $config['vdarkborder']
+));
 
-<?php
 class Commands
 {
 	static public function add($words, $description, &$errors)
@@ -202,7 +147,7 @@ class Commands
 		global $db;
 		if(isset($id))
 		{
-			if($db->select(TABLE_PREFIX . 'commands', array('id' => $id)) !== false)
+			if(self::get($id) !== false)
 				$db->delete(TABLE_PREFIX . 'commands', array('id' => $id));
 			else
 				$errors[] = 'Command with id ' . $id . ' does not exists.';
@@ -218,7 +163,7 @@ class Commands
 		global $db;
 		if(isset($id))
 		{
-			$query = $db->select(TABLE_PREFIX . 'commands', array('id' => $id));
+			$query = self::get($id);
 			if($query !== false)
 				$db->update(TABLE_PREFIX . 'commands', array('hidden' => ($query['hidden'] == 1 ? 0 : 1)), array('id' => $id));
 			else
@@ -233,7 +178,7 @@ class Commands
 	static public function move($id, $i, &$errors)
 	{
 		global $db;
-		$query = $db->select(TABLE_PREFIX . 'commands', array('id' => $id));
+		$query = self::get($id);
 		if($query !== false)
 		{
 			$ordering = $query['ordering'] + $i;
