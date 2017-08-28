@@ -69,7 +69,9 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			else
 			{
 				$groups = new DOMDocument();
+				if(!@$groups->load($file)) {
 					error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
+					log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). Error: ' . print_r(error_get_last(), true));
 					return;
 				}
 
@@ -93,7 +95,9 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 		{
 			// loads DOM document
 			$groups = new DOMDocument();
+			if(!@$groups->load($file)) {
 				error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
+				log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). Error: ' . print_r(error_get_last(), true));
 				return;
 			}
 			
