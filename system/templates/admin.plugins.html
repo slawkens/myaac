@@ -1,0 +1,19 @@
+<b>Installed plugins:</b>
+<table class="table" border="0" align="center">
+	<tr>
+		<th>Plugin name (Description on hover)</th>
+		<th>Filename</th>
+		<th>Version</th>
+		<th>Author</th>
+		<th>Contact</th>
+	</tr>
+	{% for plugin in plugins %}
+	<tr>
+		<td><div title="{{ plugin.description }}">{{ plugin.name }}</div></td>
+		<td>{{ plugin.file }}</td>
+		<td>{{ plugin.version }}</td>
+		<td>{{ plugin.author }}</td>
+		<td>{{ plugin.contact }}</td>
+	</tr>
+	{% endfor %}
+</table>

@@ -1,0 +1,38 @@
+<table>
+	<tr>
+		<td>
+			<table class="table">
+				<tr><th colspan="2">Statistics</th></tr>
+				<tr>
+					<td>Total accounts:</td>
+					<td>{{ total_accounts }}</td>
+				</tr>
+				<tr>
+					<td>Total players:</td>
+					<td>{{ total_players }}</td>
+				</tr>
+				<tr>
+					<td>Total guilds:</td>
+					<td>{{ total_guilds }}</td>
+				</tr>
+				<tr><td>Total houses:</td>
+					<td>{{ total_houses }}</td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table">
+				<tr><th colspan="3">TOP 10 - Most wealth accounts</th></tr>
+				<tr><th>#</th><th>Account {{ account_type }}</th><th>Premium points</th></tr>
+				{% set i = 0 %}
+				{% for result in points %}
+					{% set i = i + 1 %}
+					<tr>
+						<td>{{ i }}</td>
+						<td>{{ result.name }}</td>
+						<td>{{ result.premium_points }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</td>
+	</tr>
+</table>

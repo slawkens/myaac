@@ -26,6 +26,15 @@ if($config['gzip_output'] && (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !
 require_once(SYSTEM . 'libs/cache.php');
 $cache = Cache::getInstance($config['cache_engine'], $config['cache_prefix']);
 
+// twig
+require_once LIBS . 'twig/Autoloader.php';
+Twig_Autoloader::register();
+
+$loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
+$twig = new Twig_Environment($loader, array(
+	'cache' => CACHE . 'twig/',
+));
+
 // trim values we receive
 if(isset($_POST))
 {

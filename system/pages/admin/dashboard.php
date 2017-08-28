@@ -18,14 +18,6 @@ if($cache->enabled()) {
 		else
 			error('Error while clearing cache.');
 	}
-
-?>
-<table class="table">
-	<tr>
-		<th><a href="?p=dashboard&clear_cache" onclick="return confirm('Are you sure?');">Clear cache</a></th>
-	</tr>
-</table>
-<?php
 }
 if(isset($_GET['maintenance'])) {
 	$_status = (int)$_POST['status'];
@@ -55,82 +47,12 @@ $closed_message = 'Server is under maintenance, please visit later.';
 $tmp = '';
 if(fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
-?>
-<form action="?p=dashboard&maintenance" method="post">
-	<table class="table">
-		<tr>
-			<th colspan="2">Maintenance
-			</th>
-		</tr>
-		<tr>
-			<td>Site status:</td>
-			<td>
-				<select name="status">
-					<option value="0"<?php echo (!$is_closed ? ' selected' : ''); ?>>Open</option>
-					<option value="1"<?php echo ($is_closed ? ' selected' : ''); ?>>Closed</option>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td>Message: (only if closed)</td>
-			<td>
-				<textarea name="message" maxlength="255" cols="40" rows="5"><?php echo $closed_message; ?></textarea>
-			<td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<input type="submit" class="button" value="Update"/>
-			</td>
-	</table>
-</form>
-<br/>
-<div>
-	<?php if($status['online']): ?>
-	<p class="success" style="width: 150px; text-align: center;">Status: Online<br/>
-		<?php echo $status['uptimeReadable'] . ', ' . $status['players'] . '/' . $status['playersMax']; ?><br/>
-		<?php echo $config['lua']['ip'] . ' : ' . $config['lua']['loginPort']; ?>
-		<br/><br/><u><a id="more-button" href="#"></a></u>
 
-		<span id="status-more">
-		<br/>
-		<b>Server</b>:<br/> <?php echo $status['server'] . ' ' . $status['serverVersion']; ?><br/>
-		<b>Version</b>: <?php echo $status['clientVersion']; ?><br/><br/>
-
-		<b>Monsters</b>: <?php echo $status['monsters']; ?><br/>
-		<b>Map</b>: <?php echo $status['mapName']; ?>, <b>author</b>: <?php echo $status['mapAuthor']; ?>, <b>size</b>: <?php echo $status['mapWidth'] . ' x ' . $status['mapHeight']; ?><br/>
-		<b>MOTD</b>:<br/> <?php echo $status['motd']; ?><br/><br/>
-
-		<b>Last updated</b>: <?php echo date("H:i:s", $status['lastCheck']); ?>
-		</span>
-	</p>
-	<?php else: ?>
-	<p class="error" style="width: 120px; text-align: center;">Status: Offline</p>
-	<?php endif; ?>
-</div>
-<!--div>
-	Version: <?php echo MYAAC_VERSION; ?> (<a id="update" href="#">Check for updates</a>)
-</div-->
-<?php if($status['online']): ?>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("#status-more").hide();
-		$("#more-button").text("More");
-	});
-
-	$("#more-button").click(function() {
-		if($("#status-more").is(":hidden")) {
-			$("#more-button").text("Hide");
-			$("#status-more").show();
-		}
-		else {
-			$("#more-button").text("More");
-			$("#status-more").hide();
-		}
-
-		return false;
-	});
-</script>
-<?php endif;
+echo $twig->render('admin.dashboard.html', array(
+	'is_closed' => $is_closed,
+	'closed_message' => $closed_message,
+	'status' => $status
+));
 
 function clearCache()
 {

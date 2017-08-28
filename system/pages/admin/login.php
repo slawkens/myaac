@@ -19,14 +19,6 @@ if(isset($errors)) {
 		error($error);
 	}
 }
-?>
 
-Please login.
-<form method="post">
-	<input type="password" name="account_login" id="account-name-input" size="30" maxlength="30" autofocus/><br/>
-	<input type="password" name="password_login" size="30" maxlength="29"/><br/>
-	<input type="checkbox" id="remember_me" name="remember_me" value="true"/>
-	<label for="remember_me"> Remember me</label><br/>
-	<input type="hidden" name="admin" value="1"/>
-	<input type="submit" class="button" value="Login"/>
-</form>
+echo $twig->render('admin.login.html');
+?>

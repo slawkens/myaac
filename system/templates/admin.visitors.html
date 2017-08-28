@@ -1,0 +1,19 @@
+Users being active within last {{ config_visitors_counter_ttl }} minutes.<br/><br/>
+<table class="table" width="100%" border="0">
+	<tr>
+		<th><b>IP</b></th>
+		<th><b>Last visit</b></th>
+		<th><b>Page</b></th>
+	</tr>
+{% set i = 0 %}
+{% for visitor in visitors %}
+	{% set i = i + 1 %}
+	<tr>
+		<td>{{ visitor.ip }}</td>
+		<td>{{ visitor.lastvisit|date("H:i:s") }}</td>
+		<td>
+			<a href="{{ visitor.page }}">{{ visitor.page|slice(0, 50) }}</a>
+		</td>
+	</tr>
+{% endfor %}
+</table>

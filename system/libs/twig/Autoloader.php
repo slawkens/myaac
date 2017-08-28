@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Twig.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 /**
  * Autoloads Twig classes.
  *
@@ -16,12 +18,18 @@ class Twig_Autoloader
 {
     /**
      * Registers Twig_Autoloader as an SPL autoloader.
+     *
+     * @param bool $prepend Whether to prepend the autoloader or not.
      */
-    public static function register()
+    public static function register($prepend = false)
     {
-        ini_set('unserialize_callback_func', 'spl_autoload_call');
-        spl_autoload_register(array(new self, 'autoload'));
+        if (PHP_VERSION_ID < 50300) {
+            spl_autoload_register(array(__CLASS__, 'autoload'));
+        } else {
+            spl_autoload_register(array(__CLASS__, 'autoload'), true, $prepend);
+        }
     }
+
     /**
      * Handles autoloading of classes.
      *
@@ -32,6 +40,7 @@ class Twig_Autoloader
         if (0 !== strpos($class, 'Twig')) {
             return;
         }
+
         if (is_file($file = dirname(__FILE__).'/../'.str_replace(array('_', "\0"), array('/', ''), $class).'.php')) {
             require $file;
         }
