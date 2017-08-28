@@ -205,7 +205,6 @@ CREATE TABLE `myaac_pages`
 CREATE TABLE `myaac_screenshots`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(30) NOT NULL,
 	`comment` VARCHAR(255) NOT NULL DEFAULT '',
 	`image` VARCHAR(255) NOT NULL,
 	`thumb` VARCHAR(255) NOT NULL,
@@ -215,7 +214,7 @@ CREATE TABLE `myaac_screenshots`
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 
-INSERT INTO `myaac_screenshots` (`id`, `ordering`, `name`, `comment`, `image`, `thumb`, `author`) VALUES (NULL, 1, 'Demon', 'Demon', 'images/screenshots/demon.jpg', 'images/screenshots/demon_thumb.gif', 'MyAAC');
+INSERT INTO `myaac_screenshots` (`id`, `ordering`, `comment`, `image`, `thumb`, `author`) VALUES (NULL, 1, 'Demon', 'images/screenshots/demon.jpg', 'images/screenshots/demon_thumb.gif', 'MyAAC');
 
 CREATE TABLE `myaac_spells`
 (
