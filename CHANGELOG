@@ -6,7 +6,7 @@
 	- fixed recovering account and changing password when salt is enabled
 	- fixed installing samples when for example Rook Sample already exist and other samples not
 	- fixed some mysql error when character you trying to create already exist
-	- fixed some warning when you select unexisting country
+	- fixed some warning when you select nonexistent country
 	- password change minimal/maximal length notice is now more precise
 	- added 'enabled' field in myaac_hooks table, which can enable or disable specified hook
 	- removed DEFAULT '' for TEXT field. It didn't worked under some systems like MAC OS X.
