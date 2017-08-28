@@ -112,6 +112,7 @@ CREATE TABLE `myaac_hooks`
 	`name` VARCHAR(30) NOT NULL DEFAULT '',
 	`type` INT(2) NOT NULL DEFAULT 0,
 	`file` VARCHAR(100) NOT NULL,
+	`enabled` INT(1) NOT NULL DEFAULT 1,
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 

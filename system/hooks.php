@@ -84,7 +84,7 @@ class Hooks
 	public function load()
 	{
 		global $db;
-		$hooks = $db->query('SELECT `name`, `type`, `file` FROM `' . TABLE_PREFIX . 'hooks`;');
+		$hooks = $db->query('SELECT `name`, `type`, `file` FROM `' . TABLE_PREFIX . 'hooks` WHERE `enabled` = 1;');
 		foreach($hooks as $hook)
 			$this->register($hook['name'], $hook['type'], $hook['file']);
 	}
