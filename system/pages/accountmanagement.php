@@ -876,10 +876,18 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 								$sex_changed = true;
 								$old_sex = $player->getSex();
 								$player->setSex($new_sex);
-								$sexes = array(0 => 'Female', 1 => 'Male');
+								
+								$old_sex_str = 'Unknown';
+								if(isset($config['genders'][$old_sex]))
+									$old_sex_str = $config['genders'][$old_sex];
+								
+								$new_sex_str = 'Unknown';
+								if(isset($config['genders'][$new_sex]))
+									$new_sex_str = $config['genders'][$new_sex];
+								
 								$player->save();
 								$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
-								$account_logged->logAction('Changed sex on character <b>' . $player->getName() . '</b> from <b>' . $sexes[$old_sex] . '</b> to <b>' . $sexes[$new_sex] . '</b>.');
+								$account_logged->logAction('Changed sex on character <b>' . $player->getName() . '</b> from <b>' . $old_sex_str . '</b> to <b>' . $new_sex_str . '</b>.');
 								echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Character Sex Changed</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>The character <b>'.$player->getName().'</b> sex has been changed to <b>' . $sexes[$new_sex] . '</b>.</td></tr>          </table>        </div>  </table></div></td></tr><br><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
 							}
 						}
@@ -920,9 +928,11 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 					<tr>
 						<td class="LabelV" ><span >New Sex:</td>
 						<td>
-							<select name="new_sex">
-								<option value="0"' . ($player->getSex() == 0 ? ' selected' : '') . '>Female</option>
-								<option value="1"' . ($player->getSex() == 1 ? ' selected' : '') . '>Male</option>
+							<select name="new_sex">';
+								foreach($config['genders'] as $id  => $name) {
+									echo '<option value="' . $id . '"' . ($player->getSex() == $id ? ' selected' : '') . '>' . $name . '</option>';
+								}
+								echo '
 							</select>
 						</td>
 					</tr>
@@ -1045,8 +1055,8 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 				if(!admin() && !check_name_new_char($newchar_name, $error)) {
 					$newchar_errors[] = $error;
 				}
-				if($newchar_sex != 1 && $newchar_sex != "0")
-					$newchar_errors[] = 'Sex must be equal <b>0 (female)</b> or <b>1 (male)</b>.';
+				if(!isset($config['genders'][$newchar_sex]))
+					$newchar_errors[] = 'Sex is invalid.';
 				if(!in_array($newchar_town, $config['character_towns']))
 					$newchar_errors[] = 'Please select valid town.';
 				if(count($config['character_samples']) > 1)
@@ -1197,14 +1207,16 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 				</font>
 			</td>
 			<td>';
-			echo '<input type="radio" name="newcharsex" id="newcharsex" value="1" ';
-			if($newchar_sex == 1)
-				echo 'checked="checked" ';
-			echo '><label for="newcharsex">male</label><br/>';
-			echo '<input type="radio" name="newcharsex" id="newcharsex2" value="0" ';
-			if($newchar_sex == "0")
-				echo 'checked="checked" ';
-			echo '><label for="newcharsex2">female</label><br/></td></tr></table></div></div></table></div>';
+			
+			$i = 0;
+			foreach(array_reverse($config['genders'], true) as $id => $name) {
+				echo '<input type="radio" name="newcharsex" id="newcharsex' . ++$i . '" value="' . $id . '" ';
+				if($newchar_sex == "$id")
+					echo 'checked="checked" ';
+				echo '><label for="newcharsex' . $i . '">' . strtolower($name) . '</label><br/>';
+			}
+
+			echo '</td></tr></table></div></div></table></div>';
 			echo '<div class="InnerTableContainer" >          <table style="width:100%;" ><tr>';
 			if(count($config['character_samples']) > 1)
 			{

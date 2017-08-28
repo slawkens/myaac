@@ -182,10 +182,12 @@ if($player->isLoaded() && !$player->isDeleted())
 					<TD>' . $flag . ' <font color="'.($player->isOnline() ? 'green' : 'red').'"><b>'.$player->getName().'</b></font>'.$oldName.
 				'</TD></TR>';
 
+				$player_sex = 'Unknown';
+				if(isset($config['genders'][$player->getSex()]))
+					$player_sex = strtolower($config['genders'][$player->getSex()]);
+				
 				echo
-				'<TR BGCOLOR="' . getStyle(++$rows) . '"><TD>Sex:</TD><TD>'.
-				($player->getSex() == 0 ? 'female' : 'male').
-				'</TD></TR>';
+				'<TR BGCOLOR="' . getStyle(++$rows) . '"><TD>Sex:</TD><TD>' . $player_sex . '</TD></TR>';
 
 			if($config['characters']['marriage_info'] && fieldExist('marriage', 'players'))
 			{

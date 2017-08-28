@@ -87,7 +87,7 @@
 			<div id="content"><?php echo $content; ?></div>
 		</div>
 		<div id="footer">
-			Powered by <a href="http://my-aac.org" target="_blank">MyAAC</a>
+			<?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?>
 		</div>
 	</div>
 <?php endif; ?>

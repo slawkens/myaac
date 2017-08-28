@@ -435,8 +435,8 @@ $account = $player->getAccount();
 					<td>Sex:</td>
 					<td>
 						<select name="sex">
-							<?php foreach(array('female', 'male') as $id => $sex): ?>
-								<option value="<?php echo $id; ?>" <?php echo ($player->getSex() == $id ? 'selected' : ''); ?>><?php echo $sex; ?></option>
+							<?php foreach($config['genders'] as $id => $sex): ?>
+								<option value="<?php echo $id; ?>" <?php echo ($player->getSex() == $id ? 'selected' : ''); ?>><?php echo strtolower($sex); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</td>

@@ -2,7 +2,7 @@
 	defined('MYAAC') or die('Direct access not allowed!');
 
 	/**
-	ALTER TABLE `players` ADD `madphp_signature` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT 'Absolute Mango © MadPHP.org', ADD `madphp_signature_bg` VARCHAR( 50 ) NOT NULL COMMENT 'Absolute Mango © MadPHP.org' AFTER `madphp_signature`, ADD `madphp_signature_eqs` TINYINT( 4 ) NOT NULL DEFAULT '0' COMMENT 'Absolute Mango © MadPHP.org' AFTER `madphp_signature_bg`, ADD `madphp_signature_bars` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT 'Absolute Mango © MadPHP.org' AFTER `madphp_signature_eqs`, ADD `madphp_signature_cache` INT( 11 ) NOT NULL COMMENT 'Absolute Mango © MadPHP.org' AFTER `madphp_signature_bars`;
+	ALTER TABLE `players` ADD `madphp_signature` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT 'Absolute Mango ï¿½ MadPHP.org', ADD `madphp_signature_bg` VARCHAR( 50 ) NOT NULL COMMENT 'Absolute Mango ï¿½ MadPHP.org' AFTER `madphp_signature`, ADD `madphp_signature_eqs` TINYINT( 4 ) NOT NULL DEFAULT '0' COMMENT 'Absolute Mango ï¿½ MadPHP.org' AFTER `madphp_signature_bg`, ADD `madphp_signature_bars` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT 'Absolute Mango ï¿½ MadPHP.org' AFTER `madphp_signature_eqs`, ADD `madphp_signature_cache` INT( 11 ) NOT NULL COMMENT 'Absolute Mango ï¿½ MadPHP.org' AFTER `madphp_signature_bars`;
 	**/
 
 	/** Load the MadGD class **/
@@ -50,7 +50,10 @@
 					$MadGD->addText( $player->getName(), ( $player->isOnline() ? array( 'color' => '5df82d' ) : array( ) ) )->setPosition( ); $i++;
 					/** SEX **/
 					$MadGD->addText( 'Sex:', $MadGD->textBold )->setPosition( 10, $i * $eachRow );
-					$MadGD->addText( $player->getSex() == 1 ? 'male' : 'female' )->setPosition( ); $i++;
+					$player_sex = 'unknown';
+					if(isset($config['genders'][$player->getSex()]))
+						$player_sex = strtolower($config['genders'][$player->getSex()]);
+					$MadGD->addText($player_sex)->setPosition( ); $i++;
 					/** PROFESSION **/
 					$MadGD->addText( 'Profession:', $MadGD->textBold )->setPosition( 10, $i * $eachRow );
 					$MadGD->addText( $config['vocations'][$player->getVocation()] )->setPosition( ); $i++;

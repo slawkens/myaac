@@ -51,16 +51,7 @@ class POT
  * @since 0.0.4
  */
     const DB_ODBC = 4;
-
-/**
- * Female gender.
- */
-    const SEX_FEMALE = 0;
-/**
- * Male gender.
- */
-    const SEX_MALE = 1;
-
+    
 /**
  * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
  */

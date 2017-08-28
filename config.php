@@ -56,7 +56,7 @@ $config = array(
 
 	// cache system. by default file cache is used
 	'cache_engine' => 'auto', // apc, eaccelerator, xcache, file, auto, or blank to disable.
-	'cache_prefix' => 'myaac_', // have to be unique if running more MyAAC instances on the same server
+	'cache_prefix' => 'myaac_', // have to be unique if running more MyAAC instances on the same server (except file system cache)
 
 	// database details (leave blank for auto detect from config.lua)
 	'database_host' => '',
@@ -119,6 +119,12 @@ $config = array(
 	'send_mail_when_change_password' => true,	// send e-mail with new password when change password to account
 	'send_mail_when_generate_reckey' => true,	// send e-mail with rec key (key is displayed on page anyway when generate)
 
+	// genders (aka sex)
+	'genders' => array(
+		0 => 'Female',
+		1 => 'Male'
+	),
+	
 	// new character config
 	'character_samples' => array( // vocations, format: ID_of_vocation => 'Name of Character to copy'
 		//0 => 'Rook Sample',

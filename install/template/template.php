@@ -40,7 +40,7 @@
 	</div>
 
 	<div id="footer">
-		<p style="text-align: center;">Powered by <a href="http://my-aac.org" target="_blank">MyAAC.</a></p>
+		<p style="text-align: center;"><?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?></p>
 	</div>
 </body>
 </html>
