@@ -170,7 +170,7 @@ if(empty($_REQUEST['creature']))
 	//generate sql query
 	$desc = '';
 	if(isset($_REQUEST['desc']) && $_REQUEST['desc'] == 1) {
-	$desc = " DESC";
+		$desc = " DESC";
 	}
 	if($order == 'name') {
 		$whereandorder = ' ORDER BY name'.$desc;
@@ -229,24 +229,25 @@ if(empty($_REQUEST['creature']))
 	$number_of_rows = 0;
 	foreach($monsters as $monster) {
 		echo '<TR BGCOLOR="' . getStyle($number_of_rows++) . '"><TD><a href="?subtopic=creatures&creature='.urlencode($monster['name']).'">'.$monster['name'].'</a></TD><TD>'.$monster['health'].'</TD><TD>'.$monster['exp'].'</TD>';
+		
 	if($monster['summonable']) {
-	echo '<TD>'.$monster['mana'].'</TD>';
+		echo '<TD>'.$monster['mana'].'</TD>';
 	}
-		else {
-	echo '<TD>---</TD>';
+	else {
+		echo '<TD>---</TD>';
 	}
 		
 	if($monster['convinceable']) {
-	echo '<TD>'.$monster['mana'].'</TD>';
+		echo '<TD>'.$monster['mana'].'</TD>';
 	}
-		else {
-	echo '<TD>---</TD>';
+	else {
+		echo '<TD>---</TD>';
 	}
 		
-	echo '<TD>'.ucwords($monster['race']).'</TD></TR>';
+	echo '<td>'.ucwords($monster['race']).'</td></tr>';
 	}
 
-	echo '</TABLE>';
+	echo '</table>';
 	return;
 }
 

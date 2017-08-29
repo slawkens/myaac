@@ -92,4 +92,6 @@ if($config['forum'] != '')
 	else
 		$template['link_forum'] = "<a href='" . $config['forum'] . "' target='_blank'>";
 }
+
+$twig->addGlobal('template_path', $template_path);
 ?>

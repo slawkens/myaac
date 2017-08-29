@@ -13,12 +13,11 @@ if(isset($config['boxes']))
 	<script type="text/javascript" src="tools/basic.js"></script>
 	<script type="text/javascript" src="<?php echo $template_path; ?>/ticker.js"></script>
 	<script type="text/javascript">
-		<?php echo 'var loginStatus="' . ($logged ? 'true' : 'false') . '";
-		var activeSubmenuItem="' . PAGE . '";
-		var IMAGES="' . $template_path . '/images";
-		var LINK_ACCOUNT="' . BASE_URL . '";';
-		?>
-
+		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
+		var activeSubmenuItem="<?php echo PAGE; ?>";
+		var IMAGES="<?php echo $template_path; ?>/images";
+		var LINK_ACCOUNT="<?php echo BASE_URL; ?>";
+		
 		function rowOverEffect(object) {
 			if (object.className == 'moduleRow') object.className = 'moduleRowOver';
 		}
@@ -26,20 +25,7 @@ if(isset($config['boxes']))
 		function rowOutEffect(object) {
 			if (object.className == 'moduleRowOver') object.className = 'moduleRow';
 		}
-
-		<!-- // Framekiller
-		setTimeout ("changePage()", 6000);
-		function changePage()
-		{
-		  if (parent.frames.length > 2) {
-			if (browserTyp == "ie")
-				parent.location=document.location;
-			else
-				self.top.location=document.location;
-		  }
-		}
-		// -->
-
+		
 		function InitializePage() {
 		  LoadLoginBox();
 		  LoadMenu();
@@ -348,16 +334,14 @@ if(isset($config['boxes']))
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<?php
-echo "<a href='" . $template['link_downloads'] . "'>
+<a href='<?php echo $template['link_downloads']; ?>'>
   <div id='submenu_downloads' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
-    <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
-    <div id='ActiveSubmenuItemIcon_downloads' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
+    <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+    <div id='ActiveSubmenuItemIcon_downloads' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
     <div class='SubmenuitemLabel'>Downloads</div>
-    <div class='RightChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
+    <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
-</a>";
-?>
+</a>
 </div>
 </div>
 
@@ -576,34 +560,36 @@ if(isset($config['freehouses'])): ?>
 endif;
 ?>
 
-<?php
-echo "<a href='" . $template['link_screenshots'] . "'>
+<a href="<?php echo $template['link_screenshots']; ?>">
   <div id='submenu_screenshots' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
-    <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
-    <div id='ActiveSubmenuItemIcon_screenshots' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
+    <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+    <div id='ActiveSubmenuItemIcon_screenshots' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
     <div class='SubmenuitemLabel'>Screenshots</div>
-    <div class='RightChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
+    <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
-</a>";
-if(isset($config['movies']))
-echo "<a href='" . $template['link_movies'] . "'>
-  <div id='submenu_movies' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
-    <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
-    <div id='ActiveSubmenuItemIcon_movies' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
-    <div class='SubmenuitemLabel'>Movies</div>
-    <div class='RightChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
-  </div>
-</a>";
+</a>
 
-echo "<a href='" . $template['link_serverInfo'] . "'>
-  <div id='submenu_serverinfo' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
-    <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
-    <div id='ActiveSubmenuItemIcon_serverinfo' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
-    <div class='SubmenuitemLabel'>Server Info</div>
-    <div class='RightChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
+<?php
+if(isset($config['movies'])): ?>
+echo "<a href='<?php echo $template['link_movies']; ?>'>
+  <div id='submenu_movies' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+    <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+    <div id='ActiveSubmenuItemIcon_movies' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+    <div class='SubmenuitemLabel'>Movies</div>
+    <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
-</a>";
-?>
+</a>
+<?php endif; ?>
+
+<a href='<?php echo $template['link_serverInfo']; ?>'>
+  <div id='submenu_serverinfo' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+    <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+    <div id='ActiveSubmenuItemIcon_serverinfo' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+    <div class='SubmenuitemLabel'>Server Info</div>
+    <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+  </div>
+</a>
+
 <a href='<?php echo $template['link_experienceTable']; ?>'>
   <div id='submenu_experiencetable' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
@@ -615,53 +601,55 @@ echo "<a href='" . $template['link_serverInfo'] . "'>
 </div>
 </div>
 <?php
-if($config['gifts_system'])
-{
-echo "<div id='shops' class='menuitem'>
-<span onClick=\"MenuItemAction('shops')\">
-  <div class='MenuButton' style='background-image:url(".$template_path."/images/menu/button-background.gif);'>
-    <div onMouseOver='MouseOverMenuItem(this);' onMouseOut='MouseOutMenuItem(this);'><div class='Button' style='background-image:url(".$template_path."/images/menu/button-background-over.gif);'></div>
+if($config['gifts_system']):
+?>
+<div id='shops' class='menuitem'>
+<span onClick="MenuItemAction('shops')">
+  <div class='MenuButton' style='background-image:url(<?php echo $template_path; ?>/images/menu/button-background.gif);'>
+    <div onMouseOver='MouseOverMenuItem(this);' onMouseOut='MouseOutMenuItem(this);'><div class='Button' style='background-image:url(<?php echo $template_path; ?>/images/menu/button-background-over.gif);'></div>
       <span id='shops_Lights' class='Lights'>
-        <div class='light_lu' style='background-image:url(".$template_path."/images/menu/green-light.gif);'></div>
-        <div class='light_ld' style='background-image:url(".$template_path."/images/menu/green-light.gif);'></div>
-        <div class='light_ru' style='background-image:url(".$template_path."/images/menu/green-light.gif);'></div>
+        <div class='light_lu' style='background-image:url(<?php echo $template_path; ?>/images/menu/green-light.gif);'></div>
+        <div class='light_ld' style='background-image:url(<?php echo $template_path; ?>/images/menu/green-light.gif);'></div>
+        <div class='light_ru' style='background-image:url(<?php echo $template_path; ?>/images/menu/green-light.gif);'></div>
       </span>
-      <div id='shops_Icon' class='Icon' style='background-image:url(".$template_path."/images/menu/icon-shops.gif);'></div>
-      <div id='shops_Label' class='Label' style='background-image:url(".$template_path."/images/menu/label-shops.gif);'></div>
-      <div id='shops_Extend' class='Extend' style='background-image:url(".$template_path."/images/general/plus.gif);'></div>
+      <div id='shops_Icon' class='Icon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-shops.gif);'></div>
+      <div id='shops_Label' class='Label' style='background-image:url(<?php echo $template_path; ?>/images/menu/label-shops.gif);'></div>
+      <div id='shops_Extend' class='Extend' style='background-image:url(<?php echo $template_path; ?>/images/general/plus.gif);'></div>
     </div>
   </div>
 </span>
 </div>
 <div id='shops_Submenu' class='Submenu'>
-<a href='" . $template['link_points'] . "'>
+<a href='<?php echo $template['link_points']; ?>'>
   <div id='submenu_points' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
-    <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
-    <div id='ActiveSubmenuItemIcon_points' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
-    <div class='SubmenuitemLabel'><font style=\"color: red;\">Buy Points</font></div>
-    <div class='RightChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
+    <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+    <div id='ActiveSubmenuItemIcon_points' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+    <div class='SubmenuitemLabel'><font style="color: red;">Buy Points</font></div>
+    <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-<a href='" . $template['link_gifts'] . "'>
+<a href='<?php echo $template['link_gifts']; ?>'>
   <div id='submenu_gifts' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
-    <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
-    <div id='ActiveSubmenuItemIcon_gifts' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
-    <div class='SubmenuitemLabel'><div style=\"color: green;\">\$hop Offer</div></div>
-    <div class='RightChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
+    <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+    <div id='ActiveSubmenuItemIcon_gifts' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+    <div class='SubmenuitemLabel'><div style="color: green;">\$hop Offer</div></div>
+    <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
-</a>";
-if($logged)
-echo "<a href='" . $template['link_gifts_history'] . "'>
-  <div id='submenu_gifts' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
-    <div class='LeftChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
-    <div id='ActiveSubmenuItemIcon_gifts' class='ActiveSubmenuItemIcon' style='background-image:url(".$template_path."/images/menu/icon-activesubmenu.gif);'></div>
-    <div class='SubmenuitemLabel'>Trans. History</div>
-    <div class='RightChain' style='background-image:url(".$template_path."/images/general/chain.gif);'></div>
-  </div>
-</a>";
-echo "</div>";
-}
+</a>
+<?php
+if($logged):
 ?>
+<a href='<?php echo $template['link_gifts_history']; ?>'>
+  <div id='submenu_gifts' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+    <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+    <div id='ActiveSubmenuItemIcon_gifts' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+    <div class='SubmenuitemLabel'>Trans. History</div>
+    <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+  </div>
+</a>
+<?php endif; ?>
+</div>
+<?php endif; ?>
 
 <div id='MenuBottom' style='background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);'></div>
 </div>

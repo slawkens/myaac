@@ -29,6 +29,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
     <body onload="initMenu();">
 		<?php echo template_place_holder('body_start'); ?>
+		<div id="top"></div>
     	<div id="page">
         <!-- Keep all on center of browser -->
 

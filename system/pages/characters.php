@@ -14,34 +14,16 @@ $title = 'Characters';
 
 require(SYSTEM . 'item.php');
 $groups = new OTS_Groups_List();
-function generate_search_table($script = false)
+function generate_search_table($autofocus = false)
 {
-	global $config, $template_path;
-	$ret = '
-	<form action="' . getPageLink('characters') . '" method="post">
-		<table width="100%" border="0" cellspacing="1" cellpadding="4">
-			<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Search Character</B></TD></TR>
-			<TR><TD BGCOLOR="'.$config['darkborder'].'">
-				<TABLE BORDER=0 CELLPADDING=1>
-					<TR>
-						<TD>Name:</TD><TD><INPUT ID="name-input" NAME="name" VALUE="" SIZE=29 MAXLENGTH=29></TD>
-						<TD>
-							<INPUT TYPE=image NAME="Submit" SRC="' . $template_path . '/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18>
-						</TD>
-					</TR>
-				</TABLE>
-			</TD></TR>
-		</TABLE>
-	</FORM>';
-		if($script)
-			$ret .= '
-			<script type="text/javascript">
-			$(function() {
-				$(\'#name-input\').focus();
-			});
-			</script>';
-
-	return $ret;
+	global $config, $template_path, $twig;
+	return $twig->render('characters.form.html', array(
+		'link' => getPageLink('characters'),
+		'vdarkborder' => $config['vdarkborder'],
+		'darkborder' => $config['darkborder'],
+		'autofocus' => $autofocus,
+		'template_path' => $template_path
+	));
 }
 
 function generate_player_lookup($player)
@@ -129,7 +111,7 @@ if(isset($_REQUEST['name']))
 if(empty($name))
 {
 	$tmp_link = getPlayerLink($name);
-	echo 'Here you can get detailed information about a certain player on '.$config['lua']['serverName'].'.<BR>';
+	echo 'Here you can get detailed information about a certain player on ' . $config['lua']['serverName'] . '.<BR>';
 	echo generate_search_table(true);
 	return;
 }
@@ -165,7 +147,7 @@ if($player->isLoaded() && !$player->isDeleted())
 		<td>
 			<table border="0" cellspacing="1" cellpadding="4" width="100%">
 				<?php if($config['characters']['outfit']): ?>
-				<div style="width:64px;height:64px;border:2px solid #F1E0C6; border-radius:50px; padding:13px; margin-top:38px;margin-left:376px;position:absolute;"><img style="margin-left:<?php echo (in_array($player->getLookType(), array(75, 266, 302)) ? '-0px;margin-top:-0px;width:64px;height:64px;' : '-60px;margin-top:-60px;width:128px;height:128px;'); ?>" src="<?php echo $config['outfit_images_url'] . '?id=' . $player->getLookType() . (fieldExist('lookaddons', 'players') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet() . '"';?>></div>
+				<div style="width:64px;height:64px;border:2px solid #F1E0C6; border-radius:50px; padding:13px; margin-top:38px;margin-left:376px;position:absolute;"><img style="margin-left:<?php echo (in_array($player->getLookType(), array(75, 266, 302)) ? '-0px;margin-top:-0px;width:64px;height:64px;' : '-60px;margin-top:-60px;width:128px;height:128px;'); ?>" src="<?php echo $config['outfit_images_url'] . '?id=' . $player->getLookType() . (fieldExist('lookaddons', 'players') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet(); ?>"></div>
 				<?php endif; ?>
 				<tr bgcolor="<?php echo $config['vdarkborder']; ?>">
 					<td colspan="2" class="white"><b>Character Information</b></td>
