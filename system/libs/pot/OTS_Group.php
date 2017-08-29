@@ -47,7 +47,7 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  *
  * @param DOMElement $group  Group info.
  */
-    public function __construct($data)
+    public function __construct($data = array())
     {
 		$this->data = $data;
     }

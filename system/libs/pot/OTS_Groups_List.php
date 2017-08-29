@@ -51,6 +51,12 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			global $config;
 			$file = $config['data_path'] . 'XML/groups.xml';
 		}
+		
+		if(!@file_exists($file)) {
+			error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
+			log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). It doesnt exist.');
+			return;
+		}
 
 		global $cache;
 
@@ -63,7 +69,11 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			else
 			{
 				$groups = new DOMDocument();
-				$groups->load($file);
+				if(!@$groups->load($file)) {
+					error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
+					log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). Error: ' . print_r(error_get_last(), true));
+					return;
+				}
 
 				// loads groups
 				foreach( $groups->getElementsByTagName('group') as $group)
@@ -85,8 +95,12 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 		{
 			// loads DOM document
 			$groups = new DOMDocument();
-			$groups->load($file);
-
+			if(!@$groups->load($file)) {
+				error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
+				log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). Error: ' . print_r(error_get_last(), true));
+				return;
+			}
+			
 			// loads groups
 			foreach($groups->getElementsByTagName('group') as $group)
 			{

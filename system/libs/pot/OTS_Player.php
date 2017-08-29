@@ -644,7 +644,8 @@ class OTS_Player extends OTS_Row_DAO
 		if($tmp)
 			return $tmp;
 
-			echo 'error while loading group..';
+		return new OTS_Group();
+			// echo 'error while loading group..';
 /*
 		$_id = $this->data['group_id'];
 		$tmpGroup = new OTS_Group;

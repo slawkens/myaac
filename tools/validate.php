@@ -5,9 +5,9 @@
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2016 WodzAAC
- * @version   0.2.4
- * @link      http://myaac.info
+ * @copyright 2017 MyAAC
+ * @version   0.3.0
+ * @link      http://my-aac.org
  */
 
 // we need some functions

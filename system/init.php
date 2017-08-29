@@ -5,7 +5,7 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.2.4
+ * @version   0.3.0
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
@@ -19,7 +19,7 @@ if($config['server_path'][strlen($config['server_path']) - 1] != '/')
 	$config['server_path'] .= '/';
 
 // enable gzip compression if supported by the browser
-if($config['gzip_output'] && (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) && function_exists('ob_gzhandler'))
+if($config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && function_exists('ob_gzhandler'))
 	ob_start('ob_gzhandler');
 
 // cache
@@ -27,7 +27,7 @@ require_once(SYSTEM . 'libs/cache.php');
 $cache = Cache::getInstance($config['cache_engine'], $config['cache_prefix']);
 
 // twig
-require_once LIBS . 'twig/Autoloader.php';
+require_once LIBS . 'Twig/Autoloader.php';
 Twig_Autoloader::register();
 
 $loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');

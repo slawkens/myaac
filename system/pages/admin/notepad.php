@@ -5,7 +5,7 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.2.4
+ * @version   0.3.0
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
@@ -28,7 +28,7 @@ else
 		$_content = $notepad_content;
 }
 
-echo $twig->render('admin.notepad.html', array('content' => $_content));
+echo $twig->render('admin.notepad.html', array('content' => isset($_content) ? $_content : null));
 
 class Notepad
 {

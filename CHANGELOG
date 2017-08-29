@@ -1,3 +1,21 @@
+[0.3.0 - 28.08.2017]
+	- added administration panel for screenshots management with auto thumbnail generator and image auto-resizing
+	- added Twig template engine and moved some html-in-php code to it
+	- automatically detect player country based on user location (IP) on create account
+	- player sex (gender) is now configurable at $config['genders']
+	- fixed recovering account and changing password when salt is enabled
+	- fixed installing samples when for example Rook Sample already exist and other samples not
+	- fixed some mysql error when character you trying to create already exist
+	- fixed some warning when you select nonexistent country
+	- password change minimal/maximal length notice is now more precise
+	- added 'enabled' field in myaac_hooks table, which can enable or disable specified hook
+	- removed DEFAULT '' for TEXT field. It didn't worked under some systems like MAC OS X.
+	- minimum PHP version to install the MyAAC is now 5.2.0 cause of pathinfo (extension) function
+	- removed unused admin stylish template
+	- removed some unused cities field from myaac_spells table
+	- moved news adding at installation from schema.sql to finish.php
+	- some optimizations
+
 [0.2.4 - 09.06.2017]
 	- fixed invite to guild
 	- added id field on monsters, so you can delete them in phpmyadmin
@@ -6,6 +24,7 @@
 	- fixed when file is unable to parse (creatures)
 	- fixed typo loss_items => loss_containers
 	- more elegant way of showing message on reload creatures and spells
+
 [0.2.3 - 31.05.2017]
 	- fixed guild management on OTHire 0.0.3
 	- set default skills to 10 when creating new character

@@ -5,7 +5,7 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.2.4
+ * @version   0.3.0
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
@@ -1202,7 +1202,7 @@ function convert_bytes($size)
 function log_append($file, $str)
 {
 	$f = fopen(LOGS . $file, 'a');
-	fwrite($f, $str . PHP_EOL);
+	fwrite($f, '[' . date(DateTime::RFC1123) . '] ' . $str . PHP_EOL);
 	fclose($f);
 }
 
@@ -1215,8 +1215,11 @@ function load_config_lua($filename)
 		die('ERROR: Cannot find ' . $filename . ' file.');
 
 	$tempFile = @tempnam('/tmp', 'lua');
-	$file = fopen($tempFile, 'w');
-	if(!$file) die('Cannot load server config!');
+	$file = @fopen($tempFile, 'w');
+	if(!$file) {
+		log_append('error.log', '[functions.php] Cannot load config.lua file. Error: ' . print_r(error_get_last(), true));
+		die('Cannot load server config! More info in system/logs/error.log file.');
+	}
 
 	// TODO: new parser that will also load dofile() includes
 

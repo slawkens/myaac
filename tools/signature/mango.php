@@ -2,7 +2,7 @@
 	defined('MYAAC') or die('Direct access not allowed!');
 
 	/**
-	ALTER TABLE `players` ADD `madphp_signature` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT 'Absolute Mango � MadPHP.org', ADD `madphp_signature_bg` VARCHAR( 50 ) NOT NULL COMMENT 'Absolute Mango � MadPHP.org' AFTER `madphp_signature`, ADD `madphp_signature_eqs` TINYINT( 4 ) NOT NULL DEFAULT '0' COMMENT 'Absolute Mango � MadPHP.org' AFTER `madphp_signature_bg`, ADD `madphp_signature_bars` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT 'Absolute Mango � MadPHP.org' AFTER `madphp_signature_eqs`, ADD `madphp_signature_cache` INT( 11 ) NOT NULL COMMENT 'Absolute Mango � MadPHP.org' AFTER `madphp_signature_bars`;
+	ALTER TABLE `players` ADD `madphp_signature` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT 'Absolute Mango © MadPHP.org', ADD `madphp_signature_bg` VARCHAR( 50 ) NOT NULL COMMENT 'Absolute Mango © MadPHP.org' AFTER `madphp_signature`, ADD `madphp_signature_eqs` TINYINT( 4 ) NOT NULL DEFAULT '0' COMMENT 'Absolute Mango © MadPHP.org' AFTER `madphp_signature_bg`, ADD `madphp_signature_bars` TINYINT( 4 ) NOT NULL DEFAULT '1' COMMENT 'Absolute Mango © MadPHP.org' AFTER `madphp_signature_eqs`, ADD `madphp_signature_cache` INT( 11 ) NOT NULL COMMENT 'Absolute Mango © MadPHP.org' AFTER `madphp_signature_bars`;
 	**/
 
 	/** Load the MadGD class **/
