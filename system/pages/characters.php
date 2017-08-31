@@ -677,7 +677,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 else
 {
 	$search_errors[] = 'Character <b>' . $name . '</b> does not exist or has been deleted.';
-	output_errors($search_errors);
+	echo $twig->render('error_box.html', array('errors' => $search_errors));
 	$search_errors = array();
 
 	$promotion = '';
@@ -706,4 +706,4 @@ else
 }
 
 if(!empty($search_errors))
-	output_errors($search_errors);
+	echo $twig->render('error_box.html', array('errors' => $search_errors));

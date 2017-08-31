@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Movies';
 
-$movies = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'movies') . ' ORDER BY ' . $db->fieldName('ordering'));
+$movies = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'movies` ORDER BY `ordering`;');
 if(!$movies->rowCount())
 {
 ?>
@@ -22,10 +22,10 @@ There are no movies added yet.
 	return;
 }
 ?>
-<center>
+<div style="text-align: center;">
 <?php foreach($movies as $movie): ?>
 	<?php echo $movie['title']; ?><br/>
 	Author: <?php echo $movie['author']; ?><br/>
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $movie['youtube_id']; ?>" frameborder="0" allowfullscreen></iframe><br/><br/>
 <?php endforeach; ?>
-</center>
+</div>

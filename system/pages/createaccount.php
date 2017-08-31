@@ -37,24 +37,23 @@ if($step == 'save')
 
 	// account
 	if(isset($account_id)) {
-		if(!check_number($account_id))
+		if(empty($account_id))
+			$errors['account'] = 'Please enter your account number!';
+		else if(!check_number($account_id))
 			$errors['account'] = 'Invalid account number format. Please use only numbers 0-9.';
 	}
 	else {
 		if(empty($account_name))
 			$errors['account'] = 'Please enter your account name!';
-		elseif(!check_account_name($account_name_up))
+		else if(!check_account_name($account_name_up))
 			$errors['account'] = 'Invalid account name format. Please use only A-Z and numbers 0-9.';
 	}
 
 	// email
 	if(empty($email))
 		$errors['email'] = 'Please enter your email address!';
-	else
-	{
-		if(!check_mail($email))
-			$errors['email'] = 'E-mail address is not correct.';
-	}
+	else if(!check_mail($email))
+		$errors['email'] = 'Email address is not correct.';
 
 	// country
 	$country = '';
@@ -62,7 +61,7 @@ if($step == 'save')
 	{
 		$country = $_POST['country'];
 		if(!isset($country))
-			$errors['country'] = 'Country is not set';
+			$errors['country'] = 'Country is not set.';
 		elseif(!isset($config['countries'][$country]))
 			$errors['country'] = 'Country is invalid.';
 	}
@@ -74,10 +73,10 @@ if($step == 'save')
 			$verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$config['recaptcha_secret_key'].'&response='.$_POST['g-recaptcha-response']);
 			$responseData = json_decode($verifyResponse);
 			if(!$responseData->success)
-				$errors['verification'] = 'Please confirm that your not a robot.';
+				$errors['verification'] = "Please confirm that you're not a robot.";
 		}
 		else
-			$errors['verification'] = 'Please confirm that your not a robot.';
+			$errors['verification'] = "Please confirm that you're not a robot.";
 	}
 
 	// password
@@ -393,7 +392,7 @@ function validate_form(thisform)
 	}
 
 	if(!empty($errors))
-		output_errors($errors);
+		echo $twig->render('error_box.html', array('errors' => $errors));
 ?>
 To play on <?php echo $config['lua']['serverName']; ?> you need an account.
 All you have to do to create your new account is to enter an account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?>, password<?php

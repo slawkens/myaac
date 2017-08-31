@@ -1,4 +1,4 @@
-Please enter your account name and your password.<br/><a href="?subtopic=createaccount" >Create an account</a> if you do not have one yet.<br/><br/>
+Please enter your account {{ account|lower }} and your password.<br/><a href="?subtopic=createaccount" >Create an account</a> if you do not have one yet.<br/><br/>
 <form action="?subtopic=accountmanagement" method="post" >
 	{% if redirect is not null %}
 		<input type="hidden" name="redirect" value="{{ redirect }}" />
@@ -7,15 +7,15 @@ Please enter your account name and your password.<br/><a href="?subtopic=createa
 		<table class="Table1" cellpadding="0" cellspacing="0" >
 			<div class="CaptionContainer" >
 				<div class="CaptionInnerContainer" >
-					<span class="CaptionEdgeLeftTop" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></span>
-					<span class="CaptionEdgeRightTop" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></span>
-					<span class="CaptionBorderTop" style="background-image:url(<?php echo $template_path; ?>/images/content/table-headline-border.gif);" ></span>
-					<span class="CaptionVerticalLeft" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-vertical.gif);" /></span>
+					<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
+					<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
 					<div class="Text" >Account Login</div>
-					<span class="CaptionVerticalRight" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-vertical.gif);" /></span>
-					<span class="CaptionBorderBottom" style="background-image:url(<?php echo $template_path; ?>/images/content/table-headline-border.gif);" ></span>
-					<span class="CaptionEdgeLeftBottom" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></span>
-					<span class="CaptionEdgeRightBottom" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
+					<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
+					<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
 				</div>
 			</div>
 			<tr>

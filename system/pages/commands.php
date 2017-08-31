@@ -69,7 +69,7 @@ if($canEdit)
 		}
 
 		if(!empty($errors))
-			output_errors($errors);
+			echo $twig->render('error_box.html', array('errors' => $errors));
 	}
 	
 	echo $twig->render('commands.form.html', array(

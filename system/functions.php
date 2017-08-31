@@ -751,28 +751,6 @@ function news_place()
 	return $news;
 }
 
-function output_errors($errors)
-{
-	global $template_path;
-?>
-	<div class="SmallBox" >
-		<div class="MessageContainer" >
-		<div class="BoxFrameHorizontal" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-horizontal.gif);" /></div>
-		<div class="BoxFrameEdgeLeftTop" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></div>
-		<div class="BoxFrameEdgeRightTop" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></div>
-		<div class="ErrorMessage" >
-			<div class="BoxFrameVerticalLeft" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-vertical.gif);" />
-		</div>
-			<div class="BoxFrameVerticalRight" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-vertical.gif);" /></div>
-			<div class="AttentionSign" style="background-image:url(<?php echo $template_path; ?>/images/content/attentionsign.gif);" />
-			</div><b>The Following Errors Have Occurred:</b><br/>
-	<?php
-	foreach($errors as $field => $message)
-		echo $message . '<br/>';
-
-	echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
-}
-
 /**
  * Template place holder
  *

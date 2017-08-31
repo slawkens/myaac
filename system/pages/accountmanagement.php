@@ -27,7 +27,7 @@ if(!$logged)
 	else
 	{
 		if(!empty($errors))
-			output_errors($errors);
+			echo $twig->render('error_box.html', array('errors' => $errors));
 	
 		echo $twig->render('account.login.html', array(
 			'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
@@ -141,7 +141,7 @@ if(!$logged)
 		$new_password2 = isset($_POST['newpassword2']) ? $_POST['newpassword2'] : NULL;
 		$old_password = isset($_POST['oldpassword']) ? $_POST['oldpassword'] : NULL;
 		if(empty($new_password) && empty($new_password2) && empty($old_password)) {
-			echo $twig->render('account.changepassword.html');
+			echo $twig->render('account.change_password.html');
 		}
 		else
 		{
@@ -177,7 +177,7 @@ if(!$logged)
 				echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
 				
 				//show form
-				echo $twig->render('account.changepassword.html');
+				echo $twig->render('account.change_password.html');
 			}
 			else
 			{
@@ -209,8 +209,9 @@ if(!$logged)
 						$message = '<br/><p class="error">An error occorred while sending email with password:<br/>' . $mailer->ErrorInfo . '</p>';
 				}
 				
-				echo $twig->render('account.changepassword.success.html', array(
-					'message' => $message
+				echo $twig->render('success.html', array(
+					'title' => 'Password Changed',
+					'description' => 'Your password has been changed.' . $message
 				));
 				$_SESSION['password'] = $new_password;
 			}
@@ -226,25 +227,25 @@ if(!$logged)
 		$email_new = $_POST['new_email'];
 		$post_password = $_POST['password'];
 		if(empty($email_new)) {
-			$change_email_errors[] = "Please enter your new email address.";
+			$errors[] = "Please enter your new email address.";
 		}
 		else
 		{
 			if(!check_mail($email_new)) {
-				$change_email_errors[] = "E-mail address is not correct.";
+				$errors[] = "E-mail address is not correct.";
 			}
 		}
 		if(empty($post_password)) {
-			$change_email_errors[] = "Please enter password to your account.";
+			$errors[] = "Please enter password to your account.";
 		}
 		else
 		{
 			$post_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $post_password);
 			if($post_password != $account_logged->getPassword()) {
-				$change_email_errors[] = "Wrong password to account.";
+				$errors[] = "Wrong password to account.";
 			}
 		}
-		if(empty($change_email_errors)) {
+		if(empty($errors)) {
 			$email_new_time = time() + $config['account_mail_change'] * 24 * 3600;
 			$account_logged->setCustomField("email_new", $email_new);
 			$account_logged->setCustomField("email_new_time", $email_new_time);
@@ -253,17 +254,17 @@ if(!$logged)
 		else
 		{
 			//show errors
-			echo $twig->render('account.error_box.html', array('errors' => $change_email_errors));
+			echo $twig->render('error_box.html', array('errors' => $errors));
 			
 			//show form
-			echo $twig->render('account.changemail.html', array(
+			echo $twig->render('account.change_mail.html', array(
 				'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
 			));
 		}
 	}
 	else
 	{
-		echo $twig->render('account.changemail.html', array(
+		echo $twig->render('account.change_mail.html', array(
 			'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
 		));
 	}
@@ -277,7 +278,11 @@ if(!$logged)
 				$account_logged->setEmail($email_new);
 				$account_logged->save();
 				$account_logged->logAction('Account email changed to <b>' . $email_new . '</b>');
-				echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Email Address Change Accepted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>You have accepted <b>'.$account_logged->getEmail().'</b> as your new email adress.</td></tr>          </table>        </div>  </table></div></td></tr><br/><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+				
+				echo $twig->render('success.html', array(
+					'title' => 'Email Address Change Accepted',
+					'description' => 'You have accepted <b>' . $account_logged->getEmail() . '</b> as your new email adress.'
+				));
 			}
 			else
 			{
@@ -298,114 +303,55 @@ if(!$logged)
 
 //########### CHANGE PUBLIC INFORMATION (about account owner) ######################
 	if($action == "changeinfo") {
+		$show_form = true;
 		$new_rlname = isset($_POST['info_rlname']) ? htmlspecialchars(stripslashes($_POST['info_rlname'])) : NULL;
 		$new_location = isset($_POST['info_location']) ? htmlspecialchars(stripslashes($_POST['info_location'])) : NULL;
 		$new_country = isset($_POST['info_country']) ? htmlspecialchars(stripslashes($_POST['info_country'])) : NULL;
 		if(isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
-		//save data from form
-			$account_logged->setCustomField("rlname", $new_rlname);
-			$account_logged->setCustomField("location", $new_location);
-			$account_logged->setCustomField("country", $new_country);
-			$account_logged->logAction('Changed Real Name to ' . $new_rlname . ', Location to ' . $new_location . ' and Country to ' . $config['countries'][$new_country] . '.');
-			echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Public Information Changed</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Your public information has been changed.</td></tr>          </table>        </div>  </table></div></td></tr><br><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+			$errors = array();
+			
+			if(!isset($config['countries'][$new_country]))
+				$errors[] = 'Country is not correct.';
+			
+			if(empty($errors)) {
+				//save data from form
+				$account_logged->setCustomField("rlname", $new_rlname);
+				$account_logged->setCustomField("location", $new_location);
+				$account_logged->setCustomField("country", $new_country);
+				$account_logged->logAction('Changed Real Name to ' . $new_rlname . ', Location to ' . $new_location . ' and Country to ' . $config['countries'][$new_country] . '.');
+				echo $twig->render('success.html', array(
+					'title' => 'Public Information Changed',
+					'description' => 'Your public information has been changed.'
+				));
+				$show_form = false;
+			}
+			else {
+				echo $twig->render('error_box.html', array('errors' => $errors));
+			}
 		}
-		else
-		{
+		
 		//show form
+		if($show_form) {
 			$account_rlname = $account_logged->getCustomField("rlname");
 			$account_location = $account_logged->getCustomField("location");
-			if($config['account_country'])
+			if ($config['account_country'])
 				$account_country = $account_logged->getCustomField("country");
-			?>
-			Here you can tell other players about yourself. This information will be displayed alongside the data of your characters. If you do not want to fill in a certain field, just leave it blank.<br/><br/>
-			<form action="?subtopic=accountmanagement&action=changeinfo" method=post>
-			<div class="TableContainer" >
-				<table class="Table1" cellpadding="0" cellspacing="0" >
-					<div class="CaptionContainer" >
-						<div class="CaptionInnerContainer" >
-							<span class="CaptionEdgeLeftTop" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></span>
-							<span class="CaptionEdgeRightTop" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></span>
-							<span class="CaptionBorderTop" style="background-image:url(<?php echo $template_path; ?>/images/content/table-headline-border.gif);" ></span>
-							<span class="CaptionVerticalLeft" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-vertical.gif);" /></span>
-							<div class="Text" >Change Public Information</div>
-							<span class="CaptionVerticalRight" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-vertical.gif);" /></span>
-							<span class="CaptionBorderBottom" style="background-image:url(<?php echo $template_path; ?>/images/content/table-headline-border.gif);" ></span>
-							<span class="CaptionEdgeLeftBottom" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></span>
-							<span class="CaptionEdgeRightBottom" style="background-image:url(<?php echo $template_path; ?>/images/content/box-frame-edge.gif);" /></span>
-						</div>
-			</div>
-				<tr>
-					<td>
-						<div class="InnerTableContainer" >
-						<table style="width:100%;" >
-							<tr>
-								<td class="LabelV" >Real Name:</td>
-								<td style="width:90%;" >
-									<input name="info_rlname" value="<?php echo $account_rlname; ?>" size="30" maxlength="50" >
-								</td>
-						</tr>
-						<tr>
-							<td class="LabelV" >Location:</td>
-							<td>
-								<input name="info_location" value="<?php echo $account_location; ?>" size="30" maxlength="50" >
-							</td>
-						</tr>
-						<?php if($config['account_country']): ?>
-						<tr>
-							<td class="LabelV" >Country:</td>
-							<td>
-								<select name="info_country" id="account_country">
-									<?php
-										foreach(array('pl', 'se', 'br', 'us', 'gb', ) as $country)
-											echo '<option value="' . $country . '">' . $config['countries'][$country] . '</option>';
-
-										echo '<option value="">----------</option>';
-										foreach($config['countries'] as $code => $country)
-											echo '<option value="' . $code . '"' . ($account_country == $code ? ' selected' : '') . '>' . $country . '</option>';
-									?>
-								</select>
-								<img src="" id="account_country_img"/>
-								<script>
-									function updateFlag()
-									{
-										var img = $('#account_country_img');
-										var country = $('#account_country :selected').val();
-										if(country.length) {
-											img.attr('src', 'images/flags/' + country + '.gif');
-											img.show();
-										}
-										else {
-											img.hide();
-										}
-									}
-
-									$(function() {
-										updateFlag();
-										$('#account_country').change(function() {
-											updateFlag();
-										});
-									});
-								</script>
-							</td>
-						</tr>
-						<?php endif; ?>
-					</table>
-				</div>  </table></div></td></tr><br/>
-				<table width="100%">
-				<tr align="center"><td><table border="0" cellspacing="0" cellpadding="0" ><tr>
-				<td style="border:0px;" >
-				<input type="hidden" name="changeinfosave" value="1" >
-				<div class="BigButton" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton.gif)" >
-				<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" >
-				<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton_over.gif);" ></div>
-				<input class="ButtonText" type="image" name="Submit" alt="Submit" src="<?php echo $template_path; ?>/images/buttons/_sbutton_submit.gif" ></div></div>
-				</td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" >
-				<form action="?subtopic=accountmanagement" method="post" >
-				<tr><td style="border:0px;" ><div class="BigButton" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton.gif)" >
-				<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" >
-				<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton_over.gif);" ></div>
-				<input class="ButtonText" type="image" name="Back" alt="Back" src="<?php echo $template_path; ?>/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>
-	<?php
+			
+			$countries = array();
+			foreach (array('pl', 'se', 'br', 'us', 'gb',) as $country)
+				$countries[$country] = $config['countries'][$country];
+			
+			$countries['--'] = '----------';
+			
+			foreach ($config['countries'] as $code => $country)
+				$countries[$code] = $country;
+			
+			echo $twig->render('account.change_info.html', array(
+				'countries' => $countries,
+				'account_rlname' => $account_rlname,
+				'account_location' => $account_location,
+				'account_country' => $account_country
+			));
 		}
 	}
 
@@ -448,7 +394,7 @@ if(!$logged)
 			if(!empty($reg_errors))
 			{
 				//show errors
-				echo $twig->render('account.error_box.html', array('errors' => $reg_errors));
+				echo $twig->render('error_box.html', array('errors' => $reg_errors));
 			}
 			
 			//show form
@@ -628,11 +574,7 @@ if(!$logged)
 
 			if(!$name_changed) {
 				if(!empty($errors)) {
-					echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-					foreach($errors as $errors) {
-							echo '<li>'.$errors;
-					}
-					echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+					echo $twig->render('error_box.html', array('errors' => $errors));
 				}
 				echo 'To change a name of character select player and choose a new name.<br/>
 				<font color="red">Change name cost ' . $config['account_change_character_name_points'] . ' premium points. You have ' . $points . ' premium points.</font><br/><br/><form action="?subtopic=accountmanagement&action=changename" method="post" ><input type="hidden" name="changenamesave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Change Name</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >
@@ -673,16 +615,19 @@ if(!$logged)
 			$points = $account_logged->getCustomField('premium_points');
 			if(isset($_POST['changesexsave']) && $_POST['changesexsave'] == 1) {
 				if($points < $config['account_change_character_sex_points'])
-					$errors[] = 'You need ' . $config['account_change_character_sex_points'] . ' premium points to change sex. You have <b>'.$points.'<b> premium points.';
+					$errors[] = 'You need ' . $config['account_change_character_sex_points'] . ' premium points to change sex. You have <b>'.$points.'</b> premium points.';
 	
-				if(empty($errors) && $new_sex != 0 && $new_sex != 1)
+				if(empty($errors) && !isset($config['genders'][$new_sex])) {
 					$errors[] = 'This sex is invalid.';
+				}
 				
 				if(empty($errors)) {
-					$player = $ots->createObject('Player');
+					$player = new OTS_Player();
 					$player->load($player_id);
+					
 					if($player->isLoaded()) {
 						$player_account = $player->getAccount();
+						
 						if($account_logged->getId() == $player_account->getId()) {
 							if($player->isOnline()) {
 								$errors[] = 'This character is online.';
@@ -707,55 +652,32 @@ if(!$logged)
 								$player->save();
 								$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
 								$account_logged->logAction('Changed sex on character <b>' . $player->getName() . '</b> from <b>' . $old_sex_str . '</b> to <b>' . $new_sex_str . '</b>.');
-								echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Character Sex Changed</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>The character <b>'.$player->getName().'</b> sex has been changed to <b>' . $sexes[$new_sex] . '</b>.</td></tr>          </table>        </div>  </table></div></td></tr><br><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+								echo $twig->render('success.html', array(
+									'title' => 'Character Sex Changed',
+									'description' => 'The character <b>' . $player->getName() . '</b> sex has been changed to <b>' . $new_sex_str . '</b>.'
+								));
 							}
 						}
-						else
-						{
+						else {
 							$errors[] = 'Character <b>'.$player_name.'</b> is not on your account.';
 						}
 					}
-					else
-					{
-						$errors[] = 'Character with this name doesn\'t exist.';
+					else {
+						$errors[] = "Character with this name doesn't exist.";
 					}
 				}
 			}
 
 			if(!$sex_changed) {
 				if(!empty($errors)) {
-					echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-					foreach($errors as $errors) {
-							echo '<li>'.$errors;
-					}
-					echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+					echo $twig->render('error_box.html', array('errors' => $errors));
 				}
-				echo 'To change a sex of character select player and choose a new sex.<br/>
-				<font color="red">Change sex cost ' . $config['account_change_character_sex_points'] . ' premium points. You have ' . $points . ' premium points.</font><br/><br/><form action="?subtopic=accountmanagement&action=changesex" method="post" ><input type="hidden" name="changesexsave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Change sex</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >
-				<table style="width:100%;" >
-					<tr>
-						<td class="LabelV" ><span >Character:</td>
-						<td style="width:90%;" >
-							<select name="player_id">';
-								$players = $account_logged->getPlayersList();
-								foreach($players as $player)
-									echo '<option value="' . $player->getId() . '">' . $player->getName() . '</option>';
-							echo '
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="LabelV" ><span >New Sex:</td>
-						<td>
-							<select name="new_sex">';
-								foreach($config['genders'] as $id  => $name) {
-									echo '<option value="' . $id . '"' . ($player->getSex() == $id ? ' selected' : '') . '>' . $name . '</option>';
-								}
-								echo '
-							</select>
-						</td>
-					</tr>
-				</table>        </div>  </table></div></td></tr><br/><table style="width:100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
+				echo $twig->render('account.change_sex.html', array(
+					'config' => $config,
+					'players' => $account_logged->getPlayersList(),
+					'player_sex' => isset($player) ? $player->getSex() : -1,
+					'points' => $points
+				));
 			}
 		}
 	}
@@ -767,7 +689,7 @@ if(!$logged)
 		if(isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) {
 			if(!empty($player_name) && !empty($password_verify)) {
 				if(check_name($player_name)) {
-					$player = $ots->createObject('Player');
+					$player = new OTS_Player();
 					$player->find($player_name);
 					if($player->isLoaded()) {
 						$player_account = $player->getAccount();
@@ -783,45 +705,39 @@ if(!$logged)
 								else
 									$player->setCustomField('deleted', 1);
 								$account_logged->logAction('Deleted character <b>' . $player->getName() . '</b>.');
-								echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Character Deleted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>The character <b>'.$player_name.'</b> has been deleted.</td></tr>          </table>        </div>  </table></div></td></tr><br><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+								echo $twig->render('success.html', array(
+									'title' => 'Character Deleted',
+									'description' => 'The character <b>' . $player_name . '</b> has been deleted.'
+								));
 								}
 								else
-									$delete_errors[] = 'This character is online.';
+									$errors[] = 'This character is online.';
 							}
-							else
-							{
-								$delete_errors[] = 'Wrong password to account.';
+							else {
+								$errors[] = 'Wrong password to account.';
 							}
 						}
-						else
-						{
-							$delete_errors[] = 'Character <b>'.$player_name.'</b> is not on your account.';
+						else {
+							$errors[] = 'Character <b>'.$player_name.'</b> is not on your account.';
 						}
 					}
-					else
-					{
-						$delete_errors[] = 'Character with this name doesn\'t exist.';
+					else {
+						$errors[] = 'Character with this name doesn\'t exist.';
 					}
 				}
-				else
-				{
-					$delete_errors[] = 'Name contain illegal characters.';
+				else {
+					$errors[] = 'Name contain illegal characters.';
 				}
 			}
-			else
-			{
-			$delete_errors[] = 'Character name or/and password is empty. Please fill in form.';
+			else {
+				$errors[] = 'Character name or/and password is empty. Please fill in form.';
 			}
 		}
 		if(!$dontshowtableagain) {
-			if(!empty($delete_errors)) {
-				echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-				foreach($delete_errors as $delete_error) {
-						echo '<li>'.$delete_error;
-				}
-				echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+			if(!empty($errors)) {
+				echo $twig->render('error_box.html', array('errors' => $errors));
 			}
-			echo 'To delete a character enter the name of the character and your password.<br/><br/><form action="?subtopic=accountmanagement&action=deletecharacter" method="post" ><input type="hidden" name="deletecharactersave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Delete Character</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td class="LabelV" ><span >Character Name:</td><td style="width:90%;" ><input name="delete_name" value="" size="30" maxlength="29" ></td></tr><tr><td class="LabelV" ><span >Password:</td><td><input type="password" name="delete_password" size="30" maxlength="29" ></td></tr>          </table>        </div>  </table></div></td></tr><br/><table style="width:100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
+			echo $twig->render('account.delete_character.html');
 		}
 	}
 
@@ -974,7 +890,7 @@ if(!$logged)
 				$newchar_created = true;
 				$account_logged->logAction('Created character <b>' . $player->getName() . '</b>.');
 				unset($player);
-				$player = $ots->createObject('Player');
+				$player = new OTS_Player();
 				$player->find($newchar_name);
 				if($player->isLoaded())
 				{
@@ -992,7 +908,13 @@ if(!$logged)
 					$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = ".$char_to_copy->getId()."");
 					foreach($loaded_items_to_copy as $save_item)
 						$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', '".$save_item['attributes']."');");
-					echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Character Created</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>The character <b>'.$newchar_name.'</b> has been created.<br/>Please select the outfit when you log in for the first time.<br/><br/><b>See you on '.$config['lua']['serverName'].'!</b></td></tr>          </table>        </div>  </table></div></td></tr><br/><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+					
+					echo $twig->render('success.html', array(
+						'title' => 'Character Created',
+						'description' => 'The character <b>' . $newchar_name . '</b> has been created.<br/>
+							Please select the outfit when you log in for the first time.<br/><br/>
+							<b>See you on ' . $config['lua']['serverName'] . '!</b>'
+					));
 				}
 				else
 				{
@@ -1003,11 +925,7 @@ if(!$logged)
 		}
 
 		if(count($newchar_errors) > 0) {
-			echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div>';
-			echo '<b>The Following Errors Have Occurred:</b><br/>';
-			foreach($newchar_errors as $newchar_error)
-				echo '<li>'.$newchar_error . '</li>';
-			echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+			echo $twig->render('error_box.html', array('errors' => $newchar_errors));
 		}
 		
 		if(!$newchar_created) {

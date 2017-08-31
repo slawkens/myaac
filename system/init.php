@@ -30,9 +30,9 @@ $cache = Cache::getInstance($config['cache_engine'], $config['cache_prefix']);
 require_once LIBS . 'Twig/Autoloader.php';
 Twig_Autoloader::register();
 
-$loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
-$twig = new Twig_Environment($loader, array(
-	'cache' => CACHE . 'twig/',
+$twig_loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
+$twig = new Twig_Environment($twig_loader, array(
+	'cache' => CACHE . 'twig/'
 ));
 
 $function = new Twig_SimpleFunction('getStyle', function ($i) {

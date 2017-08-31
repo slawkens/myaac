@@ -1,0 +1,35 @@
+<b>Boards</b>
+<table width="100%">
+	<tr bgcolor="{{ config.vdarkborder }}">
+		<td>
+			<font color="white" size="1"><b>Board</b></font>
+		</td>
+		<td>
+			<font color="white" size="1"><b>Posts</b></font>
+		</td>
+		<td>
+			<font color="white" size="1"><b>Threads</b></font>
+		</td>
+		<td align="center">
+			<font color="white" size="1"><b>Last Post</b></font>
+		</td>
+	</tr>
+	{% set i = 0 %}
+	{% for board in boards %}
+	{% set i = i + 1 %}
+	<tr bgcolor="{{ getStyle(i) }}">
+		<td>
+			<a href="{{ board.link }}">{{ board.name }}</a><br /><small>{{ board.description }}</small>
+		</td>
+		<td>{{ board.posts }}</td>
+		<td>{{ board.threads }}</td>
+		<td>
+		{% if board.last_post.name is not null %}
+		{{ board.last_post.date|date("d.m.y H:i:s") }}<br/>by {{ board.last_post.player_link|raw }}
+		{% else %}
+		No posts
+		{% endif %}
+		</td>
+	</tr>
+	{% endfor %}
+</table>

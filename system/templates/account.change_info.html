@@ -1,0 +1,83 @@
+Here you can tell other players about yourself. This information will be displayed alongside the data of your characters. If you do not want to fill in a certain field, just leave it blank.<br/><br/>
+<form action="?subtopic=accountmanagement&action=changeinfo" method=post>
+	<div class="TableContainer" >
+		<table class="Table1" cellpadding="0" cellspacing="0" >
+			<div class="CaptionContainer" >
+				<div class="CaptionInnerContainer" >
+					<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
+					<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
+					<div class="Text" >Change Public Information</div>
+					<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
+					<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
+					<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+				</div>
+			</div>
+			<tr>
+				<td>{{ config.darkborder }}
+					<div class="InnerTableContainer" >
+						<table style="width:100%;" >
+							<tr>
+								<td class="LabelV" >Real Name:</td>
+								<td style="width:90%;" >
+									<input name="info_rlname" value="{{ account_rlname }}" size="30" maxlength="50" >
+								</td>
+							</tr>
+							<tr>
+								<td class="LabelV" >Location:</td>
+								<td>
+									<input name="info_location" value="{{ account_location }}" size="30" maxlength="50" >
+								</td>
+							</tr>
+							{% if config.account_country %}
+							<tr>
+								<td class="LabelV" >Country:</td>
+								<td>
+									<select name="info_country" id="account_country">
+										{% for code, country in countries %}
+										<option value="{{ code}}"{% if account_country == code %} selected{% endif %}>{{ country }} </option>
+										{% endfor %}
+									</select>
+									<img src="" id="account_country_img"/>
+									<script>
+                                        function updateFlag()
+                                        {
+                                            var img = $('#account_country_img');
+                                            var country = $('#account_country :selected').val();
+                                            if(country.length) {
+                                                img.attr('src', 'images/flags/' + country + '.gif');
+                                                img.show();
+                                            }
+                                            else {
+                                                img.hide();
+                                            }
+                                        }
+
+                                        $(function() {
+                                            updateFlag();
+                                            $('#account_country').change(function() {
+                                                updateFlag();
+                                            });
+                                        });
+									</script>
+								</td>
+							</tr>
+							{% endif %}
+						</table>
+					</div>  </table></div></td></tr><br/>
+	<table width="100%">
+		<tr align="center"><td><table border="0" cellspacing="0" cellpadding="0" ><tr>
+			<td style="border:0px;" >
+				<input type="hidden" name="changeinfosave" value="1" >
+				<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" >
+					<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" >
+						<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div>
+						<input class="ButtonText" type="image" name="Submit" alt="Submit" src="{{ template_path }}/images/buttons/_sbutton_submit.gif" ></div></div>
+			</td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" >
+	<form action="?subtopic=accountmanagement" method="post" >
+		<tr><td style="border:0px;" ><div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" >
+			<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" >
+				<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div>
+				<input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>

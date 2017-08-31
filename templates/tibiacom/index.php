@@ -568,7 +568,14 @@ endif;
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
-
+<a href="<?php echo $template['link_movies']; ?>">
+		<div id='submenu_movies' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+			<div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+			<div id='ActiveSubmenuItemIcon_movies' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+			<div class='SubmenuitemLabel'>Movies</div>
+			<div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+		</div>
+	</a>
 <?php
 if(isset($config['movies'])): ?>
 echo "<a href='<?php echo $template['link_movies']; ?>'>
