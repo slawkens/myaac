@@ -66,18 +66,39 @@ Here you can tell other players about yourself. This information will be display
 							</tr>
 							{% endif %}
 						</table>
-					</div>  </table></div></td></tr><br/>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<br/>
 	<table width="100%">
-		<tr align="center"><td><table border="0" cellspacing="0" cellpadding="0" ><tr>
-			<td style="border:0px;" >
-				<input type="hidden" name="changeinfosave" value="1" >
-				<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" >
-					<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" >
-						<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div>
-						<input class="ButtonText" type="image" name="Submit" alt="Submit" src="{{ template_path }}/images/buttons/_sbutton_submit.gif" ></div></div>
-			</td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" >
-	<form action="?subtopic=accountmanagement" method="post" >
-		<tr><td style="border:0px;" ><div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" >
-			<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" >
-				<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div>
-				<input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>
+		<tr align="center">
+			<td>
+				<table border="0" cellspacing="0" cellpadding="0" >
+					<tr>
+						<td style="border:0px;" >
+							<input type="hidden" name="changeinfosave" value="1">
+								<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)"><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div>
+						<input class="ButtonText" type="image" name="Submit" alt="Submit" src="{{ template_path }}/images/buttons/_sbutton_submit.gif" ></div>
+								</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td>
+</form>
+				<table border="0" cellspacing="0" cellpadding="0" >
+					<form action="?subtopic=accountmanagement" method="post" >
+						<tr>
+							<td style="border:0px;" >
+								<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" >
+			<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);"><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);"></div><input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div>
+								</div>
+							</td>
+						</tr>
+					</form>
+				</table>
+			</td>
+		</tr>
+	</table>

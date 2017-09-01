@@ -32,26 +32,40 @@ if(isset($_GET['archive']))
 		if($_REQUEST['id'] < 100000)
 			$field_name = 'id';
 
-		$news = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'news').' WHERE type = 1 AND hidden != 1 and `' . $field_name . '` = ' . (int)$_REQUEST['id']  . '');
+		$news = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'news').' WHERE `type` = 1 AND `hidden` != 1 AND `' . $field_name . '` = ' . (int)$_REQUEST['id']  . '');
 		if($news->rowCount() == 1)
 		{
-			if(@file_exists($template_path . '/news.php'))
-				require($template_path . '/news.php');
-			else
-				require(SYSTEM . 'templates/news.php');
-
 			$news = $news->fetch();
 			$author = '';
-			$query = $db->query('SELECT name FROM players WHERE id = ' . $db->quote($news['player_id'] . ' LIMIT 1'));
+			$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id'] . ' LIMIT 1;'));
 			if($query->rowCount() > 0) {
 				$query = $query->fetch();
 				$author = $query['name'];
 			}
-
-			echo news_parse($news['title'], $news['body'], $news['date'], $categories[$news['category']]['icon_id'], $config['news_author'] ? $author : '', $news['comments'] != 0 ? getForumThreadLink($news['comments']) : NULL);
+			
+			$content = $news['body'];
+			$firstLetter = '';
+			if($content[0] != '<')
+			{
+				$tmp = $template_path.'/images/letters/' . $content[0] . '.gif';
+				if(file_exists($tmp)) {
+					$firstLetter = '<img src="' . $tmp . '" alt="' . $content[0] . '" border="0" align="bottom">';
+					$content = $firstLetter . substr($content, 1);
+				}
+			}
+			
+			echo $twig->render('news.html', array(
+				'title' => stripslashes($news['title']),
+				'content' => $content,
+				'date' => $news['date'],
+				'icon' => $categories[$news['category']]['icon_id'],
+				'author' => $config['news_author'] ? $author : '',
+				'comments' => $news['comments'] != 0 ? getForumThreadLink($news['comments']) : null,
+				'news_date_format' => $config['news_date_format']
+			));
 		}
 		else
-			echo 'This news doesn\'t exist or is hidden.<br>';
+			echo "This news doesn't exist or is hidden.<br/>";
 
 		//echo '<br /><a href="' . internalLayoutLink('news') . ($config['friendly_urls'] ? '/' : '') . 'archive' . '"><font size="2"><b>Back to Archive</b></font></a>';
 	?>
@@ -257,12 +271,6 @@ if(isset($tickers_to_add[0]))
 if(!$news_cached)
 {
 	ob_start();
-	// newses
-	if(@file_exists($template_path . '/news.php'))
-		require($template_path . '/news.php');
-	else
-		require(SYSTEM . 'templates/news.php');
-
 	if($canEdit)
 	{
 ?>
@@ -427,7 +435,7 @@ if(!$news_cached)
 		foreach($newses as $news)
 		{
 			$author = '';
-			$query = $db->query('SELECT name FROM players WHERE id = ' . $db->quote($news['player_id'] . ' LIMIT 1'));
+			$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id'] . ' LIMIT 1'));
 			if($query->rowCount() > 0) {
 				$query = $query->fetch();
 				$author = $query['name'];
@@ -447,8 +455,27 @@ if(!$news_cached)
 					' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '
 				</a>';
 			}
-
-			echo news_parse($news['title'], $news['body'] . $admin_options, $news['date'], $categories[$news['category']]['icon_id'], $config['news_author'] ? $author : '', $news['comments'] != 0 ? getForumThreadLink($news['comments']) : NULL);
+			
+			$content = $news['body'];
+			$firstLetter = '';
+			if($content[0] != '<')
+			{
+				$tmp = $template_path.'/images/letters/' . $content[0] . '.gif';
+				if(file_exists($tmp)) {
+					$firstLetter = '<img src="' . $tmp . '" alt="' . $content[0] . '" border="0" align="bottom">';
+					$content = $firstLetter . substr($content, 1);
+				}
+			}
+			
+			echo $twig->render('news.html', array(
+				'title' => stripslashes($news['title']),
+				'content' => $content . $admin_options,
+				'date' => $news['date'],
+				'icon' => $categories[$news['category']]['icon_id'],
+				'author' => $config['news_author'] ? $author : '',
+				'comments' => $news['comments'] != 0 ? getForumThreadLink($news['comments']) : null,
+				'news_date_format' => $config['news_date_format']
+			));
 		}
 	}
 
@@ -564,7 +591,7 @@ class Forum
 	{
 		global $db;
 		$thread_id = 0;
-		if($db->insert(TABLE_PREFIX . 'forum', array('id' => 'null', 'first_post' => 0, 'last_post' => time(), 'section' => $section_id, 'replies' => 0, 'views' => 0, 'author_aid' => isset($account_id) ? $account_id : 0, 'author_guid' => isset($player_id) ? $player_id : 0, 'post_text' => $body, 'post_topic' => $title, 'post_smile' => 0, 'post_date' => time(), 'last_edit_aid' => 0, 'edit_date' => 0, 'post_ip' => $_SERVER['REMOTE_ADDR']))) {
+		if($db->insert(TABLE_PREFIX . 'forum', array('first_post' => 0, 'last_post' => time(), 'section' => $section_id, 'replies' => 0, 'views' => 0, 'author_aid' => isset($account_id) ? $account_id : 0, 'author_guid' => isset($player_id) ? $player_id : 0, 'post_text' => $body, 'post_topic' => $title, 'post_smile' => 0, 'post_date' => time(), 'last_edit_aid' => 0, 'edit_date' => 0, 'post_ip' => $_SERVER['REMOTE_ADDR']))) {
 			$thread_id = $db->lastInsertId();
 			$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `first_post`=".(int) $thread_id." WHERE `id` = ".(int) $thread_id);
 		}

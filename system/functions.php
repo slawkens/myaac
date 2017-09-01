@@ -441,7 +441,7 @@ function check_name($name, &$error = '')
 		return false;
 	}
 
-	return preg_match("/[A-z ']{1,25}/", $name);
+	return preg_match("/[A-z ']/", $name);
 }
 
 /**
