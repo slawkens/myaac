@@ -338,7 +338,7 @@ if($config['gifts_system'])
 			unset($_SESSION['viewed_confirmation_page']);
 		}
 	}
-	elseif($action == 'show_history')
+	elseif($action == 'show_history_transactions')
 	{
 		if(!$logged)
 		{
