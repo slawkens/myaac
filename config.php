@@ -208,6 +208,9 @@ $config = array(
 
 	// gifts/shop system
 	'gifts_system' => false,
+	
+	// support/system
+	'bug_report' => true,
 
 	// forum
 	'forum' => 'site', // link to the server forum, set to "site" if you want to use build in forum system, otherwise leave empty if you aren't going to use any forum
