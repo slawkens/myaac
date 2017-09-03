@@ -216,6 +216,17 @@ CREATE TABLE `myaac_screenshots`
 
 INSERT INTO `myaac_screenshots` (`id`, `ordering`, `comment`, `image`, `thumb`, `author`) VALUES (NULL, 1, 'Demon', 'images/screenshots/demon.jpg', 'images/screenshots/demon_thumb.gif', 'MyAAC');
 
+CREATE TABLE `myaac_shop_offer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `offer_type` enum('container','item') NOT NULL DEFAULT 'item',
+  `itemid1` int(11) NOT NULL DEFAULT '0',
+  `count1` int(11) NOT NULL DEFAULT '1',
+  `points` int(11) NOT NULL DEFAULT '0',
+  `offer_description` text,
+  `offer_name` varchar(20) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
 CREATE TABLE `myaac_spells`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
