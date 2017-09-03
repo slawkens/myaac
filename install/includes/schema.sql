@@ -225,7 +225,7 @@ CREATE TABLE `myaac_shop_offer` (
   `offer_description` text,
   `offer_name` varchar(20) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `myaac_spells`
 (
