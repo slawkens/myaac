@@ -285,7 +285,7 @@ if($logged)
             }
             elseif($_REQUEST['add'] == TRUE)
             {
-                $thread = $db->query('SELECT * FROM `' TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `type` = 1 order by `id` desc')->fetch();
+                $thread = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `type` = 1 order by `id` desc')->fetch();
                 $id_next = $db->query('SELECT MAX(id) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `type` = 1')->fetch();
                 $id_next = $id_next[0] + 1;
                 
