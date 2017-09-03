@@ -578,7 +578,7 @@ endif;
 	</a>
 <?php
 if(isset($config['movies'])): ?>
-echo "<a href='<?php echo $template['link_movies']; ?>'>
+<a href='<?php echo $template['link_movies']; ?>'>
   <div id='submenu_movies' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_movies' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
@@ -607,6 +607,40 @@ echo "<a href='<?php echo $template['link_movies']; ?>'>
 </a>
 </div>
 </div>
+
+<?php
+if($config['bug_report']):
+?>
+<div id='support' class='menuitem'>
+<span onClick="MenuItemAction('support')">
+  <div class='MenuButton' style='background-image:url(<?php echo $template_path; ?>/images/menu/button-background.gif);'>
+    <div onMouseOver='MouseOverMenuItem(this);' onMouseOut='MouseOutMenuItem(this);'><div class='Button' style='background-image:url(<?php echo $template_path; ?>/images/menu/button-background-over.gif);'></div>
+      <span id='library_Lights' class='Lights'>
+        <div class='light_lu' style='background-image:url(<?php echo $template_path; ?>/images/menu/green-light.gif);'></div>
+        <div class='light_ld' style='background-image:url(<?php echo $template_path; ?>/images/menu/green-light.gif);'></div>
+        <div class='light_ru' style='background-image:url(<?php echo $template_path; ?>/images/menu/green-light.gif);'></div>
+      </span>
+      <div id='support_Icon' class='Icon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-support.gif);'></div>
+      <div id='support_Label' class='Label' style='background-image:url(<?php echo $template_path; ?>/images/menu/label-support.gif);'></div>
+      <div id='support_Extend' class='Extend' style='background-image:url(<?php echo $template_path; ?>/images/general/plus.gif);'></div>
+    </div>
+  </div>
+</span>
+<div id='support_Submenu' class='Submenu'>
+
+<a href='<?php echo $template['link_bugtracker']; ?>'>
+  <div id='submenu_bugtracker' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+    <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+    <div id='ActiveSubmenuItemIcon_bugtracker' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+    <div class='SubmenuitemLabel'>Report Bug</div>
+    <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
+  </div>
+</a>
+
+</div>
+</div>
+<?php endif; ?>
+
 <?php
 if($config['gifts_system']):
 ?>
@@ -639,7 +673,7 @@ if($config['gifts_system']):
   <div id='submenu_gifts' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
     <div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
     <div id='ActiveSubmenuItemIcon_gifts' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
-    <div class='SubmenuitemLabel'><div style="color: green;">\$hop Offer</div></div>
+    <div class='SubmenuitemLabel'><div style="color: green;">Shop Offer</div></div>
     <div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
   </div>
 </a>
