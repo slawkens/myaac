@@ -84,7 +84,7 @@ foreach($links as $link) {
     $template['link_' . $link] = internalLayoutLink($link);
 }
 
-$template['link_gifts_history'] = internalLayoutLink('gifts', 'show_history');
+$template['link_gifts_history'] = internalLayoutLink('shopoffer', 'show_history_transactions');
 if($config['forum'] != '')
 {
 	if(strtolower($config['forum']) == 'site')
