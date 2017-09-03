@@ -182,7 +182,7 @@ if($logged)
                 echo '<TR BGCOLOR="'.$dark.'"><td colspan=2>'.nl2br($bug[2]['text']).'</td></tr>';    
                 echo '</TABLE>';
                 
-                $answers = $db->query('SELECT * FROM '.$db->tableName('wodzaac_bugtracker').' where `account` = '.$account_logged->getId().' and `id` = '.$id.' and `type` = 2 order by `reply`');
+                $answers = $db->query('SELECT * FROM '.$db->tableName('myaac_bugtracker').' where `account` = '.$account_logged->getId().' and `id` = '.$id.' and `type` = 2 order by `reply`');
                 foreach($answers as $answer)
                 {
                     if($answer['who'] == 1)
@@ -205,7 +205,7 @@ if($logged)
                 {
                     $reply = $db->query('SELECT MAX(reply) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `id` = '.$id.' and `type` = 2')->fetch();
                     $reply = $reply[0] + 1;
-                    $iswho = $db->query('SELECT * FROM `wodzaac_bugtracker` where `account` = '.$acc.' and `id` = '.$id.' and `type` = 2 order by `reply` desc limit 1')->fetch();
+                    $iswho = $db->query('SELECT * FROM `myaac_bugtracker` where `account` = '.$acc.' and `id` = '.$id.' and `type` = 2 order by `reply` desc limit 1')->fetch();
 
                     if(isset($_POST['finish']))
                     {
@@ -224,8 +224,8 @@ if($logged)
                         else
                         {
                             $type = 2;
-                            $INSERT = $db->query('INSERT INTO `wodzaac_bugtracker` (`account`,`id`,`text`,`reply`,`type`) VALUES ('.$db->quote($acc).','.$db->quote($id).','.$db->quote($_POST['text']).','.$db->quote($reply).','.$db->quote($type).')');
-                            $UPDATE = $db->query('UPDATE `wodzaac_bugtracker` SET `status` = 1 where `account` = '.$acc.' and `id` = '.$id.'');
+                            $INSERT = $db->query('INSERT INTO `myaac_bugtracker` (`account`,`id`,`text`,`reply`,`type`) VALUES ('.$db->quote($acc).','.$db->quote($id).','.$db->quote($_POST['text']).','.$db->quote($reply).','.$db->quote($type).')');
+                            $UPDATE = $db->query('UPDATE `myaac_bugtracker` SET `status` = 1 where `account` = '.$acc.' and `id` = '.$id.'');
                             header('Location: index.php?subtopic=bugtracker&id='.$id.'');
                         }
                     }
