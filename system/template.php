@@ -79,12 +79,12 @@ $template['link_account_logout'] = internalLayoutLink(($config['friendly_urls'] 
 
 $template['link_news_archive'] = internalLayoutLink('news' . ($config['friendly_urls'] ? '/' : '') . 'archive');
 
-$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'screenshots', 'movies', 'serverInfo', 'experienceTable', 'faq', 'points', 'shopoffer', 'bugtracker');
+$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'screenshots', 'movies', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts', 'bugtracker');
 foreach($links as $link) {
     $template['link_' . $link] = internalLayoutLink($link);
 }
 
-$template['link_gifts_history'] = internalLayoutLink('shopoffer', 'show_history_transactions');
+$template['link_gifts_history'] = internalLayoutLink('gifts', 'show_history');
 if($config['forum'] != '')
 {
 	if(strtolower($config['forum']) == 'site')
