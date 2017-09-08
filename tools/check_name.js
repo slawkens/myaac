@@ -9,7 +9,7 @@ function checkName()
 		eventId = 0;
 	}
 
-	if(document.getElementById("newcharname").value=="")
+	if(document.getElementById("name").value=="")
 	{
 		document.getElementById("name_check").innerHTML = '<b><font color="red">Please enter new character name.</font></b>';
 		return;
@@ -28,8 +28,8 @@ function checkName()
 		}
 	}
 
-	var newcharname = document.getElementById("newcharname").value;
-	$.get("tools/validate.php", { name: newcharname, uid: Math.random() },
+	var name = document.getElementById("name").value;
+	$.get("tools/validate.php", { name: name, uid: Math.random() },
 		function(data){
 			document.getElementById("name_check").innerHTML = data;
 			lastSend = timeNow;

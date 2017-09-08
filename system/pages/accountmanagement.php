@@ -170,11 +170,7 @@ if(!$logged)
 			}
 			if(!empty($show_msgs)){
 				//show errors
-				echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-				foreach($show_msgs as $show_msg) {
-					echo '<li>'.$show_msg;
-				}
-				echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+				echo $twig->render('error_box.html', array('errors' => $show_msg));
 				
 				//show form
 				echo $twig->render('account.change_password.html');
@@ -198,10 +194,10 @@ if(!$logged)
 				$message = '';
 				if($config['mail_enabled'] && $config['send_mail_when_change_password'])
 				{
-					$mailBody = '
-					<h3>Password to account changed!</h3>
-					<p>You or someone else changed password to your account on server <a href="'.BASE_URL.'"><b>'.$config['lua']['serverName'].'</b></a>.</p>
-					<p>New password: <b>'.$org_pass.'</b></p>';
+					$mailBody = $twig->render('mail.password_changed.html', array(
+						'config' => $config,
+						'new_password' => $org_pass
+					));
 					
 					if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - Changed password", $mailBody))
 						$message = '<br/><small>Your new password were send on email address <b>'.$account_logged->getEMail().'</b>.</small>';
@@ -449,12 +445,8 @@ if(!$logged)
 			if(!$dontshowtableagain)
 			{
 				//show errors if not empty
-				if(!empty($reg_errors))
-				{
-					echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-					foreach($reg_errors as $reg_error)
-						echo '<li>'.$reg_error;
-					echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+				if(!empty($reg_errors)) {
+					echo $twig->render('error_box.html', array('errors' => $reg_errors));
 				}
 				//show form
 				echo 'To generate NEW recovery key for your account please enter your password.<br/><font color="red"><b>New recovery key cost '.$config['generate_new_reckey_price'].' Premium Points.</font> You have '.$points.' premium points. You will receive e-mail with this recovery key.</b><br/><form action="?subtopic=accountmanagement&action=newreckey" method="post" ><input type="hidden" name="registeraccountsave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Generate recovery key</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td class="LabelV" ><span >Password:</td><td><input type="password" name="reg_password" size="30" maxlength="29" ></td></tr>          </table>        </div>  </table></div></td></tr><br/><table style="width:100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
@@ -515,7 +507,7 @@ if(!$logged)
 		
 		$name_changed = false;
 		$player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : NULL;
-		$newcharname = isset($_POST['newcharname']) ? stripslashes(ucwords(strtolower($_POST['newcharname']))) : NULL;
+		$name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : NULL;
 		if((!$config['account_change_character_name']))
 			echo 'You cant change your character name';
 		else
@@ -525,18 +517,18 @@ if(!$logged)
 				if($points < $config['account_change_character_name_points'])
 					$errors[] = 'You need ' . $config['account_change_character_name_points'] . ' premium points to change name. You have <b>'.$points.'<b> premium points.';
 	
-				if(empty($errors) && empty($newcharname))
+				if(empty($errors) && empty($name))
 					$errors[] = 'Please enter a name for your character!';
 
-				if(empty($errors) && strlen($newcharname) > 25)
+				if(empty($errors) && strlen($name) > 25)
 					$errors[] = 'Name is too long. Max. lenght <b>25</b> letters.';
-				else if(empty($errors) && strlen($newcharname) < 3)
+				else if(empty($errors) && strlen($name) < 3)
 					$errors[] = 'Name is too short. Min. lenght <b>25</b> letters.';
 				
 				if(empty($errors))
 				{
 					$error = '';
-					if(!admin() && !check_name_new_char($newcharname, $error))
+					if(!admin() && !check_name_new_char($name, $error))
 						$errors[] = $error;
 				}
 				
@@ -553,21 +545,22 @@ if(!$logged)
 							if(empty($errors)) {
 								$name_changed = true;
 								$old_name = $player->getName();
-								$player->setName($newcharname);
+								$player->setName($name);
 								$player->save();
 								$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
 								$account_logged->logAction('Changed name from <b>' . $old_name . '</b> to <b>' . $player->getName() . '</b>.');
-								echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Character Name Changed</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>The character <b>'.$old_name.'</b> name has been changed to <b>' . $player->getName() . '</b>.</td></tr>          </table>        </div>  </table></div></td></tr><br><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+								echo $twig->render('success.html', array(
+									'title' => 'Character Name Changed',
+									'description' => 'The character <b>'.$old_name.'</b> name has been changed to <b>' . $player->getName() . '</b>.'
+								));
 							}
 						}
-						else
-						{
-							$errors[] = 'Character <b>'.$player_name.'</b> is not on your account.';
+						else {
+							$errors[] = 'Character <b>' . $player_name . '</b> is not on your account.';
 						}
 					}
-					else
-					{
-						$errors[] = 'Character with this name doesn\'t exist.';
+					else {
+						$errors[] = "Character with this name doesn't exist.";
 					}
 				}
 			}
@@ -593,7 +586,7 @@ if(!$logged)
 					<tr>
 						<td class="LabelV" ><span >New Name:</td>
 						<td>
-							<input type="text" name="newcharname" id="newcharname" onkeyup="checkName();" size="25" maxlength="25" >
+							<input type="text" name="name" id="name" onkeyup="checkName();" size="25" maxlength="25" >
 							<font size="1" face="verdana,arial,helvetica">
 								<div id="name_check">Please enter your character name.</div>
 							</font>
@@ -744,36 +737,36 @@ if(!$logged)
 //## CREATE CHARACTER on account ###
 	if($action == "createcharacter") {
 		echo '<script type="text/javascript" src="tools/check_name.js"></script>';
-		$newchar_name = isset($_POST['newcharname']) ? stripslashes(ucwords(strtolower($_POST['newcharname']))) : NULL;
-		$newchar_sex = isset($_POST['newcharsex']) ? $_POST['newcharsex'] : NULL;
-		$newchar_vocation = isset($_POST['newcharvocation']) ? $_POST['newcharvocation'] : NULL;
-		$newchar_town = isset($_POST['newchartown']) ? $_POST['newchartown'] : NULL;
-		$newchar_errors = array();
+		$newchar_name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : NULL;
+		$newchar_sex = isset($_POST['sex']) ? $_POST['sex'] : NULL;
+		$newchar_vocation = isset($_POST['vocation']) ? $_POST['vocation'] : NULL;
+		$newchar_town = isset($_POST['town']) ? $_POST['town'] : NULL;
+		$errors = array();
 		
 		$newchar_created = false;
 		if(isset($_POST['savecharacter']) && $_POST['savecharacter'] == 1) {
 			if(empty($newchar_name))
-				$newchar_errors[] = 'Please enter a name for your character!';
+				$errors[] = 'Please enter a name for your character!';
 
 			if(strlen($newchar_name) > 25)
-				$newchar_errors[] = 'Name is too long. Max. lenght <b>25</b> letters.';
+				$errors[] = 'Name is too long. Max. lenght <b>25</b> letters.';
 			else if(strlen($newchar_name) < 3)
-				$newchar_errors[] = 'Name is too short. Min. lenght <b>25</b> letters.';
+				$errors[] = 'Name is too short. Min. lenght <b>25</b> letters.';
 
 			if(empty($newchar_sex) && $newchar_sex != "0")
-				$newchar_errors[] = 'Please select the sex for your character!';
+				$errors[] = 'Please select the sex for your character!';
 
 			if(count($config['character_samples']) > 1)
 			{
 				if(!isset($newchar_vocation))
-					$newchar_errors[] = 'Please select a vocation for your character.';
+					$errors[] = 'Please select a vocation for your character.';
 			}
 			else
 				$newchar_vocation = $config['character_samples'][0];
 
 			if(count($config['character_towns']) > 1) {
 				if(!isset($newchar_town))
-					$newchar_errors[] = 'Please select a town for your character.';
+					$errors[] = 'Please select a town for your character.';
 			}
 			else {
 				$newchar_town = $config['character_towns'][0];
@@ -782,18 +775,18 @@ if(!$logged)
 			$exist = new OTS_Player();
 			$exist->find($newchar_name);
 			if($exist->isLoaded()) {
-				$newchar_errors[] .= 'Character with this name already exist.';
+				$errors[] .= 'Character with this name already exist.';
 			}
 
-			if(empty($newchar_errors)) {
+			if(empty($errors)) {
 				$error = '';
 				if(!admin() && !check_name_new_char($newchar_name, $error)) {
-					$newchar_errors[] = $error;
+					$errors[] = $error;
 				}
 				if(!isset($config['genders'][$newchar_sex]))
-					$newchar_errors[] = 'Sex is invalid.';
+					$errors[] = 'Sex is invalid.';
 				if(!in_array($newchar_town, $config['character_towns']))
-					$newchar_errors[] = 'Please select valid town.';
+					$errors[] = 'Please select valid town.';
 				if(count($config['character_samples']) > 1)
 				{
 					$newchar_vocation_check = false;
@@ -801,29 +794,29 @@ if(!$logged)
 						if($newchar_vocation == $char_vocation_key)
 							$newchar_vocation_check = true;
 					if(!$newchar_vocation_check)
-						$newchar_errors[] = 'Unknown vocation. Please fill in form again.';
+						$errors[] = 'Unknown vocation. Please fill in form again.';
 				}
 				else
 					$newchar_vocation = 0;
 			}
 
-			if(empty($newchar_errors))
+			if(empty($errors))
 			{
 				$number_of_players_on_account = $account_logged->getPlayersList()->count();
 				if($number_of_players_on_account >= $config['characters_per_account'])
-					$newchar_errors[] .= 'You have too many characters on your account <b>('.$number_of_players_on_account.'/'.$config['characters_per_account'].')</b>!';
+					$errors[] .= 'You have too many characters on your account <b>('.$number_of_players_on_account.'/'.$config['characters_per_account'].')</b>!';
 			}
 
-			if(empty($newchar_errors))
+			if(empty($errors))
 			{
 				$char_to_copy_name = $config['character_samples'][$newchar_vocation];
 				$char_to_copy = new OTS_Player();
 				$char_to_copy->find($char_to_copy_name);
 				if(!$char_to_copy->isLoaded())
-					$newchar_errors[] .= 'Wrong characters configuration. Try again or contact with admin. ADMIN: Edit file config/config.php and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
+					$errors[] .= 'Wrong characters configuration. Try again or contact with admin. ADMIN: Edit file config/config.php and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
 			}
 
-			if(empty($newchar_errors))
+			if(empty($errors))
 			{
 				if($newchar_sex == "0")
 					$char_to_copy->setLookType(136);
@@ -924,46 +917,27 @@ if(!$logged)
 			}
 		}
 
-		if(count($newchar_errors) > 0) {
-			echo $twig->render('error_box.html', array('errors' => $newchar_errors));
+		if(count($errors) > 0) {
+			echo $twig->render('error_box.html', array('errors' => $errors));
 		}
 		
 		if(!$newchar_created) {
-			echo 'Please choose a name';
-			if(count($config['character_samples']) > 1)
-				echo ', vocation';
-			echo ' and sex for your character. <br/>In any case the name must not violate the naming conventions stated in the <a href="?subtopic=rules" target="_blank" >'.$config['lua']['serverName'].' Rules</a>, or your character might get deleted or name locked.';
-			if($account_logged->getPlayersList()->count() >= $config['characters_per_account']) {
-				echo '<b><font color="red"> You have maximum number of characters per account on your account. Delete one before you make new.</font></b>';
-			}
-			echo '<br/><br/><form action="?subtopic=accountmanagement&action=createcharacter" method="post" ><input type="hidden" name=savecharacter value="1" ><div class="TableContainer" >  <table class="Table3" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" ><span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><div class="Text" >Create Character</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span><span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span><span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span><span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span></div>    </div><tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" >  <div class="TableContentContainer" ><table class="TableContent" width="100%" ><tr class="LabelH" ><td style="width:50%;" ><span >Name</td><td><span >Sex</td></tr><tr class="Odd" >
-			<td>
-				<input id="newcharname" name="newcharname" onkeyup="checkName();" value="'.$newchar_name.'" size="25" maxlength="25" ><br/>
-				<font size="1" face="verdana,arial,helvetica">
-					<div id="name_check">Please enter your character name.</div>
-				</font>
-			</td>
-			<td>';
+			echo $twig->render('account.create_character.html', array(
+				'config' => $config,
+				'newchar_name' => $newchar_name
+				
+			));
 			
-			$i = 0;
-			foreach(array_reverse($config['genders'], true) as $id => $name) {
-				echo '<input type="radio" name="newcharsex" id="newcharsex' . ++$i . '" value="' . $id . '" ';
-				if($newchar_sex == "$id")
-					echo 'checked="checked" ';
-				echo '><label for="newcharsex' . $i . '">' . strtolower($name) . '</label><br/>';
-			}
-
-			echo '</td></tr></table></div></div></table></div>';
 			echo '<div class="InnerTableContainer" >          <table style="width:100%;" ><tr>';
 			if(count($config['character_samples']) > 1)
 			{
 				echo '<td><table class="TableContent" width="100%" ><tr class="Odd" valign="top"><td width="160"><br /><b>Select your vocation:</b></td><td><table class="TableContent" width="100%" >';
-				foreach($config['character_samples'] as $char_vocation_key => $sample_char)
+				foreach($config['character_samples'] as $key => $sample_char)
 				{
-					echo '<tr><td><input type="radio" name="newcharvocation" id="newcharvocation' . $char_vocation_key . '" value="'.$char_vocation_key.'" ';
-					if($newchar_vocation == $char_vocation_key)
+					echo '<tr><td><input type="radio" name="vocation" id="vocation' . $key . '" value="'.$key.'" ';
+					if($newchar_vocation == $key)
 						echo 'checked="checked" ';
-					echo '><label for="newcharvocation' . $char_vocation_key . '">'.$config['vocations'][$char_vocation_key].'</label></td></tr>';
+					echo '><label for="vocation' . $key . '">'.$config['vocations'][$key].'</label></td></tr>';
 				}
 				echo '</table></td></table>';
 			}
@@ -972,10 +946,10 @@ if(!$logged)
 				echo '<td><table class="TableContent" width="100%" ><tr class="Odd" valign="top"><td width="160"><br /><b>Select your city:</b></td><td><table class="TableContent" width="100%" >';
 				foreach($config['character_towns'] as $town_id)
 				{
-					echo '<tr><td><input type="radio" name="newchartown" id="newchartown' . $town_id . '" value="' . $town_id . '" ';
+					echo '<tr><td><input type="radio" name="town" id="town' . $town_id . '" value="' . $town_id . '" ';
 					if($newchar_town == $town_id)
 						echo 'checked="checked" ';
-					echo '><label for="newchartown' . $town_id . '">'.$config['towns'][$town_id].'</label></td></tr>';
+					echo '><label for="town' . $town_id . '">'.$config['towns'][$town_id].'</label></td></tr>';
 				}
 				echo '</table></td></tr></table></table></div>';
 			}

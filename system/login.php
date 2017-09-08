@@ -118,7 +118,7 @@ else
 	// stay-logged with sessions
 	if(isset($_SESSION['account']))
 	{
-		$account_logged = $ots->createObject('Account');
+		$account_logged = new OTS_Account();
 		$account_logged->load($_SESSION['account']);
 		if($account_logged->isLoaded() && $account_logged->getPassword() == $_SESSION['password']
 			//&& (!isset($_SESSION['admin']) || admin())
@@ -131,8 +131,10 @@ else
 		}
 	}
 
-	if($logged)
+	if($logged) {
 		$logged_flags = $account_logged->getWebFlags();
+		$twig->addGlobal('account_logged', $account_logged);
+	}
 }
 
 $_SESSION['last_visit'] = time();

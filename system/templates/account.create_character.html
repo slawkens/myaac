@@ -1,0 +1,66 @@
+Please choose a name{% if config.character_samples|length > 1 %}, vocation{% endif %}
+{% if config.character_towns|length > 1 %}, town{% endif %}
+ and sex for your character. <br/>
+In any case the name must not violate the naming conventions stated in the <a href="?subtopic=rules" target="_blank" >{{ config.lua.serverName }} Rules</a>, or your character might get deleted or name locked.
+{% if account_logged.getPlayersList()|length >= config.characters_per_account %}
+<b><font color="red"> You have maximum number of characters per account on your account. Delete one before you make new.</font></b>
+{% endif %}
+<br/><br/>
+<form action="?subtopic=accountmanagement&action=createcharacter" method="post">
+	<input type="hidden" name=savecharacter value="1">
+	<div class="TableContainer">
+		<table class="Table3" cellpadding="0" cellspacing="0">
+			<div class="CaptionContainer">
+				<div class="CaptionInnerContainer">
+					<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+					<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+					<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+					<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+					<div class="Text" >Create Character</div>
+					<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+					<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+					<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+					<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+				</div>
+			</div>
+			<tr>
+				<td>
+					<div class="InnerTableContainer">
+						<table style="width:100%;">
+							<tr>
+								<td>
+									<div class="TableShadowContainerRightTop">
+										<div class="TableShadowRightTop" style="background-image:url({{ template_path }}/images/content/table-shadow-rt.gif);"></div>
+									</div>
+									<div class="TableContentAndRightShadow" style="background-image:url({{ template_path }}/images/content/table-shadow-rm.gif);">
+										<div class="TableContentContainer">
+											<table class="TableContent" width="100%">
+												<tr class="LabelH">
+													<td style="width:50%;">
+														<span>Name</span>
+													</td>
+													<td>
+														<span>Sex</span>
+													</td>
+												</tr>
+												<tr class="Odd">
+													<td>
+														<input id="name" name="name" onkeyup="checkName();" value=" {{ newchar_name }}" size="25" maxlength="25" ><br/>
+														<font size="1" face="verdana,arial,helvetica">
+															<div id="name_check">Please enter your character name.</div>
+														</font>
+													</td>
+													<td>
+														{% set i = 0 %}
+														{% for id, _sex in config.genders|reverse(true) %}
+														{% set i = i + 1 %}
+														<input type="radio" name="sex" id="sex{{ i }}" value="{{ id }}"{% if newchar_sex == id %} checked="checked"{% endif %}
+														><label for="sex{{ i }}">{{ _sex|lower }}</label><br/>
+														{% endfor %}
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+						</table>
+					</div>
