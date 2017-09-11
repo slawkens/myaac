@@ -90,31 +90,28 @@ defined('MYAAC') or die('Direct access not allowed!');
                 	<a href="<?php echo $template['link_characters']; ?>">Characters</a>
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_guilds']; ?>">Guilds</a>
-                    <span class="separator"></span>
                     <?php
-                    if(isset($config['wars']))
-						echo '
-							<a href="' . $template['link_wars'] . '">Wars</a>
-							<span class="separator"></span>';
-					?>
+                    if(isset($config['wars'])): ?>
+					<span class="separator"></span>
+					<a href="<?php echo $template['link_wars']; ?>">Wars</a>
+                    <?php endif; ?>
+					<span class="separator"></span>
                     <a href="<?php echo $template['link_highscores']; ?>">Highscores</a>
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_lastkills']; ?>">Last Deaths</a>
 					<?php if(fieldExist('name', 'houses')): ?>
                     <span class="separator"></span>
                     <a href="<?php echo $template['link_houses']; ?>">Houses</a>
-					<?php endif; ?>
-                    <span class="separator"></span>
-					<?php if($config['otserv_version'] == TFS_03): ?>
+					<?php endif;
+					if($config['otserv_version'] == TFS_03): ?>
+					<span class="separator"></span>
                     <a href="<?php echo $template['link_bans']; ?>">Bans</a>
-					<?php endif; ?>
-                    <span class="separator"></span>
-                    <?php
-                    if($config['forum'] != '')
-						echo 
-						$template['link_forum'] . 'Forum</a>
-						<span class="separator"></span>';
-					?>
+					<?php endif;
+                    if($config['forum'] != ''): ?>
+					<span class="separator"></span>
+					<?php echo $template['link_forum']; ?>Forum</a>
+                    <?php endif; ?>
+					<span class="separator"></span>
                     <a href="<?php echo $template['link_team']; ?>">Team</a>
                 </div>
 

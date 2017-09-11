@@ -601,7 +601,7 @@ function check_name_new_char($name, &$error = '')
 	$player = new OTS_Player();
 	$player->find($name);
 	if($player->isLoaded()) {
-		$error = 'Player with this name already exist.';
+		$error = 'Character with this name already exist.';
 		return false;
 	}
 
@@ -614,28 +614,19 @@ function check_name_new_char($name, &$error = '')
 		}
 	}
 			
-	$monsters = $db->query(
-			'SELECT ' . $db->fieldName('name') .
-			' FROM ' . $db->tableName(TABLE_PREFIX . 'monsters') .
-			' WHERE ' . $db->fieldName('name') . ' LIKE ' . $db->quote($name_lower));
+	$monsters = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'monsters` WHERE `name` LIKE ' . $db->quote($name_lower));
 	if($monsters->rowCount() > 0) {
 		$error = 'Your name cannot contains monster name.';
 		return false;
 	}
 
-	$spells_name = $db->query(
-			'SELECT ' . $db->fieldName('name') .
-			' FROM ' . $db->tableName(TABLE_PREFIX . 'spells') .
-			' WHERE ' . $db->fieldName('name') . ' LIKE ' . $db->quote($name_lower));
+	$spells_name = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'spells` WHERE `name` LIKE ' . $db->quote($name_lower));
 	if($spells_name->rowCount() > 0) {
 		$error = 'Your name cannot contains spell name.';
 		return false;
 	}
 	
-	$spells_words = $db->query(
-			'SELECT ' . $db->fieldName('words') .
-			' FROM ' . $db->tableName(TABLE_PREFIX . 'spells') .
-			' WHERE ' . $db->fieldName('words') . ' = ' . $db->quote($name_lower));
+	$spells_words = $db->query('SELECT `words` FROM `' . TABLE_PREFIX . 'spells` WHERE `words` = ' . $db->quote($name_lower));
 	if($spells_words->rowCount() > 0) {
 		$error = 'Your name cannot contains spell name.';
 		return false;

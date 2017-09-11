@@ -130,7 +130,6 @@ if(!$logged)
 			'account_registered' => $account_registered,
 			'account_rlname' => $account_rlname,
 			'account_location' => $account_location,
-			'config' => $config,
 			'actions' => $actions,
 			'players' => $players
 		));
@@ -195,7 +194,6 @@ if(!$logged)
 				if($config['mail_enabled'] && $config['send_mail_when_change_password'])
 				{
 					$mailBody = $twig->render('mail.password_changed.html.twig', array(
-						'config' => $config,
 						'new_password' => $org_pass
 					));
 					
@@ -314,7 +312,7 @@ if(!$logged)
 				$account_logged->setCustomField("rlname", $new_rlname);
 				$account_logged->setCustomField("location", $new_location);
 				$account_logged->setCustomField("country", $new_country);
-				$account_logged->logAction('Changed Real Name to ' . $new_rlname . ', Location to ' . $new_location . ' and Country to ' . $config['countries'][$new_country] . '.');
+				$account_logged->logAction('Changed Real Name to <b>' . $new_rlname . '</b>, Location to <b>' . $new_location . '</b> and Country to <b>' . $config['countries'][$new_country] . '</b>.');
 				echo $twig->render('success.html.twig', array(
 					'title' => 'Public Information Changed',
 					'description' => 'Your public information has been changed.'
@@ -380,7 +378,7 @@ if(!$logged)
 					echo '</ul>          </table>        </div>  </table></div></td></tr><br/><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
 				}
 				else
-					$reg_errors[] = 'Your account is already registred.';
+					$reg_errors[] = 'Your account is already registered.';
 			}
 			else
 				$reg_errors[] = 'Wrong password to account.';
@@ -666,7 +664,6 @@ if(!$logged)
 					echo $twig->render('error_box.html.twig', array('errors' => $errors));
 				}
 				echo $twig->render('account.change_sex.html.twig', array(
-					'config' => $config,
 					'players' => $account_logged->getPlayersList(),
 					'player_sex' => isset($player) ? $player->getSex() : -1,
 					'points' => $points
@@ -747,12 +744,18 @@ if(!$logged)
 		if(isset($_POST['savecharacter']) && $_POST['savecharacter'] == 1) {
 			if(empty($newchar_name))
 				$errors[] = 'Please enter a name for your character!';
-
-			if(strlen($newchar_name) > 25)
+			else if(strlen($newchar_name) > 25)
 				$errors[] = 'Name is too long. Max. lenght <b>25</b> letters.';
 			else if(strlen($newchar_name) < 3)
-				$errors[] = 'Name is too short. Min. lenght <b>25</b> letters.';
-
+				$errors[] = 'Name is too short. Min. lenght <b>3</b> letters.';
+			else {
+				$exist = new OTS_Player();
+				$exist->find($newchar_name);
+				if($exist->isLoaded()) {
+					$errors[] = 'Character with this name already exist.';
+				}
+			}
+			
 			if(empty($newchar_sex) && $newchar_sex != "0")
 				$errors[] = 'Please select the sex for your character!';
 
@@ -770,12 +773,6 @@ if(!$logged)
 			}
 			else {
 				$newchar_town = $config['character_towns'][0];
-			}
-
-			$exist = new OTS_Player();
-			$exist->find($newchar_name);
-			if($exist->isLoaded()) {
-				$errors[] .= 'Character with this name already exist.';
 			}
 
 			if(empty($errors)) {
@@ -923,39 +920,11 @@ if(!$logged)
 		
 		if(!$newchar_created) {
 			echo $twig->render('account.create_character.html.twig', array(
-				'config' => $config,
-				'newchar_name' => $newchar_name
-				
+				'name' => $newchar_name,
+				'sex' => $newchar_sex,
+				'vocation' => $newchar_vocation,
+				'town' => $newchar_town
 			));
-			
-			echo '<div class="InnerTableContainer" >          <table style="width:100%;" ><tr>';
-			if(count($config['character_samples']) > 1)
-			{
-				echo '<td><table class="TableContent" width="100%" ><tr class="Odd" valign="top"><td width="160"><br /><b>Select your vocation:</b></td><td><table class="TableContent" width="100%" >';
-				foreach($config['character_samples'] as $key => $sample_char)
-				{
-					echo '<tr><td><input type="radio" name="vocation" id="vocation' . $key . '" value="'.$key.'" ';
-					if($newchar_vocation == $key)
-						echo 'checked="checked" ';
-					echo '><label for="vocation' . $key . '">'.$config['vocations'][$key].'</label></td></tr>';
-				}
-				echo '</table></td></table>';
-			}
-			if(count($config['character_towns']) > 1)
-			{
-				echo '<td><table class="TableContent" width="100%" ><tr class="Odd" valign="top"><td width="160"><br /><b>Select your city:</b></td><td><table class="TableContent" width="100%" >';
-				foreach($config['character_towns'] as $town_id)
-				{
-					echo '<tr><td><input type="radio" name="town" id="town' . $town_id . '" value="' . $town_id . '" ';
-					if($newchar_town == $town_id)
-						echo 'checked="checked" ';
-					echo '><label for="town' . $town_id . '">'.$config['towns'][$town_id].'</label></td></tr>';
-				}
-				echo '</table></td></tr></table></table></div>';
-			}
-			else
-				echo '</tr></table></div>';
-			echo '</table></div></td></tr><br/><table style="width:100%;" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
 		}
 	}
 ?>

@@ -16,7 +16,7 @@ Here you can tell other players about yourself. This information will be display
 				</div>
 			</div>
 			<tr>
-				<td>{{ config.darkborder }}
+				<td>
 					<div class="InnerTableContainer" >
 						<table style="width:100%;" >
 							<tr>
@@ -42,25 +42,25 @@ Here you can tell other players about yourself. This information will be display
 									</select>
 									<img src="" id="account_country_img"/>
 									<script>
-                                        function updateFlag()
-                                        {
-                                            var img = $('#account_country_img');
-                                            var country = $('#account_country :selected').val();
-                                            if(country.length) {
-                                                img.attr('src', 'images/flags/' + country + '.gif');
-                                                img.show();
-                                            }
-                                            else {
-                                                img.hide();
-                                            }
-                                        }
+										function updateFlag()
+										{
+											var img = $('#account_country_img');
+											var country = $('#account_country :selected').val();
+											if(country.length) {
+												img.attr('src', 'images/flags/' + country + '.gif');
+												img.show();
+											}
+											else {
+												img.hide();
+											}
+										}
 
-                                        $(function() {
-                                            updateFlag();
-                                            $('#account_country').change(function() {
-                                                updateFlag();
-                                            });
-                                        });
+										$(function() {
+											updateFlag();
+											$('#account_country').change(function() {
+												updateFlag();
+											});
+										});
 									</script>
 								</td>
 							</tr>

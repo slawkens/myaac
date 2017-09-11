@@ -621,7 +621,6 @@ if($action == 'new_thread')
 					
 					echo $twig->render('forum.new_thread.html.twig', array(
 						'section_id' => $section_id,
-						'config' => $config,
 						'players' => $players_from_account,
 						'post_player_id' => $char_id,
 						'post_thread' => $post_topic,

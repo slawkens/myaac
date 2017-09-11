@@ -39,7 +39,6 @@ $function = new Twig_SimpleFunction('getStyle', function ($i) {
 	return getStyle($i);
 });
 $twig->addFunction($function);
-$twig->addGlobal('config', $config);
 
 // trim values we receive
 if(isset($_POST))

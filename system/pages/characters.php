@@ -80,7 +80,8 @@ if($player->isLoaded() && !$player->isDeleted())
 	$account = $player->getAccount();
 	$rows = 0;
 
-	$outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . (fieldExist('lookaddons', 'players') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
+	if($config['characters']['outfit'])
+		$outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . (fieldExist('lookaddons', 'players') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
 	
 	$flag = '';
 	if($config['account_country'])
@@ -396,10 +397,9 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 	}
 	
 	echo $twig->render('characters.html.twig', array(
-		'outfit' => $outfit,
+		'outfit' => isset($outfit) ? $outfit : null,
 		'player' => $player,
 		'account' => $account,
-		'config' => $config,
 		'flag' => $flag,
 		'oldName' => $oldName,
 		'sex' => $player_sex,

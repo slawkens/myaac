@@ -45,17 +45,17 @@ In any case the name must not violate the naming conventions stated in the <a hr
 												</tr>
 												<tr class="Odd">
 													<td>
-														<input id="name" name="name" onkeyup="checkName();" value=" {{ newchar_name }}" size="25" maxlength="25" ><br/>
+														<input id="name" name="name" onkeyup="checkName();" value=" {{ name }}" size="25" maxlength="25" ><br/>
 														<font size="1" face="verdana,arial,helvetica">
 															<div id="name_check">Please enter your character name.</div>
 														</font>
 													</td>
 													<td>
 														{% set i = 0 %}
-														{% for id, _sex in config.genders|reverse(true) %}
+														{% for id, gender in config.genders|reverse(true) %}
 														{% set i = i + 1 %}
-														<input type="radio" name="sex" id="sex{{ i }}" value="{{ id }}"{% if newchar_sex == id %} checked="checked"{% endif %}
-														><label for="sex{{ i }}">{{ _sex|lower }}</label><br/>
+														<input type="radio" name="sex" id="sex{{ i }}" value="{{ id }}"{% if sex is not null and sex == id %} checked="checked"{% endif %}
+														><label for="sex{{ i }}">{{ gender|lower }}</label><br/>
 														{% endfor %}
 													</td>
 												</tr>
@@ -64,3 +64,84 @@ In any case the name must not violate the naming conventions stated in the <a hr
 									</div>
 						</table>
 					</div>
+					<div class="InnerTableContainer">
+						<table style="width: 100%;">
+							<tr>
+								{% if config.character_samples|length > 1 %}
+								<td>
+									<table class="TableContent" width="100%">
+										<tr class="Odd" valign="top">
+											<td width="160"><br/><b>Select your vocation:</b></td>
+											<td>
+												<table class="TableContent" width="100%" >
+													{% for key, sample_char in config.character_samples %}
+													<tr>
+														<td>
+															<input type="radio" name="vocation" id="vocation{{ key }}" value="{{ key }}"
+															{% if vocation is not null and vocation == key %} checked="checked"{% endif %}>
+															<label for="vocation{{ key }}">{{ config['vocations'][key] }}</label>
+														</td>
+													</tr>
+													{% endfor %}
+												</table>
+											</td>
+										</tr>
+									</table>
+								{% endif %}
+								{% if config.character_towns|length > 1 %}
+								<td>
+									<table class="TableContent" width="100%">
+										<tr class="Odd" valign="top">
+											<td width="160"><br/><b>Select your city:</b></td>
+											<td>
+												<table class="TableContent" width="100%">
+													{% for town_id in config.character_towns %}
+													<tr>
+														<td>
+															<input type="radio" name="town" id="town{{ town_id }}" value="{{ town_id }}"
+															{% if town is not null and town == town_id %} checked="checked"{% endif %}>
+															<label for="town{{ town_id }}">{{ config.towns[town_id] }}</label>
+														</td>
+													</tr>
+													{% endfor %}
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+								{% endif %}
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<br/>
+	<table style="width:100%;">
+		<tr align="center">
+			<td>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td style="border:0px;">
+							<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)">
+								<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);"><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="{{ template_path }}/images/buttons/_sbutton_submit.gif" ></div>
+							</div>
+						</td>
+					</tr>
+</form>
+				</table>
+			</td>
+			<td>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<form action="?subtopic=accountmanagement" method="post">
+						<tr>
+							<td style="border:0px;">
+								<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)"><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div></div>
+							</td>
+						</tr>
+					</form>
+				</table>
+			</td>
+		</tr>
+	</table>

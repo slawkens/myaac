@@ -280,7 +280,6 @@ if(!$news_cached)
 		$account_players->orderBy('group_id', POT::ORDER_DESC);
 
 		echo $twig->render('news.add.html.twig', array(
-			'config' => $config,
 			'action' => $action,
 			'news_link' => getPageLink(PAGE),
 			'news_link_form' => getPageLink('news', ($action == 'edit' ? 'edit' : 'add')),
