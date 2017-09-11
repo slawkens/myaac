@@ -81,7 +81,7 @@ if(!empty($action))
 	}
 
 	if(!empty($errors))
-		echo $twig->render('error_box.html', array('errors' => $errors));
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
 }
 ?>
 		<?php

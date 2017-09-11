@@ -53,10 +53,10 @@ if($canEdit) {
 			}
 			
 			if (!empty($errors))
-				echo $twig->render('error_box.html', array('errors' => $errors));
+				echo $twig->render('error_box.html.twig', array('errors' => $errors));
 		}
 		
-		echo $twig->render('screenshots.form.html', array(
+		echo $twig->render('screenshots.form.html.twig', array(
 			'link' => getPageLink('screenshots', ($action == 'edit' ? 'edit' : 'add')),
 			'action' => $action,
 			'id' => isset($id) ? $id : null,
@@ -94,7 +94,7 @@ if(isset($_GET['screenshot']))
 	else
 		$next_screenshot = NULL;
 	
-	echo $twig->render('screenshots.get.html', array(
+	echo $twig->render('screenshots.get.html.twig', array(
 		'previous' => $previous_screenshot ? $previous_screenshot['id'] : null,
 		'next' => $next_screenshot ? $next_screenshot['id'] : null,
 		'screenshot' => $screenshot
@@ -118,7 +118,7 @@ if(!$last)
 	return;
 }
 
-echo $twig->render('screenshots.html', array(
+echo $twig->render('screenshots.html.twig', array(
 	'screenshots' => $screenshots,
 	'last' => $last,
 	'canEdit' => $canEdit

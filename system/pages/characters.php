@@ -17,7 +17,7 @@ $groups = new OTS_Groups_List();
 function generate_search_form($autofocus = false)
 {
 	global $config, $twig;
-	return $twig->render('characters.form.html', array(
+	return $twig->render('characters.form.html.twig', array(
 		'link' => getPageLink('characters'),
 		'vdarkborder' => $config['vdarkborder'],
 		'darkborder' => $config['darkborder'],
@@ -39,7 +39,7 @@ function retrieve_former_name($name)
 		}
 	}
 
-	return "";
+	return '';
 }
 
 $name = '';
@@ -395,7 +395,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		$account_players->orderBy('name');
 	}
 	
-	echo $twig->render('characters.html', array(
+	echo $twig->render('characters.html.twig', array(
 		'outfit' => $outfit,
 		'player' => $player,
 		'account' => $account,
@@ -439,7 +439,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 else
 {
 	$search_errors[] = 'Character <b>' . $name . '</b> does not exist or has been deleted.';
-	echo $twig->render('error_box.html', array('errors' => $search_errors));
+	echo $twig->render('error_box.html.twig', array('errors' => $search_errors));
 	$search_errors = array();
 
 	$promotion = '';
@@ -468,4 +468,4 @@ else
 }
 
 if(!empty($search_errors))
-	echo $twig->render('error_box.html', array('errors' => $search_errors));
+	echo $twig->render('error_box.html.twig', array('errors' => $search_errors));

@@ -153,7 +153,7 @@ if(empty($action))
 		);
 	}
 	
-	echo $twig->render('forum.boards.html', array(
+	echo $twig->render('forum.boards.html.twig', array(
 		'boards' => $boards,
 		'config' => $config
 	));
@@ -404,7 +404,7 @@ if($action == 'new_post')
 			if(!$saved)
 			{
 				if(!empty($errors))
-					echo $twig->render('error_box.html', array('errors' => $errors));
+					echo $twig->render('error_box.html.twig', array('errors' => $errors));
 
 				echo '<form action="?" method="POST">
 					<input type="hidden" name="action" value="new_post" />
@@ -520,7 +520,7 @@ if($action == 'edit_post')
 				if(!$saved)
 				{
 					if(!empty($errors))
-						echo $twig->render('error_box.html', array('errors' => $errors));
+						echo $twig->render('error_box.html.twig', array('errors' => $errors));
 
 					echo '<br /><form action="?" method="POST"><input type="hidden" name="action" value="edit_post" /><input type="hidden" name="id" value="'.$post_id.'" /><input type="hidden" name="subtopic" value="forum" /><input type="hidden" name="save" value="save" /><table width="100%"><tr bgcolor="'.$config['vdarkborder'].'"><td colspan="2"><font color="white"><b>Edit Post</b></font></td></tr><tr bgcolor="'.$config['darkborder'].'"><td width="180"><b>Character:</b></td><td><select name="char_id"><option value="0">(Choose character)</option>';
 					foreach($players_from_account as $player)
@@ -617,9 +617,9 @@ if($action == 'new_thread')
 				}
 				if (!$saved) {
 					if (!empty($errors))
-						echo $twig->render('error_box.html', array('errors' => $errors));
+						echo $twig->render('error_box.html.twig', array('errors' => $errors));
 					
-					echo $twig->render('forum.new_thread.html', array(
+					echo $twig->render('forum.new_thread.html.twig', array(
 						'section_id' => $section_id,
 						'config' => $config,
 						'players' => $players_from_account,
@@ -652,7 +652,7 @@ if($action == 'move_thread')
 		{
 			if($post['id'] == $post['first_post'])
 			{
-				echo $twig->render('forum.move_thread.html', array(
+				echo $twig->render('forum.move_thread.html.twig', array(
 					'thread' => $post['post_topic'],
 					'author' => $name[0],
 					'board' => $sections[$post['section']]['name'],

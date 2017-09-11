@@ -20,5 +20,5 @@ if(isset($errors)) {
 	}
 }
 
-echo $twig->render('admin.login.html');
+echo $twig->render('admin.login.html.twig');
 ?>

@@ -22,14 +22,14 @@ $config_salt_enabled = fieldExist('salt', 'accounts');
 if(!$logged)
 {
 	if($action == "logout") {
-		echo $twig->render('account.logout.html');
+		echo $twig->render('account.logout.html.twig');
 	}
 	else
 	{
 		if(!empty($errors))
-			echo $twig->render('error_box.html', array('errors' => $errors));
+			echo $twig->render('error_box.html.twig', array('errors' => $errors));
 	
-		echo $twig->render('account.login.html', array(
+		echo $twig->render('account.login.html.twig', array(
 			'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
 			'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
 			'error' => isset($errors[0]) ? $errors[0] : null
@@ -42,7 +42,7 @@ if(!$logged)
 	{
 		$redirect = urldecode($_REQUEST['redirect']);
 
-		echo $twig->render('account.redirect.html', array(
+		echo $twig->render('account.redirect.html.twig', array(
 			'redirect' => $redirect
 		));
 		return;
@@ -116,7 +116,7 @@ if(!$logged)
 			);
 		}
 		
-		echo $twig->render('account.management.html', array(
+		echo $twig->render('account.management.html.twig', array(
 			'welcome_message' => $welcome_message,
 			'recovery_key' => $recovery_key,
 			'email_change' => $email_change,
@@ -141,7 +141,7 @@ if(!$logged)
 		$new_password2 = isset($_POST['newpassword2']) ? $_POST['newpassword2'] : NULL;
 		$old_password = isset($_POST['oldpassword']) ? $_POST['oldpassword'] : NULL;
 		if(empty($new_password) && empty($new_password2) && empty($old_password)) {
-			echo $twig->render('account.change_password.html');
+			echo $twig->render('account.change_password.html.twig');
 		}
 		else
 		{
@@ -170,10 +170,10 @@ if(!$logged)
 			}
 			if(!empty($show_msgs)){
 				//show errors
-				echo $twig->render('error_box.html', array('errors' => $show_msg));
+				echo $twig->render('error_box.html.twig', array('errors' => $show_msg));
 				
 				//show form
-				echo $twig->render('account.change_password.html');
+				echo $twig->render('account.change_password.html.twig');
 			}
 			else
 			{
@@ -194,7 +194,7 @@ if(!$logged)
 				$message = '';
 				if($config['mail_enabled'] && $config['send_mail_when_change_password'])
 				{
-					$mailBody = $twig->render('mail.password_changed.html', array(
+					$mailBody = $twig->render('mail.password_changed.html.twig', array(
 						'config' => $config,
 						'new_password' => $org_pass
 					));
@@ -205,7 +205,7 @@ if(!$logged)
 						$message = '<br/><p class="error">An error occorred while sending email with password:<br/>' . $mailer->ErrorInfo . '</p>';
 				}
 				
-				echo $twig->render('success.html', array(
+				echo $twig->render('success.html.twig', array(
 					'title' => 'Password Changed',
 					'description' => 'Your password has been changed.' . $message
 				));
@@ -250,17 +250,17 @@ if(!$logged)
 		else
 		{
 			//show errors
-			echo $twig->render('error_box.html', array('errors' => $errors));
+			echo $twig->render('error_box.html.twig', array('errors' => $errors));
 			
 			//show form
-			echo $twig->render('account.change_mail.html', array(
+			echo $twig->render('account.change_mail.html.twig', array(
 				'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
 			));
 		}
 	}
 	else
 	{
-		echo $twig->render('account.change_mail.html', array(
+		echo $twig->render('account.change_mail.html.twig', array(
 			'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
 		));
 	}
@@ -275,7 +275,7 @@ if(!$logged)
 				$account_logged->save();
 				$account_logged->logAction('Account email changed to <b>' . $email_new . '</b>');
 				
-				echo $twig->render('success.html', array(
+				echo $twig->render('success.html.twig', array(
 					'title' => 'Email Address Change Accepted',
 					'description' => 'You have accepted <b>' . $account_logged->getEmail() . '</b> as your new email adress.'
 				));
@@ -315,14 +315,14 @@ if(!$logged)
 				$account_logged->setCustomField("location", $new_location);
 				$account_logged->setCustomField("country", $new_country);
 				$account_logged->logAction('Changed Real Name to ' . $new_rlname . ', Location to ' . $new_location . ' and Country to ' . $config['countries'][$new_country] . '.');
-				echo $twig->render('success.html', array(
+				echo $twig->render('success.html.twig', array(
 					'title' => 'Public Information Changed',
 					'description' => 'Your public information has been changed.'
 				));
 				$show_form = false;
 			}
 			else {
-				echo $twig->render('error_box.html', array('errors' => $errors));
+				echo $twig->render('error_box.html.twig', array('errors' => $errors));
 			}
 		}
 		
@@ -342,7 +342,7 @@ if(!$logged)
 			foreach ($config['countries'] as $code => $country)
 				$countries[$code] = $country;
 			
-			echo $twig->render('account.change_info.html', array(
+			echo $twig->render('account.change_info.html.twig', array(
 				'countries' => $countries,
 				'account_rlname' => $account_rlname,
 				'account_location' => $account_location,
@@ -390,11 +390,11 @@ if(!$logged)
 			if(!empty($reg_errors))
 			{
 				//show errors
-				echo $twig->render('error_box.html', array('errors' => $reg_errors));
+				echo $twig->render('error_box.html.twig', array('errors' => $reg_errors));
 			}
 			
 			//show form
-			echo $twig->render('account.register.html');
+			echo $twig->render('account.register.html.twig');
 		}
 	}
 
@@ -446,7 +446,7 @@ if(!$logged)
 			{
 				//show errors if not empty
 				if(!empty($reg_errors)) {
-					echo $twig->render('error_box.html', array('errors' => $reg_errors));
+					echo $twig->render('error_box.html.twig', array('errors' => $reg_errors));
 				}
 				//show form
 				echo 'To generate NEW recovery key for your account please enter your password.<br/><font color="red"><b>New recovery key cost '.$config['generate_new_reckey_price'].' Premium Points.</font> You have '.$points.' premium points. You will receive e-mail with this recovery key.</b><br/><form action="?subtopic=accountmanagement&action=newreckey" method="post" ><input type="hidden" name="registeraccountsave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Generate recovery key</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td class="LabelV" ><span >Password:</td><td><input type="password" name="reg_password" size="30" maxlength="29" ></td></tr>          </table>        </div>  </table></div></td></tr><br/><table style="width:100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
@@ -549,7 +549,7 @@ if(!$logged)
 								$player->save();
 								$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
 								$account_logged->logAction('Changed name from <b>' . $old_name . '</b> to <b>' . $player->getName() . '</b>.');
-								echo $twig->render('success.html', array(
+								echo $twig->render('success.html.twig', array(
 									'title' => 'Character Name Changed',
 									'description' => 'The character <b>'.$old_name.'</b> name has been changed to <b>' . $player->getName() . '</b>.'
 								));
@@ -567,7 +567,7 @@ if(!$logged)
 
 			if(!$name_changed) {
 				if(!empty($errors)) {
-					echo $twig->render('error_box.html', array('errors' => $errors));
+					echo $twig->render('error_box.html.twig', array('errors' => $errors));
 				}
 				echo 'To change a name of character select player and choose a new name.<br/>
 				<font color="red">Change name cost ' . $config['account_change_character_name_points'] . ' premium points. You have ' . $points . ' premium points.</font><br/><br/><form action="?subtopic=accountmanagement&action=changename" method="post" ><input type="hidden" name="changenamesave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Change Name</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >
@@ -645,7 +645,7 @@ if(!$logged)
 								$player->save();
 								$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
 								$account_logged->logAction('Changed sex on character <b>' . $player->getName() . '</b> from <b>' . $old_sex_str . '</b> to <b>' . $new_sex_str . '</b>.');
-								echo $twig->render('success.html', array(
+								echo $twig->render('success.html.twig', array(
 									'title' => 'Character Sex Changed',
 									'description' => 'The character <b>' . $player->getName() . '</b> sex has been changed to <b>' . $new_sex_str . '</b>.'
 								));
@@ -663,9 +663,9 @@ if(!$logged)
 
 			if(!$sex_changed) {
 				if(!empty($errors)) {
-					echo $twig->render('error_box.html', array('errors' => $errors));
+					echo $twig->render('error_box.html.twig', array('errors' => $errors));
 				}
-				echo $twig->render('account.change_sex.html', array(
+				echo $twig->render('account.change_sex.html.twig', array(
 					'config' => $config,
 					'players' => $account_logged->getPlayersList(),
 					'player_sex' => isset($player) ? $player->getSex() : -1,
@@ -698,7 +698,7 @@ if(!$logged)
 								else
 									$player->setCustomField('deleted', 1);
 								$account_logged->logAction('Deleted character <b>' . $player->getName() . '</b>.');
-								echo $twig->render('success.html', array(
+								echo $twig->render('success.html.twig', array(
 									'title' => 'Character Deleted',
 									'description' => 'The character <b>' . $player_name . '</b> has been deleted.'
 								));
@@ -728,9 +728,9 @@ if(!$logged)
 		}
 		if(!$dontshowtableagain) {
 			if(!empty($errors)) {
-				echo $twig->render('error_box.html', array('errors' => $errors));
+				echo $twig->render('error_box.html.twig', array('errors' => $errors));
 			}
-			echo $twig->render('account.delete_character.html');
+			echo $twig->render('account.delete_character.html.twig');
 		}
 	}
 
@@ -902,7 +902,7 @@ if(!$logged)
 					foreach($loaded_items_to_copy as $save_item)
 						$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', '".$save_item['attributes']."');");
 					
-					echo $twig->render('success.html', array(
+					echo $twig->render('success.html.twig', array(
 						'title' => 'Character Created',
 						'description' => 'The character <b>' . $newchar_name . '</b> has been created.<br/>
 							Please select the outfit when you log in for the first time.<br/><br/>
@@ -918,11 +918,11 @@ if(!$logged)
 		}
 
 		if(count($errors) > 0) {
-			echo $twig->render('error_box.html', array('errors' => $errors));
+			echo $twig->render('error_box.html.twig', array('errors' => $errors));
 		}
 		
 		if(!$newchar_created) {
-			echo $twig->render('account.create_character.html', array(
+			echo $twig->render('account.create_character.html.twig', array(
 				'config' => $config,
 				'newchar_name' => $newchar_name
 				

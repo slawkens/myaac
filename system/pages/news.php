@@ -54,7 +54,7 @@ if(isset($_GET['archive']))
 				}
 			}
 			
-			echo $twig->render('news.html', array(
+			echo $twig->render('news.html.twig', array(
 				'title' => stripslashes($news['title']),
 				'content' => $content,
 				'date' => $news['date'],
@@ -113,8 +113,6 @@ define('BODY_LIMIT', 65535); // maximum news body length
 
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 if($canEdit)
-	echo '<script type="text/javascript" src="' . BASE_URL . 'tools/tiny_mce/tiny_mce.js"></script>';
-if($canEdit)
 {
 	if(!empty($action))
 	{
@@ -165,7 +163,7 @@ if($canEdit)
 		}
 
 		if(!empty($errors))
-			echo $twig->render('error_box.html', array('errors' => $errors));
+			echo $twig->render('error_box.html.twig', array('errors' => $errors));
 
 		if($cache->enabled())
 		{
@@ -273,154 +271,31 @@ if(!$news_cached)
 	ob_start();
 	if($canEdit)
 	{
-?>
-		<script type="text/javascript">
-			tinyMCE.init({
-				forced_root_block : false,
+		if($action == 'edit') {
+			$player = new OTS_Player();
+			$player->load($player_id);
+		}
+		
+		$account_players = $account_logged->getPlayersList();
+		$account_players->orderBy('group_id', POT::ORDER_DESC);
 
-				mode : "textareas",
-				theme : "advanced",
-				plugins: "safari,advimage,emotions,insertdatetime,preview,wordcount",
-
-				theme_advanced_buttons3_add : "emotions,insertdate,inserttime,preview,|,forecolor,backcolor",
-
-				theme_advanced_toolbar_location : "top",
-				theme_advanced_toolbar_align : "left",
-				theme_advanced_statusbar_location : "bottom",
-				theme_advanced_resizing : true,
-			});
-		</script>
-		<?php if($action != 'edit'): ?>
-		<a id="news-button" href="#">Add news</a>
-		<?php endif; ?>
-		<form method="post" action="<?php echo getPageLink('news', ($action == 'edit' ? 'edit' : 'add')); ?>">
-		<?php if($action == 'edit'): ?>
-			<input type="hidden" name="id" value="<?php echo $id; ?>" />
-		<?php endif; ?>
-		<table id="news-edit" width="100%" border="0" cellspacing="1" cellpadding="4">
-			<tr>
-				<td colspan="2" bgcolor="<?php echo $config['vdarkborder']; ?>" class="white"><b><?php echo ($action == 'edit' ? 'Edit' : 'Add'); ?> news</b></td>
-			</tr>
-
-			<?php $rows = 0; ?>
-
-			<tr bgcolor="<?php echo getStyle($rows++); ?>">
-				<td><b>Title:</b></td>
-				<td><input name="title" value="<?php echo (isset($p_title) ? $p_title : ''); ?>" size="50" maxlength="100"/></td>
-			</tr>
-
-			<tr bgcolor="<?php echo getStyle($rows++); ?>">
-				<!--td>Description:</td-->
-				<td colspan="2"><textarea name="body" maxlength="<?php echo BODY_LIMIT; ?>" class="tinymce"><?php echo (isset($body) ? $body : ''); ?></textarea></td>
-			<tr/>
-
-			<tr bgcolor="<?php echo getStyle($rows++); ?>">
-				<td><b>Type:</b></td>
-				<td>
-					<select name="type">
-						<option value="<?php echo NEWS; ?>" <?php echo (isset($type) && $type == NEWS ? 'selected="yes"' : ''); ?>>News</option>
-						<option value="<?php echo TICKET; ?>" <?php echo (isset($type) && $type == TICKET ? 'selected="yes"' : ''); ?>>Ticket</option>
-						<!--option value="<?php echo ARTICLE; ?>">Article</option-->
-					</select>
-				</td>
-			</tr>
-
-			<?php
-				if($action == 'edit')
-				{
-					$player = $ots->createObject('Player');
-					$player->load($player_id);
-					if($player->isLoaded())
-					{
-			?>
-			<tr bgcolor="<?php echo getStyle($rows++); ?>">
-				<td width="180"><b>Author:</b></td>
-				<td>
-					<select name="original_id" disabled="disabled">
-						<?php
-							echo '<option value="' . $player->getId() . '">' . $player->getName() . '</option>';
-						?>
-					</select>
-				</td>
-			</tr>
-			<?php
-					}
-				}
-			?>
-
-			<tr bgcolor="<?php echo getStyle($rows++); ?>">
-				<td width="180"><b><?php echo ($action == 'edit' ? 'Modified by' : 'Author'); ?>:</b></td>
-				<td>
-					<select name="player_id">
-						<?php
-							$account_players = $account_logged->getPlayersList();
-							$account_players->orderBy('group_id', POT::ORDER_DESC);
-							$player_number = 0;
-							foreach($account_players as $player)
-							{
-								echo '<option value="' . $player->getId() . '"';
-								if(isset($player_id) && $player->getId() == $player_id)
-									echo ' selected="selected"';
-								echo '>' . $player->getName() . '</option>';
-							}
-						?>
-					</select>
-				</td>
-			</tr>
-
-			<tr bgcolor="<?php echo getStyle($rows++); ?>">
-				<td><b>Category:</b></td>
-				<td>
-					<?php
-					if(!isset($category))
-						$category = 0;
-					foreach($categories as $id => $cat): ?>
-						<input type="radio" name="category" value="<?php echo $id; ?>" <?php echo (((isset($category) && $category == 0 && $id == 1) || (isset($category) && $category == $id)) ? 'checked="yes"' : ''); ?>/> <img src="images/news/icon_<?php echo $cat['icon_id']; ?>_small.gif" />
-					<?php endforeach; ?>
-				</td>
-			</tr>
-<?php
-			if($action == ''):
-?>
-			<tr bgcolor="<?php echo getStyle($rows++); ?>">
-				<td><b>Create forum thread in section:</b></td>
-				<td>
-					<select name="forum_section">
-						<option value="-1">None</option>
-					<?php
-						foreach(getForumSections() as $section): ?>
-						<option value="<?php echo $section['id']; ?>" <?php echo (isset($forum_section) && $forum_section == $section['id']) ? 'checked="yes"' : ''; ?>/><?php echo $section['name']; ?></option>
-						<?php endforeach; ?>
-					</select>
-				</td>
-			</tr>
-<?php
-			endif;
-?>
-			<tr bgcolor="<?php echo getStyle($rows++); ?>">
-				<td align="right">
-					<input type="submit" value="Submit"/>
-				</td>
-				<td align="left">
-					<input type="button" onclick="window.location = '<?php echo getPageLink(PAGE); ?>';" value="Cancel"/>
-				</td>
-			</tr>
-		</table>
-		</form>
-
-		<?php if($action != 'edit'): ?>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$("#news-edit").hide();
-			});
-
-			$("#news-button").click(function() {
-				$("#news-edit").toggle();
-				return false;
-			});
-		</script>
-		<?php endif; ?>
-<?php
+		echo $twig->render('news.add.html.twig', array(
+			'config' => $config,
+			'action' => $action,
+			'news_link' => getPageLink(PAGE),
+			'news_link_form' => getPageLink('news', ($action == 'edit' ? 'edit' : 'add')),
+			'news_id' => isset($id) ? $id : null,
+			'title' => isset($p_title) ? $p_title : '',
+			'body' => isset($body) ? $body : '',
+			'type' => isset($type) ? $type : null,
+			'player' => isset($player) && $player->isLoaded() ? $player : null,
+			'player_id' => isset($player_id) ? $player_id : null,
+			'account_players' => $account_players,
+			'category' => isset($category) ? $category : 0,
+			'categories' => $categories,
+			'forum_sections' => getForumSections(),
+			'forum_section' => isset($forum_section) ? $forum_section : null
+		));
 	}
 
 	$newses =
@@ -467,7 +342,7 @@ if(!$news_cached)
 				}
 			}
 			
-			echo $twig->render('news.html', array(
+			echo $twig->render('news.html.twig', array(
 				'title' => stripslashes($news['title']),
 				'content' => $content . $admin_options,
 				'date' => $news['date'],

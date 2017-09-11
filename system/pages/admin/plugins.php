@@ -13,7 +13,7 @@ $title = 'Plugin manager';
 
 require(SYSTEM . 'hooks.php');
 
-echo $twig->render('admin.plugins.form.html');
+echo $twig->render('admin.plugins.form.html.twig');
 
 $message = '';
 if(isset($_FILES["plugin"]["name"]))
@@ -142,7 +142,7 @@ foreach(scandir($path) as $file)
 	);
 }
 
-echo $twig->render('admin.plugins.html', array(
+echo $twig->render('admin.plugins.html.twig', array(
 	'plugins' => $rows
 ));
 ?>

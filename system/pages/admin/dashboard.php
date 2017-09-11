@@ -48,7 +48,7 @@ $tmp = '';
 if(fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
 
-echo $twig->render('admin.dashboard.html', array(
+echo $twig->render('admin.dashboard.html.twig', array(
 	'is_closed' => $is_closed,
 	'closed_message' => $closed_message,
 	'status' => $status

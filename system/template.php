@@ -94,6 +94,6 @@ if($config['forum'] != '')
 }
 
 $twig->addGlobal('template_path', $template_path);
-if($twig_loader && file_exists(BASE . $template_path . '/templates'))
-	$twig_loader->prependPath(BASE . $template_path . '/templates');
+if($twig_loader && file_exists(BASE . $template_path))
+	$twig_loader->prependPath(BASE . $template_path);
 ?>

@@ -29,7 +29,7 @@ function compare($a, $b) {
 $tmp = $visitors->getVisitors();
 usort($tmp, 'compare');
 
-echo $twig->render('admin.visitors.html', array(
+echo $twig->render('admin.visitors.html.twig', array(
 	'config_visitors_counter_ttl' => $config['visitors_counter_ttl'],
 	'visitors' => $tmp
 ));

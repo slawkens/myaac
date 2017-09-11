@@ -392,7 +392,7 @@ function validate_form(thisform)
 	}
 
 	if(!empty($errors))
-		echo $twig->render('error_box.html', array('errors' => $errors));
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
 ?>
 To play on <?php echo $config['lua']['serverName']; ?> you need an account.
 All you have to do to create your new account is to enter an account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?>, password<?php

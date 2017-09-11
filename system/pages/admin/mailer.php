@@ -38,7 +38,7 @@ if($preview) {
 }
 
 
-echo $twig->render('admin.mailer.html', array(
+echo $twig->render('admin.mailer.html.twig', array(
 	'mail_subject' => $mail_subject,
 	'mail_content' => $mail_content,
 	'preview_done' => $preview_done

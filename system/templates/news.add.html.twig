@@ -1,0 +1,130 @@
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+	tinyMCE.init({
+		forced_root_block : false,
+
+		mode : "textareas",
+		theme : "advanced",
+		plugins: "safari,advimage,emotions,insertdatetime,preview,wordcount",
+
+		theme_advanced_buttons3_add : "emotions,insertdate,inserttime,preview,|,forecolor,backcolor",
+
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+	});
+</script>
+{% if action != 'edit' %}
+<a id="news-button" href="#">Add news</a>
+{% endif %}
+<form method="post" action="{{ news_link_form }}">
+	{% if action == 'edit' %}
+	<input type="hidden" name="id" value="{{ news_id }}" />
+	{% endif %}
+	<table id="news-edit" width="100%" border="0" cellspacing="1" cellpadding="4">
+		<tr>
+			<td colspan="2" bgcolor="{{ config.vdarkborder }}" class="white"><b>{% if action == 'edit'%}Edit{% else %}Add{% endif %} news</b></td>
+		</tr>
+
+		{% set rows = 1 %}
+
+		{% set rows = rows + 1 %}
+		<tr bgcolor="{{ getStyle(rows) }}">
+			<td><b>Title:</b></td>
+			<td><input name="title" value="{{ title }}" size="50" maxlength="100"/></td>
+		</tr>
+
+		{% set rows = rows + 1 %}
+		<tr bgcolor="{{ getStyle(rows) }}">
+			<!--td>Description:</td-->
+			<td colspan="2"><textarea name="body" maxlength="{{ constant('BODY_LIMIT') }}" class="tinymce">{{ body }}</textarea></td>
+		<tr/>
+
+		{% set rows = rows + 1 %}
+		<tr bgcolor="{{ getStyle(rows) }}">
+			<td><b>Type:</b></td>
+			<td>
+				<select name="type">
+					<option value="{{ constant('NEWS') }}" {% if type is defined and type == constant('NEWS') %}selected="yes"{% endif %}>News</option>
+					<option value="{{ constant('TICKET') }}" {% if type is defined and type == constant('TICKET') %}selected="yes"{% endif %}>Ticket</option>
+					<!--option value="{{ constant('ARTICLE') }}">Article</option-->
+				</select>
+			</td>
+		</tr>
+
+		{% if action == 'edit' %}
+			{% set rows = rows + 1 %}
+			{% if player is defined %}
+			<tr bgcolor="{{ getStyle(rows) }}">
+				<td width="180"><b>Author:</b></td>
+				<td>
+					<select name="original_id" disabled="disabled">
+						<option value="{{ player.getId() }}">{{ player.getName() }}</option>
+					</select>
+				</td>
+			</tr>
+			{% endif %}
+		{% endif %}
+
+		{% set rows = rows + 1 %}
+		<tr bgcolor="{{ getStyle(rows) }}">
+			<td width="180"><b>{% if action == 'edit' %}Modified by{% else %}Author{% endif %}:</b></td>
+			<td>
+				<select name="player_id">
+					{% for player in account_players %}
+						<option value="{{ player.getId() }}"{% if player_id is defined and player.getId() == player_id %} selected="selected"{% endif %}>{{ player.getName() }}</option>
+					{% endfor %}
+				</select>
+			</td>
+		</tr>
+
+		{% set rows = rows + 1 %}
+		<tr bgcolor="{{ getStyle(rows) }}">
+			<td><b>Category:</b></td>
+			<td>
+				{% for id, cat in categories %}
+				<input type="radio" name="category" value="{{ id }}" {% if (category == 0 and id == 1) or (category == id) %}checked="yes"{% endif %}/> <img src="images/news/icon_{{ cat.icon_id }}_small.gif" />
+				{% endfor %}
+			</td>
+		</tr>
+
+		{% if action == '' %}
+			{% set rows = rows + 1 %}
+		<tr bgcolor="{{ getStyle(rows) }}">
+			<td><b>Create forum thread in section:</b></td>
+			<td>
+				<select name="forum_section">
+					<option value="-1">None</option>
+						{% for section in forum_sections %}
+					<option value="{{ section.id }}" {% if forum_section is defined and forum_section == section.id %}checked="yes"{% endif %}/>{{ section.name }}</option>
+						{% endfor %}
+				</select>
+			</td>
+		</tr>
+		{% endif %}
+
+		{% set rows = rows + 1 %}
+		<tr bgcolor="{{ getStyle(rows) }}">
+			<td align="right">
+				<input type="submit" value="Submit"/>
+			</td>
+			<td align="left">
+				<input type="button" onclick="window.location = '{{ news_link }}';" value="Cancel"/>
+			</td>
+		</tr>
+	</table>
+</form>
+
+{% if action != 'edit' %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#news-edit").hide();
+	});
+
+	$("#news-button").click(function() {
+		$("#news-edit").toggle();
+		return false;
+	});
+</script>
+{% endif %}

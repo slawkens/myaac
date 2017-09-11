@@ -69,10 +69,10 @@ if($canEdit)
 		}
 
 		if(!empty($errors))
-			echo $twig->render('error_box.html', array('errors' => $errors));
+			echo $twig->render('error_box.html.twig', array('errors' => $errors));
 	}
 	
-	echo $twig->render('commands.form.html', array(
+	echo $twig->render('commands.form.html.twig', array(
 		'link' => getPageLink('commands', ($action == 'edit' ? 'edit' : 'add')),
 		'action' => $action,
 		'id' => isset($id) ? $id : null,
@@ -91,7 +91,7 @@ $commands =
 		' ORDER BY `ordering`;');
 
 $last = $commands->rowCount();
-echo $twig->render('commands.html', array(
+echo $twig->render('commands.html.twig', array(
 	'commands' => $commands,
 	'last' => $last,
 	'canEdit' => $canEdit,
