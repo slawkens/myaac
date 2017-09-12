@@ -67,7 +67,7 @@ CREATE TABLE `myaac_faq`
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 
-CREATE TABLE `myaac_forum_sections`
+CREATE TABLE `myaac_forum_boards`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(32) NOT NULL,
@@ -77,11 +77,11 @@ CREATE TABLE `myaac_forum_sections`
 	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
-INSERT INTO `myaac_forum_sections` (`id`, `name`, `description`, `closed`) VALUES (NULL, 'News', 'News commenting', 1);
-INSERT INTO `myaac_forum_sections` (`id`, `name`, `description`) VALUES (NULL, 'Trade', 'Trade offers.');
-INSERT INTO `myaac_forum_sections` (`id`, `name`, `description`) VALUES (NULL, 'Quests', 'Quest making.');
-INSERT INTO `myaac_forum_sections` (`id`, `name`, `description`) VALUES (NULL, 'Pictures', 'Your pictures.');
-INSERT INTO `myaac_forum_sections` (`id`, `name`, `description`) VALUES (NULL, 'Bug Report', 'Report bugs there.');
+INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`, `closed`) VALUES (NULL, 'News', 'News commenting', 0, 1);
+INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`) VALUES (NULL, 'Trade', 'Trade offers.', 1);
+INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`) VALUES (NULL, 'Quests', 'Quest making.', 2);
+INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`) VALUES (NULL, 'Pictures', 'Your pictures.', 3);
+INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`) VALUES (NULL, 'Bug Report', 'Report bugs there.', 4);
 
 CREATE TABLE `myaac_forum`
 (

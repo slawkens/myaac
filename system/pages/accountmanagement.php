@@ -17,7 +17,8 @@ if($config['account_country'])
 
 $groups = new OTS_Groups_List();
 
-$dontshowtableagain = false;
+$errors = array();
+$show_form = true;
 $config_salt_enabled = fieldExist('salt', 'accounts');
 if(!$logged)
 {
@@ -213,55 +214,65 @@ if(!$logged)
 	}
 
 //############# CHANGE E-MAIL ###################
-	if($action == "changeemail") {
-		$email_new_time = $account_logged->getCustomField("email_new_time");
-	if($email_new_time > 10) {$email_new = $account_logged->getCustomField("email_new"); }
-	if($email_new_time < 10){
-	if(isset($_POST['changeemailsave']) && $_POST['changeemailsave'] == 1) {
-		$email_new = $_POST['new_email'];
-		$post_password = $_POST['password'];
-		if(empty($email_new)) {
-			$errors[] = "Please enter your new email address.";
-		}
-		else
-		{
-			if(!check_mail($email_new)) {
-				$errors[] = "E-mail address is not correct.";
-			}
-		}
-		if(empty($post_password)) {
-			$errors[] = "Please enter password to your account.";
-		}
-		else
-		{
-			$post_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $post_password);
-			if($post_password != $account_logged->getPassword()) {
-				$errors[] = "Wrong password to account.";
-			}
-		}
-		if(empty($errors)) {
-			$email_new_time = time() + $config['account_mail_change'] * 24 * 3600;
-			$account_logged->setCustomField("email_new", $email_new);
-			$account_logged->setCustomField("email_new_time", $email_new_time);
-			echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >New Email Address Requested</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>You have requested to change your email address to <b>'.$email_new.'</b>. The actual change will take place after <b>'.date("j F Y, G:i:s", $email_new_time).'</b>, during which you can cancel the request at any time.</td></tr>          </table>        </div>  </table></div></td></tr><br/><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
-		}
-		else
-		{
-			//show errors
-			echo $twig->render('error_box.html.twig', array('errors' => $errors));
+if($action == "changeemail") {
+	$email_new_time = $account_logged->getCustomField("email_new_time");
+	
+	if($email_new_time > 10) {
+		$email_new = $account_logged->getCustomField("email_new");
+	}
+	
+	if($email_new_time < 10) {
+		if(isset($_POST['changeemailsave']) && $_POST['changeemailsave'] == 1) {
+			$email_new = $_POST['new_email'];
+			$post_password = $_POST['password'];
 			
-			//show form
+			if(empty($email_new)) {
+				$errors[] = 'Please enter your new email address.';
+			}
+			else
+			{
+				if(!check_mail($email_new)) {
+					$errors[] = 'Email address is not correct.';
+				}
+			}
+			
+			if(empty($post_password)) {
+				$errors[] = 'Please enter password to your account.';
+			}
+			else {
+				$post_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $post_password);
+				if($post_password != $account_logged->getPassword()) {
+					$errors[] = 'Wrong password to account.';
+				}
+			}
+			
+			if(empty($errors)) {
+				$email_new_time = time() + $config['account_mail_change'] * 24 * 3600;
+				$account_logged->setCustomField("email_new", $email_new);
+				$account_logged->setCustomField("email_new_time", $email_new_time);
+				echo $twig->render('success.html.twig', array(
+					'title' => 'New Email Address Requested',
+					'description' => 'You have requested to change your email address to <b>' . $email_new . '</b>. The actual change will take place after <b>' . date("j F Y, G:i:s", $email_new_time) . '</b>, during which you can cancel the request at any time.'
+				));
+			}
+			else
+			{
+				//show errors
+				echo $twig->render('error_box.html.twig', array('errors' => $errors));
+				
+				//show form
+				echo $twig->render('account.change_mail.html.twig', array(
+					'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
+				));
+			}
+		}
+		else
+		{
 			echo $twig->render('account.change_mail.html.twig', array(
 				'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
 			));
 		}
-	}
-	else
-	{
-		echo $twig->render('account.change_mail.html.twig', array(
-			'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
-		));
-	}
+	
 	}
 	else
 	{
@@ -280,20 +291,89 @@ if(!$logged)
 			}
 			else
 			{
-				echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Email Address Change Accepted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Do you accept <b>'.$email_new.'</b> as your new email adress?</td></tr>          </table>        </div>  </table></div></td></tr><br /><table width="100%"><tr><td width="30">&nbsp;</td><td align=left><form action="?subtopic=accountmanagement&action=changeemail" method="post"><input type="hidden" name="changeemailsave" value=1 ><INPUT TYPE=image NAME="I Agree" SRC="'.$template_path.'/images/buttons/sbutton_iagree.gif" BORDER=0 WIDTH=120 HEIGHT=17></FORM></td><td align=left><form action="?subtopic=accountmanagement&action=changeemail" method="post"><input type="hidden" name="emailchangecancel" value=1 ><input type=image name="Cancel" src="'.$template_path.'/images/buttons/sbutton_cancel.gif" BORDER=0 WIDTH=120 HEIGHT=17></form></td><td align=right><form action="?subtopic=accountmanagement" method="post" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></td><td width="30">&nbsp;</td></tr></table>';
+				$custom_buttons = '
+<table width="100%">
+	<tr>
+		<td width="30">&nbsp;</td>
+		<td align=left>
+			<form action="?subtopic=accountmanagement&action=changeemail" method="post"><input type="hidden" name="changeemailsave" value=1 >
+				<INPUT TYPE=image NAME="I Agree" SRC="' . $template_path . '/images/buttons/sbutton_iagree.gif" BORDER=0 WIDTH=120 HEIGHT=17>
+			</form>
+		</td>
+		<td align=left>
+			<form action="?subtopic=accountmanagement&action=changeemail" method="post">
+				<input type="hidden" name="emailchangecancel" value=1 >
+				<input type=image name="Cancel" src="' . $template_path . '/images/buttons/sbutton_cancel.gif" BORDER=0 WIDTH=120 HEIGHT=17>
+			</form>
+		</td>
+		<td align=right>
+			<form action="?subtopic=accountmanagement" method="post" >
+				<div class="BigButton" style="background-image:url(' . $template_path . '/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $template_path . '/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="' . $template_path . '/images/buttons/_sbutton_back.gif" ></div>
+				</div>
+			</form>
+		</td>
+		<td width="30">&nbsp;</td>
+	</tr>
+</table>';
+				echo $twig->render('success.html.twig', array(
+					'title' => 'Email Address Change Accepted',
+					'description' => 'Do you accept <b>'.$email_new.'</b> as your new email adress?',
+					'custom_buttons' => $custom_buttons
+				));
 			}
 		}
 		else
 		{
-			echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Change of Email Address</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>A request has been submitted to change the email address of this account to <b>'.$email_new.'</b>.<br/>The actual change will take place on <b>'.date("j F Y, G:i:s", $email_new_time).'</b>.<br>If you do not want to change your email address, please click on "Cancel".</td></tr>          </table>        </div>  </table></div></td></tr><br/><table style="width:100%;" ><tr align="center"><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement&action=changeemail" method="post" ><tr><td style="border:0px;" ><input type="hidden" name="emailchangecancel" value=1 ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Cancel" alt="Cancel" src="'.$template_path.'/images/buttons/_sbutton_cancel.gif" ></div></div></td></tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
+			$custom_buttons = '
+<table style="width:100%;" >
+	<tr align="center">
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0" >
+				<form action="?subtopic=accountmanagement&action=changeemail" method="post" >
+					<tr>
+						<td style="border:0px;" >
+							<input type="hidden" name="emailchangecancel" value="1" >
+							<div class="BigButton" style="background-image:url(' . $template_path . '/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $template_path . '/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Cancel" alt="Cancel" src="'.$template_path.'/images/buttons/_sbutton_cancel.gif" ></div>
+							</div>
+						</td>
+					</tr>
+				</form>
+			</table>
+		</td>
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0" >
+				<form action="?subtopic=accountmanagement" method="post" >
+					<tr>
+						<td style="border:0px;" >
+							<div class="BigButton" style="background-image:url(' . $template_path . '/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $template_path . '/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="' . $template_path . '/images/buttons/_sbutton_back.gif" ></div>
+							</div>
+						</td>
+					</tr>
+				</form>
+			</table>
+		</td>
+	</tr>
+</table>';
+			echo $twig->render('success.html.twig', array(
+				'title' => 'Change of Email Address',
+				'description' => 'A request has been submitted to change the email address of this account to <b>'.$email_new.'</b>.<br/>The actual change will take place on <b>'.date("j F Y, G:i:s", $email_new_time).'</b>.<br>If you do not want to change your email address, please click on "Cancel".',
+				'custom_buttons' => $custom_buttons
+			));
 		}
 	}
 	if(isset($_POST['emailchangecancel']) && $_POST['emailchangecancel'] == 1) {
 		$account_logged->setCustomField("email_new", "");
 		$account_logged->setCustomField("email_new_time", 0);
-		echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Email Address Change Cancelled</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Your request to change the email address of your account has been cancelled. The email address will not be changed.</td></tr>          </table>        </div>  </table></div></td></tr><br/><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+		
+		$custom_buttons = '<center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+		
+		echo $twig->render('success.html.twig', array(
+			'title' => 'Email Address Change Cancelled',
+			'description' => 'Your request to change the email address of your account has been cancelled. The email address will not be changed.',
+			'custom_buttons' => $custom_buttons
+		));
 	}
-	}
+}
 
 //########### CHANGE PUBLIC INFORMATION (about account owner) ######################
 	if($action == "changeinfo") {
@@ -302,8 +382,6 @@ if(!$logged)
 		$new_location = isset($_POST['info_location']) ? htmlspecialchars(stripslashes($_POST['info_location'])) : NULL;
 		$new_country = isset($_POST['info_country']) ? htmlspecialchars(stripslashes($_POST['info_country'])) : NULL;
 		if(isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
-			$errors = array();
-			
 			if(!isset($config['countries'][$new_country]))
 				$errors[] = 'Country is not correct.';
 			
@@ -355,44 +433,46 @@ if(!$logged)
 		$_POST['reg_password'] = isset($_POST['reg_password']) ? $_POST['reg_password'] : '';
 		$reg_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
 		$old_key = $account_logged->getCustomField("key");
+		
 		if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1") {
 			if($reg_password == $account_logged->getPassword()) {
 				if(empty($old_key)) {
-					$dontshowtableagain = true;
+					$show_form = false;
 					$new_rec_key = generateRandomString(10, false, true, true);
 
 					$account_logged->setCustomField("key", $new_rec_key);
 					$account_logged->logAction('Generated recovery key.');
-					echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Account Registered</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" >Thank you for registering your account! You can now recover your account if you have lost access to the assigned email address by using the following<br/><br/><font size="5">&nbsp;&nbsp;&nbsp;<b>Recovery Key: '.$new_rec_key.'</b></font><br/><br/><br/><b>Important:</b><ul><li>Write down this recovery key carefully.</li><li>Store it at a safe place!</li>';
+					
 					if($config['mail_enabled'] && $config['send_mail_when_generate_reckey'])
 					{
-						$mailBody = '
-						<h3>New recovery key!</h3>
-						<p>You or someone else generated recovery key to your account on server <a href="'.BASE_URL.'"><b>'.$config['lua']['serverName'].'</b></a>.</p>
-						<p>Recovery key: <b>'.$new_rec_key.'</b></p>';
-						if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - recovery key", $mailBody))
-							echo '<br /><small>Your recovery key were send on email address <b>'.$account_logged->getEMail().'</b>.</small>';
+						$mailBody = $twig->render('mail.account.register.html.twig', array(
+							'recovery_key' => $new_rec_key
+						));
+						if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - Recovery Key", $mailBody))
+							$message = '<br /><small>Your recovery key were send on email address <b>'.$account_logged->getEMail().'</b>.</small>';
 						else
-							echo '<br /><p class="error">An error occorred while sending email with recovery key! You will not receive e-mail with this key. Error:<br/>' . $mailer->ErrorInfo . '</p>';
+							$message = '<br /><p class="error">An error occorred while sending email with recovery key! You will not receive e-mail with this key. Error:<br/>' . $mailer->ErrorInfo . '</p>';
 					}
-					echo '</ul>          </table>        </div>  </table></div></td></tr><br/><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+					echo $twig->render('success.html.twig', array(
+						'title' => 'Account Registered',
+						'description' => 'Thank you for registering your account! You can now recover your account if you have lost access to the assigned email address by using the following<br/><br/><font size="5">&nbsp;&nbsp;&nbsp;<b>Recovery Key: '.$new_rec_key.'</b></font><br/><br/><br/><b>Important:</b><ul><li>Write down this recovery key carefully.</li><li>Store it at a safe place!</li>' . $message . '</ul>'
+					));
 				}
 				else
-					$reg_errors[] = 'Your account is already registered.';
+					$errors[] = 'Your account is already registered.';
 			}
 			else
-				$reg_errors[] = 'Wrong password to account.';
+				$errors[] = 'Wrong password to account.';
 		}
-		if(!$dontshowtableagain)
-		{
-			if(!empty($reg_errors))
-			{
+		
+		if($show_form) {
+			if(!empty($errors)) {
 				//show errors
-				echo $twig->render('error_box.html.twig', array('errors' => $reg_errors));
+				echo $twig->render('error_box.html.twig', array('errors' => $errors));
 			}
 			
 			//show form
-			echo $twig->render('account.register.html.twig');
+			echo $twig->render('account.generate_recovery_key.html.twig');
 		}
 	}
 
@@ -414,40 +494,46 @@ if(!$logged)
 				{
 					if($points >= $config['generate_new_reckey_price'])
 					{
-							$dontshowtableagain = true;
-							$new_rec_key = generateRandomString(10, false, true, true);
-
-							echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Account Registered</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><ul>';
-
-								$mailBody = '
-								<h3>New recovery key!</h3>
-								<p>You or someone else generated recovery key to your account on server <a href="'.BASE_URL.'"><b>'.$config['lua']['serverName'].'</b></a>.</p>
-								<p>Recovery key: <b>'.$new_rec_key.'</b></p>';
-								if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - new recovery key", $mailBody))
-								{
-									$account_logged->setCustomField("key", $new_rec_key);
-									$account_logged->setCustomField("premium_points", $account_logged->getCustomField("premium_points") - $config['generate_new_reckey_price']);
-									$account_logged->logAction('Generated new recovery key for ' . $config['generate_new_reckey_price'] . ' premium points.');
-									echo '<br />Your recovery key were send on email address <b>'.$account_logged->getEMail().'</b> for '.$config['generate_new_reckey_price'].' premium points.';
-								}
-								else
-									echo '<br /><p class="error">An error occorred while sending email ( <b>'.$account_logged->getEMail().'</b> ) with recovery key! Recovery key not changed. Try again. Error:<br/>' . $mailer->ErrorInfo . '</p>';
-							echo '</ul>          </table>        </div>  </table></div></td></tr><br/><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+						$show_form = false;
+						$new_rec_key = generateRandomString(10, false, true, true);
+						
+						$mailBody = $twig->render('mail.account.register.html.twig', array(
+							'recovery_key' => $new_rec_key
+						));
+						
+						if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - new recovery key", $mailBody))
+						{
+							$account_logged->setCustomField("key", $new_rec_key);
+							$account_logged->setCustomField("premium_points", $account_logged->getCustomField("premium_points") - $config['generate_new_reckey_price']);
+							$account_logged->logAction('Generated new recovery key for ' . $config['generate_new_reckey_price'] . ' premium points.');
+							$message = '<br />Your recovery key were send on email address <b>'.$account_logged->getEMail().'</b> for '.$config['generate_new_reckey_price'].' premium points.';
+						}
+						else
+							$message = '<br /><p class="error">An error occorred while sending email ( <b>'.$account_logged->getEMail().'</b> ) with recovery key! Recovery key not changed. Try again. Error:<br/>' . $mailer->ErrorInfo . '</p>';
+						
+						echo $twig->render('success.html.twig', array(
+							'title' => 'Account Registered',
+							'description' => '<ul>' . $message . '</ul>'
+						));
 					}
 					else
-						$reg_errors[] = 'You need '.$config['generate_new_reckey_price'].' premium points to generate new recovery key. You have <b>'.$points.'<b> premium points.';
+						$errors[] = 'You need '.$config['generate_new_reckey_price'].' premium points to generate new recovery key. You have <b>'.$points.'<b> premium points.';
 				}
 				else
-					$reg_errors[] = 'Wrong password to account.';
+					$errors[] = 'Wrong password to account.';
 			}
-			if(!$dontshowtableagain)
+			
+			//show errors if not empty
+			if(!empty($errors)) {
+				echo $twig->render('error_box.html.twig', array('errors' => $errors));
+			}
+			
+			if($show_form)
 			{
-				//show errors if not empty
-				if(!empty($reg_errors)) {
-					echo $twig->render('error_box.html.twig', array('errors' => $reg_errors));
-				}
 				//show form
-				echo 'To generate NEW recovery key for your account please enter your password.<br/><font color="red"><b>New recovery key cost '.$config['generate_new_reckey_price'].' Premium Points.</font> You have '.$points.' premium points. You will receive e-mail with this recovery key.</b><br/><form action="?subtopic=accountmanagement&action=newreckey" method="post" ><input type="hidden" name="registeraccountsave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Generate recovery key</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td class="LabelV" ><span >Password:</td><td><input type="password" name="reg_password" size="30" maxlength="29" ></td></tr>          </table>        </div>  </table></div></td></tr><br/><table style="width:100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
+				echo $twig->render('account.generate_new_recovery_key.html.twig', array(
+					'points' => $points
+				));
 			}
 		}
 	}
@@ -469,19 +555,17 @@ if(!$logged)
 						$player->setCustomField("hidden", $new_hideacc);
 						$player->setCustomField("comment", $new_comment);
 						$account_logged->logAction('Changed comment for character <b>' . $player->getName() . '</b>.');
-						echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Character Information Changed</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>The character information has been changed.</td></tr>          </table>        </div>  </table></div></td></tr><br><center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+						echo $twig->render('success.html.twig', array(
+							'title' => 'Character Information Changed',
+							'description' => 'The character information has been changed.'
+						));
 					}
 					else
 					{
-						echo 'Here you can see and edit the information about your character.<br/>If you do not want to specify a certain field, just leave it blank.<br/><br/><form action="?subtopic=accountmanagement&action=changecomment" method="post" ><div class="TableContainer" >  <table class="Table5" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Edit Character Information</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" >  <div class="TableContentContainer" >    <table class="TableContent" width="100%" ><tr><td class="LabelV" >Name:</td><td style="width:80%;" >'.$player_name.'</td></tr><tr><td class="LabelV" >Hide Account:</td><td>
-						<input type="hidden" value="0" name="accountvisible">
-					
-						<input type="checkbox" name="accountvisible" id="accountvisible" value="1" ' . ($player->getCustomField("hidden") == 1 ? ' checked="checked"' : '') . '>
-						<label for="accountvisible"> check to hide your account information</label>';
-							if((int)$player->getCustomField('group_id') > 1)
-								echo ' (you will be also hidden on the Team page!)';
-
-						echo '</td></tr>    </table>  </div></div><div class="TableShadowContainer" >  <div class="TableBottomShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bm.gif);" >    <div class="TableBottomLeftShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bl.gif);" ></div>    <div class="TableBottomRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-br.gif);" ></div>  </div></div></td></tr><tr><td><div class="TableShadowContainerRightTop" >  <div class="TableShadowRightTop" style="background-image:url('.$template_path.'/images/content/table-shadow-rt.gif);" ></div></div><div class="TableContentAndRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-rm.gif);" >  <div class="TableContentContainer" >    <table class="TableContent" width="100%" ><tr><td class="LabelV" ><span >Comment:</span></td><td style="width:80%;" ><textarea name="comment" rows="10" cols="50" wrap="virtual" >'.$player->getCustomField("comment").'</textarea><br>[max. length: 2000 chars, 50 lines (ENTERs)]</td></tr>    </table>  </div></div><div class="TableShadowContainer" >  <div class="TableBottomShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bm.gif);" ><div class="TableBottomLeftShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-bl.gif);" ></div><div class="TableBottomRightShadow" style="background-image:url('.$template_path.'/images/content/table-shadow-br.gif);" ></div></div></div></td></tr></td></tr>          </table>        </div>  </table></div></td></tr><br/><table style="width:100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><input type="hidden" name="name" value="'.$player->getName().'"><input type="hidden" name="changecommentsave" value="1"><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
+						echo $twig->render('account.change_comment.html.twig', array(
+							'player' => $player,
+							'player_name' => $player_name
+						));
 					}
 				}
 				else
@@ -503,11 +587,10 @@ if(!$logged)
 	if($action == "changename") {
 		echo '<script type="text/javascript" src="tools/check_name.js"></script>';
 		
-		$name_changed = false;
 		$player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : NULL;
 		$name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : NULL;
 		if((!$config['account_change_character_name']))
-			echo 'You cant change your character name';
+			echo 'Changing character name for premium points is disabled on this server.';
 		else
 		{
 			$points = $account_logged->getCustomField('premium_points');
@@ -516,12 +599,18 @@ if(!$logged)
 					$errors[] = 'You need ' . $config['account_change_character_name_points'] . ' premium points to change name. You have <b>'.$points.'<b> premium points.';
 	
 				if(empty($errors) && empty($name))
-					$errors[] = 'Please enter a name for your character!';
-
-				if(empty($errors) && strlen($name) > 25)
+					$errors[] = 'Please enter a new name for your character!';
+				else if(strlen($name) > 25)
 					$errors[] = 'Name is too long. Max. lenght <b>25</b> letters.';
-				else if(empty($errors) && strlen($name) < 3)
-					$errors[] = 'Name is too short. Min. lenght <b>25</b> letters.';
+				else if(strlen($name) < 3)
+					$errors[] = 'Name is too short. Min. lenght <b>3</b> letters.';
+				else {
+					$exist = new OTS_Player();
+					$exist->find($name);
+					if($exist->isLoaded()) {
+						$errors[] = 'Character with this name already exist.';
+					}
+				}
 				
 				if(empty($errors))
 				{
@@ -531,7 +620,7 @@ if(!$logged)
 				}
 				
 				if(empty($errors)) {
-					$player = $ots->createObject('Player');
+					$player = new OTS_Player();
 					$player->load($player_id);
 					if($player->isLoaded()) {
 						$player_account = $player->getAccount();
@@ -541,7 +630,7 @@ if(!$logged)
 							}
 							
 							if(empty($errors)) {
-								$name_changed = true;
+								$show_form = false;
 								$old_name = $player->getName();
 								$player->setName($name);
 								$player->save();
@@ -563,34 +652,15 @@ if(!$logged)
 				}
 			}
 
-			if(!$name_changed) {
+			if($show_form) {
 				if(!empty($errors)) {
 					echo $twig->render('error_box.html.twig', array('errors' => $errors));
 				}
-				echo 'To change a name of character select player and choose a new name.<br/>
-				<font color="red">Change name cost ' . $config['account_change_character_name_points'] . ' premium points. You have ' . $points . ' premium points.</font><br/><br/><form action="?subtopic=accountmanagement&action=changename" method="post" ><input type="hidden" name="changenamesave" value="1"><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Change Name</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >
-				<table style="width:100%;" >
-					<tr>
-						<td class="LabelV" ><span >Character:</td>
-						<td style="width:90%;" >
-							<select name="player_id">';
-								$players = $account_logged->getPlayersList();
-								foreach($players as $player)
-									echo '<option value="' . $player->getId() . '">' . $player->getName() . '</option>';
-							echo '
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="LabelV" ><span >New Name:</td>
-						<td>
-							<input type="text" name="name" id="name" onkeyup="checkName();" size="25" maxlength="25" >
-							<font size="1" face="verdana,arial,helvetica">
-								<div id="name_check">Please enter your character name.</div>
-							</font>
-						</td>
-					</tr>
-				</table>        </div>  </table></div></td></tr><br/><table style="width:100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
+				
+				echo $twig->render('account.change_name.html.twig', array(
+					'points' => $points,
+					//'account_players' => $account_logged->getPlayersList()
+				));
 			}
 		}
 	}
@@ -688,7 +758,7 @@ if(!$logged)
 								if(!$player->isOnline())
 								{
 								//dont show table "delete character" again
-								$dontshowtableagain = true;
+								$show_form = false;
 								//delete player
 								if(fieldExist('deletion', 'players'))
 									$player->setCustomField('deletion', 1);
@@ -723,7 +793,7 @@ if(!$logged)
 				$errors[] = 'Character name or/and password is empty. Please fill in form.';
 			}
 		}
-		if(!$dontshowtableagain) {
+		if($show_form) {
 			if(!empty($errors)) {
 				echo $twig->render('error_box.html.twig', array('errors' => $errors));
 			}
@@ -738,8 +808,7 @@ if(!$logged)
 		$newchar_sex = isset($_POST['sex']) ? $_POST['sex'] : NULL;
 		$newchar_vocation = isset($_POST['vocation']) ? $_POST['vocation'] : NULL;
 		$newchar_town = isset($_POST['town']) ? $_POST['town'] : NULL;
-		$errors = array();
-		
+
 		$newchar_created = false;
 		if(isset($_POST['savecharacter']) && $_POST['savecharacter'] == 1) {
 			if(empty($newchar_name))
@@ -880,16 +949,15 @@ if(!$logged)
 				$newchar_created = true;
 				$account_logged->logAction('Created character <b>' . $player->getName() . '</b>.');
 				unset($player);
+				
 				$player = new OTS_Player();
 				$player->find($newchar_name);
-				if($player->isLoaded())
-				{
+				
+				if($player->isLoaded()) {
 					if(tableExist('player_skills')) {
-						for($i=0;$i<7;$i++)
-						{
+						for($i=0; $i<7; $i++) {
 							$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $i);
-							if($skillExists->rowCount() <= 0)
-							{
+							if($skillExists->rowCount() <= 0) {
 								$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$i.', 10, 0)');
 							}
 						}
@@ -908,8 +976,8 @@ if(!$logged)
 				}
 				else
 				{
-					echo "Error. Can\'t create character. Probably problem with database. Try again or contact with admin.";
-					exit;
+					error("Error. Can't create character. Probably problem with database. Please try again later or contact with admin.");
+					return;
 				}
 			}
 		}

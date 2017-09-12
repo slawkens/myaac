@@ -96,7 +96,7 @@
 			<td>
 				<select name="forum_section">
 					<option value="-1">None</option>
-						{% for section in forum_sections %}
+						{% for section in forum_boards %}
 					<option value="{{ section.id }}" {% if forum_section is defined and forum_section == section.id %}checked="yes"{% endif %}/>{{ section.name }}</option>
 						{% endfor %}
 				</select>

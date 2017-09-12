@@ -1,0 +1,76 @@
+To change a name of character select player and choose a new name.<br/>
+<font color="red">Change name cost {{ config.account_change_character_name_points }} premium points. You have {{ points }} premium points.</font><br/><br/>
+<form action="?subtopic=accountmanagement&action=changename" method="post">
+	<input type="hidden" name="changenamesave" value="1">
+	<div class="TableContainer">
+		<table class="Table1" cellpadding="0" cellspacing="0">
+			<div class="CaptionContainer">
+				<div class="CaptionInnerContainer" >
+					<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+					<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+					<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+					<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+					<div class="Text" >Change Name</div>
+					<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+					<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+					<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+					<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+				</div>
+			</div>
+			<tr>
+				<td>
+					<div class="InnerTableContainer" >
+						<table style="width:100%;" >
+							<tr>
+                                <td class="LabelV" ><span>Character:</span></td>
+								<td style="width:90%;" >
+									<select name="player_id">
+										{% for player in account_logged.getPlayersList() %}
+										<option value="{{ player.getId() }}">{{ player.getName() }}</option>
+										{% endfor %}
+									</select>
+								</td>
+							</tr>
+							<tr>
+                                <td class="LabelV" ><span>New Name:</span></td>
+								<td>
+									<input type="text" name="name" id="name" onkeyup="checkName();" size="25" maxlength="25" >
+									<font size="1" face="verdana,arial,helvetica">
+										<div id="name_check">Please enter your character name.</div>
+									</font>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<br/>
+	<table style="width:100%" >
+		<tr align="center">
+			<td>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td style="border:0px;">
+							<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="{{ template_path }}/images/buttons/_sbutton_submit.gif" ></div>
+							</div>
+						</td>
+					</tr>
+</form>
+				</table>
+			</td>
+			<td>
+				<table border="0" cellspacing="0" cellpadding="0">
+					<form action="?subtopic=accountmanagement" method="post">
+						<tr>
+							<td style="border:0px;">
+								<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div>
+								</div>
+							</td>
+						</tr>
+					</form>
+				</table>
+			</td>
+		</tr>
+	</table>

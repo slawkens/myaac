@@ -292,7 +292,7 @@ if(!$news_cached)
 			'account_players' => $account_players,
 			'category' => isset($category) ? $category : 0,
 			'categories' => $categories,
-			'forum_sections' => getForumSections(),
+			'forum_boards' => getForumBoards(),
 			'forum_section' => isset($forum_section) ? $forum_section : null
 		));
 	}

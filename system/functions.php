@@ -9,13 +9,22 @@
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-function success($message) {
+function success($message, $return = false) {
+	if($return)
+		return '<p class="success">' . $message . '</p>';
+	
 	echo '<p class="success">' . $message . '</p>';
 }
-function warning($message) {
+function warning($message, $return = false) {
+	if($return)
+		return '<p class="warning">' . $message . '</p>';
+	
 	echo '<p class="warning">' . $message . '</p>';
 }
-function error($message) {
+function error($message, $return = false) {
+	if($return)
+		return '<p class="error">' . $message . '</p>';
+	
 	echo '<p class="error">' . $message . '</p>';
 }
 
@@ -218,10 +227,11 @@ function generateRandomString($length, $lowCase = true, $upCase = false, $numeri
  *
  * @return array Forum sections.
  */
-function getForumSections()
+function getForumBoards()
 {
-	global $db;
-	$sections = $db->query('SELECT `id`, `name`, `description`, `closed` FROM ' . TABLE_PREFIX . 'forum_sections WHERE hidden != 1 ORDER BY `ordering`;');
+	global $db, $canEdit;
+	$sections = $db->query('SELECT `id`, `name`, `description`, `closed`' . ($canEdit ? ', `hidden`, `ordering`' : '') . ' FROM `' . TABLE_PREFIX . 'forum_boards` ' . (!$canEdit ? ' WHERE `hidden` != 1' : '') .
+		' ORDER BY `ordering`;');
 	if($sections)
 		return $sections->fetchAll();
 	

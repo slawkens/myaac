@@ -76,8 +76,6 @@ if($canEdit)
 		'link' => getPageLink('commands', ($action == 'edit' ? 'edit' : 'add')),
 		'action' => $action,
 		'id' => isset($id) ? $id : null,
-		'vdarkborder' => $config['vdarkborder'],
-		'darkborder' => $config['darkborder'],
 		'words' => isset($words) ? $words : null,
 		'description' => isset($description) ? $description : null
 	));

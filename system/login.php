@@ -74,8 +74,6 @@ else
 					$_SESSION['remember_me'] = true;
 
 				$logged = true;
-
-				$logged_flags = $account_logged->getWebFlags();
 				if(isset($_POST['admin']) && !admin()) {
 					$errors[] = 'This account has no admin privileges.';
 					unset($_SESSION['account']);
@@ -114,7 +112,7 @@ else
 			}
 		}
 	}
-	
+
 	// stay-logged with sessions
 	if(isset($_SESSION['account']))
 	{
@@ -122,15 +120,17 @@ else
 		$account_logged->load($_SESSION['account']);
 		if($account_logged->isLoaded() && $account_logged->getPassword() == $_SESSION['password']
 			//&& (!isset($_SESSION['admin']) || admin())
-			&& (isset($_SESSION['remember_me']) || $_SESSION['last_visit'] > time() - 15 * 60))  // login for 15 minutes if "remember me" is not used
+			&& (isset($_SESSION['remember_me']) || $_SESSION['last_visit'] > time() - 15 * 60)) {  // login for 15 minutes if "remember me" is not used
 				$logged = true;
+		}
 		else
 		{
+			$logged = false;
 			unset($_SESSION['account']);
 			unset($account_logged);
 		}
 	}
-
+	
 	if($logged) {
 		$logged_flags = $account_logged->getWebFlags();
 		$twig->addGlobal('account_logged', $account_logged);

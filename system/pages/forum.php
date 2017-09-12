@@ -24,17 +24,6 @@ if(strtolower($config['forum']) != 'site')
 	return;
 }
 
-$sections = array();
-foreach(getForumSections() as $section)
-{
-	$sections[$section['id']] = array(
-		'id' => $section['id'],
-		'name' => $section['name'],
-		'description' => $section['description'],
-		'closed' => $section['closed'] == '1'
-	);
-}
-
 function parseSmiles($text)
 {
 	$smileys = array(
@@ -128,6 +117,93 @@ function showPost($topic, $text, $smiles)
 if(!$logged)
 	echo  'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum') . '">Log in</a> to post on the forum.<br /><br />';
 
+$canEdit = hasFlag(FLAG_CONTENT_FORUM) || superAdmin();
+if($canEdit)
+{
+	if(!empty($action))
+	{
+		if($action == 'delete_board' || $action == 'edit_board' || $action == 'hide_board' || $action == 'moveup_board' || $action == 'movedown_board')
+			$id = $_REQUEST['id'];
+		
+		if(isset($_REQUEST['name']))
+			$name = $_REQUEST['name'];
+		
+		if(isset($_REQUEST['description']))
+			$description = stripslashes($_REQUEST['description']);
+		
+		$errors = array();
+		
+		if($action == 'add_board') {
+			if(Forum::add_board($name, $description, $errors))
+				$action = $name = $description = '';
+		}
+		else if($action == 'delete_board') {
+			Forum::delete_board($id, $errors);
+			$action = '';
+		}
+		else if($action == 'edit_board')
+		{
+			if(isset($id) && !isset($name)) {
+				$board = Forum::get_board($id);
+				$name = $board['name'];
+				$description = $board['description'];
+			}
+			else {
+				Forum::update_board($id, $name, $description);
+				$action = $name = $description = '';
+			}
+		}
+		else if($action == 'hide_board') {
+			Forum::toggleHidden_board($id, $errors);
+			$action = '';
+		}
+		else if($action == 'moveup_board') {
+			Forum::move_board($id, -1, $errors);
+			$action = '';
+		}
+		else if($action == 'movedown_board') {
+			Forum::move_board($id, 1, $errors);
+			$action = '';
+		}
+		
+		if(!empty($errors)) {
+			echo $twig->render('error_box.html.twig', array('errors' => $errors));
+			$action = '';
+		}
+	}
+	
+	if(empty($action) || $action == 'edit_board') {
+		echo $twig->render('forum.add_board.html.twig', array(
+			'link' => getPageLink('forum', ($action == 'edit_board' ? 'edit_board' : 'add_board')),
+			'action' => $action,
+			'id' => isset($id) ? $id : null,
+			'name' => isset($name) ? $name : null,
+			'description' => isset($description) ? $description : null
+		));
+		
+		if($action == 'edit_board')
+			$action = '';
+	}
+}
+
+$sections = array();
+foreach(getForumBoards() as $section)
+{
+	$sections[$section['id']] = array(
+		'id' => $section['id'],
+		'name' => $section['name'],
+		'description' => $section['description'],
+		'closed' => $section['closed'] == '1'
+	);
+	
+	if($canEdit) {
+		$sections[$section['id']]['hidden'] = $section['hidden'];
+	}
+	else {
+		$sections[$section['id']]['hidden'] = 0;
+	}
+}
+
 $number_of_rows = 0;
 if(empty($action))
 {
@@ -140,9 +216,11 @@ if(empty($action))
 	{
 		$last_post = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`section` = ".(int) $id." AND `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` ORDER BY `post_date` DESC LIMIT 1")->fetch();
 		$boards[] = array(
+			'id' => $id,
 			'link' => getForumBoardLink($id),
 			'name' => $section['name'],
 			'description' => $section['description'],
+			'hidden' => $section['hidden'],
 			'posts' => isset($counters[$id]['posts']) ? $counters[$id]['posts'] : 0,
 			'threads' => isset($counters[$id]['threads']) ? $counters[$id]['threads'] : 0,
 			'last_post' => array(
@@ -155,7 +233,8 @@ if(empty($action))
 	
 	echo $twig->render('forum.boards.html.twig', array(
 		'boards' => $boards,
-		'config' => $config
+		'canEdit' => $canEdit,
+		'last' => count($sections)
 	));
 	
 	return;
@@ -446,7 +525,7 @@ if($action == 'new_post')
 			echo 'Thread with ID '.$thread_id.' doesn\'t exist.';
 	}
 	else
-		echo 'Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
+		echo "Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";
 }
 
 if($action == 'edit_post')
@@ -660,24 +739,6 @@ if($action == 'move_thread')
 					'section_link' => getForumBoardLink($post['section']),
 					'config' => $config
 				));
-				
-				/*
-				echo '<br/><table bgcolor='.$config['vdarkborder'].' border=0 cellpadding=2 cellspacing=0 width=100%>
-				<tr bgcolor='.$config['vdarkborder'].'><td class=white colspan=5><B>Move thread to another board</B></td></tr>
-				<tr><td><table border=0 cellpadding=3 cellspacing=1 width=100%>
-				<tr bgcolor='.$config['lightborder'].'><td>
-				<FORM ACTION="" METHOD="GET">
-				<input type="hidden" name="subtopic" value="forum" />
-				<input type="hidden" name="action" value="moved_thread" />
-				<input type="hidden" name="id" value="'.$post['id'].'" />
-				<strong>THREAD:</strong> '.$post['post_topic'].'
-				<br/><strong>AUTHOR:</strong> '.$name[0].'
-				<br/><strong>BOARD:</strong> '.$sections[$post['section']]['name'].'<br/>
-				<br/><strong>Select the new board:&nbsp;</strong><SELECT NAME=section>';
-				foreach($sections as $id => $section) { echo '<OPTION value="'.$id.'">'.$section['name'].'</OPTION>'; } echo '</SELECT>
-				<INPUT TYPE="submit" VALUE="Move Thread"></FORM>
-				<form action="' . getForumBoardLink($post['section']) . '" method="POST">
-				<input type="submit" value="Cancel"></form></td></tr></table></td></tr></table>';*/
 			}
 		}
 		else
@@ -731,5 +792,99 @@ class Forum
 
 	static public function isModerator() {
 		return hasFlag(FLAG_CONTENT_FORUM) || admin();
+	}
+	
+	static public function add_board($name, $description, &$errors)
+	{
+		global $db;
+		if(isset($name[0]) && isset($description[0]))
+		{
+			$query = $db->select(TABLE_PREFIX . 'forum_boards', array('name' => $name));
+			
+			if($query === false)
+			{
+				$query =
+					$db->query(
+						'SELECT ' . $db->fieldName('ordering') .
+						' FROM ' . $db->tableName(TABLE_PREFIX . 'forum_boards') .
+						' ORDER BY ' . $db->fieldName('ordering') . ' DESC LIMIT 1'
+					);
+				
+				$ordering = 0;
+				if($query->rowCount() > 0) {
+					$query = $query->fetch();
+					$ordering = $query['ordering'] + 1;
+				}
+				$db->insert(TABLE_PREFIX . 'forum_boards', array('name' => $name, 'description' => $description, 'ordering' => $ordering));
+			}
+			else
+				$errors[] = 'Forum board with this name already exists.';
+		}
+		else
+			$errors[] = 'Please fill all inputs.';
+		
+		return !count($errors);
+	}
+	
+	static public function get_board($id) {
+		global $db;
+		return $db->select(TABLE_PREFIX . 'forum_boards', array('id' => $id));
+	}
+	
+	static public function update_board($id, $name, $description) {
+		global $db;
+		$db->update(TABLE_PREFIX . 'forum_boards', array('name' => $name, 'description' => $description), array('id' => $id));
+	}
+	
+	static public function delete_board($id, &$errors)
+	{
+		global $db;
+		if(isset($id))
+		{
+			if(self::get_board($id) !== false)
+				$db->delete(TABLE_PREFIX . 'forum_boards', array('id' => $id));
+			else
+				$errors[] = 'Forum board with id ' . $id . ' does not exists.';
+		}
+		else
+			$errors[] = 'id not set';
+		
+		return !count($errors);
+	}
+	
+	static public function toggleHidden_board($id, &$errors)
+	{
+		global $db;
+		if(isset($id))
+		{
+			$query = self::get_board($id);
+			if($query !== false)
+				$db->update(TABLE_PREFIX . 'forum_boards', array('hidden' => ($query['hidden'] == 1 ? 0 : 1)), array('id' => $id));
+			else
+				$errors[] = 'Forum board with id ' . $id . ' does not exists.';
+		}
+		else
+			$errors[] = 'id not set';
+		
+		return !count($errors);
+	}
+	
+	static public function move_board($id, $i, &$errors)
+	{
+		global $db;
+		$query = self::get_board($id);
+		if($query !== false)
+		{
+			$ordering = $query['ordering'] + $i;
+			$old_record = $db->select(TABLE_PREFIX . 'forum_boards', array('ordering' => $ordering));
+			if($old_record !== false)
+				$db->update(TABLE_PREFIX . 'forum_boards', array('ordering' => $query['ordering']), array('ordering' => $ordering));
+			
+			$db->update(TABLE_PREFIX . 'forum_boards', array('ordering' => $ordering), array('id' => $id));
+		}
+		else
+			$errors[] = 'Forum board with id ' . $id . ' does not exists.';
+		
+		return !count($errors);
 	}
 }

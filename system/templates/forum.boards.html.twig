@@ -13,6 +13,11 @@
 		<td align="center">
 			<font color="white" size="1"><b>Last Post</b></font>
 		</td>
+		{% if canEdit %}
+			<td>
+				<font color="white" size="1"><b>Options</b></font>
+			</td>
+		{% endif %}
 	</tr>
 	{% set i = 0 %}
 	{% for board in boards %}
@@ -30,6 +35,29 @@
 		No posts
 		{% endif %}
 		</td>
+		{% if canEdit %}
+			<td>
+				<a href="?subtopic=forum&action=edit_board&id={{ board.id }}" title="Edit">
+					<img src="images/edit.png"/>Edit
+				</a>
+				<a id="delete" href="?subtopic=forum&action=delete_board&id={{ board.id }}" onclick="return confirm('Are you sure?');" title="Delete">
+					<img src="images/del.png"/>Delete
+				</a>
+				<a href="?subtopic=forum&action=hide_board&id={{ board.id }}" title="{% if board.hidden != 1 %}Hide{% else %}Show{% endif %}">
+					<img src="images/{% if board.hidden != 1 %}success{% else %}error{% endif %}.png"/>{% if board.hidden != 1 %}Hide{% else %}Show{% endif %}
+				</a>
+				{% if i != 1 %}
+					<a href="?subtopic=forum&action=moveup_board&id={{ board.id }}" title="Move up">
+						<img src="images/icons/arrow_up.gif"/>Move up
+					</a>
+				{% endif %}
+				{% if i != last %}
+					<a href="?subtopic=forum&action=movedown_board&id={{ board.id }}" title="Move down">
+						<img src="images/icons/arrow_down.gif"/>Move down
+					</a>
+				{% endif %}
+			</td>
+		{% endif %}
 	</tr>
 	{% endfor %}
 </table>

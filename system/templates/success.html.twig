@@ -27,6 +27,9 @@
 	</table>
 </div>
 <br/>
+{% if custom_buttons is defined %}
+{{ custom_buttons|raw }}
+{% else %}
 <center>
 	<table border="0" cellspacing="0" cellpadding="0">
 		<form action="?subtopic=accountmanagement" method="post">
@@ -39,3 +42,4 @@
 		</form>
 	</table>
 </center>
+{% endif %}
