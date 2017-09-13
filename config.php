@@ -231,7 +231,8 @@ $config = array(
 	'google_analytics_id' => '', // e.g.: UA-XXXXXXX-X
 	'experiencetable_columns' => 5, // how many columns to display in experience table page. * experiencetable_rows, 5 = 500 (will show up to 500 level)
 	'experiencetable_rows' => 100, // till how many levels in one column
-
+	'date_timezone' => 'Europe/Berlin',
+	
 	'monsters' => array(),
 	'npc' => array()
 );

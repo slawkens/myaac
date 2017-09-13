@@ -1,0 +1,162 @@
+To play on {{ config.lua.serverName }} you need an account.
+All you have to do to create your new account is to enter an account {% if constant('USE_ACCOUNT_NAME') %}name{% else %}number{% endif %}, password{% if config.recaptcha_enabled %}, confirm reCAPTCHA{% endif %}{% if config.account_country %}, country{% endif %} and your email address.
+Also you have to agree to the terms presented below. If you have done so, your account {% if constant('USE_ACCOUNT_NAME') %}name{% else %}number{% endif %} will be shown on the following page and your account password will be sent to your email address along with further instructions. If you do not receive the email with your password, please check your spam filter.<br/><br/>
+<form action="?subtopic=createaccount" method="post" >
+	<div class="TableContainer" >
+		<table class="Table1" cellpadding="0" cellspacing="0" >
+			<div class="CaptionContainer" >
+				<div class="CaptionInnerContainer" >
+					<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
+					<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
+					<div class="Text" >Create <?php echo $config['lua']['serverName']; ?> Account</div>
+					<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
+					<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
+					<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+					<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
+				</div>
+			</div>
+			<tr>
+				<td>
+					<div class="InnerTableContainer" >
+						<table style="width:100%;" >
+							<tr>
+								<td class="LabelV" >
+									<span{% if errors.account[0] is defined %} class="red"{% endif %}>Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</span>
+								</td>
+								<td>
+									<input type="text" name="account" id="account_input" onkeyup="checkAccount();" size="30" maxlength="{% if constant('USE_ACCOUNT_NAME') %}30{% else %}10{% endif %}" value="{{ account }}" autofocus/>
+									<small id="acc_check"></small>
+								</td>
+							</tr>
+							{% if errors.account is defined %}
+							<tr><td></td><td><span class="FormFieldError">{{ errors.account }}</span></td></tr>
+							{% endif %}
+							<tr>
+								<td class="LabelV" >
+									<span{% if errors.email[0] is defined %} class="red"{% endif %}>Email Address:</span>
+								</td>
+								<td style="width:100%;" >
+									<input type="text" name="email" id="email" onkeyup="checkEmail();" size="30" maxlength="50" value="{{ email }}" />
+									<small id="email_check"></small>
+								</td>
+							</tr>
+							{% if errors.email is defined %}
+								<tr><td></td><td><span class="FormFieldError">{{ errors.email }}</span></td></tr>
+							{% endif %}
+							{% if config.account_country %}
+							<tr>
+								<td class="LabelV" >
+									<span{% if errors.country[0] is defined %} class="red"{% endif %}>Country:</span>
+								</td>
+								<td>
+									<select name="country" id="account_country">
+										{% for code, country_ in countries %}
+										<option value="{{ code }}"{% if(country is defined and country == code) or (country is not defined and country_recognized == code) %}selected{% endif %}>{{ country_ }}</option>
+										{% endfor %}
+									</select>
+									<img src="" id="account_country_img"/>
+									<script>
+										function updateFlag()
+										{
+											var img = $('#account_country_img');
+											var country = $('#account_country :selected').val();
+											if(country.length) {
+												img.attr('src', 'images/flags/' + country + '.gif');
+												img.show();
+											}
+											else {
+												img.hide();
+											}
+										}
+
+										$(function() {
+											updateFlag();
+											$('#account_country').change(function() {
+												updateFlag();
+											});
+										});
+									</script>
+								</td>
+							</tr>
+								{% if errors.country is defined %}
+									<tr><td></td><td><span class="FormFieldError">{{ errors.country }}</span></td></tr>
+								{% endif %}
+							{% endif %}
+							<tr>
+								<td class="LabelV" >
+									<span{% if errors.password[0] is defined %} class="red"{% endif %}>Password:</span>
+								</td>
+								<td>
+									<input type="password" name="password" value="" size="30" maxlength="50" />
+								</td>
+							</tr>
+							{% if errors.password is defined %}
+								<tr><td></td><td><span class="FormFieldError">{{ errors.password }}</span></td></tr>
+							{% endif %}
+							<tr>
+								<td class="LabelV" >
+									<span{% if errors.password[0] is defined %} class="red"{% endif %}>Repeat password:</span>
+								</td>
+								<td>
+									<input type="password" name="password2" value="" size="30" maxlength="50" />
+								</td>
+							</tr>
+							{% if errors.password is defined %}
+								<tr><td></td><td><span class="FormFieldError">{{ errors.password }}</span></td></tr>
+							{% endif %}
+							{% if config.recaptcha_enabled %}
+							<tr>
+								<td class="LabelV" >
+									<span{% if errors.verification[0] is defined %} class="red"{% endif %}>Verification:</span>
+								</td>
+								<td>
+									<div class="g-recaptcha" data-sitekey="{{ config.recaptcha_site_key }}" data-theme="{{ config.recaptcha_theme }}"></div>
+								</td>
+							</tr>
+								{% if errors.verification is defined %}
+									<tr><td></td><td><span class="FormFieldError">{{ errors.verification }}</span></td></tr>
+								{% endif %}
+							{% endif %}
+							<tr>
+								<td><br/></td>
+							</tr>
+							<tr>
+								<td colspan="2" ><b>Please select all of the following check boxes:</b></td>
+							</tr>
+							<tr>
+								<td colspan="2" >
+									<span><input type="checkbox" id="accept_rules" name="accept_rules" value="true"{% if accept_rules %}checked{% endif %}/> <label for="accept_rules">I agree to the <a href="?subtopic=rules" target="_blank">{{ config.lua.serverName }} Rules</a>.</label></span>
+								</td>
+							</tr>
+							{% if errors.accept_rules is defined %}
+							<tr>
+								<td colspan="2">
+									<span class="FormFieldError">{{ errors.accept_rules }}</span>
+								</td>
+							</tr>
+							{% endif %}
+						</table>
+					</div>
+		</table></div></td></tr><br/>
+	<table width="100%">
+		<tr align="center">
+			<td>
+				<table border="0" cellspacing="0" cellpadding="0" >
+					<tr>
+						<td style="border:0px;" >
+							<input type="hidden" name="step" value="save" >
+							<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" >
+								<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" >
+									<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div>
+									<input class="ButtonText" type="image" name="Submit" alt="Submit" src="{{ template_path }}/images/buttons/_sbutton_submit.gif" >
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</form>

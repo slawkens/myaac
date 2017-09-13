@@ -1,0 +1,131 @@
+<script type="text/javascript">
+	eventId = 0;
+	lastSend = 0;
+
+	$('#createaccount').submit(function(){
+		return validate_form(this);
+	});
+
+	function checkAccount()
+	{
+		if(eventId != 0)
+		{
+			clearInterval(eventId);
+			eventId = 0;
+		}
+
+		if(document.getElementById("account_input").value == "")
+		{
+			document.getElementById("acc_check").innerHTML = '<b><font color="red">Please enter account {% if constant('USE_ACCOUNT_NAME') %}name{% else %}number{% endif %}.</font></b>';
+			return;
+		}
+
+		// anti flood
+		date = new Date;
+		timeNow = parseInt(date.getTime());
+
+		if(lastSend != 0)
+		{
+			if(timeNow - lastSend < 1100)
+			{
+				eventId = setInterval('checkAccount()', 1100)
+				return;
+			}
+		}
+
+		account = document.getElementById("account_input").value;
+		$.get("tools/validate.php", { account: account, uid: Math.random() },
+			function(data){
+				document.getElementById("acc_check").innerHTML = data;
+				lastSend = timeNow;
+			});
+	}
+
+	function checkEmail()
+	{
+		if(eventId != 0)
+		{
+			clearInterval(eventId)
+			eventId = 0;
+		}
+
+		if(document.getElementById("email").value == "")
+		{
+			document.getElementById("email_check").innerHTML = '<b><font color="red">Please enter e-mail.</font></b>';
+			return;
+		}
+
+		//anti flood
+		date = new Date;
+		timeNow = parseInt(date.getTime());
+
+		if(lastSend != 0)
+		{
+			if(timeNow - lastSend < 1100)
+			{
+				eventId = setInterval('checkEmail()', 1100)
+				return;
+			}
+		}
+
+		email = document.getElementById("email").value;
+		$.get("tools/validate.php", { email: email, uid: Math.random() },
+			function(data){
+				document.getElementById("email_check").innerHTML = data;
+				lastSend = timeNow;
+			});
+	}
+
+	function validate_required(field,alerttxt)
+	{
+		with (field)
+		{
+			if (value==null || value=="" || value==" ")
+			{
+				alert(alerttxt);
+				return false;
+			}
+			else
+				return true
+		}
+	}
+
+	function validate_email(field,alerttxt)
+	{
+		with (field)
+		{
+			apos=value.indexOf("@");
+			dotpos=value.lastIndexOf(".");
+			if (apos<1 || dotpos-apos<2)
+			{
+				alert(alerttxt);
+				return false;
+			}
+			else
+				return true;
+		}
+	}
+
+	function validate_form(thisform)
+	{
+		with (thisform)
+		{
+			if (validate_required(account_input,"Please enter name of new account!")==false)
+			{account_input.focus();return false;}
+			if (validate_required(email,"Please enter your e-mail!")==false)
+			{email.focus();return false;}
+			if (validate_email(email,"Invalid e-mail format!")==false)
+			{email.focus();return false;}
+		{% if not config.account_mail_verify %}
+			if (validate_required(passor,"Please enter password!")==false)
+			{passor.focus();return false;}
+			if (validate_required(passor2,"Please repeat password!")==false)
+			{passor2.focus();return false;}
+			if (passor2.value!=passor.value)
+			{alert('Repeated password is not equal to password!');return false;}
+		{% endif %}
+			if(accept_rules.checked==false)
+			{alert('To create account you must accept server rules!');return false;}
+		}
+	}
+</script>

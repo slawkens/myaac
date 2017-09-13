@@ -78,15 +78,11 @@ if(isset($_GET['archive']))
 		return;
 	}
 	?>
-
-	<table border="0" cellspacing="1" cellpadding="4" width="100%">
-		<tr bgcolor="<?php echo $config['vdarkborder']; ?>">
-			<td colspan="3" class="white"><b>News archives</b></td>
-		</tr>
+	
 	<?php
 
-	$i = 0;
-	$news_DB = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'news').' WHERE type = 1 AND hidden != 1 ORDER BY date DESC');
+	$newses = array();
+	$news_DB = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'news').' WHERE `type` = 1 AND `hidden` != 1 ORDER BY `date` DESC');
 	foreach($news_DB as $news)
 	{
 		$link = internalLayoutLink('news');
@@ -94,13 +90,19 @@ if(isset($_GET['archive']))
 			$link .= '/archive/' . $news['id'];
 		else
 			$link .= 'archive&id=' . $news['id'];
-
-		echo '<tr BGCOLOR='. getStyle($i) .'><td width=4%><center><img src="'.$template_path.'/images/news/icon_' . $categories[$news['category']]['icon_id'] . '_small.gif"></center></td><td>'.date("j.n.Y", $news['date']).'</td><td><b><a href="' . $link.'">'.stripslashes($news['title']).'</a></b></td></tr>';
-
-		$i++;
+		
+		$newses[] = array(
+			'link' => $link,
+			'icon_id' => $categories[$news['category']]['icon_id'],
+			'title' => stripslashes($news['title']),
+			'date' => $news['date']
+		);
 	}
-
-	echo '</table>';
+	
+	echo $twig->render('news.archive.html.twig', array(
+		'newses' => $newses
+	));
+	
 	return;
 }
 

@@ -14,6 +14,7 @@ require_once(BASE . 'config.php');
 if(file_exists(BASE . 'config.local.php')) // user customizations
 	require(BASE . 'config.local.php');
 
+date_default_timezone_set($config['date_timezone']);
 // take care of trailing slash at the end
 if($config['server_path'][strlen($config['server_path']) - 1] != '/')
 	$config['server_path'] .= '/';
