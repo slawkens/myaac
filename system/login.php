@@ -74,6 +74,8 @@ else
 					$_SESSION['remember_me'] = true;
 
 				$logged = true;
+				$logged_flags = $account_logged->getWebFlags();
+				
 				if(isset($_POST['admin']) && !admin()) {
 					$errors[] = 'This account has no admin privileges.';
 					unset($_SESSION['account']);

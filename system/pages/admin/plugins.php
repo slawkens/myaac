@@ -53,7 +53,7 @@ if(isset($_FILES["plugin"]["name"]))
 	}
 	else {
 		if(is_uploaded_file($file['tmp_name']) ) {
-			if(in_array($type, $accepted_types) && strtolower($name[1]) == 'zip') // check if it is zipped/compressed file
+			if(strtolower($name[1]) == 'zip') // check if it is zipped/compressed file
 			{
 				$targetdir = BASE;
 				$targetzip = BASE . 'plugins/' . $name[0] . '.zip';
