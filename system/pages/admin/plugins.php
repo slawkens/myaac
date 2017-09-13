@@ -62,37 +62,51 @@ if(isset($_FILES["plugin"]["name"]))
 					$zip = new ZipArchive();
 					$x = $zip->open($targetzip);  // open the zip file to extract
 					if ($x === true) {
-						if($zip->extractTo($targetdir)) { // place in the directory with same name  
-							$string = file_get_contents(BASE . 'plugins/' . $name[0] . '.json');
-							$plugin = json_decode($string, true);
-							if($plugin == NULL) {
-								warning('Cannot load ' . BASE . 'plugins/' . $name[0] . '.json. File might be not valid json code.');
-							}
-							
-							if(isset($plugin['install'])) {
-								if(file_exists(BASE . $plugin['install']))
-									require(BASE . $plugin['install']);
-								else
-									warning('Cannot load install script. Your plugin might be not working correctly.');
-							}
-
-							if(isset($plugin['hooks'])) {
-								foreach($plugin['hooks'] as $_name => $info) {
-									if(isset($hook_types[$info['type']])) {
-										$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
-										if($query->rowCount() == 1) { // found something
-											$query = $query->fetch();
-											$db->query('UPDATE `' . TABLE_PREFIX . 'hooks` SET `type` = ' . $hook_types[$info['type']] . ', `file` = ' . $db->quote($info['file']) . ' WHERE `id` = ' . (int)$query['id'] . ';');
-										}
-										else {
-											$db->query('INSERT INTO `' . TABLE_PREFIX . 'hooks` (`id`, `name`, `type`, `file`) VALUES (NULL, ' . $db->quote($_name) . ', ' . $hook_types[$info['type']] . ', ' . $db->quote($info['file']) . ');');
-										}
-									}
-									else
-										warning('Unknown event type: ' . $info['type']);
+						for ($i = 0; $i < $zip->numFiles; $i++) {
+							$tmp = $zip->getNameIndex($i);
+							if(pathinfo($tmp, PATHINFO_DIRNAME) == 'plugins' && pathinfo($tmp, PATHINFO_EXTENSION) == 'json')
+								$json_file = $tmp;
+						}
+						
+						if(!isset($json_file)) {
+							error('Cannot find plugin info .json file. Installation is discontinued.');
+						}
+						else if($zip->extractTo($targetdir)) { // place in the directory with same name
+							$file_name = BASE . $json_file;
+							if(!file_exists($file_name))
+								warning("Cannot load " . $file_name . ". File doesn't exist.");
+							else {
+								$string = file_get_contents($file_name);
+								$plugin = json_decode($string, true);
+								if ($plugin == null) {
+									warning('Cannot load ' . $file_name . '. File might be not valid json code.');
 								}
+								
+								if(isset($plugin['install'])) {
+									if(file_exists(BASE . $plugin['install']))
+										require(BASE . $plugin['install']);
+									else
+										warning('Cannot load install script. Your plugin might be not working correctly.');
+								}
+								
+								if(isset($plugin['hooks'])) {
+									foreach($plugin['hooks'] as $_name => $info) {
+										if(isset($hook_types[$info['type']])) {
+											$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
+											if($query->rowCount() == 1) { // found something
+												$query = $query->fetch();
+												$db->query('UPDATE `' . TABLE_PREFIX . 'hooks` SET `type` = ' . $hook_types[$info['type']] . ', `file` = ' . $db->quote($info['file']) . ' WHERE `id` = ' . (int)$query['id'] . ';');
+											}
+											else {
+												$db->query('INSERT INTO `' . TABLE_PREFIX . 'hooks` (`id`, `name`, `type`, `file`) VALUES (NULL, ' . $db->quote($_name) . ', ' . $hook_types[$info['type']] . ', ' . $db->quote($info['file']) . ');');
+											}
+										}
+										else
+											warning('Unknown event type: ' . $info['type']);
+									}
+								}
+								success('<strong>' . $plugin['name'] . '</strong> plugin has been successfully installed.');
 							}
-							success('<strong>' . $plugin['name'] . '</strong> plugin has been successfully installed.');
 						}
 						else {
 							error('There was a problem with extracting zip archive.');
