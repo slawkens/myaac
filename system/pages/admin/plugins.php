@@ -24,28 +24,28 @@ if(isset($_FILES["plugin"]["name"]))
 	$type = $file["type"];
 
 	$name = explode(".", $filename);
-	$accepted_types = array('application/zip', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed');
+	$accepted_types = array('application/zip', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed', 'application/octet-stream', 'application/zip-compressed');
 
 	if(isset($file['error'])) {
-        $error = 'Error uploading file';
-        switch( $file['error'] ) {
-            case UPLOAD_ERR_OK:
-                $error = false;
-                break;
-            case UPLOAD_ERR_INI_SIZE:
-            case UPLOAD_ERR_FORM_SIZE:
-                $error .= ' - file too large (limit of '.ini_get('upload_max_filesize').' bytes).';
-                break;
-            case UPLOAD_ERR_PARTIAL:
-                $error .= ' - file upload was not completed.';
-                break;
-            case UPLOAD_ERR_NO_FILE:
-                $error .= ' - zero-length file uploaded.';
-                break;
-            default:
-                $error .= ' - internal error #' . $file['error'];
-                break;
-        }
+		$error = 'Error uploading file';
+		switch( $file['error'] ) {
+			case UPLOAD_ERR_OK:
+				$error = false;
+				break;
+			case UPLOAD_ERR_INI_SIZE:
+			case UPLOAD_ERR_FORM_SIZE:
+				$error .= ' - file too large (limit of '.ini_get('upload_max_filesize').' bytes).';
+				break;
+			case UPLOAD_ERR_PARTIAL:
+				$error .= ' - file upload was not completed.';
+				break;
+			case UPLOAD_ERR_NO_FILE:
+				$error .= ' - zero-length file uploaded.';
+				break;
+			default:
+				$error .= ' - internal error #' . $file['error'];
+				break;
+		}
 	}
 
 	if(isset($error) && $error != false) {
