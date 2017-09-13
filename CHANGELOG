@@ -1,3 +1,7 @@
+[0.4.1 - 13.09.2017]
+	- fixed log in to admin panel
+	- fixed File is not .zip plugin upload error
+
 [0.4.0 - 13.09.2017
 	- added option to add/edit/delete/hide/move forum boards
 	- moved some of HTML-in-PHP code to Twig templates
