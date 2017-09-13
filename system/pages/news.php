@@ -43,20 +43,20 @@ if(isset($_GET['archive']))
 				$author = $query['name'];
 			}
 			
-			$content = $news['body'];
+			$content_ = $news['body'];
 			$firstLetter = '';
-			if($content[0] != '<')
+			if($content_[0] != '<')
 			{
-				$tmp = $template_path.'/images/letters/' . $content[0] . '.gif';
+				$tmp = $template_path.'/images/letters/' . $content_[0] . '.gif';
 				if(file_exists($tmp)) {
-					$firstLetter = '<img src="' . $tmp . '" alt="' . $content[0] . '" border="0" align="bottom">';
-					$content = $firstLetter . substr($content, 1);
+					$firstLetter = '<img src="' . $tmp . '" alt="' . $content_[0] . '" border="0" align="bottom">';
+					$content_ = $firstLetter . substr($content_, 1);
 				}
 			}
 			
 			echo $twig->render('news.html.twig', array(
 				'title' => stripslashes($news['title']),
-				'content' => $content,
+				'content' => $content_,
 				'date' => $news['date'],
 				'icon' => $categories[$news['category']]['icon_id'],
 				'author' => $config['news_author'] ? $author : '',
@@ -332,20 +332,20 @@ if(!$news_cached)
 				</a>';
 			}
 			
-			$content = $news['body'];
+			$content_ = $news['body'];
 			$firstLetter = '';
-			if($content[0] != '<')
+			if($content_[0] != '<')
 			{
-				$tmp = $template_path.'/images/letters/' . $content[0] . '.gif';
+				$tmp = $template_path.'/images/letters/' . $content_[0] . '.gif';
 				if(file_exists($tmp)) {
-					$firstLetter = '<img src="' . $tmp . '" alt="' . $content[0] . '" border="0" align="bottom">';
-					$content = $firstLetter . substr($content, 1);
+					$firstLetter = '<img src="' . $tmp . '" alt="' . $content_[0] . '" border="0" align="bottom">';
+					$content_ = $firstLetter . substr($content_, 1);
 				}
 			}
 			
 			echo $twig->render('news.html.twig', array(
 				'title' => stripslashes($news['title']),
-				'content' => $content . $admin_options,
+				'content' => $content_ . $admin_options,
 				'date' => $news['date'],
 				'icon' => $categories[$news['category']]['icon_id'],
 				'author' => $config['news_author'] ? $author : '',
