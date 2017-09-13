@@ -6,14 +6,19 @@
  * @author    Gesior <jerzyskalski@wp.pl>
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.3.0
+ * @version   0.4.0
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Bug tracker';
 
-if($logged)
+if(!$logged)
 {
+	echo  'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=bugtracker') . '">Log in</a> to post on the bug tracker.<br /><br />';
+	return;
+}
+
+$showed = $post = $reply = false;
     // type (1 = question; 2 = answer)
     // status (1 = open; 2 = new message; 3 = closed;)
     
@@ -22,7 +27,7 @@ if($logged)
     
     $tags = array(1 => "[MAP]", "[WEBSITE]", "[CLIENT]", "[MONSTER]", "[NPC]", "[OTHER]");
         
-    if(admin() and $_REQUEST['control'] == "true")
+    if(admin() and isset($_REQUEST['control']) && $_REQUEST['control'] == "true")
     {
         if(empty($_REQUEST['id']) and empty($_REQUEST['acc']) or !is_numeric($_REQUEST['acc']) or !is_numeric($_REQUEST['id']) )
             $bug[1] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `type` = 1 order by `uid` desc');
@@ -249,7 +254,7 @@ if($logged)
         
         if(!$post)
         {
-            if($_REQUEST['add'] != TRUE)
+            if(!isset($_REQUEST['add']) || $_REQUEST['add'] != TRUE)
             {
                 echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD colspan=2 CLASS=white><B>Bug Tracker</B></TD></TR>';            
                 foreach($bug[1] as $report)
@@ -283,7 +288,7 @@ if($logged)
                 
                 echo '<br><a href="index.php?subtopic=bugtracker&add=true"><b>[ADD REPORT]</b></a>';
             }
-            elseif($_REQUEST['add'] == TRUE)
+            elseif(isset($_REQUEST['add']) && $_REQUEST['add'] == TRUE)
             {
                 $thread = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `type` = 1 order by `id` desc')->fetch();
                 $id_next = $db->query('SELECT MAX(id) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `type` = 1')->fetch();
@@ -314,7 +319,7 @@ if($logged)
                     {
                         $type = 1;
                         $status = 1;
-                        $INSERT = $db->query('INSERT INTO `' . TABLE_PREFIX . 'bugtracker` (`account`,`id`,`text`,`type`,`subject`,`status`,`tag`) VALUES ('.$db->quote($acc).','.$db->quote($id_next).','.$db->quote($_POST['text']).','.$db->quote($type).','.$db->quote($_POST['subject']).','.$db->quote($status).','.$db->quote($_POST['tags']).')');
+                        $INSERT = $db->query('INSERT INTO `' . TABLE_PREFIX . 'bugtracker` (`account`,`id`,`text`,`type`,`subject`, `reply`,`status`,`tag`) VALUES ('.$db->quote($acc).','.$db->quote($id_next).','.$db->quote($_POST['text']).','.$db->quote($type).','.$db->quote($_POST['subject']).', 0,'.$db->quote($status).','.$db->quote($_POST['tags']).')');
                         header('Location: index.php?subtopic=bugtracker&id='.$id_next.'');
                     }
                         
@@ -335,9 +340,4 @@ if($logged)
     {
         echo '<br><br><a href="index.php?subtopic=bugtracker&control=true">[ADMIN PANEL]</a>';
     }
-}
-else
-{
-    echo 'Please enter your account name and your password.<br/><a href="?subtopic=createaccount" >Create an account</a> if you do not have one yet.<br/><br/><form action="?subtopic=bugtracker" method="post" ><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Account Login</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td class="LabelV" ><span >Account Name:</span></td><td style="width:100%;" ><input type="password" name="account_login" SIZE="10" maxlength="10" ></td></tr><tr><td class="LabelV" ><span >Password:</span></td><td><input type="password" name="password_login" size="30" maxlength="29" ></td></tr>          </table>        </div>  </table></div></td></tr><br/><table width="100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=lostaccount" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Account lost?" alt="Account lost?" src="'.$template_path.'/images/buttons/_sbutton_accountlost.gif" ></div></div></td></tr></form></table></td></tr></table>';
-}
 ?> 

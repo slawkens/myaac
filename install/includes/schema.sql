@@ -11,15 +11,15 @@ CREATE TABLE `myaac_account_actions`
 CREATE TABLE `myaac_bugtracker`
 (
 	`account` VARCHAR(255) NOT NULL,
-	`type` INT(11) NOT NULL,
-	`status` INT(11) NOT NULL,
+	`type` INT(11) NOT NULL DEFAULT 0,
+	`status` INT(11) NOT NULL DEFAULT 0,
 	`text` text NOT NULL,
-	`id` INT(11) NOT NULL,
-	`subject` VARCHAR(255) NOT NULL,
-	`reply` INT(11) NOT NULL,
-	`who` INT(11) NOT NULL,
+	`id` INT(11) NOT NULL DEFAULT 0,
+	`subject` VARCHAR(255) NOT NULL DEFAULT '',
+	`reply` INT(11) NOT NULL DEFAULT 0,
+	`who` INT(11) NOT NULL DEFAULT 0,
 	`uid` INT(11) NOT NULL AUTO_INCREMENT,
-	`tag` INT(11) NOT NULL,
+	`tag` INT(11) NOT NULL DEFAULT 0,
 	PRIMARY KEY  (`uid`)
 ) ENGINE = MyISAM;
 
