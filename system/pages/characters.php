@@ -19,8 +19,6 @@ function generate_search_form($autofocus = false)
 	global $config, $twig;
 	return $twig->render('characters.form.html.twig', array(
 		'link' => getPageLink('characters'),
-		'vdarkborder' => $config['vdarkborder'],
-		'darkborder' => $config['darkborder'],
 		'autofocus' => $autofocus
 	));
 }

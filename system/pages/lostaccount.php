@@ -22,16 +22,10 @@ $config_salt_enabled = fieldExist('salt', 'accounts');
 $action_type = isset($_REQUEST['action_type']) ? $_REQUEST['action_type'] : '';
 if($action == '')
 {
-	echo $twig->render('account.lost.form.html.twig', array(
-		'vdarkborder' => $config['vdarkborder'],
-		'darkborder' => $config['darkborder'],
-		'template_path' => $template_path
-	));
+	echo $twig->render('account.lost.form.html.twig');
 }
 else if($action == 'step1' && $action_type == '') {
-	echo $twig->render('account.lost.noaction.html.twig', array(
-		'template_path' => $template_path
-	));
+	echo $twig->render('account.lost.noaction.html.twig');
 }
 elseif($action == 'step1' && $action_type == 'email')
 {

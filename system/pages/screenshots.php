@@ -60,8 +60,6 @@ if($canEdit) {
 			'link' => getPageLink('screenshots', ($action == 'edit' ? 'edit' : 'add')),
 			'action' => $action,
 			'id' => isset($id) ? $id : null,
-			'vdarkborder' => $config['vdarkborder'],
-			'darkborder' => $config['darkborder'],
 			'comment' => isset($comment) ? $comment : null,
 			'image' => isset($image) ? $image : null,
 			'author' => isset($author) ? $author : null

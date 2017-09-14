@@ -3,20 +3,20 @@ The Lost Account Interface can help you to get back your account name and passwo
 	<input type="hidden" name="character" value="">
 	<table cellspacing="1" cellpadding="4" border="0" width="100%">
 		<tr>
-			<td bgcolor="{{ vdarkborder }}" class="white"><b>Please enter your character name</b></td>
+			<td bgcolor="{{ config.vdarkborder }}" class="white"><b>Please enter your character name</b></td>
 		</tr>
 		<tr>
-			<td bgcolor="{{ darkborder }}">
+			<td bgcolor="{{ config.darkborder }}">
 				<input type="text" name="nick" size="40" autofocus/><br>
 			</td>
 		</tr>
 	</table>
 	<table cellspacing="1" cellpadding="4" border="0" width="100%">
 		<tr>
-			<td bgcolor="{{ vdarkborder }}" class="white"><b>What do you want?</b></td>
+			<td bgcolor="{{ config.vdarkborder }}" class="white"><b>What do you want?</b></td>
 		</tr>
 		<tr>
-			<td bgcolor="{{ darkborder }}">
+			<td bgcolor="{{ config.darkborder }}">
 				<input type="radio" name="action_type" id="action_type_email" value="email">
 				<label for="action_type_email"> Send me new password and my account name to account e-mail adress.</label><br/>
 				<input type=radio name="action_type" id="action_type_key" value="reckey">

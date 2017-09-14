@@ -737,7 +737,6 @@ if($action == 'move_thread')
 					'post_id' => $post['id'],
 					'sections' => $sections,
 					'section_link' => getForumBoardLink($post['section']),
-					'config' => $config
 				));
 			}
 		}

@@ -279,6 +279,7 @@ If you haven\'t registered on ' . $config['lua']['serverName'] . ' please ignore
 		'countries' => isset($countries) ? $countries : null,
 		'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] : false,
 		'country_recognized' => $country_recognized,
+		'country' => isset($country) ? $country : null,
 		'errors' => $errors
 	));
 ?>
