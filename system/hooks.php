@@ -46,7 +46,7 @@ class Hook
 			$ret = $tmp($params);
 		}*/
 		
-		global $db, $config, $template_path, $ots;
+		global $db, $config, $template_path, $ots, $content;
 		if(file_exists(BASE . $this->_file)) {
 			require(BASE . $this->_file);
 		}
