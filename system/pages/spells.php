@@ -143,7 +143,7 @@ if($canEdit)
 <?php
 }
 
-$vocation_id = (int) (isset($_REQUEST['vocation_id']) ? $_REQUEST['vocation_id'] : 'All');
+$vocation_id = (isset($_REQUEST['vocation_id']) ? (int)$_REQUEST['vocation_id'] : 'All');
 $order = 'spell';
 if(isset($_GET['order']))
 	$order = $_GET['order'];

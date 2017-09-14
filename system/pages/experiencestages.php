@@ -12,13 +12,16 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Experience Stages';
 
+if(file_exists($config['data_path'] . 'XML/stages.xml')) {
+	$stages = new DOMDocument();
+	$stages->load($config['data_path'] . 'XML/stages.xml');
+}
+
 if(!isset($config['lua']['experienceStages']) || !getBoolean($config['lua']['experienceStages']))
 {
 	$enabled = false;
 
-	if(file_exists($config['data_path'] . 'XML/stages.xml')) {
-		$stages = new DOMDocument();
-		$stages->load($config['data_path'] . 'XML/stages.xml');
+	if(isset($stages)) {
 		foreach($stages->getElementsByTagName('config') as $node) {
 			if($node->getAttribute('enabled'))
 				$enabled = true;
@@ -34,14 +37,9 @@ if(!isset($config['lua']['experienceStages']) || !getBoolean($config['lua']['exp
 		else if(isset($config['lua']['rate_exp']))
 			$rate_exp = $config['lua']['rate_exp'];
 
-		$content .= 'Server is not configured to use experience stages.<br/>Current experience rate is: <b>x' .  $rate_exp . '</b>';
+		echo 'Server is not configured to use experience stages.<br/>Current experience rate is: <b>x' .  $rate_exp . '</b>';
 		return;
 	}
-}
-
-if(!isset($stages)) {
-	$stages = new DOMDocument();
-	$stages->load($config['data_path'] . 'XML/stages.xml');
 }
 
 if(!$stages)
@@ -50,7 +48,7 @@ if(!$stages)
 	return;
 }
 
-$content .= '<center><h3>Experience stages</h3></center>
+echo '<center><h3>Experience stages</h3></center>
 <table bgcolor="'.$config['darkborder'].'" border="0" cellpadding="4" cellspacing="1" width="100%"><tbody>
 	<tr bgcolor="'.$config['vdarkborder'].'">
 		<td class="white" colspan="5"><b>Stages table</b></td>
@@ -61,11 +59,11 @@ $content .= '<center><h3>Experience stages</h3></center>
 	foreach($stages->getElementsByTagName('stage') as $stage)
 	{
 		$maxlevel = $stage->getAttribute('maxlevel');
-	$content .= '<tr bgcolor="'.$config['lightborder'].'">
+	echo '<tr bgcolor="'.$config['lightborder'].'">
 	<td>'.$stage->getAttribute('minlevel') . '-'. (isset($maxlevel[0]) ? $maxlevel : '*') . '</td><td>x'.$stage->getAttribute('multiplier').'</td>
 </tr>';
 }
-	$content .= '
+	echo '
 		</tbody></table>
 	</td></tr>
 </tbody></table>';

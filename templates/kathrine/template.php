@@ -18,7 +18,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 				elseif(in_array(PAGE, array('online', 'characters', 'guilds', 'highscores', 'wars', 'lastkills', 'houses', 'bans',
 					'forum', 'team')))
 						echo 'community';
-				elseif(in_array(PAGE, array('account', 'accountmanagement', 'createaccount', 'lostaccount', 'rules')))
+				elseif(in_array(PAGE, array('account', 'accountmanagement', 'createaccount', 'lostaccount', 'rules', 'bugtracker')))
 					echo 'account';
 				elseif(in_array(PAGE, array('points', 'gifts')))
 					echo 'shops';
@@ -175,8 +175,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 					</table>
 					<hr noshade="noshade" size="1" />
 					<div class="Content"><div id="ContentHelper">
-					<?php echo template_place_holder('center_top'); ?>
-					<?php echo $content; ?>
+					<?php echo template_place_holder('center_top') . $content; ?>
 					</div></div>
 				</div>
 			</div>

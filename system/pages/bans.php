@@ -149,7 +149,7 @@ function getBanReason($reasonId)
 
 function getBanType($typeId)
 {
-	switch($reasonId)
+	switch($typeId)
 	{
 		case 1:
 			return "IP Banishment";
