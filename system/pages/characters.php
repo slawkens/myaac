@@ -161,8 +161,10 @@ if($player->isLoaded() && !$player->isDeleted())
 				$skills[] = array('skillid' => $skillid, 'value' => $skills_db[$field_name]);
 			}
 		}
-		else
-			$skills = $db->query('SELECT `skillid`, `value` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' LIMIT 7');
+		else {
+			$skills_db = $db->query('SELECT `skillid`, `value` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' LIMIT 7');
+			$skills = $skills_db->fetchAll();
+		}
 		
 		foreach($skills as &$skill) {
 			$skill['name'] = getSkillName($skill['skillid']);
