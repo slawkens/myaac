@@ -146,7 +146,7 @@ INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `pl
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Rook Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Rook Sample', 1, 1, 8, 0, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179613, 2453925456, 1, 1255179614, 0, 1, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Rook Sample', 1, 1, 1, 0, 150, 150, 4200, 118, 114, 38, 57, 130, 0, 0, 0, 0, 100, 11, 2200, 1298, 7, '', 400, 1, 1255179613, 2453925456, 1, 1255179614, 0, 1, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 
