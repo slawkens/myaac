@@ -1193,21 +1193,53 @@ function load_config_lua($filename)
 	if(!@file_exists($config_file))
 		die('ERROR: Cannot find ' . $filename . ' file.');
 
-	$tempFile = @tempnam('/tmp', 'lua');
-	$file = @fopen($tempFile, 'w');
-	if(!$file) {
-		log_append('error.log', '[functions.php] Cannot load config.lua file. Error: ' . print_r(error_get_last(), true));
-		die('Cannot load server config! More info in system/logs/error.log file.');
-	}
+	$result = array();
+	$config_string = file_get_contents($filename);
+	$config_string = str_replace("\r\n", "\n", $config_string);
+	$config_string = str_replace("\r", "\n", $config_string);
+	$lines = explode("\n", $config_string);
+	if(count($lines) > 0)
+		foreach($lines as $ln => $line)
+		{
+			$tmp_exp = explode('=', $line, 2);
+			if(strpos($line, 'dofile') !== false)
+			{
+				$delimiter = '"';
+				if(strpos($line, $delimiter) === false)
+					$delimiter = "'";
+				
+				$tmp = explode($delimiter, $line);
+				$result = array_merge($result, load_config_lua($config['server_path'] . $tmp[1]));
+			}
+			else if(count($tmp_exp) >= 2)
+			{
+				$key = trim($tmp_exp[0]);
+				if(substr($key, 0, 2) != '--')
+				{
+					$value = trim($tmp_exp[1]);
+					if(is_numeric($value))
+						$result[$key] = (float) $value;
+					elseif(in_array(substr($value, 0 , 1), array("'", '"')) && in_array(substr($value, -1 , 1), array("'", '"')))
+						$result[$key] = (string) substr(substr($value, 1), 0, -1);
+					elseif(in_array($value, array('true', 'false')))
+						$result[$key] = ($value == 'true') ? true : false;
+					else
+					{
+						foreach($result as $tmp_key => $tmp_value) // load values definied by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
+							$value = str_replace($tmp_key, $tmp_value, $value);
+						$ret = @eval("return $value;");
+						if((string) $ret == '') // = parser error
+						{
+							die('ERROR: Loading config.lua file. Line <b>' . ($ln + 1) . '</b> of LUA config file is not valid [key: <b>' . $key . '</b>]');
+						}
+						$result[$key] = $ret;
+					}
+				}
+			}
+		}
+	
 
-	// TODO: new parser that will also load dofile() includes
-
-	// strip lua comments to prevent parsing errors
-	fwrite($file, preg_replace('/(-)(-)(.*)/', '', file_get_contents($config_file)));
-	fclose($file);
-
-	$result = array_merge(parse_ini_file($tempFile, true), isset($config['lua']) ? $config['lua'] : array());
-	@unlink($tempFile);
+	$result = array_merge($result, isset($config['lua']) ? $config['lua'] : array());
 	return $result;
 }
 ?>
