@@ -170,58 +170,59 @@ if($load_it)
 		require(SYSTEM . 'compat_pages.php');
 
 	$ignore = false;
-	$file = SYSTEM . 'pages/' . $page . '.php';
-	if(!@file_exists($file))
+
+	$logged_access = 0;
+	if($logged && $account_logged && $account_logged->isLoaded()) {
+		$logged_access = $account_logged->getAccess();
+	}
+
+	$query =
+		$db->query(
+			'SELECT `title`, `body`, `php`' .
+			' FROM `' . TABLE_PREFIX . 'pages`' .
+			' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
+	if($query->rowCount() > 0) // found page
 	{
-		$logged_access = 0;
-		if($logged && $account_logged && $account_logged->isLoaded()) {
-			$logged_access = $account_logged->getAccess();
-		}
+		$ignore = true;
+		$query = $query->fetch();
+		$title = $query['title'];
 
-		$query =
-			$db->query(
-				'SELECT `title`, `body`, `php`' .
-				' FROM `' . TABLE_PREFIX . 'pages`' .
-				' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
-		if($query->rowCount() > 0) // found page
+		if($query['php'] == '1') // execute it as php code
 		{
-			$ignore = true;
-			$query = $query->fetch();
-			$title = $query['title'];
-
-			if($query['php'] == '1') // execute it as php code
-			{
-				$tmp = substr($query['body'], 0, 10);
-				if(($pos = strpos($tmp, '<?php')) !== false) {
-					$tmp = preg_replace('/<\?php/', '', $query['body'], 1);
-				}
-				else if(($pos = strpos($tmp, '<?')) !== false) {
-					$tmp = preg_replace('/<\?/', '', $query['body'], 1);
-				}
-				else
-					$tmp = $query['body'];
-
-				$php_errors = array();
-				function error_handler($errno, $errstr) {
-					global $php_errors;
-					$php_errors[] = array('errno' => $errno, 'errstr' => $errstr);
-				}
-				set_error_handler('error_handler');
-
-				ob_start();
-				eval($tmp);
-				$content .= ob_get_contents();
-				ob_end_clean();
-
-				restore_error_handler();
-				if(isset($php_errors[0]) && superAdmin()) {
-					var_dump($php_errors);
-				}
+			$tmp = substr($query['body'], 0, 10);
+			if(($pos = strpos($tmp, '<?php')) !== false) {
+				$tmp = preg_replace('/<\?php/', '', $query['body'], 1);
+			}
+			else if(($pos = strpos($tmp, '<?')) !== false) {
+				$tmp = preg_replace('/<\?/', '', $query['body'], 1);
 			}
 			else
-				$content .= $query['body']; // plain html
+				$tmp = $query['body'];
+
+			$php_errors = array();
+			function error_handler($errno, $errstr) {
+				global $php_errors;
+				$php_errors[] = array('errno' => $errno, 'errstr' => $errstr);
+			}
+			set_error_handler('error_handler');
+
+			ob_start();
+			eval($tmp);
+			$content .= ob_get_contents();
+			ob_end_clean();
+
+			restore_error_handler();
+			if(isset($php_errors[0]) && superAdmin()) {
+				var_dump($php_errors);
+			}
 		}
 		else
+			$content .= $query['body']; // plain html
+	}
+	else
+	{
+		$file = SYSTEM . 'pages/' . $page . '.php';
+		if(!@file_exists($file))
 		{
 			$page = '404';
 			$file = SYSTEM . 'pages/404.php';
