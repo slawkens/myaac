@@ -285,7 +285,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			}
 			
 			if($number_of_rows > 0)
-				$dead_add_content += '</table>';
+				$dead_add_content .= '</table>';
 			else
 				$dead_add_content = '';
 		}
@@ -334,7 +334,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			}
 			
 			if($number_of_rows > 0)
-				$dead_add_content += '</table>';
+				$dead_add_content .= '</table>';
 			else
 				$dead_add_content = '';
 		}
@@ -362,7 +362,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			}
 			
 			if($frags > 0)
-				$frag_add_content += '</table>';
+				$frag_add_content .= '</table>';
 			else
 				$frag_add_content = '';
 		}
