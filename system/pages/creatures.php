@@ -43,15 +43,16 @@ function printLoot($level, $itemid, $count, $chance)
 		$chance *= $lootRate; 
 	} 
 
-	foreach($rarity as $lootRarity => $percent){ 
-		if($chance >= $percent)
-		{ 
-			//echo str_repeat("... ", $level) . '<u>' . ($count ? $count : 1) . '</u> <span style="color: #7878FF; font-weight: bold;">' . $itemList[(int)$itemid] . '</span> ' . $itemid . ' <span style="color: #C45; font-weight: bold;">' . $lootRarity . '</span> (<span style="color: #FF9A9A;">' . $chance . '%</span>)<br />'; 
+	foreach($rarity as $lootRarity => $percent) {
+		if($chance >= $percent) {
+			if(isset($itemid))
+			echo str_repeat("... ", $level) . '<u>' . ($count ? $count : 1) . '</u> <span style="color: #7878FF; font-weight: bold;">' . $itemList[(int)$itemid] . '</span> ' . $itemid . ' <span style="color: #C45; font-weight: bold;">' . $lootRarity . '</span> (<span style="color: #FF9A9A;">' . $chance . '%</span>)<br />';
+			
 			if($i % 6 == 0)
 			{
 				if($i != 0)
 					echo '</td></tr>';
-				echo '<tr BGCOLOR="'.getStyle(0).'"><td width="100">';
+				echo '<tr bgcolor="'.getStyle(0).'"><td width="100">';
 			}
 			echo getItemImage($itemid);
 			$i++;

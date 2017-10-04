@@ -21,11 +21,8 @@ There are no movies added yet.
 		echo ' You can add new movies in phpmyadmin under ' . TABLE_PREFIX . 'movies table.';
 	return;
 }
+
+echo $twig->render('movies.html.twig', array(
+	'movies' => $movies
+));
 ?>
-<div style="text-align: center;">
-<?php foreach($movies as $movie): ?>
-	<?php echo $movie['title']; ?><br/>
-	Author: <?php echo $movie['author']; ?><br/>
-	<iframe width="560" height="315" src="https://www.youtube.com/embed/<?php echo $movie['youtube_id']; ?>" frameborder="0" allowfullscreen></iframe><br/><br/>
-<?php endforeach; ?>
-</div>

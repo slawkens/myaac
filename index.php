@@ -56,6 +56,7 @@ require_once(SYSTEM . 'status.php');
 require_once(SYSTEM . 'template.php');
 
 $twig->addGlobal('config', $config);
+$twig->addGlobal('status', $status);
 
 // database migrations
 $tmp = '';

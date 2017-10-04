@@ -802,11 +802,7 @@ function template_header($is_admin = false)
 			Please turn it on, or be aware that some features on this website will not work correctly.</div>
 	</noscript>
 ';
-	if(admin())
-		$ret .= '<!--script type="text/javascript" src="' . BASE_URL . 'tools/tiny_mce/tiny_mce.js"></script>
-	<script type="text/javascript" src="' . BASE_URL . 'tools/jquery.qtip.js" ></script>
-	<script type="text/javascript" src="' . BASE_URL . 'tools/admin.js"></script-->
-';
+	
 	if($config['recaptcha_enabled'])
 		$ret .= "<script src='https://www.google.com/recaptcha/api.js'></script>";
 	return $ret;
@@ -817,13 +813,14 @@ function template_header($is_admin = false)
  */
 function template_footer()
 {
-	global $visitors, $config, $views_counter;
+	global $config, $views_counter;
 	$ret = '';
 	if(admin())
 		$ret .= generateLink(ADMIN_URL, 'Admin Panel', true);
 
 	if($config['visitors_counter'])
 	{
+		global $visitors;
 		$amount = $visitors->getAmountVisitors();
 		$ret .= '<br/>Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
 	}
@@ -843,21 +840,11 @@ function template_footer()
 
 function template_ga_code()
 {
-	global $config;
+	global $config, $twig;
 	if(!isset($config['google_analytics_id'][0]))
 		return '';
 
-	return "
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', '" . $config['google_analytics_id'] . "', 'auto');
-  ga('send', 'pageview');
-
-</script>";
+	return $twig->render('google_analytics.html.twig');
 }
 
 function template_form()
@@ -899,6 +886,8 @@ function getCreatureName($killer, $showStatus = false, $extendedInfo = false)
 {
 	global $vowels, $ots, $config;
 	$str = "";
+	$players_rows = '';
+	
 	if(is_numeric($killer))
 	{
 		$player = $ots->createObject('Player');
@@ -1104,12 +1093,9 @@ function get_templates()
 function getWorldName($id)
 {
 	global $config;
-	foreach($config['worlds'] as $_id => $details)
-	{
-		if($id == $_id)
-			return $details['name'];
-	}
-
+	if(isset($config['worlds'][$id]))
+		return $config['worlds'][$id];
+	
 	return $config['lua']['serverName'];
 }
 

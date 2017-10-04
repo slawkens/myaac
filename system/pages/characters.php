@@ -56,7 +56,7 @@ $name = str_replace('/', '', $name);
 
 $oldName = '';
 
-$player = $ots->createObject('Player');
+$player = new OTS_Player();
 $player->find($name);
 if(!$player->isLoaded())
 {

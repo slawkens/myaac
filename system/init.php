@@ -87,9 +87,11 @@ unset($tmp);
 if(isset($config['lua']['servername']))
 	$config['lua']['serverName'] = $config['lua']['servername'];
 
-
 if(isset($config['lua']['houserentperiod']))
 	$config['lua']['houseRentPeriod'] = $config['lua']['houserentperiod'];
+
+if($config['item_images_url'][strlen($config['item_images_url']) - 1] != '/')
+	$config['item_images_url'] .= '/';
 
 // localize data/ directory
 if(isset($config['lua']['dataDirectory'][0]))

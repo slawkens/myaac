@@ -1,0 +1,41 @@
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr bgcolor="{{ config.vdarkborder }}">
+		<td class="white">
+			<b>FAQ</b>
+		</td>
+		<td align="right">
+			<a href="#" onclick="toggleAll(); return false;">Toggle all</a>
+		</td>
+	</tr>
+	{% set i = 0 %}
+	{% for faq in faqs %}
+		{% set i = i + 1 %}
+	<tr bgcolor="{{ getStyle(i) }}">
+		<td colspan="2" style="cursor: pointer;" onclick="toggleVisibility('faq_{{ i }}'); return false;">
+			<b>{{ faq.question }}</b>
+			<div id="faq_{{ i }}" style="display: none;">{{ faq.answer }}</div>
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<script type="text/javascript">
+	var expanded = false;
+
+	function toggleVisibility(id)
+	{
+		var tmp = document.getElementById(id);
+		if(tmp)
+			tmp.style.display = tmp.style.display == 'none' ? '' : 'none';
+	}
+
+	function toggleAll()
+	{
+		for(i = 1; i < {{ i + 1 }}; i++)
+		{
+			document.getElementById('faq_' + i).style.display = expanded ? 'none' : '';
+		}
+
+		expanded = !expanded;
+	}
+</script>
