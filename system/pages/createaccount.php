@@ -253,7 +253,7 @@ If you haven\'t registered on ' . $config['lua']['serverName'] . ' please ignore
 
 	$country_recognized = null;
 	if($config['account_country_recognize']) {
-		$info = json_decode(@file_get_contents('http://ispinfo.io/' . $_SERVER['REMOTE_ADDR'] . '/geo'), true);
+		$info = json_decode(@file_get_contents('http://ipinfo.io/' . $_SERVER['REMOTE_ADDR'] . '/geo'), true);
 		if(isset($info['country'])) {
 			$country_recognized = strtolower($info['country']);
 		}

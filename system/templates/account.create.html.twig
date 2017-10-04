@@ -53,7 +53,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 								<td>
 									<select name="country" id="account_country">
 										{% for code, country_ in countries %}
-										<option value="{{ code }}"{% if(country is defined and country == code) or (country is not defined and country_recognized == code) %}selected{% endif %}>{{ country_ }}</option>
+										<option value="{{ code }}"{% if(country is defined and country == code) or (country is null and country_recognized == code) %}selected{% endif %}>{{ country_ }}</option>
 										{% endfor %}
 									</select>
 									<img src="" id="account_country_img"/>
