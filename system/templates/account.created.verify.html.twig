@@ -1,0 +1,27 @@
+Your account has been created.<br/><br/>
+<table width="100%" border="0" cellspacing="1" cellpadding="4">
+	<tr>
+		<td bgcolor="{{ config.vdarkborder }}" class="white"><b>Account Created</b></td>
+	</tr>
+	<tr>
+		<td bgcolor="{{ config.darkborder }}">
+			<table border="0" cellpadding="1">
+				<tr>
+					<td>
+						{% if constant('USE_ACCOUNT_NAME') %}
+							{% set account_type = 'name' %}
+						{% else %}
+							{% set account_type = 'number' %}
+						{% endif %}
+						<br/>Your account {{ account_type }} is <b>{{ account }}</b>.
+
+						You will need the account {{ account_type }} and your password to play on {{ config.lua.serverName }}.
+						Please keep your account {{ account_type }} and password in a safe place and
+						never give your account {{ account_type }} or password to anybody.<br/><br/>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<br/><br/>

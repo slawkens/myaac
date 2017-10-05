@@ -133,9 +133,7 @@ function getGuildLink($name, $generate = true)
 	if(is_numeric($name))
 	{
 		$guild = $db->query(
-			'SELECT ' . $db->fieldName('name') .
-			' FROM ' . $db->tableName('guilds') .
-			' WHERE ' . $db->fieldName('id') . ' = ' . (int)$name);
+			'SELECT `name` FROM `guilds` WHERE `id` = ' . (int)$name);
 		if($guild->rowCount() > 0)
 			$name = $guild->fetchColumn();
 	}

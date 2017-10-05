@@ -101,7 +101,7 @@ if($step == 'save')
 	{
 		if($config['account_mail_unique'])
 		{
-			$test_email_account = $ots->createObject('Account');
+			$test_email_account = new OTS_Account();
 			$test_email_account->findByEmail($email);
 			if($test_email_account->isLoaded())
 				$errors['email'] = 'Account with this e-mail address already exist.';
@@ -126,7 +126,7 @@ if($step == 'save')
 
 	if(empty($errors))
 	{
-		$new_account = $ots->createObject('Account');
+		$new_account = new OTS_Account();
 		if(USE_ACCOUNT_NAME)
 			$new_account->create($account_name);
 		else
@@ -172,44 +172,21 @@ if($step == 'save')
 			$verify_url = BASE_URL . '?p=account&action=confirm_email&v=' . $hash;
 			$server_name = $config['lua']['serverName'];
 			
-			$body_plain = "Hello!
+			$body_plain = $twig->render('mail.account.verify.plain.html.twig', array(
+				'account' => $tmp_account,
+				'verify_url' => $verify_url
+			));
 
-Thank you for registering on $server_name!
-
-Here are the details of your account:
-Account" . (USE_ACCOUNT_NAME ? ' Name' : '') . ": $tmp_account
-Password: ************ (hidden for security reasons)
-
-To verify your email address please click the link below:
-$verify_url
-If you haven't registered on $server_name please ignore this email.";
-
-			$body_html = 'Hello!<br/>
-<br/>
-Thank you for registering on ' . $config['lua']['serverName'] . '!<br/>
-<br/>
-Here are the details of your account:<br/>
-Account' . (USE_ACCOUNT_NAME ? ' Name' : '') . ': ' . $tmp_account . '<br/>
-Password: ************ (hidden for security reasons)<br/>
-<br/>
-To verify your email address please click the link below:<br/>
-' . generateLink($verify_url, $verify_url, true) . '<br/>
-If you haven\'t registered on ' . $config['lua']['serverName'] . ' please ignore this email.';
+			$body_html = $twig->render('mail.account.verify.html.twig', array(
+				'account' => $tmp_account,
+				'verify_url' => generateLink($verify_url, $verify_url, true)
+			));
 
 			if(_mail($email, 'New account on ' . $config['lua']['serverName'], $body_html, $body_plain))
 			{
-?>
-				Your account has been created.<br/><br/>
-				<table width="100%" border="0" cellspacing="1" cellpadding="4">
-					<tr><td bgcolor="<?php echo $config['vdarkborder']; ?>" class="white"><b>Account Created</b></td></tr>
-					<tr><td bgcolor="<?php echo $config['darkborder']; ?>">
-				  <table border="0" cellpadding="1"><tr><td>
-				    <br/>Your account<?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> is <b><?php echo $tmp_account; ?></b>.
-
-				You will need the account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> and your password to play on <?php echo $config['lua']['serverName']; ?>.
-				    Please keep your account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> and password in a safe place and
-				    never give your account <?php echo (USE_ACCOUNT_NAME ? 'name' : 'number'); ?> or password to anybody.<br/><br/>
-<?php
+				echo $twig->render('account.created.verify.html.twig', array(
+					'account' => $tmp_account
+				));
 			}
 			else
 			{
@@ -219,25 +196,15 @@ If you haven\'t registered on ' . $config['lua']['serverName'] . ' please ignore
 		}
 		else
 		{
-			echo 'Your account has been created. Now you can login and create your first character. See you in Tibia!<br/><br/>';
-			echo '<TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=4>
-			<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Account Created</B></TD></TR>
-			<TR><TD BGCOLOR="'.$config['darkborder'].'">
-			  <TABLE BORDER=0 CELLPADDING=1><TR><TD>
-			    <br/>Your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' is <b>'.$tmp_account.'</b><br/>You will need the account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' and your password to play on '.$config['lua']['serverName'].'.
-			    Please keep your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' and password in a safe place and
-			    never give your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' or password to anybody.<br/><br/>';
-
+			echo $twig->render('account.created.html.twig', array(
+				'account' => $tmp_account
+			));
+			
 			if($config['mail_enabled'] && $config['account_welcome_mail'])
 			{
-				$mailBody = '
-					<h3>Dear player,</h3>
-					<p>Thanks for your registration at <a href=" ' . BASE_URL . '"><b>' . $config['lua']['serverName'] . '</b></a></p>
-					<br/><br/>
-					Your login details:
-					<p>Account' . (USE_ACCOUNT_NAME ? ' name' : '') . ': <b>' . $tmp_account . '</b></p>
-					<p>Password: <b>' . str_repeat('*', strlen(trim($password))) . '</b> (hidden for security reasons)</p>
-					<p>Kind Regards,</p>';
+				$mailBody = $twig->render('account.welcome_mail.html.twig', array(
+					'account' => $tmp_account
+				));
 
 				if(_mail($email, 'Your account on ' . $config['lua']['serverName'], $mailBody))
 					echo '<br /><small>These informations were send on email address <b>' . $email . '</b>.';
@@ -245,7 +212,6 @@ If you haven\'t registered on ' . $config['lua']['serverName'] . ' please ignore
 					echo '<br /><p class="error">An error occorred while sending email (<b>' . $email . '</b>)! Error:<br/>' . $mailer->ErrorInfo . '</p>';
 			}
 		}
-		echo '</TD></TR></TABLE></TD></TR></TABLE><br/><br/>';
 
 		return;
 	}

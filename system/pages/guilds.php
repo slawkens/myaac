@@ -18,25 +18,6 @@ else
 	define('GUILD_MEMBERS_TABLE', 'guild_membership');
 	
 define('MOTD_EXISTS', fieldExist('motd', 'guilds'));
-if($action == 'login')
-{
-	if(check_guild_name($_REQUEST['guild']))
-		$guild = $_REQUEST['guild'];
-	if($_REQUEST['redirect'] == 'guild' || $_REQUEST['redirect'] == 'guilds')
-		$redirect = $_REQUEST['redirect'];
-	if(!$logged)
-		echo 'Please enter your account number and your password.<br/><a href="?subtopic=createaccount" >Create an account</a> if you do not have one yet.<br/><br/><form action="?subtopic=guilds&action=login&guild='.$guild.'&redirect='.$redirect.'" method="post" ><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Account Login</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td class="LabelV" ><span >Account Number:</span></td><td style="width:100%;" ><input type="password" name="account_login" SIZE="10" maxlength="10" ></td></tr><tr><td class="LabelV" ><span >Password:</span></td><td><input type="password" name="password_login" size="30" maxlength="29" ></td></tr>          </table>        </div>  </table></div></td></tr><br/><table width="100%" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=lostaccount" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Account lost?" alt="Account lost?" src="'.$template_path.'/images/buttons/_sbutton_accountlost.gif" ></div></div></td></tr></form></table></td></tr></table>';
-	else
-	{
-		echo '<center><h3>Now you are logged. Redirecting...</h3></center>';
-		if($redirect == 'guilds')
-			header("Location: ?subtopic=guilds");
-		elseif($redirect == 'guild')
-			header("Location: ?subtopic=guilds&action=show&guild=".$guild);
-		else
-			echo 'Wrong address to redirect!';
-	}
-}
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -187,12 +168,9 @@ if($action == 'show')
 	}
 	if(!empty($guild_errors))
 	{
-		//show errors
-		echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-		foreach($guild_errors as $guild_error)
-			echo '<li>'.$guild_error;
-		//errors and back button
-		echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+		echo '
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
 	}
 	else
 	{
@@ -402,7 +380,7 @@ if($action == 'show')
 		echo '<BR><BR>
 		<TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD>';
 		if(!$logged)
-			echo '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=login&guild='.$guild->getName().'&redirect=guild" METHOD=post><TR><TD>
+			echo '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=accountmanagement&redirect='.getGuildLink($guild->getName(), false).'" METHOD=post><TR><TD>
 			<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 			</TD></TR></FORM></TABLE></TD>';
 		else
@@ -453,16 +431,13 @@ if($action == 'changerank')
 		$guild = $ots->createObject('Guild');
 		$guild->find($guild_name);
 		if(!$guild->isLoaded())
-			$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+			$guild_errors[] = 'Guild with name <b>' . $guild_name . '</b> doesn\'t exist.';
 	}
 	if(!empty($guild_errors))
 	{
-		//show errors
-		echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-		foreach($guild_errors as $guild_error)
-			echo '<li>'.$guild_error;
-		//errors and back button
-		echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+echo '
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
 	}
 	else
 	{
@@ -616,10 +591,7 @@ if($action == 'changerank')
 			}
 			else
 			{
-				echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-				foreach($change_errors as $change_error)
-					echo '<li>'.$change_error;
-				echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/>';
+				echo $twig->render('error_box.html.twig', array('errors' => $change_errors));
 			}
 		}
 		echo '<FORM ACTION="?subtopic=guilds&action=changerank&guild='.$guild->getName().'&todo=save" METHOD=post>
@@ -722,10 +694,9 @@ if($action == 'deleteinvite')
 	}
 	if(!empty($guild_errors))
 	{
-		echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-		foreach($guild_errors as $guild_error)
-			echo '<li>'.$guild_error;
-		echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+		echo '
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
 	}
 	else
 	{
@@ -746,100 +717,103 @@ if($action == 'deleteinvite')
 //show guild page
 if($action == 'invite')
 {
-//set rights in guild
-$guild_name = isset($_REQUEST['guild']) ? $_REQUEST['guild'] : NULL;
-$name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
-if(!$logged) {
-$guild_errors[] = 'You are not logged in. You can\'t invite players.';
-}
-if(!check_guild_name($guild_name)) {
-$guild_errors[] = 'Invalid guild name format.';
-}
-if(empty($guild_errors)) {
-$guild = $ots->createObject('Guild');
-$guild->find($guild_name);
-if(!$guild->isLoaded()) {
-$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
-}
-}
-if(empty($guild_errors)) {
-$rank_list = $guild->getGuildRanksList();
-$rank_list->orderBy('level', POT::ORDER_DESC);
-$guild_leader = false;
-$guild_vice = false;
-$account_players = $account_logged->getPlayers();
-foreach($account_players as $player) {
-$player_rank = $player->getRank();
-if($player_rank->isLoaded()) {
-foreach($rank_list as $rank_in_guild) {
-if($rank_in_guild->getId() == $player_rank->getId()) {
-$players_from_account_in_guild[] = $player->getName();
-if($player_rank->getLevel() > 1) {
-$guild_vice = true;
-$level_in_guild = $player_rank->getLevel();
-}
-if($guild->getOwner()->getId() == $player->getId()) {
-$guild_vice = true;
-$guild_leader = true;
-}
-}
-}
-}
-}
-}
-if(!$guild_vice) {
-$guild_errors[] = 'You are not a leader or vice leader of guild <b>'.$guild_name.'</b>.'.$level_in_guild;
-}
-if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-if(!check_name($name)) {
-$guild_errors[] = 'Invalid name format.';
-}
-if(empty($guild_errors)) {
-$player = new OTS_Player();
-$player->find($name);
-if(!$player->isLoaded()) {
-$guild_errors[] = 'Player with name <b>'.$name.'</b> doesn\'t exist.';
-}
-else
-{
-$rank_of_player = $player->getRank();
-if($rank_of_player->isLoaded()) {
-$guild_errors[] = 'Player with name <b>'.$name.'</b> is already in guild. He must leave guild before you can invite him.';
-}
-}
-}
-}
-if(empty($guild_errors)) {
-include(SYSTEM . 'libs/pot/InvitesDriver.php');
-new InvitesDriver($guild);
-$invited_list = $guild->listInvites();
-if(count($invited_list) > 0) {
-foreach($invited_list as $invited) {
-if($invited->getName() == $player->getName()) {
-$guild_errors[] = '<b>'.$invited->getName().'</b> is already invited to your guild.';
-}
-}
-}
-}
-
-if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
-}
-else
-{
-if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-$guild->invite($player);
-echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Invite player</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%>Player with name <b>'.$player->getName().'</b> has been invited to your guild.</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
-}
-else
-{
-echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Invite player</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%><FORM ACTION="?subtopic=guilds&action=invite&guild='.$guild->getName().'&todo=save" METHOD=post>Invite player with name:&nbsp;&nbsp;<INPUT TYPE="text" NAME="name">&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></FORM></TD></TD></TR></TR></TABLE><br/><center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><TR><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TD><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></TD></TR></FORM></TABLE></center>';
-}
-}
+	//set rights in guild
+	$guild_name = isset($_REQUEST['guild']) ? $_REQUEST['guild'] : NULL;
+	$name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
+	if(!$logged) {
+		$guild_errors[] = 'You are not logged in. You can\'t invite players.';
+	}
+	
+	if(!check_guild_name($guild_name)) {
+		$guild_errors[] = 'Invalid guild name format.';
+	}
+	
+	if(empty($guild_errors)) {
+		$guild = $ots->createObject('Guild');
+		$guild->find($guild_name);
+		if(!$guild->isLoaded()) {
+			$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		}
+	}
+	
+	if(empty($guild_errors)) {
+		$rank_list = $guild->getGuildRanksList();
+		$rank_list->orderBy('level', POT::ORDER_DESC);
+		$guild_leader = false;
+		$guild_vice = false;
+		$account_players = $account_logged->getPlayers();
+		foreach($account_players as $player) {
+			$player_rank = $player->getRank();
+			if($player_rank->isLoaded()) {
+				foreach($rank_list as $rank_in_guild) {
+					if($rank_in_guild->getId() == $player_rank->getId()) {
+						$players_from_account_in_guild[] = $player->getName();
+						if($player_rank->getLevel() > 1) {
+							$guild_vice = true;
+							$level_in_guild = $player_rank->getLevel();
+						}
+						
+						if($guild->getOwner()->getId() == $player->getId()) {
+							$guild_vice = true;
+							$guild_leader = true;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	if(!$guild_vice) {
+		$guild_errors[] = 'You are not a leader or vice leader of guild <b>'.$guild_name.'</b>.'.$level_in_guild;
+	}
+	
+	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
+		if(!check_name($name)) {
+			$guild_errors[] = 'Invalid name format.';
+		}
+		
+		if(empty($guild_errors)) {
+			$player = new OTS_Player();
+			$player->find($name);
+			if(!$player->isLoaded()) {
+				$guild_errors[] = 'Player with name <b>' . $name . '</b> doesn\'t exist.';
+			}
+			else
+			{
+				$rank_of_player = $player->getRank();
+				if($rank_of_player->isLoaded()) {
+					$guild_errors[] = 'Player with name <b>' . $name . '</b> is already in guild. He must leave guild before you can invite him.';
+				}
+			}
+		}
+	}
+	if(empty($guild_errors)) {
+		include(SYSTEM . 'libs/pot/InvitesDriver.php');
+		new InvitesDriver($guild);
+		$invited_list = $guild->listInvites();
+		if(count($invited_list) > 0) {
+			foreach($invited_list as $invited) {
+				if($invited->getName() == $player->getName()) {
+					$guild_errors[] = '<b>'.$invited->getName().'</b> is already invited to your guild.';
+				}
+			}
+		}
+	}
+	
+	if(!empty($guild_errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+		echo '
+		<table border="0" cellspacing="0" cellpadding="0" width="100%"><form action="?subtopic=guilds&action=show&guild='.$guild_name.'" method="post"><tr><td><center><input type=image name="Back" alt="Back" src="'.$template_path.'/images/buttons/sbutton_back.gif" border=0 width=120 height="18"></center></td></tr></form></table>';
+	}
+	else {
+		if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
+			$guild->invite($player);
+			echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Invite player</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%>Player with name <b>'.$player->getName().'</b> has been invited to your guild.</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+		}
+		else {
+			echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Invite player</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%><FORM ACTION="?subtopic=guilds&action=invite&guild='.$guild->getName().'&todo=save" METHOD=post>Invite player with name:&nbsp;&nbsp;<INPUT TYPE="text" NAME="name">&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></FORM></TD></TD></TR></TR></TABLE><br/><center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><TR><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TD><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></TD></TR></FORM></TABLE></center>';
+		}
+	}
 }
 
 
@@ -853,42 +827,42 @@ if($action == 'acceptinvite') {
 	$guild_name = isset($_REQUEST['guild']) ? $_REQUEST['guild'] : NULL;
 	$name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
 	if(!$logged) {
-		$guild_errors[] = 'You are not logged in. You can\'t accept invitations.';
+		$errors[] = 'You are not logged in. You can\'t accept invitations.';
 	}
 	if(!check_guild_name($guild_name)) {
-		$guild_errors[] = 'Invalid guild name format.';
+		$errors[] = 'Invalid guild name format.';
 	}
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		$guild = $ots->createObject('Guild');
 		$guild->find($guild_name);
 		if(!$guild->isLoaded()) {
-			$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+			$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 		}
 	}
 
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		if(!check_name($name)) {
-			$guild_errors[] = 'Invalid name format.';
+			$errors[] = 'Invalid name format.';
 		}
 	
-		if(empty($guild_errors)) {
+		if(empty($errors)) {
 			$player = new OTS_Player();
 			$player->find($name);
 			if(!$player->isLoaded()) {
-				$guild_errors[] = 'Player with name <b>'.$name.'</b> doesn\'t exist.';
+				$errors[] = 'Player with name <b>'.$name.'</b> doesn\'t exist.';
 			}
 			else
 			{
 				$rank_of_player = $player->getRank();
 				if($rank_of_player->isLoaded()) {
-					$guild_errors[] = 'Character with name <b>'.$name.'</b> is already in guild. You must leave guild before you join other guild.';
+					$errors[] = 'Character with name <b>'.$name.'</b> is already in guild. You must leave guild before you join other guild.';
 				}
 			}
 		}
 	}
 
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-		if(empty($guild_errors)) {
+		if(empty($errors)) {
 			$is_invited = false;
 			include(SYSTEM . 'libs/pot/InvitesDriver.php');
 			new InvitesDriver($guild);
@@ -902,13 +876,13 @@ if($action == 'acceptinvite') {
 			}
 
 			if(!$is_invited) {
-				$guild_errors[] = 'Character '.$player->getName.' isn\'t invited to guild <b>'.$guild->getName().'</b>.';
+				$errors[] = 'Character '.$player->getName.' isn\'t invited to guild <b>'.$guild->getName().'</b>.';
 			}
 		}
 	}
 	else
 	{
-		if(empty($guild_errors)) {
+		if(empty($errors)) {
 			$acc_invited = false;
 			$account_players = $account_logged->getPlayers();
 			include(SYSTEM . 'libs/pot/InvitesDriver.php');
@@ -928,15 +902,13 @@ if($action == 'acceptinvite') {
 		}
 
 		if(!$acc_invited) {
-			$guild_errors[] = 'Any character from your account isn\'t invited to <b>'.$guild->getName().'</b>.';
+			$errors[] = 'Any character from your account isn\'t invited to <b>'.$guild->getName().'</b>.';
 		}
 	}
-	if(!empty($guild_errors)) {
-		echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-		foreach($guild_errors as $guild_error) {
-			echo '<li>'.$guild_error;
-		}
-		echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		echo '
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
 	}
 	else {
 		if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
@@ -954,7 +926,7 @@ if($action == 'acceptinvite') {
 			foreach($list_of_invited_players as $invited_player_from_list) {
 				echo '<input type="radio" name="name" id="name_' . $i . '" value="'.$invited_player_from_list.'" /><label for="name_' . $i++ . '">'.$invited_player_from_list.'</label><br>';
 			}
-			echo '<br><INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></form></TD></TR></TABLE><br/><center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><TR><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TD><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></TD></TR></FORM></TABLE></center>';
+			echo '<br><input type="image" name="Submit" alt="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" border="0" width="120" height="18"></form></td></tr></table><br/><center><table border="0" cellspacing="0" cellpadding="0" width="100%"><tr><form action="?subtopic=guilds&action=show&guild='.$guild_name.'" method="post"><td><input type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/sbutton_back.gif" border=0 width=120 height=18></td></tr></form></table></center>';
 		}
 	}
 }
@@ -970,26 +942,26 @@ if($action == 'kickplayer') {
 	$guild_name = $_REQUEST['guild'];
 	$name = stripslashes($_REQUEST['name']);
 	if(!$logged) {
-		$guild_errors[] = 'You are not logged in. You can\'t kick characters.';
+		$errors[] = 'You are not logged in. You can\'t kick characters.';
 	}
 	
 	if(!check_guild_name($guild_name)) {
-		$guild_errors[] = 'Invalid guild name format.';
+		$errors[] = 'Invalid guild name format.';
 	}
 	
 	if(!check_name($name)) {
-		$guild_errors[] = 'Invalid name format.';
+		$errors[] = 'Invalid name format.';
 	}
 	
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		$guild = $ots->createObject('Guild');
 		$guild->find($guild_name);
 		if(!$guild->isLoaded()) {
-			$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+			$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 		}
 	}
 
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		$rank_list = $guild->getGuildRanksList();
 		$rank_list->orderBy('level', POT::ORDER_DESC);
 		$guild_leader = false;
@@ -1015,44 +987,42 @@ if($action == 'kickplayer') {
 		}
 	}
 	
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		if(!$guild_leader && $level_in_guild < 3) {
-			$guild_errors[] = 'You are not a leader of guild <b>'.$guild_name.'</b>. You can\'t kick players.';
+			$errors[] = 'You are not a leader of guild <b>'.$guild_name.'</b>. You can\'t kick players.';
 		}
 	}
 	
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		$player = new OTS_Player();
 		$player->find($name);
 		if(!$player->isLoaded()) {
-			$guild_errors[] = 'Character <b>'.$name.'</b> doesn\'t exist.';
+			$errors[] = 'Character <b>'.$name.'</b> doesn\'t exist.';
 		}
 		else
 		{
 			if($player->getRank()->isLoaded() && $player->getRank()->getGuild()->isLoaded() && $player->getRank()->getGuild()->getName() != $guild->getName()) {
-				$guild_errors[] = 'Character <b>'.$name.'</b> isn\'t from your guild.';
+				$errors[] = 'Character <b>'.$name.'</b> isn\'t from your guild.';
 			}
 		}
 	}
 	
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		if($player->getRank()->isLoaded() && $player->getRank()->getLevel() >= $level_in_guild && !$guild_leader) {
-			$guild_errors[] = 'You can\'t kick character <b>'.$name.'</b>. Too high access level.';
+			$errors[] = 'You can\'t kick character <b>'.$name.'</b>. Too high access level.';
 		}
 	}
 	
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		if($guild->getOwner()->getName() == $player->getName()) {
-			$guild_errors[] = 'It\'s not possible to kick guild owner!';
+			$errors[] = 'It\'s not possible to kick guild owner!';
 		}
 	}
 
-	if(!empty($guild_errors)) {
-		echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-		foreach($guild_errors as $guild_error) {
-			echo '<li>'.$guild_error;
-		}
-		echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		echo '
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
 	}
 	else
 	{
@@ -1077,57 +1047,57 @@ if($action == 'leaveguild') {
 	$guild_name = isset($_REQUEST['guild']) ? $_REQUEST['guild'] : NULL;
 	$name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
 	if(!$logged) {
-		$guild_errors[] = 'You are not logged in. You can\'t leave guild.';
+		$errors[] = 'You are not logged in. You can\'t leave guild.';
 	}
 	
 	if(!check_guild_name($guild_name)) {
-		$guild_errors[] = 'Invalid guild name format.';
+		$errors[] = 'Invalid guild name format.';
 	}
 	
-	if(empty($guild_errors)) {
-		$guild = $ots->createObject('Guild');
+	if(empty($errors)) {
+		$guild = new OTS_Guild();
 		$guild->find($guild_name);
 		if(!$guild->isLoaded()) {
-			$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+			$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 		}
 	}
 
 	$array_of_player_ig = array();
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		$guild_owner_name = $guild->getOwner()->getName();
 		if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 			if(!check_name($name)) {
-				$guild_errors[] = 'Invalid name format.';
+				$errors[] = 'Invalid name format.';
 			}
 			
-			if(empty($guild_errors)) {
+			if(empty($errors)) {
 				$player = new OTS_Player();
 				$player->find($name);
 				if(!$player->isLoaded()) {
-					$guild_errors[] = 'Character <b>'.$name.'</b> doesn\'t exist.';
+					$errors[] = 'Character <b>'.$name.'</b> doesn\'t exist.';
 				}
 				else {
 					if($player->getAccount()->getId() != $account_logged->getId()) {
-						$guild_errors[] = 'Character <b>'.$name.'</b> isn\'t from your account!';
+						$errors[] = 'Character <b>'.$name.'</b> isn\'t from your account!';
 					}
 				}
 			}
 			
-			if(empty($guild_errors)) {
+			if(empty($errors)) {
 				$player_loaded_rank = $player->getRank();
 				if($player_loaded_rank->isLoaded()) {
 					if($player_loaded_rank->getGuild()->getName() != $guild->getName()) {
-						$guild_errors[] = 'Character <b>'.$name.'</b> isn\'t from guild <b>'.$guild->getName().'</b>.';
+						$errors[] = 'Character <b>'.$name.'</b> isn\'t from guild <b>'.$guild->getName().'</b>.';
 					}
 				}
 				else {
-					$guild_errors[] = 'Character <b>'.$name.'</b> isn\'t in any guild.';
+					$errors[] = 'Character <b>'.$name.'</b> isn\'t in any guild.';
 				}
 			}
 	
-			if(empty($guild_errors)) {
+			if(empty($errors)) {
 				if($guild_owner_name == $player->getName()) {
-					$guild_errors[] = 'You can\'t leave guild. You are an owner of guild.';
+					$errors[] = 'You can\'t leave guild. You are an owner of guild.';
 				}
 			}
 		}
@@ -1147,12 +1117,10 @@ if($action == 'leaveguild') {
 		}
 	}
 
-	if(!empty($guild_errors)) {
-		echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-		foreach($guild_errors as $guild_error) {
-			echo '<li>'.$guild_error;
-		}
-		echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		echo '
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
 	}
 	else
 	{
@@ -1280,11 +1248,7 @@ if($action == 'createguild')
 	}
 
 if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
+	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
 unset($todo);
 }
 
@@ -1304,52 +1268,21 @@ if(isset($todo) && $todo == 'save')
 			$player->setRank($rank);
 		}
 	}
-	echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Create guild</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%><b>Congratulations!</b><br/>You have created guild <b>'.$guild_name.'</b>. <b>'.$player->getName().'</b> is leader of this guild. Now you can invite players, change picture, description' . (MOTD_EXISTS ? ' and motd' : '') . ' of guild. Press submit to open guild manager.</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_Submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+	echo $twig->render('success.html.twig', array(
+		'title' => 'Created guild',
+		'description' => '<b>Congratulations!</b><br/>You have created guild <b>' . $guild_name . '</b>. <b>'.$player->getName().'</b> is leader of this guild. Now you can invite players, change picture, description' . (MOTD_EXISTS ? ' and motd' : '') . ' of guild. Press submit to open guild manager.',
+		'custom_buttons' => '<table border="0" cellspacing="0" cellpadding="0" width="100%"><form action="?subtopic=guilds&action=show&guild='.$guild_name.'" method="post"><tr><td><center><input type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/sbutton_Submit.gif" border="0" width="120" height="18"></center></td></tr></form></table>'
+	));
+	
 	/*$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "the Leader", 3)');
 	$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "a Vice-Leader", 2)');
 	$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "a Member", 1)');*/
 }
-else
-{
-echo '
-<FORM ACTION="?subtopic=guilds&action=createguild&todo=save" METHOD=post>
-<TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=4>
-<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Create a ' . $config['lua']['serverName'] . ' Guild</B></TD></TR>
-<TR><TD BGCOLOR="'.$config['darkborder'].'"><TABLE BORDER=0 CELLSPACING=8 CELLPADDING=0>
-  <TR><TD>
-    <TABLE BORDER=0 CELLSPACING=5 CELLPADDING=0>';
-echo '<TR><TD width="150" valign="top"><B>Leader: </B></TD><TD><SELECT name=\'name\'>';
-if(count($array_of_player_nig) > 0) {
-sort($array_of_player_nig);
-foreach($array_of_player_nig as $nick) {
-echo '<OPTION>'.$nick;
-}
-}
-echo '</SELECT><BR><font size="1" face="verdana,arial,helvetica">(Name of leader of new guild.)</font></TD></TR>
-	<TR><TD width="150" valign="top"><B>Guild name: </B></TD><TD><INPUT NAME="guild" VALUE="" SIZE=30 MAXLENGTH=50><BR><font size="1" face="verdana,arial,helvetica">(Here write name of your new guild.)</font></TD></TR>
-	</TABLE>
-  </TD></TR>
-</TABLE></TD></TR>
-</TABLE>
-<BR>
-<TABLE BORDER=0 WIDTH=100%>
-  <TR><TD ALIGN=center>
-    <IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=120 HEIGHT=1 BORDER=0><BR>
-  </TD><TD ALIGN=center VALIGN=top>
-    <INPUT TYPE=image NAME="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18>
-    </FORM>
-  </TD><TD ALIGN=center>
-    <FORM  ACTION="?subtopic=guilds" METHOD=post>
-    <INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18>
-    </FORM>
-  </TD><TD ALIGN=center>
-    <IMG src="'.$template_path.'/images/general/blank.gif" WIDTH=120 HEIGHT=1 BORDER=0><BR>
-  </TD></TR>
-</TABLE>
-</TD>
-<TD><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=10 HEIGHT=1 BORDER=0></TD>
-</TR>
-</TABLE>';
+else {
+	sort($array_of_player_nig);
+	echo $twig->render('guilds.create_guild.html.twig', array(
+		'players' => $array_of_player_nig
+	));
 }
 }
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -1357,81 +1290,38 @@ echo '</SELECT><BR><font size="1" face="verdana,arial,helvetica">(Name of leader
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'manager') {
-$guild_name = $_REQUEST['guild'];
-if(!check_guild_name($guild_name)) {
-$guild_errors[] = 'Invalid guild name format.';
-}
-if(empty($guild_errors)) {
-$guild = $ots->createObject('Guild');
-$guild->find($guild_name);
-if(!$guild->isLoaded()) {
-$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
-}
-}
-if(empty($guild_errors)) {
-if($logged) {
-$guild_leader_char = $guild->getOwner();
-$rank_list = $guild->getGuildRanksList();
-$rank_list->orderBy('level', POT::ORDER_DESC);
-$guild_leader = false;
-$account_players = $account_logged->getPlayers();
-foreach($account_players as $player) {
-if($guild_leader_char->getId() == $player->getId()) {
-$guild_vice = true;
-$guild_leader = true;
-$level_in_guild = 3;
-}
-}
+	$guild_name = $_REQUEST['guild'];
+	if(!check_guild_name($guild_name)) {
+		$guild_errors[] = 'Invalid guild name format.';
+	}
+	
+	if(empty($guild_errors)) {
+		$guild = new OTS_Guild();
+		$guild->find($guild_name);
+		if(!$guild->isLoaded()) {
+			$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		}
+	}
+	
+	if(empty($guild_errors)) {
+	if($logged) {
+	$guild_leader_char = $guild->getOwner();
+	$rank_list = $guild->getGuildRanksList();
+	$rank_list->orderBy('level', POT::ORDER_DESC);
+	$guild_leader = false;
+	$account_players = $account_logged->getPlayers();
+	foreach($account_players as $player) {
+	if($guild_leader_char->getId() == $player->getId()) {
+	$guild_vice = true;
+	$guild_leader = true;
+	$level_in_guild = 3;
+	}
+	}
 if($guild_leader) {
-echo '<center><h2>Welcome to guild manager!</h2></center>Here you can change names of ranks, delete and add ranks, pass leadership to other guild member and delete guild.';
-echo '<br/><br/><table style=\'clear:both\' border=0 cellpadding=0 cellspacing=0 width=\'100%\'>
-<tr bgcolor='.$config['darkborder'].'><td width="170"><font color="red"><b>Option</b></font></td><td><font color="red"><b>Description</b></font></td></tr>
-<tr bgcolor='.$config['lightborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=passleadership">Pass Leadership</a></b></td><td><b>Pass leadership of guild to other guild member.</b></td></tr>
-<tr bgcolor='.$config['darkborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=deleteguild">Delete Guild</a></b></td><td><b>Delete guild, kick all members.</b></td></tr>
-<tr bgcolor='.$config['lightborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=changedescription">Change Description</a></b></td><td><b>Change description of guild.</b></td></tr>';
-if(MOTD_EXISTS)
-	echo '<tr bgcolor='.$config['darkborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=changemotd">Change MOTD</a></b></td><td><b>Change MOTD of guild.</b></td></tr>';
-echo '
-<tr bgcolor='.$config['lightborder'].'><td width="170"><b><a href="?subtopic=guilds&guild='.$guild->getName().'&action=changelogo">Change guild logo</a></b></td><td><b>Upload new guild logo.</b></td></tr>
-</table>';
-echo '<br><div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Add new rank</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td width="120" valign="top">New rank name:</td><td> <form action="?subtopic=guilds&guild='.$guild->getName().'&action=addrank" method="POST"><input type="text" name="rank_name" size="20"><input type="submit" value="Add"></form></td></tr>          </table>        </div>  </table></div></td></tr>';
-echo '<center><h3>Change rank names and levels</h3></center><form action="?subtopic=guilds&action=saveranks&guild='.$guild->getName().'" method=POST><table style=\'clear:both\' border=0 cellpadding=0 cellspacing=0 width=\'100%\'><tr bgcolor='.$config['vdarkborder'].'><td rowspan="2" width="120" align="center"><font color="white"><b>ID/Delete Rank</b></font></td><td rowspan="2" width="300"><font color="white"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name</b></font></td><td colspan="3" align="center"><font color="white"><b>Level of RANK in guild</b></font></td></tr><tr bgcolor='.$config['vdarkborder'].'><td align="center" bgcolor="red"><font color="white"><b>Leader (3)</b></font></td><td align="center" bgcolor="yellow"><font color="black"><b>Vice (2)</b></font></td><td align="center" bgcolor="green"><font color="white"><b>Member (1)</b></font></td></tr>';
-$number_of_ranks = count($rank_list);
-$number_of_rows = 0;
-foreach($rank_list as $rank) {
-echo '<tr bgcolor="' . getStyle($number_of_rows++) . '"><td align="center">'.$rank->getId().' // <a href="?subtopic=guilds&guild='.$guild->getName().'&action=deleterank&rankid='.$rank->getId().'" border="0"><img src="'.$template_path.'/images/news/delete.png" border="0" alt="Delete Rank"></a></td><td><input type="text" name="'.$rank->getId().'_name" value="'.$rank->getName().'" size="35"></td><td align="center"><input type="radio" name="'.$rank->getId().'_level" value="3"';
-if($rank->getLevel() == 3) {
-echo ' checked="checked"';
-}
-echo ' /></td><td align="center"><input type="radio" name="'.$rank->getId().'_level" value="2"';
-if($rank->getLevel() == 2) {
-echo ' checked="checked"';
-}
-echo ' /></td><td align="center"><input type="radio" name="'.$rank->getId().'_level" value="1"';
-if($rank->getLevel() == 1) {
-echo ' checked="checked"';
-}
-echo ' /></td></tr>';
-
-}
-echo '<tr bgcolor='.$config['vdarkborder'].'><td>&nbsp;</td><td>&nbsp;</td><td colspan="3" align="center"><input type="submit" value="Save All"></td></tr></table></form>';
-echo '<h3>Ranks info:</h3><b>0. Owner of guild</b> - it\'s highest rank, only one player in guild may has this rank. Player with this rank can:
-<li>Invite/Cancel Invitation/Kick Player from guild
-<li>Change ranks of all players in guild
-<li>Delete guild or pass leadership to other guild member
-<li>Change names, levels(leader,vice,member), add and delete ranks';
-if(MOTD_EXISTS)
-	echo '<li>Change MOTD, logo and description of guild<hr>';
-echo '
-<b>3. Leader</b> - it\'s second rank in guild. Player with this rank can:
-<li>Invite/Cancel Invitation/Kick Player from guild (only with lower rank than his)
-<li>Change ranks of players with lower rank level ("vice leader", "member") in guild<hr>
-<b>2. Vice Leader</b> - it\'s third rank in guild. Player with this rank can:
-<li>Invite/Cancel Invitation
-<li>Change ranks of players with lower rank level ("member") in guild<hr>
-<b>1. Member</b> - it\'s lowest rank in guild. Player with this rank can:
-<li>Be a member of guild';
-echo '<br/><center><form action="?subtopic=guilds&action=show&guild='.$guild->getName().'" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+	echo $twig->render('guilds.manager.html.twig', array(
+		'guild' => $guild,
+		'rank_list' => $rank_list
+	));
 }
 else
 {
@@ -1444,11 +1334,7 @@ $guild_errors[] = 'You are not logged. You can\'t manage guild.';
 }
 }
 if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
+	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
 }
 }
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -1456,115 +1342,115 @@ echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$t
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'changelogo') {
-$guild_name = $_REQUEST['guild'];
-if(!check_guild_name($guild_name)) {
-$guild_errors[] = 'Invalid guild name format.';
-}
-if(empty($guild_errors)) {
-$guild = $ots->createObject('Guild');
-$guild->find($guild_name);
-if(!$guild->isLoaded()) {
-$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
-}
-}
-if(empty($guild_errors)) {
-if($logged) {
-$guild_leader_char = $guild->getOwner();
-$guild_leader = false;
-$account_players = $account_logged->getPlayers();
-foreach($account_players as $player) {
-if($guild_leader_char->getId() == $player->getId()) {
-$guild_vice = true;
-$guild_leader = true;
-$level_in_guild = 3;
-}
-}
-if($guild_leader)
-{
-	$max_image_size_b = $config['guild_image_size_kb'] * 1024;
-	$allowed_ext = array('image/gif', 'image/jpg', 'image/pjpeg', 'image/jpeg', 'image/bmp', 'image/png', 'image/x-png');
-	$ext_name = array('image/gif' => 'gif', 'image/jpg' => 'jpg', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/bmp' => 'bmp', 'image/png' => 'png', 'image/x-png' => 'png');
-	$save_file_name = str_replace(' ', '_', strtolower($guild->getName()));
-	$save_path = 'images/guilds/' . $save_file_name;
-	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save')
-	{
-		$file = $_FILES['newlogo'];
-		if(is_uploaded_file($file['tmp_name']))
-		{
-			if($file['size'] > $max_image_size_b) {
-				$upload_errors[] = 'Uploaded image is too big. Size: <b>'.$file['size'].' bytes</b>, Max. size: <b>'.$max_image_size_b.' bytes</b>.';
+	$guild_name = $_REQUEST['guild'];
+	if(!check_guild_name($guild_name)) {
+		$errors[] = 'Invalid guild name format.';
+	}
+	
+	if(empty($errors)) {
+		$guild = new OTS_Guild();
+		$guild->find($guild_name);
+		
+		if(!$guild->isLoaded()) {
+			$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		}
+	}
+	
+	if(empty($errors)) {
+		if($logged) {
+			$guild_leader_char = $guild->getOwner();
+			$guild_leader = false;
+			$account_players = $account_logged->getPlayers();
+			
+			foreach($account_players as $player) {
+				if($guild_leader_char->getId() == $player->getId()) {
+					$guild_vice = true;
+					$guild_leader = true;
+					$level_in_guild = 3;
+				}
 			}
-
-			$type = strtolower($file['type']);
-			if(!in_array($type, $allowed_ext)) {
-				$upload_errors[] = 'Your file type isn\' allowed. Allowed: <b>gif, jpg, bmp, png</b>. Your file type: <b>'.$type.'</b> If it\'s valid image contact with admin.';
+			
+			if($guild_leader)
+			{
+				$max_image_size_b = $config['guild_image_size_kb'] * 1024;
+				$allowed_ext = array('image/gif', 'image/jpg', 'image/pjpeg', 'image/jpeg', 'image/bmp', 'image/png', 'image/x-png');
+				$ext_name = array('image/gif' => 'gif', 'image/jpg' => 'jpg', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/bmp' => 'bmp', 'image/png' => 'png', 'image/x-png' => 'png');
+				$save_file_name = str_replace(' ', '_', strtolower($guild->getName()));
+				$save_path = 'images/guilds/' . $save_file_name;
+				if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save')
+				{
+					$file = $_FILES['newlogo'];
+					if(is_uploaded_file($file['tmp_name']))
+					{
+						if($file['size'] > $max_image_size_b) {
+							$upload_errors[] = 'Uploaded image is too big. Size: <b>'.$file['size'].' bytes</b>, Max. size: <b>'.$max_image_size_b.' bytes</b>.';
+						}
+			
+						$type = strtolower($file['type']);
+						if(!in_array($type, $allowed_ext)) {
+							$upload_errors[] = 'Your file type isn\' allowed. Allowed: <b>gif, jpg, bmp, png</b>. Your file type: <b>'.$type.'</b> If it\'s valid image contact with admin.';
+						}
+					}
+					else {
+						$upload_errors[] = 'You didn\'t send file or file is too big. Limit: <b>'.$config['guild_image_size_kb'].' KB</b>.';
+					}
+					
+					if(empty($upload_errors)) {
+						$extension = $ext_name[$type];
+						if(!move_uploaded_file($file['tmp_name'], $save_path.'.'.$extension)) {
+							$upload_errors[] = "Sorry! Can't save your image.";
+						}
+					}
+					
+					if(empty($upload_errors))
+					{
+						$guild_logo = $guild->getCustomField('logo_name');
+						$guild_logo = str_replace(array('..', '/', '\\'), array('','',''), $guild->getCustomField('logo_name'));
+						if(empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo)) {
+							$guild_logo = "default.gif";
+						}
+						
+						if($guild_logo != "default.gif" && $guild_logo != $save_file_name.'.'.$extension) {
+							unlink('images/guilds/' . $guild_logo);
+						}
+					}
+					
+					//show errors or save file
+					if(!empty($upload_errors)) {
+						echo $twig->render('error_box.html.twig', array('errors' => $upload_errors));
+					}
+					else {
+						success('Logo has been changed.');
+						$guild->setCustomField('logo_name', $save_file_name.'.'.$extension);
+					}
+				}
+				
+				$guild_logo = $guild->getCustomField('logo_name');
+				if(empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo)) {
+					$guild_logo = "default.gif";
+				}
+				
+				echo $twig->render('guilds.change_logo.html.twig', array(
+					'guild_logo' => $guild_logo,
+					'guild' => $guild,
+					'max_image_size_b' => $max_image_size_b
+				));
+			
+			}
+			else {
+				$errors[] = 'You are not a leader of guild!';
 			}
 		}
 		else
 		{
-		$upload_errors[] = 'You didn\'t send file or file is too big. Limit: <b>'.$config['guild_image_size_kb'].' KB</b>.';
-		}
-		if(empty($upload_errors)) {
-		$extension = $ext_name[$type];
-		if(!move_uploaded_file($file['tmp_name'], $save_path.'.'.$extension)) {
-		$upload_errors[] = 'Sorry! Can\'t save your image.';
-		}
-		}
-		if(empty($upload_errors))
-		{
-			$guild_logo = $guild->getCustomField('logo_name');
-			$guild_logo = str_replace(array('..', '/', '\\'), array('','',''), $guild->getCustomField('logo_name'));
-			if(empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo)) {
-				$guild_logo = "default.gif";
-			}
-			if($guild_logo != "default.gif" && $guild_logo != $save_file_name.'.'.$extension) {
-				unlink('images/guilds/' . $guild_logo);
-			}
-		}
-		//show errors or save file
-		if(!empty($upload_errors)) {
-		echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-		foreach($upload_errors as $guild_error) {
-			echo '<li>'.$guild_error;
-		}
-		echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
-		}
-		else
-		{
-		$guild->setCustomField('logo_name', $save_file_name.'.'.$extension);
+			$errors[] = 'You are not logged. You can\'t manage guild.';
 		}
 	}
-	$guild_logo = $guild->getCustomField('logo_name');
-	if(empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo)) {
-	$guild_logo = "default.gif";
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	
+	echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 	}
-	echo '<center><h2>Change guild logo</h2></center>Here you can change logo of your guild.<BR>Actuall logo: <img src="images/guilds/' .$guild_logo.'" HEIGHT="64" WIDTH="64"><BR><BR>';
-	echo '<form enctype="multipart/form-data" action="?subtopic=guilds&guild='.$guild->getName().'&action=changelogo" method="POST">
-	<input type="hidden" name="todo" value="save" />
-	<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_image_size_b.'" />
-		Select new logo: <input name="newlogo" type="file" />
-		<input type="submit" value="Send new logo" /></form>Only <b>jpg, gif, png, bmp</b> pictures. Max. size: <b>'.$config['guild_image_size_kb'].' KB</b><br>';
-	echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=manager" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
-
-}
-else
-{
-$guild_errors[] = 'You are not a leader of guild!';
-}
-}
-else
-{
-$guild_errors[] = 'You are not logged. You can\'t manage guild.';
-}
-}
-if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
-echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
-}
 }
 
 
@@ -1651,11 +1537,7 @@ else
 if($saved) {
 echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Rank Deleted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Rank <b>'.$rank->getName().'</b> has been deleted. Players with this rank has now other rank.</td></tr>          </table>        </div>  </table></div></td></tr>';
 } else {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors2 as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
+	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors2));
 }
 //back button
 echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=manager" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
@@ -1671,11 +1553,8 @@ $guild_errors[] = 'You are not logged. You can\'t manage guild.';
 }
 }
 if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
+	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+
 echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 }
 }
@@ -1723,28 +1602,21 @@ $new_rank->save();
 header("Location: ?subtopic=guilds&guild=".$guild->getName()."&action=manager");
 echo 'New rank added. Redirecting...';
 }
-else
-{
-$guild_errors[] = 'You are not a leader of guild!';
+else  {
+	$guild_errors[] = 'You are not a leader of guild!';
 }
 }
 if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
+	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+
 echo '<br/><center><form action="?subtopic=guilds&guild='.$guild_name.'&action=show" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 }
 }
 else
 {
 if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
+	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+	
 echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 }
 }
@@ -1757,18 +1629,18 @@ echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigBu
 if($action == 'changedescription') {
 	$guild_name = $_REQUEST['guild'];
 	if(!check_guild_name($guild_name)) {
-		$guild_errors[] = 'Invalid guild name format.';
+		$errors[] = 'Invalid guild name format.';
 	}
 	
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		$guild = $ots->createObject('Guild');
 		$guild->find($guild_name);
 		if(!$guild->isLoaded()) {
-			$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+			$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 		}
 	}
 	
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		if($logged) {
 			$guild_leader_char = $guild->getOwner();
 			$rank_list = $guild->getGuildRanksList();
@@ -1790,33 +1662,27 @@ if($action == 'changedescription') {
 					$guild->setCustomField('description', $description);
 					$saved = true;
 				}
-				echo '<center><h2>Change guild description</h2></center>';
+				
 				if($saved) {
-					echo '<center><font color="red" size="3"><b>CHANGES HAS BEEN SAVED!</b></font></center><br>';
+					success('Changes has been saved');
 				}
-				echo 'Here you can change description of your guild.<BR>';
-				echo '<form enctype="multipart/form-data" action="?subtopic=guilds&guild='.$guild->getName().'&action=changedescription" method="POST">
-				<input type="hidden" name="todo" value="save" />
-					<textarea name="description" cols="60" rows="'.bcsub($config['guild_description_lines_limit'],1).'">'.$guild->getCustomField('description').'</textarea><br>
-					(max. '.$config['guild_description_lines_limit'].' lines, max. '.$config['guild_description_chars_limit'].' chars) <input type="submit" value="Save description" /></form><br>';
-				echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=manager" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+				
+				echo $twig->render('guilds.change_description.html.twig', array(
+					'guild' => $guild,
+					'rows' => bcsub($config['guild_description_lines_limit'],1)
+				));
 			}
-			else
-			{
-			$guild_errors[] = 'You are not a leader of guild!';
+			else {
+				$errors[] = 'You are not a leader of guild!';
 			}
 		}
-		else
-		{
-		$guild_errors[] = 'You are not logged. You can\'t manage guild.';
+		else {
+			$errors[] = 'You are not logged. You can\'t manage guild.';
 		}
 	}
-	if(!empty($guild_errors)) {
-	echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-	foreach($guild_errors as $guild_error) {
-		echo '<li>'.$guild_error;
-	}
-	echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		
 	echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 	}
 }
@@ -1836,7 +1702,7 @@ if($action == 'passleadership') {
 		$guild = $ots->createObject('Guild');
 		$guild->find($guild_name);
 		if(!$guild->isLoaded()) {
-			$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+			$guild_errors[] = "Guild with name <b>" . $guild_name . "</b> doesn't exist.";
 		}
 	}
 	if(empty($guild_errors)) {
@@ -1898,14 +1764,16 @@ if($action == 'passleadership') {
 					$saved = true;
 				}
 				if($saved) {
-					echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Guild Deleted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td><b>'.$to_player->getName().'</b> is now a Leader of <b>'.$guild_name.'</b>.</td></tr>          </table>        </div>  </table></div></td></tr>';
-					echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=show" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+					echo $twig->render('success.html.twig', array(
+						'title' => 'Leadership passed',
+						'description' => '<b>'.$to_player->getName().'</b> is now a Leader of <b>'.$guild_name.'</b>.',
+						'custom_buttons' => '<center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=show" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>'
+					));
 				}
 				else {
-					echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Guild Deleted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Pass leadership to: </b><br>
-					<form action="?subtopic=guilds&guild='.$guild->getName().'&action=passleadership" METHOD=post><input type="hidden" name="todo" value="save"><input type="text" size="40" name="player"><input type="submit" value="Save"></form>
-					</td></tr>          </table>        </div>  </table></div></td></tr>';
-					echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=manager" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+					echo $twig->render('guilds.pass_leadership.html.twig', array(
+						'guild' => $guild
+					));
 				}
 			}
 			else {
@@ -1913,28 +1781,20 @@ if($action == 'passleadership') {
 			}
 		}
 		else {
-			$guild_errors[] = 'You are not logged. You can\'t manage guild.';
+			$guild_errors[] = "You are not logged. You can't manage guild.";
 		}
 	}
 	if(empty($guild_errors) && !empty($guild_errors2)) {
-		echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-		foreach($guild_errors2 as $guild_error2) {
-			echo '<li>'.$guild_error2;
-		}
-		echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
+		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors2));
+		
 		echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=passleadership" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 	}
 	if(!empty($guild_errors)) {
-		echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-		foreach($guild_errors as $guild_error) {
-			echo '<li>'.$guild_error . '</li>';
-		}
 		if(!empty($guild_errors2)) {
-			foreach($guild_errors2 as $guild_error2) {
-				echo '<li>'.$guild_error2 . '</li>';
-			}
+			$guild_errors = array_merge($guild_errors, $guild_errors2);
 		}
-		echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
+		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+		
 		echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 	}
 }
@@ -1943,67 +1803,70 @@ if($action == 'passleadership') {
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'deleteguild') {
-$guild_name = $_REQUEST['guild'];
-if(!check_guild_name($guild_name)) {
-$guild_errors[] = 'Invalid guild name format.';
-}
-if(empty($guild_errors)) {
-$guild = $ots->createObject('Guild');
-$guild->find($guild_name);
-if(!$guild->isLoaded()) {
-$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
-}
-}
-if(empty($guild_errors)) {
-if($logged) {
-$guild_leader_char = $guild->getOwner();
-$rank_list = $guild->getGuildRanksList();
-$rank_list->orderBy('level', POT::ORDER_DESC);
-$guild_leader = false;
-$account_players = $account_logged->getPlayers();
-foreach($account_players as $player) {
-if($guild->getOwner()->getId() == $player->getId()) {
-$guild_vice = true;
-$guild_leader = true;
-$level_in_guild = 3;
-}
-}
-if($guild_leader) {
-	$saved = false;
-if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
-delete_guild($guild->getId());
-$saved = true;
-}
-if($saved) {
-echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Guild Deleted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Guild with name <b>'.$guild_name.'</b> has been deleted.</td></tr>          </table>        </div>  </table></div></td></tr>';
-echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
-}
-else
-{
-echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Guild Deleted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Are you sure you want delete guild <b>'.$guild_name.'</b>?<br>
-<form action="?subtopic=guilds&guild='.$guild->getName().'&action=deleteguild" METHOD=post><input type="hidden" name="todo" value="save"><input type="submit" value="Yes, delete"></form>
-</td></tr>          </table>        </div>  </table></div></td></tr>';
-echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=manager" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
-}
-}
-else
-{
-$guild_errors[] = 'You are not a leader of guild!';
-}
-}
-else
-{
-$guild_errors[] = 'You are not logged. You can\'t manage guild.';
-}
-}
-if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
-echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
-}
+	$guild_name = $_REQUEST['guild'];
+	if(!check_guild_name($guild_name)) {
+		$errors[] = 'Invalid guild name format.';
+	}
+	
+	if(empty($errors)) {
+		$guild = new OTS_Guild();
+		$guild->find($guild_name);
+		if(!$guild->isLoaded()) {
+			$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		}
+	}
+	
+	if(empty($errors)) {
+		if($logged) {
+			$guild_leader_char = $guild->getOwner();
+			$rank_list = $guild->getGuildRanksList();
+			$rank_list->orderBy('level', POT::ORDER_DESC);
+			$guild_leader = false;
+			$account_players = $account_logged->getPlayers();
+			
+			foreach($account_players as $player) {
+				if($guild->getOwner()->getId() == $player->getId()) {
+					$guild_vice = true;
+					$guild_leader = true;
+					$level_in_guild = 3;
+				}
+			}
+			
+			if($guild_leader) {
+				$saved = false;
+				
+			if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
+				delete_guild($guild->getId());
+				$saved = true;
+			}
+			
+			if($saved) {
+				echo $twig->render('success.html.twig', array(
+					'title' => 'Guild Deleted',
+					'description' => 'Guild with name <b>'.$guild_name.'</b> has been deleted.',
+					'custom_buttons' => '<center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>'
+				));
+			}
+			else {
+				echo $twig->render('guilds.delete_guild.html.twig', array(
+					'guild' => $guild
+				));
+			}
+			}
+			else {
+				$errors[] = 'You are not a leader of guild!';
+			}
+		}
+		else {
+			$errors[] = 'You are not logged. You can\'t manage guild.';
+		}
+	}
+	
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		
+		echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+	}
 }
 
 
@@ -2012,55 +1875,57 @@ echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigBu
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'deletebyadmin') {
-$guild_name = $_REQUEST['guild'];
-if(!check_guild_name($guild_name)) {
-$guild_errors[] = 'Invalid guild name format.';
-}
-if(empty($guild_errors)) {
-$guild = $ots->createObject('Guild');
-$guild->find($guild_name);
-if(!$guild->isLoaded()) {
-$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
-}
-}
-if(empty($guild_errors)) {
-if($logged) {
-if(admin()) {
-	$saved = false;
-	if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
-	delete_guild($guild->getId());
-	$saved = true;
+	$guild_name = $_REQUEST['guild'];
+	if(!check_guild_name($guild_name)) {
+		$errors[] = 'Invalid guild name format.';
 	}
-	if($saved) {
-	echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Guild Deleted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Guild with name <b>'.$guild_name.'</b> has been deleted.</td></tr>          </table>        </div>  </table></div></td></tr>';
+	
+	if(empty($errors)) {
+		$guild = new OTS_Guild();
+		$guild->find($guild_name);
+		if(!$guild->isLoaded()) {
+			$errors[] = 'Guild with name <b>' . $guild_name . '</b> doesn\'t exist.';
+		}
+	}
+	
+	if(empty($errors)) {
+		if($logged) {
+			if(admin()) {
+				$saved = false;
+				if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
+					delete_guild($guild->getId());
+					$saved = true;
+				}
+				
+				if($saved) {
+					echo $twig->render('success.html.twig', array(
+						'title' => 'Guild Deleted',
+						'description' => 'Guild with name <b>' . $guild_name . '</b> has been deleted.',
+						'custom_buttons' => '<center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url(' . $template_path . '/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $template_path . '/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>'
+					));
+				}
+				else {
+					echo $twig->render('success.html.twig', array(
+						'title' => 'Delete Guild',
+						'description' => 'Are you sure you want delete guild <b>' . $guild_name . '</b>?<br>
+				<form action="?subtopic=guilds&guild=' . $guild->getName() . '&action=deletebyadmin" METHOD="post"><input type="hidden" name="todo" value="save"><input type="submit" value="Yes, delete"></form>',
+						'custom_buttons' => '<center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>'
+					));
+				}
+			}
+			else {
+				$errors[] = 'You are not an admin!';
+			}
+		}
+		else {
+			$errors[] = "You are not logged. You can't delete guild.";
+		}
+	}
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	
 	echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 	}
-	else
-	{
-	echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Guild Deleted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Are you sure you want delete guild <b>'.$guild_name.'</b>?<br>
-	<form action="?subtopic=guilds&guild='.$guild->getName().'&action=deletebyadmin" METHOD=post><input type="hidden" name="todo" value="save"><input type="submit" value="Yes, delete"></form>
-	</td></tr>          </table>        </div>  </table></div></td></tr>';
-	echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
-	}
-}
-else
-{
-$guild_errors[] = 'You are not an admin!';
-}
-}
-else
-{
-$guild_errors[] = 'You are not logged. You can\'t delete guild.';
-}
-}
-if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
-echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
-}
 }
 
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -2070,18 +1935,18 @@ echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigBu
 if($action == 'changemotd' && MOTD_EXISTS) {
 	$guild_name = $_REQUEST['guild'];
 	if(!check_guild_name($guild_name)) {
-		$guild_errors[] = 'Invalid guild name format.';
+		$errors[] = 'Invalid guild name format.';
 	}
 	
-	if(empty($guild_errors)) {
-		$guild = $ots->createObject('Guild');
+	if(empty($errors)) {
+		$guild = new OTS_Guild();
 		$guild->find($guild_name);
 		if(!$guild->isLoaded()) {
-			$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+			$errors[] = "Guild with name <b>" . $guild_name . "</b> doesn't exist.";
 		}
 	}
 	
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		if($logged) {
 			$guild_leader_char = $guild->getOwner();
 			$rank_list = $guild->getGuildRanksList();
@@ -2099,36 +1964,31 @@ if($action == 'changemotd' && MOTD_EXISTS) {
 			$saved = false;
 			if($guild_leader) {
 				if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-					$motd = htmlspecialchars(stripslashes(substr(trim($_REQUEST['motd']),0,$config['guild_motd_chars_limit'])));
+					$motd = htmlspecialchars(stripslashes(substr($_REQUEST['motd'],0, $config['guild_motd_chars_limit'])));
 					$guild->setCustomField('motd', $motd);
 					$saved = true;
 				}
-				echo '<center><h2>Change guild MOTD</h2></center>';
+				
 				if($saved) {
-					echo '<center><font color="red" size="3"><b>CHANGES HAS BEEN SAVED!</b></font></center><br>';
+					success('Changes has been saved');
 				}
-				echo 'Here you can change MOTD (Message of the Day, showed in game!) of your guild.<BR>';
-				echo '<form enctype="multipart/form-data" action="?subtopic=guilds&guild='.$guild->getName().'&action=changemotd" method="POST">
-				<input type="hidden" name="todo" value="save" />
-					<textarea name="motd" cols="60" rows="3">'.$guild->getCustomField('motd').'</textarea><br>
-					(max. '.$config['guild_motd_chars_limit'].' chars) <input type="submit" value="Save MOTD" /></form><br>';
-				echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=manager" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+				
+				echo $twig->render('guilds.change_motd.html.twig', array(
+					'guild' => $guild
+				));
 			}
 			else {
-				$guild_errors[] = 'You are not a leader of guild!';
+				$errors[] = 'You are not a leader of guild!';
 			}
 		}
 		else {
-			$guild_errors[] = 'You are not logged. You can\'t manage guild.';
+			$errors[] = 'You are not logged. You can\'t manage guild.';
 		}
 	}
-	if(!empty($guild_errors)) {
-	echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-	foreach($guild_errors as $guild_error) {
-		echo '<li>'.$guild_error;
-	}
-	echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
-	echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		
+		echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
 	}
 }
 
@@ -2137,82 +1997,77 @@ if($action == 'changemotd' && MOTD_EXISTS) {
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'saveranks') {
-$guild_name = $_REQUEST['guild'];
-if(!check_guild_name($guild_name)) {
-$guild_errors[] = 'Invalid guild name format.';
-}
-if(empty($guild_errors)) {
-$guild = $ots->createObject('Guild');
-$guild->find($guild_name);
-if(!$guild->isLoaded()) {
-$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
-}
-}
-if(empty($guild_errors)) {
-if($logged) {
-$guild_leader_char = $guild->getOwner();
-$rank_list = $guild->getGuildRanksList();
-$rank_list->orderBy('level', POT::ORDER_DESC);
-$guild_leader = false;
-$account_players = $account_logged->getPlayers();
-foreach($account_players as $player) {
-if($guild_leader_char->getId() == $player->getId()) {
-$guild_vice = true;
-$guild_leader = true;
-$level_in_guild = 3;
-}
-}
-if($guild_leader) {
-foreach($rank_list as $rank) {
-$rank_id = $rank->getId();
-$name = $_REQUEST[$rank_id.'_name'];
-$level = (int) $_REQUEST[$rank_id.'_level'];
-if(check_rank_name($name)) {
-$rank->setName($name);
-}
-else
-{
-$ranks_errors[] = 'Invalid rank name. Please use only a-Z, 0-9 and spaces. Rank ID <b>'.$rank_id.'</b>.';
-}
-if($level > 0 && $level < 4) {
-$rank->setLevel($level);
-}
-else
-{
-$ranks_errors[] = 'Invalid rank level. Contact with admin. Rank ID <b>'.$rank_id.'</b>.';
-}
-$rank->save();
-}
-//show errors or redirect
-if(!empty($ranks_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($ranks_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
-}
-else
-{
-header("Location: ?subtopic=guilds&action=manager&guild=".$guild->getName());
-}
-}
-else
-{
-$guild_errors[] = 'You are not a leader of guild!';
-}
-}
-else
-{
-$guild_errors[] = 'You are not logged. You can\'t manage guild.';
-}
-}
-if(!empty($guild_errors)) {
-echo '<div class="SmallBox" >  <div class="MessageContainer" >    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="ErrorMessage" >      <div class="BoxFrameVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="BoxFrameVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></div>      <div class="AttentionSign" style="background-image:url('.$template_path.'/images/content/attentionsign.gif);" /></div><b>The Following Errors Have Occurred:</b><br/>';
-foreach($guild_errors as $guild_error) {
-	echo '<li>'.$guild_error;
-}
-echo '</div>    <div class="BoxFrameHorizontal" style="background-image:url('.$template_path.'/images/content/box-frame-horizontal.gif);" /></div>    <div class="BoxFrameEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>    <div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></div>  </div></div><br>';
-}
+	$guild_name = $_REQUEST['guild'];
+	if(!check_guild_name($guild_name)) {
+		$errors[] = 'Invalid guild name format.';
+	}
+	
+	if(empty($errors)) {
+		$guild = $ots->createObject('Guild');
+		$guild->find($guild_name);
+		if(!$guild->isLoaded()) {
+			$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		}
+	}
+	
+	if(empty($errors)) {
+		if($logged) {
+			$guild_leader_char = $guild->getOwner();
+			$rank_list = $guild->getGuildRanksList();
+			$rank_list->orderBy('level', POT::ORDER_DESC);
+			$guild_leader = false;
+			$account_players = $account_logged->getPlayers();
+			
+			foreach($account_players as $player) {
+				if($guild_leader_char->getId() == $player->getId()) {
+					$guild_vice = true;
+					$guild_leader = true;
+					$level_in_guild = 3;
+				}
+			}
+			
+			if($guild_leader) {
+				foreach($rank_list as $rank) {
+					$rank_id = $rank->getId();
+					$name = $_REQUEST[$rank_id.'_name'];
+					$level = (int) $_REQUEST[$rank_id.'_level'];
+					if(check_rank_name($name)) {
+						$rank->setName($name);
+					}
+					else {
+						$errors[] = 'Invalid rank name. Please use only a-Z, 0-9 and spaces. Rank ID <b>'.$rank_id.'</b>.';
+					}
+					if($level > 0 && $level < 4) {
+						$rank->setLevel($level);
+					}
+					else {
+						$errors[] = 'Invalid rank level. Contact with admin. Rank ID <b>'.$rank_id.'</b>.';
+					}
+					
+					$rank->save();
+				}
+				//show errors or redirect
+				if(!empty($errors)) {
+					echo $twig->render('error_box.html.twig', array('errors' => $errors));
+				}
+				else
+				{
+					header("Location: ?subtopic=guilds&action=manager&guild=".$guild->getName());
+				}
+			}
+			else
+			{
+				$errors[] = 'You are not a leader of guild!';
+			}
+		}
+		else
+		{
+			$errors[] = 'You are not logged. You can\'t manage guild.';
+		}
+	}
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	}
 }
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -2229,6 +2084,7 @@ if($action == 'cleanup_players')
 		}
 		else
 			$players_list = $account_logged->getPlayersList();
+		
 		if(count($players_list) > 0)
 		{
 			foreach($players_list as $player)
@@ -2279,57 +2135,57 @@ if($action == 'cleanup_players')
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'cleanup_guilds')
 {
-    if($logged)
-    {
-        $guilds_list = new OTS_Guilds_List();
-        $guilds_list->init();
-        if(count($guilds_list) > 0)
-        {
-            foreach($guilds_list as $guild)
-            {
-                $error = 0;
-                $leader = $guild->getOwner();
-                if($leader->isLoaded())
-                {
-                    $leader_rank = $leader->getRank();
-                    if($leader_rank->isLoaded())
-                    {
-                        if($leader_rank->isLoaded())
-                        {
-                            $leader_guild = $leader_rank->getGuild();
-                            if($leader_guild->isLoaded())
-                            {
-                                if($leader_guild->getId() != $guild->getId())
-                                    $error = 1;
-                            }
-                            else
-                                $error = 1;
-                        }
-                        else
-                            $error = 1;
-                    }
-                    else
-                        $error = 1;
-                }
-                else
-                    $error = 1;
-                if($error == 1)
-                {
-                    $deleted_guilds[] = $guild->getName();
-                    $status = delete_guild($guild->getId());
-                }
-            }
-            echo "<b>Deleted guilds (leaders of this guilds are not members of this guild [fix bugged guilds]):</b>";
-            if(!empty($deleted_guilds))
-                foreach($deleted_guilds as $guild)
-                    echo "<li>".$guild;
-        }
-        else
-            echo "0 guilds found.";
-    }
-    else
-        echo "You are not logged in.";
-    echo "<center><h3><a href=\"?subtopic=guilds\">BACK</a></h3></center>";
+	if($logged)
+	{
+		$guilds_list = new OTS_Guilds_List();
+		$guilds_list->init();
+		if(count($guilds_list) > 0)
+		{
+			foreach($guilds_list as $guild)
+			{
+				$error = 0;
+				$leader = $guild->getOwner();
+				if($leader->isLoaded())
+				{
+					$leader_rank = $leader->getRank();
+					if($leader_rank->isLoaded())
+					{
+						if($leader_rank->isLoaded())
+						{
+							$leader_guild = $leader_rank->getGuild();
+							if($leader_guild->isLoaded())
+							{
+								if($leader_guild->getId() != $guild->getId())
+									$error = 1;
+							}
+							else
+								$error = 1;
+						}
+						else
+							$error = 1;
+					}
+					else
+						$error = 1;
+				}
+				else
+					$error = 1;
+				if($error == 1)
+				{
+					$deleted_guilds[] = $guild->getName();
+					$status = delete_guild($guild->getId());
+				}
+			}
+			echo "<b>Deleted guilds (leaders of this guilds are not members of this guild [fix bugged guilds]):</b>";
+			if(!empty($deleted_guilds))
+				foreach($deleted_guilds as $guild)
+					echo "<li>".$guild;
+		}
+		else
+			echo "0 guilds found.";
+	}
+	else
+		echo "You are not logged in.";
+	echo "<center><h3><a href=\"?subtopic=guilds\">BACK</a></h3></center>";
 }
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
@@ -2339,10 +2195,10 @@ if($action == 'cleanup_guilds')
 	{
 		if($logged)
 		{
-			$player_n = stripslashes($_REQUEST['name']);
+			$name = stripslashes($_REQUEST['name']);
 			$new_nick = stripslashes($_REQUEST['nick']);
 			$player = new OTS_Player();
-			$player->find($player_n);
+			$player->find($name);
 			$player_from_account = false;
 			if(strlen($new_nick) <= 40)
 			{
@@ -2372,7 +2228,7 @@ if($action == 'cleanup_guilds')
 					echo 'Unknow error occured.';
 			}
 			else
-				echo 'Too long guild nick. Max. 30 chars, your: '.strlen($new_nick);
+				echo 'Too long guild nick. Max. 40 chars, your length: '.strlen($new_nick);
 		}
 			else
 				echo 'You are not logged.';

@@ -1,7 +1,7 @@
 To play on {{ config.lua.serverName }} you need an account.
 All you have to do to create your new account is to enter an account {% if constant('USE_ACCOUNT_NAME') %}name{% else %}number{% endif %}, password{% if config.recaptcha_enabled %}, confirm reCAPTCHA{% endif %}{% if config.account_country %}, country{% endif %} and your email address.
 Also you have to agree to the terms presented below. If you have done so, your account {% if constant('USE_ACCOUNT_NAME') %}name{% else %}number{% endif %} will be shown on the following page and your account password will be sent to your email address along with further instructions. If you do not receive the email with your password, please check your spam filter.<br/><br/>
-<form action="?subtopic=createaccount" method="post" >
+<form action="?subtopic=createaccount" method="post" id="createaccount">
 	<div class="TableContainer" >
 		<table class="Table1" cellpadding="0" cellspacing="0" >
 			<div class="CaptionContainer" >
@@ -10,7 +10,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 					<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
 					<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
 					<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
-					<div class="Text" >Create <?php echo $config['lua']['serverName']; ?> Account</div>
+					<div class="Text" >Create {{ config.lua.serverName }} Account</div>
 					<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
 					<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
 					<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>

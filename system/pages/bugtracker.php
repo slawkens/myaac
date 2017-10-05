@@ -40,7 +40,7 @@ $showed = $post = $reply = false;
             if(!empty($_REQUEST['reply']))
                 $reply=true;
                 
-            $account = $ots->createObject('Account');
+            $account = new OTS_Account();
             $account->load($_REQUEST['acc']);
             $account->isLoaded();
             $players = $account->getPlayersList();

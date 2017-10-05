@@ -2,8 +2,10 @@
 	eventId = 0;
 	lastSend = 0;
 
-	$('#createaccount').submit(function(){
-		return validate_form(this);
+	$(function() {
+		$('#createaccount').submit(function () {
+			return validate_form(this);
+		});
 	});
 
 	function checkAccount()
@@ -21,19 +23,19 @@
 		}
 
 		// anti flood
-		date = new Date;
-		timeNow = parseInt(date.getTime());
+		var date = new Date;
+		var timeNow = parseInt(date.getTime());
 
 		if(lastSend != 0)
 		{
 			if(timeNow - lastSend < 1100)
 			{
-				eventId = setInterval('checkAccount()', 1100)
+				eventId = setInterval('checkAccount()', 1100);
 				return;
 			}
 		}
 
-		account = document.getElementById("account_input").value;
+		var account = document.getElementById("account_input").value;
 		$.get("tools/validate.php", { account: account, uid: Math.random() },
 			function(data){
 				document.getElementById("acc_check").innerHTML = data;
@@ -56,8 +58,8 @@
 		}
 
 		//anti flood
-		date = new Date;
-		timeNow = parseInt(date.getTime());
+		var date = new Date;
+		vartimeNow = parseInt(date.getTime());
 
 		if(lastSend != 0)
 		{
@@ -68,7 +70,7 @@
 			}
 		}
 
-		email = document.getElementById("email").value;
+		var email = document.getElementById("email").value;
 		$.get("tools/validate.php", { email: email, uid: Math.random() },
 			function(data){
 				document.getElementById("email_check").innerHTML = data;
