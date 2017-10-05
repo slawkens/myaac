@@ -1,3 +1,17 @@
+[0.4.3 - 05.10.2017]
+	- better config loader taken from latest gesior, you can now include files in your config by doing dofile('config.local.lua')
+	- fixed country detection in create account
+	- fixed showing of character deaths and frags
+	- fixed https://otland.net/threads/myaac-v0-0-1.251454/page-13#post-2466303
+	- fixed https://otland.net/threads/myaac-v0-0-1.251454/page-13#post-2466313
+	- fixed rook sample, which will now have level 1, 150 health, 0 mana, and 400 cap.
+	- fixed samples being deleted by tfs 1.0+ cause of 'deletion' field set to 1
+	- pages loaded from database have higher priority than normal .php pages, so they will be loaded first if they exist
+	- moved many pages to twig templates
+	- change download client links from clients.halfaway.net to tibia-clients.com
+	- added bugtracker to kathrine template
+	- added CREDITS file
+
 [0.4.2 - 14.09.2017]
 	- updated version number
 
