@@ -113,6 +113,9 @@ else
 				}
 			}
 		}
+		else {
+			$errors[] = 'Please enter your account ' . (USE_ACCOUNT_NAME ? 'name' : 'password') . ' and password.';
+		}
 	}
 
 	// stay-logged with sessions

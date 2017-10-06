@@ -1,5 +1,5 @@
 Please enter your account {{ account|lower }} and your password.<br/><a href="?subtopic=createaccount" >Create an account</a> if you do not have one yet.<br/><br/>
-<form action="?subtopic=accountmanagement" method="post" >
+<form action="{{ getLink('account/manage') }}" method="post" >
 	{% if redirect is not null %}
 		<input type="hidden" name="redirect" value="{{ redirect }}" />
 	{% endif %}
@@ -66,7 +66,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="?s
 			</td>
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
-					<form action="?subtopic=lostaccount" method="post">
+					<form action="{{ getLink('account/lost') }}" method="post">
 						<tr>
 							<td style="border:0px;">
 								<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div>

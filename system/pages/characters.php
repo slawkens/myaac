@@ -18,7 +18,7 @@ function generate_search_form($autofocus = false)
 {
 	global $config, $twig;
 	return $twig->render('characters.form.html.twig', array(
-		'link' => getPageLink('characters'),
+		'link' => getLink('characters'),
 		'autofocus' => $autofocus
 	));
 }
@@ -42,7 +42,7 @@ function retrieve_former_name($name)
 
 $name = '';
 if(isset($_REQUEST['name']))
-	$name = stripslashes(ucwords(strtolower(trim($_REQUEST['name']))));
+	$name = urldecode(stripslashes(ucwords(strtolower($_REQUEST['name']))));
 
 if(empty($name))
 {
@@ -370,9 +370,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 	
 	// signature
 	if($config['signature_enabled']) {
-		$signature_url = BASE_URL . 'tools/signature/?name=' . urlencode($player->getName());
-		if($config['friendly_urls'])
-			$signature_url = BASE_URL . urlencode($player->getName()) . '.png';
+		$signature_url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . urlencode($player->getName()) . '.png';
 	}
 	
 	$hidden = $player->getCustomField('hidden');
@@ -431,7 +429,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		'player_link' => getPlayerLink($player->getName(), false),
 		'hidden' => $hidden,
 		'bannedUntil' => isset($bannedUntil) ? $bannedUntil : null,
-		'characters_link' => internalLayoutLink('characters'),
+		'characters_link' => getLink('characters'),
 		'account_players' => isset($account_players) ? $account_players : null,
 		'search_form' => generate_search_form()
 	));

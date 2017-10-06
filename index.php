@@ -39,8 +39,81 @@ if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['i
 	die('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
 }
 
+$uri = str_replace(BASE_DIR . '/', '', $_SERVER['REQUEST_URI']);
+$uri = str_replace('index.php/', '', $uri);
+$uri = str_replace('?', '', $uri);
+
+if(empty($uri)) {
+	$_REQUEST['p'] = 'news';
+}
+else if(file_exists(SYSTEM . 'pages/' . $uri . '.php')) {
+	$_REQUEST['p'] = $uri;
+}
+else {
+	$rules = array(
+		'/^account\/manage\/?$/' => array('subtopic' => 'accountmanagement'),
+		'/^account\/create\/?$/' => array('subtopic' => 'createaccount'),
+		'/^account\/lost\/?$/' => array('subtopic' => 'lostaccount'),
+		'/^account\/logout\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'logout'),
+		'/^account\/password\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changepassword'),
+		'/^account\/register\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'registeraccount'),
+		'/^account\/register\/new\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'registernew'),
+		'/^account\/email\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changeemail'),
+		'/^account\/info\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changeinfo'),
+		'/^account\/character\/create\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'createcharacter'),
+		'/^account\/character\/name\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changename'),
+		'/^account\/character\/sex\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changesex'),
+		'/^account\/character\/delete\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'deletecharacter'),
+		'/^account\/character\/comment\/[A-Za-z]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changecomment', 'name' => '$3'),
+		'/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changecomment'),
+		'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
+		'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
+		'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
+		'/^guilds\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'guilds', 'action' => 'show', 'guild' => '$1'),
+		'/^forum\/board\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_board', 'id' => '$2'),
+		'/^forum\/board\/[0-9]+\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_board', 'id' => '$2', 'page' => '$3'),
+		'/^forum\/thread\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2'),
+		'/^forum\/thread\/[0-9]+\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2', 'page' => '$3'),
+		'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
+		'/^highscores\/[A-Za-z0-9-_]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'vocation' => '$2'),
+		'/^highscores\/[A-Za-z0-9-_\']+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1'),
+		'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1')
+	);
+	
+	if (preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
+		$tmp = explode('.', $uri);
+		$_REQUEST['name'] = urldecode($tmp[0]);
+		
+		chdir(TOOLS . 'signature');
+		include('index.php');
+		exit();
+	}
+	
+	$found = false;
+	foreach($rules as $rule => $redirect) {
+		if (preg_match($rule, $uri)) {
+			$tmp = explode('/', $uri);
+			foreach($redirect as $key => $value) {
+				if(strpos($value, '$') !== false) {
+					$value = str_replace('$' . $value[1], $tmp[$value[1]], $value);
+				}
+				
+				$_REQUEST[$key] = $value;
+				$_GET[$key] = $value;
+			}
+			
+			$found = true;
+			break;
+		}
+	}
+	
+	if(!$found) {
+		$_REQUEST['p'] = '404';
+	}
+}
+
 // define page visited, so it can be used within events system
-$page = isset($_REQUEST['subtopic']) ? $_REQUEST['subtopic'] : (isset($_GET['p']) ? $_GET['p'] : '');
+$page = isset($_REQUEST['subtopic']) ? $_REQUEST['subtopic'] : (isset($_REQUEST['p']) ? $_REQUEST['p'] : '');
 if(empty($page) || preg_match('/[^A-z0-9_\-]/', $page))
 	$page = 'news';
 
@@ -156,7 +229,7 @@ if($config['backward_support']) {
 	$config['site']['screenshot_page'] = true;
 	
 	if($config['forum'] != '')
-		$config['forum_link'] = (strtolower($config['forum']) == 'site' ? internalLayoutLink('forum') : $config['forum']);
+		$config['forum_link'] = (strtolower($config['forum']) == 'site' ? getLink('forum') : $config['forum']);
 
 	foreach($status as $key => $value)
 		$config['status']['serverStatus_' . $key] = $value;

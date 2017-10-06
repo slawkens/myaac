@@ -181,7 +181,7 @@ if(!empty($action))
 					<tr>
 						<td align="right"><input type="submit" class="button" value="Save"/></td>
 						<td align="left">
-							<input type="button" onclick="window.location = '<?php echo getPageLink(PAGE) . ($config['friendly_urls'] ? '?' : '&'); ?>p=pages';" class="button" value="Cancel"/>
+							<input type="button" onclick="window.location = '<?php echo getLink(PAGE) . ($config['friendly_urls'] ? '?' : '&'); ?>p=pages';" class="button" value="Cancel"/>
 						</td>
 					</tr>
 				</table>
@@ -203,7 +203,7 @@ $pages =
 $i = 0;
 foreach($pages as $_page): ?>
 	<tr>
-		<td><?php echo getLink($_page['name'], $_page['name']); ?></td>
+		<td><?php echo getFullLink($_page['name'], $_page['name']); ?></td>
 		<td><i><?php echo substr($_page['title'], 0, 20); ?></i></td>
 		<td>
 			<a href="?p=pages&action=edit&id=<?php echo $_page['id']; ?>" class="ico" title="Edit">

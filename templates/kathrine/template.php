@@ -53,9 +53,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 			<div id="mainsubmenu">
 				<div id="news-submenu">
-					<a href="<?php echo $template['link_news']; ?>">Latest News</a>
+					<a href="<?php echo getLink('news'); ?>">Latest News</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_news_archive']; ?>">News Archives</a>
+					<a href="<?php echo getLink('news/archive'); ?>">News Archives</a>
 				</div>
 
 				<div id="account-submenu">
@@ -63,91 +63,91 @@ defined('MYAAC') or die('Direct access not allowed!');
 					if($logged)
 					{
 ?>
-						<a href="<?php echo $template['link_account_manage']; ?>">My Account</a>
+						<a href="<?php echo getLink('account/manage'); ?>">My Account</a>
 						<span class="separator"></span>
-						<a href="<?php echo $template['link_account_logout']; ?>">Logout</a>
+						<a href="<?php echo getLink('account/logout'); ?>">Logout</a>
 						<span class="separator"></span>
 <?php
 					}
 					else
 					{
 ?>
-						<a href="<?php echo $template['link_account_manage']; ?>">Login</a>
+						<a href="<?php echo getLink('account/manage'); ?>">Login</a>
 						<span class="separator"></span>
-					<a href="<?php echo $template['link_account_create']; ?>">Create Account</a>
+					<a href="<?php echo getLink('account/create'); ?>">Create Account</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_account_lost']; ?>">Lost Account</a>
+					<a href="<?php echo getLink('account/lost'); ?>">Lost Account</a>
 					<span class="separator"></span>
 <?php
 					}
 ?>
-					<a href="<?php echo $template['link_rules']; ?>">Server Rules</a>
+					<a href="<?php echo getLink('rules'); ?>">Server Rules</a>
 					<?php if($config['bug_report']): ?>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_bugtracker']; ?>">Report Bug</a>
+					<a href="<?php echo getLink('bugtracker'); ?>">Report Bug</a>
 					<?php endif; ?>
 				</div>
 
 				<div id="community-submenu">
-					<a href="<?php echo $template['link_online']; ?>">Who is Online?</a>
+					<a href="<?php echo getLink('online'); ?>">Who is Online?</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_characters']; ?>">Characters</a>
+					<a href="<?php echo getLink('characters'); ?>">Characters</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_guilds']; ?>">Guilds</a>
+					<a href="<?php echo getLink('guilds'); ?>">Guilds</a>
 					<?php
 					if(isset($config['wars'])): ?>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_wars']; ?>">Wars</a>
+					<a href="<?php echo getLink('wars'); ?>">Wars</a>
 					<?php endif; ?>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_highscores']; ?>">Highscores</a>
+					<a href="<?php echo getLink('highscores'); ?>">Highscores</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_lastkills']; ?>">Last Deaths</a>
+					<a href="<?php echo getLink('lastkills'); ?>">Last Deaths</a>
 					<?php if(fieldExist('name', 'houses')): ?>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_houses']; ?>">Houses</a>
+					<a href="<?php echo getLink('houses'); ?>">Houses</a>
 					<?php endif;
 					if($config['otserv_version'] == TFS_03): ?>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_bans']; ?>">Bans</a>
+					<a href="<?php echo getLink('bans'); ?>">Bans</a>
 					<?php endif;
 					if($config['forum'] != ''): ?>
 					<span class="separator"></span>
 					<?php echo $template['link_forum']; ?>Forum</a>
 					<?php endif; ?>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_team']; ?>">Team</a>
+					<a href="<?php echo getLink('team'); ?>">Team</a>
 				</div>
 
 				<div id="library-submenu">
-					<a href="<?php echo $template['link_creatures']; ?>">Monsters</a>
+					<a href="<?php echo getLink('creatures'); ?>">Monsters</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_spells']; ?>">Spells</a>
+					<a href="<?php echo getLink('spells'); ?>">Spells</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_serverInfo']; ?>">Server Info</a>
+					<a href="<?php echo getLink('serverInfo'); ?>">Server Info</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_downloads']; ?>">Downloads</a>
+					<a href="<?php echo getLink('downloads'); ?>">Downloads</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_commands']; ?>">Commands</a>
+					<a href="<?php echo getLink('commands'); ?>">Commands</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_movies']; ?>">Movies</a>
+					<a href="<?php echo getLink('movies'); ?>">Movies</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_screenshots']; ?>">Screenshots</a>
+					<a href="<?php echo getLink('screenshots'); ?>">Screenshots</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_experienceTable']; ?>">Experience Table</a>
+					<a href="<?php echo getLink('experienceTable'); ?>">Experience Table</a>
 					<span class="separator"></span>
-					<a href="<?php echo $template['link_faq']; ?>">FAQ</a>
+					<a href="<?php echo getLink('faq'); ?>">FAQ</a>
 				</div>
 				<?php
 				if($config['gifts_system'])
 				{
 					echo '
 					<div id="shops-submenu">
-						<a href="' . $template['link_points'] . '">Buy Premium Points</a>
+						<a href="' . getLink('points') . '">Buy Premium Points</a>
 						<span class="separator"></span>
-						<a href="' . $template['link_gifts'] . '">Shop Offer</a>';
+						<a href="' . getLink('gifts') . '">Shop Offer</a>';
 						if($logged)
-							echo '<span class="separator"></span><a href="' . $template['link_gifts_history'] . '">Shop History</a>';
+							echo '<span class="separator"></span><a href="' . getLink('gifts/history') . '">Shop History</a>';
 					echo '</div>';
 				}
 				?>
@@ -159,7 +159,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 				<div id="margins">
 					<table cellpadding="0" cellspacing="0" border="0" width="100%">
 						<tr>
-							<td><a href="<?php echo $template['link_news']; ?>"><?php echo $config['lua']['serverName']; ?></a> &raquo; <?php echo $title; ?></td>
+							<td><a href="<?php echo getLink('news'); ?>"><?php echo $config['lua']['serverName']; ?></a> &raquo; <?php echo $title; ?></td>
 							<td>
 							<?php
 							if($status['online'])

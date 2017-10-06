@@ -174,7 +174,7 @@ if($canEdit)
 	
 	if(empty($action) || $action == 'edit_board') {
 		echo $twig->render('forum.add_board.html.twig', array(
-			'link' => getPageLink('forum', ($action == 'edit_board' ? 'edit_board' : 'add_board')),
+			'link' => getLink('forum', ($action == 'edit_board' ? 'edit_board' : 'add_board')),
 			'action' => $action,
 			'id' => isset($id) ? $id : null,
 			'name' => isset($name) ? $name : null,
@@ -253,7 +253,7 @@ if($action == 'show_board')
 		else
 			$links_to_pages .= '<b>'.($i + 1).' </b>';
 	}
-	echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <b>'.$sections[$section_id]['name'].'</b>';
+	echo '<a href="' . getLink('forum') . '">Boards</a> >> <b>'.$sections[$section_id]['name'].'</b>';
 	if(!$sections[$section_id]['closed'] || Forum::isModerator())
 	{
 		echo '<br /><br />
@@ -324,7 +324,7 @@ if($action == 'show_thread')
 		$threads = $db->query("SELECT `players`.`id` as `player_id`, `players`.`name`, `players`.`account_id`, `players`.`vocation`" . (fieldExist('promotion', 'players') ? ", `players`.`promotion`" : "") . ", `players`.`level`, `" . TABLE_PREFIX . "forum`.`id`,`" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`section`,`" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_date`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`last_edit_aid`, `" . TABLE_PREFIX . "forum`.`edit_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` LIMIT ".$config['forum_posts_per_page']." OFFSET ".($_page * $config['forum_posts_per_page']))->fetchAll();
 		if(isset($threads[0]['name']))
 			$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `views`=`views`+1 WHERE `id` = ".(int) $thread_id);
-		echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($threads[0]['section']) . '">'.$sections[$threads[0]['section']]['name'].'</a> >> <b>'.$thread_name['post_topic'].'</b>';
+		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($threads[0]['section']) . '">'.$sections[$threads[0]['section']]['name'].'</a> >> <b>'.$thread_name['post_topic'].'</b>';
 		echo '<br /><br /><a href="?subtopic=forum&action=new_post&thread_id='.$thread_id.'"><img src="images/forum/post.gif" border="0" /></a><br /><br />Page: '.$links_to_pages.'<br /><table width="100%"><tr bgcolor="'.$config['lightborder'].'" width="100%"><td colspan="2"><font size="4"><b>'.htmlspecialchars($thread_name['post_topic']).'</b></font><font size="1"><br />by ' . getPlayerLink($thread_name['name']) . '</font></td></tr><tr bgcolor="'.$config['vdarkborder'].'"><td width="200"><font color="white" size="1"><b>Author</b></font></td><td>&nbsp;</td></tr>';
 		$player = $ots->createObject('Player');
 		foreach($threads as $thread)
@@ -421,7 +421,7 @@ if($action == 'new_post')
 		$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
 		$thread_id = (int) $_REQUEST['thread_id'];
 		$thread = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." LIMIT 1")->fetch();
-		echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
+		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
 		if(isset($thread['id']))
 		{
 			$quote = isset($_REQUEST['quote']) ? (int) $_REQUEST['quote'] : NULL;
@@ -537,7 +537,7 @@ if($action == 'edit_post')
 		if(isset($thread['id']))
 		{
 			$first_post = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread['first_post']." LIMIT 1")->fetch();
-			echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread['first_post']) . '">'.$first_post['post_topic'].'</a> >> <b>Edit post</b>';
+			echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread['first_post']) . '">'.$first_post['post_topic'].'</a> >> <b>Edit post</b>';
 			if($account_logged->getId() == $thread['author_aid'] || Forum::isModerator())
 			{
 				$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
@@ -634,7 +634,7 @@ if($action == 'new_thread')
 		$players_from_account = $db->query('SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = '.(int) $account_logged->getId())->fetchAll();
 		$section_id = isset($_REQUEST['section_id']) ? $_REQUEST['section_id'] : null;
 		if($section_id !== null) {
-			echo '<a href="' . getPageLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($section_id) . '">' . $sections[$section_id]['name'] . '</a> >> <b>Post new thread</b><br />';
+			echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($section_id) . '">' . $sections[$section_id]['name'] . '</a> >> <b>Post new thread</b><br />';
 			if (isset($sections[$section_id]['name'])) {
 				if ($sections[$section_id]['closed'] && !Forum::isModerator())
 					$errors[] = 'You cannot create topic on this board.';

@@ -73,7 +73,7 @@ if($canEdit)
 	}
 	
 	echo $twig->render('commands.form.html.twig', array(
-		'link' => getPageLink('commands', ($action == 'edit' ? 'edit' : 'add')),
+		'link' => getLink('commands/' . ($action == 'edit' ? 'edit' : 'add')),
 		'action' => $action,
 		'id' => isset($id) ? $id : null,
 		'words' => isset($words) ? $words : null,

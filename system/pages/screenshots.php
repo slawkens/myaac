@@ -57,7 +57,7 @@ if($canEdit) {
 		}
 		
 		echo $twig->render('screenshots.form.html.twig', array(
-			'link' => getPageLink('screenshots', ($action == 'edit' ? 'edit' : 'add')),
+			'link' => getLink('screenshots/' . ($action == 'edit' ? 'edit' : 'add')),
 			'action' => $action,
 			'id' => isset($id) ? $id : null,
 			'comment' => isset($comment) ? $comment : null,

@@ -1,6 +1,6 @@
 Here you can see and edit the information about your character.<br/>
 If you do not want to specify a certain field, just leave it blank.<br/><br/>
-<form action="?subtopic=accountmanagement&action=changecomment" method="post">
+<form action="{{ getLink('account/character/comment') }}" method="post">
 	<div class="TableContainer" >
 		<table class="Table5" cellpadding="0" cellspacing="0">
 			<div class="CaptionContainer">
@@ -99,7 +99,7 @@ If you do not want to specify a certain field, just leave it blank.<br/><br/>
 			</td>
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
-					<form action="?subtopic=accountmanagement" method="post">
+					<form action="{{ getLink('account/manage') }}" method="post">
 						<tr>
 							<td style="border:0px;">
 								<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div>

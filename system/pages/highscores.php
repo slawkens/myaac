@@ -289,42 +289,32 @@ echo '
 			);
 				
 			foreach($types as $link => $name) {
-				if($config['friendly_urls'])
-					echo '<A HREF="' . getPageLink('highscores') . '/' . $link . (isset($vocation) ? '/' . $vocation : '') . '" CLASS="size_xs">' . $name . '</A><BR>';
-				else
-					echo '<A HREF="' . getPageLink('highscores') . '&list=' . $link . (isset($vocation) ? '&vocation=' . $vocation : '') . '" CLASS="size_xs">' . $name . '</A><BR>';
+				echo '<A HREF="' . getLink('highscores') . '/' . $link . (isset($vocation) ? '/' . $vocation : '') . '" CLASS="size_xs">' . $name . '</A><BR>';
 			}
 
 if($config['highscores_frags'])
-	if($config['friendly_urls'])
-		echo '<A HREF="' . getPageLink('highscores') . '/frags" CLASS="size_xs">Frags</A><BR>';
-	else
-		echo '<A HREF="' . getPageLink('highscores') . '&list=frags' . (isset($vocation) ? '&vocation=' . $vocation : '') . '" CLASS="size_xs">Frags</A><BR>';
-
-echo 	'</TD>
-	</TR>
-</TABLE><BR>';
+	echo '<a href="' . getLink('highscores') . '/frags' . (isset($vocation) ? '/' . $vocation : '') . '" CLASS="size_xs">Frags</a><br/>';
+echo 	'</td>
+	</tr>
+</table><br>';
 
 if($config['highscores_vocation_box'])
 {
 	echo
-	'<TABLE BORDER=0 width="100%" CELLPADDING=4 CELLSPACING=1>
-		<TR BGCOLOR="' . $config['vdarkborder'] . '">
-			<TD CLASS=whites><B>Choose a vocation</B></TD>
-		</TR>
-		<TR BGCOLOR="'.$config['lightborder'].'">
-			<TD>
-				<A HREF="' . getPageLink('highscores') . ($config['friendly_urls'] ? '/' : '&list=') . $list . '" CLASS="size_xs">[ALL]</A><BR>';
+	'<table border="0" width="100%" cellpadding="4" cellspacing="1">
+		<tr bgcolor="' . $config['vdarkborder'] . '">
+			<td class=whites><b>Choose a vocation</b></td>
+		</tr>
+		<tr bgcolor="'.$config['lightborder'].'">
+			<td>
+				<a href="' . getLink('highscores') . ($config['friendly_urls'] ? '/' : '&list=') . $list . '" class="size_xs">[ALL]</A><BR>';
 				for($i = 1; $i < count($config_vocations) / 2; $i++) {
-					if($config['friendly_urls'])
-						echo '<A HREF="' . getPageLink('highscores') . '/' . $list . '/' . strtolower($config_vocations[$i]) . '" CLASS="size_xs">' . $config_vocations[$i] . '</A><BR>';
-					else
-						echo '<A HREF="' . getPageLink('highscores') . '&list=' . $list . '&vocation=' . strtolower($config_vocations[$i]) . '" CLASS="size_xs">' . $config_vocations[$i] . '</A><BR>';
+					echo '<a href="' . getLink('highscores') . '/' . $list . '/' . strtolower($config_vocations[$i]) . '" class="size_xs">' . $config_vocations[$i] . '</a><br/>';
 				}
 		echo '
-			</TD>
-		</TR>
-	</TABLE>';
+			</td>
+		</tr>
+	</table>';
 }
 ?>
 		</td>

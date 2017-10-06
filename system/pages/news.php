@@ -66,11 +66,9 @@ if(isset($_GET['archive']))
 		}
 		else
 			echo "This news doesn't exist or is hidden.<br/>";
-
-		//echo '<br /><a href="' . internalLayoutLink('news') . ($config['friendly_urls'] ? '/' : '') . 'archive' . '"><font size="2"><b>Back to Archive</b></font></a>';
 	?>
 	<center>
-	<table cellspacing="0" cellpadding="0" border="0"><form method="post" action="<?php echo internalLayoutLink('news') . ($config['friendly_urls'] ? '' : '') . 'archive'; ?>"><tbody><tr><td>
+	<table cellspacing="0" cellpadding="0" border="0"><form method="post" action="<?php echo getLink('news/archive'); ?>"><tbody><tr><td>
 		<input width="120" height="18" border="0" type="image" src="<?php echo $template_path; ?>/images/buttons/sbutton_back.gif" alt="Back" name="Back">
 	</form></td></tr></tbody></table>
 	</center>
@@ -85,14 +83,8 @@ if(isset($_GET['archive']))
 	$news_DB = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'news').' WHERE `type` = 1 AND `hidden` != 1 ORDER BY `date` DESC');
 	foreach($news_DB as $news)
 	{
-		$link = internalLayoutLink('news');
-		if($config['friendly_urls'])
-			$link .= '/archive/' . $news['id'];
-		else
-			$link .= 'archive&id=' . $news['id'];
-		
 		$newses[] = array(
-			'link' => $link,
+			'link' => ($config['friendly_urls']) . getLink('news') . '/archive/' . $news['id'],
 			'icon_id' => $categories[$news['category']]['icon_id'],
 			'title' => stripslashes($news['title']),
 			'date' => $news['date']
@@ -283,8 +275,8 @@ if(!$news_cached)
 
 		echo $twig->render('news.add.html.twig', array(
 			'action' => $action,
-			'news_link' => getPageLink(PAGE),
-			'news_link_form' => getPageLink('news', ($action == 'edit' ? 'edit' : 'add')),
+			'news_link' => getLink(PAGE),
+			'news_link_form' => getLink('news/' . ($action == 'edit' ? 'edit' : 'add')),
 			'news_id' => isset($id) ? $id : null,
 			'title' => isset($p_title) ? $p_title : '',
 			'body' => isset($body) ? $body : '',

@@ -1,7 +1,7 @@
 <?php
-	require('../../common.php');
-	require(SYSTEM . 'functions.php');
-	require(SYSTEM . 'init.php');
+	require_once('../../common.php');
+	require_once(SYSTEM . 'functions.php');
+	require_once(SYSTEM . 'init.php');
 
 	// Definitions
 	define('SIGNATURES', TOOLS . 'signature/');

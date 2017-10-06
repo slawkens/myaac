@@ -1,5 +1,5 @@
 To generate recovery key for your account please enter your password.<br/><br/>
-<form action="?subtopic=accountmanagement&action=registeraccount" method="post">
+<form action="{{ getLink('account/register') }}" method="post">
 <input type="hidden" name="registeraccountsave" value="1"/>
 <div class="TableContainer">
 	<table class="Table1" cellpadding="0" cellspacing="0">
@@ -50,7 +50,7 @@ To generate recovery key for your account please enter your password.<br/><br/>
 </form>
 		<td>
 			<table border="0" cellspacing="0" cellpadding="0">
-				<form action="?subtopic=accountmanagement" method="post">
+				<form action="{{ getLink('account/manage') }}" method="post">
 					<tr>
 						<td style="border: 0px;">
 							<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div>

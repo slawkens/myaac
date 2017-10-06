@@ -17,7 +17,6 @@ if($config['account_country'])
 
 $groups = new OTS_Groups_List();
 
-$errors = array();
 $show_form = true;
 $config_salt_enabled = fieldExist('salt', 'accounts');
 if(!$logged)
@@ -29,7 +28,7 @@ if(!$logged)
 	{
 		if(!empty($errors))
 			echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	
+		
 		echo $twig->render('account.login.html.twig', array(
 			'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
 			'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
@@ -38,6 +37,8 @@ if(!$logged)
 	return;
 	}
 }
+
+$errors = array();
 
 	if(isset($_REQUEST['redirect']))
 	{
@@ -63,7 +64,7 @@ if(!$logged)
 		else
 		{
 			if($config['generate_new_reckey'] && $config['mail_enabled'])
-				$account_registered = '<b><font color="green">Yes ( <a href="?subtopic=accountmanagement&action=newreckey"> Buy new Recovery Key </a> )</font></b>';
+				$account_registered = '<b><font color="green">Yes ( <a href="?subtopic=accountmanagement&action=registernew"> Buy new Recovery Key </a> )</font></b>';
 			else
 				$account_registered = '<b><font color="green">Yes</font></b>';
 		}
@@ -477,7 +478,7 @@ if($action == "changeemail") {
 	}
 
 //############## GENERATE NEW RECOVERY KEY ###########
-	if($action == "newreckey")
+	if($action == "registernew")
 	{
 		if(isset($_POST['reg_password']))
 			$reg_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
@@ -542,45 +543,52 @@ if($action == "changeemail") {
 
 //###### CHANGE CHARACTER COMMENT ######
 	if($action == "changecomment") {
-		$player_name = stripslashes($_REQUEST['name']);
+		$player_name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : null;
 		$new_comment = isset($_POST['comment']) ? htmlspecialchars(stripslashes(substr($_POST['comment'],0,2000))) : NULL;
 		$new_hideacc = isset($_POST['accountvisible']) ? (int)$_POST['accountvisible'] : NULL;
-		if(check_name($player_name)) {
-			$player = $ots->createObject('Player');
-			$player->find($player_name);
-			if($player->isLoaded()) {
-				$player_account = $player->getAccount();
-				if($account_logged->getId() == $player_account->getId()) {
-					if(isset($_POST['changecommentsave']) && $_POST['changecommentsave'] == 1) {
-						$player->setCustomField("hidden", $new_hideacc);
-						$player->setCustomField("comment", $new_comment);
-						$account_logged->logAction('Changed comment for character <b>' . $player->getName() . '</b>.');
-						echo $twig->render('success.html.twig', array(
-							'title' => 'Character Information Changed',
-							'description' => 'The character information has been changed.'
-						));
+		
+		if($player_name != null) {
+			if (check_name($player_name)) {
+				$player = $ots->createObject('Player');
+				$player->find($player_name);
+				if ($player->isLoaded()) {
+					$player_account = $player->getAccount();
+					if ($account_logged->getId() == $player_account->getId()) {
+						if (isset($_POST['changecommentsave']) && $_POST['changecommentsave'] == 1) {
+							$player->setCustomField("hidden", $new_hideacc);
+							$player->setCustomField("comment", $new_comment);
+							$account_logged->logAction('Changed comment for character <b>' . $player->getName() . '</b>.');
+							echo $twig->render('success.html.twig', array(
+								'title' => 'Character Information Changed',
+								'description' => 'The character information has been changed.'
+							));
+							$show_form = false;
+						}
+					} else {
+						$errors[] = 'Error. Character <b>' . $player_name . '</b> is not on your account.';
 					}
-					else
-					{
-						echo $twig->render('account.change_comment.html.twig', array(
-							'player' => $player,
-							'player_name' => $player_name
-						));
-					}
+				} else {
+					$errors[] = "Error. Character with this name doesn't exist.";
 				}
-				else
-				{
-					echo "Error. Character <b>".$player_name."</b> is not on your account.";
-				}
-			}
-			else
-			{
-				echo "Error. Character with this name doesn't exist.";
+			} else {
+				$errors[] = 'Error. Name contain illegal characters.';
 			}
 		}
-		else
-		{
-			echo "Error. Name contain illegal characters.";
+		else {
+			$errors[] = 'Please enter character name.';
+		}
+		
+		if($show_form) {
+			if(!empty($errors)) {
+				echo $twig->render('error_box.html.twig', array('errors' => $errors));
+			}
+			
+			if(isset($player)) {
+				echo $twig->render('account.change_comment.html.twig', array(
+					'player' => $player,
+					'player_name' => $player_name
+				));
+			}
 		}
 	}
 

@@ -6,7 +6,7 @@ In any case the name must not violate the naming conventions stated in the <a hr
 <b><font color="red"> You have maximum number of characters per account on your account. Delete one before you make new.</font></b>
 {% endif %}
 <br/><br/>
-<form action="?subtopic=accountmanagement&action=createcharacter" method="post">
+<form action="{{ getLink('account/character/create') }}" method="post">
 	<input type="hidden" name=savecharacter value="1">
 	<div class="TableContainer">
 		<table class="Table3" cellpadding="0" cellspacing="0">
@@ -134,7 +134,7 @@ In any case the name must not violate the naming conventions stated in the <a hr
 			</td>
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
-					<form action="?subtopic=accountmanagement" method="post">
+					<form action="{{ getLink('account/manage') }}" method="post">
 						<tr>
 							<td style="border:0px;">
 								<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)"><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div></div>

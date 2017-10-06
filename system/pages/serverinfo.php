@@ -20,10 +20,10 @@ if(isset($config['lua']['experience_stages']))
 	<h1><?php echo $config['lua']['serverName']; ?></h1>
 	<h3>
 		<?php if(isset($config['lua']['experienceStages']) && getBoolean($config['lua']['experienceStages'])): ?>
-		Experience stages: <a href="<?php echo getPageLink('experienceStages'); ?>">Look here</a><br/>
+		Experience stages: <a href="<?php echo getLink('experienceStages'); ?>">Look here</a><br/>
 		<?php endif; ?>
-		Commands: <a href="<?php echo getPageLink('commands'); ?>">Look here</a><br/>
-		Team: <a href="<?php echo getPageLink('team'); ?>">Look here</a><br/>
+		Commands: <a href="<?php echo getLink('commands'); ?>">Look here</a><br/>
+		Team: <a href="<?php echo getLink('team'); ?>">Look here</a><br/>
 	</h3>
 </center>
 
@@ -184,6 +184,6 @@ if(isset($config['lua']['experience_stages']))
 	<?php endif; ?>
 	<br/>
 	<h2>Other</h2>
-	<li>Respect our <a href="<?php echo getPageLink('rules'); ?>">rules</a>.</li>
+	<li>Respect our <a href="<?php echo getLink('rules'); ?>">rules</a>.</li>
 	<li>Please report rule violations (Botters, players breaking rules etc) with <b>CTRL + R</b>.</li>
 </ul>

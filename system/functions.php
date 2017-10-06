@@ -38,46 +38,27 @@ function generateLink($url, $name, $blank = false) {
 	return '<a href="' . $url . '"' . ($blank ? ' target="_blank"' : '') . '>' . $name . '</a>';
 }
 
-function getLink($page, $name, $blank = false) {
-	return generateLink(getPageLink($page), $name, $blank);
+function getFullLink($page, $name, $blank = false) {
+	return generateLink(getLink($page), $name, $blank);
 }
 
-function getPageLink($page, $action = null)
+function getLink($page, $action = null)
 {
 	global $config;
-
-	// TODO: tibiacom template is not working correctly with this
-	if($config['friendly_urls'])
-		return BASE_URL . $page . ($action ? '/' . $action : '');
-
-	return BASE_URL . '?subtopic=' . $page . ($action ? '&action=' . $action : '');
+	return BASE_URL . ($config['friendly_urls'] ? '' : '?') . $page . ($action ? '/' . $action : '');
 }
-function internalLayoutLink($page, $action = null) {return getPageLink($page, $action);}
+function internalLayoutLink($page, $action = null) {return getLink($page, $action);}
 
 function getForumThreadLink($thread_id, $page = NULL)
 {
 	global $config;
-
-	$url = '';
-	if($config['friendly_urls'])
-		$url = BASE_URL . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
-	else
-		$url = BASE_URL . '?subtopic=forum&action=show_thread&id=' . (int)$thread_id . (isset($page) ? '&page=' . $page : '');
-
-	return $url;
+	return BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
 }
 
 function getForumBoardLink($board_id, $page = NULL)
 {
 	global $config;
-
-	$url = '';
-	if($config['friendly_urls'])
-		$url = BASE_URL . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
-	else
-		$url = BASE_URL . '?subtopic=forum&action=show_board&id=' . (int)$board_id . (isset($page) ? '&page=' . $page : '');
-
-	return $url;
+	return BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
 }
 
 function getPlayerLink($name, $generate = true)
@@ -91,12 +72,8 @@ function getPlayerLink($name, $generate = true)
 		if($player->isLoaded())
 			$name = $player->getName();
 	}
-
-	$url = '';
-	if($config['friendly_urls'])
-		$url = BASE_URL . 'characters/' . urlencode($name);
-	else
-		$url = BASE_URL . '?subtopic=characters&name=' . urlencode($name);
+	
+	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'characters/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -115,13 +92,9 @@ function getHouseLink($name, $generate = true)
 		if($house->rowCount() > 0)
 			$name = $house->fetchColumn();
 	}
-
-	$url = '';
-	if($config['friendly_urls'])
-		$url = BASE_URL . 'houses/' . urlencode($name);
-	else
-		$url = BASE_URL . '?subtopic=houses&page=view&house=' . urlencode($name);
-
+	
+	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'houses/' . urlencode($name);
+	
 	if(!$generate) return $url;
 	return generateLink($url, $name);
 }
@@ -138,11 +111,7 @@ function getGuildLink($name, $generate = true)
 			$name = $guild->fetchColumn();
 	}
 
-	$url = '';
-	if($config['friendly_urls'])
-		$url = BASE_URL . 'guilds/' . urlencode($name);
-	else
-		$url = BASE_URL . '?subtopic=guilds&action=show&guild=' . urlencode($name);
+	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'guilds/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);

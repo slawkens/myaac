@@ -42,6 +42,15 @@ $function = new Twig_SimpleFunction('getStyle', function ($i) {
 });
 $twig->addFunction($function);
 
+$function = new Twig_SimpleFunction('getLink', function ($s) {
+	global $config;
+	if($config['friendly_urls'])
+		return $s;
+	
+	return '?' . $s;
+});
+$twig->addFunction($function);
+
 // trim values we receive
 if(isset($_POST))
 {

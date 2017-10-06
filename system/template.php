@@ -72,23 +72,23 @@ else if(file_exists($template_path . '/config.php'))
 	require($template_path . '/config.php');
 
 $template = array();
-$template['link_account_manage'] = internalLayoutLink('account' . ($config['friendly_urls'] ? '/manage' : 'management'));
-$template['link_account_create'] = internalLayoutLink(($config['friendly_urls'] ? 'account/create' : 'createaccount'));
-$template['link_account_lost'] = internalLayoutLink(($config['friendly_urls'] ? 'account/lost' : 'lostaccount'));
-$template['link_account_logout'] = internalLayoutLink(($config['friendly_urls'] ? 'account' : 'accountmanagement'), 'logout');
+$template['link_account_manage'] = getLink('account/manage');
+$template['link_account_create'] = getLink('account/create');
+$template['link_account_lost'] = getLink('account/lost');
+$template['link_account_logout'] = getLink('account/logout');
 
-$template['link_news_archive'] = internalLayoutLink('news' . ($config['friendly_urls'] ? '/' : '') . 'archive');
+$template['link_news_archive'] = getLink('news/archive');
 
 $links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'screenshots', 'movies', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts', 'bugtracker');
 foreach($links as $link) {
-    $template['link_' . $link] = internalLayoutLink($link);
+    $template['link_' . $link] = getLink($link);
 }
 
-$template['link_gifts_history'] = internalLayoutLink('gifts', 'show_history');
+$template['link_gifts_history'] = getLink('gifts', 'show_history');
 if($config['forum'] != '')
 {
 	if(strtolower($config['forum']) == 'site')
-		$template['link_forum'] = "<a href='" . internalLayoutLink('forum') . "'>";
+		$template['link_forum'] = "<a href='" . getLink('forum') . "'>";
 	else
 		$template['link_forum'] = "<a href='" . $config['forum'] . "' target='_blank'>";
 }

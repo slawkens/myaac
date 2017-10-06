@@ -1,5 +1,5 @@
 To delete a character enter the name of the character and your password.<br/><br/>
-<form action="?subtopic=accountmanagement&action=deletecharacter" method="post">
+<form action="{{ getLink('account/character/delete') }}" method="post">
 	<input type="hidden" name="deletecharactersave" value="1"/>
 	<div class="TableContainer">
 		<table class="Table1" cellpadding="0" cellspacing="0" >
@@ -54,7 +54,7 @@ To delete a character enter the name of the character and your password.<br/><br
 			</td>
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
-					<form action="?subtopic=accountmanagement" method="post">
+					<form action="{{ getLink('account/manage') }}" method="post">
 						<tr>
 							<td style="border:0px;">
 								<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div>

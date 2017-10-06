@@ -104,6 +104,8 @@ if($action == '')
 			{
 				foreach($guilds_list as $guild)
 				{
+					$link = ($config['friendly_urls'] ? '' : '?') . 'guilds/' . $guild->getName();
+					
 					$guild_logo = $guild->getCustomField('logo_name');
 					if(empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo))
 						$guild_logo = "default.gif";
@@ -117,7 +119,7 @@ if($action == '')
 					<TD valign="top"><B>'.$guild->getName().'</B><BR/>'.$description.'';
 					if(admin())
 						echo '<br /><a href="?subtopic=guilds&action=deletebyadmin&guild='.$guild->getName().'">Delete this guild (for ADMIN only!)</a>';
-					echo '</TD><TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild->getName().'" METHOD=post><TR><TD>
+					echo '</TD><TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="' . $link . '" METHOD=post><TR><TD>
 					<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/buttons/sbutton_view.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 					</TD></TR></FORM></TABLE>
 					</TD></TR>';
@@ -145,7 +147,7 @@ if($action == '')
 		<BR /><a href="?subtopic=guilds&action=cleanup_players">Cleanup players</a> - can\'t join guild/be invited? Can\'t create guild? Try cleanup players.
 		<BR /><a href="?subtopic=guilds&action=cleanup_guilds">Cleanup guilds</a> - made guild, you are a leader, but you are not on players list? Cleanup guilds!';
 	else
-		echo 'Before you can create guild you must login.<br><TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD><TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=accountmanagement&redirect=' . getPageLink('guilds') . '" METHOD=post><TR><TD>
+		echo 'Before you can create guild you must login.<br><TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD><TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=accountmanagement&redirect=' . getLink('guilds') . '" METHOD=post><TR><TD>
 		<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 		</TD></TR></FORM></TABLE></TD><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD></TR></TABLE>';
 }
