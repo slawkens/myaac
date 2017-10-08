@@ -1,7 +1,7 @@
 # myaac
-MyAAC is a free and open-source Automatic Account Creator (AAC) written in PHP. It is a fork of the [Gesior](https://github.com/gesior/Gesior2012) project. It supports only MySQL databases.
+MyAAC is a free and open-source Automatic Account Creator (AAC) and Content Management System (CMS) written in PHP. It is a fork of the [Gesior](https://github.com/gesior/Gesior2012) project. It supports only MySQL databases.
 
-Official website: http://my-aac.org
+Official website: https://my-aac.org
 
 ### REQUIREMENTS
 
