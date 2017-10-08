@@ -39,7 +39,12 @@ if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['i
 	die('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
 }
 
-$uri = str_replace(BASE_DIR . '/', '', $_SERVER['REQUEST_URI']);
+$uri = $_SERVER['REQUEST_URI'];
+if(!empty(BASE_DIR))
+	$uri = str_replace(BASE_DIR . '/', '', $uri);
+else
+	$uri = str_replace_first('/', '', $uri);
+
 $uri = str_replace('index.php/', '', $uri);
 $uri = str_replace('?', '', $uri);
 
