@@ -49,6 +49,7 @@ else
 
 $uri = str_replace('index.php/', '', $uri);
 $uri = str_replace('?', '', $uri);
+$uri = strtolower($uri);
 
 if(empty($uri)) {
 	$_REQUEST['p'] = 'news';
