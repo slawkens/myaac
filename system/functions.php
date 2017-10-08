@@ -1144,7 +1144,10 @@ function load_config_lua($filename)
 	
 	$config_file = $filename;
 	if(!@file_exists($config_file))
-		die('ERROR: Cannot find ' . $filename . ' file.');
+	{
+		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $filename . '). Error: ' . print_r(error_get_last(), true));
+		die('ERROR: Cannot find ' . $filename . ' file. More info in system/logs/error.log');
+	}
 
 	$result = array();
 	$config_string = file_get_contents($filename);
