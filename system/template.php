@@ -84,7 +84,7 @@ foreach($links as $link) {
     $template['link_' . $link] = getLink($link);
 }
 
-$template['link_gifts_history'] = getLink('gifts', 'show_history');
+$template['link_gifts_history'] = getLink('gifts', 'history');
 if($config['forum'] != '')
 {
 	if(strtolower($config['forum']) == 'site')

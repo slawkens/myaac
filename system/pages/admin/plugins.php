@@ -32,7 +32,6 @@ function deleteDirectory($dir) {
 		if(!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
 			return false;
 		}
-		
 	}
 	
 	return rmdir($dir);
@@ -130,9 +129,9 @@ else if(isset($_FILES["plugin"]["name"]))
 								}
 								else {
 									$continue = true;
-									$require = $plugin['require'];
 									
-									if(isset($require)) {
+									if(isset($plugin['require'])) {
+										$require = $plugin['require'];
 										$require_myaac = $require['myaac'];
 										if(isset($require_myaac)) {
 											if(version_compare(MYAAC_VERSION, $require_myaac, '<')) {

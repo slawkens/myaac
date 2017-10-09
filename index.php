@@ -74,6 +74,8 @@ else {
 		'/^account\/character\/comment\/[A-Za-z]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changecomment', 'name' => '$3'),
 		'/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changecomment'),
 		'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
+		'/^commands\/add\/?$/' => array('subtopic' => 'commands', 'action' => 'add'),
+		'/^commands\/edit\/?$/' => array('subtopic' => 'commands', 'action' => 'edit'),
 		'/^news\/add\/?$/' => array('subtopic' => 'news', 'action' => 'add'),
 		'/^news\/edit\/?$/' => array('subtopic' => 'news', 'action' => 'edit'),
 		'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
