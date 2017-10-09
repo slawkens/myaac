@@ -2,6 +2,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
 	<td><img src="<{{ template_path }}/images/general/blank.gif" width="10" height="1" border="0"></td>
 	<td>
+        {{ hook(constant('HOOK_CHARACTERS_BEFORE_INFORMATIONS')) }}
 		<table border="0" cellspacing="1" cellpadding="4" width="100%">
 			{% if config.characters.outfit %}
 			<div style="width:64px;height:64px;border:2px solid #F1E0C6; border-radius:50px; padding:13px; margin-top:38px;margin-left:376px;position:absolute;"><img style="margin-left:{% if player.getLookType() in [75, 266, 302] %}-0px;margin-top:-0px;width:64px;height:64px;{% else %}-60px;margin-top:-60px;width:128px;height:128px;{% endif %}" src="{{ outfit }}" alt="player outfit"/></div>
@@ -139,6 +140,7 @@
 				<td>{% if account.isPremium() %}Premium Account{% else %}Free Account{% endif %}</td>
 			</tr>
 		</table>
+		{{ hook(constant('HOOK_CHARACTERS_AFTER_INFORMATIONS')) }}
 		<br/>
 		<table border="0" width="100%">
 			<tr>
@@ -217,21 +219,23 @@
 		{{ deaths|raw }}
 		{{ frags|raw }}
 
+		{{ hook(constant('HOOK_CHARACTERS_BEFORE_SIGNATURE')) }}
+
 		{% if config.signature_enabled %}
 		<script type="text/javascript">
-            function showSignLinks()
-            {
-                if(document.getElementById('signLinks').style.display == "none")
-                {
-                    document.getElementById('signLinks').style.display = "inline";
-                    document.getElementById('signText').innerHTML = "Hide links";
-                }
+			function showSignLinks()
+			{
+				if(document.getElementById('signLinks').style.display == "none")
+				{
+					document.getElementById('signLinks').style.display = "inline";
+					document.getElementById('signText').innerHTML = "Hide links";
+				}
 				else
-                {
-                    document.getElementById('signLinks').style.display = "none";
-                    document.getElementById('signText').innerHTML = "Show links";
-                }
-            }
+				{
+					document.getElementById('signLinks').style.display = "none";
+					document.getElementById('signText').innerHTML = "Show links";
+				}
+			}
 		</script>
 		<br/>
 		<table border="0" cellspacing="1" cellpadding="4" width="100%"><tr bgcolor="{{ config.vdarkborder }}"><td colspan=2 class="white"><b>Signature</b></td></tr>
@@ -257,7 +261,7 @@
 			</td></tr>
 		</table>
 		{% endif %}
-
+		{{ hook(constant('HOOK_CHARACTERS_AFTER_SIGNATURE')) }}
 		{% if hidden != 1 %}
 		{% set rows = 0 %}
 		<br/><br/>
@@ -299,6 +303,7 @@
 			<td>{{ account.getCustomField("created")|date("j F Y, g:i a") ~bannedUntil }}</td>
 		</tr>
 		</table>
+		{{ hook(constant('HOOK_CHARACTERS_AFTER_ACCOUNT')) }}
 		<br/><br/>
 		<table border="0" cellspacing="1" cellpadding="4" width="100%">
 			<tr bgcolor="{{ config.vdarkborder }}">
@@ -342,6 +347,7 @@
 			{% endfor %}
 			</table>
 			{% endif %}
+			{{ hook(constant('HOOK_CHARACTERS_AFTER_CHARACTERS')) }}
 		</td>
 		<td>
 			<img src="{{ template_path }}/images/general/blank.gif" width="10" height="1" border="0">

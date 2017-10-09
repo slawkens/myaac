@@ -51,6 +51,12 @@ $function = new Twig_SimpleFunction('getLink', function ($s) {
 });
 $twig->addFunction($function);
 
+$function = new Twig_SimpleFunction('hook', function ($hook) {
+	global $hooks;
+	$hooks->trigger($hook);
+});
+$twig->addFunction($function);
+
 // trim values we receive
 if(isset($_POST))
 {

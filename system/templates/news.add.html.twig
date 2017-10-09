@@ -1,18 +1,11 @@
-<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
-	tinyMCE.init({
-		forced_root_block : false,
-
-		mode : "textareas",
-		theme : "advanced",
-		plugins: "safari,advimage,emotions,insertdatetime,preview,wordcount",
-
-		theme_advanced_buttons3_add : "emotions,insertdate,inserttime,preview,|,forecolor,backcolor",
-
-		theme_advanced_toolbar_location : "top",
-		theme_advanced_toolbar_align : "left",
-		theme_advanced_statusbar_location : "bottom",
-		theme_advanced_resizing : true,
+	tinymce.init({
+		selector : "textarea",
+		theme : "modern",
+		plugins: 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount spellchecker imagetools contextmenu colorpicker textpattern help',
+		toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+		image_advtab: true
 	});
 </script>
 {% if action != 'edit' %}

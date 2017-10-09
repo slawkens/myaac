@@ -26,7 +26,7 @@
 				<a href="<?php echo BASE_URL; ?>" target="_blank">Preview</a> <span class="separator">|</span> <a href="?action=logout">Log out<img src="<?php echo BASE_URL; ?>images/icons/logout.png" alt="" title="Log out" /></a>
 			</div>
 			<?php endif; ?>
-			<h1><?php echo $config['lua']['serverName'] . ' - ' . $title; ?> - Admin Panel</h1>
+			<h1><?php echo $config['lua']['serverName'] . (isset($title) ? ' - ' . $title : ''); ?> - Admin Panel</h1>
 		</div>
 		<div id="wrapper">
 			<?php
@@ -77,6 +77,19 @@
 							echo '</ul>';
 						}
 						echo '</li>';
+					}
+				
+					$query = $db->query('SELECT `name`, `page`, `flags` FROM `' . TABLE_PREFIX . 'admin_menu` ORDER BY `ordering`');
+					$menu_db = $query->fetchAll();
+					foreach($menu_db as $item) {
+						if($item['flags'] == 0 || hasFlag($item['flags'])) {
+							echo '<li><h3>
+							<a href="?p=' . $item['page'] . '">';
+							if($page == $item['page']) echo '<u>';
+							echo $item['name'];
+							if($page == $item['page']) echo '</u>';
+							echo '</a></h3></li>';
+						}
 					}
 				?>
 				</ul>

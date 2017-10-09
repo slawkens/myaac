@@ -51,7 +51,7 @@ $uri = str_replace('index.php/', '', $uri);
 $uri = str_replace('?', '', $uri);
 $uri = strtolower($uri);
 
-if(empty($uri)) {
+if(empty($uri) || isset($_REQUEST['template'])) {
 	$_REQUEST['p'] = 'news';
 }
 else if(file_exists(SYSTEM . 'pages/' . $uri . '.php')) {
@@ -75,6 +75,8 @@ else {
 		'/^account\/character\/comment\/[A-Za-z]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changecomment', 'name' => '$3'),
 		'/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'changecomment'),
 		'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
+		'/^news\/add\/?$/' => array('subtopic' => 'news', 'action' => 'add'),
+		'/^news\/edit\/?$/' => array('subtopic' => 'news', 'action' => 'edit'),
 		'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
 		'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
 		'/^guilds\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'guilds', 'action' => 'show', 'guild' => '$1'),

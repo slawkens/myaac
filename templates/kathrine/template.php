@@ -6,7 +6,11 @@ defined('MYAAC') or die('Direct access not allowed!');
 	<head>
 		<?php echo template_place_holder('head_start'); ?>
 		<link rel="stylesheet" href="<?php echo $template_path; ?>/style.css" type="text/css" />
-		<script src="<?php echo $template_path; ?>/menu.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			<?php
+				echo $twig->render('menu.js.html.twig');
+			?>
+		</script>
 		<script type="text/javascript" src="tools/basic.js"></script>
 		<script type="text/javascript">
 			var category = '<?php

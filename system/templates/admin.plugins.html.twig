@@ -6,14 +6,16 @@
 		<th>Version</th>
 		<th>Author</th>
 		<th>Contact</th>
+		<th>Options</th>
 	</tr>
 	{% for plugin in plugins %}
 	<tr>
 		<td><div title="{{ plugin.description }}">{{ plugin.name }}</div></td>
-		<td>{{ plugin.file }}</td>
+		<td>{{ plugin.file }}.json</td>
 		<td>{{ plugin.version }}</td>
 		<td>{{ plugin.author }}</td>
 		<td>{{ plugin.contact }}</td>
+		<td><a href="?p=plugins&uninstall={{ plugin.file }}">Uninstall</a></td>
 	</tr>
 	{% endfor %}
 </table>

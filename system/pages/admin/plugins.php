@@ -15,8 +15,55 @@ require(SYSTEM . 'hooks.php');
 
 echo $twig->render('admin.plugins.form.html.twig');
 
-$message = '';
-if(isset($_FILES["plugin"]["name"]))
+function deleteDirectory($dir) {
+	if(!file_exists($dir)) {
+		return true;
+	}
+	
+	if(!is_dir($dir)) {
+		return unlink($dir);
+	}
+	
+	foreach(scandir($dir) as $item) {
+		if($item == '.' || $item == '..') {
+			continue;
+		}
+		
+		if(!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+			return false;
+		}
+		
+	}
+	
+	return rmdir($dir);
+}
+
+if(isset($_REQUEST['uninstall'])){
+	$uninstall = $_REQUEST['uninstall'];
+	
+	$string = file_get_contents(BASE . 'plugins/' . $uninstall . '.json');
+	$plugin_info = json_decode($string, true);
+	if($plugin_info == false) {
+		warning('Cannot load plugin info ' . $uninstall . '.json');
+	}
+	else {
+		$success = true;
+		foreach($plugin_info['uninstall'] as $file) {
+			$file = BASE . $file;
+			if(!deleteDirectory($file)) {
+				$success = false;
+			}
+		}
+		
+		if($success) {
+			success('Successfully uninstalled plugin ' . $uninstall);
+		}
+		else {
+			error('Error while uninstalling plugin ' . $uninstall . ': ' . error_get_last());
+		}
+	}
+}
+else if(isset($_FILES["plugin"]["name"]))
 {
 	$file = $_FILES["plugin"];
 	$filename = $file["name"];
@@ -28,7 +75,7 @@ if(isset($_FILES["plugin"]["name"]))
 
 	if(isset($file['error'])) {
 		$error = 'Error uploading file';
-		switch( $file['error'] ) {
+		switch($file['error']) {
 			case UPLOAD_ERR_OK:
 				$error = false;
 				break;
@@ -79,33 +126,55 @@ if(isset($_FILES["plugin"]["name"]))
 								$string = file_get_contents($file_name);
 								$plugin = json_decode($string, true);
 								if ($plugin == null) {
-									warning('Cannot load ' . $file_name . '. File might be not valid json code.');
+									warning('Cannot load ' . $file_name . '. File might be not a valid json code.');
 								}
-								
-								if(isset($plugin['install'])) {
-									if(file_exists(BASE . $plugin['install']))
-										require(BASE . $plugin['install']);
-									else
-										warning('Cannot load install script. Your plugin might be not working correctly.');
-								}
-								
-								if(isset($plugin['hooks'])) {
-									foreach($plugin['hooks'] as $_name => $info) {
-										if(isset($hook_types[$info['type']])) {
-											$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
-											if($query->rowCount() == 1) { // found something
-												$query = $query->fetch();
-												$db->query('UPDATE `' . TABLE_PREFIX . 'hooks` SET `type` = ' . $hook_types[$info['type']] . ', `file` = ' . $db->quote($info['file']) . ' WHERE `id` = ' . (int)$query['id'] . ';');
-											}
-											else {
-												$db->query('INSERT INTO `' . TABLE_PREFIX . 'hooks` (`id`, `name`, `type`, `file`) VALUES (NULL, ' . $db->quote($_name) . ', ' . $hook_types[$info['type']] . ', ' . $db->quote($info['file']) . ');');
+								else {
+									$continue = true;
+									$require = $plugin['require'];
+									
+									if(isset($require)) {
+										$require_myaac = $require['myaac'];
+										if(isset($require_myaac)) {
+											if(version_compare(MYAAC_VERSION, $require_myaac, '<')) {
+												warning("This plugin requires MyAAC version " . $require_myaac . ", you're using version " . MYAAC_VERSION . " - please update.");
+												$continue = false;
 											}
 										}
-										else
-											warning('Unknown event type: ' . $info['type']);
+										
+										$require_php = $require['php'];
+										if(isset($require_php)) {
+											if(version_compare(phpversion(), $require_php, '<')) {
+												warning("This plugin requires PHP version " . $require_php . ", you're using version " . phpversion() . " - please update.");
+												$continue = false;
+											}
+										}
+									}
+									
+									if($continue) {
+										if (isset($plugin['install'])) {
+											if (file_exists(BASE . $plugin['install']))
+												require(BASE . $plugin['install']);
+											else
+												warning('Cannot load install script. Your plugin might be not working correctly.');
+										}
+										
+										if (isset($plugin['hooks'])) {
+											foreach ($plugin['hooks'] as $_name => $info) {
+												if (isset($hook_types[$info['type']])) {
+													$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
+													if ($query->rowCount() == 1) { // found something
+														$query = $query->fetch();
+														$db->query('UPDATE `' . TABLE_PREFIX . 'hooks` SET `type` = ' . $hook_types[$info['type']] . ', `file` = ' . $db->quote($info['file']) . ' WHERE `id` = ' . (int)$query['id'] . ';');
+													} else {
+														$db->query('INSERT INTO `' . TABLE_PREFIX . 'hooks` (`id`, `name`, `type`, `file`) VALUES (NULL, ' . $db->quote($_name) . ', ' . $hook_types[$info['type']] . ', ' . $db->quote($info['file']) . ');');
+													}
+												} else
+													warning('Unknown event type: ' . $info['type']);
+											}
+										}
+										success('<strong>' . $plugin['name'] . '</strong> plugin has been successfully installed.');
 									}
 								}
-								success('<strong>' . $plugin['name'] . '</strong> plugin has been successfully installed.');
 							}
 						}
 						else {
@@ -132,8 +201,6 @@ if(isset($_FILES["plugin"]["name"]))
 	}
 }
 
-echo $message;
-
 $plugins = array();
 $rows = array();
 
@@ -146,14 +213,20 @@ foreach(scandir($path) as $file)
 	
 	$string = file_get_contents(BASE . 'plugins/' . $file_info[0] . '.json');
 	$plugin_info = json_decode($string, true);
-	$rows[] = array(
-		'name' => $plugin_info['name'],
-		'description' => $plugin_info['description'],
-		'version' => $plugin_info['version'],
-		'author' => $plugin_info['author'],
-		'contact' => $plugin_info['contact'],
-		'file' => $file,
-	);
+	if($plugin_info == false) {
+		warning('Cannot load plugin info ' . $file);
+	}
+	else {
+		$rows[] = array(
+			'name' => $plugin_info['name'],
+			'description' => $plugin_info['description'],
+			'version' => $plugin_info['version'],
+			'author' => $plugin_info['author'],
+			'contact' => $plugin_info['contact'],
+			'file' => $file_info[0],
+			'uninstall' => isset($plugin_info['uninstall'])
+		);
+	}
 }
 
 echo $twig->render('admin.plugins.html.twig', array(

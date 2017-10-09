@@ -1,11 +1,20 @@
 {
-     "name": "Example Plugin",
-	 "description": "This is just an example of a Plugin for MyAAC.",
-     "version": "1.0",
-	 "author": "nobody",
-	 "contact": "nobody@example.org",
-	 "install": "plugins/example/install.php",
-	 "hooks": {
+	"name": "Example Plugin",
+	"description": "This is just an example of a Plugin for MyAAC.",
+	"version": "1.0",
+	"author": "nobody",
+	"contact": "nobody@example.org",
+	"require": {
+		"myaac": "0.4.3",
+		"php": "5.2.0"
+	},
+	"install": "plugins/example/install.php",
+	"uninstall": [
+		"plugins/example.json",
+		"plugins/example/install.php",
+		"plugins/example/before.php"
+	],
+	"hooks": {
 		"Example Hook": {
 			"type": "BEFORE_PAGE",
 			"file": "plugins/example/before.php"

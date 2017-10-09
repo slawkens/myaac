@@ -1,11 +1,22 @@
 CREATE TABLE `myaac_account_actions`
 (
-  `account_id` INT(11) NOT NULL,
-  `ip` INT(11) NOT NULL DEFAULT 0,
-  `ipv6` BINARY(16) NOT NULL DEFAULT 0,
-  `date` INT(11) NOT NULL DEFAULT 0,
-  `action` VARCHAR(255) NOT NULL DEFAULT '',
-  KEY (`account_id`)
+	`account_id` INT(11) NOT NULL,
+	`ip` INT(11) NOT NULL DEFAULT 0,
+	`ipv6` BINARY(16) NOT NULL DEFAULT 0,
+	`date` INT(11) NOT NULL DEFAULT 0,
+	`action` VARCHAR(255) NOT NULL DEFAULT '',
+	KEY (`account_id`)
+) ENGINE = MyISAM;
+
+CREATE TABLE `myaac_admin_menu`
+(
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) NOT NULL DEFAULT '',
+	`page` VARCHAR(255) NOT NULL DEFAULT '',
+	`ordering` INT(11) NOT NULL DEFAULT 0,
+	`flags` INT(11) NOT NULL DEFAULT 0,
+	`enabled` INT(1) NOT NULL DEFAULT 1,
+	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 
 CREATE TABLE `myaac_bugtracker`
@@ -20,7 +31,7 @@ CREATE TABLE `myaac_bugtracker`
 	`who` INT(11) NOT NULL DEFAULT 0,
 	`uid` INT(11) NOT NULL AUTO_INCREMENT,
 	`tag` INT(11) NOT NULL DEFAULT 0,
-	PRIMARY KEY  (`uid`)
+	PRIMARY KEY (`uid`)
 ) ENGINE = MyISAM;
 
 CREATE TABLE `myaac_changelog`
@@ -112,6 +123,7 @@ CREATE TABLE `myaac_hooks`
 	`name` VARCHAR(30) NOT NULL DEFAULT '',
 	`type` INT(2) NOT NULL DEFAULT 0,
 	`file` VARCHAR(100) NOT NULL,
+	`ordering` INT(11) NOT NULL DEFAULT 0,
 	`enabled` INT(1) NOT NULL DEFAULT 1,
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
