@@ -47,8 +47,7 @@ if(!empty(BASE_DIR))
 else
 	$uri = str_replace_first('/', '', $uri);
 
-$uri = str_replace('index.php/', '', $uri);
-$uri = str_replace('?', '', $uri);
+$uri = str_replace(array('index.php/', '?'), '', $uri);
 $uri = strtolower($uri);
 
 if(empty($uri) || isset($_REQUEST['template'])) {
