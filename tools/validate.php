@@ -6,7 +6,7 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.4.3
+ * @version   0.5.0
  * @link      http://my-aac.org
  */
 

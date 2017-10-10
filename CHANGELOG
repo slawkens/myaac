@@ -1,3 +1,22 @@
+[0.5.0 - 10.10.2017]
+	- moved .htaccess rules to plain php (index.php)
+	- updated tinymce to the latest (4.7.0) version, you can now embed code, for example youtube videos
+	- added option to uninstall plugin
+	- added option to require specified myaac, php or database version for plugins, without that plugin won't be installed
+	- change accountmanagement links to use friendly_urls
+	- fixed creating new forum thread
+	- sample characters are now assigned to admin account and have group_id 4 to not be shown on highscores
+	- added links loaded from database to admin panel - for future plugins
+	- print some info to error.log when can't find config.lua
+	- some fixes in account changecomment action
+	- show info when account name/number or password is empty on login
+	- fixed showing account login errors
+	- added few characters hooks
+	- fixed some kathrine template js bug when shop is disabled
+	- you can now use slash '/' in custom pages loaded from database
+	- added new twig function getLink that convert link taking into account config.friendly_urls
+	- internalLayoutLink -> getLink
+
 [0.4.3 - 05.10.2017]
 	- better config loader taken from latest gesior, you can now include files in your config by doing dofile('config.local.lua')
 	- fixed country detection in create account

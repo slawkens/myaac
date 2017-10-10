@@ -21,13 +21,13 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.4.3
+ * @version   0.5.0
  * @link      http://my-aac.org
  */
 session_start();
 
 define('MYAAC', true);
-define('MYAAC_VERSION', '0.4.3');
+define('MYAAC_VERSION', '0.5.0');
 define('DATABASE_VERSION', 10);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
