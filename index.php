@@ -126,7 +126,7 @@ else {
 
 // define page visited, so it can be used within events system
 $page = isset($_REQUEST['subtopic']) ? $_REQUEST['subtopic'] : (isset($_REQUEST['p']) ? $_REQUEST['p'] : '');
-if(empty($page) || preg_match('/[^A-z0-9_\-]/', $page)) {
+if(empty($page) || preg_match('/[^A-z0-9\/_\-]/', $page)) {
 	if(!$found)
 		$page = '404';
 	else
