@@ -55,7 +55,7 @@ if(empty($uri) || isset($_REQUEST['template'])) {
 	$_REQUEST['p'] = 'news';
 	$found = true;
 }
-else if(file_exists(SYSTEM . 'pages/' . $uri . '.php')) {
+else if(!preg_match('/[^A-z0-9_\-]/', $uri) && file_exists(SYSTEM . 'pages/' . $uri . '.php')) {
 	$_REQUEST['p'] = $uri;
 	$found = true;
 }
