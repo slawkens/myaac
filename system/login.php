@@ -138,6 +138,7 @@ else
 	
 	if($logged) {
 		$logged_flags = $account_logged->getWebFlags();
+		$twig->addGlobal('logged', true);
 		$twig->addGlobal('account_logged', $account_logged);
 	}
 }

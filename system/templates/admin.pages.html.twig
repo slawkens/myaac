@@ -1,0 +1,27 @@
+<table class="table" width="100%" cellspacing="1" cellpadding="4">
+	<tr>
+		<th><b>Name</b></th>
+		<th><b>Title</b></th>
+		<th><b>Options</b></th>
+	</tr>
+	{% for page in pages %}
+	<tr>
+		<td>{{ page.link|raw }}</td>
+		<td><i>{{ page.title }}</i></td>
+		<td>
+			<a href="?p=pages&action=edit&id={{ page.id }}" class="ico" title="Edit">
+				<img src="{{ constant('BASE_URL') }}images/edit.png"/>
+				Edit
+			</a>
+			<a href="?p=pages&action=delete&id={{ page.id }}" class="ico" onclick="return confirm('Are you sure?');" title="Delete">
+				<img src="{{ constant('BASE_URL') }}images/del.png"/>
+				Delete
+			</a>
+			<a href="?p=pages&action=hide&id={{ page.id }}" class="ico" title="<?php echo ($_page['hidden'] != 1 ? 'Hide' : 'Show'); ?>">
+				<img src="{{ constant('BASE_URL') }}images/{% if page.hidden != 1 %}success{% else %}error{% endif %}.png"/>
+				{% if page.hidden != 1 %}Hide{% else %}Show{% endif %}
+			</a>
+		</td>
+	</tr>
+	{% endfor %}
+</table>

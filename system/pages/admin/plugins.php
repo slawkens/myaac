@@ -132,18 +132,26 @@ else if(isset($_FILES["plugin"]["name"]))
 									
 									if(isset($plugin['require'])) {
 										$require = $plugin['require'];
-										$require_myaac = $require['myaac'];
-										if(isset($require_myaac)) {
+										if(isset($require['myaac'])) {
+											$require_myaac = $require['myaac'];
 											if(version_compare(MYAAC_VERSION, $require_myaac, '<')) {
 												warning("This plugin requires MyAAC version " . $require_myaac . ", you're using version " . MYAAC_VERSION . " - please update.");
 												$continue = false;
 											}
 										}
 										
-										$require_php = $require['php'];
-										if(isset($require_php)) {
+										if(isset($require['php'])) {
+											$require_php = $require['php'];
 											if(version_compare(phpversion(), $require_php, '<')) {
 												warning("This plugin requires PHP version " . $require_php . ", you're using version " . phpversion() . " - please update.");
+												$continue = false;
+											}
+										}
+										
+										if(isset($require['database'])) {
+											$require_database = $require['database'];
+											if($require_database < DATABASE_VERSION) {
+												warning("This plugin requires database version " . $require_database . ", you're using version " . DATABASE_VERSION . " - please update.");
 												$continue = false;
 											}
 										}

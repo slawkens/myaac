@@ -1,0 +1,107 @@
+{% set use_tinymce = false %}
+<!--
+//if($action != 'edit' || !$php)
+//	$use_tinymce = true;
+-->
+
+{% if use_tinymce %}
+<script type="text/javascript" src="tools/tiny_mce/jquery.tinymce.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$('#news-body').tinymce({
+			script_url : 'tools/tiny_mce/tiny_mce.js',
+			forced_root_block : false,
+
+			theme : "advanced",
+			plugins: "safari,advimage,emotions,insertdatetime,preview,wordcount",
+
+			theme_advanced_buttons3_add : "emotions,insertdate,inserttime,preview,|,forecolor,backcolor",
+
+			theme_advanced_toolbar_location : "top",
+			theme_advanced_toolbar_align : "left",
+			theme_advanced_statusbar_location : "bottom",
+			theme_advanced_resizing : true,
+		});
+
+	<?php /*if($action != 'edit'): ?>
+				$("#page-edit-table").hide();
+				$("#page-button").click(function() {
+					$("#page-edit-table").toggle();
+					return false;
+				});
+				<?php endif; */ ?>
+	});
+</script>
+<!--script type="text/javascript">
+	tinyMCE.init({
+		forced_root_block : false,
+
+		mode : "textareas",
+		theme : "advanced",
+		plugins: "safari,advimage,emotions,insertdatetime,preview,wordcount",
+
+		theme_advanced_buttons3_add : "emotions,insertdate,inserttime,preview,|,forecolor,backcolor",
+
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+	});
+</script-->
+{% endif %}
+<form method="post" action="?p=pages&action={% if action == 'edit' %}edit{% else %}add{% endif %}">
+	{% if action == 'edit' %}
+	<input type="hidden" name="id" value="{{ id }}" />
+	{%  endif %}
+	<table class="table" id="page-edit-table" width="100%" border="0" cellspacing="1" cellpadding="4">
+		<tr>
+			<th><b>{% if action == 'edit' %}Edit{% else %}Add{% endif %} page</b></th>
+		</tr>
+		<tr>
+			<td>
+				<table border="0" cellpadding="1">
+					<tr>
+						<td>Link/name:</td>
+						<td><input name="name" value="{{ name }}" size="29" maxlength="29"/></td>
+					</tr>
+					<tr>
+						<td>Title:</td>
+						<td><input name="title" value="{{ title }}" size="29" maxlength="29"/></td>
+					</tr>
+					<tr>
+						<td>PHP:</td>
+						<td><input type="checkbox" id="news-checkbox" name="php" title="Check if page should be executed as PHP" value="1"{% if php %} checked="true"{% endif %}/></td>
+					</tr>
+					<tr>
+						<td>Content:</td>
+						<td>
+							<textarea id="news-body" name="body" maxlength="65000" cols="50" rows="5">{{ body }}</textarea>
+							{% if use_tinymce %}
+							<br/>
+							<a href="javascript:;" onmousedown="$('#news-body').tinymce().hide();">[Hide]</a>
+							<a href="javascript:;" onmousedown="$('#news-body').tinymce().show();">[Show]</a>
+							{% endif %}
+						</td>
+					<tr/>
+					<tr>
+						<td>Access:</td>
+						<td>
+							<select name="access">
+								<?php foreach($groups->getGroups() as $id => $group): ?>
+								{% for id, group in groups %}
+								<option value="{{ group.getAccess() }}"{% if access == group.getAccess() %} selected{% endif %}>{{ group.getName() }}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td align="right"><input type="submit" class="button" value="Save"/></td>
+						<td align="left">
+							<input type="button" onclick="window.location = '{{ constant('ADMIN_URL') }}?p=pages';" class="button" value="Cancel"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</form>

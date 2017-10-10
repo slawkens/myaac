@@ -50,11 +50,14 @@ else
 $uri = str_replace(array('index.php/', '?'), '', $uri);
 $uri = strtolower($uri);
 
+$found = false;
 if(empty($uri) || isset($_REQUEST['template'])) {
 	$_REQUEST['p'] = 'news';
+	$found = true;
 }
 else if(file_exists(SYSTEM . 'pages/' . $uri . '.php')) {
 	$_REQUEST['p'] = $uri;
+	$found = true;
 }
 else {
 	$rules = array(
@@ -100,7 +103,6 @@ else {
 		exit();
 	}
 	
-	$found = false;
 	foreach($rules as $rule => $redirect) {
 		if (preg_match($rule, $uri)) {
 			$tmp = explode('/', $uri);
@@ -118,15 +120,18 @@ else {
 		}
 	}
 	
-	if(!$found) {
-		$_REQUEST['p'] = '404';
-	}
+	if(!$found)
+		$_REQUEST['p'] = $uri;
 }
 
 // define page visited, so it can be used within events system
 $page = isset($_REQUEST['subtopic']) ? $_REQUEST['subtopic'] : (isset($_REQUEST['p']) ? $_REQUEST['p'] : '');
-if(empty($page) || preg_match('/[^A-z0-9_\-]/', $page))
-	$page = 'news';
+if(empty($page) || preg_match('/[^A-z0-9_\-]/', $page)) {
+	if(!$found)
+		$page = '404';
+	else
+		$page = 'news';
+}
 
 $page = strtolower($page);
 define('PAGE', $page);
@@ -306,7 +311,7 @@ if($load_it)
 	else
 	{
 		$file = SYSTEM . 'pages/' . $page . '.php';
-		if(!@file_exists($file))
+		if(!@file_exists($file) && !$found)
 		{
 			$page = '404';
 			$file = SYSTEM . 'pages/404.php';

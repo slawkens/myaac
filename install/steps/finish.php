@@ -146,31 +146,31 @@ INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `pl
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Rook Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Rook Sample', 1, 1, 1, 0, 150, 150, 4200, 118, 114, 38, 57, 130, 0, 0, 0, 0, 100, 11, 2200, 1298, 7, '', 400, 1, 1255179613, 2453925456, 1, 1255179614, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Rook Sample', 4, " . $_SESSION['account'] . ", 1, 0, 150, 150, 4200, 118, 114, 38, 57, 130, 0, 0, 0, 0, 100, 11, 2200, 1298, 7, '', 400, 1, 1255179613, 2453925456, 1, 1255179614, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Sorcerer Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Sorcerer Sample', 1, 1, 8, 1, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179571, 2453925456, 1, 1255179612, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Sorcerer Sample', 4, " . $_SESSION['account'] . ", 8, 1, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179571, 2453925456, 1, 1255179612, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Druid Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Druid Sample', 1, 1, 8, 2, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179655, 2453925456, 1, 1255179658, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Druid Sample', 4, " . $_SESSION['account'] . ", 8, 2, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179655, 2453925456, 1, 1255179658, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Paladin Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Paladin Sample', 1, 1, 8, 3, 185, 185, 4200, 118, 114, 38, 57, 129, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179854, 2453925456, 1, 1255179858, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Paladin Sample', 4, " . $_SESSION['account'] . ", 8, 3, 185, 185, 4200, 118, 114, 38, 57, 129, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179854, 2453925456, 1, 1255179858, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Knight Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Knight Sample', 1, 1, 8, 4, 185, 185, 4200, 118, 114, 38, 57, 131, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179620, 2453925456, 1, 1255179654, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Knight Sample', 4, " . $_SESSION['account'] . ", 8, 4, 185, 185, 4200, 118, 114, 38, 57, 131, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179620, 2453925456, 1, 1255179654, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 

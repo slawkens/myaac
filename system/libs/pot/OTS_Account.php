@@ -334,6 +334,9 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
             throw new E_OTS_NotLoaded();
         }
 
+        if($this->data['lastday'] == 0)
+            return 0;
+        
 		return round(($this->data['lastday'] - time()) / (24 * 60 * 60), 3);
         //return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
     }

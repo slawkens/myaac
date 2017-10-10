@@ -64,7 +64,7 @@ $errors = array();
 		else
 		{
 			if($config['generate_new_reckey'] && $config['mail_enabled'])
-				$account_registered = '<b><font color="green">Yes ( <a href="?subtopic=accountmanagement&action=registernew"> Buy new Recovery Key </a> )</font></b>';
+				$account_registered = '<b><font color="green">Yes ( <a href="' . getLink('account/register/new') . '"> Buy new Recovery Key </a> )</font></b>';
 			else
 				$account_registered = '<b><font color="green">Yes</font></b>';
 		}
@@ -105,18 +105,6 @@ $errors = array();
 		$players = array();
 		$account_players = $account_logged->getPlayersList();
 		$account_players->orderBy('id');
-		//show list of players on account
-		foreach($account_players as $player)
-		{
-			$players[] = array(
-				'name' => $player->getName(),
-				'name_encoded' => urlencode($player->getName()),
-				'deleted' => $player->isDeleted(),
-				'level' => $player->getLevel(),
-				'vocation' => $config['vocations'][$player->getVocation()],
-				'online' => $player->isOnline()
-			);
-		}
 		
 		echo $twig->render('account.management.html.twig', array(
 			'welcome_message' => $welcome_message,
@@ -133,7 +121,7 @@ $errors = array();
 			'account_rlname' => $account_rlname,
 			'account_location' => $account_location,
 			'actions' => $actions,
-			'players' => $players
+			'players' => $account_players
 		));
 	}
 //########### CHANGE PASSWORD ##########
@@ -147,31 +135,31 @@ $errors = array();
 		else
 		{
 			if(empty($new_password) || empty($new_password2) || empty($old_password)){
-				$show_msgs[] = "Please fill in form.";
+				$errors[] = "Please fill in form.";
 			}
 			$password_strlen = strlen($new_password);
 			if($new_password != $new_password2) {
-				$show_msgs[] = "The new passwords do not match!";
+				$errors[] = "The new passwords do not match!";
 			}
 			else if($password_strlen < 8) {
-				$show_msgs[] = "New password minimal length is 8 characters.";
+				$errors[] = "New password minimal length is 8 characters.";
 			}
 			else if($password_strlen > 32) {
-				$show_msgs[] = "New password maximal length is 32 characters.";
+				$errors[] = "New password maximal length is 32 characters.";
 			}
 			
-			if(empty($show_msgs)) {
+			if(empty($errors)) {
 				if(!check_password($new_password)) {
-					$show_msgs[] = "New password contains illegal chars (a-z, A-Z and 0-9 only!). Minimum password length is 7 characters and maximum 32.";
+					$errors[] = "New password contains illegal chars (a-z, A-Z and 0-9 only!). Minimum password length is 7 characters and maximum 32.";
 				}
 				$old_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $old_password);
 				if($old_password != $account_logged->getPassword()) {
-					$show_msgs[] = "Current password is incorrect!";
+					$errors[] = "Current password is incorrect!";
 				}
 			}
-			if(!empty($show_msgs)){
+			if(!empty($errors)){
 				//show errors
-				echo $twig->render('error_box.html.twig', array('errors' => $show_msg));
+				echo $twig->render('error_box.html.twig', array('errors' => $errors));
 				
 				//show form
 				echo $twig->render('account.change_password.html.twig');
