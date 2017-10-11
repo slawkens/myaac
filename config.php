@@ -158,7 +158,8 @@ $config = array(
 
 	'signature_enabled' => true,
 	'signature_type' => 'tibian', // signature engine to use: tibian, mango, gesior
-	'signature_cache_time' => 5, // how long to store cached file (in minutes)
+	'signature_cache_time' => 5, // how long to store cached file (in minutes), default 5 minutes
+	'signature_browser_cache' => 60, // how long to cache by browser (in minutes), default 1 hour
 
 	// online page
 	'online_record' => true, // display players record?

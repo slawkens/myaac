@@ -43,7 +43,7 @@
 	}
 	
 	$cached = SIGNATURES_CACHE.$player->getId() . '.png';
-	if (file_exists($cached) and (time() < (filemtime($cached) + (60 * $config['signature_cache_time']))))
+	if(file_exists($cached) and (time() < (filemtime($cached) + (60 * $config['signature_cache_time']))))
 	{
 		header( 'Content-type: image/png' );
 		readfile( SIGNATURES_CACHE.$player->getId().'.png' );
@@ -51,4 +51,11 @@
 	}
 
 	require($file);
+	header('Content-type: image/png');
+	$seconds_to_cache = $config['signature_browser_cache'] * 60;
+	$ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";
+	header('Expires: ' . $ts);
+	header('Pragma: cache');
+	header('Cache-Control: max-age=' . $seconds_to_cache);
+	readfile(SIGNATURES_CACHE . $player->getId() . '.png');
 ?>

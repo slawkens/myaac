@@ -26,7 +26,4 @@
 	imagettftext($image , $fontsize, 0, 100, 95, $color, $font, (($player->getLastLogin() > 0) ? date("j F Y, g:i a", $player->getLastLogin()) : 'Never logged in.'));
 	imagepng($image, SIGNATURES_CACHE . $player->getID() . '.png');
 	imagedestroy($image);
-
-	header('Content-type: image/png');
-	readfile(SIGNATURES_CACHE . $player->getId() . '.png');
 ?>

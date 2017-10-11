@@ -127,7 +127,4 @@
 
 	imagepng($img, SIGNATURES_CACHE . $player->getID() . '.png');
 	imagedestroy($img);
-	
-	header('Content-type: image/png');
-	readfile(SIGNATURES_CACHE.$player->getId() . '.png' );
 ?>
