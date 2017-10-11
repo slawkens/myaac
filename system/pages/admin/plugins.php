@@ -108,10 +108,12 @@ else if(isset($_FILES["plugin"]["name"]))
 	}
 	else {
 		if(is_uploaded_file($file['tmp_name']) ) {
-			if(strtolower($name[1]) == 'zip') // check if it is zipped/compressed file
+			$filetype = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+			if($filetype == 'zip') // check if it is zipped/compressed file
 			{
+				$tmp_filename = pathinfo($filename, PATHINFO_FILENAME);
 				$targetdir = BASE;
-				$targetzip = BASE . 'plugins/' . $name[0] . '.zip';
+				$targetzip = BASE . 'plugins/' . $tmp_filename;
 
 				if(move_uploaded_file($tmp_name, $targetzip)) { // move uploaded file
 					$zip = new ZipArchive();
