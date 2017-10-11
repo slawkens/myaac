@@ -229,11 +229,13 @@ $rows = array();
 $path = PLUGINS;
 foreach(scandir($path) as $file)
 {
-	$file_info = explode('.', $file);
-	if($file == '.' || $file == '..' || $file == 'disabled' || $file == 'example.json' || is_dir($path . $file) || !$file_info[1] || $file_info[1] != 'json')
+	$file_ext = pathinfo($file, PATHINFO_EXTENSION);
+	$file_name = pathinfo($file, PATHINFO_FILENAME);
+	if($file == '.' || $file == '..' || $file == 'disabled' || $file == 'example.json' || is_dir($path . $file) || $file_ext != 'json')
 		continue;
 	
-	$string = file_get_contents(BASE . 'plugins/' . $file_info[0] . '.json');
+	$file_info = str_replace('.json', '', $file_name);
+	$string = file_get_contents(BASE . 'plugins/' . $file_info . '.json');
 	$plugin_info = json_decode($string, true);
 	if($plugin_info == false) {
 		warning('Cannot load plugin info ' . $file);
@@ -245,7 +247,7 @@ foreach(scandir($path) as $file)
 			'version' => $plugin_info['version'],
 			'author' => $plugin_info['author'],
 			'contact' => $plugin_info['contact'],
-			'file' => $file_info[0],
+			'file' => $file_info,
 			'uninstall' => isset($plugin_info['uninstall'])
 		);
 	}
