@@ -185,6 +185,7 @@ $config = array(
 	'highscores_outfit' => true, // show player outfit?
 	'highscores_country_box' => false, // doesnt work yet! (not implemented)
 	'highscores_groups_hidden' => 4, // this group id and higher won't be shown on the highscores
+	'highscores_length' => 100, // how many records per page on highscores
 
 	// characters page
 	'characters' => array( // what things to display on character view page (true/false in each option)

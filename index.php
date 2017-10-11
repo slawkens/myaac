@@ -89,6 +89,8 @@ else {
 		'/^forum\/thread\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2'),
 		'/^forum\/thread\/[0-9]+\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2', 'page' => '$3'),
 		'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
+		'/^highscores\/[A-Za-z0-9-_]+\/[A-Za-z0-9-_]+\/[0-9]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'vocation' => '$2', 'page' => '$3'),
+		'/^highscores\/[A-Za-z0-9-_]+\/[0-9]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'page' => '$2'),
 		'/^highscores\/[A-Za-z0-9-_]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'vocation' => '$2'),
 		'/^highscores\/[A-Za-z0-9-_\']+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1'),
 		'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1')

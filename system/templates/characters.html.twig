@@ -244,7 +244,9 @@
 				<td width="20%" align="center">{{ frag.time|date("j M Y, H:i") }}</td>
 				<td>{{ frag.description }}</td>
 			</tr>
+			{% endfor %}
 		</table>
+		{% endif %}
 
 		{{ hook(constant('HOOK_CHARACTERS_BEFORE_SIGNATURE')) }}
 

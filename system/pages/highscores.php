@@ -109,7 +109,7 @@ if($config['highscores_outfit']) {
 	}
 }
 
-$offset = $_page * 100;
+$offset = $_page * $config['highscores_length'];
 if($skill <= POT::SKILL_LAST) { // skills
 	if(fieldExist('skill_fist', 'players')) {// tfs 1.0
 		$skill_ids = array(
@@ -186,7 +186,7 @@ foreach($skills as $player)
 		$player['online'] = $query->rowCount() > 0;
 	}
 
-	if(++$i <= 100)
+	if(++$i <= $config['highscores_length'])
 	{
 		if($skill == POT::SKILL__MAGIC)
 			$player['value'] = $player['maglevel'];
@@ -238,11 +238,11 @@ if(!$i)
 <?php
 //link to previous page if actual page is not first
 if($_page > 0)
-	echo '<TR><TD WIDTH=100% ALIGN=right VALIGN=bottom><A HREF="?subtopic=highscores&list='.$list.'&page='.($_page - 1).'" CLASS="size_xxs">Previous Page</A></TD></TR>';
+	echo '<TR><TD WIDTH=100% ALIGN=right VALIGN=bottom><A HREF="' . getLink('highscores') . '/' . $list . (isset($vocation) ? '/' . $vocation : '') . '/' . ($_page - 1) . '" CLASS="size_xxs">Previous Page</A></TD></TR>';
 
 //link to next page if any result will be on next page
 if($show_link_to_next_page)
-	echo '<TR><TD WIDTH=100% ALIGN=right VALIGN=bottom><A HREF="?subtopic=highscores&list='.$list.'&page='.($_page + 1).'" CLASS="size_xxs">Next Page</A></TD></TR>';
+	echo '<TR><TD WIDTH=100% ALIGN=right VALIGN=bottom><A HREF="' . getLink('highscores') . '/' . $list . (isset($vocation) ? '/' . $vocation : '') . '/' . ($_page + 1) . '" CLASS="size_xxs">Next Page</A></TD></TR>';
 
 //end of page
 echo '</TABLE>
@@ -307,8 +307,8 @@ if($config['highscores_vocation_box'])
 		</tr>
 		<tr bgcolor="'.$config['lightborder'].'">
 			<td>
-				<a href="' . getLink('highscores') . ($config['friendly_urls'] ? '/' : '&list=') . $list . '" class="size_xs">[ALL]</A><BR>';
-				for($i = 1; $i < count($config_vocations) / 2; $i++) {
+				<a href="' . getLink('highscores') . '/' . $list . '" class="size_xs">[ALL]</A><BR>';
+				for($i = 1; $i <= $config['vocations_amount']; $i++) {
 					echo '<a href="' . getLink('highscores') . '/' . $list . '/' . strtolower($config_vocations[$i]) . '" class="size_xs">' . $config_vocations[$i] . '</a><br/>';
 				}
 		echo '
