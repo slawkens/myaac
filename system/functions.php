@@ -1173,6 +1173,10 @@ function load_config_lua($filename)
 				if(substr($key, 0, 2) != '--')
 				{
 					$value = trim($tmp_exp[1]);
+					if(strpos($value, '--') !== false) {// found some deep comment
+						$value = preg_replace('/--.*$/i', '', $value);
+					}
+					
 					if(is_numeric($value))
 						$result[$key] = (float) $value;
 					elseif(in_array(substr($value, 0 , 1), array("'", '"')) && in_array(substr($value, -1 , 1), array("'", '"')))
