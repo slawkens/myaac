@@ -60,6 +60,9 @@ if(isset($_REQUEST['uninstall'])){
 			}
 			
 			if($success) {
+				if($cache->enabled()) {
+					$cache->delete('templates');
+				}
 				success('Successfully uninstalled plugin ' . $uninstall);
 			}
 			else {
@@ -184,6 +187,10 @@ else if(isset($_FILES["plugin"]["name"]))
 												} else
 													warning('Unknown event type: ' . $info['type']);
 											}
+										}
+										
+										if($cache->enabled()) {
+											$cache->delete('templates');
 										}
 										success('<strong>' . $plugin['name'] . '</strong> plugin has been successfully installed.');
 									}
