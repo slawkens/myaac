@@ -28,7 +28,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
  * 
  * @var string
  */
-    private $prefix = '';
+    protected $prefix = '';
 
 /**
  * Query counter

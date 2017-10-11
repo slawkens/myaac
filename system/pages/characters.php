@@ -229,22 +229,19 @@ if($player->isLoaded() && !$player->isDeleted())
 	}
 
 	$dead_add_content = '';
+	$deaths = array();
 	if(tableExist('killers')) {
 		$player_deaths = $db->query('SELECT `id`, `date`, `level` FROM `player_deaths` WHERE `player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,10;');
 		if(count($player_deaths))
 		{
-			$dead_add_content = '<br/><table border=0 cellspacing=1 cellpadding=4 width=100%><tr bgcolor='.$config['vdarkborder'].'><td colspan=2 class="white"><b>Character Deaths</b></td></tr>';
-			
 			$number_of_rows = 0;
 			foreach($player_deaths as $death)
 			{
-				$dead_add_content .= '<tr bgcolor="'.getStyle($number_of_rows++).'">
-					<td width="20%" align="center">'.date("j M Y, H:i", $death['date']).'</td>
-					<td> ';
 				$killers = $db->query("SELECT environment_killers.name AS monster_name, players.name AS player_name, players.deleted AS player_exists FROM killers LEFT JOIN environment_killers ON killers.id = environment_killers.kill_id
 LEFT JOIN player_killers ON killers.id = player_killers.kill_id LEFT JOIN players ON players.id = player_killers.player_id
 WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, killers.id ASC")->fetchAll();
 				
+				$description = '';
 				$i = 0;
 				$count = count($killers);
 				foreach($killers as $killer)
@@ -253,41 +250,36 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 					if($killer['player_name'] != "")
 					{
 						if($i == 1)
-							$dead_add_content .= "Killed at level <b>".$death['level']."</b>";
+							$description .= "Killed at level <b>".$death['level']."</b>";
 						else if($i == $count)
-							$dead_add_content .= " and";
+							$description .= " and";
 						else
-							$dead_add_content .= ",";
+							$description .= ",";
 						
-						$dead_add_content .= " by ";
+						$description .= " by ";
 						if($killer['monster_name'] != "")
-							$dead_add_content .= $killer['monster_name']." summoned by ";
+							$description .= $killer['monster_name']." summoned by ";
 						
 						if($killer['player_exists'] == 0)
-							$dead_add_content .= getPlayerLink($killer['player_name']);
+							$description .= getPlayerLink($killer['player_name']);
 						else
-							$dead_add_content .= $killer['player_name'];
+							$description .= $killer['player_name'];
 					}
 					else
 					{
 						if($i == 1)
-							$dead_add_content .= "Died at level <b>".$death['level']."</b>";
+							$description .= "Died at level <b>".$death['level']."</b>";
 						else if($i == $count)
-							$dead_add_content .= " and";
+							$description .= " and";
 						else
-							$dead_add_content .= ",";
+							$description .= ",";
 						
-						$dead_add_content .= " by ".$killer['monster_name'];
+						$description .= " by ".$killer['monster_name'];
 					}
 				}
 				
-				$dead_add_content .= ".</td></tr>";
+				$deaths[] = array('time' => $death['date'], 'description' => $description . '.');
 			}
-			
-			if($number_of_rows > 0)
-				$dead_add_content .= '</table>';
-			else
-				$dead_add_content = '';
 		}
 	}
 	else {
@@ -301,45 +293,35 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		
 		if(count($deaths_db))
 		{
-			$dead_add_content = '<br/><table border=0 cellspacing=1 cellpadding=4 width=100%><tr bgcolor="'.$config['vdarkborder'].'"><td colspan="2" class="white"><b>Character Deaths</b></td></tr>';
-			
 			$number_of_rows = 0;
 			foreach($deaths_db as $death)
 			{
-				$dead_add_content .= '<tr bgcolor="'.getStyle($number_of_rows++).'">
-					<td width="20%" align="center">'.date("j M Y, H:i", $death['time']).'</td>
-					<td> ';
-				
 				$lasthit = ($death['is_player']) ? getPlayerLink($death['killed_by']) : $death['killed_by'];
-				$dead_add_content .=  'Killed at level ' . $death['level'] . ' by ' . $lasthit;
+				$description =  'Killed at level ' . $death['level'] . ' by ' . $lasthit;
 				if($death['unjustified']) {
-					$dead_add_content .=  " <font color='red' style='font-style: italic;'>(unjustified)</font>";
+					$description .=  " <font color='red' style='font-style: italic;'>(unjustified)</font>";
 				}
 				
 				$mostdmg = ($death['mostdamage_by'] !== $death['killed_by']) ? true : false;
 				if($mostdmg)
 				{
 					$mostdmg = ($death['mostdamage_is_player']) ? getPlayerLink($death['mostdamage_by']) : $death['mostdamage_by'];
-					$dead_add_content .=  ' and by ' . $mostdmg;
+					$description .=  ' and by ' . $mostdmg;
 					
 					if ($death['mostdamage_unjustified']) {
-						$dead_add_content .=  " <font color='red' style='font-style: italic;'>(unjustified)</font>";
+						$description .=  " <font color='red' style='font-style: italic;'>(unjustified)</font>";
 					}
 				}
 				else {
-					$dead_add_content .=  " <b>(soloed)</b>";
+					$description .=  " <b>(soloed)</b>";
 				}
 				
-				$dead_add_content .= ".</td></tr>";
+				$deaths[] = array('time' => $death['time'], 'description' => $description);
 			}
-			
-			if($number_of_rows > 0)
-				$dead_add_content .= '</table>';
-			else
-				$dead_add_content = '';
 		}
 	}
 	
+	$frags = array();
 	$frag_add_content = '';
 	if($config['characters']['frags'])
 	{
@@ -349,22 +331,13 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		$player_frags = $db->query('SELECT `player_deaths`.*, `players`.`name`, `killers`.`unjustified` FROM `player_deaths` LEFT JOIN `killers` ON `killers`.`death_id` = `player_deaths`.`id` LEFT JOIN `player_killers` ON `player_killers`.`kill_id` = `killers`.`id` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `player_killers`.`player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,'.$frags_limit.';');
 		if(count($player_frags))
 		{
-			$frags = 0;
-			$frag_add_content .= '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><br><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Victims</B></TD></TR>';
+			$row_count = 0;
 			foreach($player_frags as $frag)
 			{
-				$frags++;
-				$frag_add_content .= '<tr bgcolor="' . getStyle($frags) . '">
-					<td width="20%" align="center">' . date("j M Y, H:i", $frag['date']) . '</td>
-					<td>Fragged <a href="' . getPlayerLink($frag[name], false) . '">' . $frag[name] . '</a> at level ' . $frag[level];
-				
-				$frag_add_content .= ". (".(($frag['unjustified'] == 0) ? "<font size=\"1\" color=\"green\">Justified</font>" : "<font size=\"1\" color=\"red\">Unjustified</font>").")</td></tr>";
+				$description = 'Fragged <a href="' . getPlayerLink($frag[name], false) . '">' . $frag[name] . '</a> at level ' . $frag[level];
+				$description .= '. ('.(($frag['unjustified'] == 0) ? '<font size="1" color="green">Justified</font>' : '<font size="1" color="red">Unjustified</font>').')';
+				$frags[] = array('time' => $frag['date'], 'description' => $description);
 			}
-			
-			if($frags > 0)
-				$frag_add_content .= '</table>';
-			else
-				$frag_add_content = '';
 		}
 	}
 	
@@ -423,8 +396,8 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		'quests' => isset($quests) ? $quests : null,
 		'equipment' => isset($equipment) ? $equipment : null,
 		'skull' => $player->getSkullTime() > 0 && ($player->getSkull() == 4 || $player->getSkull() == 5) ? $skulls[$player->getSkull()] : null,
-		'deaths' => $dead_add_content,
-		'frags' => $frag_add_content,
+		'deaths' => $deaths,
+		'frags' => $frags,
 		'signature_url' => isset($signature_url) ? $signature_url : null,
 		'player_link' => getPlayerLink($player->getName(), false),
 		'hidden' => $hidden,

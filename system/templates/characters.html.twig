@@ -216,8 +216,35 @@
 			</tr>
 		</table>
 
-		{{ deaths|raw }}
-		{{ frags|raw }}
+		{% if deaths|length > 0 %}
+		<br/>
+		<table border="0" cellspacing="1" cellpadding="4" width="100%">
+			<tr bgcolor="{{ config.vdarkborder }}">
+				<td colspan="2" class="white"><b>Character Deaths</b></td>
+			</tr>
+			{% set i = 0 %}
+			{% for death in deaths %}
+			<tr bgcolor="'{{ getStyle(i) }}">
+				<td width="20%" align="center">{{ death.time|date("j M Y, H:i") }}</td>
+				<td>{{ death.description }}</td>
+			</tr>
+
+			{% set i = i + 1 %}
+			{% endfor %}
+		{% endif %}
+		{% if frags|length > 0 %}
+		<br/>
+		<table border="0" cellspacing="1" cellpadding="4" width="100%">
+			<tr bgcolor="{{ config.vdarkborder }}">
+				<td colspan="2" class="white"><b>Victims</b></td>
+			</tr>
+			{% set i = 0 %}
+			{% for frag in frags %}
+			<tr bgcolor="'{{ getStyle(i) }}">
+				<td width="20%" align="center">{{ frag.time|date("j M Y, H:i") }}</td>
+				<td>{{ frag.description }}</td>
+			</tr>
+		</table>
 
 		{{ hook(constant('HOOK_CHARACTERS_BEFORE_SIGNATURE')) }}
 
@@ -300,7 +327,7 @@
 			{% set rows = rows + 1 %}
 			<tr bgcolor="{{ getStyle(rows) }}">
 			<td width="20%">Created:</td>
-			<td>{{ account.getCustomField("created")|date("j F Y, g:i a") ~bannedUntil }}</td>
+			<td>{{ account.getCustomField("created")|date("j F Y, g:i a") ~ bannedUntil|raw }}</td>
 		</tr>
 		</table>
 		{{ hook(constant('HOOK_CHARACTERS_AFTER_ACCOUNT')) }}
