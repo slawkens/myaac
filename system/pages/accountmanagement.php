@@ -537,7 +537,7 @@ if($action == "changeemail") {
 		
 		if($player_name != null) {
 			if (check_name($player_name)) {
-				$player = $ots->createObject('Player');
+				$player = new OTS_Player();
 				$player->find($player_name);
 				if ($player->isLoaded()) {
 					$player_account = $player->getAccount();
@@ -573,8 +573,7 @@ if($action == "changeemail") {
 			
 			if(isset($player)) {
 				echo $twig->render('account.change_comment.html.twig', array(
-					'player' => $player,
-					'player_name' => $player_name
+					'player' => $player
 				));
 			}
 		}
