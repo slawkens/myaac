@@ -1,4 +1,13 @@
 <?php
+	if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']))
+	{
+		header('HTTP/1.0 304 Not Modified');
+		/* PHP/webserver by default can return 'no-cache', so we must modify it */
+		header('Cache-Control: public');
+		header('Pragma: cache');
+		exit;
+	}
+
 	require_once('../../common.php');
 	require_once(SYSTEM . 'functions.php');
 	require_once(SYSTEM . 'init.php');
@@ -56,6 +65,6 @@
 	$ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";
 	header('Expires: ' . $ts);
 	header('Pragma: cache');
-	header('Cache-Control: max-age=' . $seconds_to_cache);
+	header('Cache-Control: public, max-age=' . $seconds_to_cache);
 	readfile(SIGNATURES_CACHE . $player->getId() . '.png');
 ?>
