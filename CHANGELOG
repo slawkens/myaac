@@ -1,3 +1,13 @@
+[0.5.1 - 11.10.2017]
+	- fixed forum add/edit board
+	- new configurable: highscores_length, how much highscores to display
+	- fixed highscores links (ALL, previous and next page)
+	- update templates cache when installing/uninstalling plugin
+	- moved character deaths and frags table generation to twig
+	- fixed some bug when you uninstall plugin and then try to install again on the same page
+	- check if plugin exist before uninstalling
+	- fixed some warning in OTS_Base_DB
+
 [0.5.0 - 10.10.2017]
 	- moved .htaccess rules to plain php (index.php)
 	- updated tinymce to the latest (4.7.0) version, you can now embed code, for example youtube videos
