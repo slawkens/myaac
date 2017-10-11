@@ -335,8 +335,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			foreach($player_frags as $frag)
 			{
 				$description = 'Fragged <a href="' . getPlayerLink($frag[name], false) . '">' . $frag[name] . '</a> at level ' . $frag[level];
-				$description .= '. ('.(($frag['unjustified'] == 0) ? '<font size="1" color="green">Justified</font>' : '<font size="1" color="red">Unjustified</font>').')';
-				$frags[] = array('time' => $frag['date'], 'description' => $description);
+				$frags[] = array('time' => $frag['date'], 'description' => $description, 'unjustified' => $frag['unjustified'] != 0);
 			}
 		}
 	}
