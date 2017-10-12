@@ -224,9 +224,9 @@
 			</tr>
 			{% set i = 0 %}
 			{% for death in deaths %}
-			<tr bgcolor="'{{ getStyle(i) }}">
+			<tr bgcolor="{{ getStyle(i) }}">
 				<td width="20%" align="center">{{ death.time|date("j M Y, H:i") }}</td>
-				<td>{{ death.description }}</td>
+				<td>{{ death.description|raw }}</td>
 			</tr>
 
 			{% set i = i + 1 %}
