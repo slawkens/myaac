@@ -10,6 +10,16 @@ require(BASE . 'install/includes/functions.php');
 require(BASE . 'install/includes/locale.php');
 require(BASE . 'config.local.php');
 
+// twig
+require_once LIBS . 'Twig/Autoloader.php';
+Twig_Autoloader::register();
+
+$twig_loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
+$twig = new Twig_Environment($twig_loader, array(
+	'cache' => CACHE . 'twig/',
+	'auto_reload' => true
+));
+
 if(isset($_POST['vars']))
 {
 	foreach($_POST['vars'] as $key => $value)

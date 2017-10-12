@@ -1057,6 +1057,26 @@ function get_templates()
 	return $ret;
 }
 
+/**
+ * Generates list of installed plugins
+ * @return array $plugins
+ */
+function get_plugins()
+{
+	$ret = array();
+	
+	$path = PLUGINS;
+	foreach(scandir($path) as $file) {
+		$file_ext = pathinfo($file, PATHINFO_EXTENSION);
+		$file_name = pathinfo($file, PATHINFO_FILENAME);
+		if ($file == '.' || $file == '..' || $file == 'disabled' || $file == 'example.json' || is_dir($path . $file) || $file_ext != 'json')
+			continue;
+		
+		$ret[] = str_replace('.json', '', $file_name);
+	}
+	
+	return $ret;
+}
 function getWorldName($id)
 {
 	global $config;

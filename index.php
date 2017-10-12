@@ -84,6 +84,8 @@ else {
 		'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
 		'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
 		'/^guilds\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'guilds', 'action' => 'show', 'guild' => '$1'),
+		'/^faq\/add\/?$/' => array('subtopic' => 'faq', 'action' => 'add'),
+		'/^faq\/edit\/?$/' => array('subtopic' => 'faq', 'action' => 'edit'),
 		'/^forum\/add_board\/?$/' => array('subtopic' => 'forum', 'action' => 'add_board'),#
 		'/^forum\/edit_board\/?$/' => array('subtopic' => 'forum', 'action' => 'edit_board'),
 		'/^forum\/board\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_board', 'id' => '$2'),

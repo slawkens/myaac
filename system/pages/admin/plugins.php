@@ -13,8 +13,6 @@ $title = 'Plugin manager';
 
 require(SYSTEM . 'hooks.php');
 
-echo $twig->render('admin.plugins.form.html.twig');
-
 function deleteDirectory($dir) {
 	if(!file_exists($dir)) {
 		return true;
@@ -36,6 +34,8 @@ function deleteDirectory($dir) {
 	
 	return rmdir($dir);
 }
+
+echo $twig->render('admin.plugins.form.html.twig');
 
 if(isset($_REQUEST['uninstall'])){
 	$uninstall = $_REQUEST['uninstall'];
@@ -112,13 +112,11 @@ else if(isset($_FILES["plugin"]["name"]))
 			if($filetype == 'zip') // check if it is zipped/compressed file
 			{
 				$tmp_filename = pathinfo($filename, PATHINFO_FILENAME);
-				$targetdir = BASE;
-				$targetzip = BASE . 'plugins/' . $tmp_filename;
+				$targetzip = BASE . 'plugins/' . $tmp_filename . '.zip';
 
 				if(move_uploaded_file($tmp_name, $targetzip)) { // move uploaded file
 					$zip = new ZipArchive();
-					$x = $zip->open($targetzip);  // open the zip file to extract
-					if ($x === true) {
+					if ($zip->open($targetzip)) {
 						for ($i = 0; $i < $zip->numFiles; $i++) {
 							$tmp = $zip->getNameIndex($i);
 							if(pathinfo($tmp, PATHINFO_DIRNAME) == 'plugins' && pathinfo($tmp, PATHINFO_EXTENSION) == 'json')
@@ -128,7 +126,7 @@ else if(isset($_FILES["plugin"]["name"]))
 						if(!isset($json_file)) {
 							error('Cannot find plugin info .json file. Installation is discontinued.');
 						}
-						else if($zip->extractTo($targetdir)) { // place in the directory with same name
+						else if($zip->extractTo(BASE)) { // place in the directory with same name
 							$file_name = BASE . $json_file;
 							if(!file_exists($file_name))
 								warning("Cannot load " . $file_name . ". File doesn't exist.");
@@ -224,36 +222,27 @@ else if(isset($_FILES["plugin"]["name"]))
 }
 
 $plugins = array();
-$rows = array();
-
-$path = PLUGINS;
-foreach(scandir($path) as $file)
+foreach(get_plugins() as $plugin)
 {
-	$file_ext = pathinfo($file, PATHINFO_EXTENSION);
-	$file_name = pathinfo($file, PATHINFO_FILENAME);
-	if($file == '.' || $file == '..' || $file == 'disabled' || $file == 'example.json' || is_dir($path . $file) || $file_ext != 'json')
-		continue;
-	
-	$file_info = str_replace('.json', '', $file_name);
-	$string = file_get_contents(BASE . 'plugins/' . $file_info . '.json');
+	$string = file_get_contents(BASE . 'plugins/' . $plugin . '.json');
 	$plugin_info = json_decode($string, true);
 	if($plugin_info == false) {
-		warning('Cannot load plugin info ' . $file);
+		warning('Cannot load plugin info ' . $plugin . '.json');
 	}
 	else {
-		$rows[] = array(
+		$plugins[] = array(
 			'name' => $plugin_info['name'],
 			'description' => $plugin_info['description'],
 			'version' => $plugin_info['version'],
 			'author' => $plugin_info['author'],
 			'contact' => $plugin_info['contact'],
-			'file' => $file_info,
+			'file' => $plugin,
 			'uninstall' => isset($plugin_info['uninstall'])
 		);
 	}
 }
 
 echo $twig->render('admin.plugins.html.twig', array(
-	'plugins' => $rows
+	'plugins' => $plugins
 ));
 ?>

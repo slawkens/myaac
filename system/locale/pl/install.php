@@ -48,10 +48,10 @@ $locale['step_config_password'] = 'Hasło do konta admina';
 $locale['step_config_password_desc'] = 'Hasło do Twojego konta administratora.';
 
 $locale['step_config_mail_admin'] = 'E-Mail admina';
-$locale['step_config_mail_admin_desc'] = 'Na ten adres będą dostarczane E-Maile z formularza kontaktowego , przykładowo <i>admin@gmail.com</i>';
+$locale['step_config_mail_admin_desc'] = 'Na ten adres będą dostarczane E-Maile z formularza kontaktowego , przykładowo admin@gmail.com';
 $locale['step_config_mail_admin_error'] = 'E-Mail admina jest niepoprawny.';
 $locale['step_config_mail_address'] = 'E-Mail serwera';
-$locale['step_config_mail_address_desc'] = 'Ten adres będzie używany do wysyłanych wiadomości z serwera (from:), przykładowo <i>no-reply@twój-serwer.org</i>';
+$locale['step_config_mail_address_desc'] = 'Ten adres będzie używany do wysyłanych wiadomości z serwera (from:), przykładowo no-reply@twój-serwer.org';
 $locale['step_config_mail_address_error'] = 'E-Mail serwera jest niepoprawny.';
 $locale['step_config_client'] = 'Wersja klienta';
 $locale['step_config_client_desc'] = 'Używana do strony pobieranie klienta oraz kilku szablonów';

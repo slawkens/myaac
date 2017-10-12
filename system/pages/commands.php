@@ -92,8 +92,7 @@ $last = $commands->rowCount();
 echo $twig->render('commands.html.twig', array(
 	'commands' => $commands,
 	'last' => $last,
-	'canEdit' => $canEdit,
-	'vdarkborder' => $config['vdarkborder']
+	'canEdit' => $canEdit
 ));
 
 class Commands

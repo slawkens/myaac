@@ -1,0 +1,37 @@
+<form action="{{ constant('BASE_URL') }}install/" method="post" autocomplete="off">
+	<input type="hidden" name="step" id="step" value="database" />
+	<table>
+		{% for value in ['server_path', 'mail_admin', 'mail_address'] %}
+		<tr>
+			<td>
+				<label for="vars_{{ value }}">
+					<span>{{ locale['step_config_' ~ value]  }}</span>
+				</label>
+				<br>
+				<input type="text" name="vars[{{ value }}]" id="vars_{{ value }}"{% if session['var_' ~ value] is not null %} value="{{ session['var_' ~ value] }}"{% endif %}/>
+			</td>
+			<td>
+				<em>{{ locale['step_config_' ~ value ~ '_desc'] }}</em>
+			</td>
+		</tr>
+		{% endfor %}
+		<tr>
+			<td>
+				<label for="vars_client">
+					<span>{{ locale.step_config_client }}</span>
+				</label>
+				<br>
+				<select name="vars[client]" id="vars_client">
+					{% for id, version in clients %}
+					<option value="{{ id }}">{{ version }}</option>
+					{% endfor %}
+				</select>
+			</td>
+			<td>
+				<em>{{ locale.step_config_client_desc }}</em>
+			</td>
+		</tr>
+	</table>
+
+	{{ buttons|raw }}
+</form>

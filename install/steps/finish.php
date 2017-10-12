@@ -6,14 +6,11 @@ if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['save
 }
 else {
 	require(SYSTEM . 'init.php');
-	//require(BASE . 'install/includes/config.php');
 	if(!$error) {
-		//require(BASE . 'install/includes/database.php');
-
 		if(USE_ACCOUNT_NAME)
-			$account = isset($_SESSION['var_account']) ? $_SESSION['var_account'] : NULL;
+			$account = isset($_SESSION['var_account']) ? $_SESSION['var_account'] : null;
 		else
-			$account_id = isset($_SESSION['var_account_id']) ? $_SESSION['var_account_id'] : NULL;
+			$account_id = isset($_SESSION['var_account_id']) ? $_SESSION['var_account_id'] : null;
 
 		$password = $_SESSION['var_password'];
 		
@@ -23,7 +20,7 @@ else {
 			$salt = generateRandomString(10, false, true, true);
 			$password = $salt . $password;
 		}
-
+/*
 		$account_db = new OTS_Account();
 		$account_db->load(1);
 		if($account_db->isLoaded()) {
@@ -38,12 +35,12 @@ else {
 			if(USE_ACCOUNT_NAME)
 				$new_account->create('dummy_account', 1);
 			else
-				$new_account->create(NULL, 1);
+				$new_account->create(null, 1);
 
 			$new_account->setPassword('for sample characters. ' . generateRandomString(10));
 			$new_account->save();
 		}
-			
+*/
 		$account_db = new OTS_Account();
 		if(isset($account))
 			$account_db->find($account);
@@ -177,6 +174,14 @@ INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `pl
 		if($success) {
 			success($locale['step_database_imported_players']);
 		}
+		
+		require LIBS . 'creatures.php';
+		if(Creatures::loadFromXML())
+			success($locale['step_database_loaded_creatures']);
+		
+		require LIBS . 'spells.php';
+		if(Spells::loadFromXML())
+			success($locale['step_database_loaded_spells']);
 
 		$locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(ADMIN_URL, $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
 		$locale['step_finish_desc'] = str_replace('$HOMEPAGE$', generateLink(BASE_URL, $locale['step_finish_homepage'], true), $locale['step_finish_desc']);

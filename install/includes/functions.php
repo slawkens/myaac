@@ -62,9 +62,9 @@ function next_buttons($previous = true, $next = true)
 		$ret .= '<input class="button" type="submit" onclick="document.getElementById(\'step\').value=\'' . $steps[$i + 1] . '\';" value="' . $locale['next'] . '" />';
 */
 	if($previous)
-		$ret .= '<input type="button" class="button" onclick="document.getElementById(\'step\').value=\'' . $steps[$i - 1] . '\'; this.form.submit();" value="' . $locale['previous'] . '" />';
+		$ret .= '<input type="button" class="button" onclick="document.getElementById(\'step\').value=\'' . $steps[$i - 1] . '\'; this.form.submit();" value="&laquo; ' . $locale['previous'] . '" />';
 	if($next)
-		$ret .= '<input type="button" class="button" onclick="document.getElementById(\'step\').value=\'' . $steps[$i + 1] . '\'; this.form.submit();" value="' . $locale['next'] . '" />';
+		$ret .= '<input type="button" class="button" onclick="document.getElementById(\'step\').value=\'' . $steps[$i + 1] . '\'; this.form.submit(); " value="' . $locale['next'] . ' &raquo;" />';
 
 	$ret .= '</div>';
 	return $ret;

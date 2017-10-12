@@ -1,0 +1,27 @@
+<form action="{{ constant('BASE_URL') }}install/" method="post" autocomplete="off">
+	<input type="hidden" name="step" id="step" value="finish" />
+	<table>
+		{% if constant('USE_ACCOUNT_NAME') %}
+		{% set type = 'account' %}
+		{% else %}
+		{% set type = 'account_id' %}
+		{% endif %}
+
+		{% for value in [type, 'password'] %}
+		<tr>
+			<td>
+				<label for="vars_{{ value }}">
+					<span>{{ locale['step_admin_' ~ value] }}</span>
+				</label>
+				<br/>
+				<input type="text" name="vars[{{ value }}]" id="vars_{{ value }}"{% if session['var_' ~ value] is not null %} value="{{ session['var_' ~ value] }}"{% endif %}/>
+			</td>
+			<td>
+				<em>{{ locale['step_admin_' ~ value ~ '_desc']|raw }}</em>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	{{ buttons|raw }}
+</form>

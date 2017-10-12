@@ -44,10 +44,10 @@ $locale['step_config_server_path'] = 'Server path';
 $locale['step_config_server_path_desc'] = 'Path to your TFS main directory, where you have config.lua located.';
 
 $locale['step_config_mail_admin'] = 'Admin E-Mail';
-$locale['step_config_mail_admin_desc'] = 'Address where emails from contact form will be delivered, for example <i>admin@gmail.com</i>';
+$locale['step_config_mail_admin_desc'] = 'Address where emails from contact form will be delivered, for example admin@gmail.com';
 $locale['step_config_mail_admin_error'] = 'Admin E-Mail is not correct.';
 $locale['step_config_mail_address'] = 'Server E-Mail';
-$locale['step_config_mail_address_desc'] = 'Address which will be used for outgoing emails (from:), for example <i>no-reply@your-server.org</i>';
+$locale['step_config_mail_address_desc'] = 'Address which will be used for outgoing emails (from:), for example no-reply@your-server.org';
 $locale['step_config_mail_address_error'] = 'Server E-Mail is not correct.';
 $locale['step_config_client'] = 'Client version';
 $locale['step_config_client_desc'] = 'Used for download page and some templates';
@@ -69,6 +69,8 @@ $locale['step_database_adding_field'] = 'Adding field';
 $locale['step_database_modifying_field'] = 'Modifying field';
 $locale['step_database_changing_field'] = 'Changing $FIELD$ to $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Imported player samples...';
+$locale['step_database_loaded_creatures'] = 'Loaded creatures...';
+$locale['step_database_loaded_spells'] = 'Loaded spells...';
 $locale['step_database_created_account'] = 'Created admin account...';
 $locale['step_database_created_news'] = 'Created newses...';
 

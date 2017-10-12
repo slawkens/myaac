@@ -1,7 +1,7 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
-$clients = array(
+$clients_list = array(
 	710,
 	740,
 	750,
@@ -65,51 +65,19 @@ $clients = array(
 	1098,
 );
 
-?>
-<form action="<?php echo BASE_URL; ?>install/" method="post" autocomplete="off">
-	<input type="hidden" name="step" id="step" value="database" />
-	<table>
-<?php
-	foreach(array('server_path', 'mail_admin', 'mail_address') as $value)
-		echo '
-	<tr>
-		<td>
-			<label for="vars_' . $value . '">
-				<span>' . $locale['step_config_' . $value] . '</span>
-			</label>
-			<br>
-			<input type="text" name="vars[' . $value . ']" id="vars_' . $value . '"' . (isset($_SESSION['var_' . $value]) ? ' value="' . $_SESSION['var_' . $value] . '"' : '') . '/>
-		</td>
-		<td>
-			<em>' . $locale['step_config_' . $value . '_desc'] . '</em>
-		</td>
-	</tr>';
+$clients = array();
+foreach($clients_list as $client) {
+	$client_version = (string)($client / 100);
+	if(strpos($client_version, '.') == false)
+		$client_version .= '.0';
+	
+	$clients[$client] = $client_version;
+}
 
-echo '
-	<tr>
-		<td>
-			<label for="vars_client">
-				<span>' . $locale['step_config_client'] . '</span>
-			</label>
-			<br>
-			<select name="vars[client]" id="vars_client">';
-				//$i = 0;
-				foreach($clients as $client) {
-					$client_version = (string)($client / 100);
-					if(strpos($client_version, '.') == false)
-						$client_version .= '.0';
-					echo '<option value="' . $client . '">' . $client_version . '</option>';
-				}
-			
-		echo '
-		</td>
-		<td>
-			<em>' . $locale['step_config_client_desc'] . '</em>
-		</td>
-	</tr>';
-	?>
-	</table>
-<?php
-	echo next_buttons(true, true);
+echo $twig->render('install.config.html.twig', array(
+	'clients' => $clients,
+	'locale' => $locale,
+	'session' => $_SESSION,
+	'buttons' => next_buttons()
+));
 ?>
-</form>

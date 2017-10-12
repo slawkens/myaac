@@ -14,6 +14,10 @@ require_once(BASE . 'config.php');
 if(file_exists(BASE . 'config.local.php')) // user customizations
 	require(BASE . 'config.local.php');
 
+if(!isset($config['installed']) || !$config['installed']) {
+	die('AAC has not been installed yet or there was error during installation. Please install again.');
+}
+
 date_default_timezone_set($config['date_timezone']);
 // take care of trailing slash at the end
 if($config['server_path'][strlen($config['server_path']) - 1] != '/')
