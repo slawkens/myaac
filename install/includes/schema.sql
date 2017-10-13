@@ -59,6 +59,22 @@ CREATE TABLE `myaac_commands`
 	UNIQUE (`words`)
 ) ENGINE = MyISAM;
 
+CREATE TABLE `myaac_comunication` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `type` enum('login') NOT NULL DEFAULT 'login',
+  `action` enum('give_item') NOT NULL DEFAULT 'give_item',
+  `item_id` int(11) NOT NULL DEFAULT '0',
+  `count` int(11) NOT NULL DEFAULT '1',
+  `param3` varchar(255) DEFAULT NULL,
+  `param4` varchar(255) DEFAULT NULL,
+  `offer_type` enum('container','item') DEFAULT NULL,
+  `offer_name` varchar(30) NOT NULL DEFAULT '',
+  `param7` varchar(255) DEFAULT NULL,
+  `delete_it` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
 CREATE TABLE `myaac_config`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -227,6 +243,31 @@ CREATE TABLE `myaac_screenshots`
 ) ENGINE = MyISAM;
 
 INSERT INTO `myaac_screenshots` (`id`, `ordering`, `comment`, `image`, `thumb`, `author`) VALUES (NULL, 1, 'Demon', 'images/screenshots/demon.jpg', 'images/screenshots/demon_thumb.gif', 'MyAAC');
+
+CREATE TABLE `myaac_shop_history_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `to_name` varchar(30) NOT NULL DEFAULT '',
+  `to_account` int(11) NOT NULL DEFAULT '0',
+  `from_nick` varchar(30) NOT NULL DEFAULT '',
+  `from_account` int(11) NOT NULL DEFAULT '0',
+  `price` int(10) NOT NULL DEFAULT '0',
+  `offer_id` int(11) NOT NULL DEFAULT '0',
+  `trans_state` enum('realized','wait') NOT NULL DEFAULT 'wait',
+  `trans_start` int(11) NOT NULL DEFAULT '0',
+  `trans_real` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `myaac_shop_offer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `offer_type` enum('container','item') NOT NULL DEFAULT 'item',
+  `itemid1` int(11) NOT NULL DEFAULT '0',
+  `count1` int(11) NOT NULL DEFAULT '1',
+  `points` int(11) NOT NULL DEFAULT '0',
+  `offer_description` text,
+  `offer_name` varchar(20) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `myaac_spells`
 (
