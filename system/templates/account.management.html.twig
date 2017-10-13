@@ -26,12 +26,16 @@
 <h2>General Information</h2>
 <table width="100%">
 	<tr style="background-color: {{ config.lightborder }};" >
-		<td>Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</td>
-		<td style="width:90%;" >{{ account }}</td>
+		<td style="width: 90px;">Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</td>
+		<td>{{ account }}</td>
 	</tr>
 	<tr style="background-color: {{ config.darkborder }};" >
-		<td>Email Address:</td>
-		<td style="width:90%;" >{{ account_email ~ email_change}}</td>
+		<td style="width: 90px;">Email Address:</td>
+		<td>{{ account_email ~ email_change }}
+			<form action="{{ getLink('account/email') }}" method="post">
+				<input type="submit" value="Change Email" />
+			</form>
+		</td>
 	</tr>
 	<tr style="background-color: {{ config.lightborder }};" >
 		<td>Created:</td>
@@ -52,6 +56,21 @@
 	</tr>
 	{% endautoescape %}
 </table>
+<br/>
+<h2>Public Information</h2>
+<table width="100%">
+	<tr style="background-color: {{ config.lightborder }};" >
+		<td style="width: 80px;">Real name:</td>
+		<td>{{ account_rlname }}</td>
+	</tr>
+	<tr style="background-color: {{ config.darkborder }};" >
+		<td style="width: 80px;">Location:</td>
+		<td >{{ account_location }}</td>
+	</tr>
+</table>
+<form action="{{ getLink('account/info') }}" method="post">
+	<input type="submit" value="Change Info" />
+</form>
 <br/>
 <h2>Action Log</h2>
 <table>
