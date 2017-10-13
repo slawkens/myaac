@@ -232,7 +232,7 @@ function fetchDatabaseConfig($name, &$value)
  */
 function getDatabaseConfig($name)
 {
-	$value = NULL;
+	$value = null;
 	fetchDatabaseConfig($name, $value);
 	return $value;
 }
