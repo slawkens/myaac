@@ -75,7 +75,7 @@
 					<tr>
 						<td>Content:</td>
 						<td>
-							<textarea id="news-body" name="body" maxlength="65000" cols="50" rows="5">{{ body }}</textarea>
+							<textarea id="news-body" name="body" maxlength="65000" cols="50" rows="5">{{ body|raw }}</textarea>
 							{% if use_tinymce %}
 							<br/>
 							<a href="javascript:;" onmousedown="$('#news-body').tinymce().hide();">[Hide]</a>
