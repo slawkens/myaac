@@ -42,13 +42,14 @@ if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['i
 require_once(SYSTEM . 'functions.php');
 
 $uri = $_SERVER['REQUEST_URI'];
-if(!empty(BASE_DIR))
+
+$tmp = BASE_DIR;
+if(!empty($tmp))
 	$uri = str_replace(BASE_DIR . '/', '', $uri);
 else
 	$uri = str_replace_first('/', '', $uri);
 
-$uri = str_replace(array('index.php/', '?'), '', $uri);
-$uri = strtolower($uri);
+$uri = strtolower(str_replace(array('index.php/', '?'), '', $uri));
 
 $found = false;
 if(empty($uri) || isset($_REQUEST['template'])) {
