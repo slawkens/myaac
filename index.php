@@ -30,6 +30,11 @@
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
+if(preg_match("/^(.*)\.(gif|png|jpg|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz)$/i", $_SERVER['REQUEST_URI'])) {
+	header("HTTP/1.0 404 Not Found");
+	exit;
+}
+
 require_once('common.php');
 require_once(BASE . 'config.local.php');
 
@@ -80,11 +85,6 @@ else {
 		'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
 		'/^commands\/add\/?$/' => array('subtopic' => 'commands', 'action' => 'add'),
 		'/^commands\/edit\/?$/' => array('subtopic' => 'commands', 'action' => 'edit'),
-		'/^news\/add\/?$/' => array('subtopic' => 'news', 'action' => 'add'),
-		'/^news\/edit\/?$/' => array('subtopic' => 'news', 'action' => 'edit'),
-		'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
-		'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
-		'/^guilds\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'guilds', 'action' => 'show', 'guild' => '$1'),
 		'/^faq\/add\/?$/' => array('subtopic' => 'faq', 'action' => 'add'),
 		'/^faq\/edit\/?$/' => array('subtopic' => 'faq', 'action' => 'edit'),
 		'/^forum\/add_board\/?$/' => array('subtopic' => 'forum', 'action' => 'add_board'),#
@@ -93,11 +93,19 @@ else {
 		'/^forum\/board\/[0-9]+\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_board', 'id' => '$2', 'page' => '$3'),
 		'/^forum\/thread\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2'),
 		'/^forum\/thread\/[0-9]+\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2', 'page' => '$3'),
+		'/^gallery\/add\/?$/' => array('subtopic' => 'gallery', 'action' => 'add'),
+		'/^gallery\/edit\/?$/' => array('subtopic' => 'gallery', 'action' => 'edit'),
+		'/^gallery\/[0-9]+\/?$/' => array('subtopic' => 'gallery', 'image' => '$1'),
 		'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
+		'/^guilds\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'guilds', 'action' => 'show', 'guild' => '$1'),
 		'/^highscores\/[A-Za-z0-9-_]+\/[A-Za-z0-9-_]+\/[0-9]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'vocation' => '$2', 'page' => '$3'),
 		'/^highscores\/[A-Za-z0-9-_]+\/[0-9]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'page' => '$2'),
 		'/^highscores\/[A-Za-z0-9-_]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'vocation' => '$2'),
 		'/^highscores\/[A-Za-z0-9-_\']+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1'),
+		'/^news\/add\/?$/' => array('subtopic' => 'news', 'action' => 'add'),
+		'/^news\/edit\/?$/' => array('subtopic' => 'news', 'action' => 'edit'),
+		'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
+		'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
 		'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1')
 	);
 	

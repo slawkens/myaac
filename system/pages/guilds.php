@@ -159,8 +159,8 @@ if($action == '')
 if($action == 'show')
 {
 	$guild_name = $_REQUEST['guild'];
-	if(!check_guild_name($guild_name))
-		$guild_errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name))
+		$guild_errors[] = Validator::getLastError();
 	if(empty($guild_errors))
 	{
 		$guild = $ots->createObject('Guild');
@@ -424,8 +424,8 @@ if($action == 'show')
 if($action == 'changerank')
 {
 	$guild_name = $_REQUEST['guild'];
-	if(!check_guild_name($guild_name))
-		$guild_errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name))
+		$guild_errors[] = Validator::getLastError();
 	if(!$logged)
 		$guild_errors[] = 'You are not logged in. You can\'t change rank.';
 	if(empty($guild_errors))
@@ -513,7 +513,7 @@ echo '
 		{
 			$player_name = stripslashes($_REQUEST['name']);
 			$new_rank = (int) $_REQUEST['rankid'];
-			if(!check_name($player_name))
+			if(!Validator::characterName($player_name))
 				$change_errors[] = 'Invalid player name format.';
 			$rank = $ots->createObject('GuildRank');
 			$rank->load($new_rank);
@@ -625,9 +625,9 @@ if($action == 'deleteinvite')
 	$name = stripslashes($_REQUEST['name']);
 	if(!$logged)
 		$guild_errors[] = 'You are not logged in. You can\'t delete invitations.';
-	if(!check_guild_name($guild_name))
-		$guild_errors[] = 'Invalid guild name format.';
-	if(!check_name($name))
+	if(!Validator::guildName($guild_name))
+		$guild_errors[] = Validator::getLastError();
+	if(!Validator($name))
 		$guild_errors[] = 'Invalid name format.';
 	if(empty($guild_errors))
 	{
@@ -726,8 +726,8 @@ if($action == 'invite')
 		$guild_errors[] = 'You are not logged in. You can\'t invite players.';
 	}
 	
-	if(!check_guild_name($guild_name)) {
-		$guild_errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$guild_errors[] = Validator::getLastError();
 	}
 	
 	if(empty($guild_errors)) {
@@ -770,7 +770,7 @@ if($action == 'invite')
 	}
 	
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-		if(!check_name($name)) {
+		if(!Validator::characterName($name)) {
 			$guild_errors[] = 'Invalid name format.';
 		}
 		
@@ -831,8 +831,8 @@ if($action == 'acceptinvite') {
 	if(!$logged) {
 		$errors[] = 'You are not logged in. You can\'t accept invitations.';
 	}
-	if(!check_guild_name($guild_name)) {
-		$errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$errors[] = Validator::getLastError();
 	}
 	if(empty($errors)) {
 		$guild = $ots->createObject('Guild');
@@ -843,7 +843,7 @@ if($action == 'acceptinvite') {
 	}
 
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-		if(!check_name($name)) {
+		if(!Validator::characterName($name)) {
 			$errors[] = 'Invalid name format.';
 		}
 	
@@ -947,11 +947,11 @@ if($action == 'kickplayer') {
 		$errors[] = 'You are not logged in. You can\'t kick characters.';
 	}
 	
-	if(!check_guild_name($guild_name)) {
-		$errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$errors[] = Validator::getLastError();
 	}
 	
-	if(!check_name($name)) {
+	if(!Validator::characterName($name)) {
 		$errors[] = 'Invalid name format.';
 	}
 	
@@ -1052,8 +1052,8 @@ if($action == 'leaveguild') {
 		$errors[] = 'You are not logged in. You can\'t leave guild.';
 	}
 	
-	if(!check_guild_name($guild_name)) {
-		$errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$errors[] = Validator::getLastError();
 	}
 	
 	if(empty($errors)) {
@@ -1068,7 +1068,7 @@ if($action == 'leaveguild') {
 	if(empty($errors)) {
 		$guild_owner_name = $guild->getOwner()->getName();
 		if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-			if(!check_name($name)) {
+			if(!Validator::characterName($name)) {
 				$errors[] = 'Invalid name format.';
 			}
 			
@@ -1198,12 +1198,12 @@ if($action == 'createguild')
 
 	if($todo == 'save')
 	{
-		if(!check_guild_name($guild_name)) {
-			$guild_errors[] = 'Invalid guild name format.';
+		if(!Validator::guildName($guild_name)) {
+			$guild_errors[] = Validator::getLastError();
 			$guild_name = '';
 		}
 
-		if(!check_name($name)) {
+		if(!Validator::characterName($name)) {
 			$guild_errors[] = 'Invalid character name format.';
 			$name = '';
 		}
@@ -1293,8 +1293,8 @@ else {
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'manager') {
 	$guild_name = $_REQUEST['guild'];
-	if(!check_guild_name($guild_name)) {
-		$guild_errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$guild_errors[] = Validator::getLastError();
 	}
 	
 	if(empty($guild_errors)) {
@@ -1345,8 +1345,8 @@ if(!empty($guild_errors)) {
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'changelogo') {
 	$guild_name = $_REQUEST['guild'];
-	if(!check_guild_name($guild_name)) {
-		$errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$errors[] = Validator::getLastError();
 	}
 	
 	if(empty($errors)) {
@@ -1463,8 +1463,8 @@ if($action == 'changelogo') {
 if($action == 'deleterank') {
 $guild_name = $_REQUEST['guild'];
 $rank_to_delete = (int) $_REQUEST['rankid'];
-if(!check_guild_name($guild_name)) {
-$guild_errors[] = 'Invalid guild name format.';
+if(!Validator::guildName($guild_name)) {
+$guild_errors[] = Validator::getLastError();
 }
 if(empty($guild_errors)) {
 $guild = $ots->createObject('Guild');
@@ -1567,11 +1567,11 @@ echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigBu
 if($action == 'addrank') {
 $guild_name = $_REQUEST['guild'];
 $ranknew = $_REQUEST['rank_name'];
-if(!check_guild_name($guild_name)) {
-$guild_errors[] = 'Invalid guild name format.';
+if(!Validator::guildName($guild_name)) {
+$guild_errors[] = Validator::getLastError();
 }
 if(empty($guild_errors)) {
-if(!check_rank_name($ranknew)) {
+if(!Validator::rankName($ranknew)) {
 $guild_errors[] = 'Invalid rank name format.';
 }
 if(!$logged) {
@@ -1630,8 +1630,8 @@ echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigBu
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'changedescription') {
 	$guild_name = $_REQUEST['guild'];
-	if(!check_guild_name($guild_name)) {
-		$errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$errors[] = Validator::getLastError();
 	}
 	
 	if(empty($errors)) {
@@ -1696,8 +1696,8 @@ if($action == 'changedescription') {
 if($action == 'passleadership') {
 	$guild_name = isset($_REQUEST['guild']) ? $_REQUEST['guild'] : NULL;
 	$pass_to = isset($_REQUEST['player']) ? stripslashes($_REQUEST['player']) : NULL;
-	if(!check_guild_name($guild_name)) {
-		$guild_errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$guild_errors[] = Validator::getLastError();
 	}
 	
 	if(empty($guild_errors)) {
@@ -1709,7 +1709,7 @@ if($action == 'passleadership') {
 	}
 	if(empty($guild_errors)) {
 		if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
-			if(!check_name($pass_to)) {
+			if(!Validator::characterName($pass_to)) {
 				$guild_errors2[] = 'Invalid player name format.';
 			}
 			
@@ -1806,8 +1806,8 @@ if($action == 'passleadership') {
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'deleteguild') {
 	$guild_name = $_REQUEST['guild'];
-	if(!check_guild_name($guild_name)) {
-		$errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$errors[] = Validator::getLastError();
 	}
 	
 	if(empty($errors)) {
@@ -1878,8 +1878,8 @@ if($action == 'deleteguild') {
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'deletebyadmin') {
 	$guild_name = $_REQUEST['guild'];
-	if(!check_guild_name($guild_name)) {
-		$errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$errors[] = Validator::getLastError();
 	}
 	
 	if(empty($errors)) {
@@ -1936,8 +1936,8 @@ if($action == 'deletebyadmin') {
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'changemotd' && MOTD_EXISTS) {
 	$guild_name = $_REQUEST['guild'];
-	if(!check_guild_name($guild_name)) {
-		$errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$errors[] = Validator::getLastError();
 	}
 	
 	if(empty($errors)) {
@@ -2000,8 +2000,8 @@ if($action == 'changemotd' && MOTD_EXISTS) {
 //-----------------------------------------------------------------------------//-----------------------------------------------------------------------------
 if($action == 'saveranks') {
 	$guild_name = $_REQUEST['guild'];
-	if(!check_guild_name($guild_name)) {
-		$errors[] = 'Invalid guild name format.';
+	if(!Validator::guildName($guild_name)) {
+		$errors[] = Validator::get;
 	}
 	
 	if(empty($errors)) {
@@ -2033,7 +2033,7 @@ if($action == 'saveranks') {
 					$rank_id = $rank->getId();
 					$name = $_REQUEST[$rank_id.'_name'];
 					$level = (int) $_REQUEST[$rank_id.'_level'];
-					if(check_rank_name($name)) {
+					if(Validator::rankName($name)) {
 						$rank->setName($name);
 					}
 					else {

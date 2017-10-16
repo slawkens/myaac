@@ -22,8 +22,8 @@ if($logged)
 }
 
 $errors = array();
-$step = isset($_POST['step']) ? $_POST['step'] : '';
-if($step == 'save')
+$save = isset($_POST['save']) && $_POST['save'] == 1;
+if($save)
 {
 	if(USE_ACCOUNT_NAME) {
 		$account_name = $_POST['account'];
@@ -38,23 +38,15 @@ if($step == 'save')
 
 	// account
 	if(isset($account_id)) {
-		if(empty($account_id))
-			$errors['account'] = 'Please enter your account number!';
-		else if(!check_number($account_id))
-			$errors['account'] = 'Invalid account number format. Please use only numbers 0-9.';
+		if(!Validator::accountId($account_id))
+			$errors['account'] = Validator::getLastError();
 	}
-	else {
-		if(empty($account_name))
-			$errors['account'] = 'Please enter your account name!';
-		else if(!check_account_name($account_name_up))
-			$errors['account'] = 'Invalid account name format. Please use only A-Z and numbers 0-9.';
-	}
+	else if(!Validator::accountName($account_name_up))
+		$errors['account'] = Validator::getLastError();
 
 	// email
-	if(empty($email))
-		$errors['email'] = 'Please enter your email address!';
-	else if(!check_mail($email))
-		$errors['email'] = 'Email address is not correct.';
+	if(!Validator::email($email))
+		$errors['email'] = Validator::getLastError();
 
 	// country
 	$country = '';
@@ -81,14 +73,14 @@ if($step == 'save')
 	}
 
 	// password
-	if(empty($password))
+	if(!isset($password[0])) {
 		$errors['password'] = 'Please enter the password for your new account.';
-	elseif($password != $password2)
+	}
+	elseif($password != $password2) {
 		$errors['password'] = 'Passwords are not the same.';
-	else
-	{
-		if(!check_password($password))
-			$errors['password'] = 'Password contains illegal chars (a-z, A-Z and 0-9 only!). Minimum password length is 7 characters and maximum 32.';
+	}
+	else if(!Validator::password($password)) {
+		$errors['password'] = Validator::getLastError();
 	}
 
 	// check if account name is not equal to password
@@ -246,6 +238,7 @@ if($step == 'save')
 		'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] : false,
 		'country_recognized' => $country_recognized,
 		'country' => isset($country) ? $country : null,
-		'errors' => $errors
+		'errors' => $errors,
+		'save' => $save
 	));
 ?>

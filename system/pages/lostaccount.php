@@ -30,7 +30,7 @@ else if($action == 'step1' && $action_type == '') {
 elseif($action == 'step1' && $action_type == 'email')
 {
 	$nick = stripslashes($_REQUEST['nick']);
-	if(check_name($nick))
+	if(Validator::characterName($nick))
 	{
 		$player = new OTS_Player();
 		$account = new OTS_Account();
@@ -77,7 +77,7 @@ elseif($action == 'sendcode')
 {
 	$email = $_REQUEST['email'];
 	$nick = stripslashes($_REQUEST['nick']);
-	if(check_name($nick))
+	if(Validator::characterName($nick))
 	{
 		$player = new OTS_Player();
 		$account = new OTS_Account();
@@ -139,7 +139,7 @@ elseif($action == 'sendcode')
 elseif($action == 'step1' && $action_type == 'reckey')
 {
 	$nick = stripslashes($_REQUEST['nick']);
-	if(check_name($nick))
+	if(Validator::characterName($nick))
 	{
 		$player = new OTS_Player();
 		$account = new OTS_Account();
@@ -181,7 +181,7 @@ elseif($action == 'step2')
 {
 	$rec_key = trim($_REQUEST['key']);
 	$nick = stripslashes($_REQUEST['nick']);
-	if(check_name($nick))
+	if(Validator::characterName($nick))
 	{
 		$player = new OTS_Player();
 		$account = new OTS_Account();
@@ -272,7 +272,7 @@ elseif($action == 'step3')
 	$nick = stripslashes($_REQUEST['nick']);
 	$new_pass = trim($_REQUEST['passor']);
 	$new_email = trim($_REQUEST['email']);
-	if(check_name($nick))
+	if(Validator::characterName($nick))
 	{
 		$player = new OTS_Player();
 		$account = new OTS_Account();
@@ -286,9 +286,9 @@ elseif($action == 'step3')
 			{
 				if($account_key == $rec_key)
 				{
-					if(check_password($new_pass))
+					if(Validator::password($new_pass))
 					{
-						if(check_mail($new_email))
+						if(Validator::email($new_email))
 						{
 							$account->setEMail($new_email);
 							
@@ -345,10 +345,10 @@ elseif($action == 'step3')
 							</TD></TR></FORM></TABLE></TABLE>';
 						}
 						else
-							echo 'Wrong e-mail format.';
+							echo Validator::getLastError();
 					}
 					else
-						echo 'Wrong password format. Use only a-Z, A-Z, 0-9. Minimum password length is 7 characters and maximum 32.';
+						echo Validator::getLastError();
 				}
 				else
 					echo 'Wrong recovery key!';
@@ -478,7 +478,7 @@ elseif($action == 'setnewpassword')
 		{
 			if($account->getCustomField('email_code') == $code)
 			{
-				if(check_password($newpassword))
+				if(Validator::password($newpassword))
 				{
 					if($config_salt_enabled)
 					{
@@ -523,7 +523,7 @@ elseif($action == 'setnewpassword')
 				</TD></TR></FORM></TABLE></TABLE>';
 				}
 				else
-					$error= 'Wrong password format. Use only a-z, A-Z, 0-9. Minimum password length is 7 characters and maximum 32.';
+					$error= Validator::getLastError();
 			}
 			else
 				$error= 'Wrong code to change password.';

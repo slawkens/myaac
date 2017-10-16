@@ -141,17 +141,12 @@ $errors = array();
 			if($new_password != $new_password2) {
 				$errors[] = "The new passwords do not match!";
 			}
-			else if($password_strlen < 8) {
-				$errors[] = "New password minimal length is 8 characters.";
-			}
-			else if($password_strlen > 32) {
-				$errors[] = "New password maximal length is 32 characters.";
-			}
 			
 			if(empty($errors)) {
-				if(!check_password($new_password)) {
-					$errors[] = "New password contains illegal chars (a-z, A-Z and 0-9 only!). Minimum password length is 7 characters and maximum 32.";
+				if(!Validator::password($new_password)) {
+					$errors[] = Validator::getLastError();
 				}
+				
 				$old_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $old_password);
 				if($old_password != $account_logged->getPassword()) {
 					$errors[] = "Current password is incorrect!";
@@ -215,14 +210,8 @@ if($action == "changeemail") {
 			$email_new = $_POST['new_email'];
 			$post_password = $_POST['password'];
 			
-			if(empty($email_new)) {
-				$errors[] = 'Please enter your new email address.';
-			}
-			else
-			{
-				if(!check_mail($email_new)) {
-					$errors[] = 'Email address is not correct.';
-				}
+			if(!Validator::email($email_new)) {
+				$errors[] = Validator::getLastError();
 			}
 			
 			if(empty($post_password)) {
@@ -536,7 +525,7 @@ if($action == "changeemail") {
 		$new_hideacc = isset($_POST['accountvisible']) ? (int)$_POST['accountvisible'] : NULL;
 		
 		if($player_name != null) {
-			if (check_name($player_name)) {
+			if (Validator::characterName($player_name)) {
 				$player = new OTS_Player();
 				$player->find($player_name);
 				if ($player->isLoaded()) {
@@ -609,9 +598,8 @@ if($action == "changeemail") {
 				
 				if(empty($errors))
 				{
-					$error = '';
-					if(!admin() && !check_name_new_char($name, $error))
-						$errors[] = $error;
+					if(!admin() && !Validator::newCharacterName($name))
+						$errors[] = Validator::getLastError();
 				}
 				
 				if(empty($errors)) {
@@ -654,6 +642,7 @@ if($action == "changeemail") {
 				
 				echo $twig->render('account.change_name.html.twig', array(
 					'points' => $points,
+					'errors' => $errors
 					//'account_players' => $account_logged->getPlayersList()
 				));
 			}
@@ -743,7 +732,7 @@ if($action == "changeemail") {
 		$password_verify = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $password_verify);
 		if(isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) {
 			if(!empty($player_name) && !empty($password_verify)) {
-				if(check_name($player_name)) {
+				if(Validator::characterName($player_name)) {
 					$player = new OTS_Player();
 					$player->find($player_name);
 					if($player->isLoaded()) {
@@ -805,18 +794,23 @@ if($action == "changeemail") {
 		$newchar_town = isset($_POST['town']) ? $_POST['town'] : NULL;
 
 		$newchar_created = false;
-		if(isset($_POST['savecharacter']) && $_POST['savecharacter'] == 1) {
+		$save = isset($_POST['save']) && $_POST['save'] == 1;
+		if($save) {
 			if(empty($newchar_name))
-				$errors[] = 'Please enter a name for your character!';
+				$errors['name'] = 'Please enter a name for your character!';
 			else if(strlen($newchar_name) > 25)
-				$errors[] = 'Name is too long. Max. lenght <b>25</b> letters.';
+				$errors['name'] = 'Name is too long. Max. lenght <b>25</b> letters.';
 			else if(strlen($newchar_name) < 3)
-				$errors[] = 'Name is too short. Min. lenght <b>3</b> letters.';
+				$errors['name'] = 'Name is too short. Min. lenght <b>3</b> letters.';
 			else {
+				if(!admin() && !Validator::newCharacterName($newchar_name)) {
+					$errors['name'] = Validator::getLastError();
+				}
+				
 				$exist = new OTS_Player();
 				$exist->find($newchar_name);
 				if($exist->isLoaded()) {
-					$errors[] = 'Character with this name already exist.';
+					$errors['name'] = 'Character with this name already exist.';
 				}
 			}
 			
@@ -840,10 +834,6 @@ if($action == "changeemail") {
 			}
 
 			if(empty($errors)) {
-				$error = '';
-				if(!admin() && !check_name_new_char($newchar_name, $error)) {
-					$errors[] = $error;
-				}
 				if(!isset($config['genders'][$newchar_sex]))
 					$errors[] = 'Sex is invalid.';
 				if(!in_array($newchar_town, $config['character_towns']))
@@ -865,7 +855,7 @@ if($action == "changeemail") {
 			{
 				$number_of_players_on_account = $account_logged->getPlayersList()->count();
 				if($number_of_players_on_account >= $config['characters_per_account'])
-					$errors[] .= 'You have too many characters on your account <b>('.$number_of_players_on_account.'/'.$config['characters_per_account'].')</b>!';
+					$errors[] = 'You have too many characters on your account <b>('.$number_of_players_on_account.'/'.$config['characters_per_account'].')</b>!';
 			}
 
 			if(empty($errors))
@@ -874,7 +864,7 @@ if($action == "changeemail") {
 				$char_to_copy = new OTS_Player();
 				$char_to_copy->find($char_to_copy_name);
 				if(!$char_to_copy->isLoaded())
-					$errors[] .= 'Wrong characters configuration. Try again or contact with admin. ADMIN: Edit file config/config.php and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
+					$errors[] = 'Wrong characters configuration. Try again or contact with admin. ADMIN: Edit file config/config.php and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
 			}
 
 			if(empty($errors))
@@ -986,7 +976,9 @@ if($action == "changeemail") {
 				'name' => $newchar_name,
 				'sex' => $newchar_sex,
 				'vocation' => $newchar_vocation,
-				'town' => $newchar_town
+				'town' => $newchar_town,
+				'save' => $save,
+				'errors' => $errors
 			));
 		}
 	}

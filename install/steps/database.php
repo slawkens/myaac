@@ -1,5 +1,6 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
+
 //ini_set('display_errors', false);
 ini_set('max_execution_time', 300);
 $error = false;
@@ -221,11 +222,11 @@ if(!$error) {
 
 			$content .= '$config[\'mail_enabled\'] = true;';
 			$content .= PHP_EOL;
-			if(!check_mail($_SESSION['var_mail_admin'])) {
+			if(!Validator::email($_SESSION['var_mail_admin'])) {
 				error($locale['step_config_mail_admin_error']);
 				$error = true;
 			}
-			if(!check_mail($_SESSION['var_mail_address'])) {
+			if(!Validator::email($_SESSION['var_mail_address'])) {
 				error($locale['step_config_mail_address_error']);
 				$error = true;
 			}

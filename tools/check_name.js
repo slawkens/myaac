@@ -1,5 +1,11 @@
-		eventId = 0;
-		lastSend = 0;
+$(function() {
+	$('#character_name').blur(function() {
+		checkName();
+	});
+});
+
+var eventId = 0;
+var lastSend = 0;
 
 function checkName()
 {
@@ -9,9 +15,9 @@ function checkName()
 		eventId = 0;
 	}
 
-	if(document.getElementById("name").value=="")
+	if(document.getElementById("character_name").value=="")
 	{
-		document.getElementById("name_check").innerHTML = '<b><font color="red">Please enter new character name.</font></b>';
+		$('#character_error').html('<font color="red">Please enter new character name.</font>');
 		return;
 	}
 
@@ -28,12 +34,18 @@ function checkName()
 		}
 	}
 
-	var name = document.getElementById("name").value;
-	$.get("tools/validate.php", { name: name, uid: Math.random() },
+	var name = document.getElementById("character_name").value;
+	$.getJSON("tools/validate.php", { name: name, uid: Math.random() },
 		function(data){
-			document.getElementById("name_check").innerHTML = data;
-			lastSend = timeNow;
+			if(data.hasOwnProperty('success')) {
+				$('#character_error').html ('<font color="green">' + data.success + '</font>');
+				$('#character_indicator').attr('src', 'images/global/general/ok.gif');
+			}
+			else if(data.hasOwnProperty('error')) {
+				$('#character_error').html('<font color="red">' + data.error + '</font>');
+				$('#character_indicator').attr('src', 'images/global/general/nok.gif');
+			}
+
+            lastSend = timeNow;
 	});
-	
-	lastSend = timeNow;
 }

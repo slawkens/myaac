@@ -32,7 +32,7 @@ require_once(SYSTEM . 'libs/cache.php');
 $cache = Cache::getInstance($config['cache_engine'], $config['cache_prefix']);
 
 // twig
-require_once LIBS . 'Twig/Autoloader.php';
+require_once(LIBS . 'Twig/Autoloader.php');
 Twig_Autoloader::register();
 
 $twig_loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');

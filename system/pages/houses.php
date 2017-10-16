@@ -33,7 +33,7 @@ $type = '';
 		{
 			$beds = array("", "one", "two", "three", "fourth", "fifth");
 			$houseName = $_REQUEST['house'];
-			$houseId = (check_number($_REQUEST['house']) ? $_REQUEST['house'] : -1);
+			$houseId = (Validator::number($_REQUEST['house']) ? $_REQUEST['house'] : -1);
 			$house = $db->query('SELECT * FROM ' . $db->tableName('houses') . ' WHERE ' . $db->fieldName('name') . ' LIKE ' . $db->quote($houseName) . ' OR `id` = ' . $db->quote($houseId));
 
 			if($house->rowCount() > 0)

@@ -1,5 +1,4 @@
 <?php
-
 class Spells {
 	public static function loadFromXML($show = false) {
 		global $config, $db;
@@ -35,7 +34,7 @@ class Spells {
 			$vocations_to_db = "";
 			$voc_nr = 0;
 			foreach($vocations as $vocation_to_add) {
-				if(check_number($vocation_to_add)) {
+				if(Validator::number($vocation_to_add)) {
 					$vocations_to_db .= $vocation_to_add;
 				}
 				else
@@ -98,7 +97,7 @@ class Spells {
 			$vocations_to_db = "";
 			$voc_nr = 0;
 			foreach($vocations as $vocation_to_add) {
-				if(check_number($vocation_to_add)) {
+				if(Validator::number($vocation_to_add)) {
 					$vocations_to_db .= $vocation_to_add;
 				}
 				else

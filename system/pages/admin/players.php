@@ -23,7 +23,7 @@ function echo_error($message) {
 }
 
 function verify_number($number, $name, $max_length) {
-	if(!check_number($number))
+	if(!Validator::number($number))
 		echo_error($name . ' can contain only numbers.');
 
 	$number_length = strlen($number);
@@ -50,11 +50,11 @@ $id = 0;
 if(isset($_REQUEST['id']))
 	$id = (int)$_REQUEST['id'];
 else if(isset($_REQUEST['search_name'])) {
-	if(strlen($_REQUEST['search_name']) < 3 && !check_number($_REQUEST['search_name'])) {
+	if(strlen($_REQUEST['search_name']) < 3 && !Validator::number($_REQUEST['search_name'])) {
 		echo 'Player name is too short.';
 	}
 	else {
-		if(check_number($_REQUEST['search_name']))
+		if(Validator::number($_REQUEST['search_name']))
 			$id = $_REQUEST['search_name'];
 		else {
 			$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($_REQUEST['search_name']));
@@ -90,11 +90,11 @@ if($id > 0) {
 
 		$name = $_POST['name'];
 		$_error = '';
-		if(!check_name($name, $_error))
-			echo_error($_error);
+		if(!Validator::characterName($name))
+			echo_error(Validator::getLastError());
 
-		//if(!check_name_new_char($name, $_error))
-		//	echo_error($_error);
+		//if(!Validator::newCharacterName($name)
+		//	echo_error(Validator::getLastError());
 
 		$player_db = $ots->createObject('Player');
 		$player_db->find($name);

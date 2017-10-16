@@ -12,24 +12,22 @@
 
 // we need some functions
 require('../common.php');
-require(LIBS . 'validator.php');
 require(SYSTEM . 'functions.php');
 require(SYSTEM . 'init.php');
 
-echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
+$error = '';
 if(isset($_GET['account']))
 {
 	$account = $_GET['account'];
 	$tmp = strtoupper($account);
 
-	$error = '';
 	if(USE_ACCOUNT_NAME)
 	{
-		if(!check_account_name($tmp, $error))
-			error_($error);
+		if(!Validator::accountName($tmp))
+			error_(Validator::getLastError());
 	}
-	else if(!check_account_id($account, $error))
-		error_($error);
+	else if(!Validator::accountId($account))
+		error_(Validator::getLastError());
 
 	$_account = new OTS_Account();
 	if(USE_ACCOUNT_NAME)
@@ -45,11 +43,8 @@ if(isset($_GET['account']))
 else if(isset($_GET['email']))
 {
 	$email = $_GET['email'];
-	if(strlen($email) >= 255)
-		error_('E-mail is too long (max. 255 chars).');
-
 	if(!Validator::email($email))
-		error_('Invalid e-mail format.');
+		error_(Validator::getLastError());
 
 	if($config['account_mail_unique'])
 	{
@@ -59,19 +54,34 @@ else if(isset($_GET['email']))
 			error_('Account with this e-mail already exist.');
 	}
 
-	success_('Good e-mail.');
+	success_(1);
 }
 else if(isset($_GET['name']))
 {
 	$name = strtolower(stripslashes($_GET['name']));
-	$error = '';
-	if(!check_name($name, $error))
-		error_($error);
+	if(!Validator::characterName($name))
+		error_(Validator::getLastError());
 
-	if(!check_name_new_char($name, $error))
-		error_($error);
+	if(!Validator::newCharacterName($name))
+		error_(Validator::getLastError());
 
 	success_('Good. Your name will be:<br /><b>' . ucwords($name) . '</b>');
+}
+else if(isset($_GET['password']) && isset($_GET['password2'])) {
+	$password = $_GET['password'];
+	$password2 = $_GET['password2'];
+	
+	if(!isset($password[0])) {
+		error_('Please enter the password for your new account.');
+	}
+	
+	if(!Validator::password($password))
+		error_(Validator::getLastError());
+	
+	if($password != $password2)
+		error_('Passwords are not the same.');
+	
+	success_(1);
 }
 else
 	error_('Error: no input specified.');
@@ -82,11 +92,15 @@ else
  * @param string $desc Description
  */
 function success_($desc) {
-	echo '<font color="green">' . $desc . '</font>';
+	echo json_encode(array(
+		'success' => $desc
+	));
 	exit();
 }
 function error_($desc) {
-	echo '<font color="red">' . $desc . '</font>';
+	echo json_encode(array(
+		'error' => $desc
+	));
 	exit();
 }
 

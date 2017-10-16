@@ -2363,7 +2363,7 @@ class OTS_Player extends OTS_Row_DAO
 			'skill_shielding' => POT::SKILL_SHIELD,
 			'skill_fishing' => POT::SKILL_FISH
 		);
-		if(check_number($skill))
+		if(Validator::number($skill))
 			$this->skills[ (int) $skill]['value'] = (int) $value;
 		else {
 			$this->skills[ (int) $skill_ids[$skill]]['value'] = (int) $value;
@@ -2409,7 +2409,7 @@ class OTS_Player extends OTS_Row_DAO
 			'skill_fishing' => POT::SKILL_FISH
 		);
 		
-		if(check_number($skill))
+		if(Validator::number($skill))
 			$this->skills[ (int) $skill]['tries'] = (int) $tries;
 		else {
 			$this->skills[ (int) $skill_ids[$skill]]['tries'] = (int) $tries;

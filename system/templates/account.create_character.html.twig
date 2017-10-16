@@ -7,7 +7,7 @@ In any case the name must not violate the naming conventions stated in the <a hr
 {% endif %}
 <br/><br/>
 <form action="{{ getLink('account/character/create') }}" method="post">
-	<input type="hidden" name=savecharacter value="1">
+	<input type="hidden" name="save" value="1">
 	<div class="TableContainer">
 		<table class="Table3" cellpadding="0" cellspacing="0">
 			<div class="CaptionContainer">
@@ -45,9 +45,11 @@ In any case the name must not violate the naming conventions stated in the <a hr
 												</tr>
 												<tr class="Odd">
 													<td>
-														<input id="name" name="name" onkeyup="checkName();" value=" {{ name }}" size="25" maxlength="25" ><br/>
+														<input name="name" id="character_name" value="{{ name }}" size="25" maxlength="25" >
+														<img id="character_indicator" src="images/global/general/{% if not save or errors.name is defined %}n{% endif %}ok.gif" />
+														<br/>
 														<font size="1" face="verdana,arial,helvetica">
-															<div id="name_check">Please enter your character name.</div>
+															<div id="character_error">{% if not save or errors.name is defined %}Please enter your character name.{% endif %}</div>
 														</font>
 													</td>
 													<td>

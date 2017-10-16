@@ -76,17 +76,17 @@ if(isset($_GET['image']))
 		$image = $image->fetch();
 	else
 	{
-		echo 'Image with this name does not exists.';
+		echo 'Image with this id does not exists.';
 		return;
 	}
 
-	$previous_image = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'gallery` WHERE `id` = ' . $db->quote($image['id'] - 1) . ' ORDER by `ordering`;');
+	$previous_image = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'gallery` WHERE `id` = ' . $db->quote($image['id'] - 1) . ' ORDER by `ordering`;');
 	if($previous_image->rowCount() == 1)
 		$previous_image = $previous_image->fetch();
 	else
 		$previous_image = NULL;
 
-	$next_image = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'gallery` WHERE `id` = ' . $db->quote($image['id'] + 1) . ' ORDER by `ordering`;');
+	$next_image = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'gallery` WHERE `id` = ' . $db->quote($image['id'] + 1) . ' ORDER by `ordering`;');
 	if($next_image->rowCount() == 1)
 		$next_image = $next_image->fetch();
 	else

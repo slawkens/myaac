@@ -34,9 +34,11 @@ To change a name of character select player and choose a new name.<br/>
 							<tr>
                                 <td class="LabelV" ><span>New Name:</span></td>
 								<td>
-									<input type="text" name="name" id="name" onkeyup="checkName();" size="25" maxlength="25" >
+									<input type="text" name="name" id="character_name" size="25" maxlength="25" >
+									<img id="character_indicator" src="images/global/general/{% if not save or errors|length > 0 %}n{% endif %}ok.gif" />
+									<br/>
 									<font size="1" face="verdana,arial,helvetica">
-										<div id="name_check">Please enter your character name.</div>
+										<div id="character_error">Please enter your character name.</div>
 									</font>
 								</td>
 							</tr>

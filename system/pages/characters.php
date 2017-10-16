@@ -12,7 +12,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Characters';
 
-require(SYSTEM . 'item.php');
+require_once(SYSTEM . 'item.php');
+
 $groups = new OTS_Groups_List();
 function generate_search_form($autofocus = false)
 {
@@ -213,7 +214,7 @@ if($player->isLoaded() && !$player->isDeleted())
 		
 		for($i = 1; $i < 11; $i++)
 		{
-			if(check_number($equipment[$i]))
+			if(Validator::number($equipment[$i]))
 				$equipment[$i] = getItemImage($equipment[$i]);
 			else
 				$equipment[$i] = '<img src="images/items/' . $equipment[$i] . '.gif" width="32" height="32" border="0" alt=" ' . $equipment[$i] . '" />';
