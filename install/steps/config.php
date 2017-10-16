@@ -63,6 +63,7 @@ $clients_list = array(
 	1096,
 	1097,
 	1098,
+	1100,
 );
 
 $clients = array();
