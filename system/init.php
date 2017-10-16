@@ -15,6 +15,7 @@ if(file_exists(BASE . 'config.local.php')) // user customizations
 	require(BASE . 'config.local.php');
 
 if(!isset($config['installed']) || !$config['installed']) {
+	header('Location: ' . BASE_URL);
 	die('AAC has not been installed yet or there was error during installation. Please install again.');
 }
 

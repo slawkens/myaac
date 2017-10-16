@@ -65,7 +65,12 @@ $canEdit = hasFlag(FLAG_CONTENT_MONSTERS) || admin();
 if(isset($_POST['reload_monsters']) && $canEdit)
 {
 	require LIBS . 'creatures.php';
-	Creatures::loadFromXML(true);
+	if(Creatures::loadFromXML(true))
+		if(Creatures::getMonstersList()->hasErrors())
+			error('There were some problems loading your monsters.xml file. Please check system/logs/error.log for more info.');
+	else {
+		error(Creatures::getLastError());
+	}
 }
 
 if($canEdit)

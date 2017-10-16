@@ -175,13 +175,26 @@ INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `pl
 			success($locale['step_database_imported_players']);
 		}
 		
-		require LIBS . 'creatures.php';
-		if(Creatures::loadFromXML())
-			success($locale['step_database_loaded_creatures']);
+		require(LIBS . 'creatures.php');
+		if(Creatures::loadFromXML()) {
+			success($locale['step_database_loaded_monsters']);
+			
+			if(Creatures::getMonstersList()->hasErrors()) {
+				$locale['step_database_error_monsters'] = str_replace('$LOG$', 'system/logs/error.log', $locale['step_database_error_monsters']);
+				warning($locale['step_database_error_monsters']);
+			}
+		}
+		else {
+			error(Creatures::getLastError());
+		}
 		
-		require LIBS . 'spells.php';
-		if(Spells::loadFromXML())
+		require(LIBS . 'spells.php');
+		if(Spells::loadFromXML()) {
 			success($locale['step_database_loaded_spells']);
+		}
+		else {
+			error(Spells::getLastError());
+		}
 
 		$locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(ADMIN_URL, $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
 		$locale['step_finish_desc'] = str_replace('$HOMEPAGE$', generateLink(BASE_URL, $locale['step_finish_homepage'], true), $locale['step_finish_desc']);

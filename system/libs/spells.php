@@ -12,6 +12,9 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Spells {
+	private static $spellsList = null;
+	private static $lastError = '';
+	
 	public static function loadFromXML($show = false) {
 		global $config, $db;
 		
@@ -26,15 +29,21 @@ class Spells {
 			$vocations_ids[$voc_name] = $voc_id;
 		}
 		
-		$allspells = new OTS_SpellsList($config['data_path'].'spells/spells.xml');
+		try {
+			self::$spellsList = new OTS_SpellsList($config['data_path'].'spells/spells.xml');
+		}
+		catch(Exception $e) {
+			self::$lastError = $e->getMessage();
+			return false;
+		}
 		//add conjure spells
-		$conjurelist = $allspells->getConjuresList();
+		$conjurelist = self::$spellsList->getConjuresList();
 		if($show) {
 			echo "<h3>Conjure:</h3>";
 		}
 		
 		foreach($conjurelist as $spellname) {
-			$spell = $allspells->getConjure($spellname);
+			$spell = self::$spellsList->getConjure($spellname);
 			$lvl = $spell->getLevel();
 			$mlvl = $spell->getMagicLevel();
 			$mana = $spell->getMana();
@@ -88,13 +97,13 @@ class Spells {
 		}
 		
 		//add instant spells
-		$instantlist = $allspells->getInstantsList();
+		$instantlist = self::$spellsList->getInstantsList();
 		if($show) {
 			echo "<h3>Instant:</h3>";
 		}
 		
 		foreach($instantlist as $spellname) {
-			$spell = $allspells->getInstant($spellname);
+			$spell = self::$spellsList->getInstant($spellname);
 			$lvl = $spell->getLevel();
 			$mlvl = $spell->getMagicLevel();
 			$mana = $spell->getMana();
@@ -150,5 +159,13 @@ class Spells {
 		}
 		
 		return true;
+	}
+	
+	public static function getSpellsList() {
+		return self::$spellsList;
+	}
+	
+	public static function getLastError() {
+		return self::$lastError;
 	}
 }

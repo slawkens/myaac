@@ -16,7 +16,9 @@ $canEdit = hasFlag(FLAG_CONTENT_SPELLS) || admin();
 if(isset($_POST['reload_spells']) && $canEdit)
 {
 	require LIBS . 'spells.php';
-	Spells::loadFromXML(true);
+	if(!Spells::loadFromXML(true)) {
+		error(Spells::getLastError());
+	}
 }
 
 if($canEdit)
