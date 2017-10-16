@@ -1,3 +1,26 @@
+[0.6.0 - 16.10.2017]
+	- added faq management - add/edit/move/hide/delete from website
+	- new account.login view for tibiacom template
+	- monsters and spells are now being loaded at the installation of the AAC
+	- fix for php versions under 5.5 where empty() function supported only variables
+	- added missing change email and change info buttons to account.management default template
+	- added new indicator icons for create account, create character and change character name
+	- fixed config loader when some inline comments are present
+	- fixed editing page in admin panel that contains some html code
+	- fixed forum new post on mac os and some specific mysql versions
+	- attempt to fix incorrect views counter behavior (its resetting to 0 in some cases)
+	- enabled cache http headers for signatures
+	- check if monster file exist before loading it
+	- fixed if plugin zip file name contains dot (.)
+	- renamed screenshots to gallery and movies to videos
+	- moved install pages to twig
+	- fixed Account::getGuildAccess function
+	- removed never used library from sources - dwoo
+	- moved check_* functions to class Validator
+	- from now all validators ajax requests will fire onblur instead of onkeyup
+	- ajax requests returns now json instead of xml
+	- added 404 response when file is not found
+
 [0.5.1 - 11.10.2017]
 	- fixed forum add/edit board
 	- new configurable: highscores_length, how much highscores to display

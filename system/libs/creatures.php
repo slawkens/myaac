@@ -1,4 +1,15 @@
 <?php
+/**
+ * Creatures class
+ *
+ * @package   MyAAC
+ * @author    Gesior <jerzyskalski@wp.pl>
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2017 MyAAC
+ * @version   0.6.0
+ * @link      http://my-aac.org
+ */
+defined('MYAAC') or die('Direct access not allowed!');
 
 class Creatures {
 	public static function loadFromXML($show = false) {

@@ -9,6 +9,8 @@ if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['i
 	die('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
 }
 
+define('ADMIN_PANEL', true);
+
 $content = '';
 
 // validate page
