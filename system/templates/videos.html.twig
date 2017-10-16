@@ -1,0 +1,7 @@
+<div style="text-align: center;">
+	{% for video in videos %}
+	<h2>{{ video.title }}</h2>
+	Author: {{ video.author }}<br/>
+	<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.youtube_id }}" frameborder="0" allowfullscreen></iframe><br/><br/>
+	{% endfor %}
+</div>

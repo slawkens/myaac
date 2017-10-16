@@ -17,7 +17,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 				if(in_array(PAGE, array('news', 'newsarchive')))
 					echo 'news';
 				elseif(in_array(PAGE, array('creatures', 'spells', 'serverinfo', 'downloads', 'commands',
-					'movies', 'screenshots', 'experiencetable', 'faq')))
+					'videos', 'gallery', 'experiencetable', 'faq')))
 						echo 'library';
 				elseif(in_array(PAGE, array('online', 'characters', 'guilds', 'highscores', 'wars', 'lastkills', 'houses', 'bans',
 					'forum', 'team')))
@@ -134,9 +134,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 					<span class="separator"></span>
 					<a href="<?php echo getLink('commands'); ?>">Commands</a>
 					<span class="separator"></span>
-					<a href="<?php echo getLink('movies'); ?>">Movies</a>
+					<a href="<?php echo getLink('videos'); ?>">Videos</a>
 					<span class="separator"></span>
-					<a href="<?php echo getLink('screenshots'); ?>">Screenshots</a>
+					<a href="<?php echo getLink('gallery'); ?>">Gallery</a>
 					<span class="separator"></span>
 					<a href="<?php echo getLink('experienceTable'); ?>">Experience Table</a>
 					<span class="separator"></span>

@@ -560,19 +560,19 @@ if(isset($config['freehouses'])): ?>
 endif;
 ?>
 
-<a href="<?php echo getLink('screenshots'); ?>">
-	<div id='submenu_screenshots' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+<a href="<?php echo getLink('gallery'); ?>">
+	<div id='submenu_gallery' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
 		<div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
-		<div id='ActiveSubmenuItemIcon_screenshots' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
-		<div class='SubmenuitemLabel'>Screenshots</div>
+		<div id='ActiveSubmenuItemIcon_gallery' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+		<div class='SubmenuitemLabel'>Gallery</div>
 		<div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 	</div>
 </a>
-<a href="<?php echo getLink('movies'); ?>">
-	<div id='submenu_movies' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+<a href="<?php echo getLink('videos'); ?>">
+	<div id='submenu_videos' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
 		<div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
-		<div id='ActiveSubmenuItemIcon_movies' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
-		<div class='SubmenuitemLabel'>Movies</div>
+		<div id='ActiveSubmenuItemIcon_videos' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+		<div class='SubmenuitemLabel'>Videos</div>
 		<div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 	</div>
 </a>
@@ -756,13 +756,19 @@ if($logged):
 				<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
 			</div>
 			<?php endif; ?>
-			<?php if(PAGE == 'news' && in_array("screenshots", $config['boxes'])): ?>
-			<div id="ScreenshotBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/screenshot/screenshotbox.gif);">
-				<a href="?subtopic=screenshots&screenshot=<?php echo $config['screenshot']; ?>" >
-					<img id="ScreenshotContent" class="ThemeboxContent" src="images/screenshots/<?php echo $config['screenshot']; ?>_thumb.gif" alt="Screenshot of the Day" />
+			<?php
+			if(PAGE == 'news' && in_array("gallery", $config['boxes'])):
+				$query = $db->query('SELECT `thumb` FROM `' . TABLE_PREFIX . 'gallery` WHERE `id` = ' . $db->quote($config['gallery_image']));
+				if($query->rowCount() == 1):
+					$image = $query->fetch();
+				?>
+			<div id="GalleryBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/gallery/gallerybox.gif);">
+				<a href="?subtopic=gallery&image=<?php echo $config['gallery_image']; ?>" >
+					<img id="GalleryContent" class="ThemeboxContent" src="<?php echo $image['thumb']; ?>" alt="Screenshot of the Day" />
 				</a>
 				<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
 			</div>
+				<?php endif; ?>
 			<?php endif; ?>
 			<?php if(PAGE == 'news' && in_array("poll", $config['boxes'])):
 				$poll = $db->query('SELECT id, question FROM '.$db->tableName(TABLE_PREFIX . 'polls') . ' WHERE end > ' . time() . ' ORDER BY end LIMIT 1');

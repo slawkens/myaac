@@ -28,7 +28,7 @@ session_start();
 
 define('MYAAC', true);
 define('MYAAC_VERSION', '0.5.1');
-define('DATABASE_VERSION', 10);
+define('DATABASE_VERSION', 11);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
 define('MYAAC_OS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'WINDOWS' : (strtoupper(PHP_OS) == 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -43,8 +43,8 @@ define('FLAG_CONTENT_FORUM', 32);
 define('FLAG_CONTENT_COMMANDS', 64);
 define('FLAG_CONTENT_SPELLS', 128);
 define('FLAG_CONTENT_MONSTERS', 256);
-define('FLAG_CONTENT_SCREENSHOTS', 512);
-define('FLAG_CONTENT_MOVIES', 1024);
+define('FLAG_CONTENT_GALLERY', 512);
+define('FLAG_CONTENT_VIDEOS', 1024);
 define('FLAG_CONTENT_FAQ', 2048);
 
 // news

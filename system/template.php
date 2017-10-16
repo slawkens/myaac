@@ -79,10 +79,13 @@ $template['link_account_logout'] = getLink('account/logout');
 
 $template['link_news_archive'] = getLink('news/archive');
 
-$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'screenshots', 'movies', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts', 'bugtracker');
+$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts', 'bugtracker');
 foreach($links as $link) {
-    $template['link_' . $link] = getLink($link);
+	$template['link_' . $link] = getLink($link);
 }
+
+$template['link_screenshots'] = getLink('gallery');
+$template['link_movies'] = getLink('videos');
 
 $template['link_gifts_history'] = getLink('gifts', 'history');
 if($config['forum'] != '')

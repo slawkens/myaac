@@ -147,7 +147,7 @@ CREATE TABLE `myaac_monsters` (
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 
-CREATE TABLE `myaac_movies`
+CREATE TABLE `myaac_videos`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`title` VARCHAR(100) NOT NULL DEFAULT '',
@@ -214,7 +214,7 @@ CREATE TABLE `myaac_pages`
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 
-CREATE TABLE `myaac_screenshots`
+CREATE TABLE `myaac_gallery`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`comment` VARCHAR(255) NOT NULL DEFAULT '',
@@ -226,7 +226,7 @@ CREATE TABLE `myaac_screenshots`
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 
-INSERT INTO `myaac_screenshots` (`id`, `ordering`, `comment`, `image`, `thumb`, `author`) VALUES (NULL, 1, 'Demon', 'images/screenshots/demon.jpg', 'images/screenshots/demon_thumb.gif', 'MyAAC');
+INSERT INTO `myaac_gallery` (`id`, `ordering`, `comment`, `image`, `thumb`, `author`) VALUES (NULL, 1, 'Demon', 'images/gallery/demon.jpg', 'images/gallery/demon_thumb.gif', 'MyAAC');
 
 CREATE TABLE `myaac_spells`
 (
