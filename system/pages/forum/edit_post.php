@@ -13,14 +13,20 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 if(Forum::canPost($account_logged))
 {
-	$post_id = (int) $_REQUEST['id'];
-	$thread = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_date`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $post_id." LIMIT 1")->fetch();
+	$post_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : false;
+	if(!$post_id) {
+		echo 'Please enter post id.';
+		return;
+	}
+	
+	$thread = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_date`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".$post_id." LIMIT 1")->fetch();
 	if(isset($thread['id']))
 	{
 		$first_post = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread['first_post']." LIMIT 1")->fetch();
 		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread['first_post']) . '">'.$first_post['post_topic'].'</a> >> <b>Edit post</b>';
 		if($account_logged->getId() == $thread['author_aid'] || Forum::isModerator())
 		{
+			$char_id = $post_topic = $text = $smile = null;
 			$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
 			$saved = false;
 			if(isset($_REQUEST['save']))
@@ -43,13 +49,16 @@ if(Forum::canPost($account_logged))
 					if(ord($text[$i]) >= 33 && ord($text[$i]) <= 126)
 						$lenght++;
 				}
+				
 				if($lenght < 1 || strlen($text) > 15000)
 					$errors[] = 'Too short or too long post (short: '.$lenght.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
 				if($char_id == 0)
 					$errors[] = 'Please select a character.';
 				if(empty($post_topic) && $thread['id'] == $thread['first_post'])
 					$errors[] = 'Thread topic can\'t be empty.';
+				
 				$player_on_account == false;
+				
 				if(count($errors) == 0)
 				{
 					foreach($players_from_account as $player)
@@ -58,8 +67,8 @@ if(Forum::canPost($account_logged))
 					if(!$player_on_account)
 						$errors[] = 'Player with selected ID '.$char_id.' doesn\'t exist or isn\'t on your account';
 				}
-				if(count($errors) == 0)
-				{
+				
+				if(count($errors) == 0) {
 					$saved = true;
 					if($account_logged->getId() != $thread['author_aid'])
 						$char_id = $thread['author_guid'];
@@ -70,41 +79,35 @@ if(Forum::canPost($account_logged))
 					echo '<br />Thank you for editing post.<br /><a href="' . getForumThreadLink($thread['first_post'], $_page) . '">GO BACK TO LAST THREAD</a>';
 				}
 			}
-			else
-			{
+			else {
 				$text = $thread['post_text'];
 				$char_id = (int) $thread['author_guid'];
 				$post_topic = $thread['post_topic'];
 				$smile = (int) $thread['post_smile'];
 			}
+			
 			if(!$saved)
 			{
 				if(!empty($errors))
 					echo $twig->render('error_box.html.twig', array('errors' => $errors));
 				
-				echo '<br /><form action="?" method="POST"><input type="hidden" name="action" value="edit_post" /><input type="hidden" name="id" value="'.$post_id.'" /><input type="hidden" name="subtopic" value="forum" /><input type="hidden" name="save" value="save" /><table width="100%"><tr bgcolor="'.$config['vdarkborder'].'"><td colspan="2"><font color="white"><b>Edit Post</b></font></td></tr><tr bgcolor="'.$config['darkborder'].'"><td width="180"><b>Character:</b></td><td><select name="char_id"><option value="0">(Choose character)</option>';
-				foreach($players_from_account as $player)
-				{
-					echo '<option value="'.$player['id'].'"';
-					if($player['id'] == $char_id)
-						echo ' selected="selected"';
-					echo '>'.$player['name'].'</option>';
-				}
-				echo '</select></td></tr><tr bgcolor="'.$config['lightborder'].'"><td><b>Topic:</b></td><td><input type="text" value="'.htmlspecialchars($post_topic).'" name="topic" size="40" maxlength="60" /> (Optional)</td></tr>
-					<tr bgcolor="'.$config['darkborder'].'"><td valign="top"><b>Message:</b><font size="1"><br />You can use:<br />[player]Nick[/player]<br />[url]http://address.com/[/url]<br />[img]http://images.com/images3.gif[/img]<br />[code]Code[/code]<br />[b]<b>Text</b>[/b]<br />[i]<i>Text</i>[/i]<br />[u]<u>Text</u>[/u]<br />and smileys:<br />;) , :) , :D , :( , :rolleyes:<br />:cool: , :eek: , :o , :p</font></td><td><textarea rows="10" cols="60" name="text">'.htmlspecialchars($text).'</textarea><br />(Max. 15,000 letters)</td></tr>
-					<tr bgcolor="'.$config['lightborder'].'"><td valign="top">Options:</td><td><label><input type="checkbox" name="smile" value="1"';
-				if($smile == 1)
-					echo ' checked="checked"';
-				echo '/>Disable Smileys in This Post </label></td></tr></table><center><input type="submit" value="Save Post" /></center></form>';
+				echo $twig->render('forum.edit_post.html.twig', array(
+					'post_id' => $post_id,
+					'players' => $players_from_account,
+					'player_id' => $char_id,
+					'topic' => htmlspecialchars($post_topic),
+					'text' => htmlspecialchars($text),
+					'smile' => $smile
+				));
 			}
 		}
 		else
-			echo '<br />You are not an author of this post.';
+			echo '<br/>You are not an author of this post.';
 	}
 	else
-		echo '<br />Post with ID '.$post_id.' doesn\'t exist.';
+		echo '<br/>Post with ID '.$post_id.' doesn\'t exist.';
 }
 else
-	echo '<br />Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
+	echo '<br/>Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
 
 ?>

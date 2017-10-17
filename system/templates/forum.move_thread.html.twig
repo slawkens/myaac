@@ -8,7 +8,8 @@
 			<table border="0" cellpadding="3" cellspacing="1" width="100%">
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>
-						<form action="{{ getLink('forum') }}" method="get">
+						<form action="" method="get">
+							<input type="hidden" name="subtopic" value="forum" />
 							<input type="hidden" name="action" value="move_thread" />
 							<input type="hidden" name="save" value="1" />
 							<input type="hidden" name="id" value="{{ post_id }}" />
