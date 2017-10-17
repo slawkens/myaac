@@ -19,18 +19,19 @@ if($config['template_allow_change'])
 		$template_name = $_GET['template'];
 		if(!preg_match("/[^A-z0-9_\-]/", $template_name)) { // validate template
 			//setcookie('template', $template_name, 0, BASE_DIR . '/', $_SERVER["SERVER_NAME"]);
-			$_SESSION['template'] = $template_name;
+			setSession('template', $template_name);
 		}
 		else
 			$template_name = $config['template'];
 	}
-	else if(isset($_SESSION['template']))
-	{
-		if(!preg_match("/[^A-z0-9_\-]/", $_SESSION['template'])) {
-			$template_name = $_SESSION['template'];
-		}
-		else {
-			$template_name = $config['template'];
+	else {
+		$template_session = getSession('template');
+		if ($template_session !== false) {
+			if (!preg_match("/[^A-z0-9_\-]/", $template_session)) {
+				$template_name = $template_session;
+			} else {
+				$template_name = $config['template'];
+			}
 		}
 	}
 }

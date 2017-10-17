@@ -943,6 +943,19 @@ function str_replace_first($search, $replace, $subject) {
 	return $subject;
 }
 
+function setSession($key, $data) {
+	global $config;
+	$_SESSION[$config['session_prefix'] . $key] = $data;
+}
+function getSession($key) {
+	global $config;
+	return (isset($_SESSION[$config['session_prefix'] . $key])) ? $_SESSION[$config['session_prefix'] . $key] : false;
+}
+function unsetSession($key) {
+	global $config;
+	unset($_SESSION[$config['session_prefix'] . $key]);
+}
+
 // validator functions
 require_once(LIBS . 'validator.php');
 ?>

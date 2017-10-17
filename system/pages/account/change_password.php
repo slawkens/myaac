@@ -77,7 +77,7 @@ else
 			'title' => 'Password Changed',
 			'description' => 'Your password has been changed.' . $message
 		));
-		$_SESSION['password'] = $new_password;
+		setSession('password', $new_password);
 	}
 }
 

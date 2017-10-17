@@ -30,6 +30,7 @@ $config = array(
 	// used for the Downloads page and some templates aswell
 	'client' => 1098, // 954 = client 9.54
 
+	'session_prefix' => 'myaac_', // must be unique for every site on your server
 	'friendly_urls' => false, // mod_rewrite is required for this, it makes links looks more elegant to eye, and also are SEO friendly (example: http://my-aac.org/guilds/Testing instead of http://my-aac.org/?subtopic=guilds&name=Testing). Remember to rename .htaccess.dist to .htaccess
 	'gzip_output' => false, // gzip page content before sending it to the browser, uses less bandwidth but more cpu cycles
 

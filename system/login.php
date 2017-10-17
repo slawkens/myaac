@@ -15,9 +15,9 @@ $logged_flags = 0;
 $action = isset($_REQUEST['action']) ? strtolower($_REQUEST['action']) : '';
 if($action == 'logout' && !isset($_REQUEST['account_login']))
 {
-	unset($_SESSION['account']);
-	unset($_SESSION['password']);
-	unset($_SESSION['remember_me']);
+	unsetSession('account');
+	unsetSession('password');
+	unsetSession('remember_me');
 
 	if(isset($_REQUEST['redirect']))
 	{
@@ -68,19 +68,19 @@ else
 				&& (!isset($t) || $t['attempts'] < 5)
 				)
 			{
-				$_SESSION['account'] = $account_logged->getId();
-				$_SESSION['password'] = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password);
+				setSession('account', $account_logged->getId());
+				setSession('password', encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password));
 				if(isset($_POST['remember_me']))
-					$_SESSION['remember_me'] = true;
+					setSession('remember_me', true);
 
 				$logged = true;
 				$logged_flags = $account_logged->getWebFlags();
 				
 				if(isset($_POST['admin']) && !admin()) {
 					$errors[] = 'This account has no admin privileges.';
-					unset($_SESSION['account']);
-					unset($_SESSION['password']);
-					unset($_SESSION['remember_me']);
+					unsetSession('account');
+					unsetSession('password');
+					unsetSession('remember_me');
 					$logged = false;
 				}
 				else {
@@ -119,19 +119,20 @@ else
 	}
 
 	// stay-logged with sessions
-	if(isset($_SESSION['account']))
+	$current_session = getSession('account');
+	if($current_session !== false)
 	{
 		$account_logged = new OTS_Account();
-		$account_logged->load($_SESSION['account']);
-		if($account_logged->isLoaded() && $account_logged->getPassword() == $_SESSION['password']
+		$account_logged->load($current_session);
+		if($account_logged->isLoaded() && $account_logged->getPassword() == getSession('password')
 			//&& (!isset($_SESSION['admin']) || admin())
-			&& (isset($_SESSION['remember_me']) || $_SESSION['last_visit'] > time() - 15 * 60)) {  // login for 15 minutes if "remember me" is not used
+			&& (getSession('remember_me') !== false || getSession('last_visit') > time() - 15 * 60)) {  // login for 15 minutes if "remember me" is not used
 				$logged = true;
 		}
 		else
 		{
 			$logged = false;
-			unset($_SESSION['account']);
+			unsetSession('account');
 			unset($account_logged);
 		}
 	}
@@ -143,8 +144,9 @@ else
 	}
 }
 
-$_SESSION['last_visit'] = time();
-if(defined('PAGE'))
-	$_SESSION['last_page'] = PAGE;
-$_SESSION['last_uri'] = $_SERVER['REQUEST_URI'];
+setSession('last_visit', time());
+if(defined('PAGE')) {
+	setSession('last_page', PAGE);
+}
+setSession('last_uri', $_SERVER['REQUEST_URI']);
 ?>
