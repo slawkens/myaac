@@ -676,7 +676,7 @@ function getSkillName($skillId, $suffix = true)
  */
 function hasFlag($flag) {
 	global $logged, $logged_flags;
-	return $logged && ($logged_flags & $flag) == $flag;
+	return ($logged && ($logged_flags & $flag) == $flag) || superAdmin();
 }
 /**
  * Check if current logged user have got admin flag set.
