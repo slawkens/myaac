@@ -1,3 +1,13 @@
+[0.6.1 - 17.10.2017]
+	- fixed signatures loading
+	- new configurable: session_prefix, to allow more websites on one machine (must be unique for every website on your dedicated server!)
+	- better error handling for monsters and spells loader (save errors to system/logs/error.log)
+	- check if file exist before loading (monsters and spells)
+	- (internal) Account::getAccess() = Account::getGroupId()
+	- (internal) moved account actions (pages) to account/ directory
+	- (internal) moved forum actions (pages) to forum/ directory
+	- (internal) moved forum.edit_post to twig templates
+
 [0.6.0 - 16.10.2017]
 	- added faq management - add/edit/move/hide/delete from website
 	- new account.login view for tibiacom template
