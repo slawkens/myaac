@@ -818,34 +818,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getAccess()
     {
-		global $groups;
-		if(!isset($groups))
-			$groups = new OTS_Groups_List();
-
-		// by default
-		$access = 0;
-		if(fieldExist('group_id', 'accounts')) {
-			$query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
-			// if anything was found
-
-			$group = $groups->getGroup($query['group_id']);
-			if(!$group) return 0;
-			return $group->getAccess();
-		}
-
-        // finds groups of all characters
-        foreach( $this->getPlayersList() as $player)
-        {
-            $group = $player->getGroup();
-
-            // checks if group's access level is higher then previouls found highest
-            if( $group->getAccess() > $access)
-            {
-                $access = $group->getAccess();
-            }
-        }
-
-        return $access;
+		return $this->getGroupId();
     }
 
 	public function getGroupId()
@@ -858,10 +831,12 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 				return $query['group_id'];
 		}
 
-		$db->query('SELECT `group_id` FROM `players` WHERE `account_id` = ' . $this->getId() . ' ORDER BY `group_id` DESC LIMIT 1')->fetch();
-		if(isset($query['group_id']))
+		$query = $this->db->query('SELECT `group_id` FROM `players` WHERE `account_id` = ' . (int) $this->getId() .  ' ORDER BY `group_id` DESC LIMIT 1');
+		if($query->rowCount() == 1)
+		{
+			$query = $query->fetch();
 			return $query['group_id'];
-
+		}
 		return 0;
 	}
 
