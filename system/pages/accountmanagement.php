@@ -124,7 +124,7 @@ $errors = array();
 			'players' => $account_players
 		));
 	}
-	else if(file_exists(PAGES . 'account/' . $action)) {
+	else if(file_exists(PAGES . 'account/' . $action . '.php')) {
 		require(PAGES . 'account/' . $action . '.php');
 	}
 ?>
