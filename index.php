@@ -30,7 +30,7 @@
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
-if(preg_match("/^(.*)\.(gif|png|jpg|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz)$/i", $_SERVER['REQUEST_URI'])) {
+if(preg_match("/^(.*)\.(gif|jpg|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz)$/i", $_SERVER['REQUEST_URI'])) {
 	header("HTTP/1.0 404 Not Found");
 	exit;
 }
@@ -114,7 +114,7 @@ else {
 		$_REQUEST['name'] = urldecode($tmp[0]);
 		
 		chdir(TOOLS . 'signature');
-		include('index.php');
+		include(TOOLS . 'signature/index.php');
 		exit();
 	}
 	
