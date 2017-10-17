@@ -12,6 +12,9 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Creatures {
+	private static $monstersList = null;
+	private static $lastError = '';
+	
 	public static function loadFromXML($show = false) {
 		global $config, $db;
 		
@@ -22,15 +25,22 @@ class Creatures {
 			echo "<h2>All records deleted from table 'myaac_monsters' in database.</h2>";
 		}
 		
-		$allmonsters = new OTS_MonstersList($config['data_path'].'monster/');
+		try {
+			self::$monstersList = new OTS_MonstersList($config['data_path'].'monster/');
+		}
+		catch(Exception $e) {
+			self::$lastError = $e->getMessage();
+			return false;
+		}
+		
 		//$names_added must be an array
 		$names_added[] = '';
 		//add monsters
-		foreach($allmonsters as $lol) {
-			$monster = $allmonsters->current();
+		foreach(self::$monstersList as $lol) {
+			$monster = self::$monstersList->current();
 			if(!$monster->loaded()) {
 				if($show) {
-					warning('Error while adding monster: ' . $allmonsters->currentFile());
+					warning('Error while adding monster: ' . self::$monstersList->currentFile());
 				}
 				continue;
 			}
@@ -98,7 +108,7 @@ class Creatures {
 			
 			if(!in_array($name, $names_added)) {
 				try {
-					$db->query("INSERT INTO `myaac_monsters` (`hide_creature`, `name`, `mana`, `exp`, `health`, `speed_lvl`, `use_haste`, `voices`, `immunities`, `summonable`, `convinceable`, `race`, `gfx_name`, `file_path`) VALUES (0, " . $db->quote($name) . ", " . $db->quote(empty($mana) ? 0 : $mana) . ", " . $db->quote($exp) . ", " . $db->quote($health) . ", " . $db->quote($speed_lvl) . ", " . $db->quote($use_haste) . ", " . $db->quote($voices_string) . ", " . $db->quote($immunities_string) . ", " . $db->quote($flags['summonable'] > 0 ? 1 : 0) . ", " . $db->quote($flags['convinceable'] > 0 ? 1 : 0) . ", ".$db->quote($race).", ".$db->quote($gfx_name).", " . $db->quote($allmonsters->currentFile()) . ")");
+					$db->query("INSERT INTO `myaac_monsters` (`hide_creature`, `name`, `mana`, `exp`, `health`, `speed_lvl`, `use_haste`, `voices`, `immunities`, `summonable`, `convinceable`, `race`, `gfx_name`, `file_path`) VALUES (0, " . $db->quote($name) . ", " . $db->quote(empty($mana) ? 0 : $mana) . ", " . $db->quote($exp) . ", " . $db->quote($health) . ", " . $db->quote($speed_lvl) . ", " . $db->quote($use_haste) . ", " . $db->quote($voices_string) . ", " . $db->quote($immunities_string) . ", " . $db->quote($flags['summonable'] > 0 ? 1 : 0) . ", " . $db->quote($flags['convinceable'] > 0 ? 1 : 0) . ", ".$db->quote($race).", ".$db->quote($gfx_name).", " . $db->quote(self::$monstersList->currentFile()) . ")");
 					
 					if($show) {
 						success("Added: ".$name."<br/>");
@@ -115,5 +125,13 @@ class Creatures {
 		}
 		
 		return true;
+	}
+	
+	public static function getMonstersList() {
+		return self::$monstersList;
+	}
+	
+	public static function getLastError() {
+		return self::$lastError;
 	}
 }

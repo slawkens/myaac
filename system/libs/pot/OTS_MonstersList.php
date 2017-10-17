@@ -36,6 +36,8 @@ class OTS_MonstersList implements Iterator, Countable, ArrayAccess
  */
     private $monsters = array();
 
+	private $lastMonsterFile = '';
+	private $hasErrors = false;
 /**
  * Loads monsters mapping file.
  * 
@@ -57,9 +59,18 @@ class OTS_MonstersList implements Iterator, Countable, ArrayAccess
             $this->monstersPath .= '/';
         }
 
+		// check if monsters.xml exist
+		if(!@file_exists($this->monstersPath . 'monsters.xml')) {
+			log_append('error.log', '[OTS_MonstersList.php] Fatal error: Cannot load monsters.xml. File does not exist. (' . $this->monstersPath . 'monsters.xml' . '). Error: ' . print_r(error_get_last(), true));
+			throw new Exception('Error: Cannot load monsters.xml. File not found. More info in system/logs/error.log file.');
+		}
+		
         // loads monsters mapping file
         $monsters = new DOMDocument();
-        $monsters->load($this->monstersPath . 'monsters.xml');
+        if(!@$monsters->load($this->monstersPath . 'monsters.xml')) {
+			log_append('error.log', '[OTS_MonstersList.php] Fatal error: Cannot load monsters.xml (' . $this->monstersPath . 'monsters.xml' . '). Error: ' . print_r(error_get_last(), true));
+			throw new Exception('Error: Cannot load monsters.xml. File is invalid. More info in system/logs/error.log file.');
+		}
 
         foreach( $monsters->getElementsByTagName('monster') as $monster)
         {
@@ -101,6 +112,16 @@ class OTS_MonstersList implements Iterator, Countable, ArrayAccess
         return isset($this->monsters[$name]);
     }
 
+	function xmlErrorHandler($errno, $errstr, $errfile, $errline)
+	{
+		if($errno==E_WARNING && (substr_count($errstr,"DOMDocument::loadXML()")>0)) {
+			//throw new DOMException($errstr);
+			log_append('error.log', '[OTS_MonstersList.php] Fatal error: Cannot load ' . $this->lastMonsterFile . ' - ' . $errstr);
+			$this->hasErrors = true;
+		}
+		else
+			return false;
+	}
 /**
  * Returns loaded data of given monster.
  * 
@@ -112,21 +133,31 @@ class OTS_MonstersList implements Iterator, Countable, ArrayAccess
  */
     public function getMonster($name)
     {
+		global $lastMonsterFile;
         // checks if monster exists
         if( isset($this->monsters[$name]) )
         {
             // loads file
             $monster = new OTS_Monster();
 			//echo $this->monstersPath . $this->monsters[$name];
+			
+			// check if monster file exist
            if(file_exists($this->monstersPath . $this->monsters[$name])) {
-				$monster->loadXML(trim(file_get_contents($this->monstersPath . $this->monsters[$name])));
+				set_error_handler(array($this, 'xmlErrorHandler')); 
+				$this->lastMonsterFile = $this->monstersPath . $this->monsters[$name];
+				@$monster->loadXML(trim(file_get_contents($this->monstersPath . $this->monsters[$name])));
+				restore_error_handler();
 			}
+
             return $monster;
         }
 
         throw new OutOfBoundsException();
     }
 
+	public function hasErrors() {
+		return $this->hasErrors;
+	}
 /**
  * Returns amount of monsters loaded.
  * 
