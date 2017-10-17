@@ -1,0 +1,84 @@
+<?php
+/**
+ * Change password
+ *
+ * @package   MyAAC
+ * @author    Gesior <jerzyskalski@wp.pl>
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2017 MyAAC
+ * @version   0.6.0
+ * @link      http://my-aac.org
+ */
+defined('MYAAC') or die('Direct access not allowed!');
+
+$new_password = isset($_POST['newpassword']) ? $_POST['newpassword'] : NULL;
+$new_password2 = isset($_POST['newpassword2']) ? $_POST['newpassword2'] : NULL;
+$old_password = isset($_POST['oldpassword']) ? $_POST['oldpassword'] : NULL;
+if(empty($new_password) && empty($new_password2) && empty($old_password)) {
+	echo $twig->render('account.change_password.html.twig');
+}
+else
+{
+	if(empty($new_password) || empty($new_password2) || empty($old_password)){
+		$errors[] = "Please fill in form.";
+	}
+	$password_strlen = strlen($new_password);
+	if($new_password != $new_password2) {
+		$errors[] = "The new passwords do not match!";
+	}
+	
+	if(empty($errors)) {
+		if(!Validator::password($new_password)) {
+			$errors[] = Validator::getLastError();
+		}
+		
+		$old_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $old_password);
+		if($old_password != $account_logged->getPassword()) {
+			$errors[] = "Current password is incorrect!";
+		}
+	}
+	if(!empty($errors)){
+		//show errors
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		
+		//show form
+		echo $twig->render('account.change_password.html.twig');
+	}
+	else
+	{
+		$org_pass = $new_password;
+		
+		if($config_salt_enabled)
+		{
+			$salt = generateRandomString(10, false, true, true);
+			$new_password = $salt . $new_password;
+			$account_logged->setCustomField('salt', $salt);
+		}
+		
+		$new_password = encrypt($new_password);
+		$account_logged->setPassword($new_password);
+		$account_logged->save();
+		$account_logged->logAction('Account password changed.');
+		
+		$message = '';
+		if($config['mail_enabled'] && $config['send_mail_when_change_password'])
+		{
+			$mailBody = $twig->render('mail.password_changed.html.twig', array(
+				'new_password' => $org_pass
+			));
+			
+			if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - Changed password", $mailBody))
+				$message = '<br/><small>Your new password were send on email address <b>'.$account_logged->getEMail().'</b>.</small>';
+			else
+				$message = '<br/><p class="error">An error occorred while sending email with password:<br/>' . $mailer->ErrorInfo . '</p>';
+		}
+		
+		echo $twig->render('success.html.twig', array(
+			'title' => 'Password Changed',
+			'description' => 'Your password has been changed.' . $message
+		));
+		$_SESSION['password'] = $new_password;
+	}
+}
+
+?>

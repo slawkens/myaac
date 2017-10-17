@@ -60,6 +60,7 @@ define('CACHE', SYSTEM . 'cache/');
 define('LOCALE', SYSTEM . 'locale/');
 define('LIBS', SYSTEM . 'libs/');
 define('LOGS', SYSTEM . 'logs/');
+define('PAGES', SYSTEM . 'pages/');
 define('PLUGINS', BASE . 'plugins/');
 define('TEMPLATES', BASE . 'templates/');
 define('TOOLS', BASE . 'tools/');
