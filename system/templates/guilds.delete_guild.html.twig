@@ -19,7 +19,7 @@
 					<table style="width:100%;" >
 						<tr>
 							<td>Are you sure you want delete guild <b>{{ guild.getName() }}</b>?<br/>
-								<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=deleteguild" method="post">
+								<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=delete_guild" method="post">
 									<input type="hidden" name="todo" value="save"/>
 									<input type="submit" value="Yes, delete"/>
 								</form>
