@@ -37,15 +37,15 @@ if(empty($errors)) {
 				echo $twig->render('success.html.twig', array(
 					'title' => 'Guild Deleted',
 					'description' => 'Guild with name <b>' . $guild_name . '</b> has been deleted.',
-					'custom_buttons' => '<center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url(' . $template_path . '/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $template_path . '/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>'
+					'custom_buttons' => $twig->render('guilds.back_button.html.twig')
 				));
 			}
 			else {
 				echo $twig->render('success.html.twig', array(
 					'title' => 'Delete Guild',
-					'description' => 'Are you sure you want delete guild <b>' . $guild_name . '</b>?<br>
+					'description' => 'Are you sure you want delete guild <b>' . $guild_name . '</b>?<br/>
 				<form action="?subtopic=guilds&guild=' . $guild->getName() . '&action=delete_by_admin" METHOD="post"><input type="hidden" name="todo" value="save"><input type="submit" value="Yes, delete"></form>',
-					'custom_buttons' => '<center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>'
+					'custom_buttons' => $twig->render('guilds.back_button.html.twig')
 				));
 			}
 		}
@@ -60,7 +60,10 @@ if(empty($errors)) {
 if(!empty($errors)) {
 	echo $twig->render('error_box.html.twig', array('errors' => $errors));
 	
-	echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+	echo $twig->render('guilds.back_button.html.twig', array(
+		'new_line' => true,
+		'action' => '?subtopic=guilds'
+	));
 }
 
 ?>

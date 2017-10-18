@@ -67,7 +67,7 @@ if($_REQUEST['preview'] == 2)
 	if($logged)
 		echo '
 					<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=create_guild" METHOD=post><TR><TD>
-					<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
+					<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/global/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
 					</TD></TR></FORM></TABLE>';
 	
 	echo '
@@ -95,7 +95,7 @@ else
 			if(admin())
 				echo '<br /><a href="?subtopic=guilds&action=delete_by_admin&guild='.$guild->getName().'">Delete this guild (for ADMIN only!)</a>';
 			echo '</TD><TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="' . $link . '" METHOD=post><TR><TD>
-					<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/buttons/sbutton_view.gif" BORDER=0 WIDTH=120 HEIGHT=18>
+					<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/global/buttons/sbutton_view.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 					</TD></TR></FORM></TABLE>
 					</TD></TR>';
 		}
@@ -106,7 +106,7 @@ else
 					<TD>';
 	if($logged)
 		echo '<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=create_guild" METHOD=post><TR><TD>
-					<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
+					<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/global/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
 					</TD></TR></FORM></TABLE>';
 	echo '
 					</TD></TR>';
@@ -116,13 +116,13 @@ else
 echo '</TABLE><br><br>';
 if($logged)
 	echo '<TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD><TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=create_guild" METHOD=post><TR><TD>
-		<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
+		<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/global/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
 		</TD></TR></FORM></TABLE></TD><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD></TR></TABLE>
 		<BR />If you have any problem with guilds try:
 		<BR /><a href="?subtopic=guilds&action=cleanup_players">Cleanup players</a> - can\'t join guild/be invited? Can\'t create guild? Try cleanup players.
 		<BR /><a href="?subtopic=guilds&action=cleanup_guilds">Cleanup guilds</a> - made guild, you are a leader, but you are not on players list? Cleanup guilds!';
 else
 	echo 'Before you can create guild you must login.<br><TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD><TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=accountmanagement&redirect=' . getLink('guilds') . '" METHOD=post><TR><TD>
-		<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18>
+		<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/global/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 		</TD></TR></FORM></TABLE></TD><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD></TR></TABLE>';
 ?>

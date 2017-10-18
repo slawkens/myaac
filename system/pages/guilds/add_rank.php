@@ -57,7 +57,10 @@ if(empty($guild_errors)) {
 	if(!empty($guild_errors)) {
 		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
 		
-		echo '<br/><center><form action="?subtopic=guilds&guild='.$guild_name.'&action=show" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+		echo $twig->render('guilds.back_button.html.twig', array(
+			'new_line' => true,
+			'action' => '?subtopic=guilds&guild='.$guild_name.'&action=show'
+		));
 	}
 }
 else
@@ -65,7 +68,9 @@ else
 	if(!empty($guild_errors)) {
 		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
 		
-		echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+		echo $twig->render('guilds.back_button.html.twig', array(
+			'new_line' => true
+		));
 	}
 }
 

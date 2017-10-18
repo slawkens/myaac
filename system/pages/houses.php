@@ -225,7 +225,7 @@ $type = '';
 									<FORM ACTION=?subtopic=houses&page=view METHOD=post>
 										<TR><TD>
 											<INPUT TYPE=hidden NAME=house VALUE="'.$house['name'].'">
-											<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/buttons/sbutton_view.gif" BORDER=0 WIDTH=120 HEIGHT=18>
+											<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/global/buttons/sbutton_view.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 										</TD></TR>
 									</FORM>
 								</TABLE>
@@ -301,7 +301,7 @@ $type = '';
 				<BR>
 				<CENTER>
 					<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><TR><TD>
-						<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18>
+						' . $twig->render('buttons.submit.html.twig') . '
 					</TD></TR></FORM></TABLE>
 				</CENTER>';
 			}

@@ -42,12 +42,12 @@
 				<img src="{{ template_path }}/images/general/blank.gif" width=120 height=1 border=0><br/>
 			</td>
 			<td align="center" valign="top">
-				<input type=image name="Submit" src="{{ template_path }}/images/buttons/sbutton_submit.gif" border="0" width="120" height="18"/>
+				{{ include('buttons.submit.html.twig') }}
 </form>
 			</td>
 			<td align="center">
 				<form  action="?subtopic=guilds" method="post">
-					<input type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/sbutton_back.gif" border="0" width="120" height="18"/>
+					{{ include('buttons.back.html.twig') }}
 				</form>
 			</td>
 			<td align="center">

@@ -1,0 +1,8 @@
+{% if new_line is defined and new_line %}
+<br/>
+{% endif %}
+<center>
+	<form action="{% if action is not defined %}{{ getLink('guilds') }}{% else %}{{ action }}{% endif %}" method="post">
+		{{ include('buttons.back.html.twig') }}
+	</form>
+</center>

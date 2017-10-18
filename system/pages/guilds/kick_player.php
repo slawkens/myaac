@@ -94,19 +94,28 @@ if(empty($errors)) {
 
 if(!empty($errors)) {
 	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	echo '
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+	echo $twig->render('guilds.back_button.html.twig', array(
+		'action' => getLink('guilds') . '/' . $guild_name
+	));
 }
 else
 {
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$player->setRank();
-		echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Kick player</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%>Player with name <b>'.$player->getName().'</b> has been kicked from your guild.</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+		
+		echo $twig->render('success.html.twig', array(
+			'title' => 'Kick player',
+			'description' => 'Player with name <b>'.$player->getName().'</b> has been kicked from your guild.',
+			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array(
+				'action' => getLink('guilds') . '/' . $guild_name
+			))
+		));
 	}
-	else
-	{
-		echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Kick player</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%>Are you sure you want to kick player with name <b>'.$player->getName().'</b> from your guild?</TD></TR></TABLE><br/><center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><TR><FORM ACTION="?subtopic=guilds&action=kick_player&guild='.$guild->getName().'&name='.$player->getName().'&todo=save" METHOD=post><TD align="right" width="50%"><INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18>&nbsp;&nbsp;</TD></FORM><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TD>&nbsp;&nbsp;<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></TD></TR></FORM></TABLE></center>';
+	else {
+		echo $twig->render('guilds.kick_player.html.twig', array(
+			'player_name' => $player->getName(),
+			'guild_name' => $guild->getName()
+		));
 	}
 }
-
 ?>

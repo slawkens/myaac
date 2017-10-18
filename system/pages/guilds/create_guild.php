@@ -116,10 +116,9 @@ if(isset($todo) && $todo == 'save')
 			$player->setRank($rank);
 		}
 	}
-	echo $twig->render('success.html.twig', array(
-		'title' => 'Created guild',
-		'description' => '<b>Congratulations!</b><br/>You have created guild <b>' . $guild_name . '</b>. <b>'.$player->getName().'</b> is leader of this guild. Now you can invite players, change picture, description' . (MOTD_EXISTS ? ' and motd' : '') . ' of guild. Press submit to open guild manager.',
-		'custom_buttons' => '<table border="0" cellspacing="0" cellpadding="0" width="100%"><form action="?subtopic=guilds&action=show&guild='.$guild_name.'" method="post"><tr><td><center><input type="image" name="Submit" alt="Submit" src="'.$template_path.'/images/buttons/sbutton_Submit.gif" border="0" width="120" height="18"></center></td></tr></form></table>'
+	echo $twig->render('guilds.create_guild.success.html.twig', array(
+		'guild_name' => $guild_name,
+		'leader_name' => $player->getName()
 	));
 	
 	/*$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "the Leader", 3)');

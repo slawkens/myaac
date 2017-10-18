@@ -8,11 +8,8 @@ Here you can change MOTD (Message of the Day, showed in game!) of your guild.<br
 {% spaceless %}
 <center>
 	<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=manager" method="post">
-		<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)">
-			<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);">
-				<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);"></div>
-				<input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif">
-			</div>
+		<div class="BigButton" style="background-image:url({{ template_path }}/images/global/buttons/sbutton.gif)">
+			{{ include('buttons.back.html.twig') }}
 		</div>
 	</form>
 </center>

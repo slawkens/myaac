@@ -87,19 +87,18 @@ else
 		<td width="30">&nbsp;</td>
 		<td align=left>
 			<form action="' . getLink('account/email') . '" method="post"><input type="hidden" name="changeemailsave" value=1 >
-				<INPUT TYPE=image NAME="I Agree" SRC="' . $template_path . '/images/buttons/sbutton_iagree.gif" BORDER=0 WIDTH=120 HEIGHT=17>
+				<INPUT TYPE=image NAME="I Agree" SRC="' . $template_path . '/images/global/buttons/sbutton_iagree.gif" BORDER=0 WIDTH=120 HEIGHT=17>
 			</form>
 		</td>
 		<td align=left>
 			<form action="' . getLink('account/email') . '" method="post">
 				<input type="hidden" name="emailchangecancel" value=1 >
-				<input type=image name="Cancel" src="' . $template_path . '/images/buttons/sbutton_cancel.gif" BORDER=0 WIDTH=120 HEIGHT=17>
+				' . $twig->render('buttons.cancel.html.twig') . '
 			</form>
 		</td>
 		<td align=right>
 			<form action="?subtopic=accountmanagement" method="post" >
-				<div class="BigButton" style="background-image:url(' . $template_path . '/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $template_path . '/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="' . $template_path . '/images/buttons/_sbutton_back.gif" ></div>
-				</div>
+				' . $twig->render('buttons.back.html.twig') . '
 			</form>
 		</td>
 		<td width="30">&nbsp;</td>
@@ -123,8 +122,7 @@ else
 					<tr>
 						<td style="border:0px;" >
 							<input type="hidden" name="emailchangecancel" value="1" >
-							<div class="BigButton" style="background-image:url(' . $template_path . '/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $template_path . '/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Cancel" alt="Cancel" src="'.$template_path.'/images/buttons/_sbutton_cancel.gif" ></div>
-							</div>
+							' . $twig->render('buttons.cancel.html.twig') . '
 						</td>
 					</tr>
 				</form>
@@ -135,8 +133,7 @@ else
 				<form action="' . getLink('account/manage') . '" method="post" >
 					<tr>
 						<td style="border:0px;" >
-							<div class="BigButton" style="background-image:url(' . $template_path . '/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $template_path . '/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="' . $template_path . '/images/buttons/_sbutton_back.gif" ></div>
-							</div>
+							' . $twig->render('buttons.back.html.twig') . '
 						</td>
 					</tr>
 				</form>
@@ -155,7 +152,7 @@ if(isset($_POST['emailchangecancel']) && $_POST['emailchangecancel'] == 1) {
 	$account_logged->setCustomField("email_new", "");
 	$account_logged->setCustomField("email_new_time", 0);
 	
-	$custom_buttons = '<center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></center>';
+	$custom_buttons = '<center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" >' . $twig->render('buttons.back.html.twig') . '</td></tr></form></table></center>';
 	
 	echo $twig->render('success.html.twig', array(
 		'title' => 'Email Address Change Cancelled',

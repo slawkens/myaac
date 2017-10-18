@@ -90,31 +90,35 @@ else
 	}
 	
 	if(!$acc_invited) {
-		$errors[] = 'Any character from your account isn\'t invited to <b>'.$guild->getName().'</b>.';
+		$errors[] = "Any character from your account isn't invited to <b>" . $guild->getName() . "</b>.";
 	}
 }
 if(!empty($errors)) {
 	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	echo '
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+	
+	echo $twig->render('guilds.back_button.html.twig', array(
+		'action' => getLink('guilds') . '/' . $guild_name
+	));
 }
 else {
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$guild->acceptInvite($player);
-		echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Accept invitation</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%>Player with name <b>'.$player->getName().'</b> has been added to guild <b>'.$guild->getName().'</b>.</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+		echo $twig->render('success.html.twig', array(
+			'title' => 'Accept invitation',
+			'description' => 'Player with name <b>'.$player->getName().'</b> has been added to guild <b>'.$guild->getName() . '</b>.',
+			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array(
+				'action' => getLink('guilds') . '/' . $guild_name
+			))
+		));
 	}
 	else
 	{
-		echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Accept invitation</B></TD></TR>';
-		echo '<TR BGCOLOR='.$config['lightborder'].'><TD WIDTH=100%>Select character to join guild:</TD></TR>';
-		echo '<TR BGCOLOR='.$config['darkborder'].'><TD>
-		<form action="?subtopic=guilds&action=accept_invite&guild='.$guild_name.'&todo=save" METHOD="post">';
 		sort($list_of_invited_players);
-		$i = 0;
-		foreach($list_of_invited_players as $invited_player_from_list) {
-			echo '<input type="radio" name="name" id="name_' . $i . '" value="'.$invited_player_from_list.'" /><label for="name_' . $i++ . '">'.$invited_player_from_list.'</label><br>';
-		}
-		echo '<br><input type="image" name="Submit" alt="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" border="0" width="120" height="18"></form></td></tr></table><br/><center><table border="0" cellspacing="0" cellpadding="0" width="100%"><tr><form action="?subtopic=guilds&action=show&guild='.$guild_name.'" method="post"><td><input type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/sbutton_back.gif" border=0 width=120 height=18></td></tr></form></table></center>';
+		
+		echo $twig->render('guilds.accept_invite.html.twig', array(
+			'guild_name' => $guild_name,
+			'invited_players' => $list_of_invited_players
+		));
 	}
 }
 

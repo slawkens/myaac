@@ -18,7 +18,7 @@ if(!$logged)
 	$guild_errors[] = 'You are not logged in. You can\'t delete invitations.';
 if(!Validator::guildName($guild_name))
 	$guild_errors[] = Validator::getLastError();
-if(!Validator($name))
+if(!Validator::characterName($name))
 	$guild_errors[] = 'Invalid name format.';
 if(empty($guild_errors))
 {
@@ -88,16 +88,24 @@ if(empty($guild_errors))
 if(!empty($guild_errors))
 {
 	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
-	echo '
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+	
+	echo $twig->render('guilds.back_button.html.twig', array('action' => '?subtopic=guilds&action=show&guild=' . $guild_name));
 }
 else
 {
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save')
 	{
 		$guild->deleteInvite($player);
-		echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Delete player invitation</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%>Player with name <b>'.$player->getName().'</b> has been deleted from "invites list".</TD></TR></TABLE><br/><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+		echo $twig->render('success.html.twig', array(
+			'title' => 'Deleted player invitation',
+			'description' => 'Player with name <b>' . $player->getName() . '</b> has been deleted from invites list.',
+			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array('action' => '?subtopic=guilds&action=show&guild=' . $guild_name))
+		));
 	}
-	else
-		echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD class="white"><B>Delete player invitation</B></TD></TR><TR BGCOLOR='.$config['darkborder'].'><TD WIDTH=100%>Are you sure you want to delete player with name <b>'.$player->getName().'</b> from "invites list"?</TD></TR></TABLE><br/><center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><TR><FORM ACTION="?subtopic=guilds&action=delete_invite&guild='.$guild->getName().'&name='.$player->getName().'&todo=save" METHOD=post><TD align="right" width="50%"><INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18>&nbsp;&nbsp;</TD></FORM><FORM ACTION="?subtopic=guilds&action=show&guild='.$guild_name.'" METHOD=post><TD>&nbsp;&nbsp;<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></TD></TR></FORM></TABLE></center>';
+	else {
+		echo $twig->render('guilds.delete_invite.html.twig', array(
+			'player_name' => $player->getName(),
+			'guild_name' => $guild->getName()
+		));
+	}
 }

@@ -127,29 +127,5 @@ echo $twig->render('online.html.twig', array(
 ));
 
 //search bar
-echo '<br/>
-<form action="?subtopic=characters" method=post>
-	<table width="100%" border="0" cellspacing="1" cellpadding="4">
-		<tr>
-			<td bgcolor="'.$config['vdarkborder'].'" class="white">
-				<b>Search Character</b>
-			</td>
-		</tr>
-		<tr>
-			<td bgcolor="'.$config['darkborder'].'">
-				<table border=0 cellpadding=1>
-					<tr>
-						<td>Name:</td>
-						<td>
-							<input name="name" value=""size=29 maxlength=29>
-						</td>
-						<td>
-							<input type="image" name="Submit" src="'.$template_path.'/images/buttons/sbutton_submit.gif" border="0" width="120" height="18">
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
-</form>';
+echo $twig->render('online.form.html.twig');
 ?>

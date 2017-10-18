@@ -124,12 +124,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 					<tr>
 						<td style="border:0px;" >
 							<input type="hidden" name="step" value="save" >
-							<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" >
-								<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" >
-									<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div>
-									<input class="ButtonText" type="image" name="Submit" alt="Submit" src="{{ template_path }}/images/buttons/_sbutton_submit.gif" >
-								</div>
-							</div>
+							{{ include('buttons.submit.html.twig') }}
 						</td>
 					</tr>
 				</table>

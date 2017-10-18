@@ -13,19 +13,19 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $guild_name = $_REQUEST['guild'];
 if(!Validator::guildName($guild_name))
-	$guild_errors[] = Validator::getLastError();
-if(empty($guild_errors))
+	$errors[] = Validator::getLastError();
+if(empty($errors))
 {
 	$guild = $ots->createObject('Guild');
 	$guild->find($guild_name);
 	if(!$guild->isLoaded())
-		$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 }
-if(!empty($guild_errors))
+if(!empty($errors))
 {
-	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
-	echo '
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%><FORM ACTION="?subtopic=guilds" METHOD=post><TR><TD><center><INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center></TD></TR></FORM></TABLE>';
+	echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	
+	echo $twig->render('guilds.back_button.html.twig');
 }
 else
 {
@@ -88,7 +88,7 @@ else
 		<TD WIDTH=64><IMG SRC="images/guilds/' . $guild_logo.'" WIDTH=64 HEIGHT=64></TD></TR>
 		</TABLE><BR>'.$description.'<BR><BR><a href="' . getPlayerLink($guild_owner, false).'"><b>'.$guild_owner.'</b></a> is guild leader of <b>'.$guild->getName().'</b>.<BR>The guild was founded on '.$config['lua']['serverName'].' on '.date("j F Y", $guild->getCreationData()).'.';
 	if($guild_leader)
-		echo '&nbsp;&nbsp;&nbsp;<a href="?subtopic=guilds&action=manager&guild='.$guild->getName().'"><IMG SRC="'.$template_path.'/images/buttons/sbutton_manageguild.png" BORDER=0 WIDTH=120 HEIGHT=18 alt="Manage Guild"></a>';
+		echo '&nbsp;&nbsp;&nbsp;<a href="?subtopic=guilds&action=manager&guild='.$guild->getName().'"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_manageguild.png" BORDER=0 WIDTH=120 HEIGHT=18 alt="Manage Guild"></a>';
 	echo '<BR><BR>
 
 				<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>
@@ -196,7 +196,7 @@ else
 				<B>'.$houseInfo['name'].'</B>
 					<FORM ACTION=?subtopic=houses&page=view METHOD=post>
 						<INPUT TYPE=hidden NAME=houseid VALUE='.$houseInfo['id'].'>
-						<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/buttons/sbutton_view.gif" BORDER=0 WIDTH=120>
+						<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/global/buttons/sbutton_view.gif" BORDER=0 WIDTH=120>
 					</FORM>
 			</TD>
 		</TR>';
@@ -219,7 +219,7 @@ else
 		$showed_invited = 1;
 		foreach($invited_list as $invited_player)
 		{
-			if(count($account_players) > 0)
+			if($logged && count($account_players) > 0)
 				foreach($account_players as $player_from_acc)
 					if($player_from_acc->getName() == $invited_player->getName())
 						$show_accept_invite++;
@@ -235,30 +235,30 @@ else
 		<TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD>';
 	if(!$logged)
 		echo '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=accountmanagement&redirect='.getGuildLink($guild->getName(), false).'" METHOD=post><TR><TD>
-			<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18>
+			<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/global/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 			</TD></TR></FORM></TABLE></TD>';
 	else
 	{
 		if($show_accept_invite > 0)
 			echo '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=accept_invite&guild='.$guild->getName().'" METHOD=post><TR><TD>
-				<INPUT TYPE=image NAME="Accept Invite" ALT="Accept Invite" SRC="'.$template_path.'/images/buttons/sbutton_acceptinvite.png" BORDER=0 WIDTH=120 HEIGHT=18>
+				<INPUT TYPE=image NAME="Accept Invite" ALT="Accept Invite" SRC="'.$template_path.'/images/global/buttons/sbutton_acceptinvite.png" BORDER=0 WIDTH=120 HEIGHT=18>
 				</TD></TR></FORM></TABLE></TD>';
 		if($guild_vice)
 		{
 			echo '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=invite&guild='.$guild->getName().'" METHOD=post><TR><TD>
-				<INPUT TYPE=image NAME="Invite Player" ALT="Invite Player" SRC="'.$template_path.'/images/buttons/sbutton_inviteplayer.png" BORDER=0 WIDTH=120 HEIGHT=18>
+				<INPUT TYPE=image NAME="Invite Player" ALT="Invite Player" SRC="'.$template_path.'/images/global/buttons/sbutton_inviteplayer.png" BORDER=0 WIDTH=120 HEIGHT=18>
 				</TD></TR></FORM></TABLE></TD>';
 			echo '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=change_rank&guild='.$guild->getName().'" METHOD=post><TR><TD>
-				<INPUT TYPE=image NAME="Change Rank" ALT="Change Rank" SRC="'.$template_path.'/images/buttons/sbutton_changerank.png" BORDER=0 WIDTH=120 HEIGHT=18>
+				<INPUT TYPE=image NAME="Change Rank" ALT="Change Rank" SRC="'.$template_path.'/images/global/buttons/sbutton_changerank.png" BORDER=0 WIDTH=120 HEIGHT=18>
 				</TD></TR></FORM></TABLE></TD>';
 		}
 		if(count($players_from_account_in_guild) > 0)
 			echo '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=leave_guild&guild='.$guild->getName().'" METHOD=post><TR><TD>
-				<INPUT TYPE=image NAME="Leave Guild" ALT="Leave Guild" SRC="'.$template_path.'/images/buttons/sbutton_leaveguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
+				<INPUT TYPE=image NAME="Leave Guild" ALT="Leave Guild" SRC="'.$template_path.'/images/global/buttons/sbutton_leaveguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
 				</TD></TR></FORM></TABLE></TD>';
 	}
 	echo '<TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds" METHOD=post><TR><TD>
-		<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18>
+		' . $twig->render('buttons.back.html.twig') . '
 		</TD></TR></FORM></TABLE>
 		</TD><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD></TR></TABLE>
 		</TD><TD><IMG src="'.$template_path.'/images/general/blank.gif" WIDTH=10 HEIGHT=1 BORDER=0></TD>

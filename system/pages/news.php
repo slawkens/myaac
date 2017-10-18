@@ -69,7 +69,7 @@ if(isset($_GET['archive']))
 	?>
 	<center>
 	<table cellspacing="0" cellpadding="0" border="0"><form method="post" action="<?php echo getLink('news/archive'); ?>"><tbody><tr><td>
-		<input width="120" height="18" border="0" type="image" src="<?php echo $template_path; ?>/images/buttons/sbutton_back.gif" alt="Back" name="Back">
+		<input width="120" height="18" border="0" type="image" src="<?php echo $template_path; ?>/images/global/buttons/sbutton_back.gif" alt="Back" name="Back">
 	</form></td></tr></tbody></table>
 	</center>
 	<?php

@@ -5,15 +5,8 @@ Here you can change description of your guild.<br/>
 	<textarea name="description" cols="60" rows="{{ rows }}">{{ guild.getCustomField('description')|raw }}</textarea><br>
 	(max. {{ config.guild_description_lines_limit }} lines, max. {{ config.guild_description_chars_limit }} chars) <input type="submit" value="Save description"/></form><br/>
 <br/>
-{% spaceless %}
 <center>
 	<form action="?subtopic=guilds&guild='.$guild->getName().'&action=manager" method="post">
-		<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)">
-			<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);">
-				<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div>
-				<input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" >
-			</div>
-		</div>
+		{{ include('buttons.back.html.twig') }}
 	</form>
 </center>
-{% endspaceless %}

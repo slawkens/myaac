@@ -46,24 +46,33 @@ if(!in_array($order, array('spell', 'words', 'type', 'mana', 'level', 'maglevel'
 		<td class="white"><b>Spell Search</b></td>
 	</tr>
 	<tr bgcolor="<?php echo $config['darkborder']; ?>">
-		<td>Only for vocation: <select name="vocation_id">
-			<option value="All" <?php
-			if('All' == $vocation_id)
-				echo 'SELECTED';
-
-			echo '>All';
-
-			foreach($config['vocations'] as $id => $vocation)
-			{
-				echo '<option value="' . $id . '" ';
-				if($id == $vocation_id && $vocation_id != "All" && $vocation_id != '')
-					echo 'SELECTED';
-
-				echo '>' . $vocation;
-			}
-			?>
-			</select>
-			<input type="hidden" name="order" value="<?php echo $order; ?>">&nbsp;&nbsp;&nbsp;<input type="image" name="Submit" alt="Submit" src="<?php echo $template_path; ?>/images/buttons/sbutton_submit.gif" border="0" width="120" height="18">
+		<td>
+			<table border="0" cellpadding="1">
+				<tr>
+					<td>Only for vocation: <select name="vocation_id">
+							<option value="All" <?php
+							if('All' == $vocation_id)
+								echo 'SELECTED';
+							
+							echo '>All';
+							
+							foreach($config['vocations'] as $id => $vocation)
+							{
+								echo '<option value="' . $id . '" ';
+								if($id == $vocation_id && $vocation_id != "All" && $vocation_id != '')
+									echo 'SELECTED';
+								
+								echo '>' . $vocation;
+							}
+							?>
+						</select>
+						<input type="hidden" name="order" value="<?php echo $order; ?>">
+					</td>
+					<td>
+						<?php echo $twig->render('buttons.submit.html.twig'); ?>
+					</td>
+				</tr>
+			</table>
 		</td>
 	</tr>
 </table>

@@ -163,7 +163,6 @@ Here you can change names of ranks, delete and add ranks, pass leadership to oth
 <br/>
 <center>
 	<form action="?subtopic=guilds&action=show&guild={{ guild.getName() }}" method="post">
-		<div class="BigButton" style="background-image:url({{ template_path }}/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="{{ template_path }}/images/buttons/_sbutton_back.gif" ></div>
-		</div>
+		{{ include('buttons.back.html.twig') }}
 	</form>
 </center>

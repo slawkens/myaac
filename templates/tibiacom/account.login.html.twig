@@ -45,17 +45,11 @@
 														</table>
 														<div style="float: right; font-size: 1px;" >
 															<input type="hidden" name="page" value="overview" >
-															<div class="BigButton" style="background-image:url({{ template_path }}/images/global/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/global/buttons/sbutton_over.gif);" ></div>
-																	<input class="ButtonText" type="image" name="Login" alt="Login" src="{{ template_path }}/images/global/buttons/_sbutton_login.gif" >
-																</div>
-															</div>
+															{{ include('buttons.login.html.twig') }}
 </form>
 															<div style="width: 2px; height: 2px;" ></div>
 																<form action="{{ getLink('account/lost') }}" method="post" style="padding:0px;margin:0px;" >
-																	<div class="BigButton" style="background-image:url({{ template_path }}/images/global/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url({{ template_path }}/images/global/buttons/sbutton_over.gif);" ></div>
-																			<input class="ButtonText" type="image" name="Account lost?" alt="Account lost?" src="{{ template_path }}/images/global/buttons/_sbutton_accountlost.gif" >
-																		</div>
-																	</div>
+																	{{ include('buttons.account_lost.html.twig') }}
 																</form>
 															</div>
 													</td>

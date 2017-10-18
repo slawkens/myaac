@@ -250,5 +250,5 @@ else
 	echo 'Monster with name <b>'.$monster_name.'</b> doesn\'t exist.';
 }
 //back button
-echo '<br/></br><center><form action="?subtopic=creatures" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+echo $twig->render('creatures.back_button.html.twig');
 ?>

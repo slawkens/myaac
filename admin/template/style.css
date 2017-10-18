@@ -28,7 +28,7 @@ h1, h2, h3, h4, h5, h6 {color: #313334; font-weight: bold;}
 	margin-left:5px;
 }
 
-.button { background:#eee url(images/button.gif) repeat-x 0 0; border:solid 1px #b1a874; color:#7f7f7f; font-size:11px; padding:2px 6px 2px 6px; cursor:pointer; line-height:14px !important; }
+.button { background:#eee repeat-x 0 0; border:solid 1px #b1a874; color:#7f7f7f; font-size:11px; padding:2px 6px 2px 6px; cursor:pointer; line-height:14px !important; }
 .button:hover { color:#333; border-color:#857b42; }
 
 .field, .button { -moz-border-radius:4px; -webkit-border-radius:4px; }
@@ -126,7 +126,7 @@ a.ico:hover { color:#333;}
 	font-size: 12px;
 }
 #status .success {
-  margin: 0px:
+  margin: 0px;
 }
 #version {
 	position: absolute; top: 10px; right: 10px;

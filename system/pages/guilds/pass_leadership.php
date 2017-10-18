@@ -86,7 +86,7 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 				echo $twig->render('success.html.twig', array(
 					'title' => 'Leadership passed',
 					'description' => '<b>'.$to_player->getName().'</b> is now a Leader of <b>'.$guild_name.'</b>.',
-					'custom_buttons' => '<center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=show" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>'
+					'custom_buttons' => '<center><form action="' . getLink('guilds') . '/' . $guild->getName().'" METHOD=post>' . $twig->render('buttons.back.html.twig') . '</form></center>'
 				));
 			}
 			else {
@@ -106,7 +106,7 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 if(empty($guild_errors) && !empty($guild_errors2)) {
 	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors2));
 	
-	echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=pass_leadership" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+	echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=pass_leadership" method="post">' . $twig->render('buttons.back.html.twig') . '</form></center>';
 }
 if(!empty($guild_errors)) {
 	if(!empty($guild_errors2)) {
@@ -114,7 +114,7 @@ if(!empty($guild_errors)) {
 	}
 	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
 	
-	echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+	echo '<br/><center><form action="?subtopic=guilds" method="post">' . $twig->render('buttons.back.html.twig') . '</form></center>';
 }
 
 ?>

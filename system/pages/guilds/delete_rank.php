@@ -87,12 +87,19 @@ if(empty($guild_errors)) {
 				}
 			}
 			if($saved) {
-				echo '<div class="TableContainer" >  <table class="Table1" cellpadding="0" cellspacing="0" >    <div class="CaptionContainer" >      <div class="CaptionInnerContainer" >        <span class="CaptionEdgeLeftTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightTop" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionBorderTop" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <div class="Text" >Rank Deleted</div>        <span class="CaptionVerticalRight" style="background-image:url('.$template_path.'/images/content/box-frame-vertical.gif);" /></span>        <span class="CaptionBorderBottom" style="background-image:url('.$template_path.'/images/content/table-headline-border.gif);" ></span>        <span class="CaptionEdgeLeftBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>        <span class="CaptionEdgeRightBottom" style="background-image:url('.$template_path.'/images/content/box-frame-edge.gif);" /></span>      </div>    </div>    <tr>      <td>        <div class="InnerTableContainer" >          <table style="width:100%;" ><tr><td>Rank <b>'.$rank->getName().'</b> has been deleted. Players with this rank has now other rank.</td></tr>          </table>        </div>  </table></div></td></tr>';
+				echo $twig->render('success.html.twig', array(
+					'title' => 'Rank Deleted',
+					'description' => 'Rank <b>'.$rank->getName().'</b> has been deleted. Players with this rank has now other rank.',
+					'custom_buttons' => ''
+				));
 			} else {
 				echo $twig->render('error_box.html.twig', array('errors' => $guild_errors2));
 			}
-//back button
-			echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=manager" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+			
+			echo $twig->render('guilds.back_button.html.twig', array(
+				'new_line' => true,
+				'action' => '?subtopic=guilds&guild='.$guild->getName().'&action=manager'
+			));
 		}
 		else
 		{
@@ -107,7 +114,10 @@ if(empty($guild_errors)) {
 if(!empty($guild_errors)) {
 	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
 	
-	echo '<br/><center><form action="?subtopic=guilds" METHOD=post><div class="BigButton" style="background-image:url('.$template_path.'/images/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$template_path.'/images/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="'.$template_path.'/images/buttons/_sbutton_back.gif" ></div></div></form></center>';
+	echo $twig->render('guilds.back_button.html.twig', array(
+		'new_line' => true,
+		'action' => '?subtopic=guilds'
+	));
 }
 
 ?>

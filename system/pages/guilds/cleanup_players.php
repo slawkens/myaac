@@ -63,5 +63,6 @@ if($logged)
 }
 else
 	echo "You are not logged in.";
-echo "<center><h3><a href=\"?subtopic=guilds\">BACK</a></h3></center>";
+
+echo $twig->render('guilds.back_button.html.twig');
 ?>

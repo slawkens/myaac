@@ -53,7 +53,7 @@ elseif($action == 'step1' && $action_type == 'email')
 				</TABLE>
 				<BR>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+				' . $twig->render('buttons.submit.html.twig') . '</center>
 				</TD></TR></FORM></TABLE></TABLE>';
 			else
 			{
@@ -70,7 +70,7 @@ elseif($action == 'step1' && $action_type == 'email')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<a href="?subtopic=lostaccount" border="0"><IMG SRC="'.$template_path.'/images/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
+				<a href="?subtopic=lostaccount" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'sendcode')
@@ -133,7 +133,7 @@ elseif($action == 'sendcode')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<a href="?subtopic=lostaccount&action=step1&action_type=email&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
+				<a href="?subtopic=lostaccount&action=step1&action_type=email&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'step1' && $action_type == 'reckey')
@@ -162,7 +162,7 @@ elseif($action == 'step1' && $action_type == 'reckey')
 						</TABLE>
 						<BR>
 						<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-						<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+						' . $twig->render('buttons.submit.html.twig') . '</center>
 						</TD></TR></FORM></TABLE></TABLE>';
 			}
 			else
@@ -174,7 +174,7 @@ elseif($action == 'step1' && $action_type == 'reckey')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<a href="?subtopic=lostaccount" border="0"><IMG SRC="'.$template_path.'/images/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
+				<a href="?subtopic=lostaccount" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'step2')
@@ -248,7 +248,7 @@ elseif($action == 'step2')
 					</TABLE>
 					<BR>
 					<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-					<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+					' . $twig->render('buttons.submit.html.twig') . '</center>
 					</TD></TR></FORM></TABLE></TABLE>';
 				}
 				else
@@ -263,7 +263,7 @@ elseif($action == 'step2')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<a href="?subtopic=lostaccount&action=step1&action_type=reckey&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
+				<a href="?subtopic=lostaccount&action=step1&action_type=reckey&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'step3')
@@ -341,7 +341,7 @@ elseif($action == 'step3')
 							<INPUT TYPE=hidden NAME="password_login" VALUE="'.$new_pass.'">
 							</TD></TR></TABLE><BR>
 							<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-							<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+							<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/global/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
 							</TD></TR></FORM></TABLE></TABLE>';
 						}
 						else
@@ -362,7 +362,7 @@ elseif($action == 'step3')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<a href="?subtopic=lostaccount&action=step1&action_type=reckey&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
+				<a href="?subtopic=lostaccount&action=step1&action_type=reckey&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></center>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'checkcode')
@@ -381,7 +381,7 @@ elseif($action == 'checkcode')
 				</TABLE>
 				<BR>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+				' . $twig->render('buttons.submit.html.twig') . '</center>
 				</TD></TR></FORM></TABLE></TABLE>';
 	else
 	{
@@ -431,7 +431,7 @@ elseif($action == 'checkcode')
 				</TABLE>
 				<BR>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+				' . $twig->render('buttons.submit.html.twig') . '</center>
 				</TD></TR></FORM></TABLE></TABLE>';
 			}
 			else
@@ -452,7 +452,7 @@ elseif($action == 'checkcode')
 				</TABLE>
 				<BR>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+				' . $twig->render('buttons.submit.html.twig') . '</center>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'setnewpassword')
@@ -465,7 +465,7 @@ elseif($action == 'setnewpassword')
 		echo '<font color="red"><b>Error. Try again.</b></font><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
 				<BR><FORM ACTION="?subtopic=lostaccount&action=checkcode" METHOD=post>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+				<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
 				</TD></TR></FORM></TABLE></TABLE>';
 	else
 	{
@@ -519,7 +519,7 @@ elseif($action == 'setnewpassword')
 				<BR>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
 				<FORM ACTION="?subtopic=accountmanagement" METHOD=post>
-				<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+				<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/global/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
 				</TD></TR></FORM></TABLE></TABLE>';
 				}
 				else
@@ -543,7 +543,7 @@ elseif($action == 'setnewpassword')
 				</TABLE>
 				<BR>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><center>
-				<INPUT TYPE=image NAME="Submit" ALT="Submit" SRC="'.$template_path.'/images/buttons/sbutton_submit.gif" BORDER=0 WIDTH=120 HEIGHT=18></center>
+				' . $twig->render('buttons.submit.html.twig') . '</center>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 ?>

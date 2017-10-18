@@ -36,13 +36,13 @@ if(isset($config['boxes']))
 		{
 		  if(loginStatus == "false") {
 			document.getElementById('LoginstatusText_1').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-you-are-not-logged-in.gif')";
-			document.getElementById('ButtonText').style.backgroundImage = "url('" + IMAGES + "/buttons/_sbutton_login.gif')";
+			document.getElementById('ButtonText').style.backgroundImage = "url('" + IMAGES + "/global/buttons/_sbutton_login.gif')";
 			document.getElementById('LoginstatusText_2').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-create-account.gif')";
 			document.getElementById('LoginstatusText_2_1').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-create-account.gif')";
 			document.getElementById('LoginstatusText_2_2').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-create-account-over.gif')";
 		  } else {
 			document.getElementById('LoginstatusText_1').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-welcome.gif')";
-			document.getElementById('ButtonText').style.backgroundImage = "url('" + IMAGES + "/buttons/_sbutton_myaccount.gif')";
+			document.getElementById('ButtonText').style.backgroundImage = "url('" + IMAGES + "/global/buttons/_sbutton_myaccount.gif')";
 			document.getElementById('LoginstatusText_2').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-logout.gif')";
 			document.getElementById('LoginstatusText_2_1').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-logout.gif')";
 			document.getElementById('LoginstatusText_2_2').style.backgroundImage = "url('" + IMAGES + "/loginbox/loginbox-font-logout-over.gif')";
@@ -214,10 +214,10 @@ if(isset($config['boxes']))
     </div>
 
     <div id="LoginButtonContainer" style="background-image:url(<?php echo $template_path; ?>/images/loginbox/loginbox-textfield-background.gif)" >
-      <div id="LoginButton" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton.gif)" >
-        <div onClick="LoginButtonAction();" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);"><div class="Button" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton_over.gif)" ></div>
+      <div id="LoginButton" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton.gif)" >
+        <div onClick="LoginButtonAction();" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);"><div class="Button" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton_over.gif)" ></div>
 			<?php
-          echo '<div id="ButtonText" '.($logged ? '' : 'style="background-image:url('.$template_path.'/images/buttons/_sbutton_login.gif)"').'>
+          echo '<div id="ButtonText" '.($logged ? '' : 'style="background-image:url('.$template_path.'/images/global/buttons/_sbutton_login.gif)"').'>
 			 </div>';
 			 ?>
         </div>
@@ -740,18 +740,18 @@ if($logged):
         <div id="Themeboxes">
 			<?php if(in_array("newcomer", $config['boxes'])): ?>
 			<div id="NewcomerBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/newcomer/newcomerbox.gif);">
-				<a class="ThemeboxButton" href="<?php echo getLink('account/create'); ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton.gif);">
-					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton_over.gif);"></div>
-					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/buttons/_sbutton_jointibia.gif);"></div>
+				<a class="ThemeboxButton" href="<?php echo getLink('account/create'); ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton.gif);">
+					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton_over.gif);"></div>
+					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/_sbutton_jointibia.gif);"></div>
 				</a>
 				<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
 			</div>
 			<?php endif; ?>
 			<?php if(in_array("premium", $config['boxes'])): ?>
 			<div id="PremiumBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/premium/premiumbox.gif);">
-				<a class="ThemeboxButton" href="<?php echo getLink('premium'); ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton.gif);">
-					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton_over.gif);"></div>
-					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/buttons/_sbutton_getpremium.gif);"></div>
+				<a class="ThemeboxButton" href="<?php echo getLink('premium'); ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton.gif);">
+					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton_over.gif);"></div>
+					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/_sbutton_getpremium.gif);"></div>
 				</a>
 				<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
 			</div>
@@ -778,9 +778,9 @@ if($logged):
 					?>
 			<div id="CurrentPollBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/current-poll/currentpollbox.gif);">
 				<div id="CurrentPollText"><?php echo $poll['question']; ?></div>
-					<a class="ThemeboxButton" href="<?php echo getLink('polls') . '&id=' . $poll['id']; ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton.gif);">
-					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/buttons/sbutton_over.gif);"></div>
-					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/buttons/_sbutton_votenow.gif);"></div>
+					<a class="ThemeboxButton" href="<?php echo getLink('polls') . '&id=' . $poll['id']; ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton.gif);">
+					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton_over.gif);"></div>
+					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/_sbutton_votenow.gif);"></div>
 				</a>
 				<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
 			</div>
