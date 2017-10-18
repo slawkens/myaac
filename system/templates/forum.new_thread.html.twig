@@ -14,8 +14,7 @@
 			<td>
 				<select name="char_id"><option value="0">(Choose character)</option>
 					{% for player in players %}
-					<option value="{{ player.id }}"
-						{% if player.id == post_player_id %} selected="selected"{% endif %}>{{ player.name }}</option>
+					<option value="{{ player.id }}"{% if player.id == post_player_id %} selected="selected"{% endif %}>{{ player.name }}</option>
 					{% endfor %}
 				</select>
 			</td>

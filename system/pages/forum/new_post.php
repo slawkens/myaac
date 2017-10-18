@@ -14,7 +14,12 @@ defined('MYAAC') or die('Direct access not allowed!');
 if(Forum::canPost($account_logged))
 {
 	$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
-	$thread_id = (int) $_REQUEST['thread_id'];
+	$thread_id = isset($_REQUEST['thread_id']) ? (int) $_REQUEST['thread_id'] : 0;
+	if($thread_id == 0) {
+		echo "Thread with this id doesn't exist.";
+		return;
+	}
+	
 	$thread = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." LIMIT 1")->fetch();
 	echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
 	if(isset($thread['id']))
@@ -43,6 +48,7 @@ if(Forum::canPost($account_logged))
 				$errors[] = 'Too short or too long post (short: '.$lenght.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
 			if($char_id == 0)
 				$errors[] = 'Please select a character.';
+			
 			$player_on_account = false;
 			if(count($errors) == 0)
 			{
@@ -67,7 +73,7 @@ if(Forum::canPost($account_logged))
 			if(count($errors) == 0)
 			{
 				$saved = true;
-				$db->query("INSERT INTO `" . TABLE_PREFIX . "forum` (`id` ,`first_post` ,`last_post` ,`section` ,`replies` ,`views` ,`author_aid` ,`author_guid` ,`post_text` ,`post_topic` ,`post_smile` ,`post_date` ,`last_edit_aid` ,`edit_date`, `post_ip`) VALUES (NULL, '".$thread['id']."', '0', '".$thread['section']."', '0', '0', '".$account_logged->getId()."', '".(int) $char_id."', ".$db->quote($text).", ".$db->quote($post_topic).", '".(int) $smile."', '".time()."', '0', '0', '".$_SERVER['REMOTE_ADDR']."')");
+				Forum::add_post($thread['id'], $thread['section'], $account_logged->getId(), (int) $char_id, $text, $post_topic, (int) $smile, time(), $_SERVER['REMOTE_ADDR']);
 				$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".(int) $thread_id);
 				$post_page = $db->query("SELECT COUNT(`" . TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`post_date` <= ".time()." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id'])->fetch();
 				$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
@@ -80,44 +86,26 @@ if(Forum::canPost($account_logged))
 			if(!empty($errors))
 				echo $twig->render('error_box.html.twig', array('errors' => $errors));
 			
-			echo '<form action="?" method="POST">
-					<input type="hidden" name="action" value="new_post" />
-					<input type="hidden" name="thread_id" value="'.$thread_id.'" />
-					<input type="hidden" name="subtopic" value="forum" />
-					<input type="hidden" name="save" value="save" />
-					<table width="100%">
-						<tr bgcolor="'.$config['vdarkborder'].'">
-							<td colspan="2"><font color="white"><b>Post New Reply</b></font></td>
-						</tr>
-						<tr bgcolor="'.$config['darkborder'].'">
-							<td width="180"><b>Character:</b></td>
-							<td>
-								<select name="char_id">
-									<option value="0">(Choose character)</option>';
-			foreach($players_from_account as $player)
-			{
-				echo '<option value="'.$player['id'].'"';
-				if($player['id'] == $char_id)
-					echo ' selected="selected"';
-				echo '>'.$player['name'].'</option>';
+			$threads = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_smile` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 5")->fetchAll();
+			
+			foreach($threads as &$thread) {
+				$thread['post'] = Forum::showPost($thread['post_topic'], $thread['post_text'], $thread['post_smile']);
 			}
-			echo '</select></td></tr><tr bgcolor="'.$config['lightborder'].'"><td><b>Topic:</b></td><td><input type="text" name="topic" value="'.htmlspecialchars($post_topic).'" size="40" maxlength="60" /> (Optional)</td></tr>
-				<tr bgcolor="'.$config['darkborder'].'"><td valign="top"><b>Message:</b><font size="1"><br />You can use:<br />[player]Nick[/player]<br />[url]http://address.com/[/url]<br />[img]http://images.com/images3.gif[/img]<br />[code]Code[/code]<br />[b]<b>Text</b>[/b]<br />[i]<i>Text</i>[/i]<br />[u]<u>Text</u>[/u]<br />and smileys:<br />;) , :) , :D , :( , :rolleyes:<br />:cool: , :eek: , :o , :p</font></td><td><textarea rows="10" cols="60" name="text">'.htmlspecialchars($text).'</textarea><br />(Max. 15,000 letters)</td></tr>
-				<tr bgcolor="'.$config['lightborder'].'"><td valign="top">Options:</td><td><label><input type="checkbox" name="smile" value="1"';
-			if($smile == 1)
-				echo ' checked="checked"';
-			echo '/>Disable Smileys in This Post </label></td></tr></table><center><input type="submit" value="Post Reply" /></center></form>';
-			$threads = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_smile` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 10")->fetchAll();
-			echo '<table width="100%"><tr bgcolor="'.$config['vdarkborder'].'"><td colspan="2"><font color="white"><b>Last 5 posts from thread: '.$thread['post_topic'].'</b></font></td></tr>';
-			foreach($threads as $thread)
-			{
-				echo '<tr bgcolor="' . getStyle($number_of_rows++) . '"><td>'.$thread['name'].'</td><td>'.showPost($thread['post_topic'], $thread['post_text'], $thread['post_smile']).'</td></tr>';
-			}
-			echo '</table>';
+			
+			echo $twig->render('forum.new_post.html.twig', array(
+				'thread_id' => $thread_id,
+				'post_player_id' => $char_id,
+				'players' => $players_from_account,
+				'post_topic' => $post_topic,
+				'post_text' => $text,
+				'post_smile' => $smile,
+				'topic' => $thread['post_topic'],
+				'threads' => $threads
+			));
 		}
 	}
 	else
-		echo 'Thread with ID '.$thread_id.' doesn\'t exist.';
+		echo "Thread with ID " . $thread_id . " doesn't exist.";
 }
 else
 	echo "Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";

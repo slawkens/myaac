@@ -105,9 +105,9 @@ if(Forum::canPost($account_logged))
 			echo '<br/>You are not an author of this post.';
 	}
 	else
-		echo '<br/>Post with ID '.$post_id.' doesn\'t exist.';
+		echo "<br/>Post with ID " . $post_id . " doesn't exist.";
 }
 else
-	echo '<br/>Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
+	echo "<br/>Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";
 
 ?>

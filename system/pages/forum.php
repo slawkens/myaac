@@ -24,96 +24,6 @@ if(strtolower($config['forum']) != 'site')
 	return;
 }
 
-function parseSmiles($text)
-{
-	$smileys = array(
-		';D' => 1,
-		':D' => 1,
-		':cool:' => 2,
-		';cool;' => 2,
-		':ekk:' => 3,
-		';ekk;' => 3,
-		';o' => 4,
-		';O' => 4,
-		':o' => 4,
-		':O' => 4,
-		':(' => 5,
-		';(' => 5,
-		':mad:' => 6,
-		';mad;' => 6,
-		';rolleyes;' => 7,
-		':rolleyes:' => 7,
-		':)' => 8,
-		';d' => 9,
-		':d' => 9,
-		';)' => 10
-	);
-
-	foreach($smileys as $search => $replace)
-		$text = str_replace($search, '<img src="images/forum/smile/'.$replace.'.gif" alt="'. $search .'" title="' . $search . '" />', $text);
-
-	return $text;
-}
-
-function parseBBCode($text, $smiles)
-{
-	$rows = 0;
-	while(stripos($text, '[code]') !== false && stripos($text, '[/code]') !== false )
-	{
-		$code = substr($text, stripos($text, '[code]')+6, stripos($text, '[/code]') - stripos($text, '[code]') - 6);
-		if(!is_int($rows / 2)) { $bgcolor = 'ABED25'; } else { $bgcolor = '23ED25'; } $rows++;
-		$text = str_ireplace('[code]'.$code.'[/code]', '<i>Code:</i><br /><table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #CCCCCC; border-width: 2px"><tr><td>'.$code.'</td></tr></table>', $text);
-	}
-	$rows = 0;
-	while(stripos($text, '[quote]') !== false && stripos($text, '[/quote]') !== false )
-	{
-		$quote = substr($text, stripos($text, '[quote]')+7, stripos($text, '[/quote]') - stripos($text, '[quote]') - 7);
-		if(!is_int($rows / 2)) { $bgcolor = 'AAAAAA'; } else { $bgcolor = 'CCCCCC'; } $rows++;
-		$text = str_ireplace('[quote]'.$quote.'[/quote]', '<table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #007900; border-width: 2px"><tr><td>'.$quote.'</td></tr></table>', $text);
-	}
-	$rows = 0;
-	while(stripos($text, '[url]') !== false && stripos($text, '[/url]') !== false )
-	{
-		$url = substr($text, stripos($text, '[url]')+5, stripos($text, '[/url]') - stripos($text, '[url]') - 5);
-		$text = str_ireplace('[url]'.$url.'[/url]', '<a href="'.$url.'" target="_blank">'.$url.'</a>', $text);
-	}
-
-	$xhtml = false;
-	$tags = array(
-		'#\[b\](.*?)\[/b\]#si' => ($xhtml ? '<strong>\\1</strong>' : '<b>\\1</b>'),
-		'#\[i\](.*?)\[/i\]#si' => ($xhtml ? '<em>\\1</em>' : '<i>\\1</i>'),
-		'#\[u\](.*?)\[/u\]#si' => ($xhtml ? '<span style="text-decoration: underline;">\\1</span>' : '<u>\\1</u>'),
-		'#\[s\](.*?)\[/s\]#si' => ($xhtml ? '<strike>\\1</strike>' : '<s>\\1</s>'),
-
-		'#\[guild\](.*?)\[/guild\]#si' => urldecode(generateLink(getGuildLink('$1', false), '$1', true)),
-		'#\[house\](.*?)\[/house\]#si' => urldecode(generateLink(getHouseLink('$1', false), '$1', true)),
-		'#\[player\](.*?)\[/player\]#si' => urldecode(generateLink(getPlayerLink('$1', false), '$1', true)),
-		// TODO: [poll] tag
-
-		'#\[color=(.*?)\](.*?)\[/color\]#si' => ($xhtml ? '<span style="color: \\1;">\\2</span>' : '<font color="\\1">\\2</font>'),
-		'#\[img\](.*?)\[/img\]#si' => ($xhtml ? '<img src="\\1" border="0" alt="" />' : '<img src="\\1" border="0" alt="">'),
-		'#\[url=(.*?)\](.*?)\[/url\]#si' => '<a href="\\1" title="\\2">\\2</a>',
-//		'#\[email\](.*?)\[/email\]#si' => '<a href="mailto:\\1" title="Email \\1">\\1</a>',
-		'#\[code\](.*?)\[/code\]#si' => '<code>\\1</code>',
-//		'#\[align=(.*?)\](.*?)\[/align\]#si' => ($xhtml ? '<div style="text-align: \\1;">\\2</div>' : '<div align="\\1">\\2</div>'),
-//		'#\[br\]#si' => ($xhtml ? '<br style="clear: both;" />' : '<br>'),
-	);
-
-	foreach($tags as $search => $replace)
-		$text = preg_replace($search, $replace, $text);
-
-	return ($smiles == 0 ? parseSmiles($text) : $text);
-}
-
-function showPost($topic, $text, $smiles)
-{
-	$text = nl2br($text);
-	$post = '';
-	if(!empty($topic))
-		$post .= '<b>'.($smiles == 0 ? parseSmiles($topic) : $topic).'</b><hr />';
-	$post .= parseBBCode($text, $smiles);
-	return $post;
-}
 if(!$logged)
 	echo  'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum') . '">Log in</a> to post on the forum.<br /><br />';
 
@@ -280,6 +190,21 @@ class Forum
 		return hasFlag(FLAG_CONTENT_FORUM) || admin();
 	}
 	
+	static public function add_post($thread_id, $section, $author_aid, $author_guid, $post_text, $post_topic, $smile)
+	{
+		global $db;
+		$db->insert(TABLE_PREFIX . 'forum', array(
+			'first_post' => $thread_id,
+			'section' => $section,
+			'author_aid' => $author_aid,
+			'author_guid' => $author_guid,
+			'post_text' => $post_text,
+			'post_topic' => $post_topic,
+			'post_smile' => $smile,
+			'post_date' => time(),
+			'post_ip' => $_SERVER['REMOTE_ADDR']
+ 		));
+	}
 	static public function add_board($name, $description, &$errors)
 	{
 		global $db;
@@ -372,5 +297,96 @@ class Forum
 			$errors[] = 'Forum board with id ' . $id . ' does not exists.';
 		
 		return !count($errors);
+	}
+	
+	public static function parseSmiles($text)
+	{
+		$smileys = array(
+			';D' => 1,
+			':D' => 1,
+			':cool:' => 2,
+			';cool;' => 2,
+			':ekk:' => 3,
+			';ekk;' => 3,
+			';o' => 4,
+			';O' => 4,
+			':o' => 4,
+			':O' => 4,
+			':(' => 5,
+			';(' => 5,
+			':mad:' => 6,
+			';mad;' => 6,
+			';rolleyes;' => 7,
+			':rolleyes:' => 7,
+			':)' => 8,
+			';d' => 9,
+			':d' => 9,
+			';)' => 10
+		);
+		
+		foreach($smileys as $search => $replace)
+			$text = str_replace($search, '<img src="images/forum/smile/'.$replace.'.gif" alt="'. $search .'" title="' . $search . '" />', $text);
+		
+		return $text;
+	}
+	
+	public static function parseBBCode($text, $smiles)
+	{
+		$rows = 0;
+		while(stripos($text, '[code]') !== false && stripos($text, '[/code]') !== false )
+		{
+			$code = substr($text, stripos($text, '[code]')+6, stripos($text, '[/code]') - stripos($text, '[code]') - 6);
+			if(!is_int($rows / 2)) { $bgcolor = 'ABED25'; } else { $bgcolor = '23ED25'; } $rows++;
+			$text = str_ireplace('[code]'.$code.'[/code]', '<i>Code:</i><br /><table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #CCCCCC; border-width: 2px"><tr><td>'.$code.'</td></tr></table>', $text);
+		}
+		$rows = 0;
+		while(stripos($text, '[quote]') !== false && stripos($text, '[/quote]') !== false )
+		{
+			$quote = substr($text, stripos($text, '[quote]')+7, stripos($text, '[/quote]') - stripos($text, '[quote]') - 7);
+			if(!is_int($rows / 2)) { $bgcolor = 'AAAAAA'; } else { $bgcolor = 'CCCCCC'; } $rows++;
+			$text = str_ireplace('[quote]'.$quote.'[/quote]', '<table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #007900; border-width: 2px"><tr><td>'.$quote.'</td></tr></table>', $text);
+		}
+		$rows = 0;
+		while(stripos($text, '[url]') !== false && stripos($text, '[/url]') !== false )
+		{
+			$url = substr($text, stripos($text, '[url]')+5, stripos($text, '[/url]') - stripos($text, '[url]') - 5);
+			$text = str_ireplace('[url]'.$url.'[/url]', '<a href="'.$url.'" target="_blank">'.$url.'</a>', $text);
+		}
+		
+		$xhtml = false;
+		$tags = array(
+			'#\[b\](.*?)\[/b\]#si' => ($xhtml ? '<strong>\\1</strong>' : '<b>\\1</b>'),
+			'#\[i\](.*?)\[/i\]#si' => ($xhtml ? '<em>\\1</em>' : '<i>\\1</i>'),
+			'#\[u\](.*?)\[/u\]#si' => ($xhtml ? '<span style="text-decoration: underline;">\\1</span>' : '<u>\\1</u>'),
+			'#\[s\](.*?)\[/s\]#si' => ($xhtml ? '<strike>\\1</strike>' : '<s>\\1</s>'),
+			
+			'#\[guild\](.*?)\[/guild\]#si' => urldecode(generateLink(getGuildLink('$1', false), '$1', true)),
+			'#\[house\](.*?)\[/house\]#si' => urldecode(generateLink(getHouseLink('$1', false), '$1', true)),
+			'#\[player\](.*?)\[/player\]#si' => urldecode(generateLink(getPlayerLink('$1', false), '$1', true)),
+			// TODO: [poll] tag
+			
+			'#\[color=(.*?)\](.*?)\[/color\]#si' => ($xhtml ? '<span style="color: \\1;">\\2</span>' : '<font color="\\1">\\2</font>'),
+			'#\[img\](.*?)\[/img\]#si' => ($xhtml ? '<img src="\\1" border="0" alt="" />' : '<img src="\\1" border="0" alt="">'),
+			'#\[url=(.*?)\](.*?)\[/url\]#si' => '<a href="\\1" title="\\2">\\2</a>',
+//		'#\[email\](.*?)\[/email\]#si' => '<a href="mailto:\\1" title="Email \\1">\\1</a>',
+			'#\[code\](.*?)\[/code\]#si' => '<code>\\1</code>',
+//		'#\[align=(.*?)\](.*?)\[/align\]#si' => ($xhtml ? '<div style="text-align: \\1;">\\2</div>' : '<div align="\\1">\\2</div>'),
+//		'#\[br\]#si' => ($xhtml ? '<br style="clear: both;" />' : '<br>'),
+		);
+		
+		foreach($tags as $search => $replace)
+			$text = preg_replace($search, $replace, $text);
+		
+		return ($smiles == 0 ? Forum::parseSmiles($text) : $text);
+	}
+	
+	public static function showPost($topic, $text, $smiles)
+	{
+		$text = nl2br($text);
+		$post = '';
+		if(!empty($topic))
+			$post .= '<b>'.($smiles == 0 ? self::parseSmiles($topic) : $topic).'</b><hr />';
+		$post .= self::parseBBCode($text, $smiles);
+		return $post;
 	}
 }
