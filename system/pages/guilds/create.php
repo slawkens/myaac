@@ -116,7 +116,7 @@ if(isset($todo) && $todo == 'save')
 			$player->setRank($rank);
 		}
 	}
-	echo $twig->render('guilds.create_guild.success.html.twig', array(
+	echo $twig->render('guilds.create.success.html.twig', array(
 		'guild_name' => $guild_name,
 		'leader_name' => $player->getName()
 	));
@@ -127,7 +127,7 @@ if(isset($todo) && $todo == 'save')
 }
 else {
 	sort($array_of_player_nig);
-	echo $twig->render('guilds.create_guild.html.twig', array(
+	echo $twig->render('guilds.create.html.twig', array(
 		'players' => $array_of_player_nig
 	));
 }

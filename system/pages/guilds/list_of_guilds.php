@@ -66,7 +66,7 @@ if($_REQUEST['preview'] == 2)
 					<TD colspan="4">';
 	if($logged)
 		echo '
-					<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=create_guild" METHOD=post><TR><TD>
+					<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=create" METHOD=post><TR><TD>
 					<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/global/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
 					</TD></TR></FORM></TABLE>';
 	
@@ -115,7 +115,7 @@ else
 
 echo '</TABLE><br><br>';
 if($logged)
-	echo '<TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD><TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=create_guild" METHOD=post><TR><TD>
+	echo '<TABLE BORDER=0 WIDTH=100%><TR><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD><TD ALIGN=center><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=create" METHOD=post><TR><TD>
 		<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/global/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
 		</TD></TR></FORM></TABLE></TD><TD ALIGN=center><IMG SRC="'.$template_path.'/images/general/blank.gif" WIDTH=80 HEIGHT=1 BORDER=0<BR></TD></TR></TABLE>
 		<BR />If you have any problem with guilds try:
