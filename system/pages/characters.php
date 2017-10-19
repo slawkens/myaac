@@ -351,16 +351,16 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		// check if account has been banned
 		$bannedUntil = '';
 		$banned = array();
-		if (tableExist('account_bans'))
-			$banned = $db->query('SELECT `expires_at` as `expires` FROM `account_bans` WHERE `account_id` = ' . $account->getId() . ' and `expires_at` > ' . time());
+		if(tableExist('account_bans'))
+			$banned = $db->query('SELECT `expires_at` as `expires` FROM `account_bans` WHERE `account_id` = ' . $account->getId() . ' and (`expires_at` > ' . time() . ' OR `expires_at` = -1);');
 		else if (tableExist('bans')) {
 			if (fieldExist('expires', 'bans'))
-				$banned = $db->query('SELECT `expires` FROM `bans` WHERE (`value` = ' . $account->getId() . ' or `value` = ' . $player->getId() . ') and `active` = 1 and `type` != 2 and `type` != 4 and `expires` > ' . time());
+				$banned = $db->query('SELECT `expires` FROM `bans` WHERE (`value` = ' . $account->getId() . ' or `value` = ' . $player->getId() . ') and `active` = 1 and `type` != 2 and `type` != 4 and (`expires` > ' . time() . ' OR `expires` = -1);');
 			else
-				$banned = $db->query('SELECT `time` as `time` FROM `bans` WHERE (`account` = ' . $account->getId() . ' or `player` = ' . $player->getId() . ') and `type` != 2 and `type` != 4 and `time` > ' . time());
+				$banned = $db->query('SELECT `time` as `time` FROM `bans` WHERE (`account` = ' . $account->getId() . ' or `player` = ' . $player->getId() . ') and `type` != 2 and `type` != 4 and (`time` > ' . time() . ' OR `time` = -1);');
 		}
-		foreach ($banned as $ban) {
-			$bannedUntil = ' <font color="red">[Banished ' . ($ban['expires'] == "-1" ? 'forever' : 'until ' . date("d F Y, h:s", $ban['expires'])) . ']</font>';
+		foreach($banned as $ban) {
+			$bannedUntil = $ban['expires'];
 		}
 		
 		$account_players = $account->getPlayersList();
