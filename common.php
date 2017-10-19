@@ -86,12 +86,15 @@ $basedir = str_replace('/admin', '', $basedir);
 $basedir = str_replace('/install', '', $basedir);
 define('BASE_DIR', $basedir);
 
-if(isset($_SERVER['HTTPS'][0]) && $_SERVER['HTTPS'] == 'on')
-	define('SERVER_URL', 'https://' . $_SERVER['HTTP_HOST']);
-else
-	define('SERVER_URL', 'http://' . $_SERVER['HTTP_HOST']);
-
-define('BASE_URL', SERVER_URL . BASE_DIR . '/');
-define('ADMIN_URL', SERVER_URL . BASE_DIR . '/admin/');
-//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
+if(isset($_SERVER['HTTP_HOST'])) {
+	if (isset($_SERVER['HTTPS'][0]) && $_SERVER['HTTPS'] == 'on')
+		define('SERVER_URL', 'https://' . $_SERVER['HTTP_HOST']);
+	else
+		define('SERVER_URL', 'http://' . $_SERVER['HTTP_HOST']);
+	
+	define('BASE_URL', SERVER_URL . BASE_DIR . '/');
+	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/admin/');
+	
+	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
+}
 ?>

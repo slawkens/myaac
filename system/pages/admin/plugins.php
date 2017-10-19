@@ -12,6 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Plugin manager';
 
 require(SYSTEM . 'hooks.php');
+require(LIBS . 'plugins.php');
 
 function deleteDirectory($dir) {
 	if(!file_exists($dir)) {
@@ -115,98 +116,17 @@ else if(isset($_FILES["plugin"]["name"]))
 				$targetzip = BASE . 'plugins/' . $tmp_filename . '.zip';
 
 				if(move_uploaded_file($tmp_name, $targetzip)) { // move uploaded file
-					$zip = new ZipArchive();
-					if ($zip->open($targetzip)) {
-						for ($i = 0; $i < $zip->numFiles; $i++) {
-							$tmp = $zip->getNameIndex($i);
-							if(pathinfo($tmp, PATHINFO_DIRNAME) == 'plugins' && pathinfo($tmp, PATHINFO_EXTENSION) == 'json')
-								$json_file = $tmp;
+					if(Plugins::install($targetzip)) {
+						foreach(Plugins::getWarnings() as $warning) {
+							warning($warning);
 						}
-						
-						if(!isset($json_file)) {
-							error('Cannot find plugin info .json file. Installation is discontinued.');
-						}
-						else if($zip->extractTo(BASE)) { // place in the directory with same name
-							$file_name = BASE . $json_file;
-							if(!file_exists($file_name))
-								warning("Cannot load " . $file_name . ". File doesn't exist.");
-							else {
-								$string = file_get_contents($file_name);
-								$plugin = json_decode($string, true);
-								if ($plugin == null) {
-									warning('Cannot load ' . $file_name . '. File might be not a valid json code.');
-								}
-								else {
-									$continue = true;
-									
-									if(isset($plugin['require'])) {
-										$require = $plugin['require'];
-										if(isset($require['myaac'])) {
-											$require_myaac = $require['myaac'];
-											if(version_compare(MYAAC_VERSION, $require_myaac, '<')) {
-												warning("This plugin requires MyAAC version " . $require_myaac . ", you're using version " . MYAAC_VERSION . " - please update.");
-												$continue = false;
-											}
-										}
-										
-										if(isset($require['php'])) {
-											$require_php = $require['php'];
-											if(version_compare(phpversion(), $require_php, '<')) {
-												warning("This plugin requires PHP version " . $require_php . ", you're using version " . phpversion() . " - please update.");
-												$continue = false;
-											}
-										}
-										
-										if(isset($require['database'])) {
-											$require_database = $require['database'];
-											if($require_database < DATABASE_VERSION) {
-												warning("This plugin requires database version " . $require_database . ", you're using version " . DATABASE_VERSION . " - please update.");
-												$continue = false;
-											}
-										}
-									}
-									
-									if($continue) {
-										if (isset($plugin['install'])) {
-											if (file_exists(BASE . $plugin['install']))
-												require(BASE . $plugin['install']);
-											else
-												warning('Cannot load install script. Your plugin might be not working correctly.');
-										}
-										
-										if (isset($plugin['hooks'])) {
-											foreach ($plugin['hooks'] as $_name => $info) {
-												if (isset($hook_types[$info['type']])) {
-													$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
-													if ($query->rowCount() == 1) { // found something
-														$query = $query->fetch();
-														$db->query('UPDATE `' . TABLE_PREFIX . 'hooks` SET `type` = ' . $hook_types[$info['type']] . ', `file` = ' . $db->quote($info['file']) . ' WHERE `id` = ' . (int)$query['id'] . ';');
-													} else {
-														$db->query('INSERT INTO `' . TABLE_PREFIX . 'hooks` (`id`, `name`, `type`, `file`) VALUES (NULL, ' . $db->quote($_name) . ', ' . $hook_types[$info['type']] . ', ' . $db->quote($info['file']) . ');');
-													}
-												} else
-													warning('Unknown event type: ' . $info['type']);
-											}
-										}
-										
-										if($cache->enabled()) {
-											$cache->delete('templates');
-										}
-										success('<strong>' . $plugin['name'] . '</strong> plugin has been successfully installed.');
-									}
-								}
-							}
-						}
-						else {
-							error('There was a problem with extracting zip archive.');
-						}
-						
-						$zip->close();
-						unlink($targetzip); // delete the Zipped file
+						$info = Plugins::getPluginInfo();
+						success((isset($info['name']) ? '<strong>' . $info['name'] . '</strong> p' : 'P') . 'lugin has been successfully installed.');
 					}
-					else {
-						error('There was a problem with opening zip archive.');
-					}
+					else
+						error(Plugins::getError());
+					
+					unlink($targetzip); // delete the Zipped file
 				}
 				else
 					error('There was a problem with the upload. Please try again.');
@@ -231,11 +151,11 @@ foreach(get_plugins() as $plugin)
 	}
 	else {
 		$plugins[] = array(
-			'name' => $plugin_info['name'],
-			'description' => $plugin_info['description'],
-			'version' => $plugin_info['version'],
-			'author' => $plugin_info['author'],
-			'contact' => $plugin_info['contact'],
+			'name' => isset($plugin_info['name']) ? $plugin_info['name'] : '',
+			'description' => isset($plugin_info['description']) ? $plugin_info['description'] : '',
+			'version' => isset($plugin_info['version']) ? $plugin_info['version'] : '',
+			'author' => isset($plugin_info['author']) ? $plugin_info['author'] : '',
+			'contact' => isset($plugin_info['contact']) ? $plugin_info['contact'] : '',
 			'file' => $plugin,
 			'uninstall' => isset($plugin_info['uninstall'])
 		);

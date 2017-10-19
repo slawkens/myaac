@@ -15,7 +15,7 @@
 		<td>{{ plugin.version }}</td>
 		<td>{{ plugin.author }}</td>
 		<td>{{ plugin.contact }}</td>
-		<td><a href="?p=plugins&uninstall={{ plugin.file }}">Uninstall</a></td>
+		<td><a href="?p=plugins&uninstall={{ plugin.file }}" onclick="return confirm('Are you sure?');">Uninstall</a></td>
 	</tr>
 	{% endfor %}
 </table>
