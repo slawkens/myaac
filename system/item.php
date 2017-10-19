@@ -9,17 +9,17 @@
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-require_once(SYSTEM . 'libs/items.php');
+require_once(SYSTEM . 'libs/items_images.php');
 
-Items::$files = array(
+Items_Images::$files = array(
 	'otb' => SYSTEM . 'data/items.otb',
 	'spr' => SYSTEM . 'data/Tibia.spr',
 	'dat' => SYSTEM . 'data/Tibia.dat'
 );
-Items::$outputDir = BASE . 'images/items/';
+Items_Images::$outputDir = BASE . 'images/items/';
 
 function generateItem($id = 100, $count = 1) {
-	Items::generate($id, $count);
+	Items_Images::generate($id, $count);
 }
 
 function itemImageExists($id, $count = 1)
@@ -31,7 +31,7 @@ function itemImageExists($id, $count = 1)
 	if($count > 1)
 		$file_name .= '-' . $count;
 
-	$file_name = Items::$outputDir . $file_name . '.gif';
+	$file_name = Items_Images::$outputDir . $file_name . '.gif';
 	return file_exists($file_name);
 }
 
@@ -43,7 +43,7 @@ function outputItem($id = 100, $count = 1)
 	if(!itemImageExists($id, $count))
 	{
 		//echo 'plik istnieje';
-		Items::generate($id, $count);
+		Items_Images::generate($id, $count);
 	}
 
 	$expires = 60 * 60 * 24 * 30; // 30 days
@@ -56,7 +56,7 @@ function outputItem($id = 100, $count = 1)
 	if($count > 1)
 		$file_name .= '-' . $count;
 
-	$file_name = Items::$outputDir . $file_name . '.gif';
+	$file_name = Items_Images::$outputDir . $file_name . '.gif';
 	readfile($file_name);
 }
 ?>

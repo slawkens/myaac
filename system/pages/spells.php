@@ -111,19 +111,21 @@ if(!in_array($order, array('spell', 'words', 'type', 'mana', 'level', 'maglevel'
 <?php
 
 $i = 0;
-$spells = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'spells') . ' WHERE ' . $db->fieldName('hidden') . ' != 1 ORDER BY ' . $order . ', level');
+$spells = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 3 ORDER BY ' . $order . ', level');
 if(isset($vocation_id) && $vocation_id != 'All' && $vocation_id != '')
 {
 	foreach($spells as $spell)
 	{
-		$spell_vocations = explode(",", $spell['vocations']);
-		if(in_array($vocation_id, $spell_vocations) || empty($spell['vocations']))
+		$spell_vocations = json_decode($spell['vocations'], true);
+		if(in_array($vocation_id, $spell_vocations) || count($spell_vocations) == 0)
 		{
 			echo '<TR BGCOLOR="' . getStyle(++$i) . '"><TD>' . $spell['name'] . '</TD><TD>' . $spell['words'] . '</TD>';
-			if($spell['type'] == 2)
+			if($spell['type'] == 1)
+				echo '<TD>Instant</TD>';
+			else if($spell['type'] == 2)
 				echo '<TD>Conjure ('.$spell['conjure_count'].')</TD>';
 			else
-				echo '<TD>Instant</TD>';
+				echo '<TD>Rune</TD>';
 
 			echo '<TD>' . $spell['mana'] . '</TD><TD>' . $spell['level'] . '</TD><TD>' . $spell['maglevel'] . '</TD><TD>' . $spell['soul'] . '</TD><TD>' . ($spell ['premium'] == 1 ? 'yes' : 'no') . '</TD><TD>' . $config['vocations'][$vocation_id] . '</TD></TR>';
 		}
@@ -133,13 +135,15 @@ else
 {
 	foreach($spells as $spell)
 	{
-		$spell_vocations = explode(",", $spell['vocations']);
+		$spell_vocations = json_decode($spell['vocations'], true);
 
 		echo '<TR BGCOLOR="' . getStyle(++$i) . '"><TD>' .$spell['name'] . '</TD><TD>' . $spell['words'] . '</TD>';
 		if($spell['type'] == 1)
 			echo '<TD>Instant</TD>';
-		else
+		else if($spell['type'] == 2)
 			echo '<TD>Conjure ('.$spell['conjure_count'].')</TD>';
+		else
+			echo '<TD>Rune</TD>';
 
 		echo '<TD>' . $spell['mana'] . '</TD><TD>' . $spell['level'] . '</TD><TD>' . $spell['maglevel'] . '</TD><TD>' . $spell['soul'] . '</TD><TD>'. ($spell ['premium'] == 1 ? 'yes' : 'no') .'</TD><TD><font size="1">';
 

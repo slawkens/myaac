@@ -128,6 +128,16 @@ CREATE TABLE `myaac_hooks`
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 
+CREATE TABLE `myaac_items`
+(
+	`id` INT(11) NOT NULL,
+	`article` VARCHAR(5) NOT NULL DEFAULT '',
+	`name` VARCHAR(50) NOT NULL DEFAULT '',
+	`plural` VARCHAR(50) NOT NULL DEFAULT '',
+	`attributes` VARCHAR(500) NOT NULL DEFAULT '',
+	PRIMARY KEY (`id`)
+) ENGINE = MyISAM;
+
 CREATE TABLE `myaac_monsters` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`hide_creature` tinyint(1) NOT NULL default '0',
@@ -235,17 +245,18 @@ CREATE TABLE `myaac_spells`
 	`name` VARCHAR(255) NOT NULL,
 	`words` VARCHAR(255) NOT NULL,
 	`category` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 - attack, 2 - healing, 3 - summon, 4 - supply, 5 - support',
-	`type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 - instant, 2 - rune',
+	`type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 - instant, 2 - conjure, 3 - rune',
 	`level` INT(11) NOT NULL DEFAULT 0,
 	`maglevel` INT(11) NOT NULL DEFAULT 0,
 	`mana` INT(11) NOT NULL DEFAULT 0,
 	`soul` TINYINT(3) NOT NULL DEFAULT 0,
 	`conjure_count` TINYINT(3) NOT NULL DEFAULT 0,
+	`item_id` INT(11) NOT NULL DEFAULT 0,
 	`premium` TINYINT(1) NOT NULL DEFAULT 0,
-	`vocations` VARCHAR(32) NOT NULL,
+	`vocations` VARCHAR(100) NOT NULL DEFAULT '',
 	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`),
-	UNIQUE (`spell`)
+	UNIQUE (`name`)
 ) ENGINE = MyISAM;
 
 CREATE TABLE `myaac_visitors`
@@ -254,4 +265,13 @@ CREATE TABLE `myaac_visitors`
 	`lastvisit` INT(11) NOT NULL DEFAULT 0,
 	`page` VARCHAR(100) NOT NULL,
 	UNIQUE (`ip`)
+) ENGINE = MyISAM;
+
+CREATE TABLE `myaac_weapons`
+(
+	`id` INT(11) NOT NULL,
+	`level` INT(11) NOT NULL DEFAULT 0,
+	`maglevel` INT(11) NOT NULL DEFAULT 0,
+	`vocations` VARCHAR(100) NOT NULL DEFAULT '',
+	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;

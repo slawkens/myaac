@@ -119,12 +119,21 @@ function getGuildLink($name, $generate = true)
 
 function getItemImage($id, $count = 1)
 {
+	global $db;
+	
+	$tooltip = '';
+	$query = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'items` WHERE `id` = ' . $db->quote($id) . ' LIMIT 1;');
+	if($query->rowCount() == 1) {
+		$item = $query->fetch();
+		$tooltip = ' class="tooltip" title="' . $item['name'] . '"';
+	}
+	
 	$file_name = $id;
 	if($count > 1)
 		$file_name .= '-' . $count;
 
 	global $config;
-	return '<img src="' . $config['item_images_url'] . $file_name . '.gif" width="32" height="32" border="0" alt=" ' .$id . '" />';
+	return '<img src="' . $config['item_images_url'] . $file_name . '.gif"' . $tooltip . ' width="32" height="32" border="0" alt=" ' .$id . '" />';
 }
 
 function getFlagImage($country)

@@ -43,6 +43,7 @@
 						'Statistics' => 'statistics',
 						'Visitors' => 'visitors',
 						'Players' => 'players',
+						'Items' => 'items',
 						'Tools' => array(
 							'phpinfo' => 'phpinfo'
 						),

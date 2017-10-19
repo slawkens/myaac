@@ -315,19 +315,50 @@ class OTS_Spell
  */
     public function getVocations()
     {
-        $vocations = array();
+	    global $config;
+	    if(!isset($config['vocation_ids']))
+		    $config['vocations_ids'] = array_flip($config['vocations']);
+	
+	    $vocations = array();
 
         foreach( $this->element->getElementsByTagName('vocation') as $vocation)
         {
-			if($vocation->getAttribute('id') != NULL)
-            	$vocations[] = $vocation->getAttribute('id');
-			else
-				$vocations[] = $vocation->getAttribute('name');
+	        if($vocation->getAttribute('id') != NULL) {
+		        $voc_id = $vocation->getAttribute('id');
+	        }
+	        else {
+		        $voc_id = $config['vocations_ids'][$vocation->getAttribute('name')];
+	        }
+	
+	        $vocations[] = $voc_id;
         }
 
         return $vocations;
     }
-
+	
+	public function getVocationsFull()
+	{
+	    global $config;
+	    if(!isset($config['vocation_ids']))
+	        $config['vocations_ids'] = array_flip($config['vocations']);
+	    
+		$vocations = array();
+		
+		foreach( $this->element->getElementsByTagName('vocation') as $vocation)
+		{
+		    $show = $vocation->getAttribute('showInDescription');
+            if($vocation->getAttribute('id') != NULL) {
+	            $voc_id = $vocation->getAttribute('id');
+            }
+            else {
+                $voc_id = $config['vocations_ids'][$vocation->getAttribute('name')];
+            }
+		    
+		    $vocations[$voc_id] = strlen($show) == 0 || $show != '0';
+		}
+		
+		return $vocations;
+	}
 /**
  * Creates conjure item.
  * 

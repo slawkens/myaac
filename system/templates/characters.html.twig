@@ -1,3 +1,10 @@
+<script type="text/javascript" src="tools/tipped.js"></script>
+<link rel="stylesheet" type="text/css" href="tools/tipped.css"/>
+<script>
+    $(document).ready(function() {
+        Tipped.create('.tooltip');
+    });
+</script>
 {% set rows = 0 %}
 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
 	<td><img src="<{{ template_path }}/images/general/blank.gif" width="10" height="1" border="0"></td>
@@ -145,6 +152,7 @@
 		<table border="0" width="100%">
 			<tr>
 				{% if config.characters.skills %}
+				<!-- SKILLS -->
 				<td width="30%" valign="top">
 					<table border="0" cellspacing="1" cellpadding="4" width="100%">
 						<tr bgcolor="{{ config.vdarkborder }}">
@@ -160,9 +168,11 @@
 						{% endfor %}
 					</table>
 				</td>
+				<!-- SKILLS_END -->
 				{% endif %}
 
 				{% if quests_enabled %}
+				<!-- QUESTS -->
 				<td width="40%" valign="top">
 					<table border="0" cellspacing="1" cellpadding="4" width="100%">
 						<tr bgcolor="{{ config.vdarkborder }}">
@@ -178,9 +188,11 @@
 						{% endfor %}
 					</table>
 				</td>
+				<!-- QUESTS_END -->
 				{% endif %}
 
 				{% if config.characters.equipment %}
+				<!-- EQUIPMENT -->
 				<td width="100" valign="top">
 					<table border="0" cellspacing="1" cellpadding="4" width="100%">
 						<tr bgcolor="{{ config.vdarkborder}}">
@@ -212,11 +224,13 @@
 						</tr>
 					</table>
 				</td>
+				<!-- EQUIPMENT_END -->
 				{% endif %}
 			</tr>
 		</table>
 
 		{% if deaths|length > 0 %}
+		<!-- DEATHS -->
 		<br/>
 		<table border="0" cellspacing="1" cellpadding="4" width="100%">
 			<tr bgcolor="{{ config.vdarkborder }}">
@@ -231,8 +245,10 @@
 
 			{% set i = i + 1 %}
 			{% endfor %}
+		<!-- DEATHS_END -->
 		{% endif %}
 		{% if frags|length > 0 %}
+		<!-- FRAGS -->
 		<br/>
 		<table border="0" cellspacing="1" cellpadding="4" width="100%">
 			<tr bgcolor="{{ config.vdarkborder }}">
@@ -246,11 +262,13 @@
 			</tr>
 			{% endfor %}
 		</table>
+		<!-- FRAGS_END -->
 		{% endif %}
 
 		{{ hook(constant('HOOK_CHARACTERS_BEFORE_SIGNATURE')) }}
 
 		{% if config.signature_enabled %}
+		<!-- SIGNATURE -->
 		<script type="text/javascript">
 			function showSignLinks()
 			{
@@ -289,10 +307,12 @@
 				</table>
 			</td></tr>
 		</table>
+		<!-- SIGNATURE_END -->
 		{% endif %}
 		{{ hook(constant('HOOK_CHARACTERS_AFTER_SIGNATURE')) }}
 		{% if hidden != 1 %}
 		{% set rows = 0 %}
+		<!-- ACCOUNT_INFORMATION -->
 		<br/><br/>
 		<table border="0" cellspacing="1" cellpadding="4" width="100%">
 			<tr bgcolor="{{ config.vdarkborder }}">
@@ -338,7 +358,9 @@
 			</td>
 		</tr>
 		</table>
+		<!-- ACCOUNT_INFORMATION_END -->
 		{{ hook(constant('HOOK_CHARACTERS_AFTER_ACCOUNT')) }}
+		<!-- CHARACTERS_LIST -->
 		<br/><br/>
 		<table border="0" cellspacing="1" cellpadding="4" width="100%">
 			<tr bgcolor="{{ config.vdarkborder }}">
@@ -381,6 +403,7 @@
 				{% endif %}
 			{% endfor %}
 			</table>
+			<!-- CHARACTERS_LIST_END -->
 			{% endif %}
 			{{ hook(constant('HOOK_CHARACTERS_AFTER_CHARACTERS')) }}
 		</td>
