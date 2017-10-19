@@ -46,28 +46,33 @@ if(isset($_REQUEST['uninstall'])){
 		error('Plugin ' . $uninstall . ' does not exist.');
 	}
 	else {
-		$string = file_get_contents($filename);
-		$plugin_info = json_decode($string, true);
-		if($plugin_info == false) {
-			warning('Cannot load plugin info ' . $uninstall . '.json');
+		if(!isset($plugin_info['uninstall'])) {
+			error("Plugin doesn't have uninstall options defined. Skipping...");
 		}
 		else {
-			$success = true;
-			foreach($plugin_info['uninstall'] as $file) {
-				$file = BASE . $file;
-				if(!deleteDirectory($file)) {
-					$success = false;
-				}
-			}
-			
-			if($success) {
-				if($cache->enabled()) {
-					$cache->delete('templates');
-				}
-				success('Successfully uninstalled plugin ' . $uninstall);
+			$string = file_get_contents($filename);
+			$plugin_info = json_decode($string, true);
+			if($plugin_info == false) {
+				error('Cannot load plugin info ' . $uninstall . '.json');
 			}
 			else {
-				error('Error while uninstalling plugin ' . $uninstall . ': ' . error_get_last());
+				$success = true;
+				foreach($plugin_info['uninstall'] as $file) {
+					$file = BASE . $file;
+					if(!deleteDirectory($file)) {
+						$success = false;
+					}
+				}
+				
+				if($success) {
+					if($cache->enabled()) {
+						$cache->delete('templates');
+					}
+					success('Successfully uninstalled plugin ' . $uninstall);
+				}
+				else {
+					error('Error while uninstalling plugin ' . $uninstall . ': ' . error_get_last());
+				}
 			}
 		}
 	}
