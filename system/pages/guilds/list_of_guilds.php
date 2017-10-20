@@ -105,7 +105,7 @@ else
 					<TD valign="top"><B>Create guild</B><BR/>Actually there is no guild on server.' . ($logged ? ' Create first! Press button "Create Guild".' : '') . '</TD>
 					<TD>';
 	if($logged)
-		echo '<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=create_guild" METHOD=post><TR><TD>
+		echo '<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="?subtopic=guilds&action=create" METHOD=post><TR><TD>
 					<INPUT TYPE=image NAME="Create Guild" ALT="Create Guild" SRC="'.$template_path.'/images/global/buttons/sbutton_createguild.png" BORDER=0 WIDTH=120 HEIGHT=18>
 					</TD></TR></FORM></TABLE>';
 	echo '
