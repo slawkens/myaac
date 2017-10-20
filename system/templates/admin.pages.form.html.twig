@@ -87,9 +87,8 @@
 						<td>Access:</td>
 						<td>
 							<select name="access">
-								<?php foreach($groups->getGroups() as $id => $group): ?>
 								{% for id, group in groups %}
-								<option value="{{ group.getAccess() }}"{% if access == group.getAccess() %} selected{% endif %}>{{ group.getName() }}</option>
+								<option value="{{ group.getId() }}"{% if access == group.getId() %} selected{% endif %}>{{ group.getName() }}</option>
 								{% endfor %}
 							</select>
 						</td>

@@ -12,7 +12,18 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $links_to_pages = '';
-$section_id = (int) $_REQUEST['id'];
+$section_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
+
+if($section_id == null || !isset($sections[$section_id])) {
+	echo "Board with this id does't exist.";
+	return;
+}
+
+if(!Forum::hasAccess($section_id)) {
+	echo "You don't have access to this board.";
+	return;
+}
+
 $_page = (int) (isset($_REQUEST['page']) ? $_REQUEST['page'] : 0);
 $threads_count = $db->query("SELECT COUNT(`" . TABLE_PREFIX . "forum`.`id`) AS threads_count FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`section` = ".(int) $section_id." AND `" . TABLE_PREFIX . "forum`.`first_post` = `" . TABLE_PREFIX . "forum`.`id`")->fetch();
 for($i = 0; $i < $threads_count['threads_count'] / $config['forum_threads_per_page']; $i++)

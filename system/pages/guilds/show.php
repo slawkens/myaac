@@ -14,6 +14,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $guild_name = $_REQUEST['guild'];
 if(!Validator::guildName($guild_name))
 	$errors[] = Validator::getLastError();
+
 if(empty($errors))
 {
 	$guild = $ots->createObject('Guild');

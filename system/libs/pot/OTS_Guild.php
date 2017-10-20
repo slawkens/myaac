@@ -74,6 +74,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  * 
  * @version 0.1.3
  */
+/*
     public function __clone()
     {
         unset($this->data['id']);
@@ -90,7 +91,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
             $this->requests->__construct($this);
         }
     }
-
+*/
 /**
  * Assigns invites handler.
  * 
@@ -282,6 +283,26 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
         $this->data['ownerid'] = $owner->getId();
     }
 
+    public function hasMember(OTS_Player $player) {
+        global $db;
+	
+        if(!$player || !$player->isLoaded()) {
+            return false;
+        }
+        
+	    $player_rank = $player->getRank();
+	    if(!$player_rank->isLoaded()) {
+	        return false;
+	    }
+	    
+	    foreach($this->getGuildRanksList() as $rank) {
+		    if($rank->getId() == $player_rank->getId()) {
+		        return true;
+            }
+        }
+        
+        return false;
+    }
 /**
  * Guild creation data.
  * 

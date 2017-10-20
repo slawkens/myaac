@@ -15,7 +15,7 @@ if(Forum::isModerator())
 {
 	$id = (int) $_REQUEST['id'];
 	$post = $db->query("SELECT `id`, `first_post`, `section` FROM `" . TABLE_PREFIX . "forum` WHERE `id` = ".$id." LIMIT 1")->fetch();
-	if($post['id'] == $id)
+	if($post['id'] == $id && Forum::hasAccess($post['section']))
 	{
 		if($post['id'] == $post['first_post'])
 		{

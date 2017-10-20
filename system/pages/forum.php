@@ -30,10 +30,18 @@ if(!$logged)
 $canEdit = hasFlag(FLAG_CONTENT_FORUM) || superAdmin();
 if($canEdit)
 {
+	$groups = new OTS_Groups_List();
+	
 	if(!empty($action))
 	{
 		if($action == 'delete_board' || $action == 'edit_board' || $action == 'hide_board' || $action == 'moveup_board' || $action == 'movedown_board')
 			$id = $_REQUEST['id'];
+		
+		if(isset($_REQUEST['access']))
+			$access = $_REQUEST['access'];
+		
+		if(isset($_REQUEST['guild']))
+			$guild = $_REQUEST['guild'];
 		
 		if(isset($_REQUEST['name']))
 			$name = $_REQUEST['name'];
@@ -44,7 +52,7 @@ if($canEdit)
 		$errors = array();
 		
 		if($action == 'add_board') {
-			if(Forum::add_board($name, $description, $errors))
+			if(Forum::add_board($name, $description, $access, $guild, $errors))
 				$action = $name = $description = '';
 		}
 		else if($action == 'delete_board') {
@@ -56,11 +64,14 @@ if($canEdit)
 			if(isset($id) && !isset($name)) {
 				$board = Forum::get_board($id);
 				$name = $board['name'];
+				$access = $board['access'];
+				$guild = $board['guild'];
 				$description = $board['description'];
 			}
 			else {
-				Forum::update_board($id, $name, $description);
+				Forum::update_board($id, $name, $access, $guild, $description);
 				$action = $name = $description = '';
+				$access = $guild = 0;
 			}
 		}
 		else if($action == 'hide_board') {
@@ -83,12 +94,17 @@ if($canEdit)
 	}
 	
 	if(empty($action) || $action == 'edit_board') {
+		$guilds = $db->query('SELECT `id`, `name` FROM `guilds`')->fetchAll();
 		echo $twig->render('forum.add_board.html.twig', array(
 			'link' => getLink('forum', ($action == 'edit_board' ? 'edit_board' : 'add_board')),
 			'action' => $action,
 			'id' => isset($id) ? $id : null,
 			'name' => isset($name) ? $name : null,
-			'description' => isset($description) ? $description : null
+			'description' => isset($description) ? $description : null,
+			'access' => isset($access) ? $access : 0,
+			'guild' => isset($guild) ? $guild : null,
+			'groups' => $groups,
+			'guilds' => $guilds
 		));
 		
 		if($action == 'edit_board')
@@ -103,7 +119,9 @@ foreach(getForumBoards() as $section)
 		'id' => $section['id'],
 		'name' => $section['name'],
 		'description' => $section['description'],
-		'closed' => $section['closed'] == '1'
+		'closed' => $section['closed'] == '1',
+		'guild' => $section['guild'],
+		'access' => $section['access']
 	);
 	
 	if($canEdit) {
@@ -124,21 +142,24 @@ if(empty($action))
 		$counters[$data['section']] = array('threads' => $data['threads'], 'posts' => $data['replies'] + $data['threads']);
 	foreach($sections as $id => $section)
 	{
-		$last_post = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`section` = ".(int) $id." AND `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` ORDER BY `post_date` DESC LIMIT 1")->fetch();
-		$boards[] = array(
-			'id' => $id,
-			'link' => getForumBoardLink($id),
-			'name' => $section['name'],
-			'description' => $section['description'],
-			'hidden' => $section['hidden'],
-			'posts' => isset($counters[$id]['posts']) ? $counters[$id]['posts'] : 0,
-			'threads' => isset($counters[$id]['threads']) ? $counters[$id]['threads'] : 0,
-			'last_post' => array(
-				'name' => isset($last_post['name']) ? $last_post['name'] : null,
-				'date' => isset($last_post['post_date']) ? $last_post['post_date'] : null,
-				'player_link' => isset($last_post['name']) ? getPlayerLink($last_post['name']) : null,
-			)
-		);
+		$show = true;
+		if(Forum::hasAccess($id)) {
+			$last_post = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`section` = ".(int) $id." AND `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` ORDER BY `post_date` DESC LIMIT 1")->fetch();
+			$boards[] = array(
+				'id' => $id,
+				'link' => getForumBoardLink($id),
+				'name' => $section['name'],
+				'description' => $section['description'],
+				'hidden' => $section['hidden'],
+				'posts' => isset($counters[$id]['posts']) ? $counters[$id]['posts'] : 0,
+				'threads' => isset($counters[$id]['threads']) ? $counters[$id]['threads'] : 0,
+				'last_post' => array(
+					'name' => isset($last_post['name']) ? $last_post['name'] : null,
+					'date' => isset($last_post['post_date']) ? $last_post['post_date'] : null,
+					'player_link' => isset($last_post['name']) ? getPlayerLink($last_post['name']) : null,
+				)
+			);
+		}
 	}
 	
 	echo $twig->render('forum.boards.html.twig', array(
@@ -205,7 +226,7 @@ class Forum
 			'post_ip' => $_SERVER['REMOTE_ADDR']
  		));
 	}
-	static public function add_board($name, $description, &$errors)
+	static public function add_board($name, $description, $access, $guild, &$errors)
 	{
 		global $db;
 		if(isset($name[0]) && isset($description[0]))
@@ -226,7 +247,7 @@ class Forum
 					$query = $query->fetch();
 					$ordering = $query['ordering'] + 1;
 				}
-				$db->insert(TABLE_PREFIX . 'forum_boards', array('name' => $name, 'description' => $description, 'ordering' => $ordering));
+				$db->insert(TABLE_PREFIX . 'forum_boards', array('name' => $name, 'description' => $description, 'access' => $access, 'guild' => $guild, 'ordering' => $ordering));
 			}
 			else
 				$errors[] = 'Forum board with this name already exists.';
@@ -242,9 +263,9 @@ class Forum
 		return $db->select(TABLE_PREFIX . 'forum_boards', array('id' => $id));
 	}
 	
-	static public function update_board($id, $name, $description) {
+	static public function update_board($id, $name, $access, $guild, $description) {
 		global $db;
-		$db->update(TABLE_PREFIX . 'forum_boards', array('name' => $name, 'description' => $description), array('id' => $id));
+		$db->update(TABLE_PREFIX . 'forum_boards', array('name' => $name, 'description' => $description, 'access' => $access, 'guild' => $guild), array('id' => $id));
 	}
 	
 	static public function delete_board($id, &$errors)
@@ -388,5 +409,42 @@ class Forum
 			$post .= '<b>'.($smiles == 0 ? self::parseSmiles($topic) : $topic).'</b><hr />';
 		$post .= self::parseBBCode($text, $smiles);
 		return $post;
+	}
+	
+	public static function hasAccess($board_id) {
+		global $sections, $logged, $account_logged, $logged_access;
+		if(!isset($sections[$board_id]))
+			return false;
+		
+		$hasAccess = true;
+		$section = $sections[$board_id];
+		if($section['guild'] > 0) {
+			if($logged) {
+				$guild = new OTS_Guild();
+				$guild->load($section['guild']);
+				$status = false;
+				if($guild->isLoaded()) {
+					$account_players = $account_logged->getPlayers();
+					foreach ($account_players as $player) {
+						if($guild->hasMember($player)) {
+							$status = true;
+						}
+					}
+				}
+				
+				if (!$status) $hasAccess = false;
+			}
+			else {
+				$hasAccess = false;
+			}
+		}
+		
+		if($section['access'] > 0) {
+			if($logged_access < $section['access']) {
+				$hasAccess = false;
+			}
+		}
+		
+		return $hasAccess;
 	}
 }

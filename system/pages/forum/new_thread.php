@@ -17,7 +17,7 @@ if(Forum::canPost($account_logged))
 	$section_id = isset($_REQUEST['section_id']) ? $_REQUEST['section_id'] : null;
 	if($section_id !== null) {
 		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($section_id) . '">' . $sections[$section_id]['name'] . '</a> >> <b>Post new thread</b><br />';
-		if (isset($sections[$section_id]['name'])) {
+		if(isset($sections[$section_id]['name']) && Forum::hasAccess($section_id)) {
 			if ($sections[$section_id]['closed'] && !Forum::isModerator())
 				$errors[] = 'You cannot create topic on this board.';
 			
@@ -76,6 +76,7 @@ if(Forum::canPost($account_logged))
 					echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id) . '">GO BACK TO LAST THREAD</a>';
 				}
 			}
+			
 			if (!$saved) {
 				if (!empty($errors))
 					echo $twig->render('error_box.html.twig', array('errors' => $errors));

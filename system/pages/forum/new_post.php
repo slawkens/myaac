@@ -22,7 +22,7 @@ if(Forum::canPost($account_logged))
 	
 	$thread = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." LIMIT 1")->fetch();
 	echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
-	if(isset($thread['id']))
+	if(isset($thread['id']) && Forum::hasAccess($thread['section']))
 	{
 		$quote = isset($_REQUEST['quote']) ? (int) $_REQUEST['quote'] : NULL;
 		$text = isset($_REQUEST['text']) ? stripslashes(trim($_REQUEST['text'])) : NULL;
@@ -81,6 +81,7 @@ if(Forum::canPost($account_logged))
 				echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id, $_page) . '">GO BACK TO LAST THREAD</a>';
 			}
 		}
+		
 		if(!$saved)
 		{
 			if(!empty($errors))

@@ -215,7 +215,7 @@ function generateRandomString($length, $lowCase = true, $upCase = false, $numeri
 function getForumBoards()
 {
 	global $db, $canEdit;
-	$sections = $db->query('SELECT `id`, `name`, `description`, `closed`' . ($canEdit ? ', `hidden`, `ordering`' : '') . ' FROM `' . TABLE_PREFIX . 'forum_boards` ' . (!$canEdit ? ' WHERE `hidden` != 1' : '') .
+	$sections = $db->query('SELECT `id`, `name`, `description`, `closed`, `guild`, `access`' . ($canEdit ? ', `hidden`, `ordering`' : '') . ' FROM `' . TABLE_PREFIX . 'forum_boards` ' . (!$canEdit ? ' WHERE `hidden` != 1' : '') .
 		' ORDER BY `ordering`;');
 	if($sections)
 		return $sections->fetchAll();

@@ -18,8 +18,8 @@
 							<strong>BOARD:</strong> {{ board }}<br/><br/>
 							<strong>Select the new board:&nbsp;</strong>
 							<select name="section">
-							{% for section in sections %}
-							<option value="{{ section.id }}">{{ section.name }}</option>
+							{% for id, section in sections %}
+							<option value="{{ id }}">{{ section.name }}</option>
 							{% endfor %}
 							</select>
 							<input type="submit" value="Move Thread">

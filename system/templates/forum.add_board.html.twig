@@ -17,6 +17,27 @@
 						<td><textarea name="description" maxlength="300" cols="50" rows="5">{% if description is not null %}{{ description }}{% endif %}</textarea></td>
 					<tr/>
 					<tr>
+						<td>Access:</td>
+						<td>
+							<select name="access">
+								{% for id, group in groups %}
+									<option value="{{ group.getAccess() }}"{% if access == group.getId() %} selected{% endif %}>{{ group.getName() }}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>Guild:</td>
+						<td>
+							<select name="guild">
+								<option value="0"{% if guild == 0 %} selected{% endif %}>----</option>
+								{% for guild_ in guilds %}
+									<option value="{{ guild_.id }}"{% if guild == guild_.id %} selected{% endif %}>{{ guild_.name }}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr>
 						<td colspan="2" align="center"><input type="submit" value="Submit"/>
 					</tr>
 				</table>
