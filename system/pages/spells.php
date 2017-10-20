@@ -21,145 +21,67 @@ if(isset($_POST['reload_spells']) && $canEdit)
 	}
 }
 
-if($canEdit)
-{
-?>
-	<form method="post" action="index.php?subtopic=spells">
-		<input type="hidden" name="reload_spells" value="yes"/>
-		<input type="submit" value="(admin) Reload spells"/>
-	</form>
-<?php
+if(isset($_REQUEST['vocation_id'])) {
+	$vocation_id = $_REQUEST['vocation_id'];
+	if($vocation_id == 'all') {
+		$vocation = 'all';
+	}
+	else {
+		$vocation = $config['vocations'][$vocation_id];
+	}
+}
+else {
+	$vocation = (isset($_REQUEST['vocation']) ? rawurldecode($_REQUEST['vocation']) : 'all');
+	
+	if($vocation == 'all') {
+		$vocation_id = 'all';
+	}
+	else {
+		$vocation_ids = array_flip($config['vocations']);
+		$vocation_id = $vocation_ids[$vocation];
+	}
 }
 
-$vocation_id = (isset($_REQUEST['vocation_id']) ? (int)$_REQUEST['vocation_id'] : 'All');
-$order = 'spell';
-if(isset($_GET['order']))
-	$order = $_GET['order'];
+$order = 'words';
+if(isset($_REQUEST['order']))
+	$order = $_REQUEST['order'];
 
-if(!in_array($order, array('spell', 'words', 'type', 'mana', 'level', 'maglevel', 'soul')))
+if(!in_array($order, array('words', 'type', 'mana', 'level', 'maglevel', 'soul')))
 	$order = 'level';
-?>
 
-<form action="?subtopic=spells" method="post">
-<table border="0" cellspacing="1" cellpadding="4" width="100%">
-	<tr bgcolor="<?php echo $config['vdarkborder']; ?>">
-		<td class="white"><b>Spell Search</b></td>
-	</tr>
-	<tr bgcolor="<?php echo $config['darkborder']; ?>">
-		<td>
-			<table border="0" cellpadding="1">
-				<tr>
-					<td>Only for vocation: <select name="vocation_id">
-							<option value="All" <?php
-							if('All' == $vocation_id)
-								echo 'SELECTED';
-							
-							echo '>All';
-							
-							foreach($config['vocations'] as $id => $vocation)
-							{
-								echo '<option value="' . $id . '" ';
-								if($id == $vocation_id && $vocation_id != "All" && $vocation_id != '')
-									echo 'SELECTED';
-								
-								echo '>' . $vocation;
-							}
-							?>
-						</select>
-						<input type="hidden" name="order" value="<?php echo $order; ?>">
-					</td>
-					<td>
-						<?php echo $twig->render('buttons.submit.html.twig'); ?>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-</form>
+$spells = array();
+$spells_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 3 ORDER BY ' . $order . ', level');
 
-<table border="0" cellspacing="1" cellpadding="4" width="100%">
-	<tr bgcolor="<?php echo $config['vdarkborder']; ?>">
-		<td class="white">
-			<b><a href="?subtopic=spells&vocation_id=<?php echo $vocation_id; ?>&order=spell"><font class="white">Name</font></a></b>
-		</td>
-		<td class="white">
-			<b><a href="?subtopic=spells&vocation_id=<?php echo $vocation_id; ?>&order=words"><font class="white">Words</font></a></b>
-		</td>
-		<td class="white">
-			<b><a href="?subtopic=spells&vocation_id=<?php echo $vocation_id; ?>&order=type"><font class="white">Type<br/>(count)</font></a></b>
-		</td>
-		<td class="white">
-			<b><a href="?subtopic=spells&vocation_id=<?php echo $vocation_id; ?>&order=mana"><font class="white">Mana</font></a></b>
-		</td>
-		<td class="white">
-			<b><a href="?subtopic=spells&vocation_id=<?php echo $vocation_id; ?>&order=level"><font class="white">Level</font></a></b>
-		</td>
-		<td class="white">
-			<b><a href="?subtopic=spells&vocation_id=<?php echo $vocation_id; ?>&order=maglevel"><font class="white">Magic<br/>Level</font></a></b>
-		</td>
-		<td class="white">
-			<b><a href="?subtopic=spells&vocation_id=<?php echo $vocation_id; ?>&order=soul"><font class="white">Soul</font></a></b>
-		</td>
-		<td class="white">
-			<b>Premium</b>
-		</td>
-		<td class="white">
-			<b>Vocations:</b>
-		</td>
-	</tr>
-<?php
-
-$i = 0;
-$spells = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 3 ORDER BY ' . $order . ', level');
-if(isset($vocation_id) && $vocation_id != 'All' && $vocation_id != '')
-{
-	foreach($spells as $spell)
-	{
+if((string)$vocation_id != 'all') {
+	foreach($spells_db->fetchAll() as &$spell) {
 		$spell_vocations = json_decode($spell['vocations'], true);
-		if(in_array($vocation_id, $spell_vocations) || count($spell_vocations) == 0)
-		{
-			echo '<TR BGCOLOR="' . getStyle(++$i) . '"><TD>' . $spell['name'] . '</TD><TD>' . $spell['words'] . '</TD>';
-			if($spell['type'] == 1)
-				echo '<TD>Instant</TD>';
-			else if($spell['type'] == 2)
-				echo '<TD>Conjure ('.$spell['conjure_count'].')</TD>';
+		if(in_array($vocation_id, $spell_vocations) || count($spell_vocations) == 0) {
+			$spell['vocations'] = null;
+			$spells[] = $spell;
+		}
+	}
+}
+else {
+	foreach($spells_db->fetchAll() as &$spell) {
+		$vocations = json_decode($spell['vocations'], true);
+		
+		foreach($vocations as &$tmp_vocation) {
+			if(isset($config['vocations'][$tmp_vocation]))
+				$tmp_vocation = $config['vocations'][$tmp_vocation];
 			else
-				echo '<TD>Rune</TD>';
-
-			echo '<TD>' . $spell['mana'] . '</TD><TD>' . $spell['level'] . '</TD><TD>' . $spell['maglevel'] . '</TD><TD>' . $spell['soul'] . '</TD><TD>' . ($spell ['premium'] == 1 ? 'yes' : 'no') . '</TD><TD>' . $config['vocations'][$vocation_id] . '</TD></TR>';
+				$tmp_vocation = 'Unknown';
 		}
+		
+		$spell['vocations'] = implode('</br>', $vocations);
+		$spells[] = $spell;
 	}
 }
-else
-{
-	foreach($spells as $spell)
-	{
-		$spell_vocations = json_decode($spell['vocations'], true);
 
-		echo '<TR BGCOLOR="' . getStyle(++$i) . '"><TD>' .$spell['name'] . '</TD><TD>' . $spell['words'] . '</TD>';
-		if($spell['type'] == 1)
-			echo '<TD>Instant</TD>';
-		else if($spell['type'] == 2)
-			echo '<TD>Conjure ('.$spell['conjure_count'].')</TD>';
-		else
-			echo '<TD>Rune</TD>';
-
-		echo '<TD>' . $spell['mana'] . '</TD><TD>' . $spell['level'] . '</TD><TD>' . $spell['maglevel'] . '</TD><TD>' . $spell['soul'] . '</TD><TD>'. ($spell ['premium'] == 1 ? 'yes' : 'no') .'</TD><TD><font size="1">';
-
-		$showed_vocations = 0;
-		foreach($spell_vocations as $spell_vocation)
-		{
-			if(isset($config['vocations'][$spell_vocation])) {
-				echo $config['vocations'][$spell_vocation];
-				$showed_vocations++;
-			}
-			if($showed_vocations != count($spell_vocations))
-				echo '<br/>';
-		}
-
-		echo '</font></TD></TR>';
-	}
-}
+echo $twig->render('spells.html.twig', array(
+	'canEdit' => $canEdit,
+	'post_vocation_id' => $vocation_id,
+	'post_vocation' => $vocation,
+	'post_order' => $order,
+	'spells' => $spells,
+));
 ?>
-</table>

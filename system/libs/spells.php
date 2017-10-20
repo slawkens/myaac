@@ -25,10 +25,6 @@ class Spells {
 			echo '<h2>All records deleted from table <b>' . TABLE_PREFIX . 'spells</b> in database.</h2>';
 		}
 		
-		foreach($config['vocations'] as $voc_id => $voc_name) {
-			$vocations_ids[$voc_name] = $voc_id;
-		}
-		
 		try {
 			self::$spellsList = new OTS_SpellsList($config['data_path'].'spells/spells.xml');
 		}
@@ -36,6 +32,7 @@ class Spells {
 			self::$lastError = $e->getMessage();
 			return false;
 		}
+		
 		//add conjure spells
 		$conjurelist = self::$spellsList->getConjuresList();
 		if($show) {
@@ -44,35 +41,29 @@ class Spells {
 		
 		foreach($conjurelist as $spellname) {
 			$spell = self::$spellsList->getConjure($spellname);
-			$lvl = $spell->getLevel();
-			$mlvl = $spell->getMagicLevel();
-			$mana = $spell->getMana();
 			$name = $spell->getName();
-			$soul = $spell->getSoul();
-			$spell_txt = $spell->getWords();
 			
-			$vocations = $spell->getVocations();
+			$words = $spell->getWords();
+			if(strpos($words, '#') !== false)
+				continue;
 			
-			$enabled = $spell->isEnabled();
-			if($enabled) {
-				$hide_spell = 0;
-			}
-			else {
-				$hide_spell = 1;
-			}
-			$pacc = $spell->isPremium();
-			if($pacc) {
-				$pacc = '1';
-			}
-			else {
-				$pacc = '0';
-			}
-			$type = 2;
-			$count = $spell->getConjureCount();
 			try {
-				$db->query('INSERT INTO myaac_spells (spell, name, words, type, mana, level, maglevel, soul, premium, vocations, conjure_count, hidden) VALUES (' . $db->quote($spell_txt) . ', ' . $db->quote($name) . ', ' . $db->quote($spell_txt) . ', ' . $db->quote($type) . ', ' . $db->quote($mana) . ', ' . $db->quote($lvl) . ', ' . $db->quote($mlvl) . ', ' . $db->quote($soul) . ', ' . $db->quote($pacc) . ', ' . $db->quote(json_encode($vocations)) . ', ' . $db->quote($count) . ', ' . $db->quote($hide_spell) . ')');
+				$db->insert(TABLE_PREFIX . 'spells', array(
+					'name' => $name,
+					'words' => $words,
+					'type' => 2,
+					'mana' => $spell->getMana(),
+					'level' => $spell->getLevel(),
+					'maglevel' => $spell->getMagicLevel(),
+					'soul' => $spell->getSoul(),
+					'premium' => $spell->isPremium() ? 1 : 0,
+					'vocations' => json_encode($spell->getVocations()),
+					'conjure_count' => $spell->getConjureCount(),
+					'hidden' => $spell->isEnabled() ? 0 : 1
+				));
+
 				if($show) {
-					success("Added: " . $name . "<br>");
+					success('Added: ' . $name . '<br/>');
 				}
 			}
 			catch(PDOException $error) {
@@ -82,7 +73,7 @@ class Spells {
 			}
 		}
 		
-		//add instant spells
+		// add instant spells
 		$instantlist = self::$spellsList->getInstantsList();
 		if($show) {
 			echo "<h3>Instant:</h3>";
@@ -90,39 +81,29 @@ class Spells {
 		
 		foreach($instantlist as $spellname) {
 			$spell = self::$spellsList->getInstant($spellname);
-			$lvl = $spell->getLevel();
-			$mlvl = $spell->getMagicLevel();
-			$mana = $spell->getMana();
 			$name = $spell->getName();
-			$soul = $spell->getSoul();
-			$spell_txt = $spell->getWords();
-			if(strpos($spell_txt, '###') !== false)
+			
+			$words = $spell->getWords();
+			if(strpos($words, '#') !== false)
 				continue;
 			
-			$vocations = $spell->getVocations();
-
-			$enabled = $spell->isEnabled();
-			if($enabled) {
-				$hide_spell = 0;
-			}
-			else {
-				$hide_spell = 1;
-			}
-			$pacc = $spell->isPremium();
-			if($pacc) {
-				$pacc = '1';
-			}
-			else {
-				$pacc = '0';
-			}
-			$type = 1;
-			$count = 0;
-
-			
 			try {
-				$db->query("INSERT INTO myaac_spells (spell, name, words, type, mana, level, maglevel, soul, premium, vocations, conjure_count, hidden) VALUES (".$db->quote($spell_txt).", ".$db->quote($name).", ".$db->quote($spell_txt).", '".$type."', '".$mana."', '".$lvl."', '".$mlvl."', '".$soul."', '".$pacc."', ".$db->quote(json_encode($vocations)).", '".$count."', '".$hide_spell."')");
+				$db->insert(TABLE_PREFIX . 'spells', array(
+					'name' => $name,
+					'words' => $words,
+					'type' => 1,
+					'mana' => $spell->getMana(),
+					'level' => $spell->getLevel(),
+					'maglevel' => $spell->getMagicLevel(),
+					'soul' => $spell->getSoul(),
+					'premium' => $spell->isPremium() ? 1 : 0,
+					'vocations' => json_encode($spell->getVocations()),
+					'conjure_count' => 0,
+					'hidden' => $spell->isEnabled() ? 0 : 1
+				));
+				
 				if($show) {
-					success("Added: ".$name."<br/>");
+					success('Added: ' . $name . '<br/>');
 				}
 			}
 			catch(PDOException $error) {
@@ -132,44 +113,35 @@ class Spells {
 			}
 		}
 		
-		//add runes
+		// add runes
 		$runeslist = self::$spellsList->getRunesList();
 		if($show) {
 			echo "<h3>Runes:</h3>";
 		}
-		// runes
+		
 		foreach($runeslist as $spellname) {
 			$spell = self::$spellsList->getRune($spellname);
-			$lvl = $spell->getLevel();
-			$mlvl = $spell->getMagicLevel();
-			$mana = $spell->getMana();
-			$name = $spell->getName() . ' (rune)';
-			$soul = $spell->getSoul();
-			$spell_txt = $spell->getWords();
-			$vocations = $spell->getVocations();
 
-			$id = $spell->getID();
-			
-			$enabled = $spell->isEnabled();
-			if($enabled) {
-				$hide_spell = 0;
-			}
-			else {
-				$hide_spell = 1;
-			}
-			$pacc = $spell->isPremium();
-			if($pacc) {
-				$pacc = '1';
-			}
-			else {
-				$pacc = '0';
-			}
-			$type = 3;
-			$count = $spell->getConjureCount();
+			$name = $spell->getName() . ' (rune)';
+
 			try {
-				$db->query('INSERT INTO myaac_spells (spell, name, words, type, mana, level, maglevel, soul, premium, vocations, conjure_count, item_id, hidden) VALUES (' . $db->quote($spell_txt) . ', ' . $db->quote($name) . ', ' . $db->quote($spell_txt) . ', ' . $db->quote($type) . ', ' . $db->quote($mana) . ', ' . $db->quote($lvl) . ', ' . $db->quote($mlvl) . ', ' . $db->quote($soul) . ', ' . $db->quote($pacc) . ', ' . $db->quote(json_encode($vocations)) . ', ' . $db->quote($count) . ', ' . $db->quote($id) . ', ' . $db->quote($hide_spell) . ')');
+				$db->insert(TABLE_PREFIX . 'spells', array(
+					'name' => $name,
+					'words' => $spell->getWords(),
+					'type' => 3,
+					'mana' => $spell->getMana(),
+					'level' => $spell->getLevel(),
+					'maglevel' => $spell->getMagicLevel(),
+					'soul' => $spell->getSoul(),
+					'premium' => $spell->isPremium() ? 1 : 0,
+					'vocations' => json_encode($spell->getVocations()),
+					'conjure_count' => 0,
+					'item_id' => $spell->getID(),
+					'hidden' => $spell->isEnabled() ? 0 : 1
+				));
+				
 				if($show) {
-					success("Added: " . $name . "<br>");
+					success('Added: ' . $name . '<br/>');
 				}
 			}
 			catch(PDOException $error) {

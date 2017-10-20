@@ -54,12 +54,20 @@ if(!empty($tmp))
 else
 	$uri = str_replace_first('/', '', $uri);
 
-$uri = strtolower(str_replace(array('index.php/', '?'), '', $uri));
+$uri = str_replace(array('index.php/', '?'), '', $uri);
 
 $found = false;
 if(empty($uri) || isset($_REQUEST['template'])) {
 	$_REQUEST['p'] = 'news';
 	$found = true;
+}
+else if(preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
+	$tmp = explode('.', $uri);
+	$_REQUEST['name'] = urldecode($tmp[0]);
+	
+	chdir(TOOLS . 'signature');
+	include(TOOLS . 'signature/index.php');
+	exit();
 }
 else if(!preg_match('/[^A-z0-9_\-]/', $uri) && file_exists(SYSTEM . 'pages/' . $uri . '.php')) {
 	$_REQUEST['p'] = $uri;
@@ -106,22 +114,15 @@ else {
 		'/^news\/edit\/?$/' => array('subtopic' => 'news', 'action' => 'edit'),
 		'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
 		'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
-		'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1')
+		'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
+		'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2'),
 	);
-	
-	if (preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
-		$tmp = explode('.', $uri);
-		$_REQUEST['name'] = urldecode($tmp[0]);
-		
-		chdir(TOOLS . 'signature');
-		include(TOOLS . 'signature/index.php');
-		exit();
-	}
 	
 	foreach($rules as $rule => $redirect) {
 		if (preg_match($rule, $uri)) {
 			$tmp = explode('/', $uri);
 			foreach($redirect as $key => $value) {
+				
 				if(strpos($value, '$') !== false) {
 					$value = str_replace('$' . $value[1], $tmp[$value[1]], $value);
 				}

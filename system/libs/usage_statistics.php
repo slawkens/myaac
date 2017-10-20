@@ -97,7 +97,16 @@ WHERE TABLE_SCHEMA = "forgottenserver";');
 		}
 		
 		$ret['locales'] = get_locales();
-		$ret['plugins'] = get_plugins();
+		$ret['plugins'] = array();
+		foreach(get_plugins() as $plugin) {
+			$string = file_get_contents(BASE . 'plugins/' . $plugin . '.json');
+			$plugin_info = json_decode($string, true);
+			if($plugin_info != false) {
+				if(isset($plugin_info['version'])) {
+					$ret['plugins'][$plugin] = $plugin_info['version'];
+				}
+			}
+		}
 		$ret['templates'] = get_templates();
 		
 		$ret['date_timezone'] = $config['date_timezone'];

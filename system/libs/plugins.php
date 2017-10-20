@@ -101,13 +101,14 @@ class Plugins {
 							
 							if (isset($plugin['hooks'])) {
 								foreach ($plugin['hooks'] as $_name => $info) {
-									if (isset($hook_types[$info['type']])) {
+									if (defined('HOOK_'. $info['type'])) {
+										$hook = constant('HOOK_'. $info['type']);
 										$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
 										if ($query->rowCount() == 1) { // found something
 											$query = $query->fetch();
-											$db->query('UPDATE `' . TABLE_PREFIX . 'hooks` SET `type` = ' . $hook_types[$info['type']] . ', `file` = ' . $db->quote($info['file']) . ' WHERE `id` = ' . (int)$query['id'] . ';');
+											$db->update(TABLE_PREFIX . 'hooks', array('type' => $hook, 'file' => $info['file']), array('id' => (int)$query['id']));
 										} else {
-											$db->query('INSERT INTO `' . TABLE_PREFIX . 'hooks` (`id`, `name`, `type`, `file`) VALUES (NULL, ' . $db->quote($_name) . ', ' . $hook_types[$info['type']] . ', ' . $db->quote($info['file']) . ');');
+											$db->insert(TABLE_PREFIX . 'hooks', array('id' => 'NULL', 'name' => $_name, 'type' => $hook, 'file' => $info['file']));
 										}
 									} else
 										self::$warnings[] = 'Unknown event type: ' . $info['type'];

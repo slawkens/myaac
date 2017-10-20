@@ -1,0 +1,96 @@
+{% if canEdit %}
+<form method="post" action="{{ getLink('spells') }}">
+	<input type="hidden" name="reload_spells" value="yes"/>
+	<input type="submit" value="(admin) Reload spells"/>
+</form>
+{% endif %}
+
+<form action="{{ getLink('spells') }}" method="post">
+	<table border="0" cellspacing="1" cellpadding="4" width="100%">
+		<tr bgcolor="{{ config.vdarkborder }}">
+			<td class="white"><b>Spell Search</b></td>
+		</tr>
+		<tr bgcolor="{{ config.darkborder }}">
+			<td>
+				<table border="0" cellpadding="1">
+					<tr>
+						<td>Only for vocation: <select name="vocation_id">
+								<option value="all" {% if post_vocation_id == 'all' %} selected{% endif %}>All</option>
+								{% for id, vocation in config.vocations %}
+								<option value="{{ id }}"{% if id == post_vocation_id and post_vocation_id != "all" and post_vocation_id != '' %} selected{% endif %}>{{ vocation }}</option>
+								{% endfor %}
+							</select>
+							<input type="hidden" name="order" value="{{ post_order }}">
+						</td>
+						<td>
+							{{ include('buttons.submit.html.twig') }}
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</form>
+<br/>
+<table border="0" cellspacing="1" cellpadding="4" width="100%">
+	<tr bgcolor="{{ config.vdarkborder }}">
+		<td class="white">
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|url_encode ~ '/spell' }}"><font class="white">Name</font></a></b>
+		</td>
+		<td class="white">
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|url_encode ~ '/words' }}"><font class="white">Words</font></a></b>
+		</td>
+		<td class="white">
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|url_encode ~ '/type' }}"><font class="white">Type<br/>(count)</font></a></b>
+		</td>
+		<td class="white">
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|url_encode ~ '/mana' }}"><font class="white">Mana</font></a></b>
+		</td>
+		<td class="white">
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|url_encode ~ '/level' }}"><font class="white">Level</font></a></b>
+		</td>
+		<td class="white">
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|url_encode ~ '/maglevel' }}"><font class="white">Magic<br/>Level</font></a></b>
+		</td>
+		<td class="white">
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|url_encode ~ '/soul' }}"><font class="white">Soul</font></a></b>
+		</td>
+		<td class="white">
+			<b>Premium</b>
+		</td>
+		<td class="white">
+			<b>Vocations:</b>
+		</td>
+	</tr>
+	{% set i = 0 %}
+	{% for spell in spells %}
+	{% set i = i + 1 %}
+	<tr bgcolor="{{ getStyle(i) }}">
+		<td>{{ spell.name }}</td>
+		<td>{{ spell.words }}</td>
+		<td>
+		{% if spell.type == 1 %}
+		Instant
+		{% elseif spell.type == 2 %}
+		Conjure ({{ spell.conjure_count }})
+		{% else %}
+		Rune
+		{% endif %}
+		</td>
+		<td>{{ spell.mana }}</td>
+		<td>{{ spell.level }}</td>
+		<td>{{ spell.maglevel }}</td>
+		<td>{{ spell.soul }}</td>
+		<td>{% if spell.premium == 1 %}yes{% else %}no{% endif %}</td>
+		<td>
+		{% if spell.vocations|length > 0 %}
+		<font size="1">
+			{{ spell.vocations|raw }}
+		</font>
+		{% else %}
+		{{ config.vocations[post_vocation_id] }}
+		{% endif %}
+		</td>
+	</tr>
+	{% endfor %}
+</table>
