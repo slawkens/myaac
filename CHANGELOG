@@ -1,3 +1,8 @@
+[0.6.3 - 20.10.2017]
+	- fixed creating account
+	- fixed viewing thread without being logged 
+	- fixed showing premium account status
+	
 [0.6.2 - 20.10.2017]
 	- added forums for guilds and groups
 	- added nice looking menu for my account page in default template
