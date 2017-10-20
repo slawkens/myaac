@@ -334,6 +334,9 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
             throw new E_OTS_NotLoaded();
         }
 
+		if(fieldExist('premdays', 'accounts'))
+			return $this->data['premdays'];
+		
         if($this->data['lastday'] == 0)
             return 0;
         
@@ -345,6 +348,9 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
 		global $config;
         if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return true;
+		if(fieldExist('premdays', 'accounts'))
+			return $this->data['premdays'] > 0;
+	
 		return $this->data['lastday'] > time();
         //return ($this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday'])) > 0);
     }
