@@ -1,3 +1,36 @@
+[0.6.2 - 20.10.2017]
+	- added forums for guilds and groups
+	- added nice looking menu for my account page in default template
+	- new command line tool: install_plugin.php - can be used to install plugins from command line. Usage: "php install_plugin.php path_to_file"
+	- added new tooltip to view characters equipment item name and monster loot
+	- added items.xml loader class and weapons.xml loader class
+	- minimum PHP version to install AAC is now 5.3.0 cause of Anonymous functions used by Twig
+	- Added 'Are you sure?' popup when uninstalling plugin
+	- added some warnings when plugin json file is incomplete
+	- fixed showing in characters ban expires when is unlimited
+	- fixed displaying monster loot when item.name in loot is used instead of item.id
+	- load also runes into spells table
+	- display plugin uninstall option only if its possible
+	- after changing template you will be redirected to latest viewed page
+	- display gallery add image form only on main gallery page
+	- (internal) moved most of guilds html-in-php code to twig
+	- (internal) moved spells page to twig template
+	- (internal) removed useless spells.spell column that was duplicate of spells.words
+	- (internal) save monster loot in database in json format instead loading it every time from xml file
+	- (internal) store monster voices and immunities in json format
+	- (internal) moved buttons to separate template
+	- (internal) moved online search form to twig
+	- (internal) added new function getItemNameById($id)
+	- (internal) Moved plugin install logic to a new class: Plugins
+	- (internal) changed spells.vocations database field to store json data instead of comma separated
+	- (internal) removed $hook_types array, using defined() and constant() functions now
+	- (internal) removed useless monsters.gfx_name field from database
+	- (internal) renamed database field monsters.hide_creature to hidden
+	- (internal) renamed existing Items class to Items_Images
+	- (internal) optimized Spells class
+	- (internal) new function: OTS_Guild::hasMember(OTS_Player $player)
+	- (internal) new function: Forum::hasAccess($board_id)
+	
 [0.6.1 - 17.10.2017]
 	- fixed signatures loading
 	- new configurable: session_prefix, to allow more websites on one machine (must be unique for every website on your dedicated server!)
