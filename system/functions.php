@@ -117,17 +117,26 @@ function getGuildLink($name, $generate = true)
 	return generateLink($url, $name);
 }
 
-function getItemImage($id, $count = 1)
-{
+function getItemNameById($id) {
 	global $db;
-	
-	$tooltip = '';
 	$query = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'items` WHERE `id` = ' . $db->quote($id) . ' LIMIT 1;');
 	if($query->rowCount() == 1) {
 		$item = $query->fetch();
-		$tooltip = ' class="tooltip" title="' . $item['name'] . '"';
+		return $item['name'];
 	}
 	
+	return '';
+}
+
+function getItemImage($id, $count = 1)
+{
+	$tooltip = '';
+	
+	$name = getItemNameById($id);
+	if(!empty($name)) {
+		$tooltip = ' class="tooltip" title="' . $name . '"';
+	}
+
 	$file_name = $id;
 	if($count > 1)
 		$file_name .= '-' . $count;

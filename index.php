@@ -155,9 +155,9 @@ define('PAGE', $page);
 $template_place_holders = array();
 
 require_once(SYSTEM . 'init.php');
+require_once(SYSTEM . 'template.php');
 require_once(SYSTEM . 'login.php');
 require_once(SYSTEM . 'status.php');
-require_once(SYSTEM . 'template.php');
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);

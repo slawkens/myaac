@@ -140,20 +140,19 @@ CREATE TABLE `myaac_items`
 
 CREATE TABLE `myaac_monsters` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`hide_creature` tinyint(1) NOT NULL default '0',
+	`hidden` tinyint(1) NOT NULL default 0,
 	`name` varchar(255) NOT NULL,
-	`mana` int(11) NOT NULL,
+	`mana` int(11) NOT NULL DEFAULT 0,
 	`exp` int(11) NOT NULL,
 	`health` int(11) NOT NULL,
-	`speed_lvl` int(11) NOT NULL default '1',
+	`speed_lvl` int(11) NOT NULL default 1,
 	`use_haste` tinyint(1) NOT NULL,
 	`voices` text NOT NULL,
 	`immunities` varchar(255) NOT NULL,
 	`summonable` tinyint(1) NOT NULL,
 	`convinceable` tinyint(1) NOT NULL,
 	`race` varchar(255) NOT NULL,
-	`gfx_name` varchar(255) NOT NULL,
-	`file_path` varchar(255) NOT NULL,
+	`loot` varchar(500) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 

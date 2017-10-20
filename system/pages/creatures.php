@@ -12,62 +12,24 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = "Creatures";
 
-$rarity = array( 
-    'Not Rare'    => 7, 
-    'Semi Rare'    => 2, 
-    'Rare'        => 0.5, 
-    'Very Rare' => 0 
-); 
+?>
+<script type="text/javascript" src="tools/tipped.js"></script>
+<link rel="stylesheet" type="text/css" href="tools/tipped.css"/>
+<script>
+	$(document).ready(function() {
+		Tipped.create('.tooltip');
+	});
+</script>
 
-function addLoot($loot, $level=1)
-{ 
-	foreach($loot as $test) { 
-		$chance = $test['chance']; 
-		if(!$chance) 
-			$chance = $test['chance1']; 
-
-		printLoot($level, $test['id'], $test['countmax'], $chance); 
-		foreach($test as $k => $v) 
-			addLoot($v->item, $level + 1); 
-	} 
-} 
- 
- $i = 0;
-function printLoot($level, $itemid, $count, $chance)
-{ 
-	global $itemList, $rarity, $i; 
-
-	$chance /= 1000; 
-	if(isset($_GET['lootrate'])) { 
-		global $lootRate; 
-		$chance *= $lootRate; 
-	} 
-
-	foreach($rarity as $lootRarity => $percent) {
-		if($chance >= $percent) {
-			if(isset($itemid))
-			echo str_repeat("... ", $level) . '<u>' . ($count ? $count : 1) . '</u> <span style="color: #7878FF; font-weight: bold;">' . $itemList[(int)$itemid] . '</span> ' . $itemid . ' <span style="color: #C45; font-weight: bold;">' . $lootRarity . '</span> (<span style="color: #FF9A9A;">' . $chance . '%</span>)<br />';
-			
-			if($i % 6 == 0)
-			{
-				if($i != 0)
-					echo '</td></tr>';
-				echo '<tr bgcolor="'.getStyle(0).'"><td width="100">';
-			}
-			echo getItemImage($itemid);
-			$i++;
-			break; 
-		} 
-	} 
-}
-
+<?php
 $canEdit = hasFlag(FLAG_CONTENT_MONSTERS) || admin();
 if(isset($_POST['reload_monsters']) && $canEdit)
 {
 	require LIBS . 'creatures.php';
-	if(Creatures::loadFromXML(true))
-		if(Creatures::getMonstersList()->hasErrors())
+	if(Creatures::loadFromXML(true)) {
+		if (Creatures::getMonstersList()->hasErrors())
 			error('There were some problems loading your monsters.xml file. Please check system/logs/error.log for more info.');
+	}
 	else {
 		error(Creatures::getLastError());
 	}
@@ -114,7 +76,7 @@ if(empty($_REQUEST['creature']))
 		$whereandorder = ' ORDER BY name';
 	}
 	//send query to database
-	$monsters = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'monsters').' WHERE hide_creature != 1'.$whereandorder);
+	$monsters = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1'.$whereandorder);
 	echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'>';
 	if($order == 'name' && !isset($_REQUEST['desc'])) {
 	echo '<TD class="white" width="200"><B><a href="?subtopic=creatures&order=name&desc=1"><font class="white">Name DESC</a></B></TD>';
@@ -173,7 +135,7 @@ if(empty($_REQUEST['creature']))
 
 
 $monster_name = stripslashes(trim(ucwords($_REQUEST['creature'])));
-$monster = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'monsters').' WHERE '.$db->fieldName('hide_creature').' != 1 AND '.$db->fieldName('name').' = '.$db->quote($monster_name).';')->fetch();
+$monster = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1 AND `name` = '.$db->quote($monster_name).';')->fetch();
 if(isset($monster['name']))
 {
 	$title = $monster['name'] . " - Creatures";
@@ -209,6 +171,7 @@ if(isset($monster['name']))
 	echo '</TABLE></td><td align=left>
 	<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=40%>
 	<tr><td align=left>';
+	$monster['gfx_name'] = trim(mb_strtolower($monster['name'])).".gif";
 	if(!file_exists('images/monsters/'.$monster['gfx_name'])) {
 		$gfx_name =  str_replace(" ", "", $monster['gfx_name']);
 		if(file_exists('images/monsters/' . $gfx_name))
@@ -222,33 +185,59 @@ if(isset($monster['name']))
 	echo '</td></tr>
 	</TABLE></td></tr><tr><td>
 	<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>';
-	if(!empty($monster['immunities']))
+	$immunities = json_decode($monster['immunities'], true);
+	if(count($immunities) > 0)
 	{
 		$number_of_rows++;
-		echo '<tr BGCOLOR="'.getStyle($number_of_rows).'"><td width="100"><b>Immunities: </b></td><td width="100%">'.$monster['immunities'].'</td></tr>';
+		echo '<tr BGCOLOR="'.getStyle($number_of_rows).'"><td width="100"><b>Immunities: </b></td><td width="100%">'.implode(', ', $immunities).'</td></tr>';
 	}
-	if(!empty($monster['voices']))
+	
+	$voices = json_decode($monster['voices'], true);
+	if(count($voices) > 0)
 	{
+		foreach($voices as &$voice) {
+			$voice = '"' . $voice . '"';
+		}
+		
 		$number_of_rows++;
-		echo '<tr BGCOLOR="'.getStyle($number_of_rows).'"><td width="100"><b>Voices: </b></td><td width="100%">'.$monster['voices'].'</td></tr>';
+		echo '<tr BGCOLOR="'.getStyle($number_of_rows).'"><td width="100"><b>Voices: </b></td><td width="100%">'.implode(', ', $voices).'</td></tr>';
 	}
 	echo '</TABLE></td></tr>';
-
-	echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>';
-	$loot = simplexml_load_file($config['data_path'] . 'monster/' . $monster['file_path']); 
+	
+	$loot = json_decode($monster['loot'], true);
 	if($loot)
-	{ 
-		if($item = $loot->loot->item)
-			addLoot($item);
+	{
+		echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><tr><td style="display: block;">';
+		function sort_by_chance($a, $b)
+		{
+			if($a['chance'] == $b['chance']) {
+				return 0;
+			}
+			return ($a['chance'] > $b['chance']) ? -1 : 1;
+		}
+		
+		usort($loot, 'sort_by_chance');
+		
+		$i = 0;
+		foreach($loot as $item) {
+			$name = getItemNameById($item['id']);
+			$tooltip = $name . '<br/>Chance: ' . round($item['chance'] / 1000, 2) . '%<br/>Max count: ' . $item['count'];
+			
+			echo '<img src="' . $config['item_images_url'] . $item['id'] . '.gif" class="tooltip" title="' . $tooltip . '" width="32" height="32" border="0" alt=" ' .$name . '" />';
+			$i++;
+		}
+		
+		echo '</td></tr></TABLE>';
 	}
 
-	echo '</TABLE></td></tr>';
+	echo '</td></tr>';
 	echo '</TABLE>';
 }
 else
 {
-	echo 'Monster with name <b>'.$monster_name.'</b> doesn\'t exist.';
+	echo "Monster with name <b>" . $monster_name . "</b> doesn't exist.";
 }
+
 //back button
 echo $twig->render('creatures.back_button.html.twig');
 ?>

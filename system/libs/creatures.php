@@ -33,6 +33,12 @@ class Creatures {
 			return false;
 		}
 		
+		$items = array();
+		$items_db = $db->query('SELECT `id`, `name` FROM `' . TABLE_PREFIX . 'items`;');
+		foreach($items_db->fetchAll() as $item) {
+			$items[$item['name']] = $item['id'];
+		}
+		
 		//$names_added must be an array
 		$names_added[] = '';
 		//add monsters
@@ -44,10 +50,10 @@ class Creatures {
 				}
 				continue;
 			}
+			
 			//load monster mana needed to summon/convince
 			$mana = $monster->getManaCost();
-			//load monster experience
-			$exp = $monster->getExperience();
+
 			//load monster name
 			$name = $monster->getName();
 			//load monster health
@@ -67,51 +73,44 @@ class Creatures {
 					$use_haste = 1;
 				}
 			}
-			//load monster flags
-			$flags = $monster->getFlags();
-			//create string with immunities
-			$immunities = $monster->getImmunities();
-			$imu_nr = 0;
-			$imu_count = count($immunities);
-			$immunities_string = '';
-			foreach($immunities as $immunitie) {
-				$immunities_string .= $immunitie;
-				$imu_nr++;
-				if($imu_count != $imu_nr) {
-					$immunities_string .= ", ";
-				}
-			}
 			
-			//create string with voices
-			$voices = $monster->getVoices();
-			$voice_nr = 0;
-			$voice_count = count($voices);
-			$voices_string = '';
-			foreach($voices as $voice) {
-				$voices_string .= '"'.$voice.'"';
-				$voice_nr++;
-				if($voice_count != $voice_nr) {
-					$voices_string .= ", ";
-				}
-			}
 			//load race
 			$race = $monster->getRace();
-			//create monster gfx name
-			//$gfx_name =  str_replace(" ", "", trim(mb_strtolower($name))).".gif";
-			$gfx_name =  trim(mb_strtolower($name)).".gif";
-			//don't add 2 monsters with same name, like Butterfly
-			
+
+			//load monster flags
+			$flags = $monster->getFlags();
 			if(!isset($flags['summonable']))
 				$flags['summonable'] = '0';
 			if(!isset($flags['convinceable']))
 				$flags['convinceable'] = '0';
 			
+			$loot = $monster->getLoot();
+			foreach($loot as &$item) {
+				if(!Validator::number($item['id'])) {
+					if(isset($items[$item['id']])) {
+						$item['id'] = $items[$item['id']];
+					}
+				}
+			}
 			if(!in_array($name, $names_added)) {
 				try {
-					$db->query("INSERT INTO `myaac_monsters` (`hide_creature`, `name`, `mana`, `exp`, `health`, `speed_lvl`, `use_haste`, `voices`, `immunities`, `summonable`, `convinceable`, `race`, `gfx_name`, `file_path`) VALUES (0, " . $db->quote($name) . ", " . $db->quote(empty($mana) ? 0 : $mana) . ", " . $db->quote($exp) . ", " . $db->quote($health) . ", " . $db->quote($speed_lvl) . ", " . $db->quote($use_haste) . ", " . $db->quote($voices_string) . ", " . $db->quote($immunities_string) . ", " . $db->quote($flags['summonable'] > 0 ? 1 : 0) . ", " . $db->quote($flags['convinceable'] > 0 ? 1 : 0) . ", ".$db->quote($race).", ".$db->quote($gfx_name).", " . $db->quote(self::$monstersList->currentFile()) . ")");
+					$db->insert(TABLE_PREFIX . 'monsters', array(
+						'name' => $name,
+						'mana' => empty($mana) ? 0 : $mana,
+						'exp' => $monster->getExperience(),
+						'health' => $health,
+						'speed_lvl' => $speed_lvl,
+						'use_haste' => $use_haste,
+						'voices' => json_encode($monster->getVoices()),
+						'immunities' => json_encode($monster->getImmunities()),
+						'summonable' => $flags['summonable'] > 0 ? 1 : 0,
+						'convinceable' => $flags['convinceable'] > 0 ? 1 : 0,
+						'race' => $race,
+						'loot' => json_encode($loot)
+					));
 					
 					if($show) {
-						success("Added: ".$name."<br/>");
+						success('Added: ' . $name . '<br/>');
 					}
 				}
 				catch(PDOException $error) {

@@ -194,7 +194,6 @@ class OTS_Monster extends DOMDocument
 
 /**
  * @return array List of item IDs.
- * @deprecated 0.1.0 Use getItems().
  */
     public function getLoot()
     {
@@ -208,13 +207,25 @@ class OTS_Monster extends DOMDocument
             // adds all items
             foreach( $element->getElementsByTagName('item') as $item)
             {
-                $id = $item->getAttribute('id');
-
-                // avoid redundancy
-                if( !in_array($id, $loot) )
-                {
-                    $loot[] = $id;
+	            $chance = $item->getAttribute('chance');
+	            if(empty($chance)) {
+		            $chance = $item->getAttribute('chance1');
+		            if(empty($chance)) {
+		                $chance = 100000;
+                    }
                 }
+                
+                $count = $item->getAttribute('countmax');
+	            if(empty($count)) {
+	                $count = 1;
+                }
+                
+                $id = $item->getAttribute('id');
+                if(empty($id)) {
+                    $id = $item->getAttribute('name');
+                }
+                
+                $loot[] = array('id' => $id, 'count' => $count, 'chance' => $chance);
             }
         }
 

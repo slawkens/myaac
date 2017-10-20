@@ -56,14 +56,16 @@ if($canEdit) {
 				echo $twig->render('error_box.html.twig', array('errors' => $errors));
 		}
 		
-		echo $twig->render('gallery.form.html.twig', array(
-			'link' => getLink('gallery/' . ($action == 'edit' ? 'edit' : 'add')),
-			'action' => $action,
-			'id' => isset($id) ? $id : null,
-			'comment' => isset($comment) ? $comment : null,
-			'image' => isset($image) ? $image : null,
-			'author' => isset($author) ? $author : null
-		));
+		if(!isset($_GET['image'])) {
+			echo $twig->render('gallery.form.html.twig', array(
+				'link' => getLink('gallery/' . ($action == 'edit' ? 'edit' : 'add')),
+				'action' => $action,
+				'id' => isset($id) ? $id : null,
+				'comment' => isset($comment) ? $comment : null,
+				'image' => isset($image) ? $image : null,
+				'author' => isset($author) ? $author : null
+			));
+		}
 	}
 	else
 		echo 'You cannot edit/add gallery items as it seems your PHP installation doesnt have GD support enabled. Visit <a href="http://be2.php.net/manual/en/image.installation.php">PHP Manual</a> for more info.';
