@@ -1,3 +1,6 @@
+[0.6.4 - 20.10.2017]
+	- reverted OTS_Account::getLastLogin() cause its used by tibia11-login plugin
+	
 [0.6.3 - 20.10.2017]
 	- fixed creating account
 	- fixed viewing thread without being logged 

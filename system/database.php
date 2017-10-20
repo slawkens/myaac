@@ -1,4 +1,13 @@
 <?php
+/**
+ * Database connection
+ *
+ * @package   MyAAC
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2017 MyAAC
+ * @version   0.6.4
+ * @link      http://my-aac.org
+ */
 defined('MYAAC') or die('Direct access not allowed!');
 
 	if(!isset($config['database_type'][0]) || !isset($config['database_user'][0]) || !isset($config['database_password'][0]) || !isset($config['database_name'][0]))
