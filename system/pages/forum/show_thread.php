@@ -21,7 +21,7 @@ if(empty($thread_name['name'])) {
 	return;
 }
 
-if(Forum::hasAccess($thread_name['section'])) {
+if(!Forum::hasAccess($thread_name['section'])) {
 	echo "You don't have access to view this thread.";
 	return;
 }
