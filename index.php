@@ -276,7 +276,7 @@ if($load_it)
 
 	$ignore = false;
 
-	$logged_access = 0;
+	$logged_access = 1;
 	if($logged && $account_logged && $account_logged->isLoaded()) {
 		$logged_access = $account_logged->getAccess();
 	}
