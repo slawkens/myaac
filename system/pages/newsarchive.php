@@ -6,7 +6,7 @@
  * @author    Gesior <jerzyskalski@wp.pl>
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2017 MyAAC
- * @version   0.6.4
+ * @version   0.6.5
  * @link      http://my-aac.org
  */
 $_GET['archive'] = true;
