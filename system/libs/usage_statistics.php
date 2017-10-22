@@ -11,29 +11,27 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Usage_Statistics {
+	private static $report_url = 'http://my-aac.org/report_usage.php';
+	
 	public static function report() {
-		$url = 'http://my-acc.org/report_usage.php';
-		//$url = BASE_URL . 'report_usage.php';
-		
 		$data = json_encode(self::getStats());
+		
 		$options = array(
 			'http' => array(
-				'header'  => 'Content-type: application/json',
+				'header'  => 'Content-type: application/json' . "\r\n"
+				. 'Content-Length: ' . strlen($data) . "\r\n",
 				'method'  => 'POST',
 				'content' => $data
 			)
 		);
 		
 		$context  = stream_context_create($options);
-		$result = file_get_contents($url, false, $context);
-		if ($result === false) {
-			return false;
-		}
-		
-		return true;
+		$result = file_get_contents(self::$report_url, false, $context);
+
 		//var_dump($result);
+		return $result !== false;
 	}
-	
+
 	public static function getStats() {
 		global $config, $db;
 		

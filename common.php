@@ -28,7 +28,7 @@ session_start();
 
 define('MYAAC', true);
 define('MYAAC_VERSION', '0.6.5');
-define('DATABASE_VERSION', 15);
+define('DATABASE_VERSION', 16);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
 define('MYAAC_OS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'WINDOWS' : (strtoupper(PHP_OS) == 'DARWIN' ? 'MAC' : 'LINUX'));

@@ -53,7 +53,7 @@ $spells = array();
 $spells_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 3 ORDER BY ' . $order . ', level');
 
 if((string)$vocation_id != 'all') {
-	foreach($spells_db->fetchAll() as &$spell) {
+	foreach($spells_db->fetchAll() as $spell) {
 		$spell_vocations = json_decode($spell['vocations'], true);
 		if(in_array($vocation_id, $spell_vocations) || count($spell_vocations) == 0) {
 			$spell['vocations'] = null;
@@ -62,7 +62,7 @@ if((string)$vocation_id != 'all') {
 	}
 }
 else {
-	foreach($spells_db->fetchAll() as &$spell) {
+	foreach($spells_db->fetchAll() as $spell) {
 		$vocations = json_decode($spell['vocations'], true);
 		
 		foreach($vocations as &$tmp_vocation) {
@@ -72,7 +72,7 @@ else {
 				$tmp_vocation = 'Unknown';
 		}
 		
-		$spell['vocations'] = implode('</br>', $vocations);
+		$spell['vocations'] = implode('<br/>', $vocations);
 		$spells[] = $spell;
 	}
 }
