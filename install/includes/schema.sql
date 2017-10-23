@@ -107,7 +107,7 @@ CREATE TABLE `myaac_forum`
 	`author_aid` int(20) NOT NULL default '0',
 	`author_guid` int(20) NOT NULL default '0',
 	`post_text` text NOT NULL,
-	`post_topic` varchar(255) NOT NULL,
+	`post_topic` varchar(255) NOT NULL DEFAULT '',
 	`post_smile` tinyint(1) NOT NULL default '0',
 	`post_date` int(20) NOT NULL default '0',
 	`last_edit_aid` int(20) NOT NULL default '0',
@@ -180,7 +180,7 @@ CREATE TABLE `myaac_news`
 	`player_id` INT(11) NOT NULL DEFAULT 0,
 	`last_modified_by` INT(11) NOT NULL DEFAULT 0,
 	`last_modified_date` INT(11) NOT NULL DEFAULT 0,
-	`comments` VARCHAR(50) NOT NULL,
+	`comments` VARCHAR(50) NOT NULL DEFAULT '',
 	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;

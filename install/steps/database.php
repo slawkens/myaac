@@ -85,7 +85,7 @@ if(!$error) {
 		
 			if(!fieldExist('blocked', 'accounts')) {
 				if(query("ALTER TABLE `accounts` ADD `blocked` TINYINT(1) NOT NULL DEFAULT FALSE COMMENT 'internal usage' AFTER `key`;"))
-					success($locale['step_database_adding_field'] . ' accounts.created...');
+					success($locale['step_database_adding_field'] . ' accounts.blocked...');
 			}
 	
 			if(!fieldExist('created', 'accounts')) {
