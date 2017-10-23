@@ -34,12 +34,13 @@ if(!empty($action))
 	if(isset($_REQUEST['title']))
 		$p_title = $_REQUEST['title'];
 
-	$php = isset($_REQUEST['php']);
-	//if($php)
-	//	$body = $_REQUEST['body'];
-	//else
-	if(isset($_REQUEST['body']))
+	$php = isset($_REQUEST['php']) && $_REQUEST['php'] == 1;
+	if($php)
+		$body = $_REQUEST['body'];
+	else if(isset($_REQUEST['body'])) {
+		//$body = $_REQUEST['body'];
 		$body = html_entity_decode(stripslashes($_REQUEST['body']));
+	}
 
 	if(isset($_REQUEST['access']))
 		$access = $_REQUEST['access'];
@@ -134,7 +135,7 @@ class Pages
 			if($query === false)
 				$db->insert(TABLE_PREFIX . 'pages', array('name' => $name, 'title' => $title, 'body' => $body, 'player_id' => $player_id, 'php' => $php ? '1' : '0', 'access' => $access));
 			else
-				$errors[] = 'Page with this words already exists.';
+				$errors[] = 'Page with this link already exists.';
 		}
 		else
 			$errors[] = 'Please fill all inputs.';
