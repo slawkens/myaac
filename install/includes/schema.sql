@@ -84,9 +84,9 @@ CREATE TABLE `myaac_forum_boards`
 	`name` VARCHAR(32) NOT NULL,
 	`description` VARCHAR(255) NOT NULL DEFAULT '',
 	`ordering` INT(11) NOT NULL DEFAULT 0,
-	`closed` TINYINT(1) NOT NULL DEFAULT 0,
 	`guild` INT(11) NOT NULL DEFAULT 0,
 	`access` INT(11) NOT NULL DEFAULT 0,
+	`closed` TINYINT(1) NOT NULL DEFAULT 0,
 	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;

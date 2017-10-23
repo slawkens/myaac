@@ -74,7 +74,7 @@ $config = array(
 		//'2' => 'Your Second World Name'
 	),
 
-	// items
+	// images
 	'outfit_images_url' => 'http://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
 	'item_images_url' => 'http://item-images.ots.me/960/', // set to images/items if you host your own items in images folder
 
@@ -111,7 +111,7 @@ $config = array(
 
 	// reCAPTCHA (prevent spam bots)
 	'recaptcha_enabled' => false, // enable recaptcha verification code
-	'recaptcha_site_key' => '', // get your own public and private keys at https://www.google.com/recaptcha
+	'recaptcha_site_key' => '', // get your own site and secret keys at https://www.google.com/recaptcha
 	'recaptcha_secret_key' => '',
 	'recaptcha_theme' => 'light', // light, dark
 

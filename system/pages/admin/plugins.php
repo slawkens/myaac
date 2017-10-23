@@ -46,14 +46,14 @@ if(isset($_REQUEST['uninstall'])){
 		error('Plugin ' . $uninstall . ' does not exist.');
 	}
 	else {
-		if(!isset($plugin_info['uninstall'])) {
-			error("Plugin doesn't have uninstall options defined. Skipping...");
+		$string = file_get_contents($filename);
+		$plugin_info = json_decode($string, true);
+		if($plugin_info == false) {
+			error('Cannot load plugin info ' . $uninstall . '.json');
 		}
 		else {
-			$string = file_get_contents($filename);
-			$plugin_info = json_decode($string, true);
-			if($plugin_info == false) {
-				error('Cannot load plugin info ' . $uninstall . '.json');
+			if(!isset($plugin_info['uninstall'])) {
+				error("Plugin doesn't have uninstall options defined. Skipping...");
 			}
 			else {
 				$success = true;
