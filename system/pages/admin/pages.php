@@ -56,7 +56,8 @@ if(!empty($action))
 		}
 	}
 	else if($action == 'delete') {
-		Pages::delete($id, $errors);
+		if(Pages::delete($id, $errors))
+			success('Page with id ' . $id . ' has been deleted');
 	}
 	else if($action == 'edit')
 	{

@@ -283,7 +283,7 @@ if($load_it)
 
 	$query =
 		$db->query(
-			'SELECT `title`, `body`, `php`' .
+			'SELECT `id`, `title`, `body`, `php`, `hidden`' .
 			' FROM `' . TABLE_PREFIX . 'pages`' .
 			' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
 	if($query->rowCount() > 0) // found page
@@ -323,6 +323,12 @@ if($load_it)
 		}
 		else
 			$content .= $query['body']; // plain html
+		
+		if(hasFlag(FLAG_CONTENT_PAGES) || superAdmin()) {
+			$content = $twig->render('admin.pages.links.html.twig', array(
+				'page' => array('id' => $query['id'], 'hidden' => $query['hidden'])
+			)) . $content;
+		}
 	}
 	else
 	{
