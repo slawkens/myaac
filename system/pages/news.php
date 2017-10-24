@@ -10,6 +10,7 @@
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
+header('X-XSS-Protection: 0');
 
 if(isset($_GET['archive']))
 {
@@ -146,7 +147,12 @@ if($canEdit)
 				$player_id = $news['player_id'];
 			}
 			else {
-				if(News::update($id, $p_title, $body, $type, $category, $player_id, $comments, $errors)) {
+				if(News::update($id, $p_title, $body, $type, $category, $player_id, $forum_section, $errors)) {
+					// update forum thread if exists
+					if(isset($forum_section) && Validator::number($forum_section)) {
+					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $player_id.", `post_text` = ".$db->quote($body).", `post_topic` = ".$db->quote($p_title).", `edit_date` = " . time() . " WHERE `id` = " . $db->quote($forum_section));
+					}
+					
 					$action = $p_title = $body = $comments = '';
 					$type = $category = $player_id = 0;
 				}
@@ -287,7 +293,8 @@ if(!$news_cached)
 			'category' => isset($category) ? $category : 0,
 			'categories' => $categories,
 			'forum_boards' => getForumBoards(),
-			'forum_section' => isset($forum_section) ? $forum_section : null
+			'forum_section' => isset($forum_section) ? $forum_section : null,
+			'comments' => isset($comments) ? $comments : null
 		));
 	}
 

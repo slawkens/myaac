@@ -95,6 +95,8 @@
 				</select>
 			</td>
 		</tr>
+		{% elseif comments is not null%}
+			<input type="hidden" name="forum_section" value="{{ comments }}" />
 		{% endif %}
 
 		{% set rows = rows + 1 %}
