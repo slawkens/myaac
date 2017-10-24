@@ -20,7 +20,7 @@ if(isset($_POST['content']))
 	else
 		Notepad::update($account_logged->getId(), $_content);
 
-	echo '<div class="success" style="text-align: center;">Saved at ' . date('g:i A') . '</div>';
+	echo '<div class="success" style="text-align: center;">Saved at ' . date('H:i') . '</div>';
 }
 else
 {

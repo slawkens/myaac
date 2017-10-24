@@ -8,23 +8,42 @@ defined('MYAAC') or die('Direct access not allowed!');
 		<link rel="stylesheet" href="<?php echo $template_path; ?>/style.css" type="text/css" />
 		<script type="text/javascript">
 			<?php
-				echo $twig->render('menu.js.html.twig');
+				echo $twig->render('menu.js.html.twig', array('categories' => $config['menu_categories']));
 			?>
 		</script>
 		<script type="text/javascript" src="tools/basic.js"></script>
 		<script type="text/javascript">
+			<?php
+			$menus = get_template_menus();
+			
+			function get_template_pages($category) {
+				global $menus;
+				
+				$ret = array();
+				foreach($menus[$category] as $menu) {
+					$ret[] = $menu['link'];
+				}
+				
+				return $ret;
+			}
+			?>
 			var category = '<?php
-				if(in_array(PAGE, array('news', 'newsarchive')))
+					if(strpos(URI, 'subtopic=') !== false) {
+						$tmp = array($_REQUEST['subtopic']);
+					}
+					else {
+						$tmp = explode('/', URI);
+					}
+					
+				if(in_array($tmp[0], get_template_pages(MENU_CATEGORY_NEWS)))
 					echo 'news';
-				elseif(in_array(PAGE, array('creatures', 'spells', 'serverinfo', 'downloads', 'commands',
-					'videos', 'gallery', 'experiencetable', 'faq')))
+				elseif(in_array($tmp[0], get_template_pages(MENU_CATEGORY_LIBRARY)))
 						echo 'library';
-				elseif(in_array(PAGE, array('online', 'characters', 'guilds', 'highscores', 'wars', 'lastkills', 'houses', 'bans',
-					'forum', 'team')))
+				elseif(in_array($tmp[0], get_template_pages(MENU_CATEGORY_COMMUNITY)))
 						echo 'community';
-				elseif(in_array(PAGE, array('account', 'accountmanagement', 'createaccount', 'lostaccount', 'rules', 'bugtracker')))
+				elseif(in_array($tmp[0], array_merge(get_template_pages(MENU_CATEGORY_ACCOUNT), array('account'))))
 					echo 'account';
-				elseif(in_array(PAGE, array('points', 'gifts')))
+				elseif(in_array($tmp[0], get_template_pages(MENU_CATEGORY_SHOP)))
 					echo 'shops';
 				?>';
 		</script>
@@ -43,115 +62,40 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 			<!-- Menu Section -->
 			<div id="tabs">
-				<span id="news" onclick="menuSwitch('news');" class="tab-active">Latest News</span>
-				<span id="account" onclick="menuSwitch('account');" class="tab">Account</span>
-				<span id="community" onclick="menuSwitch('community');" class="tab">Community</span>
-				<span id="library" onclick="menuSwitch('library');" class="tab">Library</span>
 				<?php
-				if($config['gifts_system'])
-				{
-					echo '<span id="shops" onclick="menuSwitch(\'shops\');" class="tab">Shop</span>';
+				foreach($config['menu_categories'] as $id => $cat) {
+					if($id != MENU_CATEGORY_SHOP || $config['gifts_system']) { ?>
+				<span id="<?php echo $cat['id']; ?>" onclick="menuSwitch('<?php echo $cat['id']; ?>');"><?php echo $cat['name']; ?></span>
+				<?php
+					}
 				}
 				?>
 			</div>
 
 			<div id="mainsubmenu">
-				<div id="news-submenu">
-					<a href="<?php echo getLink('news'); ?>">Latest News</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('news/archive'); ?>">News Archives</a>
-				</div>
-
-				<div id="account-submenu">
-<?php
-					if($logged)
-					{
-?>
-						<a href="<?php echo getLink('account/manage'); ?>">My Account</a>
-						<span class="separator"></span>
-						<a href="<?php echo getLink('account/logout'); ?>">Logout</a>
-						<span class="separator"></span>
-<?php
-					}
-					else
-					{
-?>
-						<a href="<?php echo getLink('account/manage'); ?>">Login</a>
-						<span class="separator"></span>
-					<a href="<?php echo getLink('account/create'); ?>">Create Account</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('account/lost'); ?>">Lost Account</a>
-					<span class="separator"></span>
-<?php
-					}
-?>
-					<a href="<?php echo getLink('rules'); ?>">Server Rules</a>
-					<?php if($config['bug_report']): ?>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('bugtracker'); ?>">Report Bug</a>
-					<?php endif; ?>
-				</div>
-
-				<div id="community-submenu">
-					<a href="<?php echo getLink('online'); ?>">Who is Online?</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('characters'); ?>">Characters</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('guilds'); ?>">Guilds</a>
-					<?php
-					if(isset($config['wars'])): ?>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('wars'); ?>">Wars</a>
-					<?php endif; ?>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('highscores'); ?>">Highscores</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('lastkills'); ?>">Last Deaths</a>
-					<?php if(fieldExist('name', 'houses')): ?>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('houses'); ?>">Houses</a>
-					<?php endif;
-					if($config['otserv_version'] == TFS_03): ?>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('bans'); ?>">Bans</a>
-					<?php endif;
-					if($config['forum'] != ''): ?>
-					<span class="separator"></span>
-					<?php echo $template['link_forum']; ?>Forum</a>
-					<?php endif; ?>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('team'); ?>">Team</a>
-				</div>
-
-				<div id="library-submenu">
-					<a href="<?php echo getLink('creatures'); ?>">Monsters</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('spells'); ?>">Spells</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('serverInfo'); ?>">Server Info</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('downloads'); ?>">Downloads</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('commands'); ?>">Commands</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('videos'); ?>">Videos</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('gallery'); ?>">Gallery</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('experienceTable'); ?>">Experience Table</a>
-					<span class="separator"></span>
-					<a href="<?php echo getLink('faq'); ?>">FAQ</a>
-				</div>
 				<?php
-				if($config['gifts_system'])
-				{
-					echo '
-					<div id="shops-submenu">
-						<a href="' . getLink('points') . '">Buy Premium Points</a>
-						<span class="separator"></span>
-						<a href="' . getLink('gifts') . '">Shop Offer</a>';
-						if($logged)
-							echo '<span class="separator"></span><a href="' . getLink('gifts/history') . '">Shop History</a>';
+				foreach($menus as $category => $menu) {
+					echo '<div id="' . $config['menu_categories'][$category]['id'] . '-submenu">';
+					if(!isset($menus[$category])) {
+						return;
+					}
+					
+					$size = count($menus[$category]);
+					$i = 0;
+					
+					foreach($menus[$category] as $menu) {
+						if(strpos($menu['link'], 'http') !== false) {
+							echo '<a href="' . $menu['link'] . '" target="_blank">' . $menu['name'] . '</a>';
+						}
+						else {
+							echo '<a href="' . getLink($menu['link']) . '">' . $menu['name'] . '</a>';
+						}
+						
+						if(++$i != $size) {
+							echo '<span class="separator"></span>';
+						}
+					}
+					
 					echo '</div>';
 				}
 				?>

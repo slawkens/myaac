@@ -55,6 +55,7 @@ else
 	$uri = str_replace_first('/', '', $uri);
 
 $uri = str_replace(array('index.php/', '?'), '', $uri);
+define('URI', $uri);
 
 $found = false;
 if(empty($uri) || isset($_REQUEST['template'])) {
@@ -116,6 +117,7 @@ else {
 		'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
 		'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
 		'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2'),
+		'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
 	);
 	
 	foreach($rules as $rule => $redirect) {
@@ -333,7 +335,7 @@ if($load_it)
 	else
 	{
 		$file = SYSTEM . 'pages/' . $page . '.php';
-		if(!@file_exists($file) && !$found)
+		if(!@file_exists($file))
 		{
 			$page = '404';
 			$file = SYSTEM . 'pages/404.php';

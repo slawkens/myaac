@@ -39,6 +39,7 @@
 						'Dashboard' => 'dashboard',
 						'Mailer' => 'mailer',
 						'Pages' => 'pages',
+						'Menus' => 'menus',
 						'Plugins' => 'plugins',
 						'Statistics' => 'statistics',
 						'Visitors' => 'visitors',

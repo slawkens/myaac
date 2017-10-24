@@ -1,0 +1,9 @@
+Please choose template in which you want to edit menu items.<br/>
+<form method="post" action="?p=menus">
+	<select name="template">
+		{% for template in templates %}
+			<option value="{{ template.template }}">{{ template.template }}</option>
+		{% endfor %}
+	</select>
+	<input type="submit" value="Edit" />
+</form>

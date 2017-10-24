@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="{{ constant('BASE_URL') }}tools/jquery-ui.min.css">
+<script src="{{ constant('BASE_URL') }}tools/jquery-ui.min.js"></script>
+<script>
+	var last_id = [];
+	{% for cat, menu in menus %}
+	last_id[{{ cat }}] = {{ last_id[cat] }};
+	{% endfor %}
+	$( function() {
+		$(".sortable").sortable();
+		$(".sortable").disableSelection();
+
+		$(".remove-button").click(function() {
+			var id = $(this).attr("id");
+			$('#list-' + id.replace('remove-button-', '')).remove();
+		});
+
+		$(".add-button").click(function() {
+			var cat = $(this).attr("id").replace('add-button-', '');
+			var id = last_id[cat];
+			last_id[cat]++;
+			$('#sortable-' + cat).append('<li class="ui-state-default" id="list-' + cat + '-' + id + '"><input type="text" name="menu[' + cat + '][]" value=""/><input type="text" name="menu_link[' + cat + '][]" value=""/><a class="remove-button" id="remove-button-' + cat + '-' + id + '"><img src="{{ constant('BASE_URL') }}images/del.png"/></a></li>'); //add input bo
+			$('#remove-button-' + cat + '-' + id).click(function() {
+				$('#list-' + $(this).attr("id").replace('remove-button-', '')).remove();
+			});
+		});
+	});
+</script>
+<style>
+	.sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+	.remove-button, .add-button {
+		cursor: pointer;
+	}
+</style>

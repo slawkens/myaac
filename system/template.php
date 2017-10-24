@@ -81,7 +81,7 @@ $template['link_account_logout'] = getLink('account/logout');
 
 $template['link_news_archive'] = getLink('news/archive');
 
-$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts', 'bugtracker');
+$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts', 'bugtracker', 'gallery');
 foreach($links as $link) {
 	$template['link_' . $link] = getLink($link);
 }
@@ -101,4 +101,16 @@ if($config['forum'] != '')
 $twig->addGlobal('template_path', $template_path);
 if($twig_loader && file_exists(BASE . $template_path))
 	$twig_loader->prependPath(BASE . $template_path);
+
+function get_template_menus() {
+	global $db, $template_name;
+	
+	$menus = array();
+	$query = $db->query('SELECT `name`, `link`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `ordering` ASC');
+	foreach($query->fetchAll() as $menu) {
+		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link']);
+	}
+	
+	return $menus;
+}
 ?>

@@ -28,7 +28,7 @@ session_start();
 
 define('MYAAC', true);
 define('MYAAC_VERSION', '0.6.6');
-define('DATABASE_VERSION', 16);
+define('DATABASE_VERSION', 17);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
 define('MYAAC_OS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'WINDOWS' : (strtoupper(PHP_OS) == 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -46,11 +46,11 @@ define('FLAG_CONTENT_MONSTERS', 256);
 define('FLAG_CONTENT_GALLERY', 512);
 define('FLAG_CONTENT_VIDEOS', 1024);
 define('FLAG_CONTENT_FAQ', 2048);
+define('FLAG_CONTENT_MENUS', 4096);
 
 // news
 define('NEWS', 1);
 define('TICKET', 2);
-define('ARTICLE', 3);
 
 // directories
 define('BASE', dirname(__FILE__) . '/');
@@ -64,6 +64,14 @@ define('PAGES', SYSTEM . 'pages/');
 define('PLUGINS', BASE . 'plugins/');
 define('TEMPLATES', BASE . 'templates/');
 define('TOOLS', BASE . 'tools/');
+
+// menu categories
+define('MENU_CATEGORY_NEWS', 1);
+define('MENU_CATEGORY_ACCOUNT', 2);
+define('MENU_CATEGORY_COMMUNITY', 3);
+define('MENU_CATEGORY_FORUM', 4);
+define('MENU_CATEGORY_LIBRARY', 5);
+define('MENU_CATEGORY_SHOP', 6);
 
 // otserv versions
 define('OTSERV', 1);
