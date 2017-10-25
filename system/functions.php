@@ -9,6 +9,7 @@
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
+
 function success($message, $return = false) {
 	if($return)
 		return '<p class="success">' . $message . '</p>';
@@ -411,42 +412,16 @@ function short_text($text, $limit)
 	return $text;
 }
 
-function news_place()
+function tickers()
 {
-	global $template_path, $news_content;
-
-	$news = '';
-	if(PAGE == 'news')
-	{
-		//add tickers to site - without it tickers will not be showed
-		if(isset($news_content))
-			$news .= $news_content;
-
-		//featured article
-/*		$news .= '  <div id="featuredarticle" class="Box">
-			<div class="Corner-tl" style="background-image:url('.$template_path.'/images/content/corner-tl.gif);"></div>
-			<div class="Corner-tr" style="background-image:url('.$template_path.'/images/content/corner-tr.gif);"></div>
-			<div class="Border_1" style="background-image:url('.$template_path.'/images/content/border-1.gif);"></div>
-			<div class="BorderTitleText" style="background-image:url('.$template_path.'/images/content/title-background-green.gif);"></div>
-			<img class="Title" src="'.$template_path.'/images/strings/headline-featuredarticle.gif" alt="Contentbox headline" />
-			<div class="Border_2">
-			  <div class="Border_3">
-				<div class="BoxContent" style="background-image:url('.$template_path.'/images/content/scroll.gif);">
-		<div id=\'TeaserThumbnail\'><img src="'.$template_path.'/images/news/features.jpg" width=150 height=100 border=0 alt="" /></div><div id=\'TeaserText\'><div style="position: relative; top: -2px; margin-bottom: 2px;" >
-		<b>Tutaj wpisz tytul</b></div>
-		tutaj wpisz tresc newsa<br>
-		zdjecie laduje sie w <i>tibiacom/images/news/features.jpg</i><br>
-		skad sie laduje mozesz zmienic linijke ponad komentarzem
-		</div>        </div>
-			  </div>
-			</div>
-			<div class="Border_1" style="background-image:url('.$template_path.'/images/content/border-1.gif);"></div>
-			<div class="CornerWrapper-b"><div class="Corner-bl" style="background-image:url('.$template_path.'/images/content/corner-bl.gif);"></div></div>
-			<div class="CornerWrapper-b"><div class="Corner-br" style="background-image:url('.$template_path.'/images/content/corner-br.gif);"></div></div>
-		  </div>';*/
+	global $tickers_content;
+	
+	if(PAGE == 'news') {
+		if(isset($tickers_content))
+			return $tickers_content;
 	}
 
-	return $news;
+	return '';
 }
 
 /**
@@ -485,8 +460,7 @@ function template_header($is_admin = false)
 	<meta http-equiv="content-type" content="text/html; charset=' . $charset . '" />';
 	if(!$is_admin)
 		$ret .= '
-	<title>' . $title_full . '</title>
-	<base href="' . BASE_URL . '" />';
+	<title>' . $title_full . '</title>';
 
 	$ret .= '
 	<meta name="description" content="' . $config['meta_description'] . '" />
@@ -958,6 +932,7 @@ function str_replace_first($search, $replace, $subject) {
 	if ($pos !== false) {
 		return substr_replace($subject, $replace, $pos, strlen($search));
 	}
+	
 	return $subject;
 }
 
@@ -976,52 +951,5 @@ function unsetSession($key) {
 
 // validator functions
 require_once(LIBS . 'validator.php');
-
-function check_name($name, &$errors = '') {
-	if(Validator::characterName($name))
-		return true;
-	
-	$errors = Validator::getLastError();
-	return false;
-}
-
-function check_account_id($id, &$errors = '') {
-	if(Validator::accountId($id))
-		return true;
-	
-	$errors = Validator::getLastError();
-	return false;
-}
-
-function check_account_name($name, &$errors = '') {
-	if(Validator::accountName($name))
-		return true;
-	
-	$errors = Validator::getLastError();
-	return false;
-}
-
-function check_name_new_char($name, &$errors = '') {
-	if(Validator::newCharacterName($name))
-		return true;
-	
-	$errors = Validator::getLastError();
-	return false;
-}
-
-function check_rank_name($name, &$errors = '') {
-	if(Validator::rankName($name))
-		return true;
-	
-	$errors = Validator::getLastError();
-	return false;
-}
-
-function check_guild_name($name, &$errors = '') {
-	if(Validator::guildName($name))
-		return true;
-	
-	$errors = Validator::getLastError();
-	return false;
-}
+require_once(SYSTEM . 'compat.php');
 ?>

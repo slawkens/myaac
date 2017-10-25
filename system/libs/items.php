@@ -11,7 +11,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-class Items {
+class Items
+{
 	private static $error = '';
 
 	public static function loadFromXML($show = false)

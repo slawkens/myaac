@@ -238,6 +238,7 @@ if($config['backward_support']) {
 	$layout_header = template_header();
 	$layout_name = $template_path;
 	$news_content = '';
+	$tickers_content = '';
 	$subtopic = PAGE;
 	$main_content = '';
 	

@@ -304,7 +304,7 @@ foreach($config['menu_categories'] as $id => $cat) { ?>
         <div id="ContentColumn">
           <div class="Content">
             <div id="ContentHelper">
-			<?php echo news_place(); ?>
+			<?php echo tickers(); ?>
 
 
   <div id="<?php echo PAGE; ?>" class="Box">

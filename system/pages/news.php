@@ -10,7 +10,8 @@
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-header('X-XSS-Protection: 0');
+
+require_once(LIBS . 'forum.php');
 
 if(isset($_GET['archive']))
 {
@@ -67,13 +68,8 @@ if(isset($_GET['archive']))
 		}
 		else
 			echo "This news doesn't exist or is hidden.<br/>";
-	?>
-	<center>
-	<table cellspacing="0" cellpadding="0" border="0"><form method="post" action="<?php echo getLink('news/archive'); ?>"><tbody><tr><td>
-		<input width="120" height="18" border="0" type="image" src="<?php echo $template_path; ?>/images/global/buttons/sbutton_back.gif" alt="Back" name="Back">
-	</form></td></tr></tbody></table>
-	</center>
-	<?php
+
+		echo $twig->render('news.back_button.html.twig');
 		return;
 	}
 	?>
@@ -99,6 +95,7 @@ if(isset($_GET['archive']))
 	return;
 }
 
+header('X-XSS-Protection: 0');
 $title = 'Latest News';
 
 $news_cached = false;
@@ -124,7 +121,7 @@ if($canEdit)
 
 		if($action == 'add') {
 			if(isset($forum_section) && $forum_section != '-1') {
-				$forum_add = Forum::add($p_title, $body, $forum_section, $player_id, $account_logged->getId(), $errors);
+				$forum_add = Forum::add_thread($p_title, $body, $forum_section, $player_id, $account_logged->getId(), $errors);
 			}
 			
 			if(News::add($p_title, $body, $type, $category, $player_id, isset($forum_add) && $forum_add != 0 ? $forum_add : 0, $errors)) {
@@ -187,52 +184,25 @@ if(!$news_cached)
 		);
 	}
 
-	$tickers =
+	$tickers_db =
 		$db->query(
 			'SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news') . ' WHERE ' . $db->fieldName('type') . ' = ' . TICKET .
 			($canEdit ? '' : ' AND ' . $db->fieldName('hidden') . ' != 1') .
 			' ORDER BY ' . $db->fieldName('date') . ' DESC' .
 			' LIMIT ' . $config['news_ticker_limit']);
 
-	if($tickers->rowCount() > 0)
+	if($tickers_db->rowCount() > 0)
 	{
-		$rows = 0;
-		$tickers_to_add = '';
-		foreach($tickers as $news)
-		{
-			$admin_options = '';
-			if($canEdit)
-			{
-				$admin_options = '<a href="?subtopic=news&action=edit&id=' . $news['id'] . '" title="Edit">
-					<img src="images/edit.png"/>
-					Edit
-				</a>
-				<a id="delete" href="' . BASE_URL . '?subtopic=news&action=delete&id=' . $news['id'] . '" onclick="return confirm(\'Are you sure?\');" title="Delete">
-					<img src="images/del.png"/>
-					Delete
-				</a>
-				<a href="?subtopic=news&action=hide&id=' . $news['id'] . '" title="' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '">
-					<img src="images/' . ($news['hidden'] != 1 ? 'success' : 'error') . '.png"/>
-					' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '
-				</a>';
-			}
-			$tickers_to_add .= '<div id="TickerEntry-'.$rows.'" class="Row" onclick=\'TickerAction("TickerEntry-'.$rows.'")\'>
-			  <div class="' . (is_int($rows / 2) ? "Odd" : "Even") . '">
-				<div class="NewsTickerIcon" style="background-image: url('.$template_path.'/images/news/icon_'.$categories[$news['category']]['icon_id'].'_small.gif);"></div>
-				<div id="TickerEntry-'.$rows.'-Button" class="NewsTickerExtend" style="background-image: url('.$template_path.'/images/general/plus.gif);"></div>
-				<div class="NewsTickerText">
-				  <span class="NewsTickerDate">'.date("j M Y", $news['date']).' -</span>
-				  <div id="TickerEntry-'.$rows.'-ShortText" class="NewsTickerShortText">';
-			//if admin show button to delete (hide) ticker
-			$tickers_to_add .= short_text(strip_tags($news['body']), 100).'</div>
-				  <div id="TickerEntry-'.$rows.'-FullText" class="NewsTickerFullText">';
-			//if admin show button to delete (hide) ticker
-			$tickers_to_add .= $news['body'] . $admin_options . '</div>
-				</div>
-			  </div>
-			</div>';
-			$rows++;
+		$tickers = $tickers_db->fetchAll();
+		foreach($tickers as &$ticker) {
+			$ticker['icon'] = $categories[$ticker['category']]['icon_id'];
+			$ticker['body_short'] = short_text(strip_tags($ticker['body']), 100);
 		}
+		
+		$tickers_to_add = $twig->render('news.tickers.html.twig', array(
+			'tickers' => $tickers,
+			'canEdit' => $canEdit
+		));
 	}
 }
 else
@@ -240,30 +210,9 @@ else
 
 if(isset($tickers_to_add[0]))
 {
-	//show table with tickers
-	$news_content = '<div id="newsticker" class="Box">
-		<div class="Corner-tl" style="background-image: url('.$template_path.'/images/content/corner-tl.gif);"></div>
-		<div class="Corner-tr" style="background-image: url('.$template_path.'/images/content/corner-tr.gif);"></div>
-		<div class="Border_1" style="background-image: url('.$template_path.'/images/content/border-1.gif);"></div>
-		<div class="BorderTitleText" style="background-image: url('.$template_path.'/images/content/title-background-green.gif);"></div>
-		<img class="Title" src="'.$template_path.'/images/header/headline-newsticker.gif" alt="Contentbox headline">
-		<div class="Border_2">
-			<div class="Border_3">
-			<div class="BoxContent" style="background-image: url('.$template_path.'/images/content/scroll.gif);">';
-
-			//add tickers list
-	$news_content .= $tickers_to_add;
-	//koniec
-	$news_content .= '</div>
-		  </div>
-		</div>
-		<div class="Border_1" style="background-image: url('.$template_path.'/images/content/border-1.gif);"></div>
-		<div class="CornerWrapper-b"><div class="Corner-bl" style="background-image: url('.$template_path.'/images/content/corner-bl.gif);"></div></div>
-		<div class="CornerWrapper-b"><div class="Corner-br" style="background-image: url('.$template_path.'/images/content/corner-br.gif);"></div></div>
-	  </div>';
-
-		if($cache->enabled() && !$news_cached && !$canEdit)
-			$cache->set('news_' . $template_name . '_' . TICKET, $tickers_to_add, 120);
+	$tickers_content = $tickers_to_add;
+	if($cache->enabled() && !$news_cached && !$canEdit)
+		$cache->set('news_' . $template_name . '_' . TICKET, $tickers_to_add, 120);
 }
 
 if(!$news_cached)
@@ -457,21 +406,6 @@ class News
 		}
 
 		return false;
-	}
-}
-
-class Forum
-{
-	static public function add($title, $body, $section_id, $player_id, $account_id, &$errors)
-	{
-		global $db;
-		$thread_id = 0;
-		if($db->insert(TABLE_PREFIX . 'forum', array('first_post' => 0, 'last_post' => time(), 'section' => $section_id, 'replies' => 0, 'views' => 0, 'author_aid' => isset($account_id) ? $account_id : 0, 'author_guid' => isset($player_id) ? $player_id : 0, 'post_text' => $body, 'post_topic' => $title, 'post_smile' => 0, 'post_date' => time(), 'last_edit_aid' => 0, 'edit_date' => 0, 'post_ip' => $_SERVER['REMOTE_ADDR']))) {
-			$thread_id = $db->lastInsertId();
-			$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `first_post`=".(int) $thread_id." WHERE `id` = ".(int) $thread_id);
-		}
-		
-		return $thread_id;
 	}
 }
 ?>
