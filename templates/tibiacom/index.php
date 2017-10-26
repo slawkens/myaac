@@ -12,14 +12,22 @@ if(isset($config['boxes']))
 	<link href="<?php echo $template_path; ?>/basic.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="tools/basic.js"></script>
 	<script type="text/javascript" src="<?php echo $template_path; ?>/ticker.js"></script>
+	<script id="twitter-wjs" src="<?php echo $template_path; ?>/js/twitter.js"></script>
+	<script id="facebook-jssdk" async src="<?php echo $template_path; ?>/js/facebook.js"></script>
+	<link href="<?php echo $template_path; ?>/css/facebook.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript">
 		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
 		<?php
-			if(strpos(URI, 'subtopic=') !== false) {
-				$tmp = $_REQUEST['subtopic'];
+			if(PAGE != 'news') {
+				if(strpos(URI, 'subtopic=') !== false) {
+					$tmp = $_REQUEST['subtopic'];
+				}
+				else {
+					$tmp = str_replace('/', '', URI);
+				}
 			}
 			else {
-				$tmp = str_replace('/', '', URI);
+				$tmp = 'news';
 			}
 		?>
 		var activeSubmenuItem="<?php echo $tmp; ?>";
@@ -200,6 +208,54 @@ if(isset($config['boxes']))
 </head>
 <body onBeforeUnLoad="SaveMenu();" onUnload="SaveMenu();">
 	<?php echo template_place_holder('body_start'); ?>
+	<?php if(!empty($config['network_facebook'])) {?>
+	<script type="text/javascript">
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : 497232093667125, // App ID
+                status     : true,              // check login status
+                cookie     : true,              // enable cookies to allow the server to access the session
+                xfbml      : true               // parse XFBML
+            });
+            FB.Event.subscribe('auth.login', function() {
+                var URLHelper = "?";
+                if (window.location.search.replace("?", "").length > 0) {
+                    URLHelper = "&";
+                }
+                if (FB_TryLogin == 1) {
+                    window.location = window.location + URLHelper + "step=facebooktrylogin&wasreloaded=1";
+                } else if (FB_TryLogin == 2) {
+                    window.location = window.location + URLHelper + "page=facebooktrylogin&wasreloaded=1";
+                } else {
+                    window.location = window.location + URLHelper + "wasreloaded=1";
+                }
+            });
+            FB.Event.subscribe('auth.logout', function(a_Response) {
+                if (a_Response.status !== 'connected') {
+                    window.location.href=window.location.href;
+                } else {
+                    /* nothing to do here*/
+                }
+            });
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                if (FB_ForceReload == 1 && response.status == "connected") {
+                    var URLHelper = "?";
+                    if (window.location.search.replace("?", "").length > 0) {
+                        URLHelper = "&";
+                    }
+                    window.location = window.location + URLHelper + "step=facebooktrylogin&wasreloaded=1";
+                }
+            });
+        };
+        (function(d){
+            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement('script'); js.id = id; js.async = true;
+            js.src = "//connect.facebook.net/en_US/all.js";
+            ref.parentNode.insertBefore(js, ref);
+        }(document));
+	</script>
+	<?php } ?>
   <div id="top"></div>
   <div id="ArtworkHelper" style="background-image:url(<?php echo $template_path; ?>/images/header/<?php echo $config['background_image']; ?>);" >
     <div id="Bodycontainer">
@@ -269,7 +325,7 @@ foreach($config['menu_categories'] as $id => $cat) { ?>
 	<?php
 	if(isset($menus[$id])) {
 		foreach($menus[$id] as $category => $menu) {
-				$is_external = strpos($menu['link'], 'http') !== false;
+				$is_external = strpos(trim($menu['link']), 'http') === 0;
 			?>
 			<a href='<?php echo $is_external ? $menu['link'] : getLink($menu['link']); ?>'<?php echo $is_external ? ' target="_blank"' : ''?>>
 				<div id='submenu_<?php echo str_replace('/', '', $menu['link']); ?>' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
@@ -353,56 +409,15 @@ foreach($config['menu_categories'] as $id => $cat) { ?>
         </div>
 
         <div id="Themeboxes">
-			<?php if(in_array("newcomer", $config['boxes'])): ?>
-			<div id="NewcomerBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/newcomer/newcomerbox.gif);">
-				<a class="ThemeboxButton" href="<?php echo getLink('account/create'); ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton.gif);">
-					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton_over.gif);"></div>
-					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/_sbutton_jointibia.gif);"></div>
-				</a>
-				<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
-			</div>
-			<?php endif; ?>
-			<?php if(in_array("premium", $config['boxes'])): ?>
-			<div id="PremiumBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/premium/premiumbox.gif);">
-				<a class="ThemeboxButton" href="<?php echo getLink('premium'); ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton.gif);">
-					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton_over.gif);"></div>
-					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/_sbutton_getpremium.gif);"></div>
-				</a>
-				<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
-			</div>
-			<?php endif; ?>
 			<?php
-			if(PAGE == 'news' && in_array("gallery", $config['boxes'])):
-				$query = $db->query('SELECT `thumb` FROM `' . TABLE_PREFIX . 'gallery` WHERE `id` = ' . $db->quote($config['gallery_image']));
-				if($query->rowCount() == 1):
-					$image = $query->fetch();
-				?>
-			<div id="GalleryBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/gallery/gallerybox.gif);">
-				<a href="?subtopic=gallery&image=<?php echo $config['gallery_image']; ?>" >
-					<img id="GalleryContent" class="ThemeboxContent" src="<?php echo $image['thumb']; ?>" alt="Screenshot of the Day" />
-				</a>
-				<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
-			</div>
-				<?php endif; ?>
-			<?php endif; ?>
-			<?php if(PAGE == 'news' && in_array("poll", $config['boxes'])):
-				$poll = $db->query('SELECT id, question FROM '.$db->tableName(TABLE_PREFIX . 'polls') . ' WHERE end > ' . time() . ' ORDER BY end LIMIT 1');
-				if($poll->rowCount() > 0)
-				{
-					$poll = $poll->fetch();
-					?>
-			<div id="CurrentPollBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/current-poll/currentpollbox.gif);">
-				<div id="CurrentPollText"><?php echo $poll['question']; ?></div>
-					<a class="ThemeboxButton" href="<?php echo getLink('polls') . '&id=' . $poll['id']; ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton.gif);">
-					<div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton_over.gif);"></div>
-					<div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/_sbutton_votenow.gif);"></div>
-				</a>
-				<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
-			</div>
-			<?php
+			foreach($config['boxes'] as $box) {
+				$file = TEMPLATES . $template_name . '/boxes/' . $box . '.php';
+				if(file_exists($file)) {
+					include($file); ?>
+				<?php
 				}
-			endif; ?>
-<br/><br/>
+			}
+			?>
  <?php
 	if($config['template_allow_change'])
 		 echo '<font color="white">Template:</font><br/>' . template_form();

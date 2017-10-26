@@ -20,10 +20,10 @@ CREATE TABLE `z_polls` (
   `id` int(11) NOT NULL auto_increment,
   `question` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `end` int(11) NOT NULL,
-  `start` int(11) NOT NULL,
-  `answers` int(11) NOT NULL,
-  `votes_all` int(11) NOT NULL,
+  `end` int(11) NOT NULL DEFAULT 0,
+  `start` int(11) NOT NULL DEFAULT 0,
+  `answers` int(11) NOT NULL DEFAULT 0,
+  `votes_all` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;');
 
@@ -33,7 +33,7 @@ $db->query('
   `poll_id` int(11) NOT NULL,
   `answer_id` int(11) NOT NULL,
   `answer` varchar(255) NOT NULL,
-  `votes` int(11) NOT NULL
+  `votes` int(11) NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;');
 
 if(!fieldExist('vote', 'accounts'))
@@ -346,10 +346,23 @@ function getColorByPercent($percent)
 
                 for( $x = 1; $x <= getSession('answers'); $x++ )
                 {
-                    $INSERT_answer = $db->query('INSERT INTO `z_polls_answers` (`poll_id`,`answer_id`,`answer`) VALUES ('.$db->quote($id_next).','.$db->quote($x).','.$db->quote($_POST[$x]).')');
+                	$db->insert('z_polls_answers', array(
+                		'poll_id' => $id_next,
+						'answer_id' => $x,
+						'answer' => $_POST[$x],
+						'votes' => 0
+					));
                 }
                 $end = $time+24*60*60*$_POST['end'];
-                $INSERT_poll = $db->query('INSERT INTO `z_polls` (`id`,`question`, `description`,`end`,`answers`,`start`) VALUES ('.$db->quote($id_next).','.$db->quote($_POST['question']).','.$db->quote($_POST['description']).','.$db->quote($end).','.$db->quote(getSession('answers')).','.$db->quote($time).')');
+                $db->insert('z_polls', array(
+                	'id' => $id_next,
+					'question' => $_POST['question'],
+					'description' => $_POST['description'],
+					'end' => $end,
+					'answers' => getSession('answers'),
+					'start' => $time,
+					'votes_all' => 0
+				));
         }
 
         $POLLS_check = $db->query('SELECT MAX(end) FROM '.$db->tableName('z_polls').'');

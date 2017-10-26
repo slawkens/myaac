@@ -34,7 +34,7 @@ if(isset($_GET['archive']))
 		if($_REQUEST['id'] < 100000)
 			$field_name = 'id';
 
-		$news = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'news').' WHERE `type` = 1 AND `hidden` != 1 AND `' . $field_name . '` = ' . (int)$_REQUEST['id']  . '');
+		$news = $db->query('SELECT * FROM `'.TABLE_PREFIX . 'news` WHERE `hidden` != 1 AND `' . $field_name . '` = ' . (int)$_REQUEST['id']  . '');
 		if($news->rowCount() == 1)
 		{
 			$news = $news->fetch();
@@ -102,21 +102,24 @@ $news_cached = false;
 // some constants, used mainly by database (cannot by modified without schema changes)
 define('TITLE_LIMIT', 100);
 define('BODY_LIMIT', 65535); // maximum news body length
+define('ARTICLE_TEXT_LIMIT', 300);
+define('ARTICLE_IMAGE_LIMIT', 100);
 
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 if($canEdit)
 {
 	if(!empty($action))
 	{
-		$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : NULL;
-		$p_title = isset($_REQUEST['title']) ? $_REQUEST['title'] : NULL;
-		$body = isset($_REQUEST['body']) ? stripslashes($_REQUEST['body']) : NULL;
-		$comments = isset($_REQUEST['comments']) ? $_REQUEST['comments'] : NULL;
-		$type = isset($_REQUEST['type']) ? (int)$_REQUEST['type'] : NULL;
-		$category = isset($_REQUEST['category']) ? (int)$_REQUEST['category'] : NULL;
-		$player_id = isset($_REQUEST['player_id']) ? (int)$_REQUEST['player_id'] : NULL;
-
-		$forum_section = isset($_REQUEST['forum_section']) ? $_REQUEST['forum_section'] : NULL;
+		$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+		$p_title = isset($_REQUEST['title']) ? $_REQUEST['title'] : null;
+		$body = isset($_REQUEST['body']) ? stripslashes($_REQUEST['body']) : null;
+		$comments = isset($_REQUEST['comments']) ? $_REQUEST['comments'] : null;
+		$type = isset($_REQUEST['type']) ? (int)$_REQUEST['type'] : null;
+		$category = isset($_REQUEST['category']) ? (int)$_REQUEST['category'] : null;
+		$player_id = isset($_REQUEST['player_id']) ? (int)$_REQUEST['player_id'] : null;
+		$article_text = isset($_REQUEST['article_text']) ? $_REQUEST['article_text'] : null;
+		$article_image = isset($_REQUEST['article_image']) ? $_REQUEST['article_image'] : null;
+		$forum_section = isset($_REQUEST['forum_section']) ? $_REQUEST['forum_section'] : null;
 		$errors = array();
 
 		if($action == 'add') {
@@ -124,8 +127,8 @@ if($canEdit)
 				$forum_add = Forum::add_thread($p_title, $body, $forum_section, $player_id, $account_logged->getId(), $errors);
 			}
 			
-			if(News::add($p_title, $body, $type, $category, $player_id, isset($forum_add) && $forum_add != 0 ? $forum_add : 0, $errors)) {
-				$p_title = $body = $comments = '';
+			if(News::add($p_title, $body, $type, $category, $player_id, isset($forum_add) && $forum_add != 0 ? $forum_add : 0, $article_text, $article_image, $errors)) {
+				$p_title = $body = $comments = $article_text = $article_image = '';
 				$type = $category = $player_id = 0;
 			}
 		}
@@ -142,15 +145,17 @@ if($canEdit)
 				$type = $news['type'];
 				$category = $news['category'];
 				$player_id = $news['player_id'];
+				$article_text = $news['article_text'];
+				$article_image = $news['article_image'];
 			}
 			else {
-				if(News::update($id, $p_title, $body, $type, $category, $player_id, $forum_section, $errors)) {
+				if(News::update($id, $p_title, $body, $type, $category, $player_id, $forum_section, $article_text, $article_image, $errors)) {
 					// update forum thread if exists
 					if(isset($forum_section) && Validator::number($forum_section)) {
 					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $player_id.", `post_text` = ".$db->quote($body).", `post_topic` = ".$db->quote($p_title).", `edit_date` = " . time() . " WHERE `id` = " . $db->quote($forum_section));
 					}
 					
-					$action = $p_title = $body = $comments = '';
+					$action = $p_title = $body = $comments = $article_text = $article_image = '';
 					$type = $category = $player_id = 0;
 				}
 			}
@@ -165,7 +170,7 @@ if($canEdit)
 		if($cache->enabled())
 		{
 			$cache->set('news_' . $template_name . '_' . NEWS, '', 120);
-			$cache->set('news_' . $template_name . '_' . TICKET, '', 120);
+			$cache->set('news_' . $template_name . '_' . TICKER, '', 120);
 		}
 	}
 }
@@ -176,7 +181,7 @@ if(!$news_cached)
 {
 	$categories = array();
 	foreach($db->query(
-		'SELECT id, name, icon_id FROM ' . TABLE_PREFIX . 'news_categories WHERE hidden != 1') as $cat)
+		'SELECT `id`, `name`, `icon_id` FROM `' . TABLE_PREFIX . 'news_categories` WHERE `hidden` != 1') as $cat)
 	{
 		$categories[$cat['id']] = array(
 			'name' => $cat['name'],
@@ -186,11 +191,11 @@ if(!$news_cached)
 
 	$tickers_db =
 		$db->query(
-			'SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news') . ' WHERE ' . $db->fieldName('type') . ' = ' . TICKET .
-			($canEdit ? '' : ' AND ' . $db->fieldName('hidden') . ' != 1') .
-			' ORDER BY ' . $db->fieldName('date') . ' DESC' .
-			' LIMIT ' . $config['news_ticker_limit']);
-
+			'SELECT * FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . TICKER .
+			($canEdit ? '' : ' AND `hidden` != 1') .
+			' ORDER BY `date` DESC LIMIT ' . $config['news_ticker_limit']);
+	
+	$tickers_content = '';
 	if($tickers_db->rowCount() > 0)
 	{
 		$tickers = $tickers_db->fetchAll();
@@ -199,20 +204,47 @@ if(!$news_cached)
 			$ticker['body_short'] = short_text(strip_tags($ticker['body']), 100);
 		}
 		
-		$tickers_to_add = $twig->render('news.tickers.html.twig', array(
+		$tickers_content = $twig->render('news.tickers.html.twig', array(
 			'tickers' => $tickers,
 			'canEdit' => $canEdit
 		));
 	}
+	
+	if($cache->enabled() && !$canEdit)
+		$cache->set('news_' . $template_name . '_' . TICKER, $tickers_content, 120);
+	
+	$featured_article_db =
+		$db->query(
+			'SELECT `id`, `title`, `article_text`, `article_image`, `hidden` FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . ARTICLE .
+			($canEdit ? '' : ' AND `hidden` != 1') .
+			' ORDER BY `date` DESC LIMIT 1');
+	
+	$article = '';
+	if($featured_article_db->rowCount() > 0) {
+		$article = $featured_article_db->fetch();
+		
+		$featured_article = '';
+		if($twig->getLoader()->exists('news.featured_article.html.twig')) {
+			$featured_article = $twig->render('news.featured_article.html.twig', array(
+				'article' => array(
+					'id' => $article['id'],
+					'title' => $article['title'],
+					'text' => $article['article_text'],
+					'image' => $article['article_image'],
+					'hidden' => $article['hidden'],
+					'read_more'=> getLink('news/archive/') . $article['id']
+				),
+				'canEdit' => $canEdit
+			));
+		}
+		
+		if($cache->enabled() && !$canEdit)
+			$cache->set('news_' . $template_name . '_' . ARTICLE, $featured_article, 120);
+	}
 }
-else
-	$tickers_to_add = News::getCached(TICKET);
-
-if(isset($tickers_to_add[0]))
-{
-	$tickers_content = $tickers_to_add;
-	if($cache->enabled() && !$news_cached && !$canEdit)
-		$cache->set('news_' . $template_name . '_' . TICKET, $tickers_to_add, 120);
+else {
+	$tickers_content = News::getCached(TICKER);
+	$featured_article = News::getCached(ARTICLE);
 }
 
 if(!$news_cached)
@@ -243,7 +275,9 @@ if(!$news_cached)
 			'categories' => $categories,
 			'forum_boards' => getForumBoards(),
 			'forum_section' => isset($forum_section) ? $forum_section : null,
-			'comments' => isset($comments) ? $comments : null
+			'comments' => isset($comments) ? $comments : null,
+			'article_text' => isset($article_text) ? $article_text : null,
+			'article_image' => isset($article_image) ? $article_image : null
 		));
 	}
 
@@ -271,7 +305,7 @@ if(!$news_cached)
 				$admin_options = '<br/><br/><a href="?subtopic=news&action=edit&id=' . $news['id'] . '" title="Edit">
 					<img src="images/edit.png"/>Edit
 				</a>
-				<a id="delete" href="' . BASE_URL . '?subtopic=news&action=delete&id=' . $news['id'] . '" onclick="return confirm(\'Are you sure?\');" title="Delete">
+				<a id="delete" href="?subtopic=news&action=delete&id=' . $news['id'] . '" onclick="return confirm(\'Are you sure?\');" title="Delete">
 					<img src="images/del.png"/>Delete
 				</a>
 				<a href="?subtopic=news&action=hide&id=' . $news['id'] . '" title="' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '">
@@ -292,13 +326,15 @@ if(!$news_cached)
 			}
 			
 			echo $twig->render('news.html.twig', array(
+				'id' => $news['id'],
 				'title' => stripslashes($news['title']),
 				'content' => $content_ . $admin_options,
 				'date' => $news['date'],
 				'icon' => $categories[$news['category']]['icon_id'],
 				'author' => $config['news_author'] ? $author : '',
 				'comments' => $news['comments'] != 0 ? getForumThreadLink($news['comments']) : null,
-				'news_date_format' => $config['news_date_format']
+				'news_date_format' => $config['news_date_format'],
+				'hidden'=> $news['hidden']
 			));
 		}
 	}
@@ -316,7 +352,7 @@ else
 
 class News
 {
-	static public function verify($title, $body, &$errors)
+	static public function verify($title, $body, $article_text, $article_image, &$errors)
 	{
 		if(!isset($title[0]) || !isset($body[0])) {
 			$errors[] = 'Please fill all inputs.';
@@ -333,16 +369,26 @@ class News
 			return false;
 		}
 		
+		if(strlen($article_text) > ARTICLE_TEXT_LIMIT) {
+			$errors[] = 'Article text cannot be longer than ' . ARTICLE_TEXT_LIMIT . ' characters.';
+			return false;
+		}
+		
+		if(strlen($article_image) > ARTICLE_IMAGE_LIMIT) {
+			$errors[] = 'Article image cannot be longer than ' . ARTICLE_IMAGE_LIMIT . ' characters.';
+			return false;
+		}
+		
 		return true;
 	}
 
-	static public function add($title, $body, $type, $category, $player_id, $comments, &$errors)
+	static public function add($title, $body, $type, $category, $player_id, $comments, $article_text, $article_image, &$errors)
 	{
 		global $db;
-		if(!News::verify($title, $body, $errors))
+		if(!self::verify($title, $body, $article_text, $article_image, $errors))
 			return false;
 
-		$db->insert(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'date' => time(), 'category' => $category, 'player_id' => isset($player_id) ? $player_id : 0, 'comments' => $comments));
+		$db->insert(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'date' => time(), 'category' => $category, 'player_id' => isset($player_id) ? $player_id : 0, 'comments' => $comments, 'article_text' => $article_text, 'article_image' => $article_image));
 		return true;
 	}
 
@@ -351,13 +397,13 @@ class News
 		return $db->select(TABLE_PREFIX . 'news', array('id' => $id));
 	}
 
-	static public function update($id, $title, $body, $type, $category, $player_id, $comments, &$errors)
+	static public function update($id, $title, $body, $type, $category, $player_id, $comments, $article_text, $article_image, &$errors)
 	{
 		global $db;
-		if(!News::verify($title, $body, $errors))
+		if(!self::verify($title, $body, $article_text, $article_image, $errors))
 			return false;
 
-		$db->update(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'category' => $category, 'last_modified_by' => isset($player_id) ? $player_id : 0, 'last_modified_date' => time(), 'comments' => $comments), array('id' => $id));
+		$db->update(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'category' => $category, 'last_modified_by' => isset($player_id) ? $player_id : 0, 'last_modified_date' => time(), 'comments' => $comments, 'article_text' => $article_text, 'article_image' => $article_image), array('id' => $id));
 		return true;
 	}
 
@@ -396,7 +442,7 @@ class News
 
 	static public function getCached($type)
 	{
-		global $cache, $config, $template_name;
+		global $cache, $template_name;
 		if($cache->enabled())
 		{
 			$tmp = '';

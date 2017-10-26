@@ -5,8 +5,12 @@ $config['vdarkborder'] = "#505050";
 $config['news_title_color'] = "white";
 $config['logo_monster'] = "Elder Beholder";
 // separated by comma
-// List: newcomer,gallery,premium,poll
-$config['boxes'] = "newcomer,gallery";
+// sequence is important! they will be shown in same order that you add them to the list
+// List: newcomer,gallery,premium,poll,highscores,networks
+$config['boxes'] = "highscores,newcomer,gallery,networks,poll";
+$config['network_facebook'] = 'tibia'; // leave empty to disable
+$config['network_twitter'] = 'tibia'; // leave empty to disable
+
 $config['background_image'] = "background-artwork-860.jpg";
 $config['logo_image'] = "tibia-logo-artwork-top.gif";
 $config['gallery_image'] = 1;

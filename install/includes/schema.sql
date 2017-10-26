@@ -255,13 +255,15 @@ CREATE TABLE `myaac_news`
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`title` VARCHAR(100) NOT NULL,
 	`body` TEXT NOT NULL,
-	`type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 - news, 2 - ticket, 3 - article',
+	`type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 - news, 2 - ticker, 3 - article',
 	`date` INT(11) NOT NULL DEFAULT 0,
 	`category` TINYINT(1) NOT NULL DEFAULT 0,
 	`player_id` INT(11) NOT NULL DEFAULT 0,
 	`last_modified_by` INT(11) NOT NULL DEFAULT 0,
 	`last_modified_date` INT(11) NOT NULL DEFAULT 0,
 	`comments` VARCHAR(50) NOT NULL DEFAULT '',
+	`article_text` VARCHAR(300) NOT NULL DEFAULT '',
+	`article_image` VARCHAR(100) NOT NULL DEFAULT '',
 	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;

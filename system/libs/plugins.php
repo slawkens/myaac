@@ -108,7 +108,7 @@ class Plugins {
 											$query = $query->fetch();
 											$db->update(TABLE_PREFIX . 'hooks', array('type' => $hook, 'file' => $info['file']), array('id' => (int)$query['id']));
 										} else {
-											$db->insert(TABLE_PREFIX . 'hooks', array('id' => 'NULL', 'name' => $_name, 'type' => $hook, 'file' => $info['file']));
+											$db->insert(TABLE_PREFIX . 'hooks', array('id' => null, 'name' => $_name, 'type' => $hook, 'file' => $info['file']));
 										}
 									} else
 										self::$warnings[] = 'Unknown event type: ' . $info['type'];

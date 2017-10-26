@@ -740,6 +740,52 @@ img {
   border: 0;
 }
 
+#Themeboxes #NetworksBox {
+  position: relative;
+  height: 204px;
+}
+#Themeboxes #NetworksBox #FacebookBlock {
+  position: relative;
+  top: 32px;
+  height: 113px;
+}
+#Themeboxes #NetworksBox #FacebookLikeBox {
+  position: relative;
+  left: 27px;
+  top: 3px;
+  height: 60px;
+  width: 115px;
+  overflow: hidden;
+}
+#Themeboxes #NetworksBox #FacebookLikeBox div {
+  position: relative;
+  left: -1px;
+  top: -1px;
+}
+#Themeboxes #NetworksBox #FacebookSendBox {
+  position: absolute;
+  left: 92px;
+  top: 14px;
+  width: 50px;
+}
+#Themeboxes #NetworksBox #FacebookLikes {
+  position: relative;
+  left: 14px;
+  top: 10px;
+  width: 155px;
+  left: 13px;
+  overflow: hidden;
+}
+#Themeboxes #NetworksBox #FacebookLikes div {
+  position: relative;
+  left: -69px;
+}
+#Themeboxes #NetworksBox #TwitterBlock {
+  position: relative;
+  top: 42px;
+  text-align: center;
+}
+
 /** -------------------------------
  *  OLD Stylesheet declarations for
  *  the CONTENT AREA

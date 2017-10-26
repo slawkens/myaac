@@ -84,7 +84,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 					$i = 0;
 					
 					foreach($menus[$category] as $menu) {
-						if(strpos($menu['link'], 'http') !== false) {
+						if(strpos(trim($menu['link']), 'http') === 0) {
 							echo '<a href="' . $menu['link'] . '" target="_blank">' . $menu['name'] . '</a>';
 						}
 						else {

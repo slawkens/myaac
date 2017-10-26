@@ -89,8 +89,8 @@ function clearCache()
 	if($cache->fetch('news' . $template_name . '_' . NEWS, $tmp))
 		$cache->delete('news' . $template_name . '_' . NEWS);
 
-	if($cache->fetch('news' . $template_name . '_' . TICKET, $tmp))
-		$cache->delete('news' . $template_name . '_' . TICKET);
+	if($cache->fetch('news' . $template_name . '_' . TICKER, $tmp))
+		$cache->delete('news' . $template_name . '_' . TICKER);
 	
 	if($cache->fetch('template_ini' . $template_name, $tmp))
 		$cache->delete('template_ini' . $template_name);

@@ -28,7 +28,7 @@ session_start();
 
 define('MYAAC', true);
 define('MYAAC_VERSION', '0.6.6');
-define('DATABASE_VERSION', 17);
+define('DATABASE_VERSION', 18);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
 define('MYAAC_OS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'WINDOWS' : (strtoupper(PHP_OS) == 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -50,7 +50,8 @@ define('FLAG_CONTENT_MENUS', 4096);
 
 // news
 define('NEWS', 1);
-define('TICKET', 2);
+define('TICKER', 2);
+define('ARTICLE', 3);
 
 // directories
 define('BASE', dirname(__FILE__) . '/');

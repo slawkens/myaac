@@ -414,11 +414,11 @@ function short_text($text, $limit)
 
 function tickers()
 {
-	global $tickers_content;
+	global $tickers_content, $featured_article;
 	
 	if(PAGE == 'news') {
 		if(isset($tickers_content))
-			return $tickers_content;
+			return $tickers_content . $featured_article;
 	}
 
 	return '';
@@ -947,6 +947,40 @@ function getSession($key) {
 function unsetSession($key) {
 	global $config;
 	unset($_SESSION[$config['session_prefix'] . $key]);
+}
+
+function getTopPlayers($limit = 5) {
+	global $cache, $config, $db;
+	
+	$fetch_from_db = true;
+	if($cache->enabled())
+	{
+		$tmp = '';
+		if($cache->fetch('top_' . $limit . '_level', $tmp))
+		{
+			$players = unserialize($tmp);
+			$fetch_from_db = false;
+		}
+	}
+	
+	if($fetch_from_db)
+	{
+		$deleted = 'deleted';
+		if(fieldExist('deletion', 'players'))
+			$deleted = 'deletion';
+		
+		$players = $db->query('SELECT `name`, `level`, `experience` FROM `players` WHERE `group_id` < ' . $config['highscores_groups_hidden'] . ' AND `' . $deleted . '` = 0 AND account_id != 1 ORDER BY `experience` DESC LIMIT 5')->fetchAll();
+		
+		$i = 0;
+		foreach($players as &$player) {
+			$player['rank'] = ++$i;
+		}
+		
+		if($cache->enabled())
+			$cache->set('top_' . $limit . '_level', serialize($players), 120);
+	}
+	
+	return $players;
 }
 
 // validator functions
