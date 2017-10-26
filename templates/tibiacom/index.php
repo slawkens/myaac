@@ -24,6 +24,16 @@ if(isset($config['boxes']))
 				}
 				else {
 					$tmp = str_replace('/', '', URI);
+					$exp = explode('/', URI);
+					if(isset($exp[1]) && URI != 'account/create' && URI != 'account/lost') {
+						if ($exp[0] == 'account') {
+							$tmp = 'accountmanage';
+						} else if ($exp[0] == 'news' && $exp[1] == 'archive') {
+							$tmp = 'newsarchive';
+						}
+						else
+							$tmp = $exp[0];
+					}
 				}
 			}
 			else {
