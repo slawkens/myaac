@@ -14,5 +14,4 @@ $image = $query->fetch();
 	</a>
 	<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
 </div>
-<br/><br/><br/>
 <?php endif; ?>
