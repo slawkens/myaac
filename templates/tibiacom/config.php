@@ -2,7 +2,6 @@
 $config['darkborder'] = "#D4C0A1";
 $config['lightborder'] = "#F1E0C6";
 $config['vdarkborder'] = "#505050";
-$config['news_title_color'] = "white";
 $config['logo_monster'] = "Elder Beholder";
 // separated by comma
 // sequence is important! they will be shown in same order that you add them to the list

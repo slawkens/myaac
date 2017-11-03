@@ -315,7 +315,11 @@ if(isset($config['boxes']))
 <?php
 $menus = get_template_menus();
 
-foreach($config['menu_categories'] as $id => $cat) { ?>
+foreach($config['menu_categories'] as $id => $cat) {
+	if(!isset($menus[$id])) {
+		continue;
+	}
+	?>
 <div id='<?php echo $cat['id']; ?>' class='menuitem'>
 	<span onClick="MenuItemAction('<?php echo $cat['id']; ?>')">
 		<div class='MenuButton' style='background-image:url(<?php echo $template_path; ?>/images/menu/button-background.gif);'>
@@ -333,7 +337,6 @@ foreach($config['menu_categories'] as $id => $cat) { ?>
 	</span>
 	<div id='<?php echo $cat['id']; ?>_Submenu' class='Submenu'>
 	<?php
-	if(isset($menus[$id])) {
 		foreach($menus[$id] as $category => $menu) {
 				$is_external = strpos(trim($menu['link']), 'http') === 0;
 			?>
@@ -347,7 +350,6 @@ foreach($config['menu_categories'] as $id => $cat) { ?>
 			</a>
 			<?php
 		}
-	}
 	?>
 	</div>
 	<?php

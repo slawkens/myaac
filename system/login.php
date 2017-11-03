@@ -13,7 +13,9 @@ $logged = false;
 $logged_flags = 0;
 
 $action = isset($_REQUEST['action']) ? strtolower($_REQUEST['action']) : '';
-if($action == 'logout' && !isset($_REQUEST['account_login']))
+define('ACTION', $action);
+
+if(ACTION == 'logout' && !isset($_REQUEST['account_login']))
 {
 	unsetSession('account');
 	unsetSession('password');
