@@ -460,6 +460,7 @@ function template_header($is_admin = false)
 	<meta http-equiv="content-type" content="text/html; charset=' . $charset . '" />';
 	if(!$is_admin)
 		$ret .= '
+	<base href="' . BASE_URL . '" />
 	<title>' . $title_full . '</title>';
 
 	$ret .= '
@@ -981,6 +982,28 @@ function getTopPlayers($limit = 5) {
 	}
 	
 	return $players;
+}
+
+function deleteDirectory($dir) {
+	if(!file_exists($dir)) {
+		return true;
+	}
+	
+	if(!is_dir($dir)) {
+		return unlink($dir);
+	}
+	
+	foreach(scandir($dir) as $item) {
+		if($item == '.' || $item == '..') {
+			continue;
+		}
+		
+		if(!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+			return false;
+		}
+	}
+	
+	return rmdir($dir);
 }
 
 // validator functions

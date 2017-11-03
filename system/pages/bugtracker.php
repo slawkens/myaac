@@ -83,7 +83,7 @@ $showed = $post = $reply = false;
                     echo '</TABLE>';
                 }
                 if($bug[2]['status'] != 3)
-                    echo '<br><a href="index.php?subtopic=bugtracker&control=true&id='.$_REQUEST['id'].'&acc='.$_REQUEST['acc'].'&reply=true"><b>[REPLY]</b></a>';
+                    echo '<br><a href="?subtopic=bugtracker&control=true&id='.$_REQUEST['id'].'&acc='.$_REQUEST['acc'].'&reply=true"><b>[REPLY]</b></a>';
             }
             else
             {
@@ -112,7 +112,7 @@ $showed = $post = $reply = false;
                             $type = 2;
                             $INSERT = $db->query('INSERT INTO `' . TABLE_PREFIX . 'bugtracker` (`account`,`id`,`text`,`reply`,`type`, `who`) VALUES ('.$db->quote($_REQUEST['acc']).','.$db->quote($_REQUEST['id']).','.$db->quote($_POST['text']).','.$db->quote($reply).','.$db->quote($type).','.$db->quote(1).')');
                             $UPDATE = $db->query('UPDATE `' . TABLE_PREFIX . 'bugtracker` SET `status` = '.$_POST['status'].' where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].'');
-                            header('Location: index.php?subtopic=bugtracker&control=true&id='.$_REQUEST['id'].'&acc='.$_REQUEST['acc'].'');
+                            header('Location: ?subtopic=bugtracker&control=true&id='.$_REQUEST['id'].'&acc='.$_REQUEST['acc'].'');
                         }
                     }
                     echo '<br><form method="post" action=""><table><tr><td><i>Description</i></td><td><textarea name="text" rows="15" cols="35"></textarea></td></tr><tr><td>Status[OPEN]</td><td><input type=radio name=status value=2></td></tr><tr><td>Status[CLOSED]</td><td><input type=radio name=status value=3></td></tr></table><br><input type="submit" name="finish" value="Submit" class="input2"/></form>';
@@ -138,7 +138,7 @@ $showed = $post = $reply = false;
                 elseif($report['status'] == 1)
                     $value = "<font color=blue>[NEW ANSWER]</font>";
                             
-                echo '<TR BGCOLOR="' . getStyle($i) . '"><td width=75%><a href="index.php?subtopic=bugtracker&control=true&id='.$report['id'].'&acc='.$report['account'].'">'.$tags[$report['tag']].' '.$report['subject'].'</a></td><td>'.$value.'</td></tr>';            
+                echo '<TR BGCOLOR="' . getStyle($i) . '"><td width=75%><a href="?subtopic=bugtracker&control=true&id='.$report['id'].'&acc='.$report['account'].'">'.$tags[$report['tag']].' '.$report['subject'].'</a></td><td>'.$value.'</td></tr>';
                         
                 $showed=true;
                 $i++;
@@ -202,7 +202,7 @@ $showed = $post = $reply = false;
                     echo '</TABLE>';
                 }
                 if($bug[2]['status'] != 3)
-                    echo '<br><a href="index.php?subtopic=bugtracker&id='.$id.'&reply=true"><b>[REPLY]</b></a>';
+                    echo '<br><a href="?subtopic=bugtracker&id='.$id.'&reply=true"><b>[REPLY]</b></a>';
             }
             else
             {
@@ -231,7 +231,7 @@ $showed = $post = $reply = false;
                             $type = 2;
                             $INSERT = $db->query('INSERT INTO `myaac_bugtracker` (`account`,`id`,`text`,`reply`,`type`) VALUES ('.$db->quote($acc).','.$db->quote($id).','.$db->quote($_POST['text']).','.$db->quote($reply).','.$db->quote($type).')');
                             $UPDATE = $db->query('UPDATE `myaac_bugtracker` SET `status` = 1 where `account` = '.$acc.' and `id` = '.$id.'');
-                            header('Location: index.php?subtopic=bugtracker&id='.$id.'');
+                            header('Location: ?subtopic=bugtracker&id='.$id.'');
                         }
                     }
                     echo '<br><form method="post" action=""><table><tr><td><i>Description</i></td><td><textarea name="text" rows="15" cols="35"></textarea></td></tr></table><br><input type="submit" name="finish" value="Submit" class="input2"/></form>';
@@ -275,7 +275,7 @@ $showed = $post = $reply = false;
                         $bgcolor = $light;
                     }
 
-                    echo '<TR BGCOLOR="'.$bgcolor.'"><td width=75%><a href="index.php?subtopic=bugtracker&id='.$report['id'].'">'.$tags[$report['tag']].' '.$report['subject'].'</a></td><td>'.$value.'</td></tr>';            
+                    echo '<TR BGCOLOR="'.$bgcolor.'"><td width=75%><a href="?subtopic=bugtracker&id='.$report['id'].'">'.$tags[$report['tag']].' '.$report['subject'].'</a></td><td>'.$value.'</td></tr>';
                     
                     $showed=true;
                 }
@@ -286,7 +286,7 @@ $showed = $post = $reply = false;
                 }
                 echo '</TABLE>';
                 
-                echo '<br><a href="index.php?subtopic=bugtracker&add=true"><b>[ADD REPORT]</b></a>';
+                echo '<br><a href="?subtopic=bugtracker&add=true"><b>[ADD REPORT]</b></a>';
             }
             elseif(isset($_REQUEST['add']) && $_REQUEST['add'] == TRUE)
             {
@@ -320,7 +320,7 @@ $showed = $post = $reply = false;
                         $type = 1;
                         $status = 1;
                         $INSERT = $db->query('INSERT INTO `' . TABLE_PREFIX . 'bugtracker` (`account`,`id`,`text`,`type`,`subject`, `reply`,`status`,`tag`) VALUES ('.$db->quote($acc).','.$db->quote($id_next).','.$db->quote($_POST['text']).','.$db->quote($type).','.$db->quote($_POST['subject']).', 0,'.$db->quote($status).','.$db->quote($_POST['tags']).')');
-                        header('Location: index.php?subtopic=bugtracker&id='.$id_next.'');
+                        header('Location: ?subtopic=bugtracker&id='.$id_next.'');
                     }
                         
                 }
@@ -338,6 +338,6 @@ $showed = $post = $reply = false;
     
     if(admin() and empty($_REQUEST['control']))
     {
-        echo '<br><br><a href="index.php?subtopic=bugtracker&control=true">[ADMIN PANEL]</a>';
+        echo '<br><br><a href="?subtopic=bugtracker&control=true">[ADMIN PANEL]</a>';
     }
 ?> 

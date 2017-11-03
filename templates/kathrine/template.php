@@ -75,10 +75,11 @@ defined('MYAAC') or die('Direct access not allowed!');
 			<div id="mainsubmenu">
 				<?php
 				foreach($menus as $category => $menu) {
-					echo '<div id="' . $config['menu_categories'][$category]['id'] . '-submenu">';
 					if(!isset($menus[$category])) {
-						return;
+						continue;
 					}
+					
+					echo '<div id="' . $config['menu_categories'][$category]['id'] . '-submenu">';
 					
 					$size = count($menus[$category]);
 					$i = 0;

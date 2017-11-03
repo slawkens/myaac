@@ -26,7 +26,7 @@
 
 	$file = trim(strtolower($config['signature_type'])) . '.php';
 	if(!file_exists($file))
-		die('ERROR: Wrong signature type in config.');
+		die('ERROR: Wrong signature_type in config.');
 
 	putenv('GDFONTPATH=' . SIGNATURES_FONTS);
 
@@ -52,7 +52,7 @@
 	}
 	
 	$cached = SIGNATURES_CACHE.$player->getId() . '.png';
-	if(file_exists($cached) and (time() < (filemtime($cached) + (60 * $config['signature_cache_time']))))
+	if(file_exists($cached) && (time() < (filemtime($cached) + (60 * $config['signature_cache_time']))))
 	{
 		header( 'Content-type: image/png' );
 		readfile( SIGNATURES_CACHE.$player->getId().'.png' );

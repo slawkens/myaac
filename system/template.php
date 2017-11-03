@@ -43,7 +43,7 @@ if(!file_exists($template_path . '/index.php') &&
 	!file_exists($template_path . '/layout.php'))
 {
 	$template_name = 'kathrine';
-	$template_path = 'templates/' . $template_name;
+	$template_path = TEMPLATES . $template_name;
 }
 
 $file = $template_path . '/config.ini';
@@ -106,7 +106,7 @@ function get_template_menus() {
 	global $db, $template_name;
 	
 	$menus = array();
-	$query = $db->query('SELECT `name`, `link`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `ordering` ASC');
+	$query = $db->query('SELECT `name`, `link`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `category`, `ordering` ASC');
 	foreach($query->fetchAll() as $menu) {
 		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link']);
 	}

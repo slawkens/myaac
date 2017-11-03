@@ -38,7 +38,7 @@ if(isset($_POST['reload_monsters']) && $canEdit)
 if($canEdit)
 {
 ?>
-	<form method="post" action="index.php?subtopic=creatures">
+	<form method="post" action="<?php echo getLink('creatures'); ?>">
 		<input type="hidden" name="reload_monsters" value="yes"/>
 		<input type="submit" value="(admin) Reload monsters"/>
 	</form>

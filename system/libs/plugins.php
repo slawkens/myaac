@@ -138,6 +138,52 @@ class Plugins {
 		return false;
 	}
 	
+	public static function uninstall($plugin_name) {
+		global $cache;
+		
+		$filename = BASE . 'plugins/' . $plugin_name . '.json';
+		if(!file_exists($filename)) {
+			self::$error = 'Plugin ' . $plugin_name . ' does not exist.';
+			return false;
+		}
+		else {
+			$string = file_get_contents($filename);
+			$plugin_info = json_decode($string, true);
+			if($plugin_info == false) {
+				self::$error = 'Cannot load plugin info ' . $plugin_name . '.json';
+				return false;
+			}
+			else {
+				if(!isset($plugin_info['uninstall'])) {
+					self::$error = "Plugin doesn't have uninstall options defined. Skipping...";
+					return false;
+				}
+				else {
+					$success = true;
+					foreach($plugin_info['uninstall'] as $file) {
+						$file = BASE . $file;
+						if(!deleteDirectory($file)) {
+							$success = false;
+						}
+					}
+					
+					if($success) {
+						if($cache->enabled()) {
+							$cache->delete('templates');
+						}
+						
+						return true;
+					}
+					else {
+						self::$error = error_get_last();
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	public static function getWarnings() {
 		return self::$warnings;
 	}

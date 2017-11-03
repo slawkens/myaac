@@ -23,7 +23,11 @@ if(!$error) {
 					$value .= "/";
 			}
 
-			if($key != 'var_account' && $key != 'var_account_id' && $key != 'var_password') {
+			if($key == 'var_usage') {
+				$content .= '$config[\'anonymous_usage_statistics\'] = ' . ((int)$value == 1 ? 'true' : 'false') . ';';
+				$content .= PHP_EOL;
+			}
+			else if($key != 'var_account' && $key != 'var_account_id' && $key != 'var_password') {
 				$content .= '$config[\'' . str_replace('var_', '', $key) . '\'] = \'' . $value . '\';';
 				$content .= PHP_EOL;
 			}
@@ -238,6 +242,7 @@ if(!$error) {
 			$content .= '// place for your configuration directives, so you can later easily update myaac';
 			$content .= PHP_EOL;
 			$content .= "?>";
+			
 			$file = fopen(BASE . 'config.local.php', 'a+');
 			if($file) {
 				if(!$error) {

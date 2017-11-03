@@ -17,10 +17,12 @@ if(!file_exists(BASE . 'CHANGELOG')) {
 }
 
 $changelog = file_get_contents(BASE . 'CHANGELOG');
-$changelog = nl2br(htmlspecialchars($changelog));
+$changelog = htmlspecialchars($changelog);
 
 // replace URLs with <a href...> elements
 $changelog = preg_replace('/\s(\w+:\/\/)(\S+)/', ' <a href="\\1\\2" target="_blank">\\1\\2</a>', $changelog);
+
+$changelog = nl2br($changelog);
 
 echo '<div>' . $changelog . '</div>';
 ?>

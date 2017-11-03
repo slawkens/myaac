@@ -14,67 +14,16 @@ $title = 'Plugin manager';
 require(SYSTEM . 'hooks.php');
 require(LIBS . 'plugins.php');
 
-function deleteDirectory($dir) {
-	if(!file_exists($dir)) {
-		return true;
-	}
-	
-	if(!is_dir($dir)) {
-		return unlink($dir);
-	}
-	
-	foreach(scandir($dir) as $item) {
-		if($item == '.' || $item == '..') {
-			continue;
-		}
-		
-		if(!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-			return false;
-		}
-	}
-	
-	return rmdir($dir);
-}
-
 echo $twig->render('admin.plugins.form.html.twig');
 
 if(isset($_REQUEST['uninstall'])){
 	$uninstall = $_REQUEST['uninstall'];
 	
-	$filename = BASE . 'plugins/' . $uninstall . '.json';
-	if(!file_exists($filename)) {
-		error('Plugin ' . $uninstall . ' does not exist.');
+	if(Plugins::uninstall($uninstall)) {
+		success('Successfully uninstalled plugin ' . $uninstall);
 	}
 	else {
-		$string = file_get_contents($filename);
-		$plugin_info = json_decode($string, true);
-		if($plugin_info == false) {
-			error('Cannot load plugin info ' . $uninstall . '.json');
-		}
-		else {
-			if(!isset($plugin_info['uninstall'])) {
-				error("Plugin doesn't have uninstall options defined. Skipping...");
-			}
-			else {
-				$success = true;
-				foreach($plugin_info['uninstall'] as $file) {
-					$file = BASE . $file;
-					if(!deleteDirectory($file)) {
-						$success = false;
-					}
-				}
-				
-				if($success) {
-					if($cache->enabled()) {
-						$cache->delete('templates');
-					}
-					success('Successfully uninstalled plugin ' . $uninstall);
-				}
-				else {
-					error('Error while uninstalling plugin ' . $uninstall . ': ' . error_get_last());
-				}
-			}
-		}
+		error('Error while uninstalling plugin ' . $plugin_name . ': ' . Plugins::getError());
 	}
 }
 else if(isset($_FILES["plugin"]["name"]))

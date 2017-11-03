@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Usage_Statistics {
-	private static $report_url = 'http://my-aac.org/report_usage.php';
+	private static $report_url = 'https://my-aac.org/report_usage.php';
 	
 	public static function report() {
 		$data = json_encode(self::getStats());
@@ -20,7 +20,6 @@ class Usage_Statistics {
 			'http' => array(
 				'header'  => 'Content-type: application/json' . "\r\n"
 				. 'Content-Length: ' . strlen($data) . "\r\n",
-				'method'  => 'POST',
 				'content' => $data
 			)
 		);
@@ -28,7 +27,6 @@ class Usage_Statistics {
 		$context  = stream_context_create($options);
 		$result = file_get_contents(self::$report_url, false, $context);
 
-		//var_dump($result);
 		return $result !== false;
 	}
 

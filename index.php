@@ -30,20 +30,7 @@
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
-if(preg_match("/^(.*)\.(gif|jpg|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz)$/i", $_SERVER['REQUEST_URI'])) {
-	header("HTTP/1.0 404 Not Found");
-	exit;
-}
-
 require_once('common.php');
-require_once(BASE . 'config.local.php');
-
-if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed']))
-{
-	header('Location: ' . BASE_URL . 'install/');
-	die('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
-}
-
 require_once(SYSTEM . 'functions.php');
 
 $uri = $_SERVER['REQUEST_URI'];
@@ -57,18 +44,30 @@ else
 $uri = str_replace(array('index.php/', '?'), '', $uri);
 define('URI', $uri);
 
-$found = false;
-if(empty($uri) || isset($_REQUEST['template'])) {
-	$_REQUEST['p'] = 'news';
-	$found = true;
-}
-else if(preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
+if(preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
 	$tmp = explode('.', $uri);
 	$_REQUEST['name'] = urldecode($tmp[0]);
 	
 	chdir(TOOLS . 'signature');
 	include(TOOLS . 'signature/index.php');
 	exit();
+}
+else if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz)$/i", $_SERVER['REQUEST_URI'])) {
+	header("HTTP/1.0 404 Not Found");
+	exit;
+}
+
+require_once(BASE . 'config.local.php');
+if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed']))
+{
+	header('Location: ' . BASE_URL . 'install/');
+	die('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
+}
+
+$found = false;
+if(empty($uri) || isset($_REQUEST['template'])) {
+	$_REQUEST['p'] = 'news';
+	$found = true;
 }
 else if(!preg_match('/[^A-z0-9_\-]/', $uri) && file_exists(SYSTEM . 'pages/' . $uri . '.php')) {
 	$_REQUEST['p'] = $uri;
@@ -192,6 +191,40 @@ require_once(SYSTEM . 'hooks.php');
 $hooks = new Hooks();
 $hooks->load();
 $hooks->trigger(HOOK_STARTUP);
+
+// anonymous usage statistics
+// sent only when user agrees
+if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_statistics']) {
+	$report_time = 30 * 24 * 60 * 60; // report one time per 30 days
+	$should_report = true;
+	
+	$value = '';
+	if($cache->enabled() && $cache->fetch('last_usage_report', $value)) {
+		$should_report = time() > (int)$value + $report_time;
+	}
+	else {
+		$value = '';
+		if(fetchDatabaseConfig('last_usage_report', $value)) {
+			$should_report = time() > (int)$value + $report_time;
+			if($cache->enabled()) {
+				$cache->set('last_usage_report', $value);
+			}
+		}
+		else {
+			registerDatabaseConfig('last_usage_report', time());
+		}
+	}
+	
+	if($should_report) {
+		require_once(LIBS . 'usage_statistics.php');
+		Usage_Statistics::report();
+		
+		updateDatabaseConfig('last_usage_report', time());
+		if($cache->enabled()) {
+			$cache->set('last_usage_report', time());
+		}
+	}
+}
 
 if($config['views_counter'])
 	require_once(SYSTEM . 'counter.php');

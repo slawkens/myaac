@@ -228,6 +228,7 @@ $config = array(
 	'status_port' => '',
 
 	// other
+	'anonymous_usage_statistics' => false,
 	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam
 	'google_analytics_id' => '', // e.g.: UA-XXXXXXX-X
 	'experiencetable_columns' => 5, // how many columns to display in experience table page. * experiencetable_rows, 5 = 500 (will show up to 500 level)

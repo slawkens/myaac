@@ -29,16 +29,16 @@ if(isset($_REQUEST['template'])) {
 		}
 		
 		$db->query('DELETE FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template));
-		foreach($post_menu as $id => $menus) {
+		foreach($post_menu as $category => $menus) {
 			foreach($menus as $i => $menu) {
 				if(empty($menu)) // don't save empty menu item
 					continue;
 				
 				try {
-					$db->insert(TABLE_PREFIX . 'menu', array('template' => $template, 'name' => $menu, 'link' => $post_menu_link[$id][$i], 'category' => $id, 'ordering' => $i));
+					$db->insert(TABLE_PREFIX . 'menu', array('template' => $template, 'name' => $menu, 'link' => $post_menu_link[$category][$i], 'category' => $category, 'ordering' => $i));
 				}
 				catch(PDOException $error) {
-					warning('Error while adding menu item (' . $name . '): ' . $error->getMessage());
+					warning('Error while adding menu item (' . $menu . '): ' . $error->getMessage());
 				}
 			}
 		}
@@ -97,6 +97,12 @@ if(isset($_REQUEST['template'])) {
 }
 else {
 	$templates = $db->query('SELECT `template` FROM `' . TABLE_PREFIX . 'menu` GROUP BY `template`;')->fetchAll();
+	foreach($templates as $key => $value) {
+		$file = TEMPLATES . $value['template'] . '/config.php';
+		if(!file_exists($file)) {
+			unset($templates[$key]);
+		}
+	}
 	
 	echo $twig->render('admin.menus.form.html.twig', array(
 		'templates' => $templates

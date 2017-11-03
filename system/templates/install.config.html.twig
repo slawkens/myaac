@@ -31,6 +31,18 @@
 				<em>{{ locale.step_config_client_desc }}</em>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<label for="vars_usage">
+					<span>{{ locale.step_config_usage }}</span>
+				</label>
+				<br>
+				<input type="checkbox" name="vars[usage]" id="vars_usage" value="1" checked/>
+			</td>
+			<td>
+				<em>{{ locale.step_config_usage_desc }}</em>
+			</td>
+		</tr>
 	</table>
 
 	{{ buttons|raw }}
