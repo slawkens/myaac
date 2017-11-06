@@ -92,7 +92,7 @@ $query =
 $pages = array();
 foreach($query as $_page) {
 	$pages[] = array(
-		'link' => getFullLink($_page['name'], $_page['name']),
+		'link' => getFullLink($_page['name'], $_page['name'], true),
 		'title' => substr($_page['title'], 0, 20),
 		'id' => $_page['id'],
 		'hidden' => $_page['hidden']
