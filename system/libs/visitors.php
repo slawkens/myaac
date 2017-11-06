@@ -102,12 +102,12 @@ class Visitors
 		if($this->cacheEnabled) {
 			foreach($this->data as $ip => &$details)
 				$details['ip'] = $ip;
-
+			
 			return $this->data;
 		}
-
+		
 		global $db;
-		return $db->query('SELECT ' . $db->fieldName('ip') . ', ' . $db->fieldName('lastvisit') . ', ' . $db->fieldName('page') . ' FROM ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' ORDER BY ' . $db->fieldName('lastvisit') . ' DESC')->fetch();
+		return $db->query('SELECT ' . $db->fieldName('ip') . ', ' . $db->fieldName('lastvisit') . ', ' . $db->fieldName('page') . ' FROM ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' ORDER BY ' . $db->fieldName('lastvisit') . ' DESC')->fetchAll();
 	}
 
 	public function getAmountVisitors()

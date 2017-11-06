@@ -103,7 +103,7 @@ if($twig_loader && file_exists(BASE . $template_path))
 	$twig_loader->prependPath(BASE . $template_path);
 
 function get_template_menus() {
-	global $db, $template_name;
+	global $db, $config, $template_name;
 	
 	$menus = array();
 	$query = $db->query('SELECT `name`, `link`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `category`, `ordering` ASC');
@@ -111,6 +111,12 @@ function get_template_menus() {
 		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link']);
 	}
 	
-	return $menus;
+	$new_menus = array();
+	foreach($config['menu_categories'] as $id => $options) {
+		if(isset($menus[$id]))
+			$new_menus[$id] = $menus[$id];
+	}
+	
+	return $new_menus;
 }
 ?>
