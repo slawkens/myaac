@@ -138,7 +138,7 @@ class Plugins {
 	}
 	
 	public static function uninstall($plugin_name) {
-		global $cache;
+		global $cache, $db;
 		
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
@@ -163,6 +163,20 @@ class Plugins {
 						$file = BASE . $file;
 						if(!deleteDirectory($file)) {
 							$success = false;
+						}
+					}
+					
+					if (isset($plugin_info['hooks'])) {
+						foreach ($plugin_info['hooks'] as $_name => $info) {
+							if (defined('HOOK_'. $info['type'])) {
+								$hook = constant('HOOK_'. $info['type']);
+								$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
+								if ($query->rowCount() == 1) { // found something
+									$query = $query->fetch();
+									$db->delete(TABLE_PREFIX . 'hooks', array('id' => (int)$query['id']));
+								}
+							} else
+								self::$warnings[] = 'Unknown event type: ' . $info['type'];
 						}
 					}
 					
