@@ -26,7 +26,7 @@
 session_start();
 
 define('MYAAC', true);
-define('MYAAC_VERSION', '0.6.6');
+define('MYAAC_VERSION', '0.6.6-dev');
 define('DATABASE_VERSION', 18);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
