@@ -7,6 +7,7 @@ if(php_sapi_name() != "cli") {
 require_once('../../common.php');
 require_once(SYSTEM . 'functions.php');
 require_once(SYSTEM . 'init.php');
+require_once(SYSTEM . 'hooks.php');
 require_once(LIBS . 'plugins.php');
 
 if($argc != 2) {
