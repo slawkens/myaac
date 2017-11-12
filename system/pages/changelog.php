@@ -14,6 +14,7 @@ $_page = isset($_GET['page']) ? $_GET['page'] : 0;
 $id = isset($_GET['id']) ? $_GET['id'] : 0;
 $limit = 30;
 $offset = $_page * $limit;
+$next_page = false;
 ?>
 
 <br/>

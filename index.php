@@ -89,6 +89,7 @@ else {
 		'/^account\/character\/delete\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'delete_character'),
 		'/^account\/character\/comment\/[A-Za-z]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment', 'name' => '$3'),
 		'/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment'),
+		'/^account\/confirm_email\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'confirm_email', 'v' => '$2'),
 		'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
 		'/^commands\/add\/?$/' => array('subtopic' => 'commands', 'action' => 'add'),
 		'/^commands\/edit\/?$/' => array('subtopic' => 'commands', 'action' => 'edit'),
@@ -135,14 +136,11 @@ else {
 			break;
 		}
 	}
-	
-	if(!$found)
-		$_REQUEST['p'] = $uri;
 }
 
 // define page visited, so it can be used within events system
 $page = isset($_REQUEST['subtopic']) ? $_REQUEST['subtopic'] : (isset($_REQUEST['p']) ? $_REQUEST['p'] : '');
-if(empty($page) || preg_match('/[^A-z0-9\/_\-]/', $page)) {
+if(empty($page) || !preg_match('/^[A-z0-9\_\-]+$/', $page)) {
 	if(!$found)
 		$page = '404';
 	else

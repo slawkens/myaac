@@ -160,7 +160,6 @@ if($save)
 			$hash = md5(generateRandomString(16, true, true) . $email);
 			$new_account->setCustomField('email_hash', $hash);
 
-			$verify_url = BASE_URL . '?p=account&action=confirm_email&v=' . $hash;
 			$server_name = $config['lua']['serverName'];
 			
 			$body_plain = $twig->render('mail.account.verify.plain.html.twig', array(
@@ -181,7 +180,8 @@ if($save)
 			}
 			else
 			{
-				echo '<br /><p class="error">An error occorred while sending email! Account not created. Try again. Error:<br/>' . $mailer->ErrorInfo . '</p>';
+				error('An error occorred while sending email! Account not created. Try again. Error:<br/>' . $mailer->ErrorInfo . '<br/>More info in system/logs/error.log');
+				log_append('error.log', '[createaccount.php] An error occorred while sending email: ' . $mailer->ErrorInfo . '. Error: ' . print_r(error_get_last(), true));
 				$new_account->delete();
 			}
 		}
@@ -200,7 +200,8 @@ if($save)
 				if(_mail($email, 'Your account on ' . $config['lua']['serverName'], $mailBody))
 					echo '<br /><small>These informations were send on email address <b>' . $email . '</b>.';
 				else
-					echo '<br /><p class="error">An error occorred while sending email (<b>' . $email . '</b>)! Error:<br/>' . $mailer->ErrorInfo . '</p>';
+					error('An error occorred while sending email (<b>' . $email . '</b>)! Error:<br/>' . $mailer->ErrorInfo . '<br/>More info in system/logs/error.log');
+					log_append('error.log', '[createaccount.php] An error occorred while sending email: ' . $mailer->ErrorInfo . '. Error: ' . print_r(error_get_last(), true));
 			}
 		}
 

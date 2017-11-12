@@ -9,23 +9,25 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-function success($message, $return = false) {
+function message($message, $type, $return)
+{
 	if($return)
-		return '<p class="success">' . $message . '</p>';
+		return '<p class="' . $type . '">' . $message . '</p>';
 	
-	echo '<p class="success">' . $message . '</p>';
+	echo '<p class="' . $type . '">' . $message . '</p>';
+	return true;
+}
+function success($message, $return = false) {
+	return message($message, 'success', $return);
 }
 function warning($message, $return = false) {
-	if($return)
-		return '<p class="warning">' . $message . '</p>';
-	
-	echo '<p class="warning">' . $message . '</p>';
+	return message($message, 'warning', $return);
+}
+function note($message, $return = false) {
+	return message($message, 'note', $return);
 }
 function error($message, $return = false) {
-	if($return)
-		return '<p class="error">' . $message . '</p>';
-	
-	echo '<p class="error">' . $message . '</p>';
+	return message($message, 'error', $return);
 }
 
 function longToIp($ip)

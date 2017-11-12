@@ -25,6 +25,11 @@ if(!$logged)
 	}
 	else
 	{
+		if($action == 'confirm_email') {
+			require(PAGES . 'account/' . $action . '.php');
+			return;
+		}
+		
 		if(!empty($errors))
 			echo $twig->render('error_box.html.twig', array('errors' => $errors));
 		
@@ -33,8 +38,9 @@ if(!$logged)
 			'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
 			'error' => isset($errors[0]) ? $errors[0] : null
 		));
-	return;
 	}
+
+	return;
 }
 
 $errors = array();
@@ -123,7 +129,15 @@ $errors = array();
 			'players' => $account_players
 		));
 	}
-	else if(file_exists(PAGES . 'account/' . $action . '.php')) {
-		require(PAGES . 'account/' . $action . '.php');
+	else {
+		if(!ctype_alnum(str_replace(array('-', '_'), '', $action))) {
+			error('Error: Action contains illegal characters.');
+		}
+		else if(file_exists(PAGES . 'account/' . $action . '.php')) {
+			require(PAGES . 'account/' . $action . '.php');
+		}
+		else {
+			error('This page does not exists.');
+		}
 	}
 ?>

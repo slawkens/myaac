@@ -185,8 +185,13 @@ if(!$logged)
 	return;
 }
 
-if(file_exists(PAGES . 'forum/' . $action . '.php')) {
+if(!ctype_alnum(str_replace(array('-', '_'), '', $action))) {
+	error('Error: Action contains illegal characters.');
+}
+else if(file_exists(PAGES . 'forum/' . $action . '.php')) {
 	require(PAGES . 'forum/' . $action . '.php');
 }
-
+else {
+	error('This page does not exists.');
+}
 ?>
