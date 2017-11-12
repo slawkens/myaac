@@ -160,6 +160,7 @@ if($save)
 			$hash = md5(generateRandomString(16, true, true) . $email);
 			$new_account->setCustomField('email_hash', $hash);
 
+			$verify_url = getLink('account/confirm_email/' . $hash);
 			$server_name = $config['lua']['serverName'];
 			
 			$body_plain = $twig->render('mail.account.verify.plain.html.twig', array(

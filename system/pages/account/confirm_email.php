@@ -17,11 +17,13 @@ if(empty($hash)) {
 	return;
 }
 
+$res = $db->query('SELECT `email_hash` FROM `accounts` WHERE `email_hash` = ' . $db->quote($hash));
 if(!$res->rowCount()) {
 	note("Your email couldn't be verified. Please contact staff to do it manually.");
 }
 else
 {
+	$db->update('accounts', array('email_verified' => '1'), array('email_hash' => $hash));
 	success('You have now verified your e-mail, this will increase the security of your account. Thank you for doing this.');
 }
 ?>
