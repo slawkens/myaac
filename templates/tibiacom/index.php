@@ -363,8 +363,6 @@ foreach($config['menu_categories'] as $id => $cat) {
 	<?php
 	}
 	?>
-}
-?>
 		<script type="text/javascript">
             InitializePage();
         </script>
