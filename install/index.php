@@ -30,16 +30,30 @@ $steps = array(1 => 'welcome', 2 => 'license', 3 => 'requirements', 4 => 'config
 if(!in_array($step, $steps)) // check if step is valid
 	die('ERROR: Unknown step.');
 
+$errors = array();
 if($step == 'database')
 {
 	foreach($_POST['vars'] as $key => $value)
 	{
-		if(empty($value))
+		if($key != 'usage' && empty($value))
 		{
-			$step = 'config';
-			$errors = '<p class="error">' . $locale['please_fill_all'] . '</p>';
+			$errors[] = $locale['please_fill_all'];
 			break;
 		}
+		else if($key == 'mail_admin' && !Validator::email($value))
+		{
+			$errors[] = $locale['step_config_mail_admin_error'];
+			break;
+		}
+		else if($key == 'mail_address' && !Validator::email($value))
+		{
+			$errors[] = $locale['step_config_mail_address_error'];
+			break;
+		}
+	}
+
+	if(!empty($errors)) {
+		$step = 'config';
 	}
 }
 

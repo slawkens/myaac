@@ -211,7 +211,8 @@ if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_stat
 			}
 		}
 		else {
-			registerDatabaseConfig('last_usage_report', time());
+			registerDatabaseConfig('last_usage_report', time() - ($report_time - (7 * 24 * 60 * 60))); // first report after a week
+			$should_report = false;
 		}
 	}
 	

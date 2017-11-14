@@ -79,6 +79,7 @@ echo $twig->render('install.config.html.twig', array(
 	'clients' => $clients,
 	'locale' => $locale,
 	'session' => $_SESSION,
+	'errors' => isset($errors) ? $errors : null,
 	'buttons' => next_buttons()
 ));
 ?>

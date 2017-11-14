@@ -20,7 +20,7 @@
 				<label for="vars_client">
 					<span>{{ locale.step_config_client }}</span>
 				</label>
-				<br>
+				<br/>
 				<select name="vars[client]" id="vars_client">
 					{% for id, version in clients %}
 					<option value="{{ id }}">{{ version }}</option>
@@ -36,7 +36,8 @@
 				<label for="vars_usage">
 					<span>{{ locale.step_config_usage }}</span>
 				</label>
-				<br>
+				<br/>
+				<input type="hidden" value="0" name="vars[usage]">
 				<input type="checkbox" name="vars[usage]" id="vars_usage" value="1" checked/>
 			</td>
 			<td>
@@ -45,5 +46,10 @@
 		</tr>
 	</table>
 
+	{% if errors is defined %}
+		{% for error in errors %}
+			<p class="error">{{ error }}</p>
+		{% endfor %}
+	{% endif %}
 	{{ buttons|raw }}
 </form>

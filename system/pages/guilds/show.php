@@ -10,7 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$guild_name = urldecode($_REQUEST['guild']);
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 if(!Validator::guildName($guild_name))
 	$errors[] = Validator::getLastError();
 
@@ -21,6 +21,7 @@ if(empty($errors))
 	if(!$guild->isLoaded())
 		$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 }
+
 if(!empty($errors))
 {
 	echo $twig->render('error_box.html.twig', array('errors' => $errors));
