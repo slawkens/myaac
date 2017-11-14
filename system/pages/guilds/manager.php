@@ -10,20 +10,20 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$guild_name = urldecode($_REQUEST['guild']);
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 if(!Validator::guildName($guild_name)) {
-	$guild_errors[] = Validator::getLastError();
+	$errors[] = Validator::getLastError();
 }
 
-if(empty($guild_errors)) {
+if(empty($errors)) {
 	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded()) {
-		$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 	}
 }
 
-if(empty($guild_errors)) {
+if(empty($errors)) {
 	if($logged) {
 		$guild_leader_char = $guild->getOwner();
 		$rank_list = $guild->getGuildRanksList();
@@ -45,16 +45,16 @@ if(empty($guild_errors)) {
 		}
 		else
 		{
-			$guild_errors[] = 'You are not a leader of guild!';
+			$errors[] = 'You are not a leader of guild!';
 		}
 	}
 	else
 	{
-		$guild_errors[] = 'You are not logged. You can\'t manage guild.';
+		$errors[] = 'You are not logged. You can\'t manage guild.';
 	}
 }
-if(!empty($guild_errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+if(!empty($errors)) {
+	echo $twig->render('error_box.html.twig', array('errors' => $errors));
 }
 
 ?>

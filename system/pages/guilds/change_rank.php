@@ -10,11 +10,15 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$guild_name = urldecode($_REQUEST['guild']);
-if(!Validator::guildName($guild_name))
-	$errors[] = Validator::getLastError();
-if(!$logged)
+if(!$logged) {
 	$errors[] = 'You are not logged in. You can\'t change rank.';
+}
+else {
+	$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
+	if(!Validator::guildName($guild_name))
+		$errors[] = Validator::getLastError();
+}
+
 if(empty($errors))
 {
 	$guild = $ots->createObject('Guild');
@@ -22,6 +26,7 @@ if(empty($errors))
 	if(!$guild->isLoaded())
 		$errors[] = 'Guild with name <b>' . $guild_name . '</b> doesn\'t exist.';
 }
+
 if(!empty($errors))
 {
 	echo $twig->render('error_box.html.twig', array('errors' => $errors));
@@ -136,6 +141,7 @@ if($guild_vice)
 			if(!$player_has_lower_rank)
 				$change_errors[] = 'This player has higher rank in guild than you. You can\'t change his/her rank.';
 		}
+		
 		if(empty($change_errors))
 		{
 			$player_to_change->setRank($rank);

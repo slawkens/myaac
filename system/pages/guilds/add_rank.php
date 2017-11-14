@@ -10,24 +10,25 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$guild_name = urldecode($_REQUEST['guild']);
-$ranknew = $_REQUEST['rank_name'];
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
+$new_rank = isset($_REQUEST['rank_name']) ? $_REQUEST['rank_name'] : null;
 if(!Validator::guildName($guild_name)) {
-	$guild_errors[] = Validator::getLastError();
+	$errors[] = Validator::getLastError();
 }
-if(empty($guild_errors)) {
-	if(!Validator::rankName($ranknew)) {
-		$guild_errors[] = 'Invalid rank name format.';
+
+if(empty($errors)) {
+	if(!Validator::rankName($new_rank)) {
+		$errors[] = 'Invalid rank name format.';
 	}
 	if(!$logged) {
-		$guild_errors[] = 'You are not logged.';
+		$errors[] = 'You are not logged.';
 	}
 	$guild = $ots->createObject('Guild');
 	$guild->find($guild_name);
 	if(!$guild->isLoaded()) {
-		$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 	}
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		$guild_leader_char = $guild->getOwner();
 		$rank_list = $guild->getGuildRanksList();
 		$rank_list->orderBy('level', POT::ORDER_DESC);
@@ -44,17 +45,17 @@ if(empty($guild_errors)) {
 			$new_rank = new OTS_GuildRank();
 			$new_rank->setGuild($guild);
 			$new_rank->setLevel(1);
-			$new_rank->setName($ranknew);
+			$new_rank->setName($new_rank);
 			$new_rank->save();
 			header("Location: ?subtopic=guilds&guild=".$guild->getName()."&action=manager");
 			echo 'New rank added. Redirecting...';
 		}
-		else  {
-			$guild_errors[] = 'You are not a leader of guild!';
+		else {
+			$errors[] = 'You are not a leader of guild!';
 		}
 	}
-	if(!empty($guild_errors)) {
-		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
 		
 		echo $twig->render('guilds.back_button.html.twig', array(
 			'new_line' => true,
@@ -64,8 +65,8 @@ if(empty($guild_errors)) {
 }
 else
 {
-	if(!empty($guild_errors)) {
-		echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+	if(!empty($errors)) {
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
 		
 		echo $twig->render('guilds.back_button.html.twig', array(
 			'new_line' => true

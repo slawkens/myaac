@@ -440,7 +440,7 @@
 												{% else %}
 												<td><font color="red"><b>Offline</b></font></td>
 												{% endif %}
-												<td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|url_encode) }}" >Edit</a>]</td>
+												<td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]</td>
 											</tr>
 											{% endfor %}
 										</table>

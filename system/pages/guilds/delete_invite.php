@@ -10,23 +10,27 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-//set rights in guild
-$guild_name = urldecode($_REQUEST['guild']);
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 $name = stripslashes($_REQUEST['name']);
+
 if(!$logged)
-	$guild_errors[] = 'You are not logged in. You can\'t delete invitations.';
+	$errors[] = 'You are not logged in. You can\'t delete invitations.';
+
 if(!Validator::guildName($guild_name))
-	$guild_errors[] = Validator::getLastError();
+	$errors[] = Validator::getLastError();
+
 if(!Validator::characterName($name))
-	$guild_errors[] = 'Invalid name format.';
-if(empty($guild_errors))
+	$errors[] = 'Invalid name format.';
+
+if(empty($errors))
 {
-	$guild = $ots->createObject('Guild');
+	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded())
-		$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		$errors[] = "Guild with name <b>" . $guild_name . "</b> doesn't exist.";
 }
-if(empty($guild_errors))
+
+if(empty($errors))
 {
 	$rank_list = $guild->getGuildRanksList();
 	$rank_list->orderBy('level', POT::ORDER_DESC);
@@ -58,16 +62,17 @@ if(empty($guild_errors))
 		}
 	}
 }
-if(empty($guild_errors))
+if(empty($errors))
 {
 	$player = new OTS_Player();
 	$player->find($name);
 	if(!$player->isLoaded())
-		$guild_errors[] = 'Player with name <b>'.$name.'</b> doesn\'t exist.';
+		$errors[] = 'Player with name <b>' . $name . '</b> doesn\'t exist.';
 }
 if(!$guild_vice)
-	$guild_errors[] = 'You are not a leader or vice leader of guild <b>'.$guild_name.'</b>.';
-if(empty($guild_errors))
+	$errors[] = 'You are not a leader or vice leader of guild <b>' . $guild_name . '</b>.';
+
+if(empty($errors))
 {
 	include(SYSTEM . 'libs/pot/InvitesDriver.php');
 	new InvitesDriver($guild);
@@ -79,14 +84,14 @@ if(empty($guild_errors))
 			if($invited->getName() == $player->getName())
 				$is_invited = true;
 		if(!$is_invited)
-			$guild_errors[] = '<b>'.$player->getName().'</b> isn\'t invited to your guild.';
+			$errors[] = '<b>'.$player->getName().'</b> isn\'t invited to your guild.';
 	}
 	else
-		$guild_errors[] = 'No one is invited to your guild.';
+		$errors[] = 'No one is invited to your guild.';
 }
-if(!empty($guild_errors))
+if(!empty($errors))
 {
-	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+	echo $twig->render('error_box.html.twig', array('errors' => $errors));
 	
 	echo $twig->render('guilds.back_button.html.twig', array('action' => '?subtopic=guilds&action=show&guild=' . $guild_name));
 }

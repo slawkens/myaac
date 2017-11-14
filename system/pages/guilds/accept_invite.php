@@ -11,14 +11,16 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 //set rights in guild
-$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : NULL;
-$name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
+$name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : null;
 if(!$logged) {
 	$errors[] = 'You are not logged in. You can\'t accept invitations.';
 }
+
 if(!Validator::guildName($guild_name)) {
 	$errors[] = Validator::getLastError();
 }
+
 if(empty($errors)) {
 	$guild = $ots->createObject('Guild');
 	$guild->find($guild_name);

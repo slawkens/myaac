@@ -10,8 +10,9 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$guild_name = urldecode($_REQUEST['guild']);
-$rank_to_delete = (int) $_REQUEST['rankid'];
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
+$rank_to_delete = isset($_REQUEST['rankid']) ? (int) $_REQUEST['rankid'] : null;
+
 if(!Validator::guildName($guild_name)) {
 	$guild_errors[] = Validator::getLastError();
 }
