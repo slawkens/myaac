@@ -16,11 +16,11 @@ if(!$logged) {
 	return;
 }
 
-$new_rank = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : null;
+$name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : null;
 $new_nick = isset($_REQUEST['nick']) ? stripslashes($_REQUEST['nick']) : null;
 
-if(!$new_rank) {
-	echo 'Please enter new rank.';
+if(!$name) {
+	echo 'Please enter new name.';
 	return;
 }
 
