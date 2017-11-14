@@ -22,7 +22,15 @@ define('MOTD_EXISTS', fieldExist('motd', 'guilds'));
 if(empty($action)) {
 	require(PAGES . 'guilds/list_of_guilds.php');
 }
-else if(file_exists(PAGES . 'guilds/' . $action . '.php')) {
-	require(PAGES . 'guilds/' . $action . '.php');
+else {
+	if(!ctype_alnum(str_replace(array('-', '_'), '', $action))) {
+		error('Error: Action contains illegal characters.');
+	}
+	else if(file_exists(PAGES . 'guilds/' . $action . '.php')) {
+		require(PAGES . 'guilds/' . $action . '.php');
+	}
+	else {
+		error('This page does not exists.');
+	}
 }
 ?>

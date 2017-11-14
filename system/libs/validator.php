@@ -364,6 +364,11 @@ class Validator
 	 */
 	public static function guildName($name)
 	{
+		if(empty($name)) {
+			self::$lastError = 'Please enter guild name.';
+			return false;
+		}
+		
 		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789- ") != strlen($name)) {
 			self::$lastError = 'Invalid guild name format.';
 			return false;
@@ -386,6 +391,11 @@ class Validator
 	 */
 	public static function rankName($name)
 	{
+		if(empty($name)) {
+			self::$lastError = 'Please enter rank name.';
+			return false;
+		}
+		
 		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789-[ ] ") != strlen($name)) {
 			self::$lastError = 'Invalid rank name. Please use only a-Z, 0-9 and spaces.';
 			return false;

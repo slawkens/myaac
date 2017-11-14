@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 //set rights in guild
-$guild_name = isset($_REQUEST['guild']) ? $_REQUEST['guild'] : NULL;
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : NULL;
 $name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
 if(!$logged) {
 	$errors[] = 'You are not logged in. You can\'t accept invitations.';
@@ -86,12 +86,13 @@ else
 				}
 			}
 		}
-	}
-	
-	if(!$acc_invited) {
-		$errors[] = "Any character from your account isn't invited to <b>" . $guild->getName() . "</b>.";
+
+		if(!$acc_invited) {
+			$errors[] = "Any character from your account isn't invited to <b>" . $guild->getName() . "</b>.";
+		}
 	}
 }
+
 if(!empty($errors)) {
 	echo $twig->render('error_box.html.twig', array('errors' => $errors));
 	

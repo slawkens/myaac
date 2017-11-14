@@ -57,6 +57,11 @@ $function = new Twig_SimpleFunction('hook', function ($hook) {
 });
 $twig->addFunction($function);
 
+$filter = new Twig_SimpleFilter('urlencode', function ($s) {
+	return urlencode($s);
+});
+$twig->addFilter($filter);
+
 // trim values we receive
 if(isset($_POST))
 {

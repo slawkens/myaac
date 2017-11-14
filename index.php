@@ -68,72 +68,74 @@ if(empty($uri) || isset($_REQUEST['template'])) {
 	$_REQUEST['p'] = 'news';
 	$found = true;
 }
-else if(!preg_match('/[^A-z0-9_\-]/', $uri) && file_exists(SYSTEM . 'pages/' . $uri . '.php')) {
-	$_REQUEST['p'] = $uri;
-	$found = true;
-}
 else {
-	$rules = array(
-		'/^account\/manage\/?$/' => array('subtopic' => 'accountmanagement'),
-		'/^account\/create\/?$/' => array('subtopic' => 'createaccount'),
-		'/^account\/lost\/?$/' => array('subtopic' => 'lostaccount'),
-		'/^account\/logout\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'logout'),
-		'/^account\/password\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_password'),
-		'/^account\/register\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'register'),
-		'/^account\/register\/new\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'register_new'),
-		'/^account\/email\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_email'),
-		'/^account\/info\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_info'),
-		'/^account\/character\/create\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'create_character'),
-		'/^account\/character\/name\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_name'),
-		'/^account\/character\/sex\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_sex'),
-		'/^account\/character\/delete\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'delete_character'),
-		'/^account\/character\/comment\/[A-Za-z]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment', 'name' => '$3'),
-		'/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment'),
-		'/^account\/confirm_email\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'confirm_email', 'v' => '$2'),
-		'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
-		'/^commands\/add\/?$/' => array('subtopic' => 'commands', 'action' => 'add'),
-		'/^commands\/edit\/?$/' => array('subtopic' => 'commands', 'action' => 'edit'),
-		'/^faq\/add\/?$/' => array('subtopic' => 'faq', 'action' => 'add'),
-		'/^faq\/edit\/?$/' => array('subtopic' => 'faq', 'action' => 'edit'),
-		'/^forum\/add_board\/?$/' => array('subtopic' => 'forum', 'action' => 'add_board'),#
-		'/^forum\/edit_board\/?$/' => array('subtopic' => 'forum', 'action' => 'edit_board'),
-		'/^forum\/board\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_board', 'id' => '$2'),
-		'/^forum\/board\/[0-9]+\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_board', 'id' => '$2', 'page' => '$3'),
-		'/^forum\/thread\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2'),
-		'/^forum\/thread\/[0-9]+\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2', 'page' => '$3'),
-		'/^gallery\/add\/?$/' => array('subtopic' => 'gallery', 'action' => 'add'),
-		'/^gallery\/edit\/?$/' => array('subtopic' => 'gallery', 'action' => 'edit'),
-		'/^gallery\/[0-9]+\/?$/' => array('subtopic' => 'gallery', 'image' => '$1'),
-		'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
-		'/^guilds\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'guilds', 'action' => 'show', 'guild' => '$1'),
-		'/^highscores\/[A-Za-z0-9-_]+\/[A-Za-z0-9-_]+\/[0-9]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'vocation' => '$2', 'page' => '$3'),
-		'/^highscores\/[A-Za-z0-9-_]+\/[0-9]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'page' => '$2'),
-		'/^highscores\/[A-Za-z0-9-_]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'vocation' => '$2'),
-		'/^highscores\/[A-Za-z0-9-_\']+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1'),
-		'/^news\/add\/?$/' => array('subtopic' => 'news', 'action' => 'add'),
-		'/^news\/edit\/?$/' => array('subtopic' => 'news', 'action' => 'edit'),
-		'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
-		'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
-		'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
-		'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2'),
-		'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
-	);
-	
-	foreach($rules as $rule => $redirect) {
-		if (preg_match($rule, $uri)) {
-			$tmp = explode('/', $uri);
-			foreach($redirect as $key => $value) {
-				
-				if(strpos($value, '$') !== false) {
-					$value = str_replace('$' . $value[1], $tmp[$value[1]], $value);
+	$tmp = strtolower($uri);
+	if(!preg_match('/[^A-z0-9_\-]/', $uri) && file_exists(SYSTEM . 'pages/' . $tmp . '.php')) {
+		$_REQUEST['p'] = $uri;
+		$found = true;
+	}
+	else {
+		$rules = array(
+			'/^account\/manage\/?$/' => array('subtopic' => 'accountmanagement'),
+			'/^account\/create\/?$/' => array('subtopic' => 'createaccount'),
+			'/^account\/lost\/?$/' => array('subtopic' => 'lostaccount'),
+			'/^account\/logout\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'logout'),
+			'/^account\/password\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_password'),
+			'/^account\/register\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'register'),
+			'/^account\/register\/new\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'register_new'),
+			'/^account\/email\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_email'),
+			'/^account\/info\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_info'),
+			'/^account\/character\/create\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'create_character'),
+			'/^account\/character\/name\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_name'),
+			'/^account\/character\/sex\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_sex'),
+			'/^account\/character\/delete\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'delete_character'),
+			'/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment'),
+			'/^account\/confirm_email\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'confirm_email', 'v' => '$2'),
+			'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
+			'/^commands\/add\/?$/' => array('subtopic' => 'commands', 'action' => 'add'),
+			'/^commands\/edit\/?$/' => array('subtopic' => 'commands', 'action' => 'edit'),
+			'/^faq\/add\/?$/' => array('subtopic' => 'faq', 'action' => 'add'),
+			'/^faq\/edit\/?$/' => array('subtopic' => 'faq', 'action' => 'edit'),
+			'/^forum\/add_board\/?$/' => array('subtopic' => 'forum', 'action' => 'add_board'),#
+			'/^forum\/edit_board\/?$/' => array('subtopic' => 'forum', 'action' => 'edit_board'),
+			'/^forum\/board\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_board', 'id' => '$2'),
+			'/^forum\/board\/[0-9]+\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_board', 'id' => '$2', 'page' => '$3'),
+			'/^forum\/thread\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2'),
+			'/^forum\/thread\/[0-9]+\/[0-9]+\/?$/' => array('subtopic' => 'forum', 'action' => 'show_thread', 'id' => '$2', 'page' => '$3'),
+			'/^gallery\/add\/?$/' => array('subtopic' => 'gallery', 'action' => 'add'),
+			'/^gallery\/edit\/?$/' => array('subtopic' => 'gallery', 'action' => 'edit'),
+			'/^gallery\/[0-9]+\/?$/' => array('subtopic' => 'gallery', 'image' => '$1'),
+			'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
+			'/^guilds\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'guilds', 'action' => 'show', 'guild' => '$1'),
+			'/^highscores\/[A-Za-z0-9-_]+\/[A-Za-z0-9-_]+\/[0-9]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'vocation' => '$2', 'page' => '$3'),
+			'/^highscores\/[A-Za-z0-9-_]+\/[0-9]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'page' => '$2'),
+			'/^highscores\/[A-Za-z0-9-_]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1', 'vocation' => '$2'),
+			'/^highscores\/[A-Za-z0-9-_\']+\/?$/' => array('subtopic' => 'highscores', 'list' => '$1'),
+			'/^news\/add\/?$/' => array('subtopic' => 'news', 'action' => 'add'),
+			'/^news\/edit\/?$/' => array('subtopic' => 'news', 'action' => 'edit'),
+			'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
+			'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
+			'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
+			'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2'),
+			'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
+		);
+		
+		foreach($rules as $rule => $redirect) {
+			if (preg_match($rule, $uri)) {
+				$tmp = explode('/', $uri);
+				foreach($redirect as $key => $value) {
+					
+					if(strpos($value, '$') !== false) {
+						$value = str_replace('$' . $value[1], $tmp[$value[1]], $value);
+					}
+					
+					$_REQUEST[$key] = $value;
+					$_GET[$key] = $value;
 				}
 				
-				$_REQUEST[$key] = $value;
-				$_GET[$key] = $value;
+				$found = true;
+				break;
 			}
-			
-			$found = true;
-			break;
 		}
 	}
 }

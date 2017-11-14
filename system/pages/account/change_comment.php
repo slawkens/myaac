@@ -10,7 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$player_name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : null;
+$player_name = isset($_REQUEST['name']) ? stripslashes(urldecode($_REQUEST['name'])) : null;
 $new_comment = isset($_POST['comment']) ? htmlspecialchars(stripslashes(substr($_POST['comment'],0,2000))) : NULL;
 $new_hideacc = isset($_POST['accountvisible']) ? (int)$_POST['accountvisible'] : NULL;
 

@@ -32,7 +32,13 @@ defined('MYAAC') or die('Direct access not allowed!');
 						$tmp = array($_REQUEST['subtopic']);
 					}
 					else {
-						$tmp = explode('/', URI);
+						$tmp = URI;
+						if(empty($tmp)) {
+							$tmp = array('news');
+						}
+						else {
+							$tmp = explode('/', URI);
+						}
 					}
 					
 				if(in_array($tmp[0], get_template_pages(MENU_CATEGORY_NEWS)))

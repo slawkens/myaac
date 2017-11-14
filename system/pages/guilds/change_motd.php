@@ -13,7 +13,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 if(!MOTD_EXISTS)
 	return;
 
-$guild_name = $_REQUEST['guild'];
+$guild_name = urldecode($_REQUEST['guild']);
 if(!Validator::guildName($guild_name)) {
 	$errors[] = Validator::getLastError();
 }

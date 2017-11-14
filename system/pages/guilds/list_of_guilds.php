@@ -79,22 +79,20 @@ else
 	{
 		foreach($guilds_list as $guild)
 		{
-			$link = ($config['friendly_urls'] ? '' : '?') . 'guilds/' . $guild->getName();
-			
 			$guild_logo = $guild->getCustomField('logo_name');
 			if(empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo))
 				$guild_logo = "default.gif";
+
 			$description = $guild->getCustomField('description');
 			$description_with_lines = str_replace(array("\r\n", "\n", "\r"), '<br />', $description, $count);
 			if($count < $config['guild_description_lines_limit'])
 				$description = wordwrap(nl2br($description), 60, "<br />", true);
-			//$description = $description_with_lines;
-			
+
 			echo '<TR BGCOLOR="' . getStyle($showed_guilds++) . '"><TD><IMG SRC="images/guilds/' . $guild_logo.'" WIDTH=64 HEIGHT=64></TD>
 					<TD valign="top"><B>'.$guild->getName().'</B><BR/>'.$description.'';
 			if(admin())
 				echo '<br /><a href="?subtopic=guilds&action=delete_by_admin&guild='.$guild->getName().'">Delete this guild (for ADMIN only!)</a>';
-			echo '</TD><TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="' . $link . '" METHOD=post><TR><TD>
+			echo '</TD><TD><TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0><FORM ACTION="' . getGuildLink($guild->getName(), false) . '" METHOD=post><TR><TD>
 					<INPUT TYPE=image NAME="View" ALT="View" SRC="'.$template_path.'/images/global/buttons/sbutton_view.gif" BORDER=0 WIDTH=120 HEIGHT=18>
 					</TD></TR></FORM></TABLE>
 					</TD></TR>';

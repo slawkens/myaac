@@ -30,7 +30,7 @@ if(isset($_REQUEST['vocation_id'])) {
 	}
 }
 else {
-	$vocation = (isset($_REQUEST['vocation']) ? rawurldecode($_REQUEST['vocation']) : 'all');
+	$vocation = (isset($_REQUEST['vocation']) ? urldecode($_REQUEST['vocation']) : 'all');
 	
 	if($vocation == 'all') {
 		$vocation_id = 'all';

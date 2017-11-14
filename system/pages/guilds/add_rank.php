@@ -10,7 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$guild_name = $_REQUEST['guild'];
+$guild_name = urldecode($_REQUEST['guild']);
 $ranknew = $_REQUEST['rank_name'];
 if(!Validator::guildName($guild_name)) {
 	$guild_errors[] = Validator::getLastError();

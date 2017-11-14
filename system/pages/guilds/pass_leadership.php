@@ -10,7 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$guild_name = isset($_REQUEST['guild']) ? $_REQUEST['guild'] : NULL;
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : NULL;
 $pass_to = isset($_REQUEST['player']) ? stripslashes($_REQUEST['player']) : NULL;
 if(!Validator::guildName($guild_name)) {
 	$guild_errors[] = Validator::getLastError();

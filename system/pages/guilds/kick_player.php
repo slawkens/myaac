@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 //set rights in guild
-$guild_name = $_REQUEST['guild'];
+$guild_name = urldecode($_REQUEST['guild']);
 $name = stripslashes($_REQUEST['name']);
 if(!$logged) {
 	$errors[] = 'You are not logged in. You can\'t kick characters.';

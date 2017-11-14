@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 //set rights in guild
-$guild_name = isset($_REQUEST['guild']) ? $_REQUEST['guild'] : NULL;
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : NULL;
 $name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
 if(!$logged) {
 	$errors[] = "You are not logged in. You can't invite players.";
