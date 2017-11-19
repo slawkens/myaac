@@ -96,8 +96,8 @@ elseif($action == 'sendcode')
 					<p>Account name: '.$account->getName().'</p>
 					<br />
 					To do so, please click this link:
-					<p><a href="' . BASE_URL . '/?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'">'.BASE_URL.'/?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'</a></p>
-					<p>or open page: <i>' . BASE_URL . '/?subtopic=lostaccount&action=checkcode</i> and in field "code" write <b>'.$newcode.'</b></p>
+					<p><a href="' . BASE_URL . '?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'">'.BASE_URL.'/?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'</a></p>
+					<p>or open page: <i>' . BASE_URL . '?subtopic=lostaccount&action=checkcode</i> and in field "code" write <b>'.$newcode.'</b></p>
 					<br/>
 						<p>If you did not request a password change, you may ignore this message and your password will remain unchanged.';
 
@@ -291,13 +291,14 @@ elseif($action == 'step3')
 						{
 							$account->setEMail($new_email);
 							
+							$tmp_new_pass = $new_pass;
 							if($config_salt_enabled)
 							{
 								$salt = generateRandomString(10, false, true, true);
-								$new_pass_with_salt = $salt . $new_pass;
+								$tmp_new_pass = $salt . $new_pass;
 							}
 							
-							$account->setPassword(encrypt($new_pass_with_salt));
+							$account->setPassword(encrypt($tmp_new_pass));
 							$account->save();
 							
 							if($config_salt_enabled)
@@ -479,14 +480,15 @@ elseif($action == 'setnewpassword')
 			{
 				if(Validator::password($newpassword))
 				{
+					$tmp_new_pass = $newpassword;
 					if($config_salt_enabled)
 					{
 						$salt = generateRandomString(10, false, true, true);
-						$newpassword_with_salt = $salt . $newpassword;
+						$tmp_new_pass  = $salt . $newpassword;
 						$account->setCustomField('salt', $salt);
 					}
 					
-					$account->setPassword(encrypt($newpassword_with_salt));
+					$account->setPassword(encrypt($tmp_new_pass ));
 					$account->save();
 					$account->setCustomField('email_code', '');
 					echo 'New password to your account is below. Now you can login.<BR>
