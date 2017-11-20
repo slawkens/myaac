@@ -144,10 +144,16 @@ else {
 // define page visited, so it can be used within events system
 $page = isset($_REQUEST['subtopic']) ? $_REQUEST['subtopic'] : (isset($_REQUEST['p']) ? $_REQUEST['p'] : '');
 if(empty($page) || !preg_match('/^[A-z0-9\_\-]+$/', $page)) {
-	if(!$found)
-		$page = '404';
-	else
-		$page = 'news';
+	$tmp = URI;
+	if(!empty($tmp)) {
+		$page = $tmp;
+	}
+	else {
+		if(!$found)
+			$page = '404';
+		else
+			$page = 'news';
+	}
 }
 
 $page = strtolower($page);
