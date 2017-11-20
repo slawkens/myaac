@@ -1,3 +1,40 @@
+[0.7.0 - 20.11.2017]
+	- moved template menus to database, they're now dynamically loaded
+	- added anonymous usage statistics reporting (only if user agrees, first usage report will be send after 7 days)
+	- you can edit them in Admin Panel under 'Menus' option
+	- you can also add custom links, like http://google.pl
+	- added networks (facebook and twitter) and highscores (top 5) boxes to tibiacom template, configurable in templates/tibiacom/config.php
+	- added news ticker for kathrine template
+	- added featured article to tibiacom template (you can add them with add news button)
+	- added tinymce editor to 'Pages' in admin panel
+	- added links to edit/delete/hide custom page directly from page
+	- update forum post after editing news (when forum post has been created)
+	- enabled code plugin for tinymce which enabled raw html code editing
+	- removed videos pages, as it can be easily added using custom Menus and Pages with insert Media
+	- removed bug_report configurable, its now enabled by default
+	- log some error info when mail cannot be send on account create
+	- twig getLink function will now return with full url (BASE_URL included)
+	- verify install post values directly on config page and display error
+	- updated tinymce to version 4.7.2 (from 4.7.0)
+	- updated phpmailer to version 5.2.26 (from 5.2.23)
+	- (#30) (fix) recovering account on servers that doesn't support salts
+	- (fix) account email confirm function
+	- (fix) showing changelog with urls in Admin Panel
+	- (fix) uninstalling plugin
+	- (fix) polls box in tibiacom template
+	- (fix) remove hooks from db on plugin deinstall
+	- (fix) some weird include possibilities with forum and account actions (verify action name)
+	- (fix) loading hooks from plugin installed from command line
+	- (fix) some changelog PHP Notice warning
+	- (internal) moved uninstall logic to Plugins class
+	- (internal) moved tibiacom boxes to separate directory
+	- (internal) moved news tickers to twig template
+	- (internal) moved Forum class to separate file
+	- (internal) moved deprecated functions to compat.php
+	- (internal) added some compat functions that are used by shop system
+	- (internal) renamed constant TICKET -> TICKER
+	- (internal) shortened message functions
+	
 [0.6.6 - 22.10.2017]
 	- fixed some php fatal error on spells page
 	- changed spells.vocations field in db size to 300
