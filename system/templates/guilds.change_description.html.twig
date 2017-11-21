@@ -6,7 +6,7 @@ Here you can change description of your guild.<br/>
 	(max. {{ config.guild_description_lines_limit }} lines, max. {{ config.guild_description_chars_limit }} chars) <input type="submit" value="Save description"/></form><br/>
 <br/>
 <center>
-	<form action="?subtopic=guilds&guild='.$guild->getName().'&action=manager" method="post">
+	<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=manager" method="post">
 		{{ include('buttons.back.html.twig') }}
 	</form>
 </center>

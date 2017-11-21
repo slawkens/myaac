@@ -61,6 +61,9 @@ if(empty($errors))
 			}
 		}
 	}
+	
+	if(!$guild_vice)
+		$errors[] = 'You are not a leader or vice leader of guild <b>' . $guild_name . '</b>.';
 }
 if(empty($errors))
 {
@@ -69,8 +72,6 @@ if(empty($errors))
 	if(!$player->isLoaded())
 		$errors[] = 'Player with name <b>' . $name . '</b> doesn\'t exist.';
 }
-if(!$guild_vice)
-	$errors[] = 'You are not a leader or vice leader of guild <b>' . $guild_name . '</b>.';
 
 if(empty($errors))
 {

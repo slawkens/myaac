@@ -61,7 +61,7 @@ else
 	}
 ?>
 <table border="0" cellspacing="1" cellpadding="4" width="100%">
-<?
+<?php
 	if($_page > 0)
 		echo '<tr><td width="100%" align="right" valign="bottom"><a href="?subtopic=changelog&page=' . ($_page - 1) . '" class="size_xxs">Previous Page</a></td></tr>';
 
