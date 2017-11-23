@@ -18,6 +18,7 @@ CREATE TABLE `myaac_menu`
 /* MENU_CATEGORY_NEWS kathrine */
 INSERT INTO `myaac_menu` (`template`, `name`, `link`, `category`, `ordering`) VALUES ('kathrine', 'Latest News', 'news', 1, 0);
 INSERT INTO `myaac_menu` (`template`, `name`, `link`, `category`, `ordering`) VALUES ('kathrine', 'News Archive', 'news/archive', 1, 1);
+INSERT INTO `myaac_menu` (`template`, `name`, `link`, `category`, `ordering`) VALUES ('kathrine', 'Changelog', 'changelog', 1, 2);
 /* MENU_CATEGORY_ACCOUNT kathrine */
 INSERT INTO `myaac_menu` (`template`, `name`, `link`, `category`, `ordering`) VALUES ('kathrine', 'Account Management', 'account/manage', 2, 0);
 INSERT INTO `myaac_menu` (`template`, `name`, `link`, `category`, `ordering`) VALUES ('kathrine', 'Create Account', 'account/create', 2, 1);

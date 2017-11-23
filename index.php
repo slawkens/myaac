@@ -93,6 +93,7 @@ else {
 			'/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment'),
 			'/^account\/confirm_email\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'confirm_email', 'v' => '$2'),
 			'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
+			'/^changelog\/[0-9]+\/?$/' => array('subtopic' => 'changelog', 'page' => '$1'),
 			'/^commands\/add\/?$/' => array('subtopic' => 'commands', 'action' => 'add'),
 			'/^commands\/edit\/?$/' => array('subtopic' => 'commands', 'action' => 'edit'),
 			'/^faq\/add\/?$/' => array('subtopic' => 'faq', 'action' => 'add'),
