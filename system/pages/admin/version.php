@@ -15,7 +15,8 @@ $title = 'Version check';
 //$myaac_version = fgets($file);
 $myaac_version = @file_get_contents('http://my-aac.org/VERSION');
 if(!$myaac_version) {
-	warning('Error while fetching version info from http://my-aac.org. Site might be offline.');
+	warning('Error while fetching version info from http://my-aac.org<br/>
+	Please try again later.');
 	return;
 }
 
