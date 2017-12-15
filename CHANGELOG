@@ -1,3 +1,11 @@
+[0.7.1 - 13.12.2017]
+	- added changelog menu item to kathrine template
+	- fixed some php short tag in changelogs page
+	- fixed guild change description back button
+	- removed duplicated "Support List" menu item from tibiacom template
+	- changed some notice when version check is failed
+	- (internal) moved changelog to twig
+
 [0.7.0 - 20.11.2017]
 	- moved template menus to database, they're now dynamically loaded
 	- added anonymous usage statistics reporting (only if user agrees, first usage report will be send after 7 days)
