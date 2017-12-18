@@ -356,7 +356,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 	?>
 	</div>
 	<?php
-	if($id == MENU_CATEGORY_SHOP) {
+	if($id == MENU_CATEGORY_SHOP || (!$config['gifts_system'] && $id == MENU_CATEGORY_SHOP - 1)) {
 	?>
 		<div id='MenuBottom' style='background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);'></div>
 	<?php
