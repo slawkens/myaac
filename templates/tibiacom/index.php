@@ -21,6 +21,9 @@ if(isset($config['boxes']))
 			if(PAGE != 'news') {
 				if(strpos(URI, 'subtopic=') !== false) {
 					$tmp = $_REQUEST['subtopic'];
+					if($tmp == 'accountmanagement') {
+						$tmp = 'accountmanage';
+					}
 				}
 				else {
 					$tmp = str_replace('/', '', URI);
@@ -316,7 +319,7 @@ if(isset($config['boxes']))
 $menus = get_template_menus();
 
 foreach($config['menu_categories'] as $id => $cat) {
-	if(!isset($menus[$id])) {
+	if(!isset($menus[$id]) || ($id == MENU_CATEGORY_SHOP && !$config['gifts_system'])) {
 		continue;
 	}
 	?>

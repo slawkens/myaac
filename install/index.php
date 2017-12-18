@@ -1,9 +1,6 @@
 <?php
 require('../common.php');
 
-// step
-$step = isset($_POST['step']) ? $_POST['step'] : 'welcome';
-
 // includes
 require(SYSTEM . 'functions.php');
 require(BASE . 'install/includes/functions.php');
@@ -25,6 +22,9 @@ if(isset($_POST['vars']))
 	foreach($_POST['vars'] as $key => $value)
 		$_SESSION['var_' . $key] = $value;
 }
+
+// step
+$step = isset($_POST['step']) ? $_POST['step'] : 'welcome';
 
 $steps = array(1 => 'welcome', 2 => 'license', 3 => 'requirements', 4 => 'config', 5 => 'database', 6 => 'admin', 7 => 'finish');
 if(!in_array($step, $steps)) // check if step is valid
@@ -56,12 +56,46 @@ if($step == 'database')
 		$step = 'config';
 	}
 }
+else if($step == 'finish') {
+	// password
+	$password = $_SESSION['var_password'];
+
+	if(isset($_SESSION['var_account'])) {
+		if(!Validator::accountName($_SESSION['var_account'])) {
+			$errors[] = $locale['step_admin_account_error_format'];
+		}
+		else if(strtoupper($_SESSION['var_account']) == strtoupper($password)) {
+			$errors[] = $locale['step_admin_account_error_same'];
+		}
+	}
+	else if(isset($_SESSION['var_account_id'])) {
+		if(!Validator::accountId($account_id)) {
+			$errors[] = $locale['step_admin_account_id_error_format'];
+		}
+		else if($_SESSION['var_account'] == $password) {
+			$errors[] = $locale['step_admin_account_id_error_same'];
+		}
+	}
+
+	if(empty($password)) {
+		$errors[] = $locale['step_admin_password_error_empty'];
+	}
+	else if(!Validator::password($password)) {
+		$errors[] = $locale['step_admin_password_error_format'];
+	}
+
+	if(!empty($errors)) {
+		$step = 'admin';
+	}
+}
 
 $error = false;
 
 // step include
 ob_start();
-require('steps/' . $step . '.php');
+
+$step_id = array_search($step, $steps);
+require('steps/' . $step_id . '-' . $step . '.php');
 $content = ob_get_contents();
 ob_end_clean();
 

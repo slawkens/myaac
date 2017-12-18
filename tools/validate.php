@@ -18,11 +18,8 @@ $error = '';
 if(isset($_GET['account']))
 {
 	$account = $_GET['account'];
-	$tmp = strtoupper($account);
-
-	if(USE_ACCOUNT_NAME)
-	{
-		if(!Validator::accountName($tmp))
+	if(USE_ACCOUNT_NAME) {
+		if(!Validator::accountName($account))
 			error_(Validator::getLastError());
 	}
 	else if(!Validator::accountId($account))
@@ -30,9 +27,9 @@ if(isset($_GET['account']))
 
 	$_account = new OTS_Account();
 	if(USE_ACCOUNT_NAME)
-		$_account->find($tmp);
+		$_account->find($account);
 	else
-		$_account->load($tmp);
+		$_account->load($account);
 
 	if($_account->isLoaded())
 		error_('Account with this name already exist.');

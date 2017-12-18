@@ -42,7 +42,6 @@ $locale['step_config'] = 'Configuration';
 $locale['step_config_title'] = 'Basic configuration';
 $locale['step_config_server_path'] = 'Server path';
 $locale['step_config_server_path_desc'] = 'Path to your TFS main directory, where you have config.lua located.';
-
 $locale['step_config_mail_admin'] = 'Admin E-Mail';
 $locale['step_config_mail_admin_desc'] = 'Address where emails from contact form will be delivered, for example admin@gmail.com';
 $locale['step_config_mail_admin_error'] = 'Admin E-Mail is not correct.';
@@ -82,10 +81,16 @@ $locale['step_admin'] = 'Admin Account';
 $locale['step_admin_title'] = 'Create Admin Account';
 $locale['step_admin_account'] = 'Admin account name';
 $locale['step_admin_account_desc'] = 'Name of your admin account, which will be used to login to website and server.';
+$locale['step_admin_account_error_format'] = 'Invalid account name format. Use only a-Z and numbers 0-9. Minimum 3, maximum 32 characters.';
+$locale['step_admin_account_error_same'] = 'Password may not be the same as account name.';
 $locale['step_admin_account_id'] = 'Admin account id';
 $locale['step_admin_account_id_desc'] = 'ID of your admin account, which will be used to login to website and server.';
+$locale['step_admin_account_id_error_format'] = 'Invalid account number format. Please use only numbers 0-9. Minimum 6, maximum 10 characters.';
+$locale['step_admin_account_id_error_same'] = 'Password may not be the same as account number.';
 $locale['step_admin_password'] = 'Admin account password';
 $locale['step_admin_password_desc'] = 'Password to your admin account.';
+$locale['step_admin_password_error_empty'] = 'Please enter the password for your new account.';
+$locale['step_admin_password_error_format'] = 'Invalid password format. Use only a-Z and numbers 0-9. Minimum 8, maximum 30 characters.';
 
 // finish
 $locale['step_finish_admin_panel'] = 'Admin Panel';

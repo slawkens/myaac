@@ -8,6 +8,7 @@ if(!$error) {
 	echo $twig->render('install.admin.html.twig', array(
 		'locale' => $locale,
 		'session' => $_SESSION,
+		'errors' => isset($errors) ? $errors : null,
 		'buttons' => next_buttons(true, $error ? false : true)
 	));
 }

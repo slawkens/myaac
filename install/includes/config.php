@@ -1,12 +1,17 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+if(!isset($_SESSION['var_server_path'])) {
+	error($locale['step_database_error_config']);
+	$error = true;
+}
+
 	$config['server_path'] = $_SESSION['var_server_path'];
 	// take care of trailing slash at the end
 	if($config['server_path'][strlen($config['server_path']) - 1] != '/')
 		$config['server_path'] .= '/';
 
-	if(!file_exists($config['server_path'] . 'config.lua')) {
+if((!isset($error) || !$error) && !file_exists($config['server_path'] . 'config.lua')) {
 		error($locale['step_database_error_config']);
 		$error = true;
 	}

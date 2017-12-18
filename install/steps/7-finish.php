@@ -20,27 +20,7 @@ else {
 			$salt = generateRandomString(10, false, true, true);
 			$password = $salt . $password;
 		}
-/*
-		$account_db = new OTS_Account();
-		$account_db->load(1);
-		if($account_db->isLoaded()) {
-			if(USE_ACCOUNT_NAME)
-				$account_db->setName('dummy_account');
 
-			$account_db->setPassword('for sample characters. ' . generateRandomString(10));
-			$account_db->save();
-		}
-		else {
-			$new_account = new OTS_Account();
-			if(USE_ACCOUNT_NAME)
-				$new_account->create('dummy_account', 1);
-			else
-				$new_account->create(null, 1);
-
-			$new_account->setPassword('for sample characters. ' . generateRandomString(10));
-			$new_account->save();
-		}
-*/
 		$account_db = new OTS_Account();
 		if(isset($account))
 			$account_db->find($account);
@@ -55,30 +35,20 @@ else {
 			$player = new OTS_Player();
 			$player->setName('Admin');
 			
-			$player->setGroupId($groups->getHighestId());
+			$player_used = &$player;
 		}
+		else {
+			$player_used = &$player_db;
+		}
+
+		$player_used->setGroupId($groups->getHighestId());
 
 		if($account_db->isLoaded()) {
 			$account_db->setPassword(encrypt($password));
 			$account_db->setEMail($_SESSION['var_mail_admin']);
 			$account_db->save();
 			
-			if($config_salt_enabled)
-				$account_db->setCustomField('salt', $salt);
-			
-			$account_db->setCustomField('web_flags', 3);
-			$account_db->setCustomField('country', 'us');
-			if(fieldExist('group_id', 'accounts'))
-				$account_db->setCustomField('group_id', $groups->getHighestId());
-			if(fieldExist('type', 'accounts'))
-				$account_db->setCustomField('type', 5);
-
-			if(!$player_db->isLoaded())
-				$player->setAccountId($account_db->getId());
-			else
-				$player_db->setAccountId($account_db->getId());
-			
-			setSession('account', $account_db->getId());
+			$account_used = &$account_db;
 		}
 		else {
 			$new_account = new OTS_Account();
@@ -90,28 +60,30 @@ else {
 			$new_account->unblock();
 			$new_account->save();
 			
-			if($config_salt_enabled)
-				$new_account->setCustomField('salt', $salt);
-			
 			$new_account->setCustomField('created', time());
-			$new_account->setCustomField('web_flags', 3);
-			$new_account->setCustomField('country', 'us');
-			if(fieldExist('group_id', 'accounts'))
-				$new_account->setCustomField('group_id', $groups->getHighestId());
-			if(fieldExist('type', 'accounts'))
-				$new_account->setCustomField('type', 5);
-
 			$new_account->logAction('Account created.');
 			
-			if(!$player_db->isLoaded())
-				$player->setAccountId($new_account->getId());
-			else
-				$player_db->setAccountId($new_account->getId());
-			
-			setSession('account', $new_account->getId());
+			$account_used = &$new_account;
 		}
 
+		if($config_salt_enabled)
+			$account_used->setCustomField('salt', $salt);
+
+		$account_used->setCustomField('web_flags', FLAG_ADMIN + FLAG_SUPER_ADMIN);
+		$account_used->setCustomField('country', 'us');
+		if(fieldExist('group_id', 'accounts'))
+			$account_used->setCustomField('group_id', $groups->getHighestId());
+		if(fieldExist('type', 'accounts'))
+			$account_used->setCustomField('type', 5);
+
+		if(!$player_db->isLoaded())
+			$player->setAccountId($account_used->getId());
+		else
+			$player_db->setAccountId($account_used->getId());
+
 		success($locale['step_database_created_account']);
+
+		setSession('account', $account_used->getId());
 		setSession('password', encrypt($password));
 		setSession('remember_me', true);
 
@@ -143,31 +115,31 @@ INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `pl
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Rook Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Rook Sample', 4, " . getSession('account') . ", 1, 0, 150, 150, 4200, 118, 114, 38, 57, 130, 0, 0, 0, 0, 100, 11, 2200, 1298, 7, '', 400, 1, 1255179613, 2453925456, 1, 1255179614, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Rook Sample', 1, " . getSession('account') . ", 1, 0, 150, 150, 4200, 118, 114, 38, 57, 130, 0, 0, 0, 0, 100, 1, 1000, 1000, 7, '', 400, 1, 1255179613, 2453925456, 1, 1255179614, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Sorcerer Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Sorcerer Sample', 4, " . getSession('account') . ", 8, 1, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179571, 2453925456, 1, 1255179612, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Sorcerer Sample', 1, " . getSession('account') . ", 8, 1, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 1, 1000, 1000, 7, '', 470, 1, 1255179571, 2453925456, 1, 1255179612, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Druid Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Druid Sample', 4, " . getSession('account') . ", 8, 2, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179655, 2453925456, 1, 1255179658, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Druid Sample', 1, " . getSession('account') . ", 8, 2, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 1, 1000, 1000, 7, '', 470, 1, 1255179655, 2453925456, 1, 1255179658, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Paladin Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Paladin Sample', 4, " . getSession('account') . ", 8, 3, 185, 185, 4200, 118, 114, 38, 57, 129, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179854, 2453925456, 1, 1255179858, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Paladin Sample', 1, " . getSession('account') . ", 8, 3, 185, 185, 4200, 118, 114, 38, 57, 129, 0, 35, 35, 0, 100, 1, 1000, 1000, 7, '', 470, 1, 1255179854, 2453925456, 1, 1255179858, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Knight Sample'));
 		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Knight Sample', 4, " . getSession('account') . ", 8, 4, 185, 185, 4200, 118, 114, 38, 57, 131, 0, 35, 35, 0, 100, 11, 2200, 1298, 7, '', 470, 1, 1255179620, 2453925456, 1, 1255179654, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
+			if(!query($insert_into_players . "(null, 'Knight Sample', 1, " . getSession('account') . ", 8, 4, 185, 185, 4200, 118, 114, 38, 57, 131, 0, 35, 35, 0, 100, 1, 1000, 1000, 7, '', 470, 1, 1255179620, 2453925456, 1, 1255179654, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
 				$success = false;
 		}
 

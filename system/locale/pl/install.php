@@ -42,11 +42,6 @@ $locale['step_config'] = 'Konfiguracja';
 $locale['step_config_title'] = 'Podstawowa konfiguracja';
 $locale['step_config_server_path'] = 'Ścieżka do serwera';
 $locale['step_config_server_path_desc'] = 'Ścieżka do Twojego folderu z TFS, gdzie znajduje się plik config.lua.';
-$locale['step_config_account'] = 'Konto administratora';
-$locale['step_config_account_desc'] = 'Nazwa twojego konta admina, która będzie używana do logowania na stronę i do serwera.';
-$locale['step_config_password'] = 'Hasło do konta admina';
-$locale['step_config_password_desc'] = 'Hasło do Twojego konta administratora.';
-
 $locale['step_config_mail_admin'] = 'E-Mail admina';
 $locale['step_config_mail_admin_desc'] = 'Na ten adres będą dostarczane E-Maile z formularza kontaktowego , przykładowo admin@gmail.com';
 $locale['step_config_mail_admin_error'] = 'E-Mail admina jest niepoprawny.';
@@ -55,13 +50,16 @@ $locale['step_config_mail_address_desc'] = 'Ten adres będzie używany do wysył
 $locale['step_config_mail_address_error'] = 'E-Mail serwera jest niepoprawny.';
 $locale['step_config_client'] = 'Wersja klienta';
 $locale['step_config_client_desc'] = 'Używana do strony pobieranie klienta oraz kilku szablonów';
+$locale['step_config_usage'] = 'Raportowanie Statystyk';
+$locale['step_config_usage_desc'] = 'Zezwalaj MyAAC na raportowanie anonimowych statystyk? Dane są wysyłane raz na 30 dni i są w pełni anonimowe.';
 
 // database
-$locale['step_database'] = 'Baza';
+$locale['step_database'] = 'Baza Danych';
 $locale['step_database_title'] = 'Baza MySQL';
 $locale['step_database_importing'] = 'Twoja baza to MySQL. Importowanie schematu...';
 $locale['step_database_error_path'] = 'Proszę podać ścieżkę do serwera.';
 $locale['step_database_error_config'] = 'Nie można znaleźć pliku config. Jest Twoja ścieżka do katalogu serwera poprawna? Wróć się i sprawdź ponownie.';
+$locale['step_database_error_database_empty'] = 'Nie można wykryć typu bazy danych z pliku config.lua. Prawdopodobnie Twój OTS nie jest wspierany przez ten AAC.';
 $locale['step_database_error_only_mysql'] = 'Ten AAC wspiera tylko bazy danych MySQL. Z Twojego pliku config wynika, że Twój serwera używa bazy: $DATABASE_TYPE$. Proszę zmienić typ bazy na MySQL i ponownie przystąpić do instalacji.';
 $locale['step_database_error_table'] = 'Tabela $TABLE$ nie istnieje. Proszę najpierw zaimportować schemat bazy danych serwera OTS.';
 $locale['step_database_error_table_exist'] = 'Tabela $TABLE$ już istnieje. Wygląda na to, że AAC został już zainstalowany. Schemat MySQL nie zostanie zaimportowany..';
@@ -72,8 +70,27 @@ $locale['step_database_adding_field'] = 'Dodawanie pola';
 $locale['step_database_modifying_field'] = 'Modyfikacja pola';
 $locale['step_database_changing_field'] = 'Zmiana $FIELD$ na $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Importowanie schematów graczy...';
+$locale['step_database_loaded_monsters'] = 'Załadowano potworki (monsters)...';
+$locale['step_database_error_monsters'] = 'Wystąpiły problemy podczas ładowania pliku monsters.xml. Zobacz $LOG$ po więcej informacji.';
+$locale['step_database_loaded_spells'] = 'Załadowano czary (spells)...';
 $locale['step_database_created_account'] = 'Utworzono konto admina...';
 $locale['step_database_created_news'] = 'Utworzono newsy...';
+
+// admin account
+$locale['step_admin'] = 'Konto Admina';
+$locale['step_admin_title'] = 'Tworzenie Konta Admina';
+$locale['step_admin_account'] = 'Nazwa Konta Admina';
+$locale['step_admin_account_desc'] = 'Nazwa Twojego konta admina, która będzie używana do logowania na stronę i do serwera.';
+$locale['step_admin_account_error_format'] = 'Nieprawidłowy format nazwy konta. Używaj tylko znaków a-Z oraz liczb 0-9. Minimum 3, maksimum 32 znaków.';
+$locale['step_admin_account_error_same'] = 'Hasło nie może być takie same jak nazwa konta.';
+$locale['step_admin_account_id'] = 'Numer Konta Admina';
+$locale['step_admin_account_id_desc'] = 'Numer Twojego Konta Admina, który będzie używany do logowania do strony i na serwer.';
+$locale['step_admin_account_id_error_format'] = 'Nieprawidłowy format numeru konta. Używaj tylko liczb 0-9. Minimum 6, maksimum 10 znaków.';
+$locale['step_admin_account_id_error_same'] = 'Hasło nie może być takie same jak numer konta.';
+$locale['step_admin_password'] = 'Hasło Konta Admina';
+$locale['step_admin_password_desc'] = 'Hasło do Twojego Konta Admina.';
+$locale['step_admin_password_error_empty'] = 'Proszę podać hasło do Twojego nowego konta.';
+$locale['step_admin_password_error_format'] = 'Nieprawidłowy format hasła. Używaj tylko znaków a-Z oraz liczb 0-9. Minimum 8, maksimum 30 characters.';
 
 // finish
 $locale['step_finish_admin_panel'] = 'Panelu Admina';

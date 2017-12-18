@@ -23,5 +23,10 @@
 		{% endfor %}
 	</table>
 
+	{% if errors is defined %}
+		{% for error in errors %}
+			<p class="error">{{ error }}</p>
+		{% endfor %}
+	{% endif %}
 	{{ buttons|raw }}
 </form>

@@ -26,7 +26,6 @@ if($save)
 {
 	if(USE_ACCOUNT_NAME) {
 		$account_name = $_POST['account'];
-		$account_name_up = strtoupper($account_name);
 	}
 	else
 		$account_id = $_POST['account'];
@@ -40,7 +39,7 @@ if($save)
 		if(!Validator::accountId($account_id))
 			$errors['account'] = Validator::getLastError();
 	}
-	else if(!Validator::accountName($account_name_up))
+	else if(!Validator::accountName($account_name))
 		$errors['account'] = Validator::getLastError();
 
 	// email
@@ -72,7 +71,7 @@ if($save)
 	}
 
 	// password
-	if(!isset($password[0])) {
+	if(empty($password)) {
 		$errors['password'] = 'Please enter the password for your new account.';
 	}
 	elseif($password != $password2) {
@@ -83,8 +82,7 @@ if($save)
 	}
 
 	// check if account name is not equal to password
-	if(USE_ACCOUNT_NAME && $account_name_up == strtoupper($password))
-	{
+	if(USE_ACCOUNT_NAME && strtoupper($account_name) == strtoupper($password)) {
 		$errors['password'] = 'Password may not be the same as account name.';
 	}
 
