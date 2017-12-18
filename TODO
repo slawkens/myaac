@@ -8,6 +8,10 @@
 	* cache Menus in templates
 	* don't show error indicators on first time load - createaccount page
 	* update Twig to the latest version from 1.x branch
+	* semantic versioning support for plugins (github.com/composer/semver)
+	* database towns table support for TFS 1.3
+	* players.is_sample is waste, better save in config.php array of ignored ids
+	* add some notice to the user that installing step "Import Schema" will take some time
 
 1.0:
 	* i18n support (issue #1 on github)
@@ -19,7 +23,6 @@
 		* var/ (for logs, cache and data), config/, bin, public/ (for index and images and other public content), system/ (for php files and classess)
 	* rename templates to layouts as templates is meant to be used for twig templates
 	* change gifts_system to shop_system configurable
-
 
 At any time between (version not specified):
 	* better news archive with search function (like on tibia.com)

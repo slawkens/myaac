@@ -69,10 +69,10 @@ else if($step == 'finish') {
 		}
 	}
 	else if(isset($_SESSION['var_account_id'])) {
-		if(!Validator::accountId($account_id)) {
+		if(!Validator::accountId($_SESSION['var_account_id'])) {
 			$errors[] = $locale['step_admin_account_id_error_format'];
 		}
-		else if($_SESSION['var_account'] == $password) {
+		else if($_SESSION['var_account_id'] == $password) {
 			$errors[] = $locale['step_admin_account_id_error_same'];
 		}
 	}
