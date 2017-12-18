@@ -12,6 +12,7 @@
 	* database towns table support for TFS 1.3
 	* players.is_sample is waste, better save in config.php array of ignored ids
 	* add some notice to the user that installing step "Import Schema" will take some time
+	* remember client version in session on install
 
 1.0:
 	* i18n support (issue #1 on github)

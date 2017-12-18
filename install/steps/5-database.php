@@ -11,7 +11,8 @@ if(!isset($_SESSION['var_server_path'])) {
 }
 
 if(!$error) {
-	$content = "<?php\n";
+	$content = "<?php";
+	$content .= PHP_EOL;
 	foreach($_SESSION as $key => $value)
 	{
 		if(strpos($key, 'var_') !== false)
@@ -218,11 +219,6 @@ if(!$error) {
 				if(query("ALTER TABLE `players` ADD `comment` TEXT NOT NULL;"))
 					success($locale['step_database_adding_field'] . ' players.comment...');
 			}
-
-			if(!fieldExist('is_sample', 'players')) {
-				if(query("ALTER TABLE `players` ADD `is_sample` TINYINT(1) NOT NULL DEFAULT 0;"))
-					success($locale['step_database_adding_field'] . ' players.is_sample...');
-			}
 		}
 		
 		if(!$error && (!isset($_SESSION['saved']))) {
@@ -248,9 +244,6 @@ if(!$error) {
 			$content .= PHP_EOL;
 			$content .= '$config[\'cache_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '\';';
 			$content .= PHP_EOL;
-			$content .= '// place for your configuration directives, so you can later easily update myaac';
-			$content .= PHP_EOL;
-			$content .= "?>";
 			
 			$file = fopen(BASE . 'config.local.php', 'a+');
 			if($file) {

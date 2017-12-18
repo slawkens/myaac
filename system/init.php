@@ -148,6 +148,11 @@ else
 $config['data_path'] = $tmp;
 unset($tmp);
 
+// new config values for compability
+if($config['highscores_ids_hidden'] == null) {
+	$config['highscores_ids_hidden'] = array();
+}
+
 // POT
 require_once(SYSTEM . 'libs/pot/OTS.php');
 $ots = POT::getInstance();
