@@ -101,9 +101,12 @@ else {
 			$player_id = $query['id'];
 		}
 
-		if(query("INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '1', UNIX_TIMESTAMP(), '2', 'Hello!', 'MyAAC is just READY to use!', " . $player_id . ", 'http://my-aac.org', '0');
-INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '2', UNIX_TIMESTAMP(), '4', 'Hello tickets!', 'http://my-aac.org', " . $player_id . ", '', '0');")) {
-			success($locale['step_database_created_news']);
+		$query = $db->query("SELECT `id` FROM `" . TABLE_PREFIX ."news` WHERE `title` LIKE 'Hello';");
+		if($query->rowCount() == 0) {
+			if(query("INSERT INTO `" . TABLE_PREFIX ."news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '1', UNIX_TIMESTAMP(), '2', 'Hello!', 'MyAAC is just READY to use!', " . $player_id . ", 'http://my-aac.org', '0');
+	INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hidden`) VALUES (NULL, '2', UNIX_TIMESTAMP(), '4', 'Hello tickets!', 'http://my-aac.org', " . $player_id . ", '', '0');")) {
+				success($locale['step_database_created_news']);
+			}
 		}
 
 		$deleted = 'deleted';
