@@ -3,15 +3,23 @@
 0.*
 	* support duplicated vocation names with different ids
 	* plugins: option to define custom requirements check in json file, to check if system meets the requirement
-	* Inform user about Twig cache failure on installation, instead of 500 error
+	* inform user about Twig cache failure on installation, instead of 500 error
 	* add support for defining max myaac version in plugin.json file
+	* cache Menus in templates
+	* don't show error indicators on first time load - createaccount page
+	* update Twig to the latest version from 1.x branch
 
 1.0:
 	* i18n support (issue #1 on github)
 	* New Admin Panel layout and interface
-	* change gifts_system to shop_system configurable
-	* rename templates to layouts as templates is meant to be used for twig templates
+
+2.0
 	* remove compat functions
+	* folder restructure:
+		* var/ (for logs, cache and data), config/, bin, public/ (for index and images and other public content), system/ (for php files and classess)
+	* rename templates to layouts as templates is meant to be used for twig templates
+	* change gifts_system to shop_system configurable
+
 
 At any time between (version not specified):
 	* better news archive with search function (like on tibia.com)
@@ -20,3 +28,5 @@ At any time between (version not specified):
 	* update guilds page to be more realistic (like on tibia.com)
 	* possibility to add extra cache engines with plugins
 	* preferably configurable (enable/disable) forum TinyMCE editor
+	* new cache engine - plain php, is good with pure php 7.0+ and opcache
+	* OTAdmin support in Admin Panel
