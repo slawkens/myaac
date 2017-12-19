@@ -149,7 +149,7 @@ $config['data_path'] = $tmp;
 unset($tmp);
 
 // new config values for compability
-if($config['highscores_ids_hidden'] == null) {
+if(!isset($config['highscores_ids_hidden'])) {
 	$config['highscores_ids_hidden'] = array();
 }
 

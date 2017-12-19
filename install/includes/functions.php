@@ -78,4 +78,23 @@ function next_form($previous = true, $next = true)
 	<input type="hidden" name="step" id="step" value="' . $step . '" />' . next_buttons($previous, $next) . '
 </form>';
 }
-?>
+
+function win_is_writable($path) {
+	if($path[strlen( $path ) - 1] == '/') { // if it looks like a directory, check a random file within the directory
+		return win_is_writable( $path . uniqid( mt_rand() ) . '.tmp');
+	} elseif(is_dir( $path )) { // If it's a directory (and not a file) check a random file within the directory
+		return win_is_writable( $path . '/' . uniqid( mt_rand() ) . '.tmp' );
+	}
+
+	// check tmp file for read/write capabilities
+	$should_delete_tmp_file = !file_exists( $path );
+	$f = @fopen( $path, 'a' );
+	if ( $f === false )
+		return false;
+
+	fclose( $f );
+	if($should_delete_tmp_file)
+		unlink($path);
+
+	return true;
+}

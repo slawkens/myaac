@@ -23,7 +23,7 @@
 				<br/>
 				<select name="vars[client]" id="vars_client">
 					{% for id, version in clients %}
-					<option value="{{ id }}">{{ version }}</option>
+					<option value="{{ id }}"{% if session['var_client'] is not null and session['var_client'] == id %} selected{% endif %}>{{ version }}</option>
 					{% endfor %}
 				</select>
 			</td>
@@ -38,7 +38,7 @@
 				</label>
 				<br/>
 				<input type="hidden" value="0" name="vars[usage]">
-				<input type="checkbox" name="vars[usage]" id="vars_usage" value="1" checked/>
+				<input type="checkbox" name="vars[usage]" id="vars_usage" value="1"{% if session['var_usage'] is null or session['var_usage'] == 1 %} checked{% endif %}/>
 			</td>
 			<td>
 				<em>{{ locale.step_config_usage_desc }}</em>

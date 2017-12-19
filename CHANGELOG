@@ -1,6 +1,6 @@
 [0.7.3 - 18.12.2017]
-	* auto generate myaac cache & session prefix on install to be unique accross installations
-	* fixed hidding shop system menu on tibiacom template when disabled in config
+	* auto generate myaac cache & session prefix on install to be unique across installations
+	* fixed hiding shop system menu on tibiacom template when disabled in config
 	* prevent adding duplicated newses with installation
 	* some changes to sample characters: chanced town_id to 1, posx: 1000, posy: 1000, posz: 1000 and default group_id to 1 so you can change in-game outfits and they will be used
 	* added version 772 constant to install client choose (OTHire)

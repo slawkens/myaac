@@ -91,16 +91,19 @@ else if($step == 'finish') {
 
 $error = false;
 
-// step include
-ob_start();
+clearstatcache();
+if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
+	ob_start();
 
-$step_id = array_search($step, $steps);
-require('steps/' . $step_id . '-' . $step . '.php');
-$content = ob_get_contents();
-ob_end_clean();
+	$step_id = array_search($step, $steps);
+	require('steps/' . $step_id . '-' . $step . '.php');
+	$content = ob_get_contents();
+	ob_end_clean();
+}
+else {
+	$content = error(file_get_contents(BASE . 'install/includes/twig_error.html'), true);
+}
 
 // render
 require('template/template.php');
 //$_SESSION['laststep'] = $step;
-
-?>
