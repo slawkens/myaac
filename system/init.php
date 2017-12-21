@@ -150,7 +150,7 @@ unset($tmp);
 
 // new config values for compability
 if(!isset($config['highscores_ids_hidden'])) {
-	$config['highscores_ids_hidden'] = array();
+	$config['highscores_ids_hidden'] = array(0);
 }
 
 // POT
