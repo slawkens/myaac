@@ -3151,6 +3151,14 @@ class OTS_Player extends OTS_Row_DAO
 
         $this->db->query('DELETE FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('name') . ' = ' . $this->db->quote( $spell->getName() ) );
     }
+	
+	public static function getPercentLevel($count, $nextLevelCount)
+	{
+		if($nextLevelCount > 0)
+			return min(100, max(0, $count * 100 / $nextLevelCount));
+
+		return 0;
+	}
 
 /**
  * Magic PHP5 method.

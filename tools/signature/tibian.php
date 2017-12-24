@@ -30,12 +30,17 @@
 	imagettftext($img, $fontsize, 0, 100, 43, $text, $font, number_format($player->getLevel()));
 
 	// experience bar
-	$exppercent = round($experience / $needexp * 100);
-	imagerectangle($img, 14, 46, 166, 50, $bar);
-	if($exppercent > 0)
-		imagefilledrectangle($img, 15, 47, $exppercent * 1.5 + 15, 49, $barfill);
+	$currLevelExp = OTS_Toolbox::experienceForLevel($player->getLevel());
+	$nextLevelExp = OTS_Toolbox::experienceForLevel($player->getLevel() + 1);
+	$levelPercent = 0;
+	if($nextLevelExp > $currLevelExp)
+		$levelPercent = (int)OTS_Player::getPercentLevel($experience - $currLevelExp, $nextLevelExp - $currLevelExp);
 
-	imagettftext($img, $fontsize, 0, 170, 51, $text, $font, $exppercent . '%');
+	imagerectangle($img, 14, 46, 166, 50, $bar);
+	if($levelPercent > 0)
+		imagefilledrectangle($img, 15, 47, $levelPercent * 1.5 + 15, 49, $barfill);
+
+	imagettftext($img, $fontsize, 0, 170, 51, $text, $font, $levelPercent . '%');
 
 	// vocation
 	$vocation = 'Unknown';

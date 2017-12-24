@@ -28,13 +28,11 @@ class OTS_Toolbox
  * @param int $experience Current experience points.
  * @return int Experience points for level.
  */
-    public static function experienceForLevel($level, $experience = 0)
+	public static function experienceForLevel($level, $experience = 0)
     {
-        return 50 * ($level - 1) * ($level * $level - 5 * $level + 12) / 3 - $experience;
-		/*
-			$level = $level - 1;
-	return ((50 * $level * $level * $level) - (150 * $level * $level) + (400 * $level)) / 3;
-	*/
+        //return 50 * ($level - 1) * ($level * $level - 5 * $level + 12) / 3 - $experience;
+		$level = $level - 1;
+		return ((50 * $level * $level * $level) - (150 * $level * $level) + (400 * $level)) / 3;
     }
 
 /**

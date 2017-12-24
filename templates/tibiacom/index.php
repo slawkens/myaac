@@ -406,10 +406,6 @@ foreach($config['menu_categories'] as $id => $cat) {
         </div>
         <div id="ThemeboxesColumn">
           <div id="RightArtwork">
-		  <?php
-			//$tmp_link =
-			//if($config['friendly_urls'])
-		  ?>
             <img id="Monster" src="images/monsters/<?php echo logo_monster() ?>.gif" onClick="window.location = '?subtopic=creatures&creature=<?php echo $config['logo_monster'] ?>';" alt="Monster of the Week" />
             <img id="PedestalAndOnline" src="<?php echo $template_path; ?>/images/header/pedestal-and-online.gif" alt="Monster Pedestal and Players Online Box"/>
           <div id="PlayersOnline" onClick="window.location = '<?php echo getLink('online'); ?>'">
@@ -430,8 +426,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 				<?php
 				}
 			}
-			?>
- <?php
+
 	if($config['template_allow_change'])
 		 echo '<font color="white">Template:</font><br/>' . template_form();
  ?>
