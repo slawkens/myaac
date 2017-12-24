@@ -1,3 +1,11 @@
+[0.7.4 - 24.12.2017]
+	* fixed mysql fatal error on tibiacom template - top 5 box
+	* fixed displaying of level percent bar on tibian signature
+	* inform user about Twig cache failure on installation, instead of http 500 error
+	* when dir system/cache is not writable by the webserver, then show some nice notice to the user about it instead of http 500 error
+	* remember client version select and usage stats checkbox in session on install
+	* automatically update highscores_ids_hidden for users who installed myaac before (migration)
+
 [0.7.3 - 18.12.2017]
 	* auto generate myaac cache & session prefix on install to be unique across installations
 	* fixed hiding shop system menu on tibiacom template when disabled in config
