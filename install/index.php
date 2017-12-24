@@ -5,7 +5,9 @@ require('../common.php');
 require(SYSTEM . 'functions.php');
 require(BASE . 'install/includes/functions.php');
 require(BASE . 'install/includes/locale.php');
-require(BASE . 'config.local.php');
+
+if(file_exists(BASE . 'config.local.php'))
+	require(BASE . 'config.local.php');
 
 // twig
 require_once LIBS . 'Twig/Autoloader.php';
@@ -31,14 +33,30 @@ if(!in_array($step, $steps)) // check if step is valid
 	die('ERROR: Unknown step.');
 
 $errors = array();
-if($step == 'database')
-{
-	foreach($_POST['vars'] as $key => $value)
-	{
+if($step == 'database') {
+	foreach($_SESSION as $key => $value) {
+		if(strpos($key, 'var_') === false || strpos($key, 'account') !== false || strpos($key, 'password') !== false) {
+			continue;
+		}
+
+		$key = str_replace('var_', '', $key);
 		if($key != 'usage' && empty($value))
 		{
 			$errors[] = $locale['please_fill_all'];
 			break;
+		}
+		else if($key == 'server_path')
+		{
+			$config['server_path'] = $value;
+
+			// take care of trailing slash at the end
+			if($config['server_path'][strlen($config['server_path']) - 1] != '/')
+				$config['server_path'] .= '/';
+
+			if(!file_exists($config['server_path'] . 'config.lua')) {
+				$errors[] = $locale['step_database_error_config'];
+				break;
+			}
 		}
 		else if($key == 'mail_admin' && !Validator::email($value))
 		{
@@ -54,6 +72,16 @@ if($step == 'database')
 
 	if(!empty($errors)) {
 		$step = 'config';
+	}
+}
+else if($step == 'admin') {
+	$config_failed = true;
+	if(file_exists(BASE . 'config.local.php') && isset($config['installed']) && $config['installed'] && isset($_SESSION['saved'])) {
+		$config_failed = false;
+	}
+
+	if($config_failed) {
+		$step = 'database';
 	}
 }
 else if($step == 'finish') {

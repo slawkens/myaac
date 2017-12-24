@@ -56,7 +56,9 @@ else if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|
 	exit;
 }
 
-require_once(BASE . 'config.local.php');
+if(file_exists(BASE . 'config.local.php'))
+	require_once(BASE . 'config.local.php');
+
 if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed']))
 {
 	header('Location: ' . BASE_URL . 'install/');

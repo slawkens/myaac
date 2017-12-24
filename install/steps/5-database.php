@@ -13,6 +13,8 @@ if(!isset($_SESSION['var_server_path'])) {
 if(!$error) {
 	$content = "<?php";
 	$content .= PHP_EOL;
+	$content .= '// place for your configuration directives, so you can later easily update myaac';
+	$content .= PHP_EOL;
 	foreach($_SESSION as $key => $value)
 	{
 		if(strpos($key, 'var_') !== false)
@@ -221,7 +223,7 @@ if(!$error) {
 			}
 		}
 		
-		if(!$error && (!isset($_SESSION['saved']))) {
+		if(!$error) {
 			$content .= '$config[\'installed\'] = true;';
 			$content .= PHP_EOL;
 
@@ -243,16 +245,21 @@ if(!$error) {
 			$content .= '$config[\'session_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
 			$content .= PHP_EOL;
 			$content .= '$config[\'cache_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
-			$content .= PHP_EOL;
+
+			$saved = true;
+			if(!$error) {
+				$saved = file_put_contents(BASE . 'config.local.php', $content);
+			}
 			
-			$file = fopen(BASE . 'config.local.php', 'a+');
-			if($file) {
+			if($saved) {
 				if(!$error) {
-					fwrite($file, $content);
 					$_SESSION['saved'] = true;
 				}
 			}
 			else {
+				$_SESSION['config_content'] = $content;
+				unset($_SESSION['saved']);
+				
 				$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
 				warning($locale['step_database_error_file'] . '<br/>
 					<textarea cols="70" rows="10">' . $content . '</textarea>');

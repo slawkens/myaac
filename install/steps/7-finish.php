@@ -192,13 +192,26 @@ else {
 			error(Spells::getLastError());
 		}
 
+		if(count($highscores_ignored_ids) == 0) {
+			$query = $db->query("SELECT `id` FROM `players` WHERE (`name` = " . $db->quote("Rook Sample") . " OR `name` = " . $db->quote("Sorcerer Sample") . " OR `name` = " . $db->quote("Druid Sample") . " OR `name` = " . $db->quote("Paladin Sample") . " OR `name` = " . $db->quote("Knight Sample") . ") ORDER BY `id`;");
+
+			$highscores_ignored_ids = array();
+			if($query->rowCount() > 0) {
+				foreach($query->fetchAll() as $result)
+					$highscores_ignored_ids[] = $result['id'];
+			}
+			else {
+				$highscores_ignored_ids[] = 0;
+			}
+		}
+
 		$content = PHP_EOL;
 		$content .= '$config[\'highscores_ids_hidden\'] = array(' . implode(', ', $highscores_ignored_ids) . ');';
-		$content .= PHP_EOL;
 
 		$file = fopen(BASE . 'config.local.php', 'a+');
 		if($file) {
 			fwrite($file, $content);
+			fclose($file);
 		}
 		else {
 			$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
