@@ -45,6 +45,10 @@ else {
 	}
 }
 
+if($step == 'finish' && (!isset($config['installed']) || !$config['installed'])) {
+	$step = 'welcome';
+}
+
 // step verify
 $steps = array(1 => 'welcome', 2 => 'license', 3 => 'requirements', 4 => 'config', 5 => 'database', 6 => 'admin', 7 => 'finish');
 if(!in_array($step, $steps)) // check if step is valid
@@ -151,12 +155,35 @@ $error = false;
 
 clearstatcache();
 if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
-	ob_start();
+	if(!file_exists(BASE . 'install/ip.txt')) {
+		$content = warning('AAC installation is disabled. To enable it make file <b>ip.txt</b> in install/ directory and put there your IP.<br/>
+		Your IP is:<br /><b>' . $_SERVER['REMOTE_ADDR'] . '</b>', true);
+	}
+	else {
+		$file_content = trim(file_get_contents(BASE . 'install/ip.txt'));
+		$allow = false;
+		$listIP = preg_split('/\s+/', $file_content);
+		foreach($listIP as $ip) {
+			if($_SERVER['REMOTE_ADDR'] == $ip) {
+				$allow = true;
+			}
+		}
+		
+		if(!$allow)
+		{
+			$content = warning('In file <b>install/ip.txt</b> must be your IP!<br/>
+			In file is:<br /><b>' . nl2br($file_content) . '</b><br/>
+			Your IP is:<br /><b>' . $_SERVER['REMOTE_ADDR'] . '</b>', true);
+		}
+		else {
+			ob_start();
 
-	$step_id = array_search($step, $steps);
-	require('steps/' . $step_id . '-' . $step . '.php');
-	$content = ob_get_contents();
-	ob_end_clean();
+			$step_id = array_search($step, $steps);
+			require('steps/' . $step_id . '-' . $step . '.php');
+			$content = ob_get_contents();
+			ob_end_clean();
+		}
+	}
 }
 else {
 	$content = error(file_get_contents(BASE . 'install/includes/twig_error.html'), true);

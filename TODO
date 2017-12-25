@@ -6,10 +6,8 @@
 	* add support for defining max myaac version in plugin.json file
 	* cache Menus in templates
 	* don't show error indicators on first time load - createaccount page
-	* update Twig to the latest version from 1.x branch
 	* semantic versioning support for plugins (github.com/composer/semver)
 	* add some notice to the user that installing step "Import Schema" will take some time
-	* check user IP on installing to prevent install by random user
 
 1.0:
 	* i18n support (issue #1 on github)
