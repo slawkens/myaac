@@ -27,7 +27,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 								</td>
 								<td>
 									<input type="text" name="account" id="account_input" size="30" maxlength="{% if constant('USE_ACCOUNT_NAME') %}30{% else %}10{% endif %}" value="{{ account }}" autofocus/>
-									<img id="account_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" />
+									<img id="account_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" style="display: none;" />
 								</td>
 							</tr>
 							<tr><td></td><td><span id="account_error" class="FormFieldError">{% if errors.account is defined %}{{ errors.account }}{% endif %}</span></td></tr>
@@ -37,7 +37,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 								</td>
 								<td style="width:100%;" >
 									<input type="text" name="email" id="email" size="30" maxlength="50" value="{{ email }}" />
-									<img id="email_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" />
+									<img id="email_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" style="display: none;" />
 								</td>
 							</tr>
 							<tr><td></td><td><span id="email_error" class="FormFieldError">{% if errors.email is defined %}{{ errors.email }}{% endif %}</span></td></tr>
@@ -65,7 +65,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 								</td>
 								<td>
 									<input type="password" name="password" id="password" value="" size="30" maxlength="50" />
-									<img id="password_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" />
+									<img id="password_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" style="display: none;" />
 								</td>
 							</tr>
 							<tr><td></td><td><span id="password_error" class="FormFieldError">{% if errors.password is defined %}{{ errors.password }}{% endif %}</span></td></tr>
@@ -75,7 +75,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 								</td>
 								<td>
 									<input type="password" name="password2" id="password2" value="" size="30" maxlength="50" />
-									<img id="password2_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" />
+									<img id="password2_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" style="display: none;" />
 								</td>
 							</tr>
 							<tr><td></td><td><span id="password2_error" class="FormFieldError">{% if errors.password is defined %}{{ errors.password }}{% endif %}</span></td></tr>

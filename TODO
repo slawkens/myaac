@@ -5,7 +5,6 @@
 	* plugins: option to define custom requirements check in json file, to check if system meets the requirement
 	* add support for defining max myaac version in plugin.json file
 	* cache Menus in templates
-	* don't show error indicators on first time load - createaccount page
 	* semantic versioning support for plugins (github.com/composer/semver)
 	* add some notice to the user that installing step "Import Schema" will take some time
 

@@ -51,6 +51,7 @@
 		{
 			$('#account_error').html('Please enter account {% if constant('USE_ACCOUNT_NAME') %}name{% else %}number{% endif %}.');
 			$('#account_indicator').attr('src', 'images/global/general/nok.gif');
+			$('#account_indicator').show();
 			return;
 		}
 
@@ -78,6 +79,8 @@
 					$('#account_error').html(data.error);
 					$('#account_indicator').attr('src', 'images/global/general/nok.gif');
 				}
+				
+				$('#account_indicator').show();
 			}
 		);
 
@@ -96,6 +99,7 @@
 		{
 			$('#email_error').html('Please enter e-mail.');
 			$('#email_indicator').attr('src', 'images/global/general/nok.gif');
+			$('#email_indicator').show();
 			return;
 		}
 
@@ -123,6 +127,8 @@
 					$('#email_error').html(data.error);
 					$('#email_indicator').attr('src', 'images/global/general/nok.gif');
 				}
+				
+				$('#email_indicator').show();
 			}
 		);
 
@@ -141,6 +147,7 @@
 		{
 			$('#password_error').html('Please enter the password for your new account.');
 			$('#password_indicator').attr('src', 'images/global/general/nok.gif');
+			$('#password_indicator').show();
 			return;
 		}
 
@@ -148,6 +155,7 @@
 		{
 			$('#password2_error').html('Please enter the password again!');
 			$('#password2_indicator').attr('src', 'images/global/general/nok.gif');
+			$('#password2_indicator').show();
 			return;
 		}
 
@@ -180,6 +188,9 @@
 					$('#password_indicator').attr('src', 'images/global/general/nok.gif');
 					$('#password2_indicator').attr('src', 'images/global/general/nok.gif');
 				}
+				
+				$('#password_indicator').show();
+				$('#password2_indicator').show();
 			}
 		);
 
