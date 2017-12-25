@@ -6,7 +6,6 @@
 	* add support for defining max myaac version in plugin.json file
 	* cache Menus in templates
 	* semantic versioning support for plugins (github.com/composer/semver)
-	* add some notice to the user that installing step "Import Schema" will take some time
 
 1.0:
 	* i18n support (issue #1 on github)

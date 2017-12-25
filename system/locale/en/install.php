@@ -56,6 +56,7 @@ $locale['step_config_client_desc'] = 'Used for download page and some templates'
 $locale['step_config_client_error'] = 'Client is not correct.';
 $locale['step_config_usage'] = 'Usage Statistics';
 $locale['step_config_usage_desc'] = 'Allow MyAAC to report anonymous usage statistics? The data is sent only once per 30 days and is fully confidential.';
+$locale['step_config_note'] = 'Loading next step will take some time. Please do not refresh the page and wait till it loads.';
 
 // database
 $locale['step_database'] = 'Import schema';
