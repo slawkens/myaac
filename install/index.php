@@ -5,6 +5,7 @@ require('../common.php');
 require(SYSTEM . 'functions.php');
 require(BASE . 'install/includes/functions.php');
 require(BASE . 'install/includes/locale.php');
+require(SYSTEM . 'clients.conf.php');
 
 if(file_exists(BASE . 'config.local.php'))
 	require(BASE . 'config.local.php');
@@ -19,20 +20,39 @@ $twig = new Twig_Environment($twig_loader, array(
 	'auto_reload' => true
 ));
 
-if(isset($_POST['vars']))
-{
-	foreach($_POST['vars'] as $key => $value)
-		$_SESSION['var_' . $key] = $value;
-}
-
-// step
+// load installation status
 $step = isset($_POST['step']) ? $_POST['step'] : 'welcome';
 
+$install_status = array();
+if(file_exists(CACHE . 'install.txt')) {
+	$install_status = unserialize(file_get_contents(CACHE . 'install.txt'));
+
+	if(!isset($_POST['step'])) {
+		$step = isset($install_status['step']) ? $install_status['step'] : '';
+	}
+}
+
+if(isset($_POST['vars']))
+{
+	foreach($_POST['vars'] as $key => $value) {
+		$_SESSION['var_' . $key] = $value;
+		$install_status[$key] = $value;
+	}
+}
+else {
+	foreach($install_status as $key => $value) {
+		$_SESSION['var_' . $key] = $value;
+	}
+}
+
+// step verify
 $steps = array(1 => 'welcome', 2 => 'license', 3 => 'requirements', 4 => 'config', 5 => 'database', 6 => 'admin', 7 => 'finish');
 if(!in_array($step, $steps)) // check if step is valid
 	die('ERROR: Unknown step.');
 
+$install_status['step'] = $step;
 $errors = array();
+
 if($step == 'database') {
 	foreach($_SESSION as $key => $value) {
 		if(strpos($key, 'var_') === false || strpos($key, 'account') !== false || strpos($key, 'password') !== false) {
@@ -40,32 +60,38 @@ if($step == 'database') {
 		}
 
 		$key = str_replace('var_', '', $key);
-		if($key != 'usage' && empty($value))
-		{
+
+		if($key != 'usage' && empty($value)) {
 			$errors[] = $locale['please_fill_all'];
 			break;
 		}
-		else if($key == 'server_path')
-		{
+		else if($key == 'server_path') {
 			$config['server_path'] = $value;
 
 			// take care of trailing slash at the end
-			if($config['server_path'][strlen($config['server_path']) - 1] != '/')
+			if($config['server_path'][strlen($config['server_path']) - 1] != '/') {
 				$config['server_path'] .= '/';
+			}
 
 			if(!file_exists($config['server_path'] . 'config.lua')) {
 				$errors[] = $locale['step_database_error_config'];
 				break;
 			}
 		}
-		else if($key == 'mail_admin' && !Validator::email($value))
-		{
+		else if($key == 'mail_admin' && !Validator::email($value)) {
 			$errors[] = $locale['step_config_mail_admin_error'];
 			break;
 		}
-		else if($key == 'mail_address' && !Validator::email($value))
-		{
+		else if($key == 'mail_address' && !Validator::email($value)) {
 			$errors[] = $locale['step_config_mail_address_error'];
+			break;
+		}
+		else if($key == 'timezone' && !in_array($value, DateTimeZone::listIdentifiers())) {
+			$errors[] = $locale['step_config_timezone_error'];
+			break;
+		}
+		else if($key == 'client' && !in_array($value, $config['clients'])) {
+			$errors[] = $locale['step_config_client_error'];
 			break;
 		}
 	}
@@ -115,6 +141,10 @@ else if($step == 'finish') {
 	if(!empty($errors)) {
 		$step = 'admin';
 	}
+}
+
+if(empty($errors)) {
+	file_put_contents(CACHE . 'install.txt', serialize($install_status));
 }
 
 $error = false;

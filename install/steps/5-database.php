@@ -15,6 +15,10 @@ if(!$error) {
 	$content .= PHP_EOL;
 	$content .= '// place for your configuration directives, so you can later easily update myaac';
 	$content .= PHP_EOL;
+	$content .= '$config[\'installed\'] = true;';
+	$content .= PHP_EOL;
+	$content .= '$config[\'mail_enabled\'] = true;';
+	$content .= PHP_EOL;
 	foreach($_SESSION as $key => $value)
 	{
 		if(strpos($key, 'var_') !== false)
@@ -23,14 +27,14 @@ if(!$error) {
 			{
 				$value = str_replace("\\", "/", $value);
 				if($value[strlen($value) - 1] != '/')
-					$value .= "/";
+					$value .= '/';
 			}
 
 			if($key == 'var_usage') {
 				$content .= '$config[\'anonymous_usage_statistics\'] = ' . ((int)$value == 1 ? 'true' : 'false') . ';';
 				$content .= PHP_EOL;
 			}
-			else if($key != 'var_account' && $key != 'var_account_id' && $key != 'var_password') {
+			else if($key != 'var_account' && $key != 'var_account_id' && $key != 'var_password' && $key != 'var_step') {
 				$content .= '$config[\'' . str_replace('var_', '', $key) . '\'] = \'' . $value . '\';';
 				$content .= PHP_EOL;
 			}
@@ -224,11 +228,6 @@ if(!$error) {
 		}
 		
 		if(!$error) {
-			$content .= '$config[\'installed\'] = true;';
-			$content .= PHP_EOL;
-
-			$content .= '$config[\'mail_enabled\'] = true;';
-			$content .= PHP_EOL;
 			if(!Validator::email($_SESSION['var_mail_admin'])) {
 				error($locale['step_config_mail_admin_error']);
 				$error = true;

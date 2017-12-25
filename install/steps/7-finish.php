@@ -235,6 +235,9 @@ else {
 				unset($_SESSION[$key]);
 		}
 		unset($_SESSION['saved']);
+		if(file_exists(CACHE . 'install.txt')) {
+			unlink(CACHE . 'install.txt');
+		}
 	}
 }
 ?>
