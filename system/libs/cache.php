@@ -23,6 +23,11 @@ class Cache
 					self::$instance = new Cache_APC($prefix);
 					break;
 
+				case 'apcu':
+					require('cache_apcu.php');
+					self::$instance = new Cache_APCu($prefix);
+					break;
+
 				case 'eaccelerator':
 					require('cache_eaccelerator.php');
 					self::$instance = new Cache_eAccelerator($prefix);
@@ -55,6 +60,8 @@ class Cache
 	{
 		if(function_exists('apc_fetch'))
 			return 'apc';
+		else if(function_exists('apcu_fetch'))
+			return 'apcu';
 		else if(function_exists('eaccelerator_get'))
 			return 'eaccelerator';
 		else if(function_exists('xcache_get') && ini_get('xcache.var_size'))

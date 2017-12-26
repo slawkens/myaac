@@ -56,7 +56,7 @@ $config = array(
 	'views_counter' => true,
 
 	// cache system. by default file cache is used
-	'cache_engine' => 'auto', // apc, eaccelerator, xcache, file, auto, or blank to disable.
+	'cache_engine' => 'auto', // apc, apcu, eaccelerator, xcache, file, auto, or blank to disable.
 	'cache_prefix' => 'myaac_', // have to be unique if running more MyAAC instances on the same server (except file system cache)
 
 	// database details (leave blank for auto detect from config.lua)

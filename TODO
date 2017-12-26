@@ -6,6 +6,7 @@
 	* sandbox for plugins, don't install when requirements are not passed
 	* load items & weapons on install, preferably with ajax
 	* add changelog management interface
+	* option to require php extension to be installed
 
 1.0:
 	* i18n support (issue #1 on github)
