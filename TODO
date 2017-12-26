@@ -3,9 +3,7 @@
 0.*
 	* support duplicated vocation names with different ids
 	* plugins: option to define custom requirements check in json file, to check if system meets the requirement
-	* add support for defining max myaac version in plugin.json file
 	* cache Menus in templates
-	* semantic versioning support for plugins (github.com/composer/semver)
 
 1.0:
 	* i18n support (issue #1 on github)
@@ -15,6 +13,7 @@
 
 2.0
 	* remove compat functions
+	* remove $template['link_*']
 	* folder restructure:
 		* var/ (for logs, cache and data), config/, bin, public/ (for index and images and other public content), system/ (for php files and classess)
 	* rename templates to layouts as templates is meant to be used for twig templates

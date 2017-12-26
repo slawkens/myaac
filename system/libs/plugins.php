@@ -10,6 +10,34 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+spl_autoload_register(function ($class) {
+	// project-specific namespace prefix
+	$prefix = 'Composer\\Semver\\';
+
+	// base directory for the namespace prefix
+	$base_dir = LIBS . '/semver/';
+
+	// does the class use the namespace prefix?
+	$len = strlen($prefix);
+	if (strncmp($prefix, $class, $len) !== 0) {
+		// no, move to the next registered autoloader
+		return;
+	}
+
+	// get the relative class name
+	$relative_class = substr($class, $len);
+
+	// replace the namespace prefix with the base directory, replace namespace
+	// separators with directory separators in the relative class name, append
+	// with .php
+	$file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+
+	// if the file exists, require it
+	if (file_exists($file)) {
+		require $file;
+	}
+});
+
 class Plugins {
 	private static $warnings = array();
 	private static $error = null;
@@ -67,25 +95,37 @@ class Plugins {
 							$require = $plugin['require'];
 							if(isset($require['myaac'])) {
 								$require_myaac = $require['myaac'];
-								if(version_compare(MYAAC_VERSION, $require_myaac, '<')) {
-									self::$warnings[] = "This plugin requires MyAAC version " . $require_myaac . ", you're using version " . MYAAC_VERSION . " - please update.";
+								if(!self::satisfies(MYAAC_VERSION, $require_myaac)) {
+									self::$error = "Your AAC version doesn't meet the requirement of this plugin. Required version is: " . $require_myaac . ", and you're using version " . MYAAC_VERSION . ".";
 									$continue = false;
 								}
 							}
 							
 							if(isset($require['php'])) {
 								$require_php = $require['php'];
-								if(version_compare(phpversion(), $require_php, '<')) {
-									self::$warnings[] = "This plugin requires PHP version " . $require_php . ", you're using version " . phpversion() . " - please update.";
+								if(!self::satisfies(phpversion(), $require_php)) {
+									self::$error = "Your PHP version doesn't meet the requirement of this plugin. Required version is: " . $require_php . ", and you're using version " . phpversion() . ".";
 									$continue = false;
 								}
 							}
 							
 							if(isset($require['database'])) {
 								$require_database = $require['database'];
-								if($require_database < DATABASE_VERSION) {
-									self::$warnings[] = "This plugin requires database version " . $require_database . ", you're using version " . DATABASE_VERSION . " - please update.";
+								if(!self::satisfies(DATABASE_VERSION, $require_database)) {
+									self::$error = "Your database version doesn't meet the requirement of this plugin. Required version is: " . $require_database . ", and you're using version " . DATABASE_VERSION . ".";
 									$continue = false;
+								}
+							}
+							
+							foreach($require as $req => $version) {
+								if(in_array($req, array('myaac', 'php', 'database'))) {
+									continue;
+								}
+								
+								if(!self::is_installed($req, $version)) {
+									self::$error = "This plugin requires another plugin to run correctly. The another plugin is: " . $req . ", with version " . $version . ".";
+									$continue = false;
+									break;
 								}
 							}
 						}
@@ -197,6 +237,44 @@ class Plugins {
 		return false;
 	}
 	
+	public static function is_installed($plugin_name, $version) {
+		$filename = BASE . 'plugins/' . $plugin_name . '.json';
+		if(!file_exists($filename)) {
+			return false;
+		}
+
+		$string = file_get_contents($filename);
+		$plugin_info = json_decode($string, true);
+		if($plugin_info == false) {
+			return false;
+		}
+
+		if(!isset($plugin_info['version'])) {
+			return false;
+		}
+
+		return self::satisfies($plugin_info['version'], $version);
+	}
+
+	public static function satisfies($version, $constraints) {
+		$is_semver = false;
+		$array = array(',', '>', '<', '=', '*', '|', '~');
+		foreach($array as $x) {
+			if(strpos($constraints, $x) !== false) {
+				$is_semver = true;
+			}
+		}
+		
+		if($is_semver && !Composer\Semver\Semver::satisfies($version, $constraints)) {
+			return false;
+		}
+		else if(version_compare($version, $constraints, '<')) {
+			return false;
+		}
+		
+		return true;
+	}
+
 	public static function getWarnings() {
 		return self::$warnings;
 	}
