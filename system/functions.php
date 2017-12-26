@@ -816,9 +816,9 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 		$signature_html = $config['mail_signature']['html'];
 
 	if($add_html_tags && isset($body[0]))
-		$body = '<html><head></head><body>' . $body . '<br/><br/>' . $signature_html . '</body></html>';
+		$tmp_body = '<html><head></head><body>' . $body . '<br/><br/>' . $signature_html . '</body></html>';
 	else
-		$body .= '<br/><br/>' . $signature_html;
+		$tmp_body .= '<br/><br/>' . $signature_html;
 
 	if($config['smtp_enabled'])
 	{
@@ -839,7 +839,7 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	$mailer->FromName = $config['lua']['serverName'];
 	$mailer->Subject = $subject;
 	$mailer->AddAddress($to);
-	$mailer->Body = $body;
+	$mailer->Body = $tmp_body;
 
 	$signature_plain = '';
 	if(isset($config['mail_signature']['plain']))
@@ -847,6 +847,9 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 
 	if(isset($altBody[0]))
 		$mailer->AltBody = $altBody . $signature_plain;
+	else { // automatically generate plain html
+		$mailer->AltBody = strip_tags(preg_replace('/<a(.*)href="([^"]*)"(.*)>/','$2', $body)) . "\n" . $signature_plain;
+	}
 
 	return $mailer->Send();
 }

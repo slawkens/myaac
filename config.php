@@ -98,7 +98,7 @@ $config = array(
 	'mail_address' => 'no-reply@your-server.org', // server e-mail address (from:)
 	'mail_admin' => 'your-address@your-server.org', // admin email address, where mails from contact form will be sent
 	'mail_signature' => array( // signature that will be included at the end of every message sent using _mail function
-		'plain' => ''/*'--\nMy Server,\nhttp://www.myserver.com'*/,
+		'plain' => ""/*"--\nMy Server,\nhttp://www.myserver.com"*/,
 		'html' => ''/*'<br/>My Server,\n<a href="http://www.myserver.com">myserver.com</a>'*/
 	),
 	'smtp_enabled' => false, // send by smtp or mail function (set false if use mail function)

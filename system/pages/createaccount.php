@@ -159,19 +159,12 @@ if($save)
 			$new_account->setCustomField('email_hash', $hash);
 
 			$verify_url = getLink('account/confirm_email/' . $hash);
-			$server_name = $config['lua']['serverName'];
-			
-			$body_plain = $twig->render('mail.account.verify.plain.html.twig', array(
-				'account' => $tmp_account,
-				'verify_url' => $verify_url
-			));
-
 			$body_html = $twig->render('mail.account.verify.html.twig', array(
 				'account' => $tmp_account,
 				'verify_url' => generateLink($verify_url, $verify_url, true)
 			));
 
-			if(_mail($email, 'New account on ' . $config['lua']['serverName'], $body_html, $body_plain))
+			if(_mail($email, 'New account on ' . $config['lua']['serverName'], $body_html))
 			{
 				echo $twig->render('account.created.verify.html.twig', array(
 					'account' => $tmp_account
