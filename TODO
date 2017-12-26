@@ -2,13 +2,14 @@
 
 0.*
 	* support duplicated vocation names with different ids
-	* plugins: option to define custom requirements check in json file, to check if system meets the requirement
 	* cache Menus in templates
+	* sandbox for plugins, don't install when requirements are not passed
+	* load items & weapons on install, preferably with ajax
+	* add changelog management interface
 
 1.0:
 	* i18n support (issue #1 on github)
 	* New Admin Panel layout and interface
-	* add changelog management interface
 	* remove tibiacom template, and include it as a plugin
 
 2.0
@@ -30,3 +31,4 @@ At any time between (version not specified):
 	* preferably configurable (enable/disable) forum TinyMCE editor
 	* OTAdmin support in Admin Panel
 	* database towns table support for TFS 1.3
+	* two factor authentication for TFS 1.x

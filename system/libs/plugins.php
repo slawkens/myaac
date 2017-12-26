@@ -42,10 +42,10 @@ class Plugins {
 	private static $warnings = array();
 	private static $error = null;
 	private static $pluginInfo = array();
-	
+
 	public static function install($file) {
 		global $db, $cache;
-		
+
 		$zip = new ZipArchive();
 		if($zip->open($file)) {
 			for ($i = 0; $i < $zip->numFiles; $i++) {
@@ -53,12 +53,12 @@ class Plugins {
 				if(pathinfo($tmp, PATHINFO_DIRNAME) == 'plugins' && pathinfo($tmp, PATHINFO_EXTENSION) == 'json')
 					$json_file = $tmp;
 			}
-			
+
 			if(!isset($json_file)) {
 				self::$error = 'Cannot find plugin info .json file. Installation is discontinued.';
 				return false;
 			}
-			
+
 			if($zip->extractTo(BASE)) { // place in the directory with same name
 				$file_name = BASE . $json_file;
 				if(!file_exists($file_name)) {
@@ -74,7 +74,7 @@ class Plugins {
 					}
 					else {
 						$continue = true;
-						
+
 						if(!isset($plugin['name'])) {
 							self::$warnings[] = 'Plugin "name" tag is not set.';
 						}
@@ -90,38 +90,72 @@ class Plugins {
 						if(!isset($plugin['contact'])) {
 							self::$warnings[] = 'Plugin "contact" tag is not set.';
 						}
-						
+
 						if(isset($plugin['require'])) {
 							$require = $plugin['require'];
-							if(isset($require['myaac'])) {
+
+							$myaac_satified = true;
+							if(isset($require['myaac_'])) {
+								$require_myaac = $require['myaac_'];
+								if(!Composer\Semver\Semver::satisfies(MYAAC_VERSION, $require_myaac)) {
+									$myaac_satified = false;
+								}
+							}
+							else if(isset($require['myaac'])) {
 								$require_myaac = $require['myaac'];
-								if(!self::satisfies(MYAAC_VERSION, $require_myaac)) {
-									self::$error = "Your AAC version doesn't meet the requirement of this plugin. Required version is: " . $require_myaac . ", and you're using version " . MYAAC_VERSION . ".";
-									$continue = false;
+								if(version_compare(MYAAC_VERSION, $require_myaac, '<')) {
+									$myaac_satified = false;
 								}
 							}
-							
-							if(isset($require['php'])) {
+
+							if(!$myaac_satified) {
+								self::$error = "Your AAC version doesn't meet the requirement of this plugin. Required version is: " . $require_myaac . ", and you're using version " . MYAAC_VERSION . ".";
+								$continue = false;
+							}
+
+							$php_satified = true;
+							if(isset($require['php_'])) {
+								$require_php = $require['php_'];
+								if(!Composer\Semver\Semver::satisfies(phpversion(), $require_php)) {
+									$php_satified = false;
+								}
+							}
+							else if(isset($require['php'])) {
 								$require_php = $require['php'];
-								if(!self::satisfies(phpversion(), $require_php)) {
-									self::$error = "Your PHP version doesn't meet the requirement of this plugin. Required version is: " . $require_php . ", and you're using version " . phpversion() . ".";
-									$continue = false;
+								if(version_compare(phpversion(), $require_php, '<')) {
+									$php_satified = false;
 								}
 							}
-							
-							if(isset($require['database'])) {
+
+							if(!$php_satified) {
+								self::$error = "Your PHP version doesn't meet the requirement of this plugin. Required version is: " . $require_php . ", and you're using version " . phpversion() . ".";
+								$continue = false;
+							}
+
+							$database_satified = true;
+							if(isset($require['database_'])) {
+								$require_database = $require['database_'];
+								if(!Composer\Semver\Semver::satisfies(DATABASE_VERSION, $require_database)) {
+									$database_satified = false;
+								}
+							}
+							else if(isset($require['database'])) {
 								$require_database = $require['database'];
-								if(!self::satisfies(DATABASE_VERSION, $require_database)) {
-									self::$error = "Your database version doesn't meet the requirement of this plugin. Required version is: " . $require_database . ", and you're using version " . DATABASE_VERSION . ".";
-									$continue = false;
+								if(version_compare(DATABASE_VERSION, $require_database, '<')) {
+									$database_satified = false;
 								}
 							}
-							
+
+							if(!$database_satified) {
+								self::$error = "Your database version doesn't meet the requirement of this plugin. Required version is: " . $require_database . ", and you're using version " . DATABASE_VERSION . ".";
+								$continue = false;
+							}
+
 							foreach($require as $req => $version) {
-								if(in_array($req, array('myaac', 'php', 'database'))) {
+								if(in_array($req, array('myaac', 'myaac_', 'php', 'php_', 'database', 'database_'))) {
 									continue;
 								}
-								
+
 								if(!self::is_installed($req, $version)) {
 									self::$error = "This plugin requires another plugin to run correctly. The another plugin is: " . $req . ", with version " . $version . ".";
 									$continue = false;
@@ -129,7 +163,7 @@ class Plugins {
 								}
 							}
 						}
-						
+
 						if($continue) {
 							if (isset($plugin['install'])) {
 								if (file_exists(BASE . $plugin['install']))
@@ -137,7 +171,7 @@ class Plugins {
 								else
 									self::$warnings[] = 'Cannot load install script. Your plugin might be not working correctly.';
 							}
-							
+
 							if (isset($plugin['hooks'])) {
 								foreach ($plugin['hooks'] as $_name => $info) {
 									if (defined('HOOK_'. $info['type'])) {
@@ -153,11 +187,11 @@ class Plugins {
 										self::$warnings[] = 'Unknown event type: ' . $info['type'];
 								}
 							}
-							
+
 							if($cache->enabled()) {
 								$cache->delete('templates');
 							}
-							
+
 							$zip->close();
 							return true;
 						}
@@ -167,19 +201,19 @@ class Plugins {
 			else {
 				self::$error = 'There was a problem with extracting zip archive.';
 			}
-			
+
 			$zip->close();
 		}
 		else {
 			self::$error = 'There was a problem with opening zip archive.';
 		}
-		
+
 		return false;
 	}
-	
+
 	public static function uninstall($plugin_name) {
 		global $cache, $db;
-		
+
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
 			self::$error = 'Plugin ' . $plugin_name . ' does not exist.';
@@ -205,7 +239,7 @@ class Plugins {
 							$success = false;
 						}
 					}
-					
+
 					if (isset($plugin_info['hooks'])) {
 						foreach ($plugin_info['hooks'] as $_name => $info) {
 							if (defined('HOOK_'. $info['type'])) {
@@ -219,12 +253,12 @@ class Plugins {
 								self::$warnings[] = 'Unknown event type: ' . $info['type'];
 						}
 					}
-					
+
 					if($success) {
 						if($cache->enabled()) {
 							$cache->delete('templates');
 						}
-						
+
 						return true;
 					}
 					else {
@@ -233,10 +267,10 @@ class Plugins {
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public static function is_installed($plugin_name, $version) {
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
@@ -253,36 +287,17 @@ class Plugins {
 			return false;
 		}
 
-		return self::satisfies($plugin_info['version'], $version);
-	}
-
-	public static function satisfies($version, $constraints) {
-		$is_semver = false;
-		$array = array(',', '>', '<', '=', '*', '|', '~');
-		foreach($array as $x) {
-			if(strpos($constraints, $x) !== false) {
-				$is_semver = true;
-			}
-		}
-		
-		if($is_semver && !Composer\Semver\Semver::satisfies($version, $constraints)) {
-			return false;
-		}
-		else if(version_compare($version, $constraints, '<')) {
-			return false;
-		}
-		
-		return true;
+		return Composer\Semver\Semver::satisfies($plugin_info['version'], $version);
 	}
 
 	public static function getWarnings() {
 		return self::$warnings;
 	}
-	
+
 	public static function getError() {
 		return self::$error;
 	}
-	
+
 	public static function getPluginInfo() {
 		return self::$pluginInfo;
 	}
