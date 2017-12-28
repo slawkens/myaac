@@ -51,7 +51,7 @@ if(preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
 	include(TOOLS . 'signature/index.php');
 	exit();
 }
-else if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz|ttf|woff)$/i", $_SERVER['REQUEST_URI'])) {
+else if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz|ttf|woff|ico)$/i", $_SERVER['REQUEST_URI'])) {
 	header("HTTP/1.0 404 Not Found");
 	exit;
 }
