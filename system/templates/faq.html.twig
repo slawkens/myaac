@@ -17,9 +17,9 @@
 		{% set i = i + 1 %}
 	<tr bgcolor="{{ getStyle(i) }}">
 		<td colspan="2" style="cursor: pointer;" onclick="toggleVisibility('faq_{{ i }}'); return false;">
-			<b>{{ faq.question }}</b>
+			<b>{{ faq.question|raw }}</b>
 
-			<div id="faq_{{ i }}" style="display: none;">{{ faq.answer }}</div>
+			<div id="faq_{{ i }}" style="display: none;">{{ faq.answer|raw }}</div>
 		</td>
 		{% if canEdit %}
 			<td>
