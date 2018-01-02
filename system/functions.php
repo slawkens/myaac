@@ -971,7 +971,7 @@ function getTopPlayers($limit = 5) {
 		if(fieldExist('deletion', 'players'))
 			$deleted = 'deletion';
 		
-		$players = $db->query('SELECT `name`, `level`, `experience` FROM `players` WHERE `group_id` < ' . $config['highscores_groups_hidden'] . ' AND `id` NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT 5')->fetchAll();
+		$players = $db->query('SELECT `id`, `name`, `level`, `experience` FROM `players` WHERE `group_id` < ' . $config['highscores_groups_hidden'] . ' AND `id` NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
 		
 		$i = 0;
 		foreach($players as &$player) {
