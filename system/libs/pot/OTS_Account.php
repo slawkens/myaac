@@ -170,7 +170,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function load($id)
     {
         // SELECT query on database
-        $this->data = $this->db->query('SELECT `id`, ' . (fieldExist('name', 'accounts') ? '`name`,' : '') . '`password`, `email`, ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('rlname') . ', ' . $this->db->fieldName('location') . ', ' . $this->db->fieldName('web_flags') . ', ' . (fieldExist('premdays', 'accounts') ? $this->db->fieldName('premdays') . ',' : '') . (fieldExist('lastday', 'accounts') ? $this->db->fieldName('lastday') . ',' : (fieldExist('premend', 'accounts') ?  $this->db->fieldName('premend') . ' as `lastday`,' : '')) . $this->db->fieldName('created') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+        $this->data = $this->db->query('SELECT `id`, ' . (fieldExist('name', 'accounts') ? '`name`,' : '') . '`password`, `email`, ' . $this->db->fieldName('blocked') . ', ' . $this->db->fieldName('rlname') . ', ' . $this->db->fieldName('location') . ', ' . $this->db->fieldName('web_flags') . ', ' . (fieldExist('premdays', 'accounts') ? $this->db->fieldName('premdays') . ',' : '') . (fieldExist('lastday', 'accounts') ? $this->db->fieldName('lastday') . ',' : (fieldExist('premend', 'accounts') ?  $this->db->fieldName('premend') . ',' : '')) . $this->db->fieldName('created') . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
     }
 
 /**
@@ -252,9 +252,14 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		$lastday = 'lastday';
 		if(fieldExist('premend', 'accounts'))
 			$lastday = 'premend';
+		
+		$field = 'lastday';
+		if(isset($this->data['premend'])) { // othire
+			$field = 'premend';
+		}
 
         // UPDATE query on database
-        $this->db->query('UPDATE `accounts` SET ' . (fieldExist('name', 'accounts') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `blocked` = ' . (int) $this->data['blocked'] . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . (fieldExist('premdays', 'accounts') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $lastday . '` = ' . (int) $this->data['lastday'] . ' WHERE `id` = ' . $this->data['id']);
+        $this->db->query('UPDATE `accounts` SET ' . (fieldExist('name', 'accounts') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `blocked` = ' . (int) $this->data['blocked'] . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . (fieldExist('premdays', 'accounts') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $field . '` = ' . (int) $this->data[$field] . ' WHERE `id` = ' . $this->data['id']);
     }
 
 /**
@@ -327,22 +332,18 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		return $this->hasFlag(FLAG_SUPER_ADMIN);
 	}
 
-    public function getPremDays()
-    {
-        if( !isset($this->data['lastday']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getPremDays()
+	{
+		if(!isset($this->data['lastday']) && !isset($this->data['premend'])) {
+			throw new E_OTS_NotLoaded();
+		}
 
-		if(fieldExist('premdays', 'accounts'))
-			return $this->data['premdays'];
-		
-        if($this->data['lastday'] == 0)
-            return 0;
-        
-		return round(($this->data['lastday'] - time()) / (24 * 60 * 60), 3);
-        //return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
-    }
+		if(isset($this->data['premend'])) {
+			return round(($this->data['premend'] - time()) / (24 * 60 * 60), 2);
+		}
+
+		return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
+	}
 	
    public function getLastLogin()
     {
@@ -358,12 +359,13 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
 		global $config;
         if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return true;
-		if(fieldExist('premdays', 'accounts'))
-			return $this->data['premdays'] > 0;
-	
-		return $this->data['lastday'] > time();
-        //return ($this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday'])) > 0);
-    }
+
+		if(isset($this->data['premend'])) {
+			return $this->data['premend'] > time();
+		}
+
+		return ($this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday'])) > 0);
+	}
 
     public function getCreated()
     {

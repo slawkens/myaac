@@ -144,8 +144,13 @@ if($save)
 		}
 
 		if($config['account_premium_days'] && $config['account_premium_days'] > 0) {
-			$new_account->setCustomField('premdays', $config['account_premium_days']);
-			$new_account->setCustomField('lastday', time());
+			if(fieldExist('premend', 'accounts')) { // othire
+				$new_account->setCustomField('premend', time() + $config['account_premium_days'] * 86400);
+			}
+			else { // rest
+				$new_account->setCustomField('premdays', $config['account_premium_days']);
+				$new_account->setCustomField('lastday', time());
+			}
 		}
 
 		if($config['account_premium_points']) {

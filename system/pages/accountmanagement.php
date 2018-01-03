@@ -110,7 +110,7 @@ $errors = array();
 		$players = array();
 		$account_players = $account_logged->getPlayersList();
 		$account_players->orderBy('id');
-		
+
 		echo $twig->render('account.management.html.twig', array(
 			'welcome_message' => $welcome_message,
 			'recovery_key' => $recovery_key,
