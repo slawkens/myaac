@@ -75,8 +75,13 @@ if(isset($config['lua']['statustimeout']))
 // get status timeout from server config
 $status_timeout = eval('return ' . $config['lua']['statusTimeout'] . ';') / 1000 + 1;
 
-if($status['lastCheck'] + $status_timeout < time())
-{
+if($status['lastCheck'] + $status_timeout < time()) {
+	updateStatus();
+}
+
+function updateStatus() {
+	global $db, $cache, $config, $status, $status_ip, $status_port;
+	
 	// get server status and save it to database
 	$serverInfo = new OTS_ServerInfo($status_ip, $status_port);
 	$serverStatus = $serverInfo->status();
@@ -98,9 +103,14 @@ if($status['lastCheck'] + $status_timeout < time())
 		if($config['online_afk'])
 		{
 			// get amount of players that are currently logged in-game, including disconnected clients (exited)
-			$query = $db->query('SELECT COUNT(' . $db->fieldName('id') . ') AS playersTotal FROM ' . $db->tableName('players') .
-				' WHERE ' . $db->fieldName('online') . ' > 0');
-
+			if(tableExist('players_online')) { // tfs 1.x
+				$query = $db->query('SELECT COUNT(`player_id`) AS `playersTotal` FROM `players`;');
+			}
+			else {
+				$query = $db->query('SELECT COUNT(`id`) AS `playersTotal` FROM `players` WHERE `online` > 0');
+			}
+			
+			$status['playersTotal'] = 0;
 			if($query->rowCount() > 0)
 			{
 				$query = $query->fetch();
@@ -133,4 +143,3 @@ if($status['lastCheck'] + $status_timeout < time())
 		updateDatabaseConfig('status_' . $key, $value);
 	}
 }
-?>
