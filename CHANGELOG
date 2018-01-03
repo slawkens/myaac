@@ -1,3 +1,16 @@
+[0.7.5 - 04.01.2017]
+	* fixed bug on othire with config.account_premium_days
+	* fixed bug on TFS 1.x when online_afk is enabled
+	* warning about leaving news page with changes
+	* added player status to tibiacom top 5 highscores box
+	* save detected country on create account in session
+	* fixed getPremDays and isPremium functions (newest 11.x engines are bugged when it comes to PACC, its not fault of MyAAC)
+	* fix when there are no changelogs or highscores yet
+	* small fix regarding getTopPlayers function which was ignoring $limit variable
+	* fixed news adding when type != ARTICLE
+	* fixed template path finding
+	* fixed displaying article_text when it was empty saved
+
 [0.7.4 - 24.12.2017]
 	* fixed mysql fatal error on tibiacom template - top 5 box
 	* fixed displaying of level percent bar on tibian signature
