@@ -22,11 +22,9 @@ $add_sql = '';
 $config_vocations = $config['vocations'];
 if($config['highscores_vocation_box'] && isset($vocation))
 {
-	for($i = 1; $i < count($config_vocations) / 2; $i++)
-	{
-		if(strtolower($config_vocations[$i]) == $vocation)
-		{
-			$add_sql = 'AND ' . $db->fieldName('vocation') . ' = ' . $db->quote($i);
+	foreach($config['vocations'] as $id => $name) {
+		if(strtolower($name) == $vocation) {
+			$add_sql = 'AND ' . $db->fieldName('vocation') . ' = ' . $db->quote($id);
 			break;
 		}
 	}
