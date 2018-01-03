@@ -387,7 +387,7 @@ class News
 		if(!self::verify($title, $body, $article_text, $article_image, $errors))
 			return false;
 
-		$db->insert(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'date' => time(), 'category' => $category, 'player_id' => isset($player_id) ? $player_id : 0, 'comments' => $comments, 'article_text' => $article_text, 'article_image' => $article_image));
+		$db->insert(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'date' => time(), 'category' => $category, 'player_id' => isset($player_id) ? $player_id : 0, 'comments' => $comments, 'article_text' => ($type == 3 ? $article_text : ''), 'article_image' => ($type == 3 ? $article_image : '')));
 		return true;
 	}
 

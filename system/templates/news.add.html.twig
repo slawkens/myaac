@@ -1,7 +1,8 @@
+<div id="news_preview"></div>
 {% if action != 'edit' %}
 <a id="news-button" href="#">Add news</a>
 {% endif %}
-<form method="post" action="{{ news_link_form }}">
+<form method="post" action="{{ news_link_form }}" id="news-edit-form">
 	{% if action == 'edit' %}
 	<input type="hidden" name="id" value="{{ news_id }}" />
 	{% endif %}
@@ -15,7 +16,7 @@
 		{% set rows = rows + 1 %}
 		<tr bgcolor="{{ getStyle(rows) }}">
 			<td><b>Title:</b></td>
-			<td><input name="title" value="{{ title }}" size="50" maxlength="100"/></td>
+			<td><input name="title" id="title" value="{{ title }}" size="50" maxlength="100"/></td>
 		</tr>
 
 		{% set rows = rows + 1 %}
@@ -40,7 +41,7 @@
 		<tr id="article-text" bgcolor="{{ getStyle(rows) }}"{% if article_text is empty %} style="display: none;"{% endif %}>
 			<td><b>Article short text:<br/>This will be displayed on news page.<br/>Rest will be available on "read more" page.</b></td>
 			<td>
-				<textarea name="article_text">{% if article_text is not empty %}{{ article_text }}{% endif %}</textarea>
+				<textarea name="article_text" id="article_text">{% if article_text is not empty %}{{ article_text }}{% endif %}</textarea>
 			</td>
 		</tr>
 
@@ -48,7 +49,7 @@
 		<tr id="article-image" bgcolor="{{ getStyle(rows) }}"{% if article_image is empty %} style="display: none;"{% endif %}>
 			<td><b>Article image:</b></td>
 			<td>
-				<input type="text" name="article_image" value="{% if article_image is not empty %}{{ article_image }}{% else %}images/news/announcement.jpg{% endif %}" />
+				<input type="text" name="article_image" id="article_image" value="{% if article_image is not empty %}{{ article_image }}{% else %}images/news/announcement.jpg{% endif %}" />
 			</td>
 		</tr>
 
@@ -70,7 +71,7 @@
 		<tr bgcolor="{{ getStyle(rows) }}">
 			<td width="180"><b>{% if action == 'edit' %}Modified by{% else %}Author{% endif %}:</b></td>
 			<td>
-				<select name="player_id">
+				<select name="player_id" id="player_id">
 					{% for player in account_players %}
 						<option value="{{ player.getId() }}"{% if player_id is defined and player.getId() == player_id %} selected="selected"{% endif %}>{{ player.getName() }}</option>
 					{% endfor %}
@@ -93,7 +94,7 @@
 		<tr bgcolor="{{ getStyle(rows) }}">
 			<td><b>Create forum thread in section:</b></td>
 			<td>
-				<select name="forum_section">
+				<select name="forum_section" id="forum_section">
 					<option value="-1">None</option>
 						{% for section in forum_boards %}
 					<option value="{{ section.id }}" {% if forum_section is defined and forum_section == section.id %}checked="yes"{% endif %}/>{{ section.name }}</option>
@@ -102,12 +103,13 @@
 			</td>
 		</tr>
 		{% elseif comments is not null%}
-			<input type="hidden" name="forum_section" value="{{ comments }}" />
+			<input type="hidden" name="forum_section" id="forum_section" value="{{ comments }}" />
 		{% endif %}
 
 		{% set rows = rows + 1 %}
 		<tr bgcolor="{{ getStyle(rows) }}">
 			<td align="right">
+				<a id="preview" style="cursor: pointer;">Preview</a>
 				<input type="submit" value="Submit"/>
 			</td>
 			<td align="left">
@@ -169,6 +171,58 @@
 		$("#cancel").click(function( event ) {
 			unsaved = false;
 			window.location = '{{ news_link }}';
+		});
+		
+		$("#news-edit-form").submit(function( event ) {
+			unsaved = false;
+		});
+
+		if($("#news.Box").length > 0) {
+			$('<div id="article_preview"></div>').insertBefore("#news.Box");
+			$('<div id="ticker_preview"></div>').insertBefore("#news.Box");
+		}
+		else {
+			$('<div id="article_preview"></div>').insertBefore("#news-edit");
+			$('<div id="ticker_preview"></div>').insertBefore("#news-edit");
+		}
+
+		$("#preview").click(function(e) {
+			var title = document.getElementById("title").value;
+			var body = tinyMCE.activeEditor.getContent();
+			var player_id = document.getElementById("player_id").value;
+			var category = $('input[name=category]:checked').val();
+			var forum_section = document.getElementById("forum_section").value;
+			var type = document.getElementById("select-type").value;
+			
+			var params = { title: title, body: body, player_id: player_id, category: category, forum_section: forum_section, template_path: '{{ template_path }}', type: type, uid: Math.random() }
+			
+			if(type == 3) {
+				params.article_text = document.getElementById("article_text").value;
+				params.article_image = document.getElementById("article_image").value;
+			}
+
+			$.getJSON("tools/news_preview.php", params, function(data){
+				if(data.hasOwnProperty('success')) {
+					if(type == 3) { // ARTICLE
+						$('#news_preview').html('');
+						$('#ticker_preview').html('');
+						$('#article_preview').html(data.success);
+					}
+					else if(type == 2) { // TICKER
+						$('#news_preview').html('');
+						$('#ticker_preview').html(data.success);
+						$('#article_preview').html('');
+					}
+					else { // NEWS
+						$('#news_preview').html(data.success);
+						$('#ticker_preview').html('');
+						$('#article_preview').html('');
+					}
+				}
+				else if(data.hasOwnProperty('error')) {
+					$('#news_preview').html(data.error);
+				}
+			});
 		});
 
 		lastContent = $("#body").val();

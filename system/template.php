@@ -33,20 +33,20 @@ if($config['template_allow_change'])
 }
 $template_path = 'templates/' . $template_name;
 
-if(!file_exists($template_path . '/index.php') &&
-	!file_exists($template_path . '/template.php') &&
-	!file_exists($template_path . '/layout.php'))
+if(!file_exists(BASE . $template_path . '/index.php') &&
+	!file_exists(BASE . $template_path . '/template.php') &&
+	!file_exists(BASE . $template_path . '/layout.php'))
 {
 	$template_name = 'kathrine';
-	$template_path = TEMPLATES . $template_name;
+	$template_path = 'templates/' . $template_name;
 }
 
-$file = $template_path . '/config.ini';
+$file = BASE . $template_path . '/config.ini';
 $exists = file_exists($file);
-if($exists || ($config['backward_support'] && file_exists($template_path . '/layout_config.ini')))
+if($exists || ($config['backward_support'] && file_exists(BASE . $template_path . '/layout_config.ini')))
 {
 	if(!$exists)
-		$file = $template_path . '/layout_config.ini';
+		$file = BASE . $template_path . '/layout_config.ini';
 
 	if($cache->enabled())
 	{
@@ -65,8 +65,8 @@ if($exists || ($config['backward_support'] && file_exists($template_path . '/lay
 	foreach($template_ini as $key => $value)
 		$config[$key] = $value;
 }
-else if(file_exists($template_path . '/config.php'))
-	require($template_path . '/config.php');
+else if(file_exists(BASE . $template_path . '/config.php'))
+	require(BASE . $template_path . '/config.php');
 
 $template = array();
 $template['link_account_manage'] = getLink('account/manage');

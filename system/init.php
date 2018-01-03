@@ -37,7 +37,8 @@ Twig_Autoloader::register();
 $twig_loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
 $twig = new Twig_Environment($twig_loader, array(
 	'cache' => CACHE . 'twig/',
-	'auto_reload' => true
+	'auto_reload' => true,
+	//'debug' => true
 ));
 
 $function = new Twig_SimpleFunction('getStyle', function ($i) {
