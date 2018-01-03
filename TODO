@@ -20,8 +20,6 @@
 		* show position of the player
 		* replace forum actions links for admin (move, remove) with images
 		* redirect directly to the thread on user login
-	* latest news: 
-		* news preview option
 	* characters: edit in admin panel option
 	* move highscores to twig
 
