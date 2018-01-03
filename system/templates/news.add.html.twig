@@ -1,7 +1,7 @@
 {% if action != 'edit' %}
 <a id="news-button" href="#">Add news</a>
 {% endif %}
-<form method="post" action="{{ news_link_form }}">
+<form method="post" action="{{ news_link_form }}" id="news-edit-form">
 	{% if action == 'edit' %}
 	<input type="hidden" name="id" value="{{ news_id }}" />
 	{% endif %}
@@ -169,6 +169,10 @@
 		$("#cancel").click(function( event ) {
 			unsaved = false;
 			window.location = '{{ news_link }}';
+		});
+
+		$("#news-edit-form").submit(function( event ) {
+			unsaved = false;
 		});
 
 		lastContent = $("#body").val();
