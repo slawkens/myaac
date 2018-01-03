@@ -38,7 +38,7 @@
 		</tr>
 
 		{% set rows = rows + 1 %}
-		<tr id="article-text" bgcolor="{{ getStyle(rows) }}"{% if article_text is empty %} style="display: none;"{% endif %}>
+		<tr id="article-text" bgcolor="{{ getStyle(rows) }}"{% if type is not defined or type != constant('ARTICLE') %} style="display: none;"{% endif %}>
 			<td><b>Article short text:<br/>This will be displayed on news page.<br/>Rest will be available on "read more" page.</b></td>
 			<td>
 				<textarea name="article_text" id="article_text">{% if article_text is not empty %}{{ article_text }}{% endif %}</textarea>
@@ -46,7 +46,7 @@
 		</tr>
 
 		{% set rows = rows + 1 %}
-		<tr id="article-image" bgcolor="{{ getStyle(rows) }}"{% if article_image is empty %} style="display: none;"{% endif %}>
+		<tr id="article-image" bgcolor="{{ getStyle(rows) }}"{% if type is not defined or type != constant('ARTICLE') %} style="display: none;"{% endif %}>
 			<td><b>Article image:</b></td>
 			<td>
 				<input type="text" name="article_image" id="article_image" value="{% if article_image is not empty %}{{ article_image }}{% else %}images/news/announcement.jpg{% endif %}" />
