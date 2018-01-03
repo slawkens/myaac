@@ -1,13 +1,3 @@
-<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/tinymce/tinymce.min.js"></script>
-<script type="text/javascript">
-	tinymce.init({
-		selector : "#body",
-		theme : "modern",
-		plugins: 'print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount spellchecker imagetools contextmenu colorpicker textpattern help code',
-		toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
-		image_advtab: true
-	});
-</script>
 {% if action != 'edit' %}
 <a id="news-button" href="#">Add news</a>
 {% endif %}
@@ -121,7 +111,7 @@
 				<input type="submit" value="Submit"/>
 			</td>
 			<td align="left">
-				<input type="button" onclick="window.location = '{{ news_link }}';" value="Cancel"/>
+				<input id="cancel" type="button" value="Cancel"/>
 			</td>
 		</tr>
 	</table>
@@ -151,3 +141,44 @@
 	});
 </script>
 {% endif %}
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/tinymce/tinymce.min.js"></script>
+<script type="text/javascript">
+	var unsaved = false;
+	var lastContent = '';
+
+	tinymce.init({
+		selector : "#body",
+		theme : "modern",
+		plugins: 'print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount spellchecker imagetools contextmenu colorpicker textpattern help code',
+		toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
+		image_advtab: true,
+		setup: function(ed){
+			ed.on('NodeChange', function(e) {
+				if(ed.getContent() != lastContent) {
+					unsaved = true;
+				}
+			});
+		}
+	});
+
+	$(document).ready(function() {
+		$(":input").change(function(){ //trigers change in all input fields including text type
+			unsaved = true;
+		});
+		
+		$("#cancel").click(function( event ) {
+			unsaved = false;
+			window.location = '{{ news_link }}';
+		});
+
+		lastContent = $("#body").val();
+	});
+	
+	function unloadPage(){ 
+		if(unsaved){
+			return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
+		}
+	}
+
+	window.onbeforeunload = unloadPage;
+</script>
