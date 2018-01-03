@@ -213,36 +213,43 @@ if($save)
 	}
 }
 
-	$country_recognized = null;
-	if($config['account_country_recognize']) {
+$country_recognized = null;
+if($config['account_country_recognize']) {
+	$country_session = getSession('country');
+	if($country_session !== false) { // get from session
+		$country_recognized = $country_session;
+	}
+	else {
 		$info = json_decode(@file_get_contents('http://ipinfo.io/' . $_SERVER['REMOTE_ADDR'] . '/geo'), true);
 		if(isset($info['country'])) {
 			$country_recognized = strtolower($info['country']);
+			setSession('country', $country_recognized);
 		}
 	}
+}
 
-	if(!empty($errors))
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+if(!empty($errors))
+	echo $twig->render('error_box.html.twig', array('errors' => $errors));
 
-	if($config['account_country']) {
-		$countries = array();
-		foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
-			$countries[$c] = $config['countries'][$c];
-		
-		$countries['--'] = '----------';
-		foreach ($config['countries'] as $code => $c)
-			$countries[$code] = $c;
-	}
+if($config['account_country']) {
+	$countries = array();
+	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
+		$countries[$c] = $config['countries'][$c];
+	
+	$countries['--'] = '----------';
+	foreach ($config['countries'] as $code => $c)
+		$countries[$code] = $c;
+}
 
-	echo $twig->render('account.create.js.html.twig');
-	echo $twig->render('account.create.html.twig', array(
-		'account' => isset($_POST['account']) ? $_POST['account'] : '',
-		'email' => isset($_POST['email']) ? $_POST['email'] : '',
-		'countries' => isset($countries) ? $countries : null,
-		'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] : false,
-		'country_recognized' => $country_recognized,
-		'country' => isset($country) ? $country : null,
-		'errors' => $errors,
-		'save' => $save
-	));
+echo $twig->render('account.create.js.html.twig');
+echo $twig->render('account.create.html.twig', array(
+	'account' => isset($_POST['account']) ? $_POST['account'] : '',
+	'email' => isset($_POST['email']) ? $_POST['email'] : '',
+	'countries' => isset($countries) ? $countries : null,
+	'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] : false,
+	'country_recognized' => $country_recognized,
+	'country' => isset($country) ? $country : null,
+	'errors' => $errors,
+	'save' => $save
+));
 ?>
