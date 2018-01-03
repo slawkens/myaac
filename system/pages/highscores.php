@@ -228,8 +228,10 @@ echo '
 		$show_link_to_next_page = true;
 }
 
-if(!$i)
-	echo '<tr bgcolor="' . $config['darkborder'] . '"><td colspan="' . ($skill == POT::SKILL__LEVEL ? 5 : 4) . '">No records yet.</td></tr>';
+if(!$i) {
+	$extra = ($config['highscores_outfit'] ? 1 : 0);
+	echo '<tr bgcolor="' . $config['darkborder'] . '"><td colspan="' . ($skill == POT::SKILL__LEVEL ? 5 + $extra : 4 + $extra) . '">No records yet.</td></tr>';
+}
 
 ?>
 </table>
