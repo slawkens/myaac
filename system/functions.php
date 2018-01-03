@@ -973,9 +973,17 @@ function getTopPlayers($limit = 5) {
 		$deleted = 'deleted';
 		if(fieldExist('deletion', 'players'))
 			$deleted = 'deletion';
-		
-		$players = $db->query('SELECT `id`, `name`, `level`, `experience` FROM `players` WHERE `group_id` < ' . $config['highscores_groups_hidden'] . ' AND `id` NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
-		
+
+		$is_tfs10 = tableExist('players_online');
+		$players = $db->query('SELECT `id`, `name`, `level`, `experience`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . $config['highscores_groups_hidden'] . ' AND `id` NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
+
+		if($is_tfs10) {
+			foreach($players as &$player) {
+				$query = $db->query('SELECT `player_id` FROM `players_online` WHERE `player_id` = ' . $player['id']);
+				$player['online'] = ($query->rowCount() > 0 ? 1 : 0);
+			}
+		}
+
 		$i = 0;
 		foreach($players as &$player) {
 			$player['rank'] = ++$i;
