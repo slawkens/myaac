@@ -22,6 +22,9 @@
 		* redirect directly to the thread on user login
 	* characters: edit in admin panel option
 	* move highscores to twig
+	* $db->hasTable(table) + $db->hasColumn(table, column)
+	* migrations: option to downgrade the database
+	* hooks: login + logout
 
 1.0:
 	* i18n support (issue #1 on github)
