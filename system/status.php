@@ -104,7 +104,7 @@ function updateStatus() {
 		{
 			// get amount of players that are currently logged in-game, including disconnected clients (exited)
 			if(tableExist('players_online')) { // tfs 1.x
-				$query = $db->query('SELECT COUNT(`player_id`) AS `playersTotal` FROM `players`;');
+				$query = $db->query('SELECT COUNT(`player_id`) AS `playersTotal` FROM `players_online`;');
 			}
 			else {
 				$query = $db->query('SELECT COUNT(`id`) AS `playersTotal` FROM `players` WHERE `online` > 0');
