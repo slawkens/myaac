@@ -235,13 +235,17 @@ class Forum
 		return ($smiles == 0 ? Forum::parseSmiles($text) : $text);
 	}
 	
-	public static function showPost($topic, $text, $smiles)
+	public static function showPost($topic, $text, $smiles, $bb_code = true)
 	{
-		$text = nl2br($text);
+		if(!$bb_code) {
+			return '<b>' . $topic . '</b><hr />' . $text;
+		}
+
 		$post = '';
 		if(!empty($topic))
 			$post .= '<b>'.($smiles == 0 ? self::parseSmiles($topic) : $topic).'</b><hr />';
-		$post .= self::parseBBCode($text, $smiles);
+
+		$post .= self::parseBBCode(nl2br($text), $smiles);
 		return $post;
 	}
 	
