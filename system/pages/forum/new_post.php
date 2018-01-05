@@ -85,14 +85,17 @@ if(Forum::canPost($account_logged))
 		{
 			if(!empty($errors))
 				echo $twig->render('error_box.html.twig', array('errors' => $errors));
-			
-			$threads = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_smile` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 5")->fetchAll();
-			
-			// check if its news written in tinymce
-			$bb_code = ($thread['post_text'] == strip_tags($thread['post_text'])) || (!$player_account->hasFlag(FLAG_CONTENT_NEWS) && !$player_account->isSuperAdmin());
-	
+				
+			$threads = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`author_aid` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 5")->fetchAll();
 			foreach($threads as &$thread) {
-				$thread['post'] = Forum::showPost($thread['post_topic'], $thread['post_text'], $thread['post_smile'], $bb_code);
+				$player_account = new OTS_Account();
+				$player_account->load($thread['author_aid']);
+				if($player_account->isLoaded()) {
+					// check if its news written in tinymce
+					$hasAccess = $player_account->hasFlag(FLAG_CONTENT_NEWS) || $player_account->isSuperAdmin();
+					$bb_code = ($thread['post_text'] == strip_tags($thread['post_text'])) || !$hasAccess;
+					$thread['post'] = Forum::showPost(($hasAccess ? $thread['post_topic'] : htmlspecialchars($thread['post_topic'])), ($hasAccess ? $thread['post_text'] : htmlspecialchars($thread['post_text'])), $thread['post_smile'], $bb_code);
+				}
 			}
 			
 			echo $twig->render('forum.new_post.html.twig', array(
