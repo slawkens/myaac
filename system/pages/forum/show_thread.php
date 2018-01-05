@@ -89,4 +89,4 @@ foreach($threads as $thread)
 	echo '</td></tr>';
 }
 echo '</table><br /><a href="?subtopic=forum&action=new_post&thread_id='.$thread_id.'"><img src="images/forum/post.gif" border="0" /></a>';
-?>
+echo $twig->render('forum.fullscreen.html.twig');

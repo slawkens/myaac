@@ -221,7 +221,7 @@ class Forum
 			// TODO: [poll] tag
 			
 			'#\[color=(.*?)\](.*?)\[/color\]#si' => ($xhtml ? '<span style="color: \\1;">\\2</span>' : '<font color="\\1">\\2</font>'),
-			'#\[img\](.*?)\[/img\]#si' => ($xhtml ? '<img src="\\1" border="0" alt="" />' : '<img src="\\1" border="0" alt="">'),
+			'#\[img\](.*?)\[/img\]#si' => ($xhtml ? '<img class="forum-image" style="max-width:550px; max-height; 550px;" src="\\1" border="0" alt="" />' : '<img class="forum-image" style="max-width:550px; max-height; 550px;" src="\\1" border="0" alt="">'),
 			'#\[url=(.*?)\](.*?)\[/url\]#si' => '<a href="\\1" title="\\2">\\2</a>',
 //		'#\[email\](.*?)\[/email\]#si' => '<a href="mailto:\\1" title="Email \\1">\\1</a>',
 			'#\[code\](.*?)\[/code\]#si' => '<code>\\1</code>',
