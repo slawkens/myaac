@@ -1,6 +1,7 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+ini_set('max_execution_time', 300);
 if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['saved'])) {
 	warning($locale['already_installed']);
 }
