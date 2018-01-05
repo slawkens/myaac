@@ -1,3 +1,10 @@
+[0.7.6 - 05.01.2017]
+	* fixed othire account creating/installation
+	* fixed table name players -> players_online
+	* fixed unexpected error logging about email fail
+	* added max_execution_time to the install finish step
+	* some small fix regarding highscores vocation box
+
 [0.7.5 - 04.01.2017]
 	* fixed bug on othire with config.account_premium_days
 	* fixed bug on TFS 1.x when online_afk is enabled
