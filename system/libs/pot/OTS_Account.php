@@ -39,7 +39,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @var array
  * @version 0.1.5
  */
-    private $data = array('email' => '', 'blocked' => false, 'rlname' => '','location' => '','web_flags' => 0,'lastday' => 0,'premdays' => 0, 'created' => 0);
+    private $data = array('email' => '', 'blocked' => false, 'rlname' => '','location' => '','web_flags' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
 
 /**
  * Creates new account.
@@ -249,14 +249,13 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
             throw new E_OTS_NotLoaded();
         }
 
-		$lastday = 'lastday';
-		if(fieldExist('premend', 'accounts'))
-			$lastday = 'premend';
-		
-		$field = 'lastday';
-		if(isset($this->data['premend'])) { // othire
-			$field = 'premend';
+	$field = 'lastday';
+	if(fieldExist('premend', 'accounts')) { // othire
+    		$field = 'premend';
+		if(!isset($this->data['premend'])) {
+			$this->data['premend'] = 0;
 		}
+	}
 
         // UPDATE query on database
         $this->db->query('UPDATE `accounts` SET ' . (fieldExist('name', 'accounts') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `blocked` = ' . (int) $this->data['blocked'] . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . (fieldExist('premdays', 'accounts') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $field . '` = ' . (int) $this->data[$field] . ' WHERE `id` = ' . $this->data['id']);
@@ -344,7 +343,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
 		return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
 	}
-	
+
    public function getLastLogin()
     {
         if( !isset($this->data['lastday']) )
@@ -354,7 +353,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
         return $this->data['lastday'];
     }
-	
+
     public function isPremium()
     {
 		global $config;
