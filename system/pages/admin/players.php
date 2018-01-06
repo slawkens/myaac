@@ -399,7 +399,7 @@ $account = $player->getAccount();
 			Head:<input type="text" name="look_head" size="2" maxlength="11" value="<?php echo $player->getLookHead(); ?>" />
 			Legs:<input type="text" name="look_legs" size="2" maxlength="11" value="<?php echo $player->getLookLegs(); ?>" />
 			Type:<input type="text" name="look_type" size="2" maxlength="11" value="<?php echo $player->getLookType(); ?>" />
-			<?php if($db->hasColumn('lookaddons', 'players')): ?>
+			<?php if($db->hasColumn('players', 'lookaddons')): ?>
 			Addons:<input type="text" name="look_addons" size="2" maxlength="11" value="<?php echo $player->getLookAddons(); ?>" />
 			<?php endif; ?>
 		</td>
@@ -520,7 +520,7 @@ $account = $player->getAccount();
 			<table>
 				<tr style="background-color: transparent;">
 					<td><label for="deleted">Deleted:</label></td>
-					<td><input type="checkbox" name="deleted" id="deleted" value="true" <?php echo ($player->getCustomField($db->hasColumn('deletion', 'players') ? 'deletion' : 'deleted') == '1' ? ' checked' : ''); ?>/></td>
+					<td><input type="checkbox" name="deleted" id="deleted" value="true" <?php echo ($player->getCustomField($db->hasColumn('players', 'deletion') ? 'deletion' : 'deleted') == '1' ? ' checked' : ''); ?>/></td>
 
 					<td><label for="hidden">Hidden:</label></td>
 					<td><input type="checkbox" name="hidden" id="hidden" value="true" <?php echo ($player->isHidden() ? ' checked' : ''); ?>/></td>

@@ -27,12 +27,7 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 			'icon_id' => $cat['icon_id']
 		);
 	}
-/*
-	$template_path = $_GET['template_path'];
-	$twig->addGlobal('template_path', $template_path);
-	if($twig_loader && file_exists(BASE . $template_path))
-		$twig_loader->prependPath(BASE . $template_path);
-*/
+
 	$twig->addGlobal('config', $config);
 
 	$player = new OTS_Player();
@@ -45,7 +40,7 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 
 	if($_GET['type'] == 3) { // ARTICLE
 		if(!isset($_GET['article_text'], $_GET['article_image'])) {
-			error_('Error: please fill all inputs 2.');
+			error_('Error: please fill all inputs.');
 		}
 	
 		$featured_article = '';
@@ -57,7 +52,7 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 					'text' => $_GET['article_text'],
 					'image' => $_GET['article_image'],
 					'hidden' => 0,
-					'read_more'=> getLink('news/archive/') . '0'
+					'read_more'=> '#'
 				),
 				'canEdit' => false
 			));

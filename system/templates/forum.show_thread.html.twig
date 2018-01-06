@@ -28,7 +28,7 @@ Page: {{ links_to_pages|raw }}<br/>
 			<br />
 			{% endif %}
 			<font size="1">
-				{% if post.group is defined and post.group|lower != 'player' %}
+				{% if post.group is defined %}
 					Position: {{ post.group }}<br />
 				{% endif %}
 
@@ -55,7 +55,7 @@ Page: {{ links_to_pages|raw }}<br/>
 					{% if post.first_post != post.id %}
 						<a href="?subtopic=forum&action=remove_post&id={{ post.id }}" title="Remove Post" onclick="return confirm('Are you sure you want remove post of {{ post.player.getName() }}?')"><img src="images/del.png"/></a>
 					{% else %}
-						<a href="?subtopic=forum&action=move_thread&id={{ post.id }}"><img src="images/icons/arrow_right.gif"/></a>
+						<a href="?subtopic=forum&action=move_thread&id={{ post.id }}" title="Move Thread"><img src="images/icons/arrow_right.gif"/></a>
 						<a href="?subtopic=forum&action=remove_post&id={{ post.id }}" title="Remove Thread" target="_blank" onclick="return confirm('Are you sure you want remove thread > {{ post.post_topic}} <?')"><img src="images/del.png"/></a>
 					{% endif %}
 					{% if logged and (post.player.getAccount().getId() == account_logged.getId() or is_moderator) %}

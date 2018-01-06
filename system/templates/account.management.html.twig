@@ -58,7 +58,8 @@
 		<div align="center">
 			You can register your account for increased protection. Click on "Register Account" and get your free recovery key today!<br/>
 			<form action="{{ getLink('account/register') }}" method="post">
-				<input type="submit" value="Register Account" />
+				{% set button_name = 'Register Account' %}
+				{% include('buttons.base.html.twig') %}
 			</form>
 		</div>
 		<br/>
@@ -69,7 +70,8 @@
 				A request has been submitted to change the email address of this account to <b>{{ email_new }}</b>. After <b>{{ email_new_time|date("j F Y, G:i:s") }}</b> you can accept the new email address and finish the process. Please cancel the request if you do not want your email address to be changed! Also cancel the request if you have no access to the new email address!
 
 				<form action="{{ getLink('account/email') }}" method="post">
-					<input type="submit" value="Edit" />
+					{% set button_name = 'Edit' %}
+					{% include('buttons.base.html.twig') %}
 				</form>
 			</div>
 		<br/><br/>
@@ -84,7 +86,8 @@
 				<td style="width: 90px;">Email Address:</td>
 				<td>{{ account_email ~ email_change }}
 					<form action="{{ getLink('account/email') }}" method="post">
-						<input type="submit" value="Change Email" />
+						{% set button_name = 'Change Email' %}
+						{% include('buttons.base.html.twig') %}
 					</form>
 				</td>
 			</tr>
@@ -120,7 +123,8 @@
 			</tr>
 		</table>
 		<form action="{{ getLink('account/info') }}" method="post">
-			<input type="submit" value="Change Info" />
+			{% set button_name = 'Change Info' %}
+			{% include('buttons.base.html.twig') %}
 		</form>
 		<br/>
 		<h2>Action Log</h2>
@@ -159,26 +163,30 @@
 			<tr>
 				<td>
 					<form action="{{ getLink('account/character/create') }}" method="post" >
-						<input type="Submit" name="Create Character" value="Create Character" />
+						{% set button_name = 'Create Character' %}
+						{% include('buttons.base.html.twig') %}
 					</form>
 				</td>
 				{% if config.account_change_character_name %}
 				<td>
 					<form action="{{ getLink('account/character/name') }}" method="post" >
-						<input type="Submit" name="Change Name" value="Change Name" />
+						{% set button_name = 'Change Name' %}
+						{% include('buttons.base.html.twig') %}
 					</form>
 				</td>
 				{% endif %}
 				{% if config.account_change_character_sex %}
 				<td>
 					<form action="{{ getLink('account/character/sex') }}" method="post" >
-						<input type="Submit" name="Change Sex" value="Change Sex" />
+						{% set button_name = 'Change Sex' %}
+						{% include('buttons.base.html.twig') %}
 					</form>
 				</td>
 				{% endif %}
 				<td>
 					<form action="{{ getLink('account/character/delete') }}" method="post">
-						<input type="Submit" name="Delete Character" value="Delete Character" />
+						{% set button_name = 'Delete Character' %}
+						{% include('buttons.base.html.twig') %}
 					</form>
 				</td>
 			</tr>

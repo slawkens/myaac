@@ -38,7 +38,7 @@ if(isset($posts[0]['player_id'])) {
 	$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `views`=`views`+1 WHERE `id` = ".(int) $thread_id);
 }
 
-$lookaddons = $db-hasColumn('players', 'lookaddons');
+$lookaddons = $db->hasColumn('players', 'lookaddons');
 $groups = new OTS_Groups_List();
 foreach($posts as &$post)
 {
