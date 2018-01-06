@@ -31,6 +31,6 @@
 	// Automatic redirect
 	setTimeout ("automaticRedirect()", 1000);
 	function automaticRedirect() {
-		window.location = "{{ redirect }}";
+		window.location = "{{ redirect|raw }}";
 	}
 </script>

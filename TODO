@@ -16,10 +16,6 @@
 		* hooks
 		* fieldExist and tableExist functions
 		* Menus in templates
-	* forum:
-		* show position of the player
-		* replace forum actions links for admin (move, remove) with images
-		* redirect directly to the thread on user login
 	* characters: edit in admin panel option
 	* move highscores to twig
 	* $db->hasTable(table) + $db->hasColumn(table, column)

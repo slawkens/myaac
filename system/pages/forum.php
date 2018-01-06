@@ -181,7 +181,12 @@ if($action == 'show_board' || $action == 'show_thread')
 
 if(!$logged)
 {
-	header('Location: ' . BASE_URL . '?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum'));
+	$extra_url = '';
+	if($action == 'new_post' && isset($_GET['thread_id'])) {
+		$extra_url = '&action=new_post&thread_id=' . $_GET['thread_id'];
+	}
+
+	header('Location: ' . BASE_URL . '?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum' . $extra_url));
 	return;
 }
 
