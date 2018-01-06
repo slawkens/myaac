@@ -16,7 +16,6 @@
 		* hooks
 		* fieldExist and tableExist functions
 		* Menus in templates
-	* characters: edit in admin panel option
 	* move highscores to twig
 	* $db->hasTable(table) + $db->hasColumn(table, column)
 	* migrations: option to downgrade the database

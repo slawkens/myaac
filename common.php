@@ -46,6 +46,7 @@ define('FLAG_CONTENT_GALLERY', 512);
 define('FLAG_CONTENT_VIDEOS', 1024);
 define('FLAG_CONTENT_FAQ', 2048);
 define('FLAG_CONTENT_MENUS', 4096);
+define('FLAG_CONTENT_PLAYERS', 8192);
 
 // news
 define('NEWS', 1);
