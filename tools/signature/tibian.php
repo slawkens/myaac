@@ -101,7 +101,7 @@
 	imagefilledrectangle($img, 225, 40, 225, 130, $title); //seperator
 	$posy = 50;
 	
-	if(fieldExist('skill_fist', 'players')) {// tfs 1.0+
+	if($db->hasColumn('players', 'skill_fist')) {// tfs 1.0+
 		$skills_db = $db->query('SELECT `skill_fist`, `skill_club`, `skill_sword`, `skill_axe`, `skill_dist`, `skill_shielding`, `skill_fishing` FROM `players` WHERE `id` = ' . $player->getId())->fetch();
 		
 		$skill_ids = array(

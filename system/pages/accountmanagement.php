@@ -17,7 +17,7 @@ if($config['account_country'])
 $groups = new OTS_Groups_List();
 
 $show_form = true;
-$config_salt_enabled = fieldExist('salt', 'accounts');
+$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 if(!$logged)
 {
 	if($action == "logout") {
@@ -74,7 +74,7 @@ $errors = array();
 				$account_registered = '<b><font color="green">Yes</font></b>';
 		}
 
-		$account_created = $account_logged->getCustomField("created");
+		$account_created = $account_logged->getCreated();
 		$account_email = $account_logged->getEMail();
 		$email_new_time = $account_logged->getCustomField("email_new_time");
 		if($email_new_time > 1)

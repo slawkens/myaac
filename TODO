@@ -14,10 +14,8 @@
 		* should the link blink?
 	* cache:
 		* hooks
-		* fieldExist and tableExist functions
 		* Menus in templates
 	* move highscores to twig
-	* $db->hasTable(table) + $db->hasColumn(table, column)
 	* migrations: option to downgrade the database
 	* hooks: login + logout
 

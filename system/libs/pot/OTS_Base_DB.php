@@ -37,6 +37,9 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
  */
     private $queries = 0;
 
+	protected $logged = false;
+	private $log = '';
+
 /**
  * Query-quoted field name.
  * 
@@ -96,6 +99,10 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 
     public function query($query)
     {
+		if($this->logged) {
+			$this->log .= $query . PHP_EOL;
+		}
+
         $this->queries++;
 		//echo $query . PHP_EOL;
         return parent::query($query);
@@ -234,6 +241,10 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 
 	public function queries() {
 		return $this->queries;
+	}
+	
+	public function getLog() {
+		return $this->log;
 	}
 }
 

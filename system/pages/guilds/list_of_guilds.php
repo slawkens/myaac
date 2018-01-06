@@ -1,6 +1,6 @@
 <?php
 
-$guilds_list = $ots->createObject('Guilds_List');
+$guilds_list = new OTS_Guilds_List();
 
 if(!isset($_REQUEST['preview']))
 	$_REQUEST['preview'] = 1;

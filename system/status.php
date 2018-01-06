@@ -103,7 +103,7 @@ function updateStatus() {
 		if($config['online_afk'])
 		{
 			// get amount of players that are currently logged in-game, including disconnected clients (exited)
-			if(tableExist('players_online')) { // tfs 1.x
+			if($db->hasTable('players_online')) { // tfs 1.x
 				$query = $db->query('SELECT COUNT(`player_id`) AS `playersTotal` FROM `players_online`;');
 			}
 			else {

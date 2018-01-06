@@ -16,7 +16,7 @@ if(!Validator::guildName($guild_name))
 
 if(empty($errors))
 {
-	$guild = $ots->createObject('Guild');
+	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded())
 		$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
@@ -110,9 +110,9 @@ else
 	$showed_players = 1;
 	foreach($rank_list as $rank)
 	{
-		if(tableExist(GUILD_MEMBERS_TABLE))
+		if($db->hasTable(GUILD_MEMBERS_TABLE))
 			$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
-		else if(fieldExist('rank_id', 'players'))
+		else if($db->hasColumn('players', 'rank_id'))
 			$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 		
 		$players_with_rank_number = $players_with_rank->rowCount();
@@ -127,7 +127,7 @@ else
 							<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%>';
 			foreach($players_with_rank as $result)
 			{
-				$player = $ots->createObject('Player');
+				$player = new OTS_Player();
 				$player->load($result['id']);
 				if(!$player->isLoaded())
 					continue;

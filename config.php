@@ -46,8 +46,6 @@ $config = array(
 	// footer
 	'footer' => ''/*'<br/>Your Server &copy; 2016. All rights reserved.'*/,
 
-	'debug_level' => 0, // 0 - disabled, 1 - show load time, 2 - show db query counter, 3 - both, 4 - memory usage, 5 - load time & memory usage, 6 - queries & memory usage, 7 - all
-
 	'language' => 'en', // default language (currently only 'en' available)
 	'language_allow_change' => false,
 
@@ -65,6 +63,7 @@ $config = array(
 	'database_user' => '',
 	'database_password' => '',
 	'database_name' => '',
+	'database_log' => false, // should database queries be logged and displayed in the page source? They will be included at the end of the .html source of the page
 
 	// multiworld system (only TFS 0.3)
 	'multiworld' => false, // use multiworld system?

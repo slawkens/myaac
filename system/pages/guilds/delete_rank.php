@@ -17,7 +17,7 @@ if(!Validator::guildName($guild_name)) {
 	$guild_errors[] = Validator::getLastError();
 }
 if(empty($guild_errors)) {
-	$guild = $ots->createObject('Guild');
+	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded()) {
 		$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
@@ -55,7 +55,7 @@ if(empty($guild_errors)) {
 					}
 					else
 					{
-						if(fieldExist('rank_id', 'players'))
+						if($db->hasColumn('players', 'rank_id'))
 							$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 						else
 							$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');

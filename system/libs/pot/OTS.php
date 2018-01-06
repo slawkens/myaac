@@ -30,50 +30,6 @@
 class POT
 {
 /**
- * MySQL driver.
- */
-    const DB_MYSQL = 1;
-/**
- * SQLite driver.
- */
-    const DB_SQLITE = 2;
-/**
- * PostgreSQL driver.
- * 
- * @version 0.0.4
- * @since 0.0.4
- */
-    const DB_PGSQL = 3;
-/**
- * ODBC driver.
- * 
- * @version 0.0.4
- * @since 0.0.4
- */
-    const DB_ODBC = 4;
-    
-/**
- * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
- */
-    const VOCATION_NONE = 0;
-/**
- * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
- */
-    const VOCATION_SORCERER = 1;
-/**
- * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
- */
-    const VOCATION_DRUID = 2;
-/**
- * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
- */
-    const VOCATION_PALADIN = 3;
-/**
- * @deprecated 0.0.5 Vocations are now loaded dynamicly from vocations.xml file.
- */
-    const VOCATION_KNIGHT = 4;
-
-/**
  * North.
  */
     const DIRECTION_NORTH = 0;
@@ -401,15 +357,13 @@ class POT
  * </p>
  * 
  * @version 0.1.3
- * @param int|null $driver Database driver type.
  * @param array $params Connection info.
- * @throws E_OTS_Generic When driver is not supported or not supported.
  * @throws LogicException When PDO extension is not loaded.
  * @throws PDOException On PDO operation error.
  * @example examples/quickstart.php quickstart.php
  * @tutorial POT/Basics.pkg#basics.database
  */
-    public function connect($driver, $params)
+    public function connect($params)
     {
         // checks if PDO extension is loaded
         if( !extension_loaded('PDO') )
@@ -417,47 +371,7 @@ class POT
             throw new LogicException();
         }
 
-        // $params['driver'] option instead of $driver
-        if( !isset($driver) )
-        {
-            if( isset($params['driver']) )
-            {
-                $driver = $params['driver'];
-            }
-            else
-            {
-                throw new E_OTS_Generic(E_OTS_Generic::CONNECT_NO_DRIVER);
-            }
-        }
-        unset($params['driver']);
-
-        // switch() structure provides us further flexibility
-        switch($driver)
-        {
-            // MySQL database
-            case self::DB_MYSQL:
-                $this->db = new OTS_DB_MySQL($params);
-                break;
-
-            // SQLite database
-            case self::DB_SQLITE:
-                $this->db = new OTS_DB_SQLite($params);
-                break;
-
-            // SQLite database
-            case self::DB_PGSQL:
-                $this->db = new OTS_DB_PostgreSQL($params);
-                break;
-
-            // SQLite database
-            case self::DB_ODBC:
-                $this->db = new OTS_DB_ODBC($params);
-                break;
-
-            // unsupported driver
-            default:
-                throw new E_OTS_Generic(E_OTS_Generic::CONNECT_INVALID_DRIVER);
-        }
+        $this->db = new OTS_DB_MySQL($params);
 
         $this->db->setAttribute(PDO_ATTR_ERRMODE, PDO_ERRMODE_EXCEPTION);
 //        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

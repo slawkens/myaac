@@ -122,13 +122,13 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function load($id)
     {
 		$ownerid = 'ownerid';
-		if(fieldExist('owner_id', 'guilds'))
+		if($this->db->hasColumn('guilds', 'owner_id'))
 			$ownerid = 'owner_id';
 		
 		$creationdata = 'creationdata';
-		if(fieldExist('creationdate', 'guilds'))
+		if($this->db->hasColumn('guilds', 'creationdate'))
 			$creationdata = 'creationdate';
-		else if(fieldExist('creation_time', 'guilds'))
+		else if($this->db->hasColumn('guilds', 'creation_time'))
 			$creationdata = 'creation_time';
 
         // SELECT query on database
@@ -177,13 +177,13 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function save()
     {
 		$ownerid = 'ownerid';
-		if(fieldExist('owner_id', 'guilds'))
+		if($this->db->hasColumn('guilds', 'owner_id'))
 			$ownerid = 'owner_id';
 		
 		$creationdata = 'creationdata';
-		if(fieldExist('creationdate', 'guilds'))
+		if($this->db->hasColumn('guilds', 'creationdate'))
 			$creationdata = 'creationdate';
-		else if(fieldExist('creation_time', 'guilds'))
+		else if($this->db->hasColumn('guilds', 'creation_time'))
 			$creationdata = 'creation_time';
 
         // updates existing guild

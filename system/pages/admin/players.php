@@ -78,7 +78,7 @@ else if(isset($_REQUEST['search_name'])) {
 
 $groups = new OTS_Groups_List();
 if($id > 0) {
-	$player = $ots->createObject('Player');
+	$player = new OTS_Player();
 	$player->load($id);
 	
 	if(isset($player) && $player->isLoaded() && isset($_POST['save'])) {// we want to save
@@ -95,7 +95,7 @@ if($id > 0) {
 		//if(!Validator::newCharacterName($name)
 		//	echo_error(Validator::getLastError());
 
-		$player_db = $ots->createObject('Player');
+		$player_db = new OTS_Player();
 		$player_db->find($name);
 		if($player_db->isLoaded() && $player->getName() != $name)
 			echo_error('This name is already used. Please choose another name!');
@@ -149,7 +149,7 @@ if($id > 0) {
 		verify_number($look_legs, 'Look legs', 11);
 		$look_type = $_POST['look_type'];
 		verify_number($look_type, 'Look type', 11);
-		if(fieldExist('lookaddons', 'players')) {
+		if($db->hasColumn('players', 'lookaddons')) {
 			$look_addons = $_POST['look_addons'];
 			verify_number($look_addons, 'Look addons', 11);
 		}
@@ -188,7 +188,7 @@ if($id > 0) {
 		$skull_time = $_POST['skull_time'];
 		verify_number($skull_time, 'Skull time', 11);
 	
-		if(fieldExist('loss_experience', 'players')) {
+		if($db->hasColumn('players', 'loss_experience')) {
 			$loss_experience = $_POST['loss_experience'];
 			verify_number($loss_experience, 'Loss experience', 11);
 			$loss_mana = $_POST['loss_mana'];
@@ -201,13 +201,13 @@ if($id > 0) {
 			verify_number($loss_items, 'Loss items', 11);
 		}
 		
-		if(fieldExist('blessings', 'players')) {
+		if($db->hasColumn('players', 'blessings')) {
 			$blessings = $_POST['blessings'];
 			verify_number($blessings, 'Blessings', 2);
 		}
 		$balance = $_POST['balance'];
 		verify_number($balance, 'Balance', 20);
-		if(fieldExist('stamina', 'players')) {
+		if($db->hasColumn('players', 'stamina')) {
 			$stamina = $_POST['stamina'];
 			verify_number($stamina, 'Stamina', 20);
 		}
@@ -243,7 +243,7 @@ if($id > 0) {
 			$player->setLookHead($look_head);
 			$player->setLookLegs($look_legs);
 			$player->setLookType($look_type);
-			if(fieldExist('lookaddons', 'players'))
+			if($db->hasColumn('players', 'lookaddons'))
 				$player->setLookAddons($look_addons);
 			$player->setPosX($pos_x);
 			$player->setPosY($pos_y);
@@ -257,19 +257,19 @@ if($id > 0) {
 			$player->setLastIP(ip2long($lastip));
 			$player->setSkull($skull);
 			$player->setSkullTime($skull_time);
-			if(fieldExist('loss_experience', 'players')) {
+			if($db->hasColumn('players', 'loss_experience')) {
 				$player->setLossExperience($loss_experience);
 				$player->setLossMana($loss_mana);
 				$player->setLossSkills($loss_skills);
 				$player->setLossContainers($loss_containers);
 				$player->setLossItems($loss_items);
 			}
-			if(fieldExist('blessings', 'players'))
+			if($db->hasColumn('players', 'blessings'))
 				$player->setBlessings($blessings);
 			$player->setBalance($balance);
-			if(fieldExist('stamina', 'players'))
+			if($db->hasColumn('players', 'stamina'))
 				$player->setStamina($stamina);
-			if(fieldExist('deletion', 'players'))
+			if($db->hasColumn('players', 'deletion'))
 				$player->setCustomField('deletion', $deleted ? '1' : '0');
 			else
 				$player->setCustomField('deleted', $deleted ? '1' : '0');
@@ -399,7 +399,7 @@ $account = $player->getAccount();
 			Head:<input type="text" name="look_head" size="2" maxlength="11" value="<?php echo $player->getLookHead(); ?>" />
 			Legs:<input type="text" name="look_legs" size="2" maxlength="11" value="<?php echo $player->getLookLegs(); ?>" />
 			Type:<input type="text" name="look_type" size="2" maxlength="11" value="<?php echo $player->getLookType(); ?>" />
-			<?php if(fieldExist('lookaddons', 'players')): ?>
+			<?php if($db->hasColumn('lookaddons', 'players')): ?>
 			Addons:<input type="text" name="look_addons" size="2" maxlength="11" value="<?php echo $player->getLookAddons(); ?>" />
 			<?php endif; ?>
 		</td>
@@ -472,7 +472,7 @@ $account = $player->getAccount();
 			</table>
 		</td>
 	</tr>
-	<?php if(fieldExist('loss_experience', 'players')): ?>
+	<?php if($db->hasColumn('players', 'loss_experience')): ?>
 	<tr>
 		<td colspan="2">
 			<table>
@@ -500,14 +500,14 @@ $account = $player->getAccount();
 		<td colspan="2">
 			<table>
 				<tr style="background-color: transparent;">
-					<?php if(fieldExist('blessings', 'players')): ?>
+					<?php if($db->hasColumn('players', 'blessings')): ?>
 					<td>Blessings:</td>
 					<td><input type="text" name="blessings" size="2" maxlength="2" value="<?php echo $player->getBlessings(); ?>" /></td>
 					<?php endif; ?>
 					<td>Balance:</td>
 					<td><input type="text" name="balance" size="16" maxlength="20" value="<?php echo $player->getBalance(); ?>" /></td>
 					
-					<?php if(fieldExist('stamina', 'players')): ?>
+					<?php if($db->hasColumn('players', 'stamina')): ?>
 					<td>Stamina:</td>
 					<td><input type="text" name="stamina" size="16" maxlength="20" value="<?php echo $player->getStamina(); ?>" /></td>
 					<?php endif; ?>
@@ -520,10 +520,10 @@ $account = $player->getAccount();
 			<table>
 				<tr style="background-color: transparent;">
 					<td><label for="deleted">Deleted:</label></td>
-					<td><input type="checkbox" name="deleted" id="deleted" value="true" <?php echo ($player->getCustomField(fieldExist('deletion', 'players') ? 'deletion' : 'deleted') == '1' ? ' checked' : ''); ?>/></td>
+					<td><input type="checkbox" name="deleted" id="deleted" value="true" <?php echo ($player->getCustomField($db->hasColumn('deletion', 'players') ? 'deletion' : 'deleted') == '1' ? ' checked' : ''); ?>/></td>
 
 					<td><label for="hidden">Hidden:</label></td>
-					<td><input type="checkbox" name="hidden" id="hidden" value="true" <?php echo ($player->getCustomField('hidden') == 1 ? ' checked' : ''); ?>/></td>
+					<td><input type="checkbox" name="hidden" id="hidden" value="true" <?php echo ($player->isHidden() ? ' checked' : ''); ?>/></td>
 
 					<td>Created:</td>
 					<td><input type="text" name="created" id="created" value="<?php echo $player->getCustomField('created'); ?>"/></td>

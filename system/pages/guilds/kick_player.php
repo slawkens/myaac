@@ -27,7 +27,7 @@ if(!Validator::characterName($name)) {
 }
 
 if(empty($errors)) {
-	$guild = $ots->createObject('Guild');
+	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded()) {
 		$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';

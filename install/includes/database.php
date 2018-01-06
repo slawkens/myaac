@@ -5,8 +5,8 @@ require(SYSTEM . 'libs/pot/OTS.php');
 $ots = POT::getInstance();
 require(SYSTEM . 'database.php');
 
-if(tableExist('accounts'))
-	define('USE_ACCOUNT_NAME', fieldExist('name', 'accounts'));
+if($db->hasTable('accounts'))
+	define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 else
 	define('USE_ACCOUNT_NAME', false);
 ?>

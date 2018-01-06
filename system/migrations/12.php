@@ -1,7 +1,7 @@
 <?php
 
 // add new item_id field for runes
-if(!fieldExist('item_id', TABLE_PREFIX . 'spells'))
+if(!$db->hasColumn(TABLE_PREFIX . 'spells', 'item_id'))
 	$db->query("ALTER TABLE `" . TABLE_PREFIX . "spells` ADD `item_id` INT(11) NOT NULL DEFAULT 0 AFTER `conjure_count`;");
 
 // change unique index from spell to name
@@ -12,7 +12,7 @@ $db->query("ALTER TABLE `" . TABLE_PREFIX . "spells` ADD UNIQUE INDEX (`name`);"
 $db->query("ALTER TABLE `" . TABLE_PREFIX . "spells` MODIFY `type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 - instant, 2 - conjure, 3 - rune';");
 
 // new items table
-if(!tableExist(TABLE_PREFIX . 'items'))
+if(!$db->hasTable(TABLE_PREFIX . 'items'))
 $db->query("
 CREATE TABLE `" . TABLE_PREFIX . "items`
 (
@@ -25,7 +25,7 @@ CREATE TABLE `" . TABLE_PREFIX . "items`
 ) ENGINE = MyISAM;");
 
 // new weapons table
-if(!tableExist(TABLE_PREFIX . 'weapons'))
+if(!$db->hasTable(TABLE_PREFIX . 'weapons'))
 $db->query("
 CREATE TABLE `" . TABLE_PREFIX . "weapons`
 (

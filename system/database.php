@@ -76,13 +76,17 @@ defined('MYAAC') or die('Direct access not allowed!');
 	if(isset($config['lua']['useMD5Passwords']) && getBoolean($config['lua']['useMD5Passwords']))
 		$config['database_encryption'] = 'md5';
 
+	if(!isset($config['database_log'])) {
+		$config['database_log'] = false;
+	}
+
 	try {
-		$ots->connect(POT::DB_MYSQL,
-			array(
+		$ots->connect(array(
 				'host' => $config['database_host'],
 				'user' => $config['database_user'],
 				'password' => $config['database_password'],
-				'database' => $config['database_name']
+				'database' => $config['database_name'],
+				'log' => $config['database_log']
 			)
 		);
 	}

@@ -27,7 +27,7 @@ if(isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) {
 							//dont show table "delete character" again
 							$show_form = false;
 							//delete player
-							if(fieldExist('deletion', 'players'))
+							if($db->hasColumn('players', 'deletion'))
 								$player->setCustomField('deletion', 1);
 							else
 								$player->setCustomField('deleted', 1);

@@ -94,17 +94,18 @@ if($save) {
 	{
 		if($newchar_sex == "0")
 			$char_to_copy->setLookType(136);
-		$player = $ots->createObject('Player');
+
+		$player = new OTS_Player();
 		$player->setName($newchar_name);
 		$player->setAccount($account_logged);
 		//$player->setGroupId($char_to_copy->getGroup()->getId());
 		$player->setGroupId(1);
 		$player->setSex($newchar_sex);
 		$player->setVocation($char_to_copy->getVocation());
-		if(fieldExist('promotion', 'players'))
+		if($db->hasColumn('players', 'promotion'))
 			$player->setPromotion($char_to_copy->getPromotion());
 		
-		if(fieldExist('direction', 'players'))
+		if($db->hasColumn('players', 'direction'))
 			$player->setDirection($char_to_copy->getDirection());
 		
 		$player->setConditions($char_to_copy->getConditions());
@@ -113,7 +114,7 @@ if($save) {
 			$player->setRank($char_to_copy->getRank());
 		}
 		
-		if(fieldExist('lookaddons', 'players'))
+		if($db->hasColumn('players', 'lookaddons'))
 			$player->setLookAddons($char_to_copy->getLookAddons());
 		
 		$player->setTownId($newchar_town);
@@ -141,12 +142,12 @@ if($save) {
 		$player->setPosY(0);
 		$player->setPosZ(0);
 		$player->setStamina($config['otserv_version'] == TFS_03 ? 151200000 : 2520);
-		if(fieldExist('loss_experience', 'players')) {
+		if($db->hasColumn('players', 'loss_experience')) {
 			$player->setLossExperience($char_to_copy->getLossExperience());
 			$player->setLossMana($char_to_copy->getLossMana());
 			$player->setLossSkills($char_to_copy->getLossSkills());
 		}
-		if(fieldExist('loss_items', 'players')) {
+		if($db->hasColumn('players', 'loss_items')) {
 			$player->setLossItems($char_to_copy->getLossItems());
 			$player->setLossContainers($char_to_copy->getLossContainers());
 		}
@@ -162,7 +163,7 @@ if($save) {
 		$player->find($newchar_name);
 		
 		if($player->isLoaded()) {
-			if(tableExist('player_skills')) {
+			if($db->hasTable('player_skills')) {
 				for($i=0; $i<7; $i++) {
 					$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $i);
 					if($skillExists->rowCount() <= 0) {

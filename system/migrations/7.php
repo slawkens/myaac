@@ -1,4 +1,4 @@
 <?php
-	if(fieldExist('name', TABLE_PREFIX . 'screenshots'))
+	if($db->hasColumn(TABLE_PREFIX . 'screenshots', 'name'))
 		$db->query("ALTER TABLE `" . TABLE_PREFIX . "screenshots` DROP `name`;");
 ?>

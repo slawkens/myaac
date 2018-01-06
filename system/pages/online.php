@@ -15,7 +15,7 @@ if($config['account_country'])
 	require(SYSTEM . 'countries.conf.php');
 
 $promotion = '';
-if(fieldExist('promotion', 'players'))
+if($db->hasColumn('players', 'promotion'))
 	$promotion = '`promotion`,';
 $order = isset($_GET['order']) ? $_GET['order'] : 'name';
 if(!in_array($order, array('country', 'name', 'level', 'vocation')))
@@ -26,12 +26,12 @@ else if($order == 'vocation')
 	$order = $promotion . 'vocation ASC';
 
 $skull_type = 'skull';
-if(fieldExist('skull_type', 'players')) {
+if($db->hasColumn('players', 'skull_type')) {
 	$skull_type = 'skull_type';
 }
 
 $skull_time = 'skulltime';
-if(fieldExist('skull_time', 'players')) {
+if($db->hasColumn('players', 'skull_time')) {
 	$skull_time = 'skull_time';
 }
 
@@ -39,7 +39,7 @@ $outfit_addons = false;
 $outfit = '';
 if($config['online_outfit']) {
 	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
-	if(fieldExist('lookaddons', 'players')) {
+	if($db->hasColumn('players', 'lookaddons')) {
 		$outfit .= ', lookaddons';
 		$outfit_addons = true;
 	}
@@ -51,7 +51,7 @@ if($config['online_vocations']) {
 		$vocs[$id] = 0;
 }
 
-if(tableExist('players_online')) // tfs 1.0
+if($db->hasTable('players_online')) // tfs 1.0
 	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 else
 	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
@@ -99,14 +99,14 @@ if($players > 0)
 	if($config['online_record'])
 	{
 		$timestamp = false;
-		if(tableExist('server_record')) {
+		if($db->hasTable('server_record')) {
 			$query =
 				$db->query(
 					'SELECT `record`, `timestamp` FROM `server_record` WHERE `world_id` = ' . (int)$config['lua']['worldId'] .
 					' ORDER BY `record` DESC LIMIT 1');
 			$timestamp = true;
 		}
-		else if(tableExist('server_config')) { // tfs 1.0
+		else if($db->hasTable('server_config')) { // tfs 1.0
 			$query = $db->query('SELECT `value` as `record` FROM `server_config` WHERE `config` = ' . $db->quote('players_record'));
 		}
 		else

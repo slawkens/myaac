@@ -15,7 +15,7 @@ else {
 
 		$password = $_SESSION['var_password'];
 		
-		$config_salt_enabled = fieldExist('salt', 'accounts');
+		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 		if($config_salt_enabled)
 		{
 			$salt = generateRandomString(10, false, true, true);
@@ -77,9 +77,9 @@ else {
 
 		$account_used->setCustomField('web_flags', FLAG_ADMIN + FLAG_SUPER_ADMIN);
 		$account_used->setCustomField('country', 'us');
-		if(fieldExist('group_id', 'accounts'))
+		if($db->hasColumn('accounts', 'group_id'))
 			$account_used->setCustomField('group_id', $groups->getHighestId());
-		if(fieldExist('type', 'accounts'))
+		if($db->hasColumn('accounts', 'type'))
 			$account_used->setCustomField('type', 5);
 
 		if(!$player_db->isLoaded())
@@ -116,7 +116,7 @@ else {
 		}
 
 		$deleted = 'deleted';
-		if(fieldExist('deletion', 'players'))
+		if($db->hasColumn('players', 'deletion'))
 			$deleted = 'deletion';
 
 		$insert_into_players = "INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `save`, `lastlogout`, `balance`, `$deleted`, `created`, `hidden`, `comment`) VALUES ";

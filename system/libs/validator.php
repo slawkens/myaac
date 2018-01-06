@@ -296,7 +296,7 @@ class Validator
 		}
 		
 		//check if was namelocked previously
-		if(tableExist('player_namelocks') && fieldExist('name', 'player_namelocks')) {
+		if($db->hasTable('player_namelocks') && $db->hasColumn('player_namelocks', 'name')) {
 			$namelock = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));
 			if($namelock->rowCount() > 0) {
 				self::$lastError =  'Character with this name has been namelocked.';

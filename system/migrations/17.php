@@ -1,6 +1,6 @@
 <?php
 
-if(!tableExist('myaac_menu')) {
+if(!$db->hasTable('myaac_menu')) {
 	$db->query("
 CREATE TABLE `myaac_menu`
 (

@@ -17,7 +17,7 @@ if(!$config['mail_enabled'])
 	return;
 }
 
-$config_salt_enabled = fieldExist('salt', 'accounts');
+$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 $action_type = isset($_REQUEST['action_type']) ? $_REQUEST['action_type'] : '';
 if($action == '')
 {

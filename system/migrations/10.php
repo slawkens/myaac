@@ -1,8 +1,8 @@
 <?php
-	if(!fieldExist('ordering', TABLE_PREFIX . 'hooks'))
+	if(!$db->hasColumn(TABLE_PREFIX . 'hooks', 'ordering'))
 		$db->query("ALTER TABLE `" . TABLE_PREFIX . "hooks` ADD `ordering` INT(11) NOT NULL DEFAULT 0 AFTER `file`;");
 	
-	if(!tableExist(TABLE_PREFIX . 'admin_menu'))
+	if(!$db->hasTable(TABLE_PREFIX . 'admin_menu'))
 		$db->query("
 CREATE TABLE `myaac_admin_menu`
 (

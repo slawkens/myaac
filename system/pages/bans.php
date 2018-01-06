@@ -170,7 +170,7 @@ function getPlayerNameByAccount($id)
 	global $vowels, $ots, $db;
 	if(is_numeric($id))
 	{
-		$player = $ots->createObject('Player');
+		$player = new OTS_Player();
 		$player->load($id);
 		if($player->isLoaded())
 			return $player->getName();

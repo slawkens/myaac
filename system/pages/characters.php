@@ -27,7 +27,7 @@ function retrieve_former_name($name)
 {
 	global $oldName, $db;
 
-	if(tableExist('player_namelocks') && fieldExist('name', 'player_namelocks')) {
+	if($db->hasTable('player_namelocks') && $db->hasColumn('player_namelocks', 'name')) {
 		$newNameSql = $db->query('SELECT `name`, `new_name` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));
 		if($newNameSql->rowCount() > 0) // namelocked
 		{
@@ -79,24 +79,27 @@ if($player->isLoaded() && !$player->isDeleted())
 	$rows = 0;
 
 	if($config['characters']['outfit'])
-		$outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . (fieldExist('lookaddons', 'players') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
+		$outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
 	
 	$flag = '';
 	if($config['account_country'])
-		$flag = getFlagImage($account->getCustomField('country'));
+		$flag = getFlagImage($account->getCountry());
 	
 	$player_sex = 'Unknown';
 	if(isset($config['genders'][$player->getSex()]))
 		$player_sex = strtolower($config['genders'][$player->getSex()]);
 	
-	$marriage = new OTS_Player();
-	$marriage->load($player->getMarriage());
-	
 	$marital_status = 'single';
-	if($marriage->isLoaded())
-		$marital_status = 'married to ' . getPlayerLink($marriage->getName());
-	
-	$frags_enabled = tableExist('player_killers') && $config['characters']['frags'];
+	$marriage_id = $player->getMarriage();
+	if($marriage_id > 0) {
+		$marriage = new OTS_Player();
+		$marriage->load($player->getMarriage(), array('id', 'name'), false);
+		if($marriage->isLoaded()) {
+			$marital_status = 'married to ' . getPlayerLink($marriage->getName());
+		}
+	}
+
+	$frags_enabled = $db->hasTable('player_killers') && $config['characters']['frags'];
 	$frags_count = 0;
 	if($frags_enabled) {
 		$query = $db->query(
@@ -114,14 +117,14 @@ if($player->isLoaded() && !$player->isDeleted())
 	}
 	
 	$town_field = 'town';
-	if(fieldExist('town_id', 'houses'))
+	if($db->hasColumn('houses', 'town_id'))
 		$town_field = 'town_id';
-	else if(fieldExist('townid', 'houses'))
+	else if($db->hasColumn('houses', 'townid'))
 		$town_field = 'townid';
-	else if(!fieldExist('town', 'houses'))
+	else if(!$db->hasColumn('houses', 'town'))
 		$town_field = false;
 	
-	if(fieldExist('name', 'houses')) {
+	if($db->hasColumn('houses', 'name')) {
 		$house = $db->query('SELECT `id`, `paid`, `name`' . ($town_field != false ? ', `' . $town_field . '` as `town`' : '') . ' FROM `houses` WHERE `owner` = '.$player->getId())->fetch();
 		if(isset($house['id']))
 		{
@@ -143,7 +146,7 @@ if($player->isLoaded() && !$player->isDeleted())
 	
 	if($config['characters']['skills'])
 	{
-		if(fieldExist('skill_fist', 'players')) {// tfs 1.0+
+		if($db->hasColumn('players', 'skill_fist')) {// tfs 1.0+
 			$skills_db = $db->query('SELECT `skill_fist`, `skill_club`, `skill_sword`, `skill_axe`, `skill_dist`, `skill_shielding`, `skill_fishing` FROM `players` WHERE `id` = ' . $player->getId())->fetch();
 			
 			$skill_ids = array(
@@ -230,7 +233,7 @@ if($player->isLoaded() && !$player->isDeleted())
 
 	$dead_add_content = '';
 	$deaths = array();
-	if(tableExist('killers')) {
+	if($db->hasTable('killers')) {
 		$player_deaths = $db->query('SELECT `id`, `date`, `level` FROM `player_deaths` WHERE `player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,10;');
 		if(count($player_deaths))
 		{
@@ -284,7 +287,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 	}
 	else {
 		$mostdamage = '';
-		if(fieldExist('mostdamage_by', 'player_deaths'))
+		if($db->hasColumn('player_deaths', 'mostdamage_by'))
 			$mostdamage = ', `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`';
 		$deaths_db = $db->query('SELECT
 				`player_id`, `time`, `level`, `killed_by`, `is_player`' . $mostdamage . '
@@ -345,15 +348,15 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		$signature_url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . urlencode($player->getName()) . '.png';
 	}
 	
-	$hidden = $player->getCustomField('hidden');
-	if($hidden != 1) {
+	$hidden = $player->isHidden();
+	if(!$hidden) {
 		// check if account has been banned
 		$bannedUntil = '';
 		$banned = array();
-		if(tableExist('account_bans'))
+		if($db->hasTable('account_bans'))
 			$banned = $db->query('SELECT `expires_at` as `expires` FROM `account_bans` WHERE `account_id` = ' . $account->getId() . ' and (`expires_at` > ' . time() . ' OR `expires_at` = -1);');
-		else if (tableExist('bans')) {
-			if (fieldExist('expires', 'bans'))
+		else if ($db->hasTable('bans')) {
+			if ($db->hasColumn('bans', 'expires'))
 				$banned = $db->query('SELECT `expires` FROM `bans` WHERE (`value` = ' . $account->getId() . ' or `value` = ' . $player->getId() . ') and `active` = 1 and `type` != 2 and `type` != 4 and (`expires` > ' . time() . ' OR `expires` = -1);');
 			else
 				$banned = $db->query('SELECT `time` as `time` FROM `bans` WHERE (`account` = ' . $account->getId() . ' or `player` = ' . $player->getId() . ') and `type` != 2 and `type` != 4 and (`time` > ' . time() . ' OR `time` = -1);');
@@ -362,8 +365,16 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			$bannedUntil = $ban['expires'];
 		}
 		
-		$account_players = $account->getPlayersList();
-		$account_players->orderBy('name');
+		$account_players = array();
+		$query = $db->query('SELECT `id` FROM `players` WHERE `account_id` = ' . $account->getId() . ' ORDER BY `name`')->fetchAll();
+		foreach($query as $p) {
+			$_player = new OTS_Player();
+			$fields = array('id', 'name', 'vocation', 'level', 'online', 'deleted', 'hidden');
+			$_player->load($p['id'], $fields, false);
+			if($_player->isLoaded()) {
+				$account_players[] = $_player;
+			}
+		}
 	}
 	
 	echo $twig->render('characters.html.twig', array(
@@ -373,7 +384,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		'flag' => $flag,
 		'oldName' => $oldName,
 		'sex' => $player_sex,
-		'marriage_enabled' => $config['characters']['marriage_info'] && fieldExist('marriage', 'players'),
+		'marriage_enabled' => $config['characters']['marriage_info'] && $db->hasColumn('players', 'marriage'),
 		'marital_status' => $marital_status,
 		'vocation' => $config['vocations'][$player->getVocation()],
 		'frags_enabled' => $frags_enabled,
@@ -414,11 +425,11 @@ else
 	$search_errors = array();
 
 	$promotion = '';
-	if(fieldExist('promotion', 'players'))
+	if($db->hasColumn('players', 'promotion'))
 		$promotion = ', `promotion`';
 
 	$deleted = 'deleted';
-	if(fieldExist('deletion', 'players'))
+	if($db->hasColumn('players', 'deletion'))
 		$deleted = 'deletion';
 
 	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1;');

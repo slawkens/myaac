@@ -85,22 +85,22 @@ else
 }
 
 $promotion = '';
-if(fieldExist('promotion', 'players'))
+if($db->hasColumn('players', 'promotion'))
 	$promotion = ',promotion';
 
 $online = '';
-if(fieldExist('online', 'players'))
+if($db->hasColumn('players', 'online'))
 	$online = ',online';
 
 $deleted = 'deleted';
-if(fieldExist('deletion', 'players'))
+if($db->hasColumn('players', 'deletion'))
 	$deleted = 'deletion';
 
 $outfit_addons = false;
 $outfit = '';
 if($config['highscores_outfit']) {
 	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
-	if(fieldExist('lookaddons', 'players')) {
+	if($db->hasColumn('players', 'lookaddons')) {
 		$outfit .= ', lookaddons';
 		$outfit_addons = true;
 	}
@@ -108,7 +108,7 @@ if($config['highscores_outfit']) {
 
 $offset = $_page * $config['highscores_length'];
 if($skill <= POT::SKILL_LAST) { // skills
-	if(fieldExist('skill_fist', 'players')) {// tfs 1.0
+	if($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
 		$skill_ids = array(
 			POT::SKILL_FIST => 'skill_fist',
 			POT::SKILL_CLUB => 'skill_club',
@@ -119,10 +119,10 @@ if($skill <= POT::SKILL_LAST) { // skills
 			POT::SKILL_FISH => 'skill_fishing',
 		);
 
-		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . $outfit . ', ' . $skill_ids[$skill] . ' as value FROM accounts,players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id > 6 AND accounts.id = players.account_id ORDER BY ' . $skill_ids[$skill] . ' DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . $outfit . ', ' . $skill_ids[$skill] . ' as value FROM accounts,players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND accounts.id = players.account_id ORDER BY ' . $skill_ids[$skill] . ' DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 	}
 	else
-		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',value,level,vocation' . $promotion . $outfit . ' FROM accounts,players,player_skills WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id > 6 AND players.id = player_skills.player_id AND player_skills.skillid = '.$skill.' AND accounts.id = players.account_id ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',value,level,vocation' . $promotion . $outfit . ' FROM accounts,players,player_skills WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id = player_skills.player_id AND player_skills.skillid = '.$skill.' AND accounts.id = players.account_id ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 }
 else if($skill == 666 && $config['otserv_version'] == TFS_03) // frags
 {
@@ -131,15 +131,15 @@ else if($skill == 666 && $config['otserv_version'] == TFS_03) // frags
 			' WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id = player_killers.player_id AND accounts.id = players.account_id' .
 			' GROUP BY `player_id`' .
 			' ORDER BY value DESC' .
-			' LIMIT 101 OFFSET '.$offset);
+			' LIMIT 101 OFFSET '.$offset)->fetchAll();
 }
 else
 {
 	if($skill == POT::SKILL__MAGLEVEL) {
-		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',maglevel,level,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND players.id > 6 AND accounts.id = players.account_id ORDER BY maglevel DESC, manaspent DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',maglevel,level,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND accounts.id = players.account_id ORDER BY maglevel DESC, manaspent DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 	}
 	else { // level
-		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,experience,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND players.id > 6 AND accounts.id = players.account_id ORDER BY level DESC, experience DESC LIMIT 101 OFFSET '.$offset);
+		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,experience,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND accounts.id = players.account_id ORDER BY level DESC, experience DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 		$list = 'experience';
 	}
 }
@@ -174,13 +174,25 @@ $show_link_to_next_page = false;
 $i = 0;
 
 $online_exist = false;
-if(fieldExist('online', 'players'))
+if($db->hasColumn('players', 'online'))
 	$online_exist = true;
+
+$players = array();
+foreach($skills as $player) {
+	$players[] = $player['id'];
+}
+
+if($db->hasTable('players_online')) {
+	$query = $db->query('SELECT `player_id`, 1 FROM `players_online` WHERE `player_id` IN (' . implode(', ', $players) . ')')->fetchAll();
+	foreach($query as $t) {
+		$is_online[$t['player_id']] = true;
+	}
+}
+
 foreach($skills as $player)
 {
-	if(!$online_exist) {
-		$query = $db->query('SELECT `player_id` FROM `players_online` WHERE `player_id` = ' . $player['id']);
-		$player['online'] = $query->rowCount() > 0;
+	if(isset($is_online)) {
+		$player['online'] = (isset($is_online[$player['id']]) ? 1 : 0);
 	}
 
 	if(++$i <= $config['highscores_length'])

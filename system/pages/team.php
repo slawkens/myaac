@@ -44,13 +44,13 @@ foreach($groupList as $id => $group)
 	$groupNames = array();
 	foreach($group_members as $member)
 	{
-		if(!admin() && $member->getCustomField('hidden') > 0)
+		if(!admin() && $member->isHidden())
 			continue;
 
 		$members_count++;
 		$flag = '';
 		if($config['account_country'])
-			$flag = getFlagImage($member->getAccount()->getCustomField('country'));
+			$flag = getFlagImage($member->getAccount()->getCountry());
 
 		$tmp = '<tr bgcolor="' . getStyle($i++) . '">';
 		if(!$newStyle)

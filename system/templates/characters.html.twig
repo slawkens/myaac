@@ -315,7 +315,7 @@
 		<!-- SIGNATURE_END -->
 		{% endif %}
 		{{ hook(constant('HOOK_CHARACTERS_AFTER_SIGNATURE')) }}
-		{% if hidden != 1 %}
+		{% if not hidden %}
 		{% set rows = 0 %}
 		<!-- ACCOUNT_INFORMATION -->
 		<br/><br/>
@@ -324,7 +324,7 @@
 				<td colspan="2" class="white"><b>Account Information</b></td>
 			</tr>
 
-			{% set realName = account.getCustomField('rlname') %}
+			{% set realName = account.getRLName() %}
 			{% if realName is not empty %}
 			{% set rows = rows + 1 %}
 			<tr bgcolor="{{ getStyle(rows) }}">
@@ -342,7 +342,7 @@
 			</tr>
 			{% endif %}
 
-			{% set realLocation = account.getCustomField('location') %}
+			{% set realLocation = account.getLocation() %}
 			{% if realLocation is not empty %}
 			{% set rows = rows + 1 %}
 			<tr bgcolor="{{ getStyle(rows) }}">
@@ -354,7 +354,7 @@
 			{% set rows = rows + 1 %}
 			<tr bgcolor="{{ getStyle(rows) }}">
 			<td width="20%">Created:</td>
-			<td>{{ account.getCustomField("created")|date("j F Y, g:i a") }}
+			<td>{{ account.getCreated()|date("j F Y, g:i a") }}
 				{% if bannedUntil matches '/^\\d+$/' or bannedUntil == '-1' %}
 					<font color="red">[Banished {% if bannedUntil == '-1' %}forever{% else %}until {{ bannedUntil|date('d F Y, h:s') }}{% endif %}]</font>
 				{% else %}

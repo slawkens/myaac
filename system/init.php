@@ -164,7 +164,7 @@ require_once(SYSTEM . 'libs/pot/OTS.php');
 $ots = POT::getInstance();
 require_once(SYSTEM . 'database.php');
 
-define('USE_ACCOUNT_NAME', fieldExist('name', 'accounts'));
+define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 // load vocation names
 $tmp = '';
 if($cache->enabled() && $cache->fetch('vocations', $tmp)) {

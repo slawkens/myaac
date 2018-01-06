@@ -54,7 +54,7 @@ if($todo == 'save')
 	}
 	
 	if(empty($guild_errors)) {
-		$player = $ots->createObject('Player');
+		$player = new OTS_Player();
 		$player->find($name);
 		if(!$player->isLoaded()) {
 			$guild_errors[] = 'Character <b>'.$name.'</b> doesn\'t exist.';
@@ -64,7 +64,7 @@ if($todo == 'save')
 	
 	if(empty($guild_errors))
 	{
-		$guild = $ots->createObject('Guild');
+		$guild = new OTS_Guild();
 		$guild->find($guild_name);
 		if($guild->isLoaded()) {
 			$guild_errors[] = 'Guild <b>'.$guild_name.'</b> already exist. Select other name.';

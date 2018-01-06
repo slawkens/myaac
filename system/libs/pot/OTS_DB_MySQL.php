@@ -24,6 +24,8 @@
  */
 class OTS_DB_MySQL extends OTS_Base_DB
 {
+	private $has_table_cache = array();
+	private $has_column_cache = array();
 /**
  * Creates database connection.
  * 
@@ -92,8 +94,47 @@ class OTS_DB_MySQL extends OTS_Base_DB
             $this->prefix = $params['prefix'];
         }
 
+        if( isset($params['log']) )
+        {
+            $this->logged = true;
+        }
+
+		global $cache, $config;
+		if($cache->enabled()) {
+			$tmp = null;
+			$need_revalidation = true;
+			if($cache->fetch('database_checksum', $tmp) && $tmp) {
+				$tmp = unserialize($tmp);
+				if(sha1($config['database_host'] . '.' . $config['database_name']) == $tmp) {
+					$need_revalidation = false;
+				}
+			}
+
+			if(!$need_revalidation) {
+				$tmp = null;
+				if($cache->fetch('database_tables', $tmp) && $tmp) {
+					$this->has_table_cache = unserialize($tmp);
+				}
+
+				$tmp = null;
+				if($cache->fetch('database_columns', $tmp) && $tmp) {
+					$this->has_column_cache = unserialize($tmp);
+				}
+			}
+		}
+
 		parent::__construct('mysql:' . implode(';', $dns), $user, $password);
     }
+
+	public function __destruct()
+    {
+		global $cache, $config;
+		if($cache->enabled()) {
+			$cache->set('database_tables', serialize($this->has_table_cache));
+			$cache->set('database_columns', serialize($this->has_column_cache));
+			$cache->set('database_checksum', serialize(sha1($config['database_host'] . '.' . $config['database_name'])));
+		}
+	}
 
 /**
  * Query-quoted field name.
@@ -133,6 +174,23 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
         return $sql;
     }
+
+	public function hasTable($name) {
+		if(isset($this->has_table_cache[$name])) {
+			return $this->has_table_cache[$name];
+		}
+
+		global $config;
+		return ($this->has_table_cache[$name] = $this->query("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " . $this->quote($config['database_name']) . " AND `TABLE_NAME` = " . $this->quote($name) . " LIMIT 1;")->rowCount() > 0);
+	}
+	
+	public function hasColumn($table, $column) {
+		if(isset($this->has_column_cache[$table . '.' . $column])) {
+			return $this->has_column_cache[$table . '.' . $column];
+		}
+	
+		return ($this->has_column_cache[$table . '.' . $column] = count($this->query("SHOW COLUMNS FROM `" . $table . "` LIKE '" . $column . "'")->fetchAll()) > 0);
+	}
 }
 
 /**#@-*/

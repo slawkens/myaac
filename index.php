@@ -423,15 +423,18 @@ else
 	die('ERROR: Cannot load template.');
 }
 
+$super = superAdmin();
 echo '<!-- MyAAC ' . MYAAC_VERSION . ' :: http://www.my-aac.org/ -->' . "\n";
-if(($config['debug_level'] & 1) == 1)
-	echo '<!-- Generated in :: ' . round(microtime(true) - START_TIME, 4) . ' -->';
+if($super) {
+	echo '<!-- Generated in: ' . round(microtime(true) - START_TIME, 4) . 'ms -->';
+	echo PHP_EOL . '<!-- Queries done: ' . $db->queries() . ' -->';
+	if(function_exists('memory_get_peak_usage')) {
+		echo PHP_EOL . '<!-- Peak memory usage: ' . convert_bytes(memory_get_peak_usage(true)) . ' -->';
+	}
+}
 
-if(($config['debug_level'] & 2) == 2)
-	echo "\n" . '<!-- Queries done :: ' . $db->queries() . ' -->';
-
-if(($config['debug_level'] & 4) == 4 && function_exists('memory_get_peak_usage'))
-	echo "\n" . '<!-- Peak memory usage: ' . convert_bytes(memory_get_peak_usage(true)) . ' -->';
-
+if($config['database_log'] && $super) {
+	echo PHP_EOL . '<!-- Database Queries Done by MyAAC:' . PHP_EOL . $db->getLog() . '-->';
+}
 $hooks->trigger(HOOK_FINISH);
 ?>

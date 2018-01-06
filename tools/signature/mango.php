@@ -65,7 +65,7 @@
 
 	/** HOUSE **/
 	$town = 'town';
-	if(fieldExist('town_id', 'houses'))
+	if($db->hasColumn('houses', 'town_id'))
 		$town = 'town_id';
 	
 	$house = $db->query( 'SELECT `houses`.`name`, `houses`.`' . $town . '` as town FROM `houses` WHERE `houses`.`owner` = '.$player->getId().';' )->fetchAll();

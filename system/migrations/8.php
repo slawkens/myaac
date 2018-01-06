@@ -1,5 +1,5 @@
 <?php
-	if(tableExist(TABLE_PREFIX . 'forum_sections'))
+	if($db->hasTable(TABLE_PREFIX . 'forum_sections'))
 		$db->query('RENAME TABLE `' . TABLE_PREFIX . 'forum_sections` TO `' . TABLE_PREFIX . 'forum_boards`;');
 	
 	$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'forum_boards` WHERE `ordering` > 0;');

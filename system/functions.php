@@ -69,7 +69,7 @@ function getPlayerLink($name, $generate = true)
 
 	if(is_numeric($name))
 	{
-		$player = $ots->createObject('Player');
+		$player = new OTS_Player();
 		$player->load(intval($name));
 		if($player->isLoaded())
 			$name = $player->getName();
@@ -302,22 +302,6 @@ function encrypt($str)
 	return $str;
 }
 
-function tableExist($table)
-{
-	global $db, $config;
-	$query = $db->query("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " . $db->quote($config['database_name']) . " AND `TABLE_NAME` = " . $db->quote($table) . ";");
-	return $query->rowCount() > 0;
-}
-
-function fieldExist($field, $table)
-{
-	global $db;
-	if(count($db->query("SHOW COLUMNS FROM `" . $table . "` LIKE '" . $field . "'")->fetchAll()))
-		return true;
-
-	return false;
-}
-
 //delete player with name
 function delete_player($name)
 {
@@ -376,9 +360,9 @@ function delete_guild($id)
 		
 		global $db, $ots;
 		foreach($rank_list as $rank_in_guild) {
-			if(tableExist('guild_members'))
+			if($db->hasTable('guild_members'))
 				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_members`.`rank_id` as `rank_id` FROM `players`, `guild_members` WHERE `guild_members`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_members`.`player_id` ORDER BY `name`;');
-			else if(tableExist('guild_membership'))
+			else if($db->hasTable('guild_membership'))
 				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` ORDER BY `name`;');
 			else
 				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank_in_guild->getId() . ' AND `deleted` = 0;');
@@ -386,7 +370,7 @@ function delete_guild($id)
 			$players_with_rank_number = $players_with_rank->rowCount();
 			if($players_with_rank_number > 0) {
 				foreach($players_with_rank as $result) {
-					$player = $ots->createObject('Player');
+					$player = new OTS_Player();
 					$player->load($result['id']);
 					if(!$player->isLoaded())
 						continue;
@@ -563,7 +547,7 @@ function getCreatureName($killer, $showStatus = false, $extendedInfo = false)
 	
 	if(is_numeric($killer))
 	{
-		$player = $ots->createObject('Player');
+		$player = new OTS_Player();
 		$player->load($killer);
 		if($player->isLoaded())
 		{
@@ -971,10 +955,10 @@ function getTopPlayers($limit = 5) {
 	if($fetch_from_db)
 	{
 		$deleted = 'deleted';
-		if(fieldExist('deletion', 'players'))
+		if($db->hasColumn('players', 'deletion'))
 			$deleted = 'deletion';
 
-		$is_tfs10 = tableExist('players_online');
+		$is_tfs10 = $db->hasTable('players_online');
 		$players = $db->query('SELECT `id`, `name`, `level`, `experience`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . $config['highscores_groups_hidden'] . ' AND `id` NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
 
 		if($is_tfs10) {

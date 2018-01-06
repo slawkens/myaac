@@ -31,9 +31,8 @@ class OTS_Groups_List implements IteratorAggregate, Countable
  */
     public function __construct($file = '')
     {
-		if(tableExist('groups')) { // read groups from database
-			global $db;
-
+		global $db;
+		if($db->hasTable('groups')) { // read groups from database
 			foreach($db->query('SELECT `id`, `name`, `access` FROM `groups`;') as $group)
 			{
 				$info = array();

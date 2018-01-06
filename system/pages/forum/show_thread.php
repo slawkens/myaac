@@ -38,6 +38,7 @@ if(isset($posts[0]['player_id'])) {
 	$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `views`=`views`+1 WHERE `id` = ".(int) $thread_id);
 }
 
+$lookaddons = $db-hasColumn('players', 'lookaddons');
 $groups = new OTS_Groups_List();
 foreach($posts as &$post)
 {
@@ -50,7 +51,7 @@ foreach($posts as &$post)
 	}
 	
 	if($config['characters']['outfit']) {
-		$post['outfit'] = $config['outfit_images_url'] . '?id=' . $player->getLookType() . (fieldExist('lookaddons', 'players') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
+		$post['outfit'] = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($lookaddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
 	}
 
 	$groupName = '';

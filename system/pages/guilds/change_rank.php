@@ -21,7 +21,7 @@ else {
 
 if(empty($errors))
 {
-	$guild = $ots->createObject('Guild');
+	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded())
 		$errors[] = 'Guild with name <b>' . $guild_name . '</b> doesn\'t exist.';
@@ -75,7 +75,7 @@ if($guild_vice)
 			$ranks[$rid]['1'] = $rank->getName();
 			$rid++;
 			
-			if(fieldExist('rank_id', 'players'))
+			if($db->hasColumn('players', 'rank_id'))
 				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 			else
 				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
@@ -107,7 +107,7 @@ if($guild_vice)
 		$new_rank = (int) $_REQUEST['rankid'];
 		if(!Validator::characterName($player_name))
 			$change_errors[] = 'Invalid player name format.';
-		$rank = $ots->createObject('GuildRank');
+		$rank = new OTS_GuildRank();
 		$rank->load($new_rank);
 		if(!$rank->isLoaded())
 			$change_errors[] = 'Rank with this ID doesn\'t exist.';
@@ -115,7 +115,7 @@ if($guild_vice)
 			$change_errors[] = 'You can\'t set ranks with equal or higher level than your.';
 		if(empty($change_errors))
 		{
-			$player_to_change = $ots->createObject('Player');
+			$player_to_change = new OTS_Player();
 			$player_to_change->find($player_name);
 			if(!$player_to_change->isLoaded())
 				$change_errors[] = 'Player with name '.$player_name.'</b> doesn\'t exist.';
@@ -163,7 +163,7 @@ if($guild_vice)
 					$ranks[$rid]['1'] = $rank->getName();
 					$rid++;
 					
-					if(fieldExist('rank_id', 'players'))
+					if($db->hasColumn('players', 'rank_id'))
 						$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 					else
 						$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
@@ -173,7 +173,7 @@ if($guild_vice)
 					{
 						foreach($players_with_rank as $result)
 						{
-							$player = $ots->createObject('Player');
+							$player = new OTS_Player();
 							$player->load($result['id']);
 							if(!$player->isLoaded())
 								continue;

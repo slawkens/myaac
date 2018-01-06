@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Houses';
 
-if(!fieldExist('name', 'houses')) {
+if(!$db->hasColumn('houses', 'name')) {
 	echo 'Houses list is not available on this server.';
 	return;
 }
@@ -87,7 +87,7 @@ $type = '';
 									$who = $guild->getName();
 								else
 								{
-									$player = $ots->createObject('Player');
+									$player = new OTS_Player();
 									$player->load($houseOwner);
 									if($player->isLoaded())
 									{
@@ -107,7 +107,7 @@ $type = '';
 		else
 		{
 			echo '
-				Here you can see the list of all available houses, flats' . (tableExist('guild', 'houses') ? ' or guildhall' : '') . '.
+				Here you can see the list of all available houses, flats' . ($db->hasTable('houses', 'guild') ? ' or guildhall' : '') . '.
 				Click on any view button to get more information about a house or adjust
 				the search criteria and start a new search.<br/><br/>';
 				if(isset($config['lua']['houseCleanOld'])) {
@@ -134,7 +134,7 @@ $type = '';
 				echo '<br/>';
 
 				if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order'])
-					&& (isset($_POST['type']) || !tableExist('guild', 'houses')))
+					&& (isset($_POST['type']) || !$db->hasTable('houses', 'guild')))
 				{
 					$order = $_POST['order'];
 					$orderby = '`name`';
@@ -147,9 +147,9 @@ $type = '';
 					}
 
 					$town = 'town';
-					if(fieldExist('town_id', 'houses'))
+					if($db->hasColumn('houses', 'town_id'))
 						$town = 'town_id';
-					else if(fieldExist('townid', 'houses'))
+					else if($db->hasColumn('houses', 'townid'))
 						$town = 'townid';
 	
 					$whereby = '`' . $town . '` = ' .(int)$_POST['town'];
@@ -158,7 +158,7 @@ $type = '';
 						$whereby .= ' AND `owner` ' . ($state == 'free' ? '' : '!'). '= 0';
 
 					$type = isset($_POST['type']) ? $_POST['type'] : NULL;
-					if($type == 'guildhalls' && !fieldExist('guild', 'houses'))
+					if($type == 'guildhalls' && !$db->hasColumn('houses', 'guild'))
 						$type = 'all';
 
 					if(!empty($type) && $type != 'all')
@@ -202,7 +202,7 @@ $type = '';
 							<TD WIDTH="10%"><NOBR>'.$house['size'].' sqm</TD>
 							<TD WIDTH="10%"><NOBR>'.$house['rent'].' gold</TD>
 							<TD WIDTH="40%"><NOBR>';
-						if(fieldExist('guild', 'houses') && $house['guild'] == 1 && $house['owner'] != 0)
+						if($db->hasColumn('houses', 'guild') && $house['guild'] == 1 && $house['owner'] != 0)
 						{
 							$guild = new OTS_Guild();
 							$guild->load($house['owner']);
@@ -285,7 +285,7 @@ $type = '';
 						</TD>
 					</TR>';
 					
-					if(fieldExist('guild', 'houses')) {
+					if($db->hasColumn('houses', 'guild')) {
 						echo '
 						<TR BGCOLOR='.$config['darkborder'].'>
 							<TD VALIGN=top>

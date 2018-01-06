@@ -344,7 +344,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
         }
 
         // creates filter
-		if(fieldExist('rank_id', 'players')) {
+		if($this->db->hasColumn('players', 'rank_id')) {
 			$filter = new OTS_SQLFilter();
 			$filter->compareField('rank_id', (int) $this->data['id']);
 		}

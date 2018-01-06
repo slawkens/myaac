@@ -60,4 +60,16 @@ function check_guild_name($name, &$errors = '') {
 function news_place() {
 	return tickers();
 }
+
+function tableExist($table)
+{
+	global $db;
+	return $db->hasTable($table);
+}
+
+function fieldExist($field, $table)
+{
+	global $db;
+	return $db->hasColumn($table, $field);
+}
 ?>

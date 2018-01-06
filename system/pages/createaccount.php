@@ -121,7 +121,7 @@ if($save)
 		else
 			$new_account->create(NULL, $account_id);
 
-		$config_salt_enabled = fieldExist('salt', 'accounts');
+		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 		if($config_salt_enabled)
 		{
 			$salt = generateRandomString(10, false, true, true);
@@ -144,7 +144,7 @@ if($save)
 		}
 
 		if($config['account_premium_days'] && $config['account_premium_days'] > 0) {
-			if(fieldExist('premend', 'accounts')) { // othire
+			if($db->hasColumn('accounts', 'premend')) { // othire
 				$new_account->setCustomField('premend', time() + $config['account_premium_days'] * 86400);
 			}
 			else { // rest
