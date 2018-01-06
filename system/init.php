@@ -8,6 +8,7 @@
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
+
 // load configuration
 require_once(BASE . 'config.php');
 if(file_exists(BASE . 'config.local.php')) // user customizations
@@ -86,21 +87,26 @@ if(isset($_REQUEST))
 }
 
 // load otserv config file
-$tmp = '';
-if($cache->enabled() && $cache->fetch('config_lua', $tmp)) {
-	$config['lua'] = unserialize($tmp);
-	/*if(isset($config['lua']['myaac'][0])) {
-		foreach($config['lua']['myaac'] as $key => $value)
-			$config[$key] = $value;
-	}*/
+$config_lua_reload = true;
+if($cache->enabled()) {
+	$tmp = null;
+	if($cache->fetch('server_path', $tmp) && $tmp == $config['server_path']) {
+		$tmp = null;
+		if($cache->fetch('config_lua', $tmp) && $tmp) {
+			$config['lua'] = unserialize($tmp);
+			$config_lua_reload = false;
+		}
+	}
 }
-else
-{
+
+if($config_lua_reload) {
 	$config['lua'] = load_config_lua($config['server_path'] . 'config.lua');
 
 	// cache config
-	if($cache->enabled())
+	if($cache->enabled()) {
 		$cache->set('config_lua', serialize($config['lua']), 120);
+		$cache->set('server_path', $config['server_path']);
+	}
 }
 unset($tmp);
 
