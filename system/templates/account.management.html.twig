@@ -51,7 +51,12 @@
 	<div id="two">
 		<h1>My account</h1>
 		<p>Welcome to your account page, {{ account }}<br>
-			You have {{ account_logged.getPremDays() }} days remaining premium account.</p>
+			{% if config.lua.freePremium %}
+			You have unlimited premium account.
+			{% else %}
+			You have {{ account_logged.getPremDays() }} days remaining premium account.
+			{% endif %}
+		</p>
 
 		{# if account dont have recovery key show hint #}
 		{% if recovery_key is empty %}
