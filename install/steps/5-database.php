@@ -225,6 +225,17 @@ if(!$error) {
 				if(query("ALTER TABLE `players` ADD `comment` TEXT NOT NULL;"))
 					success($locale['step_database_adding_field'] . ' players.comment...');
 			}
+			
+			if($db->hasColumn('players', 'rank_id')) {
+				if(query("ALTER TABLE players MODIFY `rank_id` INT(11) NOT NULL DEFAULT 0;"))
+					success($locale['step_database_modifying_field'] . ' players.rank_id...');
+			
+				if($db->hasColumn('players', 'guildnick')) {
+					if(query("ALTER TABLE players MODIFY `guildnick` VARCHAR(255) NOT NULL DEFAULT '';")) {
+						success($locale['step_database_modifying_field'] . ' players.guildnick...');
+					}
+				}
+			}
 		}
 		
 		if(!$error) {
