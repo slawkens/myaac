@@ -341,6 +341,10 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			return round(($this->data['premend'] - time()) / (24 * 60 * 60), 2);
 		}
 
+		if($this->data['premdays'] == 0) {
+			return 0;
+		}
+
 		global $config;
         if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
 		return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
