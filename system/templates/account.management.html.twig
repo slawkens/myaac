@@ -52,9 +52,14 @@
 		<h1>My account</h1>
 		<p>Welcome to your account page, {{ account }}<br>
 			{% if config.lua.freePremium %}
-			You have unlimited premium account.
+			You have unlimited Premium Account.
 			{% else %}
-			You have {{ account_logged.getPremDays() }} days remaining premium account.
+				{% set premiumDays = account_logged.getPremDays() %}
+				{% if premiumDays == 0 %}
+				You don't have Premium Account
+				{% else %}
+				You have {{ account_logged.getPremDays() }} days remaining Premium Account.
+				{% endif %}
 			{% endif %}
 		</p>
 
