@@ -209,7 +209,11 @@ echo '
 							$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
 					}
 
-					echo '<br/><small>' . $config['vocations'][$player['vocation']] . '</small>';
+					$tmp = 'Unknown';
+					if(isset($config['vocations'][$player['vocation']])) {
+						$tmp = $config['vocations'][$player['vocation']];
+					}
+					echo '<br/><small>' . $tmp . '</small>';
 				}
 echo '
 			</td>
