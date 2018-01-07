@@ -167,7 +167,9 @@ function getFlagImage($country)
  */
 function getBoolean($v)
 {
-	if(!$v || !isset($v[0])) return false;
+	if(is_bool($v)) {
+		return $v;
+	}
 
 	if(is_numeric($v))
 		return intval($v) > 0;
