@@ -120,7 +120,11 @@ if($id > 0) {
 		verify_number($experience, 'Experience', 20);
 
 		$vocation = $_POST['vocation'];
-		verify_number($vocation, 'Vocation id', 1);
+		verify_number($vocation, 'Vocation id', 11);
+
+		if(!isset($config['vocations'][$vocation])) {
+			echo_error("Vocation with this id doesn't exist.");
+		}
 
 		// health
 		$health = $_POST['health'];
@@ -357,14 +361,12 @@ $account = $player->getAccount();
 		<td>
 			<select name="vocation">
 <?php
-			$i = 0;
-			foreach($config['vocations'] as $voc)
+			foreach($config['vocations'] as $id => $name)
 			{
-				echo '<option value=' . $i;
-				if($i == $player->getVocation())
+				echo '<option value=' . $id;
+				if($id == $player->getVocation())
 					echo ' selected="selected"';
-				echo '>' . $voc . '</option>';
-				$i++;
+				echo '>' . $name . '</option>';
 			}
 					
 
