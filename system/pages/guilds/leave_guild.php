@@ -94,7 +94,7 @@ else
 {
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$player->setRank();
-		$twig->render('success.html.twig', array(
+		echo $twig->render('success.html.twig', array(
 			'title' => 'Leave guild',
 			'description' => 'Player with name <b>'.$player->getName().'</b> leaved guild <b>'.$guild->getName().'</b>.',
 			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array(

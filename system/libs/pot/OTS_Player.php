@@ -216,11 +216,6 @@ class OTS_Player extends OTS_Row_DAO
 		if(!isset($this->data['rank_id']) || $this->data['rank_id'] == NULL)
 			$this->data['rank_id'] = 0;
 
-		if(isset($this->data['promotion'])) {
-			global $config;
-			if((int)$this->data['promotion'] > 0)
-				$this->data['vocation'] += ($this->data['promotion'] * $config['vocations_amount']);
-		}
         // loads skills
         if( $this->isLoaded() )
         {
@@ -819,6 +814,12 @@ class OTS_Player extends OTS_Row_DAO
         {
             throw new E_OTS_NotLoaded();
         }
+
+		if(isset($this->data['promotion'])) {
+			global $config;
+			if((int)$this->data['promotion'] > 0)
+				return ($this->data['vocation'] + ($this->data['promotion'] * $config['vocations_amount']));
+		}
 
         return $this->data['vocation'];
     }
@@ -2895,7 +2896,12 @@ class OTS_Player extends OTS_Row_DAO
         }
 
 		global $config;
-		return $config['vocations'][$this->data['vocation']];
+		$voc = $this->getVocation();
+		if(!isset($config['vocations'][$voc])) {
+			return 'Unknown';
+		}
+
+		return $config['vocations'][$voc];
         //return POT::getInstance()->getVocationsList()->getVocationName($this->data['vocation']);
     }
 

@@ -47,8 +47,8 @@ foreach($threads as $thread)
 		die();
 	}
 	
-	echo '<tr bgcolor="' . getStyle($number_of_rows++) . '"><td valign="top">' . getPlayerLink($thread['name']) . '<br /><br /><font size="1">Profession: '.$config['vocations'][$player->getVocation()].'<br />Level: '.$thread['level'].'<br />';
-	
+	echo '<tr bgcolor="' . getStyle($number_of_rows++) . '"><td valign="top">' . getPlayerLink($thread['name']) . '<br /><br /><font size="1">Profession: '.$player->getVocationName().'<br />Level: '.$thread['level'].'<br />';
+
 	$rank = $player->getRank();
 	if($rank->isLoaded())
 	{
