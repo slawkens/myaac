@@ -22,7 +22,7 @@ if(isset($_REQUEST['uninstall'])){
 		success('Successfully uninstalled plugin ' . $uninstall);
 	}
 	else {
-		error('Error while uninstalling plugin ' . $plugin_name . ': ' . Plugins::getError());
+		error('Error while uninstalling plugin ' . $uninstall . ': ' . Plugins::getError());
 	}
 }
 else if(isset($_FILES["plugin"]["name"]))

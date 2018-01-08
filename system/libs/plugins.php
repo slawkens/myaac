@@ -10,6 +10,34 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+function is_sub_dir($path = NULL, $parent_folder = SITE_PATH) {
+	
+	//Get directory path minus last folder
+	$dir = dirname($path);
+	$folder = substr($path, strlen($dir));
+	
+	//Check the the base dir is valid
+	$dir = realpath($dir);
+	
+	//Only allow valid filename characters
+	$folder = preg_replace('/[^a-z0-9\.\-_]/i', '', $folder);
+	
+	//If this is a bad path or a bad end folder name
+	if( !$dir OR !$folder OR $folder === '.') {
+		return FALSE;
+	}
+	
+	//Rebuild path
+	$path = $dir. '/' . $folder;
+	
+	//If this path is higher than the parent folder
+	if( strcasecmp($path, $parent_folder) > 0 ) {
+		return $path;
+	}
+	
+	return FALSE;
+}
+
 class Plugins {
 	private static $warnings = array();
 	private static $error = null;
@@ -160,16 +188,32 @@ class Plugins {
 				else {
 					$success = true;
 					foreach($plugin_info['uninstall'] as $file) {
-						$file = BASE . $file;
-						if(!deleteDirectory($file)) {
+						if(strpos($file, '/') === 0) {
 							$success = false;
+							self::$error = "You cannot use absolute paths (starting with slash - '/'): " . $file;
+							break;
+						}
+						
+						$file = BASE . $file;
+						if(!is_sub_dir($file, BASE) || realpath(dirname($file)) != dirname($file)) {
+							$success = false;
+							self::$error = "You don't have rights to delete: " . $file;
+							break;
 						}
 					}
-					
+
+					if($success) {
+						foreach($plugin_info['uninstall'] as $file) {
+							if(!deleteDirectory(BASE . $file)) {
+								self::$warnings[] = 'Cannot delete: ' . $$file;
+							}
+						}
+					}
+
 					if (isset($plugin_info['hooks'])) {
 						foreach ($plugin_info['hooks'] as $_name => $info) {
 							if (defined('HOOK_'. $info['type'])) {
-								$hook = constant('HOOK_'. $info['type']);
+								//$hook = constant('HOOK_'. $info['type']);
 								$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
 								if ($query->rowCount() == 1) { // found something
 									$query = $query->fetch();
@@ -186,9 +230,6 @@ class Plugins {
 						}
 						
 						return true;
-					}
-					else {
-						self::$error = error_get_last();
 					}
 				}
 			}
