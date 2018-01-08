@@ -119,54 +119,23 @@ else {
 		if($db->hasColumn('players', 'deletion'))
 			$deleted = 'deletion';
 
-		$insert_into_players = "INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `save`, `lastlogout`, `balance`, `$deleted`, `created`, `hidden`, `comment`) VALUES ";
+		$time = time();
+		function insert_sample_if_not_exist($p) {
+			global $db, $success, $deleted, $time;
+	
+			$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($p['name']));
+			if($query->rowCount() == 0) {
+				if(!query("INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `save`, `lastlogout`, `balance`, `$deleted`, `created`, `hidden`, `comment`) VALUES (null, " . $db->quote($p['name']) . ", 1, " . getSession('account') . ", " . $p['level'] . ", " . $p['vocation_id'] . ", " . $p['health'] . ", " . $p['healthmax'] . ", " . $p['experience'] . ", 118, 114, 38, 57, " . $p['looktype'] . ", 0, " . $p['mana'] . ", " . $p['manamax'] . ", 0, " . $p['soul'] . ", 1, 1000, 1000, 7, '', " . $p['cap'] . ", 1, " . $time . ", 2130706433, 1, " . $time . ", 0, 0, " . $time . ", 1, '');"))
+					$success = false;
+			}
+		}
+
 		$success = true;
-
-		$highscores_ignored_ids = array();
-		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Rook Sample'));
-		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Rook Sample', 1, " . getSession('account') . ", 1, 0, 150, 150, 4200, 118, 114, 38, 57, 130, 0, 0, 0, 0, 100, 1, 1000, 1000, 7, '', 400, 1, 1255179613, 2453925456, 1, 1255179614, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
-				$success = false;
-			else {
-				$highscores_ignored_ids[] = $db->lastInsertId();
-			}
-		}
-
-		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Sorcerer Sample'));
-		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Sorcerer Sample', 1, " . getSession('account') . ", 8, 1, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 1, 1000, 1000, 7, '', 470, 1, 1255179571, 2453925456, 1, 1255179612, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
-				$success = false;
-			else {
-				$highscores_ignored_ids[] = $db->lastInsertId();
-			}
-		}
-
-		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Druid Sample'));
-		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Druid Sample', 1, " . getSession('account') . ", 8, 2, 185, 185, 4200, 118, 114, 38, 57, 130, 0, 35, 35, 0, 100, 1, 1000, 1000, 7, '', 470, 1, 1255179655, 2453925456, 1, 1255179658, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
-				$success = false;
-			else {
-				$highscores_ignored_ids[] = $db->lastInsertId();
-			}
-		}
-
-		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Paladin Sample'));
-		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Paladin Sample', 1, " . getSession('account') . ", 8, 3, 185, 185, 4200, 118, 114, 38, 57, 129, 0, 35, 35, 0, 100, 1, 1000, 1000, 7, '', 470, 1, 1255179854, 2453925456, 1, 1255179858, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
-				$success = false;
-			else {
-				$highscores_ignored_ids[] = $db->lastInsertId();
-			}
-		}
-
-		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote('Knight Sample'));
-		if($query->rowCount() == 0) {
-			if(!query($insert_into_players . "(null, 'Knight Sample', 1, " . getSession('account') . ", 8, 4, 185, 185, 4200, 118, 114, 38, 57, 131, 0, 35, 35, 0, 100, 1, 1000, 1000, 7, '', 470, 1, 1255179620, 2453925456, 1, 1255179654, 0, 0, UNIX_TIMESTAMP(), 1, '');"))
-				$success = false;
-			else {
-				$highscores_ignored_ids[] = $db->lastInsertId();
-			}
-		}
+		insert_sample_if_not_exist(array('name' => 'Rook Sample', 'level' => 1, 'vocation_id' => 0, 'health' => 150, 'healthmax' => 150, 'experience' => 0, 'looktype' => 130, 'mana' => 0, 'manamax' => 0, 'soul' => 100, 'cap' => 400));
+		insert_sample_if_not_exist(array('name' => 'Sorcerer Sample', 'level' => 8, 'vocation_id' => 1, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 35, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
+		insert_sample_if_not_exist(array('name' => 'Druid Sample', 'level' => 8, 'vocation_id' => 2, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 35, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
+		insert_sample_if_not_exist(array('name' => 'Paladin Sample', 'level' => 8, 'vocation_id' => 3, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 129, 'mana' => 35, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
+		insert_sample_if_not_exist(array('name' => 'Knight Sample', 'level' => 8, 'vocation_id' => 4, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 131, 'mana' => 35, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
 
 		if($success) {
 			success($locale['step_database_imported_players']);
@@ -193,28 +162,13 @@ else {
 			error(Spells::getLastError());
 		}
 
-		if(count($highscores_ignored_ids) == 0) {
-			$query = $db->query("SELECT `id` FROM `players` WHERE (`name` = " . $db->quote("Rook Sample") . " OR `name` = " . $db->quote("Sorcerer Sample") . " OR `name` = " . $db->quote("Druid Sample") . " OR `name` = " . $db->quote("Paladin Sample") . " OR `name` = " . $db->quote("Knight Sample") . ") ORDER BY `id`;");
+		$query = $db->query("SELECT `id` FROM `players` WHERE (`name` = " . $db->quote("Rook Sample") . " OR `name` = " . $db->quote("Sorcerer Sample") . " OR `name` = " . $db->quote("Druid Sample") . " OR `name` = " . $db->quote("Paladin Sample") . " OR `name` = " . $db->quote("Knight Sample") . " OR `name` = " . $db->quote("Account Manager") . ") ORDER BY `id`;");
 
-			$highscores_ignored_ids = array();
-			if($query->rowCount() > 0) {
-				foreach($query->fetchAll() as $result)
-					$highscores_ignored_ids[] = $result['id'];
-			}
-			else {
-				$highscores_ignored_ids[] = 0;
-			}
-		}
-
-		$content = PHP_EOL;
-		$content .= '$config[\'highscores_ids_hidden\'] = array(' . implode(', ', $highscores_ignored_ids) . ');';
-
-		$file = fopen(BASE . 'config.local.php', 'a+');
-		if($file) {
-			fwrite($file, $content);
-			fclose($file);
-		}
-		else {
+		// update config.highscores_ids_hidden
+		require_once(SYSTEM . 'migrations/20.php');
+		$database_migration_20 = true;
+		$content = '';
+		if(!databaseMigration20($content)) {
 			$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
 			warning($locale['step_database_error_file'] . '<br/>
 				<textarea cols="70" rows="10">' . $content . '</textarea>');

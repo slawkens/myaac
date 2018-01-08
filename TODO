@@ -5,7 +5,9 @@
 	* sandbox for plugins, don't install when requirements are not passed
 	* load items & weapons on install, preferably with ajax
 	* add changelog management interface
-	* option to require php extension to be installed
+	* plugins require:
+		* php extension
+		* database table or column
 	* kathrine tickets - show/hide
 	* highscores - by balance
 	* admin panel Menus:

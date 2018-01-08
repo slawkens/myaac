@@ -208,24 +208,23 @@ class OTS_Player extends OTS_Row_DAO
 			$__load['marriage'] = $this->db->hasColumn('players', 'marriage');
 		}
 
-		global $db;
 		if(isset($fields)) { // load only what we wish
 			if(in_array('promotion', $fields)) {
 				if(!$this->db->hasColumn('players', 'promotion')) {
-					unset($fields[array_search('promotion')]);
+					unset($fields[array_search('promotion', $fields)]);
 				}
 			}
 			
 			if(in_array('deleted', $fields)) {
 				if($this->db->hasColumn('players', 'deletion')) {
-					unset($fields[array_search('deleted')]);
+					unset($fields[array_search('deleted', $fields)]);
 					$fields[] = 'deletion';
 				}
 			}
 			
 			if(in_array('online', $fields)) {
 				if(!$this->db->hasColumn('players', 'online')) {
-					unset($fields[array_search('online')]);
+					unset($fields[array_search('online', $fields)]);
 				}
 			}
 			$this->data = $this->db->query('SELECT ' . implode(', ', $fields) . ' FROM `players` WHERE `id` = ' . (int)$id)->fetch();
@@ -613,6 +612,15 @@ class OTS_Player extends OTS_Row_DAO
         return $account;
     }
 
+    public function getAccountId()
+    {
+        if( !isset($this->data['account_id']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+		return $this->data['account_id'];
+    }
 /**
  * Assigns character to account.
  *
