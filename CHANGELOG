@@ -12,9 +12,9 @@
 	* function OTS_Account:getPremDays will now return -1 if there's freePremium configurable enabled on the server
 	* fixed tr bgcolor in characters view (Frags) (#38)
 	* fixed some warning in guild show
-	* fixed PHP warning about country not existing on online and characteres pages
+	* fixed PHP warning about country not existing on online and characters pages
 	* fixed forum bbcode parsing
-	* dont add extra <br/> to the TinyMCE news forum posts
+	* don't add extra <br/> to the TinyMCE news forum posts
 	* (internal) using $player->getVocationName() where possible instead of older method
 
 [0.7.6 - 05.01.2017]
