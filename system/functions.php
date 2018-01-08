@@ -156,6 +156,10 @@ function getFlagImage($country)
 	if(!isset($config['countries']))
 		require(SYSTEM . 'countries.conf.php');
 
+	if(!isset($config['countries'][$country])) {
+		return '';
+	}
+	
 	return '<img src="images/flags/' . $country . '.gif" title="' . $config['countries'][$country]. '"/>';
 }
 
