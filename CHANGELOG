@@ -5,12 +5,14 @@
 	* fixed othire default column value (#26)
 	* fixed saving custom vocations in admin panel (#36)
 	* fixed warning in highscores when vocation doesn't exist
+	* fixed characters page - config.characters.frags "Notice: Use of undefined constant"
 	* fixed getBoolean function when boolean is passed
 	* fixed empty success message on leave guild
 	* fixed displaying premium account days
 	* function OTS_Account:getPremDays will now return -1 if there's freePremium configurable enabled on the server
 	* fixed tr bgcolor in characters view (Frags) (#38)
 	* fixed some warning in guild show
+	* fixed PHP warning about country not existing on online and characteres pages
 	* fixed forum bbcode parsing
 	* dont add extra <br/> to the TinyMCE news forum posts
 	* (internal) using $player->getVocationName() where possible instead of older method
