@@ -1,3 +1,20 @@
+[0.7.7 - 08.01.2018]
+	* important fix for servers with promotion column (caused player.vocation to be resetted when saving player, for example: on change name, accept invite to guild, leave guild)
+	* immediately reload config.lua when there's change in config.server_path detected
+	* added new forum option: "Enable HTML"
+	* fixed othire default column value (#26)
+	* fixed saving custom vocations in admin panel (#36)
+	* fixed warning in highscores when vocation doesn't exist
+	* fixed getBoolean function when boolean is passed
+	* fixed empty success message on leave guild
+	* fixed displaying premium account days
+	* function OTS_Account:getPremDays will now return -1 if there's freePremium configurable enabled on the server
+	* fixed tr bgcolor in characters view (Frags) (#38)
+	* fixed some warning in guild show
+	* fixed forum bbcode parsing
+	* dont add extra <br/> to the TinyMCE news forum posts
+	* (internal) using $player->getVocationName() where possible instead of older method
+
 [0.7.6 - 05.01.2017]
 	* fixed othire account creating/installation
 	* fixed table name players -> players_online
