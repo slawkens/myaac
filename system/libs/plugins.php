@@ -38,6 +38,34 @@ spl_autoload_register(function ($class) {
 	}
 });
 
+function is_sub_dir($path = NULL, $parent_folder = SITE_PATH) {
+	
+	//Get directory path minus last folder
+	$dir = dirname($path);
+	$folder = substr($path, strlen($dir));
+	
+	//Check the the base dir is valid
+	$dir = realpath($dir);
+	
+	//Only allow valid filename characters
+	$folder = preg_replace('/[^a-z0-9\.\-_]/i', '', $folder);
+	
+	//If this is a bad path or a bad end folder name
+	if( !$dir OR !$folder OR $folder === '.') {
+		return FALSE;
+	}
+	
+	//Rebuild path
+	$path = $dir. '/' . $folder;
+	
+	//If this path is higher than the parent folder
+	if( strcasecmp($path, $parent_folder) > 0 ) {
+		return $path;
+	}
+	
+	return FALSE;
+}
+
 class Plugins {
 	private static $warnings = array();
 	private static $error = null;
