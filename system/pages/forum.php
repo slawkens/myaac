@@ -28,7 +28,7 @@ if(!$logged)
 
 require_once(LIBS . 'forum.php');
 
-$canEdit = hasFlag(FLAG_CONTENT_FORUM) || superAdmin();
+$canEdit = Forum::isModerator();
 if($canEdit)
 {
 	$groups = new OTS_Groups_List();
