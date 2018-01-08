@@ -27,7 +27,8 @@ if(Forum::canPost($account_logged))
 		$text = isset($_REQUEST['text']) ? stripslashes(trim($_REQUEST['text'])) : NULL;
 		$char_id = (int) (isset($_REQUEST['char_id']) ? $_REQUEST['char_id'] : 0);
 		$post_topic = isset($_REQUEST['topic']) ? stripslashes(trim($_REQUEST['topic'])) : '';
-		$smile = (int) (isset($_REQUEST['smile']) ? $_REQUEST['smile'] : 0);
+		$smile = (isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0);
+		$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
 		$saved = false;
 		if(isset($_REQUEST['quote']))
 		{
@@ -72,7 +73,7 @@ if(Forum::canPost($account_logged))
 			if(count($errors) == 0)
 			{
 				$saved = true;
-				Forum::add_post($thread['id'], $thread['section'], $account_logged->getId(), (int) $char_id, $text, $post_topic, (int) $smile, time(), $_SERVER['REMOTE_ADDR']);
+				Forum::add_post($thread['id'], $thread['section'], $account_logged->getId(), (int) $char_id, $text, $post_topic, $smile, $html, time(), $_SERVER['REMOTE_ADDR']);
 				$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".(int) $thread_id);
 				$post_page = $db->query("SELECT COUNT(`" . TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`post_date` <= ".time()." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id'])->fetch();
 				$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
@@ -86,15 +87,12 @@ if(Forum::canPost($account_logged))
 			if(!empty($errors))
 				echo $twig->render('error_box.html.twig', array('errors' => $errors));
 				
-			$threads = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`author_aid` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 5")->fetchAll();
+			$threads = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`post_html`, `" . TABLE_PREFIX . "forum`.`author_aid` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 5")->fetchAll();
 			foreach($threads as &$thread) {
 				$player_account = new OTS_Account();
 				$player_account->load($thread['author_aid']);
 				if($player_account->isLoaded()) {
-					// check if its news written in tinymce
-					$hasAccess = $player_account->hasFlag(FLAG_CONTENT_NEWS) || $player_account->isSuperAdmin();
-					$bb_code = ($thread['post_text'] == strip_tags($thread['post_text'])) || !$hasAccess;
-					$thread['post'] = Forum::showPost(($hasAccess ? $thread['post_topic'] : htmlspecialchars($thread['post_topic'])), ($hasAccess ? $thread['post_text'] : htmlspecialchars($thread['post_text'])), $thread['post_smile'], $bb_code);
+					$thread['post'] = Forum::showPost(($thread['post_html'] > 0 ? $thread['post_topic'] : htmlspecialchars($thread['post_topic'])), ($thread['post_html'] > 0 ? $thread['post_text'] : htmlspecialchars($thread['post_text'])), $thread['post_smile'] == 0, $thread['post_html'] > 0);
 				}
 			}
 			
@@ -104,9 +102,11 @@ if(Forum::canPost($account_logged))
 				'players' => $players_from_account,
 				'post_topic' => $post_topic,
 				'post_text' => $text,
-				'post_smile' => $smile,
+				'post_smile' => $smile > 0,
+				'post_html' => $html > 0,
 				'topic' => $thread['post_topic'],
-				'threads' => $threads
+				'threads' => $threads,
+				'canEdit' => $canEdit
 			));
 		}
 	}

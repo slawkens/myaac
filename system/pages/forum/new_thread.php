@@ -24,7 +24,8 @@ if(Forum::canPost($account_logged))
 			$text = isset($_REQUEST['text']) ? stripslashes($_REQUEST['text']) : '';
 			$char_id = (int)(isset($_REQUEST['char_id']) ? $_REQUEST['char_id'] : 0);
 			$post_topic = isset($_REQUEST['topic']) ? stripslashes($_REQUEST['topic']) : '';
-			$smile = (int)(isset($_REQUEST['smile']) ? $_REQUEST['smile'] : 0);
+			$smile = (isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0);
+			$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
 			$saved = false;
 			if (isset($_REQUEST['save'])) {
 				$errors = array();
@@ -68,7 +69,7 @@ if(Forum::canPost($account_logged))
 				}
 				if (count($errors) == 0) {
 					$saved = true;
-					$db->query("INSERT INTO `" . TABLE_PREFIX . "forum` (`first_post` ,`last_post` ,`section` ,`replies` ,`views` ,`author_aid` ,`author_guid` ,`post_text` ,`post_topic` ,`post_smile` ,`post_date` ,`last_edit_aid` ,`edit_date`, `post_ip`) VALUES ('0', '" . time() . "', '" . (int)$section_id . "', '0', '0', '" . $account_logged->getId() . "', '" . (int)$char_id . "', " . $db->quote($text) . ", " . $db->quote($post_topic) . ", '" . (int)$smile . "', '" . time() . "', '0', '0', '" . $_SERVER['REMOTE_ADDR'] . "')");
+					$db->query("INSERT INTO `" . TABLE_PREFIX . "forum` (`first_post` ,`last_post` ,`section` ,`replies` ,`views` ,`author_aid` ,`author_guid` ,`post_text` ,`post_topic` ,`post_smile`, `post_html` ,`post_date` ,`last_edit_aid` ,`edit_date`, `post_ip`) VALUES ('0', '" . time() . "', '" . (int)$section_id . "', '0', '0', '" . $account_logged->getId() . "', '" . (int)$char_id . "', " . $db->quote($text) . ", " . $db->quote($post_topic) . ", '" . (int)$smile . "', '" . (int)$html . "', '" . time() . "', '0', '0', '" . $_SERVER['REMOTE_ADDR'] . "')");
 					$thread_id = $db->lastInsertId();
 					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `first_post`=" . (int)$thread_id . " WHERE `id` = " . (int)$thread_id);
 					header('Location: ' . getForumThreadLink($thread_id));
@@ -85,8 +86,10 @@ if(Forum::canPost($account_logged))
 					'players' => $players_from_account,
 					'post_player_id' => $char_id,
 					'post_thread' => $post_topic,
-					'text' => $text,
-					'smiles_enabled' => $smile > 0
+					'post_text' => $text,
+					'post_smile' => $smile > 0,
+					'post_html' => $html > 0,
+					'canEdit' => $canEdit
 				));
 			}
 		}

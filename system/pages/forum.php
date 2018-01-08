@@ -172,7 +172,7 @@ if(empty($action))
 	return;
 }
 
-
+$errors = array();
 if($action == 'show_board' || $action == 'show_thread')
 {
 	require(PAGES . 'forum/' . $action . '.php');

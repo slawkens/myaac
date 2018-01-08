@@ -109,6 +109,7 @@ CREATE TABLE `myaac_forum`
 	`post_text` text NOT NULL,
 	`post_topic` varchar(255) NOT NULL DEFAULT '',
 	`post_smile` tinyint(1) NOT NULL default '0',
+	`post_html` tinyint(1) NOT NULL default '0',
 	`post_date` int(20) NOT NULL default '0',
 	`last_edit_aid` int(20) NOT NULL default '0',
 	`edit_date` int(20) NOT NULL default '0',

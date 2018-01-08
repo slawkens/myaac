@@ -33,7 +33,7 @@ for($i = 0; $i < $posts_count['posts_count'] / $config['forum_threads_per_page']
 	else
 		$links_to_pages .= '<b>'.($i + 1).' </b>';
 }
-$threads = $db->query("SELECT `players`.`id` as `player_id`, `players`.`name`, `players`.`account_id`, `players`.`vocation`" . (fieldExist('promotion', 'players') ? ", `players`.`promotion`" : "") . ", `players`.`level`, `" . TABLE_PREFIX . "forum`.`id`,`" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`section`,`" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_date`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`last_edit_aid`, `" . TABLE_PREFIX . "forum`.`edit_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` LIMIT ".$config['forum_posts_per_page']." OFFSET ".($_page * $config['forum_posts_per_page']))->fetchAll();
+$threads = $db->query("SELECT `players`.`id` as `player_id`, `players`.`name`, `players`.`account_id`, `players`.`vocation`" . (fieldExist('promotion', 'players') ? ", `players`.`promotion`" : "") . ", `players`.`level`, `" . TABLE_PREFIX . "forum`.`id`,`" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`section`,`" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_date`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`post_html`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`last_edit_aid`, `" . TABLE_PREFIX . "forum`.`edit_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` LIMIT ".$config['forum_posts_per_page']." OFFSET ".($_page * $config['forum_posts_per_page']))->fetchAll();
 if(isset($threads[0]['name']))
 	$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `views`=`views`+1 WHERE `id` = ".(int) $thread_id);
 echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($threads[0]['section']) . '">'.$sections[$threads[0]['section']]['name'].'</a> >> <b>'.$thread_name['post_topic'].'</b>';
@@ -56,14 +56,9 @@ foreach($threads as $thread)
 		if($guild->isLoaded())
 			echo $rank->getName().' of <a href="'.getGuildLink($guild->getName(), false).'">'.$guild->getName().'</a><br />';
 	}
-	$player_account = $player->getAccount();
-	$canEditForum = $player_account->hasFlag(FLAG_CONTENT_FORUM) || $player_account->isAdmin();
-	
-	// check if its news written in tinymce
-	$bb_code = ($thread['post_text'] == strip_tags($thread['post_text'])) || (!$player_account->hasFlag(FLAG_CONTENT_NEWS) && !$player_account->isSuperAdmin());
 
 	$posts = $db->query("SELECT COUNT(`id`) AS 'posts' FROM `" . TABLE_PREFIX . "forum` WHERE `author_aid`=".(int) $thread['account_id'])->fetch();
-	echo '<br />Posts: '.(int) $posts['posts'].'<br /></font></td><td valign="top">'.Forum::showPost(($canEditForum ? $thread['post_topic'] : htmlspecialchars($thread['post_topic'])), ($canEditForum ? $thread['post_text'] : htmlspecialchars($thread['post_text'])), $thread['post_smile'], $bb_code).'</td></tr>
+	echo '<br />Posts: '.(int) $posts['posts'].'<br /></font></td><td valign="top">'.Forum::showPost(($thread['post_html'] > 0 ? $thread['post_topic'] : htmlspecialchars($thread['post_topic'])), ($thread['post_html'] > 0 ? $thread['post_text'] : htmlspecialchars($thread['post_text'])), $thread['post_smile'] == 0, $thread['post_html'] > 0).'</td></tr>
 		<tr bgcolor="'.getStyle($number_of_rows++).'"><td><font size="1">'.date('d.m.y H:i:s', $thread['post_date']);
 	if($thread['edit_date'] > 0)
 	{
