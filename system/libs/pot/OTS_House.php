@@ -34,7 +34,7 @@
  * @property-read OTS_MapCoords $entry Entry point.
  * @property-read array $tiles List of tile points which house uses.
  */
-class OTS_House extends OTS_Base_DAO
+class OTS_House extends OTS_Row_DAO
 {
 /**
  * House rent info.
@@ -42,6 +42,8 @@ class OTS_House extends OTS_Base_DAO
  * @var array
  */
     private $data = array();
+	
+	//private $columns = array('id', 'name', 'owner', 'paid', 'warnings', 'rent', 'beds');
 
 /**
  * Information handler.
@@ -57,19 +59,39 @@ class OTS_House extends OTS_Base_DAO
  */
     private $tiles = array();
 
-/**
- * Creates wrapper for given house element.
- * 
- * @param DOMElement $element House information.
- * @throws PDOException On PDO operation error.
- */
-    public function __construct(DOMElement $element)
+	public function load($id) {
+		$this->data = $this->db->query('SELECT * FROM `houses` WHERE `id` = ' . $id )->fetch();
+		foreach($this->data as $key => $value) {
+			if(is_numeric($key)) {
+				unset($this->data[$key]);
+			}
+		}
+	}
+	
+    public function find($name)
     {
-        parent::__construct();
-        $this->element = $element;
+        // finds player's ID
+        $id = $this->db->query('SELECT `id` FROM `houses` WHERE `name` = ' . $this->db->quote($name) )->fetch();
 
-        // loads SQL part - `id` field is not needed as we have it from XML
-        $this->data = $this->db->query('SELECT ' . $this->db->fieldName('owner') . ', ' . $this->db->fieldName('paid') . ', ' . $this->db->fieldName('warnings') . ' FROM ' . $this->db->tableName('houses') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->getId() )->fetch();
+        // if anything was found
+        if( isset($id['id']) )
+        {
+            $this->load($id['id']);
+        }
+    }
+
+	public function setElement(DOMElement $element) {
+		$this->element = $element;
+	}
+	
+/**
+ * Checks if object is loaded.
+ *
+ * @return bool Load state.
+ */
+    public function isLoaded()
+    {
+        return isset($this->data['id']);
     }
 
 /**
@@ -101,7 +123,7 @@ class OTS_House extends OTS_Base_DAO
         // updates previous one
         else
         {
-            $this->db->query('UPDATE ' . $this->db->tableName('houses') . ' SET ' . $this->db->fieldName('id') . ' = ' . $this->getId() . ', ' . $this->db->fieldName('owner') . ' = ' . $this->data['owner'] . ', ' . $this->db->fieldName('paid') . ' = ' . $this->data['paid'] . ', ' . $this->db->fieldName('warnings') . ' = ' . $this->data['warnings'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->getId() );
+			$this->db->update('houses', $this->data, array('id' => $this->getId()));
         }
     }
 
@@ -127,7 +149,13 @@ class OTS_House extends OTS_Base_DAO
  */
     public function getId()
     {
-        return (int) $this->element->getAttribute('houseid');
+		if(isset($this->data['id'])) {
+			return $this->data['id'];
+		}
+
+		if($this->element) {
+			return $this->element->getAttribute('houseid');
+		}
     }
 
 /**
@@ -138,7 +166,13 @@ class OTS_House extends OTS_Base_DAO
  */
     public function getName()
     {
-        return $this->element->getAttribute('name');
+		if(isset($this->data['name'])) {
+			return $this->data['name'];
+		}
+		
+		if($this->element) {
+			return $this->element->getAttribute('name');
+		}
     }
 
 /**
@@ -149,8 +183,23 @@ class OTS_House extends OTS_Base_DAO
  */
     public function getTownId()
     {
-        return (int) $this->element->getAttribute('townid');
+		if(isset($this->data['town_id'])) {
+			return $this->data['town_id'];
+		}
+		if(isset($this->data['town'])) {
+			return $this->data['town'];
+		}
+		if(isset($this->data['townid'])) {
+			return $this->data['townid'];
+		}
+	
+		if($this->element) {
+			return (int) $this->element->getAttribute('townid');
+		}
+		
+		return null;
     }
+
 
 /**
  * Returns town name.
@@ -195,6 +244,13 @@ class OTS_House extends OTS_Base_DAO
         return new OTS_MapCoords( (int) $this->element->getAttribute('entryx'), (int) $this->element->getAttribute('entryy'), (int) $this->element->getAttribute('entryz') );
     }
 
+	public function getOwnerId() {
+		if( isset($this->data['owner'])) {
+			return $this->data['owner'];
+		}
+		
+		return null;
+	}
 /**
  * Returns current house owner.
  * 
@@ -296,6 +352,53 @@ class OTS_House extends OTS_Base_DAO
         $this->data['warnings'] = (int) $warnings;
     }
 
+	public function getBid() {
+		if(isset($this->data['bid'])) {
+			return $this->data['bid'];
+		}
+		
+		return null;
+	}
+	
+	public function setBid($bid) {
+		$this->data['bid'] = $bid;
+	}
+
+	public function getBidEnd() {
+		if(isset($this->data['bid_end'])) {
+			return $this->data['bid_end'];
+		}
+		
+		return null;
+	}
+	
+	public function setBidEnd($bid_end) {
+		$this->data['bid_end'] = $bid_end;
+	}
+
+	public function getLastBid() {
+		if(isset($this->data['last_bid'])) {
+			return $this->data['last_bid'];
+		}
+		
+		return null;
+	}
+
+	public function setLastBid($last_bid) {
+		$this->data['last_bid'] = $last_bid;
+	}
+
+	public function getHighestBidder() {
+		if(isset($this->data['highest_bidder'])) {
+			return $this->data['highest_bidder'];
+		}
+		
+		return null;
+	}
+	
+	public function setHighestBidder($highest_bidder) {
+		$this->data['highest_bidder'] = $highest_bidder;
+	}
 /**
  * Adds tile to house.
  * 
