@@ -256,10 +256,11 @@
 			</tr>
 			{% set i = 0 %}
 			{% for frag in frags %}
-			<tr bgcolor="'{{ getStyle(i) }}">
+			<tr bgcolor="{{ getStyle(i) }}">
 				<td width="20%" align="center">{{ frag.time|date("j M Y, H:i") }}</td>
 				<td>{{ frag.description|raw }}({% if frag.unjustified %}<font size="1" color="red">Unjustified</font>{% else %}<font size="1" color="green">Justified</font>{% endif %})</td>
 			</tr>
+			{% set i = i + 1 %}
 			{% endfor %}
 		</table>
 		<!-- FRAGS_END -->
