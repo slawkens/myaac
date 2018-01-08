@@ -1,7 +1,7 @@
 [0.7.7 - 08.01.2018]
 	* important fix for servers with promotion column (caused player.vocation to be resetted when saving player, for example: on change name, accept invite to guild, leave guild)
 	* immediately reload config.lua when there's change in config.server_path detected
-	* added new forum option: "Enable HTML"
+	* added new forum option: "Enable HTML" (only for moderators)
 	* fixed othire default column value (#26)
 	* fixed saving custom vocations in admin panel (#36)
 	* fixed warning in highscores when vocation doesn't exist
