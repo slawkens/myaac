@@ -559,7 +559,7 @@ function getCreatureName($killer, $showStatus = false, $extendedInfo = false)
 
 			$str .= '<font color="'.($player->isOnline() ? 'green' : 'red').'">' . $player->getName() . '</font></b></a>';
 			if($extendedInfo) {
-				$str .= '<br><small>'.$player->getLevel().' '.$config['vocations'][$player->getVocation()].'</small>';
+				$str .= '<br><small>'.$player->getLevel().' '.$player->getVocationName().'</small>';
 			}
 			return $str;
 		}

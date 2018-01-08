@@ -385,12 +385,8 @@
 				<td>
 					<nobr>{{ i }}.&#160;{{ player.getName() }}{% if player.isDeleted() %}<font color="red"> [DELETED]</font>{% endif %}</nobr>
 				</td>
-				{% set vocation = 'Unknown' %}
-				{% if config.vocations[player.getVocation()] is defined %}
-					{% set vocation = config.vocations[player.getVocation()] %}
-				{% endif %}
 
-				<td>{{ player.getLevel() }} {{ vocation }}</td>
+				<td>{{ player.getLevel() }} {{ player.getVocationName() }}</td>
 				<td>{% if player.isOnline() %}<b><font color="green">Online</font></b>{% endif %}</td>
 				<td>
 					<table border="0" cellspacing="0" cellpadding="0">

@@ -63,10 +63,7 @@ foreach($posts as &$post)
 	$post['group'] = $groupName;
 	$post['player_link'] = getPlayerLink($player->getName());
 
-	$post['vocation'] = 'Unknown';
-	if(isset($config['vocations'][$player->getVocation()])) {
-		$post['vocation'] = $config['vocations'][$player->getVocation()];
-	}
+	$post['vocation'] = $player->getVocationName();
 
 	$rank = $player->getRank();
 	if($rank->isLoaded())

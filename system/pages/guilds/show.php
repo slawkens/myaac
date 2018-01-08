@@ -10,6 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Guilds';
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 if(!Validator::guildName($guild_name))
 	$errors[] = Validator::getLastError();
@@ -41,6 +42,7 @@ else
 	$players_from_account_in_guild = array();
 	if($logged)
 	{
+		$players_from_account_ids = array();
 		$account_players = $account_logged->getPlayers();
 		foreach($account_players as $player)
 		{
