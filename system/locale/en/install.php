@@ -74,12 +74,12 @@ $locale['step_database_error_file'] = '$FILE$ couldn\'t be opened. Please copy t
 $locale['step_database_adding_field'] = 'Adding field';
 $locale['step_database_modifying_field'] = 'Modifying field';
 $locale['step_database_changing_field'] = 'Changing $FIELD$ to $FIELD_NEW$...';
-$locale['step_database_imported_players'] = 'Imported player samples...';
-$locale['step_database_loaded_monsters'] = 'Loaded monsters...';
+$locale['step_database_imported_players'] = 'Player samples has been imported...';
+$locale['step_database_loaded_monsters'] = 'Monsters has been loaded...';
 $locale['step_database_error_monsters'] = 'There were some problems loading your monsters.xml file. Please check $LOG$ for more info.';
-$locale['step_database_loaded_spells'] = 'Loaded spells...';
+$locale['step_database_loaded_spells'] = 'Spells has been loaded...';
 $locale['step_database_created_account'] = 'Created admin account...';
-$locale['step_database_created_news'] = 'Created newses...';
+$locale['step_database_created_news'] = 'Newses has been created...';
 
 // admin account
 $locale['step_admin'] = 'Admin Account';

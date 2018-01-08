@@ -74,7 +74,7 @@ else if(isset($_FILES["plugin"]["name"]))
 							warning($warning);
 						}
 						
-						$info = Plugins::getPluginInfo();
+						$info = Plugins::getPlugin();
 						success((isset($info['name']) ? '<strong>' . $info['name'] . '</strong> p' : 'P') . 'lugin has been successfully installed.');
 					}
 					else {
@@ -101,6 +101,7 @@ $plugins = array();
 foreach(get_plugins() as $plugin)
 {
 	$string = file_get_contents(BASE . 'plugins/' . $plugin . '.json');
+	$string = Plugins::removeComments($string);
 	$plugin_info = json_decode($string, true);
 	if($plugin_info == false) {
 		warning('Cannot load plugin info ' . $plugin . '.json');

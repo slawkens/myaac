@@ -6,13 +6,21 @@
 	"contact": "nobody@example.org",
 	"require": {
 		"myaac": "0.4.3",
-		"php": "5.2.0"
+		"myaac_": ">=0.7,<1.0", // support for defining versions like in composer (since 0.8.0)
+		"php": "5.2.0",
+		"php_": ">5.4,<7.0", // support for defining versions like in composer (since 0.8.0)
+		"database": "21"
 	},
 	"install": "plugins/example/install.php",
 	"uninstall": [
 		"plugins/example.json",
-		"plugins/example/install.php",
-		"plugins/example/before.php"
+		"plugins/example-directory",
+		"templates/other-directory"
+		/***
+		 this is example of multi line comment
+		 	1. list example
+		 	2. something
+		 ****/
 	],
 	"hooks": {
 		"Example Hook": {

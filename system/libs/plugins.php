@@ -41,7 +41,7 @@ spl_autoload_register(function ($class) {
 class Plugins {
 	private static $warnings = array();
 	private static $error = null;
-	private static $pluginInfo = array();
+	private static $plugin = array();
 
 	public static function install($file) {
 		global $db, $cache;
@@ -67,8 +67,9 @@ class Plugins {
 				}
 				else {
 					$string = file_get_contents($file_name);
+					$string = Plugins::removeComments($string);
 					$plugin = json_decode($string, true);
-					self::$pluginInfo = $plugin;
+					self::$plugin = $plugin;
 					if ($plugin == null) {
 						self::$warnings[] = 'Cannot load ' . $file_name . '. File might be not a valid json code.';
 					}
@@ -221,6 +222,7 @@ class Plugins {
 		}
 		else {
 			$string = file_get_contents($filename);
+			$string = self::removeComments($string);
 			$plugin_info = json_decode($string, true);
 			if($plugin_info == false) {
 				self::$error = 'Cannot load plugin info ' . $plugin_name . '.json';
@@ -298,7 +300,23 @@ class Plugins {
 		return self::$error;
 	}
 
-	public static function getPluginInfo() {
-		return self::$pluginInfo;
+	public static function getPlugin() {
+		return self::$plugin;
+	}
+	
+	public static function removeComments($string) {
+		$string = preg_replace('!/\*.*?\*/!s', '', $string);
+		$string = preg_replace('/\n\s*\n/', "\n", $string);
+		//  Removes multi-line comments and does not create
+		//  a blank line, also treats white spaces/tabs
+		$string = preg_replace('!^[ \t]*/\*.*?\*/[ \t]*[\r\n]!s', '', $string);
+
+		//  Removes single line '//' comments, treats blank characters
+		$string = preg_replace('![ \t]*//.*[ \t]*[\r\n]!', '', $string);
+
+		//  Strip blank lines
+		$string = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $string);
+		
+		return $string;
 	}
 }
