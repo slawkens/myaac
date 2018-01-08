@@ -28,7 +28,17 @@
 		</tr>
 		<tr bgcolor="{{ config.lightborder }}">
 			<td valign="top">Options:</td>
-			<td><label><input type="checkbox" name="smile" value="1"{% if post_smile == 1 %} checked="checked"{% endif %}/>Disable Smileys in This Post </label></td>
+			<td>
+				<label>
+					<input type="checkbox" name="smile" value="1"{% if post_smile %} checked="checked"{% endif %}/>Disable Smileys in This Post
+				</label>
+				{% if canEdit %}
+					<br/>
+					<label>
+						<input type="checkbox" name="html" value="1"{% if post_html %} checked="checked"{% endif %}/>Enable HTML in this post (moderator only)
+					</label>
+				{% endif %}
+			</td>
 		</tr>
 	</table>
 	<center>

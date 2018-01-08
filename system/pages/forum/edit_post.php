@@ -18,14 +18,14 @@ if(Forum::canPost($account_logged))
 		return;
 	}
 	
-	$thread = $db->query("SELECT `author_guid`, `author_aid`, `first_post`, `post_topic`, `post_date`, `post_text`, `post_smile`, `id`, `section` FROM `" . TABLE_PREFIX . "forum` WHERE `id` = ".$post_id." LIMIT 1")->fetch();
+	$thread = $db->query("SELECT `author_guid`, `author_aid`, `first_post`, `post_topic`, `post_date`, `post_text`, `post_smile`, `post_html`, `id`, `section` FROM `" . TABLE_PREFIX . "forum` WHERE `id` = ".$post_id." LIMIT 1")->fetch();
 	if(isset($thread['id']))
 	{
 		$first_post = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread['first_post']." LIMIT 1")->fetch();
 		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread['first_post']) . '">'.$first_post['post_topic'].'</a> >> <b>Edit post</b>';
 		if(Forum::hasAccess($thread['section'] && ($account_logged->getId() == $thread['author_aid'] || Forum::isModerator())))
 		{
-			$char_id = $post_topic = $text = $smile = null;
+			$char_id = $post_topic = $text = $smile = $html = null;
 			$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
 			$saved = false;
 			if(isset($_REQUEST['save']))
@@ -33,9 +33,10 @@ if(Forum::canPost($account_logged))
 				$text = stripslashes(trim($_REQUEST['text']));
 				$char_id = (int) $_REQUEST['char_id'];
 				$post_topic = stripslashes(trim($_REQUEST['topic']));
-				$smile = (int) $_REQUEST['smile'];
+				$smile = isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0;
+				$html = isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0;
 				$lenght = 0;
-				for($i = 0; $i <= strlen($post_topic); $i++)
+				for($i = 0; $i < strlen($post_topic); $i++)
 				{
 					if(ord($post_topic[$i]) >= 33 && ord($post_topic[$i]) <= 126)
 						$lenght++;
@@ -43,12 +44,11 @@ if(Forum::canPost($account_logged))
 				if(($lenght < 1 || strlen($post_topic) > 60) && $thread['id'] == $thread['first_post'])
 					$errors[] = 'Too short or too long topic (short: '.$lenght.' long: '.strlen($post_topic).' letters). Minimum 1 letter, maximum 60 letters.';
 				$lenght = 0;
-				for($i = 0; $i <= strlen($text); $i++)
+				for($i = 0; $i < strlen($text); $i++)
 				{
 					if(ord($text[$i]) >= 33 && ord($text[$i]) <= 126)
 						$lenght++;
 				}
-				
 				if($lenght < 1 || strlen($text) > 15000)
 					$errors[] = 'Too short or too long post (short: '.$lenght.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
 				if($char_id == 0)
@@ -56,7 +56,7 @@ if(Forum::canPost($account_logged))
 				if(empty($post_topic) && $thread['id'] == $thread['first_post'])
 					$errors[] = 'Thread topic can\'t be empty.';
 				
-				$player_on_account == false;
+				$player_on_account = false;
 				
 				if(count($errors) == 0)
 				{
@@ -71,7 +71,7 @@ if(Forum::canPost($account_logged))
 					$saved = true;
 					if($account_logged->getId() != $thread['author_aid'])
 						$char_id = $thread['author_guid'];
-					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $char_id.", `post_text` = ".$db->quote($text).", `post_topic` = ".$db->quote($post_topic).", `post_smile` = ".(int) $smile.", `last_edit_aid` = ".(int) $account_logged->getId().",`edit_date` = ".time()." WHERE `id` = ".(int) $thread['id']);
+					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $char_id.", `post_text` = ".$db->quote($text).", `post_topic` = ".$db->quote($post_topic).", `post_smile` = ".$smile.", `post_html` = ".$html.", `last_edit_aid` = ".(int) $account_logged->getId().",`edit_date` = ".time()." WHERE `id` = ".(int) $thread['id']);
 					$post_page = $db->query("SELECT COUNT(`" . TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`post_date` <= ".$thread['post_date']." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['first_post'])->fetch();
 					$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
 					header('Location: ' . getForumThreadLink($thread['first_post'], $_page));
@@ -83,6 +83,7 @@ if(Forum::canPost($account_logged))
 				$char_id = (int) $thread['author_guid'];
 				$post_topic = $thread['post_topic'];
 				$smile = (int) $thread['post_smile'];
+				$html = (int) $thread['post_html'];
 			}
 			
 			if(!$saved)
@@ -94,9 +95,12 @@ if(Forum::canPost($account_logged))
 					'post_id' => $post_id,
 					'players' => $players_from_account,
 					'player_id' => $char_id,
-					'topic' => htmlspecialchars($post_topic),
-					'text' => htmlspecialchars($text),
-					'smile' => $smile
+					'post_topic' => $canEdit ? $post_topic : htmlspecialchars($post_topic),
+					'post_text' => $canEdit ? $text : htmlspecialchars($text),
+					'post_smile' => $smile > 0,
+					'post_html' => $html > 0,
+					'html' => $html,
+					'canEdit' => $canEdit
 				));
 			}
 		}

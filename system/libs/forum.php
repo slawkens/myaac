@@ -37,7 +37,20 @@ class Forum
 	{
 		global $db;
 		$thread_id = 0;
-		if($db->insert(TABLE_PREFIX . 'forum', array('first_post' => 0, 'last_post' => time(), 'section' => $section_id, 'replies' => 0, 'views' => 0, 'author_aid' => isset($account_id) ? $account_id : 0, 'author_guid' => isset($player_id) ? $player_id : 0, 'post_text' => $body, 'post_topic' => $title, 'post_smile' => 0, 'post_date' => time(), 'last_edit_aid' => 0, 'edit_date' => 0, 'post_ip' => $_SERVER['REMOTE_ADDR']))) {
+		if($db->insert(TABLE_PREFIX . 'forum', array(
+			'first_post' => 0,
+			'last_post' => time(),
+			'section' => $section_id,
+			'replies' => 0,
+			'views' => 0,
+			'author_aid' => isset($account_id) ? $account_id : 0,
+			'author_guid' => isset($player_id) ? $player_id : 0,
+			'post_text' => $body, 'post_topic' => $title,
+			'post_smile' => 0, 'post_html' => 1,
+			'post_date' => time(),
+			'last_edit_aid' => 0, 'edit_date' => 0,
+			'post_ip' => $_SERVER['REMOTE_ADDR']
+		))) {
 			$thread_id = $db->lastInsertId();
 			$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `first_post`=".(int) $thread_id." WHERE `id` = ".(int) $thread_id);
 		}
@@ -45,7 +58,7 @@ class Forum
 		return $thread_id;
 	}
 	
-	static public function add_post($thread_id, $section, $author_aid, $author_guid, $post_text, $post_topic, $smile)
+	static public function add_post($thread_id, $section, $author_aid, $author_guid, $post_text, $post_topic, $smile, $html)
 	{
 		global $db;
 		$db->insert(TABLE_PREFIX . 'forum', array(
@@ -56,6 +69,7 @@ class Forum
 			'post_text' => $post_text,
 			'post_topic' => $post_topic,
 			'post_smile' => $smile,
+			'post_html' => $html,
 			'post_date' => time(),
 			'post_ip' => $_SERVER['REMOTE_ADDR']
 		));
@@ -232,18 +246,18 @@ class Forum
 		foreach($tags as $search => $replace)
 			$text = preg_replace($search, $replace, $text);
 		
-		return ($smiles == 0 ? Forum::parseSmiles($text) : $text);
+		return ($smiles ? Forum::parseSmiles($text) : $text);
 	}
 	
-	public static function showPost($topic, $text, $smiles, $bb_code = true)
+	public static function showPost($topic, $text, $smiles = true, $html = false)
 	{
-		if(!$bb_code) {
+		if($html) {
 			return '<b>' . $topic . '</b><hr />' . $text;
 		}
 
 		$post = '';
 		if(!empty($topic))
-			$post .= '<b>'.($smiles == 0 ? self::parseSmiles($topic) : $topic).'</b><hr />';
+			$post .= '<b>'.($smiles ? self::parseSmiles($topic) : $topic).'</b><hr />';
 
 		$post .= self::parseBBCode(nl2br($text), $smiles);
 		return $post;
