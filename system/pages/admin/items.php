@@ -26,5 +26,4 @@ if($reload) {
 		success('Successfully loaded weapons.');
 	else
 		error(Weapons::getError());
-	
 }

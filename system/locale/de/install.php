@@ -17,6 +17,8 @@ $locale['off'] = 'Aus';
 $locale['loaded'] = 'Geladen';
 $locale['not_loaded'] = 'Nicht geladen';
 
+$locale['loading_spinner'] = 'Bitte warten, installieren...';
+$locale['importing_spinner'] = 'Bitte warte, Daten werden importiert...';
 $locale['please_fill_all'] = 'Bitte füllen Sie alle Felder aus!';
 $locale['already_installed'] = 'MyAAC wurde bereits installiert. Bitte löschen <b>install/<b/> Verzeichnis.';
 
@@ -75,6 +77,8 @@ $locale['step_database_adding_field'] = 'Folgendes Feld wurde hinzugefügt: ';
 $locale['step_database_modifying_field'] = 'Folgendes Feld wurde geändert: ';
 $locale['step_database_changing_field'] = 'Änderung von $FIELD$ zu $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Spielerproben wurden importiert...';
+$locale['step_database_loaded_items'] = 'Items wurden geladen...';
+$locale['step_database_loaded_weapons'] = 'Weapons wurden geladen...';
 $locale['step_database_loaded_monsters'] = 'Monster wurden geladen...';
 $locale['step_database_error_monsters'] = 'Beim Laden der Datei monsters.xml sind einige Probleme aufgetreten. Bitte überprüfen Sie $LOG$ für weitere Informationen.';
 $locale['step_database_loaded_spells'] = 'Zauber wurden geladen...';

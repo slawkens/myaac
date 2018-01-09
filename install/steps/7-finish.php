@@ -114,71 +114,11 @@ else {
 				success($locale['step_database_created_news']);
 			}
 		}
-
-		$deleted = 'deleted';
-		if($db->hasColumn('players', 'deletion'))
-			$deleted = 'deletion';
-
-		$time = time();
-		function insert_sample_if_not_exist($p) {
-			global $db, $success, $deleted, $time;
-	
-			$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($p['name']));
-			if($query->rowCount() == 0) {
-				if(!query("INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `save`, `lastlogout`, `balance`, `$deleted`, `created`, `hidden`, `comment`) VALUES (null, " . $db->quote($p['name']) . ", 1, " . getSession('account') . ", " . $p['level'] . ", " . $p['vocation_id'] . ", " . $p['health'] . ", " . $p['healthmax'] . ", " . $p['experience'] . ", 118, 114, 38, 57, " . $p['looktype'] . ", 0, " . $p['mana'] . ", " . $p['manamax'] . ", 0, " . $p['soul'] . ", 1, 1000, 1000, 7, '', " . $p['cap'] . ", 1, " . $time . ", 2130706433, 1, " . $time . ", 0, 0, " . $time . ", 1, '');"))
-					$success = false;
-			}
-		}
-
-		$success = true;
-		insert_sample_if_not_exist(array('name' => 'Rook Sample', 'level' => 1, 'vocation_id' => 0, 'health' => 150, 'healthmax' => 150, 'experience' => 0, 'looktype' => 130, 'mana' => 0, 'manamax' => 0, 'soul' => 100, 'cap' => 400));
-		insert_sample_if_not_exist(array('name' => 'Sorcerer Sample', 'level' => 8, 'vocation_id' => 1, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 35, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
-		insert_sample_if_not_exist(array('name' => 'Druid Sample', 'level' => 8, 'vocation_id' => 2, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 35, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
-		insert_sample_if_not_exist(array('name' => 'Paladin Sample', 'level' => 8, 'vocation_id' => 3, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 129, 'mana' => 35, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
-		insert_sample_if_not_exist(array('name' => 'Knight Sample', 'level' => 8, 'vocation_id' => 4, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 131, 'mana' => 35, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
-
-		if($success) {
-			success($locale['step_database_imported_players']);
-		}
 		
-		require(LIBS . 'creatures.php');
-		if(Creatures::loadFromXML()) {
-			success($locale['step_database_loaded_monsters']);
-			
-			if(Creatures::getMonstersList()->hasErrors()) {
-				$locale['step_database_error_monsters'] = str_replace('$LOG$', 'system/logs/error.log', $locale['step_database_error_monsters']);
-				warning($locale['step_database_error_monsters']);
-			}
-		}
-		else {
-			error(Creatures::getLastError());
-		}
-		
-		require(LIBS . 'spells.php');
-		if(Spells::loadFromXML()) {
-			success($locale['step_database_loaded_spells']);
-		}
-		else {
-			error(Spells::getLastError());
-		}
-
-		$query = $db->query("SELECT `id` FROM `players` WHERE (`name` = " . $db->quote("Rook Sample") . " OR `name` = " . $db->quote("Sorcerer Sample") . " OR `name` = " . $db->quote("Druid Sample") . " OR `name` = " . $db->quote("Paladin Sample") . " OR `name` = " . $db->quote("Knight Sample") . " OR `name` = " . $db->quote("Account Manager") . ") ORDER BY `id`;");
-
-		// update config.highscores_ids_hidden
-		require_once(SYSTEM . 'migrations/20.php');
-		$database_migration_20 = true;
-		$content = '';
-		if(!databaseMigration20($content)) {
-			$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
-			warning($locale['step_database_error_file'] . '<br/>
-				<textarea cols="70" rows="10">' . $content . '</textarea>');
-		}
-
-		$locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(ADMIN_URL, $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
-		$locale['step_finish_desc'] = str_replace('$HOMEPAGE$', generateLink(BASE_URL, $locale['step_finish_homepage'], true), $locale['step_finish_desc']);
-		$locale['step_finish_desc'] = str_replace('$LINK$', generateLink('http://my-aac.org', 'http://my-aac.org', true), $locale['step_finish_desc']);
-
-		success($locale['step_finish_desc']);
+		echo $twig->render('install.installer.html.twig', array(
+			'url' => 'tools/7-finish.php',
+			'message' => $locale['importing_spinner']
+		));
 
 		if(!isset($_SESSION['installed'])) {
 			file_get_contents('http://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL));

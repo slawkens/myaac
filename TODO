@@ -3,7 +3,6 @@
 0.*
 	* support duplicated vocation names with different ids
 	* sandbox for plugins, don't install when requirements are not passed
-	* load items & weapons on install, preferably with ajax
 	* add changelog management interface
 	* plugins require:
 		* php extension

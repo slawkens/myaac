@@ -17,6 +17,8 @@ $locale['off'] = 'Wyłączone';
 $locale['loaded'] = 'Załadowane';
 $locale['not_loaded'] = 'Nie załadowane';
 
+$locale['loading_spinner'] = 'Proszę czekać, trwa instalacja...';
+$locale['importing_spinner'] = 'Proszę czekać, trwa importowanie danych...';
 $locale['please_fill_all'] = 'Proszę wypełnić wszystkie pola!';
 $locale['already_installed'] = 'MyAAC został już zainstalowany. Proszę usunąć katalog <b>install/</b>.';
 
@@ -70,6 +72,8 @@ $locale['step_database_adding_field'] = 'Dodawanie pola';
 $locale['step_database_modifying_field'] = 'Modyfikacja pola';
 $locale['step_database_changing_field'] = 'Zmiana $FIELD$ na $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Importowanie schematów graczy...';
+$locale['step_database_loaded_items'] = 'Załadowano przedmioty (items)...';
+$locale['step_database_loaded_weapons'] = 'Załadowano bronie (weapons)...';
 $locale['step_database_loaded_monsters'] = 'Załadowano potworki (monsters)...';
 $locale['step_database_error_monsters'] = 'Wystąpiły problemy podczas ładowania pliku monsters.xml. Zobacz $LOG$ po więcej informacji.';
 $locale['step_database_loaded_spells'] = 'Załadowano czary (spells)...';
