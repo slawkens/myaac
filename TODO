@@ -19,6 +19,7 @@
 	* move highscores to twig
 	* migrations: option to downgrade the database
 	* hooks: login + logout
+	* create account: create character
 
 1.0:
 	* i18n support (issue #1 on github)
