@@ -220,11 +220,11 @@ if(!$error) {
 					success($locale['step_database_adding_field'] . ' players.comment...');
 			}
 			
-			if($db->hasColumn('players', 'rank_id')) {
+			if($fieldExist('rank_id', 'players')) {
 				if(query("ALTER TABLE players MODIFY `rank_id` INT(11) NOT NULL DEFAULT 0;"))
 					success($locale['step_database_modifying_field'] . ' players.rank_id...');
 			
-				if($db->hasColumn('players', 'guildnick')) {
+				if($fieldExist('guildnick', 'players')) {
 					if(query("ALTER TABLE players MODIFY `guildnick` VARCHAR(255) NOT NULL DEFAULT '';")) {
 						success($locale['step_database_modifying_field'] . ' players.guildnick...');
 					}
