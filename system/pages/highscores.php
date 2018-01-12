@@ -24,7 +24,15 @@ if($config['highscores_vocation_box'] && isset($vocation))
 {
 	foreach($config['vocations'] as $id => $name) {
 		if(strtolower($name) == $vocation) {
-			$add_sql = 'AND ' . $db->fieldName('vocation') . ' = ' . $db->quote($id);
+			$add_vocs = array($id);
+	
+			$i = $id + $config['vocations_amount'];
+			while(isset($config['vocations'][$i])) {
+				$add_vocs[] = $i;
+				$i += $config['vocations_amount'];
+			}
+	
+			$add_sql = 'AND `vocation` IN (' . implode(', ', $add_vocs) . ')';
 			break;
 		}
 	}
@@ -176,6 +184,7 @@ $i = 0;
 $online_exist = false;
 if(fieldExist('online', 'players'))
 	$online_exist = true;
+
 foreach($skills as $player)
 {
 	if(!$online_exist) {
