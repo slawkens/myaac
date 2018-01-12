@@ -1,3 +1,9 @@
+[0.7.8 - 12.01.2017]
+	* fixed installation error " call to undefined method OTS_DB_MySQL::hasColumn()"
+	* updated tinymce to the latest (4.7.4) version
+	* enabled emoticons plugin in tinymce :)
+	* some security fixes
+
 [0.7.7 - 08.01.2018]
 	* important fix for servers with promotion column (caused player.vocation to be resetted when saving player, for example: on change name, accept invite to guild, leave guild)
 	* immediately reload config.lua when there's change in config.server_path detected
