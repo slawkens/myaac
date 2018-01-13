@@ -141,7 +141,11 @@ if($save) {
 		$player->setPosX(0);
 		$player->setPosY(0);
 		$player->setPosZ(0);
-		$player->setStamina($config['otserv_version'] == TFS_03 ? 151200000 : 2520);
+
+		if($db->hasColumn('players', 'stamina')) {
+			$player->setStamina($char_to_copy->getStamina());
+		}
+
 		if($db->hasColumn('players', 'loss_experience')) {
 			$player->setLossExperience($char_to_copy->getLossExperience());
 			$player->setLossMana($char_to_copy->getLossMana());
