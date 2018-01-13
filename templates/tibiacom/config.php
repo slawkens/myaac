@@ -10,7 +10,7 @@ $config['boxes'] = "highscores,newcomer,gallery,networks,poll";
 $config['network_facebook'] = 'tibia'; // leave empty to disable
 $config['network_twitter'] = 'tibia'; // leave empty to disable
 
-$config['background_image'] = "background-artwork-860.jpg";
+$config['background_image'] = "background-artwork.jpg";
 $config['logo_image'] = "tibia-logo-artwork-top.gif";
 $config['gallery_image'] = 1;
 $config['menu_categories'] = array(

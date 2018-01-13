@@ -29,6 +29,7 @@
 	* remove tibiacom template, and include it as a plugin
 
 2.0
+	* remove signatures, creature images (make a separate plugins for them) - this way we save 2.5mb of space
 	* remove gesior backward support
 	* remove compat functions
 	* remove $template['link_*']
