@@ -89,11 +89,18 @@ defined('MYAAC') or die('Direct access not allowed!');
 				'log' => $config['database_log']
 			)
 		);
+
+		$db = POT::getInstance()->getDBHandle();
 	}
 	catch(PDOException $error) {
 		if(isset($cache) && $cache->enabled()) {
 			$cache->delete('config_lua');
 		}
+		
+		if(defined('MYAAC_INSTALL')) {
+			return; // installer will take care of this
+		}
+
 		die('ERROR: Cannot connect to MySQL database.<br/>' .
 			'Possible reasons:' .
 			'<ul>' .
@@ -102,5 +109,4 @@ defined('MYAAC') or die('Direct access not allowed!');
 			'</ul>' . $error);
 
 	}
-	$db = POT::getInstance()->getDBHandle();
 ?>

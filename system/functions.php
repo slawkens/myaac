@@ -12,9 +12,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 function message($message, $type, $return)
 {
 	if($return)
-		return '<p class="' . $type . '">' . $message . '</p>';
+		return '<div class="' . $type . '">' . $message . '</div>';
 	
-	echo '<p class="' . $type . '">' . $message . '</p>';
+	echo '<div class="' . $type . '">' . $message . '</div>';
 	return true;
 }
 function success($message, $return = false) {

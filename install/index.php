@@ -1,6 +1,8 @@
 <?php
 require('../common.php');
 
+define('MYAAC_INSTALL', true);
+
 // includes
 require(SYSTEM . 'functions.php');
 require(BASE . 'install/includes/functions.php');

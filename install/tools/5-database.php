@@ -14,29 +14,35 @@ ob_end_flush();
 
 if(!$error) {
 	require(BASE . 'install/includes/database.php');
+	if(isset($database_error)) { // we failed connect to the database
+		error($database_error);
+		return;
+	}
 }
 
 if(!$db->hasTable('accounts')) {
 	$locale['step_database_error_table'] = str_replace('$TABLE$', 'accounts', $locale['step_database_error_table']);
 	error($locale['step_database_error_table']);
-	$error = true;
+	return;
 }
-else if(!$db->hasTable('players')) {
+
+if(!$db->hasTable('players')) {
 	$locale['step_database_error_table'] = str_replace('$TABLE$', 'players', $locale['step_database_error_table']);
 	error($locale['step_database_error_table']);
-	$error = true;
+	return;
 }
-else if(!$db->hasTable('guilds')) {
+
+if(!$db->hasTable('guilds')) {
 	$locale['step_database_error_table'] = str_replace('$TABLE$', 'guilds', $locale['step_database_error_table']);
 	error($locale['step_database_error_table']);
-	$error = true;
+	return;
 }
 
 if($db->hasTable(TABLE_PREFIX . 'account_actions')) {
 	$locale['step_database_error_table_exist'] = str_replace('$TABLE$', TABLE_PREFIX . 'account_actions', $locale['step_database_error_table_exist']);
 	warning($locale['step_database_error_table_exist']);
 }
-else if(!$error) {
+else {
 	// import schema
 	try {
 		$db->query(file_get_contents(BASE . 'install/includes/schema.sql'));
@@ -47,12 +53,8 @@ else if(!$error) {
 	}
 	catch(PDOException $error_) {
 		error($locale['step_database_error_schema'] . ' ' . $error_);
-		$error = true;
+		return;
 	}
-}
-
-if($error) {
-	return;
 }
 
 if($db->hasColumn('accounts', 'key')) {

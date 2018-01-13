@@ -47,46 +47,51 @@ if(!$error) {
 		success($locale['step_database_importing']);
 		require(BASE . 'install/includes/database.php');
 		
-		echo $twig->render('install.installer.html.twig', array(
-			'url' => 'tools/5-database.php',
-			'message' => $locale['loading_spinner']
-		));
-
-		if(!$error) {
-			if(!Validator::email($_SESSION['var_mail_admin'])) {
-				error($locale['step_config_mail_admin_error']);
-				$error = true;
-			}
-			if(!Validator::email($_SESSION['var_mail_address'])) {
-				error($locale['step_config_mail_address_error']);
-				$error = true;
-			}
+		if(isset($database_error)) { // we failed connect to the database
+			error($database_error);
+		}
+		else {
+			echo $twig->render('install.installer.html.twig', array(
+				'url' => 'tools/5-database.php',
+				'message' => $locale['loading_spinner']
+			));
 			
-			$content .= '$config[\'client_download\'] = \'http://tibia-clients.com/clients/download/\'. $config[\'client\'] . \'/exe/windows\';';
-			$content .= PHP_EOL;
-			$content .= '$config[\'client_download_linux\'] = \'http://tibia-clients.com/clients/download/\'. $config[\'client\'] . \'/tar/linux\';';
-			$content .= PHP_EOL;
-			$content .= '$config[\'session_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
-			$content .= PHP_EOL;
-			$content .= '$config[\'cache_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
-
-			$saved = true;
 			if(!$error) {
-				$saved = file_put_contents(BASE . 'config.local.php', $content);
-			}
-			
-			if($saved) {
-				if(!$error) {
-					$_SESSION['saved'] = true;
+				if(!Validator::email($_SESSION['var_mail_admin'])) {
+					error($locale['step_config_mail_admin_error']);
+					$error = true;
 				}
-			}
-			else {
-				$_SESSION['config_content'] = $content;
-				unset($_SESSION['saved']);
+				if(!Validator::email($_SESSION['var_mail_address'])) {
+					error($locale['step_config_mail_address_error']);
+					$error = true;
+				}
 				
-				$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
-				warning($locale['step_database_error_file'] . '<br/>
-					<textarea cols="70" rows="10">' . $content . '</textarea>');
+				$content .= '$config[\'client_download\'] = \'http://tibia-clients.com/clients/download/\'. $config[\'client\'] . \'/exe/windows\';';
+				$content .= PHP_EOL;
+				$content .= '$config[\'client_download_linux\'] = \'http://tibia-clients.com/clients/download/\'. $config[\'client\'] . \'/tar/linux\';';
+				$content .= PHP_EOL;
+				$content .= '$config[\'session_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
+				$content .= PHP_EOL;
+				$content .= '$config[\'cache_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
+
+				$saved = true;
+				if(!$error) {
+					$saved = file_put_contents(BASE . 'config.local.php', $content);
+				}
+				
+				if($saved) {
+					if(!$error) {
+						$_SESSION['saved'] = true;
+					}
+				}
+				else {
+					$_SESSION['config_content'] = $content;
+					unset($_SESSION['saved']);
+					
+					$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
+					warning($locale['step_database_error_file'] . '<br/>
+						<textarea cols="70" rows="10">' . $content . '</textarea>');
+				}
 			}
 		}
 	}
