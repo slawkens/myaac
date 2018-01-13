@@ -1,3 +1,12 @@
+[0.7.9 - 13.01.2017]
+	* removed 6mb of trash (some useless things)
+	* (fix) TFS 1.x not showing promoted vocations in highscores
+	* otserv 0.6.x: fixed some warning (on the characters page) and fatal mysql error (on the mango signature)
+	* fixed default stamina on otserv 0.6.x engine (and some others perhaps)
+	* install: change permission check to is_writable
+	* changed highscores_groups_hidden to 3 (for TFS 1.x)
+	* updated background-artwork (tibiacom template) to the latest version, removed other ones
+
 [0.7.8 - 12.01.2017]
 	* fixed installation error " call to undefined method OTS_DB_MySQL::hasColumn()"
 	* updated tinymce to the latest (4.7.4) version
