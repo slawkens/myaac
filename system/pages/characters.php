@@ -231,7 +231,7 @@ if($player->isLoaded() && !$player->isDeleted())
 	$dead_add_content = '';
 	$deaths = array();
 	if(tableExist('killers')) {
-		$player_deaths = $db->query('SELECT `id`, `date`, `level` FROM `player_deaths` WHERE `player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,10;');
+		$player_deaths = $db->query('SELECT `id`, `date`, `level` FROM `player_deaths` WHERE `player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,10;')->fetchAll();
 		if(count($player_deaths))
 		{
 			$number_of_rows = 0;
@@ -289,7 +289,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		$deaths_db = $db->query('SELECT
 				`player_id`, `time`, `level`, `killed_by`, `is_player`' . $mostdamage . '
 				FROM `player_deaths`
-				WHERE `player_id` = ' . $player->getId() . ' ORDER BY `time` DESC LIMIT 10;');
+				WHERE `player_id` = ' . $player->getId() . ' ORDER BY `time` DESC LIMIT 10;')->fetchAll();
 		
 		if(count($deaths_db))
 		{
@@ -328,7 +328,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		//frags list by Xampy
 		$i = 0;
 		$frags_limit = 10; // frags limit to show? // default: 10
-		$player_frags = $db->query('SELECT `player_deaths`.*, `players`.`name`, `killers`.`unjustified` FROM `player_deaths` LEFT JOIN `killers` ON `killers`.`death_id` = `player_deaths`.`id` LEFT JOIN `player_killers` ON `player_killers`.`kill_id` = `killers`.`id` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `player_killers`.`player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,'.$frags_limit.';');
+		$player_frags = $db->query('SELECT `player_deaths`.*, `players`.`name`, `killers`.`unjustified` FROM `player_deaths` LEFT JOIN `killers` ON `killers`.`death_id` = `player_deaths`.`id` LEFT JOIN `player_killers` ON `player_killers`.`kill_id` = `killers`.`id` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `player_killers`.`player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,'.$frags_limit.';')->fetchAll();
 		if(count($player_frags))
 		{
 			$row_count = 0;

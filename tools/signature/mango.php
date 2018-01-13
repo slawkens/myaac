@@ -31,7 +31,7 @@
 	$MadGD = new MadGD( SIGNATURES_BACKGROUNDS.$background );
 	$MadGD->testMode = false;
 
-	$MadGD->setDefaultStyle( SIGNATURES_FONTS.'arial.ttf', SIGNATURES_FONTS.'arialbd.ttf', 8 );
+	$MadGD->setDefaultStyle( SIGNATURES_FONTS.'arialbd.ttf', SIGNATURES_FONTS.'arialbd.ttf', 8 );
 	$MadGD->setEquipmentBackground( SIGNATURES_IMAGES.'equipments.png' );
 
 	/** NAME **/
@@ -67,6 +67,8 @@
 	$town = 'town';
 	if(fieldExist('town_id', 'houses'))
 		$town = 'town_id';
+	else if($db->hasColumn('houses', 'townid'))
+		$town = 'townid';
 	
 	$house = $db->query( 'SELECT `houses`.`name`, `houses`.`' . $town . '` as town FROM `houses` WHERE `houses`.`owner` = '.$player->getId().';' )->fetchAll();
 	if ( count( $house ) != 0 )
