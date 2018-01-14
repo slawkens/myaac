@@ -178,14 +178,17 @@ else {
 		}
 
 		// update config.highscores_ids_hidden
-		require_once(SYSTEM . 'migrations/20.php');
 		$database_migration_20 = true;
+		require_once(SYSTEM . 'migrations/20.php');
 		$content = '';
 		if(!databaseMigration20($content)) {
 			$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
 			warning($locale['step_database_error_file'] . '<br/>
 						<textarea cols="70" rows="10">' . $content . '</textarea>');
 		}
+		
+		// add z_polls tables
+		require_once(SYSTEM . 'migrations/22.php');
 
 		$locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(ADMIN_URL, $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
 		$locale['step_finish_desc'] = str_replace('$HOMEPAGE$', generateLink(BASE_URL, $locale['step_finish_homepage'], true), $locale['step_finish_desc']);
