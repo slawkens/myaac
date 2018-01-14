@@ -180,6 +180,10 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			return $this->has_table_cache[$name];
 		}
 
+		return $this->hasTableInternal($name);
+	}
+	
+	private function hasTableInternal($name) {
 		global $config;
 		return ($this->has_table_cache[$name] = $this->query("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " . $this->quote($config['database_name']) . " AND `TABLE_NAME` = " . $this->quote($name) . " LIMIT 1;")->rowCount() > 0);
 	}
@@ -189,7 +193,24 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			return $this->has_column_cache[$table . '.' . $column];
 		}
 	
+		return $this->hasColumnInternal($table, $column);
+	}
+	
+	private function hasColumnInternal($table, $column) {
 		return ($this->has_column_cache[$table . '.' . $column] = count($this->query("SHOW COLUMNS FROM `" . $table . "` LIKE '" . $column . "'")->fetchAll()) > 0);
+	}
+
+	public function revalidateCache() {
+		foreach($this->has_table_cache as $key => $value) {
+			$this->hasTableInternal($key);
+		}
+
+		foreach($this->has_column_cache as $key => $value) {
+			$explode = explode('.', $key);
+			if(isset($this->has_table_cache[$explode[0]]) && $this->has_table_cache[$explode[0]]) {// first check if table exist
+				$this->hasColumnInternal($explode[0], $explode[1]);
+			}
+		}
 	}
 }
 

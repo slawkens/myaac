@@ -18,14 +18,21 @@
 		* Menus in templates
 	* move highscores to twig
 	* migrations: option to downgrade the database
-	* hooks: login + logout
 	* create account: create character
 
 1.0:
+	* mobile version
+		* switch do desktop/mobile version link
+		* inside templates/mobile
+		* using Mobile_Detect.php library
 	* i18n support (issue #1 on github)
 	* New Admin Panel layout and interface
 		* most preferably: https://adminlte.io/
 		* move all pages administration to this panel (like faq, forum, newses)
+	* save plugin configuration in database
+		* table name: myaac_config_plugins, columns: plugin, name, type, default, required, extra (json data, like options for select)
+	* plugin auto-update and check-version
+		* needs support from my-aac.org (plugins database)
 	* remove tibiacom template, and include it as a plugin
 
 2.0

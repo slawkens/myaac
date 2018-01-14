@@ -18,27 +18,30 @@ $groups = new OTS_Groups_List();
 
 $show_form = true;
 $config_salt_enabled = $db->hasColumn('accounts', 'salt');
-if(!$logged)
-{
-	if($action == "logout") {
+
+if(ACTION == "logout" && !isset($_REQUEST['account_login'])) {
+	if(!defined('HOOK_LOGOUT_DISPLAY') || HOOK_LOGOUT_DISPLAY) { // plugin will take care of this message
 		echo $twig->render('account.logout.html.twig');
 	}
-	else
-	{
-		if($action == 'confirm_email') {
-			require(PAGES . 'account/' . $action . '.php');
-			return;
-		}
-		
-		if(!empty($errors))
-			echo $twig->render('error_box.html.twig', array('errors' => $errors));
-		
-		echo $twig->render('account.login.html.twig', array(
-			'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
-			'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
-			'error' => isset($errors[0]) ? $errors[0] : null
-		));
+
+	return;
+}
+
+if(!$logged)
+{
+	if(ACTION == 'confirm_email') {
+		require(PAGES . 'account/' . ACTION . '.php');
+		return;
 	}
+		
+	if(!empty($errors))
+		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	
+	echo $twig->render('account.login.html.twig', array(
+		'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
+		'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
+		'error' => isset($errors[0]) ? $errors[0] : null
+	));
 
 	return;
 }

@@ -165,6 +165,11 @@ define('PAGE', $page);
 $template_place_holders = array();
 
 require_once(SYSTEM . 'init.php');
+
+// event system
+require_once(SYSTEM . 'hooks.php');
+$hooks = new Hooks();
+$hooks->load();
 require_once(SYSTEM . 'template.php');
 require_once(SYSTEM . 'login.php');
 require_once(SYSTEM . 'status.php');
@@ -191,10 +196,6 @@ else { // register first version
 	}
 }
 
-// event system
-require_once(SYSTEM . 'hooks.php');
-$hooks = new Hooks();
-$hooks->load();
 $hooks->trigger(HOOK_STARTUP);
 
 // anonymous usage statistics

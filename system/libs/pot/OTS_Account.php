@@ -879,14 +879,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
 	public function logAction($action)
 	{
-		$ip = '0';
-		if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
-			$ip = $_SERVER['REMOTE_ADDR'];
-		else if(isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP']))
-			$ip = $_SERVER['HTTP_CLIENT_IP'];
-		else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']))
-			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-
+		$ip = get_browser_real_ip();
 		if(strpos($ip, ":") === false) {
 			$ipv6 = '0';
 		}

@@ -14,16 +14,37 @@ $logged_flags = 0;
 $action = isset($_REQUEST['action']) ? strtolower($_REQUEST['action']) : '';
 define('ACTION', $action);
 
-if(ACTION == 'logout' && !isset($_REQUEST['account_login']))
+// stay-logged with sessions
+$current_session = getSession('account');
+if($current_session !== false)
 {
-	unsetSession('account');
-	unsetSession('password');
-	unsetSession('remember_me');
+	$account_logged = new OTS_Account();
+	$account_logged->load($current_session);
+	if($account_logged->isLoaded() && $account_logged->getPassword() == getSession('password')
+		//&& (!isset($_SESSION['admin']) || admin())
+		&& (getSession('remember_me') !== false || getSession('last_visit') > time() - 15 * 60)) {  // login for 15 minutes if "remember me" is not used
+			$logged = true;
+	}
+	else {
+		unsetSession('account');
+		unset($account_logged);
+	}
+}
 
-	if(isset($_REQUEST['redirect']))
-	{
-		header('Location: ' . urldecode($_REQUEST['redirect']));
-		exit;
+if(ACTION == 'logout' && !isset($_REQUEST['account_login'])) {
+	if($hooks->trigger(HOOK_LOGOUT, array('logged' => $logged, 'account' => (isset($account_logged) ? $account_logged : new OTS_Account()), 'password' => getSession('password')))) {
+		unsetSession('account');
+		unsetSession('password');
+		unsetSession('remember_me');
+
+		$logged = false;
+		unset($account_logged);
+
+		if(isset($_REQUEST['redirect']))
+		{
+			header('Location: ' . urldecode($_REQUEST['redirect']));
+			exit;
+		}
 	}
 }
 else
@@ -31,8 +52,9 @@ else
 	// new login with data from form
 	if(!$logged && isset($_POST['account_login']) && isset($_POST['password_login']))
 	{
-		$login_account = strtoupper($_POST['account_login']);
+		$login_account = $_POST['account_login'];
 		$login_password = $_POST['password_login'];
+		$remember_me = isset($_POST['remember_me']);
 		if(!empty($login_account) && !empty($login_password))
 		{
 			if($cache->enabled())
@@ -71,8 +93,9 @@ else
 			{
 				setSession('account', $account_logged->getId());
 				setSession('password', encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password));
-				if(isset($_POST['remember_me']))
+				if($remember_me) {
 					setSession('remember_me', true);
+				}
 
 				$logged = true;
 				$logged_flags = $account_logged->getWebFlags();
@@ -87,9 +110,13 @@ else
 				else {
 					$account_logged->setCustomField('web_lastlogin', time());
 				}
+				
+				$hooks->trigger(HOOK_LOGIN, array('account' => $account_logged, 'password' => $login_password, 'remember_me' => $remember_me));
 			}
 			else
 			{
+				$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
+				
 				// temporary solution for blocking failed login attempts
 				if($cache->enabled())
 				{
@@ -116,28 +143,11 @@ else
 		}
 		else {
 			$errors[] = 'Please enter your account ' . (USE_ACCOUNT_NAME ? 'name' : 'password') . ' and password.';
+			
+			$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
 		}
 	}
 
-	// stay-logged with sessions
-	$current_session = getSession('account');
-	if($current_session !== false)
-	{
-		$account_logged = new OTS_Account();
-		$account_logged->load($current_session);
-		if($account_logged->isLoaded() && $account_logged->getPassword() == getSession('password')
-			//&& (!isset($_SESSION['admin']) || admin())
-			&& (getSession('remember_me') !== false || getSession('last_visit') > time() - 15 * 60)) {  // login for 15 minutes if "remember me" is not used
-				$logged = true;
-		}
-		else
-		{
-			$logged = false;
-			unsetSession('account');
-			unset($account_logged);
-		}
-	}
-	
 	if($logged) {
 		$logged_flags = $account_logged->getWebFlags();
 		$twig->addGlobal('logged', true);

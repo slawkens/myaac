@@ -23,6 +23,12 @@ define('PAGE', $page);
 
 require(SYSTEM . 'functions.php');
 require(SYSTEM . 'init.php');
+
+// event system
+require_once(SYSTEM . 'hooks.php');
+$hooks = new Hooks();
+$hooks->load();
+
 require(SYSTEM . 'status.php');
 require(SYSTEM . 'login.php');
 require(ADMIN . 'includes/functions.php');

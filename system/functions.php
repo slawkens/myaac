@@ -931,6 +931,16 @@ function str_replace_first($search, $replace, $subject) {
 	return $subject;
 }
 
+function get_browser_real_ip() {
+	if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
+		return $_SERVER['REMOTE_ADDR'];
+	else if(isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP']))
+		return $_SERVER['HTTP_CLIENT_IP'];
+	else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+		return $_SERVER['HTTP_X_FORWARDED_FOR'];
+
+	return '0';
+}
 function setSession($key, $data) {
 	global $config;
 	$_SESSION[$config['session_prefix'] . $key] = $data;

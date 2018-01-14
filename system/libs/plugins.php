@@ -195,8 +195,11 @@ class Plugins {
 
 						if($continue) {
 							if (isset($plugin['install'])) {
-								if (file_exists(BASE . $plugin['install']))
+								if (file_exists(BASE . $plugin['install'])) {
+									$db->revalidateCache();
 									require(BASE . $plugin['install']);
+									$db->revalidateCache();
+								}
 								else
 									self::$warnings[] = 'Cannot load install script. Your plugin might be not working correctly.';
 							}
@@ -270,7 +273,7 @@ class Plugins {
 							break;
 						}
 						
-						$file = BASE . $file;
+						$file = str_replace('/', '\\', BASE . $file);
 						if(!is_sub_dir($file, BASE) || realpath(dirname($file)) != dirname($file)) {
 							$success = false;
 							self::$error = "You don't have rights to delete: " . $file;
