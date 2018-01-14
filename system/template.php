@@ -101,9 +101,10 @@ function get_template_menus() {
 	global $db, $config, $template_name;
 	
 	$menus = array();
-	$query = $db->query('SELECT `name`, `link`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `category`, `ordering` ASC');
+	$query = $db->query('SELECT `name`, `link`, `blank`, `color`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `category`, `ordering` ASC');
 	foreach($query->fetchAll() as $menu) {
-		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link']);
+		$link_full = strpos(trim($menu['link']), 'http') === 0 ? $menu['link'] : getLink($menu['link']);
+		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'link_full' => $link_full, 'blank' => $menu['blank'] == 1, 'color' => '#' . $menu['color']);
 	}
 	
 	$new_menus = array();

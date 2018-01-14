@@ -8,10 +8,6 @@
 		* php extension
 		* database table or column
 	* kathrine tickets - show/hide
-	* admin panel Menus:
-		* open in external window (_blank option)
-		* color of the link
-		* should the link blink?
 	* cache:
 		* hooks
 		* Menus in templates

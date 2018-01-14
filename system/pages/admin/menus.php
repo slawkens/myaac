@@ -22,6 +22,8 @@ if(isset($_REQUEST['template'])) {
 	if(isset($_REQUEST['menu'])) {
 		$post_menu = $_REQUEST['menu'];
 		$post_menu_link = $_REQUEST['menu_link'];
+		$post_menu_blank =  $_REQUEST['menu_blank'];
+		$post_menu_color = $_REQUEST['menu_color'];
 		if(count($post_menu) != count($post_menu_link)) {
 			echo 'Menu count is not equal menu links. Something went wrong when sending form.';
 			return;
@@ -34,7 +36,7 @@ if(isset($_REQUEST['template'])) {
 					continue;
 				
 				try {
-					$db->insert(TABLE_PREFIX . 'menu', array('template' => $template, 'name' => $menu, 'link' => $post_menu_link[$category][$i], 'category' => $category, 'ordering' => $i));
+					$db->insert(TABLE_PREFIX . 'menu', array('template' => $template, 'name' => $menu, 'link' => $post_menu_link[$category][$i], 'blank' => $post_menu_blank[$category][$i] == 'on', 'color' => str_replace('#', '', $post_menu_color[$category][$i]), 'category' => $category, 'ordering' => $i));
 				}
 				catch(PDOException $error) {
 					warning('Error while adding menu item (' . $menu . '): ' . $error->getMessage());
@@ -59,15 +61,18 @@ if(isset($_REQUEST['template'])) {
 		return;
 	}
 	
-	echo 'Hint: You can drag menu items.<br/>Editing: ' . $template . ' template.';
+	echo 'Hint: You can drag menu items.<br/>
+	Hint: Add links to external sites using: <b>http://</b> prefix.<br/>
+	Not all templates support blank and colorful links.<br/>
+	Editing: ' . $template . ' template.';
 	$menus = array();
-	$menus_db = $db->query('SELECT `name`, `link`, `category`, `ordering` FROM `' . TABLE_PREFIX . 'menu` WHERE `enabled` = 1 AND `template` = ' . $db->quote($template) . ' ORDER BY `ordering` ASC;')->fetchAll();
+	$menus_db = $db->query('SELECT `name`, `link`, `blank`, `color`, `category`, `ordering` FROM `' . TABLE_PREFIX . 'menu` WHERE `enabled` = 1 AND `template` = ' . $db->quote($template) . ' ORDER BY `ordering` ASC;')->fetchAll();
 	foreach($menus_db as $menu) {
-		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'ordering' => $menu['ordering']);
+		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'blank' => $menu['blank'], 'color' => $menu['color'], 'ordering' => $menu['ordering']);
 	}
-	
+
 	$last_id = array();
-	echo '<form method="post" action="?p=menus">';
+	echo '<form method="post" id="menus-form" action="?p=menus">';
 	echo '<input type="hidden" name="template" value="' . $template . '"/>';
 	foreach($config['menu_categories'] as $id => $cat) {
 		echo '<h2>' . $cat['name'] . '<img class="add-button" id="add-button-' . $id . '" src="' . BASE_URL . 'images/plus.png" width="16" height="16"/></h2>';
@@ -75,7 +80,14 @@ if(isset($_REQUEST['template'])) {
 		if(isset($menus[$id])) {
 			$i = 0;
 			foreach($menus[$id] as $menu) {
-				echo '<li class="ui-state-default" id="list-' . $id . '-' . $i . '"><input type="text" name="menu[' . $id . '][]" value="' . $menu['name'] . '"/><input type="text" name="menu_link[' . $id . '][]" value="' . $menu['link'] . '"/><a class="remove-button" id="remove-button-' . $id . '-' . $i . '"><img src="' . BASE_URL . 'images/del.png"/></a></li>';
+				echo '<li class="ui-state-default" id="list-' . $id . '-' . $i . '"><input type="text" name="menu[' . $id . '][]" value="' . $menu['name'] . '"/>
+				<input type="text" name="menu_link[' . $id . '][]" value="' . $menu['link'] . '"/>
+				<input type="hidden" name="menu_blank[' . $id . '][]" value="0" />
+				<label><input class="blank-checkbox" type="checkbox" ' . ($menu['blank'] == 1 ? 'checked' : '') . '/><span title="Open in New Window">Blank</span></label>
+				
+				<input class="color-picker" type="text" name="menu_color[' . $id . '][]" value="#' . $menu['color'] . '" />
+				
+				<a class="remove-button" id="remove-button-' . $id . '-' . $i . '"><img src="' . BASE_URL . 'images/del.png"/></a></li>';
 				
 				$i++;
 				$last_id[$id] = $i;

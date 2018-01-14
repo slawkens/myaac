@@ -341,13 +341,12 @@ foreach($config['menu_categories'] as $id => $cat) {
 	<div id='<?php echo $cat['id']; ?>_Submenu' class='Submenu'>
 	<?php
 		foreach($menus[$id] as $category => $menu) {
-				$is_external = strpos(trim($menu['link']), 'http') === 0;
 			?>
-			<a href='<?php echo $is_external ? $menu['link'] : getLink($menu['link']); ?>'<?php echo $is_external ? ' target="_blank"' : ''?>>
-				<div id='submenu_<?php echo str_replace('/', '', $menu['link']); ?>' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)'>
+			<a href='<?php echo $menu['link_full']; ?>'<?php echo $menu['blank'] ? ' target="_blank"' : ''?>>
+				<div id='submenu_<?php echo str_replace('/', '', $menu['link']); ?>' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)' style="color: <?php echo $menu['color']; ?>;">
 					<div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 					<div id='ActiveSubmenuItemIcon_<?php echo str_replace('/', '', $menu['link']); ?>' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
-					<div class='SubmenuitemLabel'><?php echo $menu['name']; ?></div>
+					<div class='SubmenuitemLabel' style="color: <?php echo $menu['color']; ?>;"><?php echo $menu['name']; ?></div>
 					<div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 				</div>
 			</a>

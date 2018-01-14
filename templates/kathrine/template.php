@@ -91,12 +91,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 					$i = 0;
 					
 					foreach($menus[$category] as $menu) {
-						if(strpos(trim($menu['link']), 'http') === 0) {
-							echo '<a href="' . $menu['link'] . '" target="_blank">' . $menu['name'] . '</a>';
-						}
-						else {
-							echo '<a href="' . getLink($menu['link']) . '">' . $menu['name'] . '</a>';
-						}
+						echo '<a href="' . $menu['link_full'] . '"' . ($menu['blank'] ? ' target="_blank"' : '') . ' style="color: ' . $menu['color'] . ';">' . $menu['name'] . '</a>';
 						
 						if(++$i != $size) {
 							echo '<span class="separator"></span>';
