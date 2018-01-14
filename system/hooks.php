@@ -42,12 +42,12 @@ class Hook
 			$ret = $tmp($params);
 		}*/
 		
-		global $db, $config, $template_path, $ots, $content;
+		global $db, $config, $template_path, $ots, $content, $twig;
 		if(file_exists(BASE . $this->_file)) {
-			require(BASE . $this->_file);
+			$ret = require(BASE . $this->_file);
 		}
 
-		return true;
+		return $ret === null || $ret == 1 || $ret;
 	}
 
 	public function name() {return $this->_name;}
@@ -71,10 +71,16 @@ class Hooks
 		if(isset(self::$_hooks[$type]))
 		{
 			foreach(self::$_hooks[$type] as $name => $hook)
-				$ret = $hook->execute($params);
+				if(!$hook->execute($params)) {
+					$ret = false;
+				}
 		}
 
 		return $ret;
+	}
+
+	public function exist($type) {
+		return isset(self::$_hooks[$type]);
 	}
 	
 	public function load()
