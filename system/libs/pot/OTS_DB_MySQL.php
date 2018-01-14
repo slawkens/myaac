@@ -207,7 +207,11 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
 		foreach($this->has_column_cache as $key => $value) {
 			$explode = explode('.', $key);
-			if(isset($this->has_table_cache[$explode[0]]) && $this->has_table_cache[$explode[0]]) {// first check if table exist
+			if(!isset($this->has_table_cache[$explode[0]])) { // first check if table exist
+				$this->hasTableInternal($explode[0]);
+			}
+
+			if($this->has_table_cache[$explode[0]]) {
 				$this->hasColumnInternal($explode[0], $explode[1]);
 			}
 		}
