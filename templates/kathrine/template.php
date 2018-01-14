@@ -80,6 +80,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 			<div id="mainsubmenu">
 				<?php
+				$default_menu_color = "ffffff";
+
 				foreach($menus as $category => $menu) {
 					if(!isset($menus[$category])) {
 						continue;
@@ -91,8 +93,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 					$i = 0;
 					
 					foreach($menus[$category] as $menu) {
-						echo '<a href="' . $menu['link_full'] . '"' . ($menu['blank'] ? ' target="_blank"' : '') . ' style="color: ' . $menu['color'] . ';">' . $menu['name'] . '</a>';
-						
+						echo '<a href="' . $menu['link_full'] . '"' . ($menu['blank'] ? ' target="_blank"' : '') . ' style="color: #' . (strlen($menu['color']) == 0 ? $default_menu_color : $menu['color']) . ';">' . $menu['name'] . '</a>';
+
 						if(++$i != $size) {
 							echo '<span class="separator"></span>';
 						}
