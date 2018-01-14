@@ -163,13 +163,12 @@ else
 		$list = 'experience';
 	}
 }
-
 ?>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 	<tr>
 		<td><img src="<?php echo $template_path; ?>/images/general/blank.gif" width="10" height="1" border="0"></td>
 		<td>
-			<center><h2>Ranking for <?php echo ($skill == SKILL_FRAGS ? 'Frags' : $skill == SKILL_BALANCE ? 'Balance' : getSkillName($skill)); if(isset($vocation)) echo ' (' . $vocation . ')';?> on <?php echo $config['lua']['serverName']; ?></h2></center><br/>
+			<center><h2>Ranking for <?php echo ($skill == SKILL_FRAGS ? 'Frags' : ($skill == SKILL_BALANCE ? 'Balance' : getSkillName($skill))); if(isset($vocation)) echo ' (' . $vocation . ')';?> on <?php echo $config['lua']['serverName']; ?></h2></center><br/>
 			<table border="0" cellpadding="4" cellspacing="1" width="100%"></table>
 			<table border="0" cellpadding="4" cellspacing="1" width="100%">
 				<tr bgcolor="<?php echo $config['vdarkborder']; ?>">
