@@ -175,6 +175,7 @@ else {
 		}
 		else {
 			error(Spells::getLastError());
+		}
 
 		// update config.highscores_ids_hidden
 		require_once(SYSTEM . 'migrations/20.php');
