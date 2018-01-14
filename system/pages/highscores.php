@@ -38,6 +38,9 @@ if($config['highscores_vocation_box'] && isset($vocation))
 	}
 }
 
+define('SKILL_FRAGS', -1);
+define('SKILL_BALANCE', -2);
+
 $skill = POT::SKILL__LEVEL;
 if(is_numeric($list))
 {
@@ -87,7 +90,12 @@ else
 
 		case 'frags':
 			if($config['highscores_frags'] && $config['otserv_version'] == TFS_03)
-				$skill = 666;
+				$skill = SKILL_FRAGS;
+			break;
+
+		case 'balance':
+			if($config['highscores_balance'])
+				$skill = SKILL_BALANCE;
 			break;
 	}
 }
@@ -115,7 +123,7 @@ if($config['highscores_outfit']) {
 }
 
 $offset = $_page * $config['highscores_length'];
-if($skill <= POT::SKILL_LAST) { // skills
+if($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 	if($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
 		$skill_ids = array(
 			POT::SKILL_FIST => 'skill_fist',
@@ -132,7 +140,7 @@ if($skill <= POT::SKILL_LAST) { // skills
 	else
 		$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',value,level,vocation' . $promotion . $outfit . ' FROM accounts,players,player_skills WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id = player_skills.player_id AND player_skills.skillid = '.$skill.' AND accounts.id = players.account_id ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 }
-else if($skill == 666 && $config['otserv_version'] == TFS_03) // frags
+else if($skill == SKILL_FRAGS && $config['otserv_version'] == TFS_03) // frags
 {
 	$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . $outfit . ',COUNT(`player_killers`.`player_id`) as value' .
 			' FROM `accounts`, `players`, `player_killers` ' .
@@ -140,6 +148,10 @@ else if($skill == 666 && $config['otserv_version'] == TFS_03) // frags
 			' GROUP BY `player_id`' .
 			' ORDER BY value DESC' .
 			' LIMIT 101 OFFSET '.$offset)->fetchAll();
+}
+else if($skill == SKILL_BALANCE) // balance
+{
+	$skills = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,balance as value,vocation' . $promotion . $outfit . ' FROM accounts,players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND accounts.id = players.account_id ORDER BY value DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 }
 else
 {
@@ -157,7 +169,7 @@ else
 	<tr>
 		<td><img src="<?php echo $template_path; ?>/images/general/blank.gif" width="10" height="1" border="0"></td>
 		<td>
-			<center><h2>Ranking for <?php echo ($skill == 666 ? 'Frags' : getSkillName($skill)); if(isset($vocation)) echo ' (' . $vocation . ')';?> on <?php echo $config['lua']['serverName']; ?></h2></center><br/>
+			<center><h2>Ranking for <?php echo ($skill == SKILL_FRAGS ? 'Frags' : $skill == SKILL_BALANCE ? 'Balance' : getSkillName($skill)); if(isset($vocation)) echo ' (' . $vocation . ')';?> on <?php echo $config['lua']['serverName']; ?></h2></center><br/>
 			<table border="0" cellpadding="4" cellspacing="1" width="100%"></table>
 			<table border="0" cellpadding="4" cellspacing="1" width="100%">
 				<tr bgcolor="<?php echo $config['vdarkborder']; ?>">
@@ -169,7 +181,7 @@ else
 					<td class="white"><b>Outfit</b></td>
 					<?php endif; ?>
 					<td width="75%" class="white"><b>Name</b></td>
-					<td width="15%" class="white"><b><?php echo ($skill != 666 ? 'Level' : 'Frags'); ?></b></td>
+					<td width="15%" class="white"><b><?php echo ($skill != SKILL_FRAGS ? 'Level' : $skill == SKILL_BALANCE ? 'Balance' : 'Frags'); ?></b></td>
 					<?php if($skill == POT::SKILL__LEVEL): ?>
 					<td class="white"><b>Points</b></td>
 					<?php endif; ?>
@@ -309,12 +321,16 @@ echo '
 				'fishing' => 'Fishing',
 			);
 				
+			if($config['highscores_frags']) {
+				$types['frags'] = 'Frags';
+			}
+			if($config['highscores_balance'])
+				$types['balance'] = 'Balance';
+
 			foreach($types as $link => $name) {
 				echo '<A HREF="' . getLink('highscores') . '/' . $link . (isset($vocation) ? '/' . $vocation : '') . '" CLASS="size_xs">' . $name . '</A><BR>';
 			}
 
-if($config['highscores_frags'])
-	echo '<a href="' . getLink('highscores') . '/frags' . (isset($vocation) ? '/' . $vocation : '') . '" CLASS="size_xs">Frags</a><br/>';
 echo 	'</td>
 	</tr>
 </table><br>';
