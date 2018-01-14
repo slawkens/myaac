@@ -273,8 +273,9 @@ class Plugins {
 							break;
 						}
 						
-						$file = str_replace('/', '\\', BASE . $file);
-						if(!is_sub_dir($file, BASE) || realpath(dirname($file)) != dirname($file)) {
+						$file = str_replace('\\', '/', BASE . $file);
+						$realpath = str_replace('\\', '/', realpath(dirname($file)));
+						if(!is_sub_dir($file, BASE) || $realpath != dirname($file)) {
 							$success = false;
 							self::$error = "You don't have rights to delete: " . $file;
 							break;
