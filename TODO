@@ -14,6 +14,7 @@
 	* move highscores to twig
 	* migrations: option to downgrade the database
 	* create account: create character
+	* add robots.txt file
 
 1.0:
 	* mobile version
@@ -53,3 +54,4 @@ At any time between (version not specified):
 	* OTAdmin support in Admin Panel
 	* database towns table support for TFS 1.3
 	* two factor authentication for TFS 1.x
+	* support for .yml plugin file specification
