@@ -22,7 +22,7 @@ function version_check($name, $ok, $info = '', $warning = false)
 $failed = false;
 
 // start validating
-version_check($locale['step_requirements_php_version'], (PHP_VERSION_ID >= 50300), PHP_VERSION);
+version_check($locale['step_requirements_php_version'], (PHP_VERSION_ID >= 50303), PHP_VERSION);
 foreach(array('images/guilds', 'images/houses', 'images/gallery') as $value)
 {
 	$is_writable = is_writable(BASE . $value);
