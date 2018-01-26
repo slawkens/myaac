@@ -32,18 +32,20 @@ if($current_session !== false)
 }
 
 if(ACTION == 'logout' && !isset($_REQUEST['account_login'])) {
-	if($hooks->trigger(HOOK_LOGOUT, array('logged' => $logged, 'account' => (isset($account_logged) ? $account_logged : new OTS_Account()), 'password' => getSession('password')))) {
-		unsetSession('account');
-		unsetSession('password');
-		unsetSession('remember_me');
+	if(isset($account_logged) && $account_logged->isLoaded()) {
+		if($hooks->trigger(HOOK_LOGOUT, array('account' => $account_logged, 'password' => getSession('password')))) {
+			unsetSession('account');
+			unsetSession('password');
+			unsetSession('remember_me');
 
-		$logged = false;
-		unset($account_logged);
+			$logged = false;
+			unset($account_logged);
 
-		if(isset($_REQUEST['redirect']))
-		{
-			header('Location: ' . urldecode($_REQUEST['redirect']));
-			exit;
+			if(isset($_REQUEST['redirect']))
+			{
+				header('Location: ' . urldecode($_REQUEST['redirect']));
+				exit;
+			}
 		}
 	}
 }
