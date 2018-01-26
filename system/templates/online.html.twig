@@ -14,7 +14,7 @@
 					{% set players_count = players|length %}
 					{% set afk = players_count - status.players %}
 					{% if afk < 0 %}
-						{% set players = players + afk|abs %}
+						{% set players_count = players_count + afk|abs %}
 						{% set afk = 0 %}
 					{% endif %}
 					Currently there are <b>{{ status.players }}</b> active and <b>{{ afk }}</b> AFK players.<br/>
