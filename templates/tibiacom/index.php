@@ -46,7 +46,7 @@ if(isset($config['boxes']))
 		var activeSubmenuItem="<?php echo $tmp; ?>";
 		var IMAGES="<?php echo $template_path; ?>/images";
 		var LINK_ACCOUNT="<?php echo BASE_URL; ?>";
-		
+
 		function rowOverEffect(object) {
 			if (object.className == 'moduleRow') object.className = 'moduleRowOver';
 		}
@@ -54,7 +54,7 @@ if(isset($config['boxes']))
 		function rowOutEffect(object) {
 			if (object.className == 'moduleRowOver') object.className = 'moduleRow';
 		}
-		
+
 		function InitializePage() {
 		  LoadLoginBox();
 		  LoadMenu();
@@ -442,6 +442,6 @@ foreach($config['menu_categories'] as $id => $cat) {
 function logo_monster()
 {
 	global $config;
-	return str_replace(" ", "", trim(mb_strtolower($config['logo_monster'])));
+	return str_replace(" ", "", trim(strtolower($config['logo_monster'])));
 }
 ?>

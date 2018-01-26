@@ -110,21 +110,21 @@ if(empty($_REQUEST['creature']))
 	$number_of_rows = 0;
 	foreach($monsters as $monster) {
 		echo '<TR BGCOLOR="' . getStyle($number_of_rows++) . '"><TD><a href="?subtopic=creatures&creature='.urlencode($monster['name']).'">'.$monster['name'].'</a></TD><TD>'.$monster['health'].'</TD><TD>'.$monster['exp'].'</TD>';
-		
+
 	if($monster['summonable']) {
 		echo '<TD>'.$monster['mana'].'</TD>';
 	}
 	else {
 		echo '<TD>---</TD>';
 	}
-		
+
 	if($monster['convinceable']) {
 		echo '<TD>'.$monster['mana'].'</TD>';
 	}
 	else {
 		echo '<TD>---</TD>';
 	}
-		
+
 	echo '<td>'.ucwords($monster['race']).'</td></tr>';
 	}
 
@@ -170,13 +170,13 @@ if(isset($monster['name']))
 	echo '</TABLE></td><td align=left>
 	<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=40%>
 	<tr><td align=left>';
-	$monster['gfx_name'] = trim(mb_strtolower($monster['name'])).".gif";
+	$monster['gfx_name'] = trim(strtolower($monster['name'])).".gif";
 	if(!file_exists('images/monsters/'.$monster['gfx_name'])) {
 		$gfx_name =  str_replace(" ", "", $monster['gfx_name']);
 		if(file_exists('images/monsters/' . $gfx_name))
 			echo '<img src="images/monsters/'.$gfx_name.'" height="128" width="128">';
-	else
-		echo '<img src="images/monsters/nophoto.png" height="128" width="128">';
+	    else
+		    echo '<img src="images/monsters/nophoto.png" height="128" width="128">';
 	}
 	else
 		echo '<img src="images/monsters/' . $monster['gfx_name'] . '" height="128" width="128">';
@@ -190,19 +190,19 @@ if(isset($monster['name']))
 		$number_of_rows++;
 		echo '<tr BGCOLOR="'.getStyle($number_of_rows).'"><td width="100"><b>Immunities: </b></td><td width="100%">'.implode(', ', $immunities).'</td></tr>';
 	}
-	
+
 	$voices = json_decode($monster['voices'], true);
 	if(count($voices) > 0)
 	{
 		foreach($voices as &$voice) {
 			$voice = '"' . $voice . '"';
 		}
-		
+
 		$number_of_rows++;
 		echo '<tr BGCOLOR="'.getStyle($number_of_rows).'"><td width="100"><b>Voices: </b></td><td width="100%">'.implode(', ', $voices).'</td></tr>';
 	}
 	echo '</TABLE></td></tr>';
-	
+
 	$loot = json_decode($monster['loot'], true);
 	if($loot)
 	{
@@ -214,18 +214,18 @@ if(isset($monster['name']))
 			}
 			return ($a['chance'] > $b['chance']) ? -1 : 1;
 		}
-		
+
 		usort($loot, 'sort_by_chance');
-		
+
 		$i = 0;
 		foreach($loot as $item) {
 			$name = getItemNameById($item['id']);
 			$tooltip = $name . '<br/>Chance: ' . round($item['chance'] / 1000, 2) . '%<br/>Max count: ' . $item['count'];
-			
+
 			echo '<img src="' . $config['item_images_url'] . $item['id'] . '.gif" class="tooltip" title="' . $tooltip . '" width="32" height="32" border="0" alt=" ' .$name . '" />';
 			$i++;
 		}
-		
+
 		echo '</td></tr></TABLE>';
 	}
 

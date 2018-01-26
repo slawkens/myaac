@@ -815,6 +815,7 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	{
 		require(SYSTEM . 'libs/phpmailer/PHPMailerAutoload.php');
 		$mailer = new PHPMailer();
+		$mailer->setLanguage('en', LIBS . 'phpmailer/language/');
 	}
 
 	$signature_html = '';
