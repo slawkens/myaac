@@ -42,7 +42,11 @@
 	* change gifts_system to shop_system configurable
 	* move most used options in system/templates dir to separate directories (more transparent)
 	* move database fields to separate tables without modifing the OTServ schema (myaac_accounts, myaac_players)
-	* add option to write templates in Twig
+	* fundamental changes in Twig:
+		* add option to write layouts in Twig
+		* change twig config global variable to config('name') function
+			* this fixes when config gets updated at run-time
+		* change constant('BASE_URL') to base_url()
 
 At any time between (version not specified):
 	* better news archive with search function (like on tibia.com)
