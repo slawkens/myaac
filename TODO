@@ -61,6 +61,7 @@
 		* change constants: BASE_URL to base_url(), USE_ACCOUNT_NAME to config
 	* make use of Model/View/Controller (MVC) approach
 		* use some modern and fast Routing library
+	* configurable session handler: file, database, php
 
 x.x - At any time between (version not specified)
 	* better news archive with search function (like on tibia.com)
