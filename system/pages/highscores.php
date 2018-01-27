@@ -323,7 +323,7 @@ echo '
 			if($config['highscores_frags']) {
 				$types['frags'] = 'Frags';
 			}
-			if($config['highscores_balance'])
+			if(isset($config['highscores_balance']) && $config['highscores_balance'])
 				$types['balance'] = 'Balance';
 
 			foreach($types as $link => $name) {

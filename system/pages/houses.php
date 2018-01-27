@@ -134,7 +134,7 @@ $type = '';
 				echo '<br/>';
 
 				if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order'])
-					&& (isset($_POST['type']) || !$db->hasTable('houses', 'guild')))
+					&& (isset($_POST['type']) || !$db->hasColumn('houses', 'guild')))
 				{
 					$order = $_POST['order'];
 					$orderby = '`name`';
