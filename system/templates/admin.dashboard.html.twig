@@ -35,7 +35,7 @@
 	{% if status.online %}
 	<p class="success" style="width: 150px; text-align: center;">Status: Online<br/>
 		{{ status.uptimeReadable }}, {{ status.players }}/{{ status.playersMax }}<br/>
-		{{ status.lua.ip }} : {{ status.lua.loginPort }}
+		{{ config.lua.ip }} : {{ config.lua.loginPort }}
 		<br/><br/><u><a id="more-button" href="#"></a></u>
 
 		<span id="status-more">
