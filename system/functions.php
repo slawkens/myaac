@@ -819,6 +819,7 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 		$mailer->SMTPAuth = $config['smtp_auth'];
 		$mailer->Username = $config['smtp_user'];
 		$mailer->Password = $config['smtp_pass'];
+		$mailer->SMTPSecure = isset($config['smtp_secure']) ? $config['smtp_secure'] : '';
 	}
 	else
 		$mailer->IsMail();
