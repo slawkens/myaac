@@ -5,7 +5,7 @@ Official website: https://my-aac.org
 
 ### REQUIREMENTS
 
-	- PHP 5.3.0 or later
+	- PHP 5.3.3 or later
 	- MySQL database
 	- PDO PHP Extension
 	- XML PHP Extension
@@ -28,6 +28,7 @@ Official website: https://my-aac.org
 			chmod 660 images/guilds
 			chmod 660 images/houses
 			chmod 660 images/gallery
+			chmod -R 770 system/cache
 
 	Visit http://your_domain/install (http://localhost/install) and follow instructions in the browser.
 
