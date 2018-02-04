@@ -19,7 +19,12 @@
 					</tr>
 					<tr>
 						<td>PHP:</td>
-						<td><input type="checkbox" id="php" name="php" title="Check if page should be executed as PHP" value="1"{% if php %} checked="true"{% endif %}{% if action == 'edit' %} disabled{% endif %}/></td>
+						<td>
+							<input type="checkbox" id="php" name="php" title="Check if page should be executed as PHP" value="1"{% if php %} checked="true"{% endif %}{% if action == 'edit' %} disabled{% endif %}/>
+							{% if action == 'edit' %}
+								<input type="hidden" name="php" value="{% if php %}1{% else %}0{% endif %}"/>
+							{% endif %}
+						</td>
 					</tr>
 					<tr>
 						<td>Content:</td>
