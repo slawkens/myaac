@@ -197,7 +197,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 	}
 	
 	private function hasColumnInternal($table, $column) {
-		return ($this->has_column_cache[$table . '.' . $column] = count($this->query("SHOW COLUMNS FROM `" . $table . "` LIKE '" . $column . "'")->fetchAll()) > 0);
+		return $this->hasTable($table) && ($this->has_column_cache[$table . '.' . $column] = count($this->query("SHOW COLUMNS FROM `" . $table . "` LIKE '" . $column . "'")->fetchAll()) > 0);
 	}
 
 	public function revalidateCache() {

@@ -180,15 +180,42 @@ class Plugins {
 								$continue = false;
 							}
 
-							foreach($require as $req => $version) {
-								if(in_array($req, array('myaac', 'myaac_', 'php', 'php_', 'database', 'database_'))) {
-									continue;
-								}
+							if($continue) {
+								foreach($require as $req => $version) {
+									if(in_array($req, array('myaac', 'myaac_', 'php', 'php_', 'database', 'database_'))) {
+										continue;
+									}
 
-								if(!self::is_installed($req, $version)) {
-									self::$error = "This plugin requires another plugin to run correctly. The another plugin is: " . $req . ", with version " . $version . ".";
-									$continue = false;
-									break;
+									$req = strtolower($req);
+									if(in_array($req, array('php-ext', 'php-extension'))) { // require php extension
+										if(!extension_loaded($version)) {
+											self::$error = "This plugin requires php extension: " . $version . " to be installed.";
+											$continue = false;
+											break;
+										}
+									}
+									else if($req == 'table') {
+										if(!$db->hasTable($version)) {
+											self::$error = "This plugin requires table: " . $version . " to exist in the database.";
+											$continue = false;
+											break;
+										}
+									}
+									else if($req == 'column') {
+										$tmp = explode('.', $version);
+										if(count($tmp) == 2) {
+											if(!$db->hasColumn($tmp[0], $tmp[1])) {
+												self::$error = "This plugin requires database column: " . $tmp[0] . "." . $tmp[1] . " to exist in database.";
+												$continue = false;
+												break;
+											}
+										}
+									}
+									else if(!self::is_installed($req, $version)) {
+										self::$error = "This plugin requires another plugin to run correctly. The another plugin is: " . $req . ", with version " . $version . ".";
+										$continue = false;
+										break;
+									}
 								}
 							}
 						}
