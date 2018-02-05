@@ -4,9 +4,6 @@
 	* support duplicated vocation names with different ids
 	* sandbox for plugins, don't install when requirements are not passed
 	* add changelog management interface
-	* plugins require:
-		* php extension
-		* database table or column
 	* kathrine tickets - show/hide
 	* cache:
 		* hooks
