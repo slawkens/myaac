@@ -23,4 +23,7 @@ $db->query('
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;');
 
 if(!$db->hasColumn('accounts', 'vote'))
-	$db->query('ALTER TABLE `accounts` ADD `vote` INT( 11 ) NOT NULL ;');
+	$db->query('ALTER TABLE `accounts` ADD `vote` INT( 11 ) DEFAULT 0 NOT NULL ;');
+else {
+	$db->query('ALTER TABLE `accounts` MODIFY `vote` INT( 11 ) DEFAULT 0 NOT NULL ;');
+}
