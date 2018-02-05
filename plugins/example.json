@@ -11,6 +11,7 @@
 		"php_": ">5.4,<7.0", // support for defining versions like in composer (since 0.8)
 		"database": "21",
 		"php-ext": "curl", // php extension needs to be installed (since 0.8)
+		"ext-curl": ">5.0", // php extension with version specifiec (since 0.8)
 		"table": "accounts", // table need to exist in database (since 0.8)
 		"column": "players.online" // column need to exist in database (since 0.8)
 	},

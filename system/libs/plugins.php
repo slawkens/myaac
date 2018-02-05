@@ -66,6 +66,8 @@ function is_sub_dir($path = NULL, $parent_folder = SITE_PATH) {
 	return FALSE;
 }
 
+use Composer\Semver\Semver;
+
 class Plugins {
 	private static $warnings = array();
 	private static $error = null;
@@ -126,7 +128,7 @@ class Plugins {
 							$myaac_satified = true;
 							if(isset($require['myaac_'])) {
 								$require_myaac = $require['myaac_'];
-								if(!Composer\Semver\Semver::satisfies(MYAAC_VERSION, $require_myaac)) {
+								if(!Semver::satisfies(MYAAC_VERSION, $require_myaac)) {
 									$myaac_satified = false;
 								}
 							}
@@ -145,7 +147,7 @@ class Plugins {
 							$php_satified = true;
 							if(isset($require['php_'])) {
 								$require_php = $require['php_'];
-								if(!Composer\Semver\Semver::satisfies(phpversion(), $require_php)) {
+								if(!Semver::satisfies(phpversion(), $require_php)) {
 									$php_satified = false;
 								}
 							}
@@ -164,7 +166,7 @@ class Plugins {
 							$database_satified = true;
 							if(isset($require['database_'])) {
 								$require_database = $require['database_'];
-								if(!Composer\Semver\Semver::satisfies(DATABASE_VERSION, $require_database)) {
+								if(!Semver::satisfies(DATABASE_VERSION, $require_database)) {
 									$database_satified = false;
 								}
 							}
@@ -206,6 +208,16 @@ class Plugins {
 										if(count($tmp) == 2) {
 											if(!$db->hasColumn($tmp[0], $tmp[1])) {
 												self::$error = "This plugin requires database column: " . $tmp[0] . "." . $tmp[1] . " to exist in database.";
+												$continue = false;
+												break;
+											}
+										}
+									}
+									else if(strpos($req, 'ext-') !== false) {
+										$tmp = explode('-', $req);
+										if(count($tmp) == 2) {
+											if(!extension_loaded($tmp[1]) || !Semver::satisfies(phpversion($tmp[1]), $version)) {
+												self::$error = "This plugin requires php extension: " . $tmp[1] . ", version " . $version . " to be installed.";
 												$continue = false;
 												break;
 											}
@@ -361,7 +373,7 @@ class Plugins {
 			return false;
 		}
 
-		return Composer\Semver\Semver::satisfies($plugin_info['version'], $version);
+		return Semver::satisfies($plugin_info['version'], $version);
 	}
 
 	public static function getWarnings() {
