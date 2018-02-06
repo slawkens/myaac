@@ -1,7 +1,7 @@
 CREATE TABLE `myaac_account_actions`
 (
 	`account_id` INT(11) NOT NULL,
-	`ip` INT(11) NOT NULL DEFAULT 0,
+	`ip` INT(10) UNSIGNED NOT NULL DEFAULT 0,
 	`ipv6` BINARY(16) NOT NULL DEFAULT 0,
 	`date` INT(11) NOT NULL DEFAULT 0,
 	`action` VARCHAR(255) NOT NULL DEFAULT '',
