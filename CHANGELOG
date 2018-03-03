@@ -1,4 +1,26 @@
-[0.7.9 - 13.01.2017]
+[0.7.10 - 03.03.2018]
+### Added:
+* new configurable: smtp_secure
+* robots.txt
+
+### Fixed:
+* editing an existing page that had php enabled
+* chrome bug on save (when editing page) ERR_BLOCKED_BY_XSS_AUDITOR
+* showing IP and Port in admin panel (#44, by miqueiaspenha)
+* deleting plugin showing "You don't have rights to delete"
+* some bug with PHPMailer not finding its language file
+* default accounts.vote value
+* saving some really high long ip addresses
+
+### Changed:
+* update config.highscores_ids_hidden on install when there are samples already in database
+* auto add z_polls table on install
+
+### Internal:
+* changed mb_strtolower functions to strtolower()
+* added new function: $hooks->exist($type)
+
+[0.7.9 - 13.01.2018]
 	* removed 6mb of trash (some useless things)
 	* (fix) TFS 1.x not showing promoted vocations in highscores
 	* otserv 0.6.x: fixed some warning (on the characters page) and fatal mysql error (on the mango signature)
@@ -7,7 +29,7 @@
 	* changed highscores_groups_hidden to 3 (for TFS 1.x)
 	* updated background-artwork (tibiacom template) to the latest version, removed other ones
 
-[0.7.8 - 12.01.2017]
+[0.7.8 - 12.01.2018]
 	* fixed installation error " call to undefined method OTS_DB_MySQL::hasColumn()"
 	* updated tinymce to the latest (4.7.4) version
 	* enabled emoticons plugin in tinymce :)
