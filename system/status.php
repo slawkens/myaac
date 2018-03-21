@@ -56,7 +56,7 @@ if($cache->enabled())
 if($fetch_from_db)
 {
 	// get info from db
-	$status_query = $db->query('SELECT ' . $db->fieldName('name') . ', ' . $db->fieldName('value') . ' FROM ' . $db->tableName(TABLE_PREFIX . 'config') . ' WHERE ' . $db->fieldName('name') . ' LIKE "%status%"');
+	$status_query = $db->query('SELECT `name`, `value` FROM `' . TABLE_PREFIX . 'config` WHERE ' . $db->fieldName('name') . ' LIKE "%status%"');
 	if($status_query->rowCount() <= 0) // empty, just insert it
 	{
 		foreach($status as $key => $value)

@@ -6,7 +6,7 @@
 
 /**
  * This file contains main toolkit class. Please read README file for quick startup guide and/or tutorials for more info.
- * 
+ *
  * @package POT
  * @version 0.1.5
  * @author Wrzasq <wrzasq@gmail.com>
@@ -23,7 +23,7 @@
 
 /**
  * Main POT class.
- * 
+ *
  * @package POT
  * @version 0.1.5
  */
@@ -76,70 +76,70 @@ class POT
 	const SKILL__LAST = self::SKILL__LEVEL;
 /**
  * Head slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
     const SLOT_HEAD = 1;
 /**
  * Necklace slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
     const SLOT_NECKLACE = 2;
 /**
  * Backpack slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
     const SLOT_BACKPACK = 3;
 /**
  * Armor slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
     const SLOT_ARMOR = 4;
 /**
  * Right hand slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
     const SLOT_RIGHT = 5;
 /**
  * Left hand slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
     const SLOT_LEFT = 6;
 /**
  * Legs slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
     const SLOT_LEGS = 7;
 /**
  * Boots slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
     const SLOT_FEET = 8;
 /**
  * Ring slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
     const SLOT_RING = 9;
 /**
  * Ammunition slot.
- * 
+ *
  * @version 0.0.3
  * @since 0.0.3
  */
@@ -147,7 +147,7 @@ class POT
 
 /**
  * First depot item sid.
- * 
+ *
  * @version 0.0.4
  * @since 0.0.4
  */
@@ -155,21 +155,21 @@ class POT
 
 /**
  * IP ban.
- * 
+ *
  * @version 0.0.5
  * @since 0.0.5
  */
     const BAN_IP = 1;
 /**
  * Player ban.
- * 
+ *
  * @version 0.0.5
  * @since 0.0.5
  */
     const BAN_PLAYER = 2;
 /**
  * Account ban.
- * 
+ *
  * @version 0.0.5
  * @since 0.0.5
  */
@@ -177,14 +177,14 @@ class POT
 
 /**
  * Ascencind sorting order.
- * 
+ *
  * @version 0.0.5
  * @since 0.0.5
  */
     const ORDER_ASC = 1;
 /**
  * Descending sorting order.
- * 
+ *
  * @version 0.0.5
  * @since 0.0.5
  */
@@ -211,11 +211,11 @@ class POT
 
 /**
  * Singleton.
- * 
+ *
  * <p>
  * This method return global instance of POT class. You can only fetch it this way - class constructor is private and you can't create instance of it other way. This is clasic singleton implementation. As class names are globaly accessible you can fetch it anywhere in code.
  * </p>
- * 
+ *
  * @return POT Global POT class instance.
  * @example examples/quickstart.php quickstart.php
  * @tutorial POT/Basics.pkg#basics.instance
@@ -235,22 +235,22 @@ class POT
 
 /**
  * POT classes directory.
- * 
+ *
  * <p>
  * Directory path to POT files.
  * </p>
- * 
+ *
  * @var string
  */
     private $path = '';
 
 /**
  * Set POT directory.
- * 
+ *
  * <p>
  * Use this method if you keep your POT package in different directory then this file. Don't need to care about trailing directory separator - it will append it if needed.
  * </p>
- * 
+ *
  * @param string $path POT files path.
  * @example examples/fakeroot.php fakeroot.php
  * @tutorial POT/Basics.pkg#basics.fakeroot
@@ -260,7 +260,7 @@ class POT
         $this->path = str_replace('\\', '/', $path);
 
         // appends ending slash to directory path
-        if( substr($this->path, -1) != '/')
+        if( substr($this->path, -1) !== '/')
         {
             $this->path .= '/';
         }
@@ -268,44 +268,44 @@ class POT
 
 /**
  * Class initialization tools.
- * 
+ *
  * <p>
  * Never create instance of this class by yourself! Use POT::getInstance()!
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.0.2 version this method registers spl_autoload_register() callback. If you use POT with PHP 5.0 you need {@link compat.php compat.php library} to prevent from FATAL errors.
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.0.3 version this method is private.
  * </p>
- * 
+ *
  * @version 0.0.3
  */
     private function __construct()
     {
         // default POT directory
-        $this->path = dirname(__FILE__) . '/';
+        $this->path = __DIR__ . '/';
         // registers POT autoload mechanism
         spl_autoload_register( array($this, 'loadClass') );
     }
 
 /**
  * Loads POT class file.
- * 
+ *
  * <p>
  * Runtime class loading on demand - usefull for autoloading functions. Usualy you don't need to call this method directly.
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.0.2 version this method is suitable for spl_autoload_register().
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.0.3 version this method handles also exception classes.
  * </p>
- * 
+ *
  * @version 0.0.3
  * @param string $class Class name.
  */
@@ -319,43 +319,43 @@ class POT
 
 /**
  * Database connection.
- * 
+ *
  * <p>
  * OTServ database connection object.
  * </p>
- * 
+ *
  * @var PDO
  */
     private $db;
 
 /**
  * Connects to database.
- * 
+ *
  * <p>
  * Creates OTServ database connection object.
  * </p>
- * 
+ *
  * <p>
  * First parameter is one of database driver constants values. Currently {@link OTS_DB_MySQL MySQL}, {@link OTS_DB_SQLite SQLite}, {@link OTS_DB_PostgreSQL PostgreSQL} and {@link OTS_DB_ODBC ODBC} drivers are supported. This parameter can be null, then you have to specify <var>'driver'</var> parameter. Such way is comfortable to store entire database configuration in one array and possibly runtime evaluation and/or configuration file saving.
  * </p>
- * 
+ *
  * <p>
  * For parameters list see driver documentation. Common parameters for all drivers are:
  * </p>
- * 
+ *
  * <ul>
  * <li><var>driver</var> - optional, specifies driver, aplies when <var>$driver</var> method parameter is <i>null</i>,</li>
  * <li><var>prefix</var> - optional, prefix for database tables, use if you have more then one OTServ installed on one database.</li>
  * </ul>
- * 
+ *
  * <p>
  * Note: Since 0.1.1 version this method throws {@link E_OTS_Generic E_OTS_Generic exceptions} instead of general Exception class objects. Since all exception classes are child classes of Exception class so your old code will still handle all exceptions.
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.1.2 version this method checks if PDO extension is loaded and if not, then throws LogicException. This exception class is part of SPL library and was introduced in PHP 5.1 so if you use PHP 5.0 you will need to load {@link compat.php compat.php library} first.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @param array $params Connection info.
  * @throws LogicException When PDO extension is not loaded.
@@ -391,15 +391,15 @@ class POT
 
 /**
  * Queries server status.
- * 
+ *
  * <p>
  * Sends 'info' packet to OTS server and return output. Returns {@link OTS_InfoRespond OTS_InfoRespond} (wrapper for XML data) with results or <var>false</var> if server is online.
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.1.4 version this method is static so you can call it staticly, but it is also still possible to call it in dynamic context.
  * </p>
- * 
+ *
  * @version 0.1.4
  * @since 0.0.2
  * @param string $server Server IP/domain.
@@ -418,19 +418,19 @@ class POT
 
 /**
  * Returns database connection handle.
- * 
+ *
  * <p>
  * At all you shouldn't use this method and work with database using POT classes, but it may be sometime necessary to use direct database access (mainly until POT won't provide many important features).
  * </p>
- * 
+ *
  * <p>
  * It is also important as serialised objects after unserialisation needs to be re-initialised with database connection.
  * </p>
- * 
+ *
  * <p>
  * Note that before you will be able to fetch connection handler, you have to connect to database using {@link POT::connect() connect() method}.
  * </p>
- * 
+ *
  * @version 0.0.4
  * @since 0.0.4
  * @return PDO Database connection handle.
@@ -442,15 +442,15 @@ class POT
 
 /**
  * Bans given IP number.
- * 
+ *
  * <p>
  * Adds IP/mask ban. You can call this function with only one parameter to ban only given IP address without expiration.
  * </p>
- * 
+ *
  * <p>
  * Second parameter is mask which you can use to ban entire IP classes. Third parameter is time after which ban will expire. However - this is not lifetime - it is timestamp of moment, when ban should expire (and <var>0</var> means forever).
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.0.5
  * @param string $ip IP to ban.
@@ -493,11 +493,11 @@ class POT
 
 /**
  * Deletes ban from given IP number.
- * 
+ *
  * <p>
  * Removes given IP/mask ban. Remember to specify also mask if you banned intire IP class.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.0.5
  * @param string $ip IP to ban.
@@ -528,7 +528,7 @@ class POT
 
 /**
  * Checks if given IP is banned.
- * 
+ *
  * @version 0.1.5
  * @since 0.0.5
  * @param string $ip IP to ban.
@@ -557,7 +557,7 @@ class POT
 
 /**
  * Returns list of banned IPs as list of pairs (ip => IP, mask => MASK).
- * 
+ *
  * @version 0.1.5
  * @since 0.1.3
  * @return array List of banned IPs.
@@ -594,7 +594,7 @@ class POT
 
 /**
  * List of vocations.
- * 
+ *
  * @version 0.1.0
  * @since 0.0.5
  * @var OTS_VocationsList
@@ -603,15 +603,15 @@ class POT
 
 /**
  * Loads vocations list.
- * 
+ *
  * <p>
  * This method loads vocations from given file. You can create local instances of vocations lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.1.0 version this method loads instance of {@link OTS_VocationsList OTS_VocationsList} which you should fetch to get vocations info instead of calling POT class methods.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.0.5
  * @param string $file vocations.xml file location.
@@ -625,11 +625,11 @@ class POT
 
 /**
  * Checks if vocations are loaded.
- * 
+ *
  * <p>
  * You should use this method before fetching vocations list in new enviroment, or after loading new list to make sure it is loaded.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return bool True if vocations are loaded.
@@ -641,7 +641,7 @@ class POT
 
 /**
  * Unloads vocations list.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -652,11 +652,11 @@ class POT
 
 /**
  * Returns vocations list object.
- * 
+ *
  * <p>
  * Note: Since 0.1.0 version this method returns loaded instance of {@link OTS_VocationsList OTS_VocationsList} instead of array. However {@link OTS_VocationsList OTS_VocationsList class} provides full array interface including Iterator, Countable and ArrayAccess interfaces so your code will work fine with it.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.0.5
  * @return OTS_VocationsList List of vocations.
@@ -710,7 +710,7 @@ class POT
 
 /**
  * List of loaded monsters.
- * 
+ *
  * @version 0.1.0
  * @since 0.0.6
  * @var OTS_MonstersList
@@ -719,15 +719,15 @@ class POT
 
 /**
  * Loads monsters mapping file.
- * 
+ *
  * <p>
  * This method loads monsters list from <var>monsters.xml</var> file in given directory. You can create local instances of monsters lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.1.0 version this method loads instance of {@link OTS_MonstersList OTS_MonstersList} which you should fetch to get vocations info instead of calling POT class methods.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.0.6
  * @param string $path Monsters directory.
@@ -740,11 +740,11 @@ class POT
 
 /**
  * Checks if monsters are loaded.
- * 
+ *
  * <p>
  * You should use this method before fetching monsters list in new enviroment, or after loading new list to make sure it is loaded.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return bool True if monsters are loaded.
@@ -756,7 +756,7 @@ class POT
 
 /**
  * Unloads monsters list.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -767,11 +767,11 @@ class POT
 
 /**
  * Returns list of laoded monsters.
- * 
+ *
  * <p>
  * Note: Since 0.1.0 version this method returns loaded instance of {@link OTS_MonstersList OTS_MonstersList} instead of array. However {@link OTS_MonstersList OTS_MonstersList class} provides full array interface including Iterator, Countable and ArrayAccess interfaces so your code will work fine with it.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.0.6
  * @return OTS_MonstersList List of monsters.
@@ -807,7 +807,7 @@ class POT
 
 /**
  * Spells list.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @var OTS_SpellsList
@@ -816,15 +816,15 @@ class POT
 
 /**
  * Loads spells list.
- * 
+ *
  * <p>
  * This method loads spells list from given file. You can create local instances of spells lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.1.0 version this method loads instance of {@link OTS_SpellsList OTS_SpellsList} which you should fetch to get vocations info instead of calling POT class methods.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.0.7
  * @param string $file Spells file name.
@@ -837,11 +837,11 @@ class POT
 
 /**
  * Checks if spells are loaded.
- * 
+ *
  * <p>
  * You should use this method before fetching spells list in new enviroment, or after loading new list to make sure it is loaded.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return bool True if spells are loaded.
@@ -853,7 +853,7 @@ class POT
 
 /**
  * Unloads spells list.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -864,7 +864,7 @@ class POT
 
 /**
  * Returns list of laoded spells.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @return OTS_SpellsList List of spells.
@@ -987,7 +987,7 @@ class POT
 
 /**
  * List of loaded houses.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @var OTS_HousesList
@@ -996,11 +996,11 @@ class POT
 
 /**
  * Loads houses list file.
- * 
+ *
  * <p>
  * This method loads houses list from given file. You can create local instances of houses lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $path Houses file.
@@ -1013,11 +1013,11 @@ class POT
 
 /**
  * Checks if houses are loaded.
- * 
+ *
  * <p>
  * You should use this method before fetching houses list in new enviroment, or after loading new list to make sure it is loaded.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return bool True if houses are loaded.
@@ -1029,7 +1029,7 @@ class POT
 
 /**
  * Unloads houses list.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -1040,7 +1040,7 @@ class POT
 
 /**
  * Returns list of laoded houses.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @return OTS_HousesList List of houses.
@@ -1094,7 +1094,7 @@ class POT
 
 /**
  * Cache handler for items loading.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @var IOTS_FileCache
@@ -1103,11 +1103,11 @@ class POT
 
 /**
  * Presets cache handler for items loader.
- * 
+ *
  * <p>
  * Use this method in order to preset cache handler for items list that you want to load into global POT instance. Note that this driver will be set for global resource only. If you will create local items list instances they won't use this driver automaticly.
  * </p>
- * 
+ *
  * @param IOTS_FileCache $cache Cache handler (skip this parameter to reset cache handler to null).
  */
     public function setItemsCache(IOTS_FileCache $cache = null)
@@ -1117,7 +1117,7 @@ class POT
 
 /**
  * List of loaded items.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @var OTS_ItemsList
@@ -1126,11 +1126,11 @@ class POT
 
 /**
  * Loads items list.
- * 
+ *
  * <p>
  * This method loads items list from <var>items.xml</var> and <var>items.otb</var> files from given directory. You can create local instances of items lists directly - calling this method will associate loaded list with POT class instance and will make it available everywhere in the code.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $path Items information directory.
@@ -1151,11 +1151,11 @@ class POT
 
 /**
  * Checks if items are loaded.
- * 
+ *
  * <p>
  * You should use this method before fetching items list in new enviroment, or after loading new list to make sure it is loaded.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return bool True if items are loaded.
@@ -1167,7 +1167,7 @@ class POT
 
 /**
  * Unloads items list.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -1178,7 +1178,7 @@ class POT
 
 /**
  * Returns list of laoded items.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @return OTS_ItemsList List of items.
@@ -1232,7 +1232,7 @@ class POT
 
 /**
  * Cache handler for OTBM loading.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @var IOTS_FileCache
@@ -1241,11 +1241,11 @@ class POT
 
 /**
  * Presets cache handler for OTBM loader.
- * 
+ *
  * <p>
  * Use this method in order to preset cache handler for map that you want to load into global POT instance. Note that this driver will be set for global resource only. If you will create local OTBM instances they won't use this driver automaticly.
  * </p>
- * 
+ *
  * @param IOTS_FileCache $cache Cache handler (skip this parameter to reset cache handler to null).
  */
     public function setMapCache(IOTS_FileCache $cache = null)
@@ -1255,7 +1255,7 @@ class POT
 
 /**
  * Loaded map.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @var OTS_OTBMFile
@@ -1264,15 +1264,15 @@ class POT
 
 /**
  * Loads OTBM map.
- * 
+ *
  * <p>
  * This method loads OTBM map from given file. You can create local instances of maps directly - calling this method will associate loaded map with POT class instance and will make it available everywhere in the code.
  * </p>
- * 
+ *
  * <p>
  * Note: This method will also load houses list associated with map.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $path Map file path.
@@ -1293,11 +1293,11 @@ class POT
 
 /**
  * Checks if OTBM is loaded.
- * 
+ *
  * <p>
  * You should use this method before fetching map information in new enviroment, or after loading new map to make sure it is loaded.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return bool True if map is loaded.
@@ -1309,7 +1309,7 @@ class POT
 
 /**
  * Unloads OTBM map.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -1320,7 +1320,7 @@ class POT
 
 /**
  * Returns loaded map.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @return OTS_OTBMFile Loaded OTBM file.
@@ -1425,7 +1425,7 @@ class POT
 
 /**
  * Display driver.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @var IOTS_Display
@@ -1434,7 +1434,7 @@ class POT
 
 /**
  * Sets display driver for database-related resources.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param IOTS_Display $display Display driver.
@@ -1446,11 +1446,11 @@ class POT
 
 /**
  * Checks if any display driver is loaded.
- * 
+ *
  * <p>
  * This method is mostly used internaly by POT classes.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return bool True if driver is loaded.
@@ -1462,7 +1462,7 @@ class POT
 
 /**
  * Unloads display driver.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -1473,11 +1473,11 @@ class POT
 
 /**
  * Returns current display driver.
- * 
+ *
  * <p>
  * This method is mostly used internaly by POT classes.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @return IOTS_Display Current display driver.
@@ -1495,7 +1495,7 @@ class POT
 
 /**
  * Display driver for non-database resources.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @var IOTS_DataDisplay
@@ -1504,7 +1504,7 @@ class POT
 
 /**
  * Sets display driver for non-database resources.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param IOTS_DataDisplay $dataDisplay Display driver.
@@ -1516,11 +1516,11 @@ class POT
 
 /**
  * Checks if any display driver for non-database resources is loaded.
- * 
+ *
  * <p>
  * This method is mostly used internaly by POT classes.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @return bool True if driver is loaded.
@@ -1532,7 +1532,7 @@ class POT
 
 /**
  * Unloads display driver.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  */
@@ -1543,11 +1543,11 @@ class POT
 
 /**
  * Returns current display driver.
- * 
+ *
  * <p>
  * This method is mostly used internaly by POT classes.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @return IOTS_DataDisplay Current display driver.

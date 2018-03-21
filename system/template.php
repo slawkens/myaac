@@ -66,7 +66,7 @@ if($exists || ($config['backward_support'] && file_exists(BASE . $template_path 
 		$config[$key] = $value;
 }
 else if(file_exists(BASE . $template_path . '/config.php'))
-	require(BASE . $template_path . '/config.php');
+	require BASE . $template_path . '/config.php';
 
 $template = array();
 $template['link_account_manage'] = getLink('account/manage');

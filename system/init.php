@@ -10,9 +10,9 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 // load configuration
-require_once(BASE . 'config.php');
+require_once BASE . 'config.php';
 if(file_exists(BASE . 'config.local.php')) // user customizations
-	require(BASE . 'config.local.php');
+	require BASE . 'config.local.php';
 
 if(!isset($config['installed']) || !$config['installed']) {
 	die('MyAAC has not been installed yet or there was error during installation. Please install again.');
@@ -20,7 +20,7 @@ if(!isset($config['installed']) || !$config['installed']) {
 
 date_default_timezone_set($config['date_timezone']);
 // take care of trailing slash at the end
-if($config['server_path'][strlen($config['server_path']) - 1] != '/')
+if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
 	$config['server_path'] .= '/';
 
 // enable gzip compression if supported by the browser
@@ -28,11 +28,11 @@ if($config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($
 	ob_start('ob_gzhandler');
 
 // cache
-require_once(SYSTEM . 'libs/cache.php');
+require_once SYSTEM . 'libs/cache.php';
 $cache = Cache::getInstance($config['cache_engine'], $config['cache_prefix']);
 
 // twig
-require_once(LIBS . 'Twig/Autoloader.php');
+require_once LIBS . 'Twig/Autoloader.php';
 Twig_Autoloader::register();
 
 $twig_loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
@@ -117,35 +117,35 @@ if(isset($config['lua']['servername']))
 if(isset($config['lua']['houserentperiod']))
 	$config['lua']['houseRentPeriod'] = $config['lua']['houserentperiod'];
 
-if($config['item_images_url'][strlen($config['item_images_url']) - 1] != '/')
+if($config['item_images_url'][strlen($config['item_images_url']) - 1] !== '/')
 	$config['item_images_url'] .= '/';
 
 // localize data/ directory
 if(isset($config['lua']['dataDirectory'][0]))
 {
 	$tmp = $config['lua']['dataDirectory'];
-	if($tmp[0] != '/')
+	if($tmp[0] !== '/')
 		$tmp = $config['server_path'] . $tmp;
 
-	if($tmp[strlen($tmp) - 1] != '/') // do not forget about trailing slash
+	if($tmp[strlen($tmp) - 1] !== '/') // do not forget about trailing slash
 		$tmp .= '/';
 }
 else if(isset($config['lua']['data_directory'][0]))
 {
 	$tmp = $config['lua']['data_directory'];
-	if($tmp[0] != '/')
+	if($tmp[0] !== '/')
 		$tmp = $config['server_path'] . $tmp;
 
-	if($tmp[strlen($tmp) - 1] != '/') // do not forget about trailing slash
+	if($tmp[strlen($tmp) - 1] !== '/') // do not forget about trailing slash
 		$tmp .= '/';
 }
 else if(isset($config['lua']['datadir'][0]))
 {
 	$tmp = $config['lua']['datadir'];
-	if($tmp[0] != '/')
+	if($tmp[0] !== '/')
 		$tmp = $config['server_path'] . $tmp;
 
-	if($tmp[strlen($tmp) - 1] != '/') // do not forget about trailing slash
+	if($tmp[strlen($tmp) - 1] !== '/') // do not forget about trailing slash
 		$tmp .= '/';
 }
 else
@@ -195,7 +195,7 @@ unset($tmp, $id, $vocation);
 
 // load towns
 /* TODO: doesnt work
-ini_set('memory_limit', '-1'); 
+ini_set('memory_limit', '-1');
 $tmp = '';
 
 if($cache->enabled() && $cache->fetch('towns', $tmp)) {

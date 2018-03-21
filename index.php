@@ -29,8 +29,8 @@
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
-require_once('common.php');
-require_once(SYSTEM . 'functions.php');
+require_once 'common.php';
+require_once SYSTEM . 'functions.php';
 
 $uri = $_SERVER['REQUEST_URI'];
 
@@ -48,7 +48,7 @@ if(preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
 	$_REQUEST['name'] = urldecode($tmp[0]);
 	
 	chdir(TOOLS . 'signature');
-	include(TOOLS . 'signature/index.php');
+	include TOOLS . 'signature/index.php';
 	exit();
 }
 else if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz|ttf|woff|ico)$/i", $_SERVER['REQUEST_URI'])) {
@@ -57,7 +57,7 @@ else if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|
 }
 
 if(file_exists(BASE . 'config.local.php'))
-	require_once(BASE . 'config.local.php');
+	require_once BASE . 'config.local.php';
 
 if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed']))
 {
@@ -120,8 +120,7 @@ else {
 			'/^news\/archive\/?$/' => array('subtopic' => 'newsarchive'),
 			'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
 			'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
-			'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2'),
-			'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
+			'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2')
 		);
 		
 		foreach($rules as $rule => $redirect) {
@@ -164,15 +163,15 @@ define('PAGE', $page);
 
 $template_place_holders = array();
 
-require_once(SYSTEM . 'init.php');
+require_once SYSTEM . 'init.php';
 
 // event system
-require_once(SYSTEM . 'hooks.php');
+require_once SYSTEM . 'hooks.php';
 $hooks = new Hooks();
 $hooks->load();
-require_once(SYSTEM . 'template.php');
-require_once(SYSTEM . 'login.php');
-require_once(SYSTEM . 'status.php');
+require_once SYSTEM . 'template.php';
+require_once SYSTEM . 'login.php';
+require_once SYSTEM . 'status.php';
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
@@ -236,11 +235,11 @@ if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_stat
 }
 
 if($config['views_counter'])
-	require_once(SYSTEM . 'counter.php');
+	require_once SYSTEM . 'counter.php';
 
 if($config['visitors_counter'])
 {
-	require_once(SYSTEM . 'libs/visitors.php');
+	require_once SYSTEM . 'libs/visitors.php';
 	$visitors = new Visitors($config['visitors_counter_ttl']);
 }
 
@@ -264,7 +263,7 @@ if(fetchDatabaseConfig('site_closed', $site_closed)) {
 		if(!$logged)
 		{
 			ob_start();
-			require(SYSTEM . 'pages/accountmanagement.php');
+			require SYSTEM . 'pages/accountmanagement.php';
 			$content .= ob_get_contents();
 			ob_end_clean();
 			$load_it = false;
@@ -305,7 +304,7 @@ if($config['backward_support']) {
 	$config['site']['screenshot_page'] = true;
 	
 	if($config['forum'] != '')
-		$config['forum_link'] = (strtolower($config['forum']) == 'site' ? getLink('forum') : $config['forum']);
+		$config['forum_link'] = (strtolower($config['forum']) === 'site' ? getLink('forum') : $config['forum']);
 
 	foreach($status as $key => $value)
 		$config['status']['serverStatus_' . $key] = $value;
@@ -317,7 +316,7 @@ if($load_it)
 		$content .= '<p class="note">Site is under maintenance (closed mode). Only privileged users can see it.</p>';
 
 	if($config['backward_support'])
-		require(SYSTEM . 'compat_pages.php');
+		require SYSTEM . 'compat_pages.php';
 
 	$ignore = false;
 
@@ -388,7 +387,7 @@ if($load_it)
 	ob_start();
 	if($hooks->trigger(HOOK_BEFORE_PAGE)) {
 		if(!$ignore)
-			require($file);
+			require $file;
 	}
 
 	if($config['backward_support'] && isset($main_content[0]))

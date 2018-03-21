@@ -31,7 +31,7 @@ if($current_session !== false)
 	}
 }
 
-if(ACTION == 'logout' && !isset($_REQUEST['account_login'])) {
+if(ACTION === 'logout' && !isset($_REQUEST['account_login'])) {
 	if(isset($account_logged) && $account_logged->isLoaded()) {
 		if($hooks->trigger(HOOK_LOGOUT, array('account' => $account_logged, 'password' => getSession('password')))) {
 			unsetSession('account');
@@ -52,7 +52,7 @@ if(ACTION == 'logout' && !isset($_REQUEST['account_login'])) {
 else
 {
 	// new login with data from form
-	if(!$logged && isset($_POST['account_login']) && isset($_POST['password_login']))
+	if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
 	{
 		$login_account = $_POST['account_login'];
 		$login_password = $_POST['password_login'];

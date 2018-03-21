@@ -70,7 +70,7 @@ function getPlayerLink($name, $generate = true)
 	if(is_numeric($name))
 	{
 		$player = new OTS_Player();
-		$player->load(intval($name));
+		$player->load((int)$name);
 		if($player->isLoaded())
 			$name = $player->getName();
 	}
@@ -88,9 +88,7 @@ function getHouseLink($name, $generate = true)
 	if(is_numeric($name))
 	{
 		$house = $db->query(
-			'SELECT ' . $db->fieldName('name') .
-			' FROM ' . $db->tableName('houses') .
-			' WHERE ' . $db->fieldName('id') . ' = ' . (int)$name);
+			'SELECT `name` FROM `houses` WHERE `id` = ' . (int)$name);
 		if($house->rowCount() > 0)
 			$name = $house->fetchColumn();
 	}
@@ -122,7 +120,7 @@ function getGuildLink($name, $generate = true)
 function getItemNameById($id) {
 	global $db;
 	$query = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'items` WHERE `id` = ' . $db->quote($id) . ' LIMIT 1;');
-	if($query->rowCount() == 1) {
+	if($query->rowCount() === 1) {
 		$item = $query->fetch();
 		return $item['name'];
 	}
@@ -154,7 +152,7 @@ function getFlagImage($country)
 
 	global $config;
 	if(!isset($config['countries']))
-		require(SYSTEM . 'countries.conf.php');
+		require SYSTEM . 'countries.conf.php';
 
 	if(!isset($config['countries'][$country])) {
 		return '';
@@ -176,16 +174,18 @@ function getBoolean($v)
 	}
 
 	if(is_numeric($v))
-		return intval($v) > 0;
+		return (int)$v > 0;
 
 	$v = strtolower($v);
-	return $v == 'yes' || $v == 'true';
+	return $v === 'yes' || $v === 'true';
 }
 
 /**
  * Generates random string.
  *
  * @param int $length Length of the generated string.
+ * @param bool $lowCase Should lower case characters be used?
+ * @param bool $upCase Should upper case characters be used?
  * @param bool $numeric Should numbers by used too?
  * @param bool $special Should special characters by used?
  * @return string Generated string.
@@ -242,7 +242,7 @@ function fetchDatabaseConfig($name, &$value)
 {
 	global $db;
 
-	$query = $db->query('SELECT ' . $db->fieldName('value') . ' FROM ' . $db->tableName(TABLE_PREFIX . 'config') . ' WHERE ' . $db->fieldName('name') . ' = ' . $db->quote($name));
+	$query = $db->query('SELECT `value` FROM `' . TABLE_PREFIX . 'config` WHERE `name` = ' . $db->quote($name));
 	if($query->rowCount() <= 0)
 		return false;
 
@@ -297,9 +297,9 @@ function encrypt($str)
 		$str .= $config['database_salt'];
 
 	$encryptionType = $config['database_encryption'];
-	if(isset($encryptionType) && strtolower($encryptionType) != 'plain')
+	if(isset($encryptionType) && strtolower($encryptionType) !== 'plain')
 	{
-		if($encryptionType == 'vahash')
+		if($encryptionType === 'vahash')
 			return base64_encode(hash('sha256', $str));
 
 		return hash($encryptionType, $str);
@@ -350,6 +350,8 @@ function delete_player($name)
 		$player->delete();
 		return true;
 	}
+	
+	return false;
 }
 
 //delete guild with id
@@ -407,7 +409,7 @@ function tickers()
 {
 	global $tickers_content, $featured_article;
 	
-	if(PAGE == 'news') {
+	if(PAGE === 'news') {
 		if(isset($tickers_content))
 			return $tickers_content . $featured_article;
 	}
@@ -429,9 +431,9 @@ function template_place_holder($type)
 	if(array_key_exists($type, $template_place_holders) && is_array($template_place_holders[$type]))
 		$ret = implode($template_place_holders[$type]);
 
-	if($type == 'head_start')
+	if($type === 'head_start')
 		$ret .= template_header();
-	elseif($type == 'body_end')
+	elseif($type === 'body_end')
 		$ret .= template_ga_code();
 
 	return $ret;
@@ -506,7 +508,7 @@ function template_ga_code()
 	global $config, $twig;
 	if(!isset($config['google_analytics_id'][0]))
 		return '';
-
+	
 	return $twig->render('google_analytics.html.twig');
 }
 
@@ -574,7 +576,7 @@ function getCreatureName($killer, $showStatus = false, $extendedInfo = false)
 			$players_rows .= "item or field";
 		else
 		{
-			if(in_array(substr(strtolower($killer), 0, 1), $vowels))
+			if(in_array(strtolower($killer[0]), $vowels))
 				$players_rows .= "an ";
 			else
 				$players_rows .= "a ";
@@ -746,7 +748,7 @@ function get_templates()
 	$path = TEMPLATES;
 	foreach(scandir($path) as $file)
 	{
-		if($file[0] != '.' && $file != '..' && is_dir($path . $file))
+		if($file[0] !== '.' && $file !== '..' && is_dir($path . $file))
 			$ret[] = $file;
 	}
 
@@ -765,7 +767,7 @@ function get_plugins()
 	foreach(scandir($path) as $file) {
 		$file_ext = pathinfo($file, PATHINFO_EXTENSION);
 		$file_name = pathinfo($file, PATHINFO_FILENAME);
-		if ($file == '.' || $file == '..' || $file == 'disabled' || $file == 'example.json' || is_dir($path . $file) || $file_ext != 'json')
+		if ($file === '.' || $file === '..' || $file === 'disabled' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file))
 			continue;
 		
 		$ret[] = str_replace('.json', '', $file_name);
@@ -797,7 +799,7 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	global $mailer, $config;
 	if(!$mailer)
 	{
-		require(SYSTEM . 'libs/phpmailer/PHPMailerAutoload.php');
+		require SYSTEM . 'libs/phpmailer/PHPMailerAutoload.php';
 		$mailer = new PHPMailer();
 		$mailer->setLanguage('en', LIBS . 'phpmailer/language/');
 	}
@@ -871,9 +873,7 @@ function load_config_lua($filename)
 	}
 
 	$result = array();
-	$config_string = file_get_contents($filename);
-	$config_string = str_replace("\r\n", "\n", $config_string);
-	$config_string = str_replace("\r", "\n", $config_string);
+	$config_string = str_replace(array("\r\n", "\r"), "\n", file_get_contents($filename));
 	$lines = explode("\n", $config_string);
 	if(count($lines) > 0)
 		foreach($lines as $ln => $line)
@@ -984,12 +984,14 @@ function getTopPlayers($limit = 5) {
 				$query = $db->query('SELECT `player_id` FROM `players_online` WHERE `player_id` = ' . $player['id']);
 				$player['online'] = ($query->rowCount() > 0 ? 1 : 0);
 			}
+			unset($player);
 		}
 
 		$i = 0;
 		foreach($players as &$player) {
 			$player['rank'] = ++$i;
 		}
+		unset($player);
 		
 		if($cache->enabled())
 			$cache->set('top_' . $limit . '_level', serialize($players), 120);
@@ -1008,7 +1010,7 @@ function deleteDirectory($dir) {
 	}
 	
 	foreach(scandir($dir) as $item) {
-		if($item == '.' || $item == '..') {
+		if($item === '.' || $item === '..') {
 			continue;
 		}
 		
@@ -1021,6 +1023,6 @@ function deleteDirectory($dir) {
 }
 
 // validator functions
-require_once(LIBS . 'validator.php');
-require_once(SYSTEM . 'compat.php');
+require_once LIBS . 'validator.php';
+require_once SYSTEM . 'compat.php';
 ?>

@@ -30,7 +30,7 @@ define('MYAAC_VERSION', '0.8.0-dev');
 define('DATABASE_VERSION', 23);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
-define('MYAAC_OS', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'WINDOWS' : (strtoupper(PHP_OS) == 'DARWIN' ? 'MAC' : 'LINUX'));
+define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
 
 // account flags
 define('FLAG_ADMIN', 1);
@@ -54,7 +54,7 @@ define('TICKER', 2);
 define('ARTICLE', 3);
 
 // directories
-define('BASE', dirname(__FILE__) . '/');
+define('BASE', __DIR__ . '/');
 define('ADMIN', BASE . 'admin/');
 define('SYSTEM', BASE . 'system/');
 define('CACHE', SYSTEM . 'cache/');
@@ -87,16 +87,15 @@ define('TFS_LAST', TFS_03);
 // basedir
 $basedir = '';
 $tmp = explode('/', $_SERVER['SCRIPT_NAME']);
-$size = sizeof($tmp) - 1;
+$size = count($tmp) - 1;
 for($i = 1; $i < $size; $i++)
 	$basedir .= '/' . $tmp[$i];
 
-$basedir = str_replace('/admin', '', $basedir);
-$basedir = str_replace('/install', '', $basedir);
+$basedir = str_replace(array('/admin', '/install'), '', $basedir);
 define('BASE_DIR', $basedir);
 
 if(isset($_SERVER['HTTP_HOST'])) {
-	if (isset($_SERVER['HTTPS'][0]) && $_SERVER['HTTPS'] == 'on')
+	if (isset($_SERVER['HTTPS'][0]) && $_SERVER['HTTPS'] === 'on')
 		define('SERVER_URL', 'https://' . $_SERVER['HTTP_HOST']);
 	else
 		define('SERVER_URL', 'http://' . $_SERVER['HTTP_HOST']);
