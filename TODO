@@ -26,6 +26,9 @@
 	* plugin auto-update and check-version
 		* needs support from my-aac.org (plugins database)
 	* remove tibiacom template, and include it as a plugin
+	* add some strong password requirements when creating new account
+		* minimum one big letter, one small letter, digit and one special character?
+		* should be configurable
 
 2.0
 	* minimum PHP 7.0.0 required - use PHP 7 features
