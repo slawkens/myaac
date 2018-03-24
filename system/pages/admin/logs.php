@@ -28,29 +28,27 @@ foreach(scandir($aac_path_logs) as $f) {
 }
 
 $server_path_logs = $config['server_path'] . 'logs/';
-if(!file_exists($server_path_logs))
-$server_path_logs = $config['data_path'] . 'logs/';
-
 if(!file_exists($server_path_logs)) {
-	echo '</table>Logs are not available on this server.';
-	return;
+    $server_path_logs = $config['data_path'] . 'logs/';
 }
 
-foreach(scandir($server_path_logs) as $f) {
-	if($f[0] == '.' || $f == '..')
-		continue;
+if(file_exists($server_path_logs)) {
+	foreach(scandir($server_path_logs) as $f) {
+		if($f[0] == '.' || $f == '..')
+			continue;
 
-	if(is_dir($server_path_logs . $f)) {
-		foreach(scandir($server_path_logs . $f) as $f2) {
-			if($f2[0] == '.' || $f2 == '..')
-				continue;
-			$files[] = array($f . '/' . $f2, $server_path_logs);
+		if(is_dir($server_path_logs . $f)) {
+			foreach(scandir($server_path_logs . $f) as $f2) {
+				if($f2[0] == '.' || $f2 == '..')
+					continue;
+				$files[] = array($f . '/' . $f2, $server_path_logs);
+			}
+
+			continue;
 		}
 
-		continue;
+		$files[] = array($f, $server_path_logs);
 	}
-	
-	$files[] = array($f, $server_path_logs);
 }
 
 $i = 0;
