@@ -59,6 +59,7 @@
 		* use some modern and fast Routing library
 			* most preferably this one (inspired by Laravel) - https://github.com/skipperbent/simple-php-router
 	* configurable session handler: file, database, php
+	* change global variables pointing to classes like $db, $cache to Singleton Pattern
 
 x.x - At any time between (version not specified)
 	* better news archive with search function (like on tibia.com)
