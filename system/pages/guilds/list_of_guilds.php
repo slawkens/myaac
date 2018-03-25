@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 $GuildList = new OTS_Guilds_List();
+$GuildList->orderBy("name");
+
 $GuildListArray = array();
 
 foreach($GuildList as $Guild)
