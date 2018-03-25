@@ -1,0 +1,56 @@
+{% if guilds|length > 0 %}
+{% set rows = 0 %}
+<div class="TableContainer">
+	<div class="CaptionContainer">
+		<div class="CaptionInnerContainer">
+			<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+			<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+			<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+			<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+			<div class="Text">Active Guilds on {{ config.lua.serverName }}</div>
+			<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+			<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+			<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+			<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+		</div>
+	</div>
+	<table class="Table3" cellpadding="0" cellspacing="0">
+    <tr>
+      <td>
+        <div class="InnerTableContainer" >
+          <table style="width:100%;">
+            <tr>
+              <td>
+                <div class="TableContentAndRightShadow"> 
+                  <div class="TableContentContainer" >
+                    <table class="TableContent" style="width:100%;">
+                      <tr bgcolor="{{ getStyle(rows) }}">
+                        <td width="64px;"><b>Logo</b></td>
+                        <td><b>Description</b></td>
+                        <td width="56px;"></td>
+                      </tr>
+                      {% for guild in guilds %}
+                      {% set rows = rows + 1 %}
+                      <tr bgcolor="{{ getStyle(rows) }}">
+                        <td><img src="images/guilds/{{ guild.logo }}"></td>
+                        <td><b>{{ guild.name }}</b><br />{{ guild.description }}</td>
+                        <td><a href = "{{ guild.link }}">{{ include('buttons.view.html.twig') }}</a></td>
+                      </tr>
+                      {% endfor %}
+                    </table>
+                  </div>
+                </div>
+              </tr>
+            </td>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+{% endif %}
+<table>
+  <tr>
+    <td><a href="?subtopic=guilds&action=create">No guild found that suits your needs?</a></td>
+  </tr>
+</table>
