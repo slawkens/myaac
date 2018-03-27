@@ -11,6 +11,7 @@
 	* move highscores to twig
 	* migrations: option to downgrade the database
 	* create account: create character
+	* csrf token protection
 
 1.0
 	* mobile version
