@@ -50,12 +50,12 @@
 			* images/
 			* storage/ (all dynamic content like guild images)
 		* system/ (for php files, twig templates, locales and other classess)
-	* rename templates to layouts as templates is meant to be used for twig templates
+	* rename templates to themes as templates is meant to be used for twig templates
 	* change gifts_system to shop_system configurable
 	* move most used options in system/templates dir to separate directories (more transparent)
 	* move database fields to separate tables without modifing the OTServ schema (myaac_accounts, myaac_players)
 	* fundamental changes in Twig:
-		* add option to write layouts in Twig
+		* add option to write themes in Twig
 		* change twig global config variable to config('name') function
 			* this fixes when config gets updated at run-time
 		* change constants: BASE_URL to base_url(), USE_ACCOUNT_NAME to config
