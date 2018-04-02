@@ -154,13 +154,6 @@ $config = array(
 	'guild_description_lines_limit' => 6, // limit of lines, if description has more lines it will be showed as long text, without 'enters'
 	'guild_motd_chars_limit' => 150, // limit of MOTD (message of the day) that is shown later in the game on the guild channel
 
-	'quests' => array(), // quests list (displayed in character view), name => storage
-
-	'signature_enabled' => true,
-	'signature_type' => 'tibian', // signature engine to use: tibian, mango, gesior
-	'signature_cache_time' => 5, // how long to store cached file (in minutes), default 5 minutes
-	'signature_browser_cache' => 60, // how long to cache by browser (in minutes), default 1 hour
-
 	// online page
 	'online_record' => true, // display players record?
 	'online_vocations' => false, // display vocation statistics?
@@ -203,6 +196,11 @@ $config = array(
 		'equipment' => true,
 		'frags' => false
 	),
+	'quests' => array(), // quests list (displayed in character view), name => storage
+	'signature_enabled' => true,
+	'signature_type' => 'tibian', // signature engine to use: tibian, mango, gesior
+	'signature_cache_time' => 5, // how long to store cached file (in minutes), default 5 minutes
+	'signature_browser_cache' => 60, // how long to cache by browser (in minutes), default 1 hour
 
 	// news page
 	'news_limit' => 5, // limit of news on the latest news page
