@@ -19,6 +19,8 @@
 		* inside templates/mobile
 		* using Mobile_Detect.php library
 	* i18n support (issue #1 on github)
+		* use some web-based translation tools
+			* most preferably https://weblate.org
 	* New Admin Panel layout and interface
 		* most preferably: https://adminlte.io/
 		* move all pages administration to this panel (like faq, forum, newses)
