@@ -14,6 +14,10 @@
 	* csrf token protection
 
 1.0
+	* use Composer for additional libraries
+		* Twig 1.x
+		* PHPMailer 5.x
+		* semver
 	* mobile version
 		* switch do desktop/mobile version link
 		* inside templates/mobile
@@ -36,9 +40,6 @@
 2.0
 	* minimum PHP 7.0.0 required - use PHP 7 features
 		* remove cache engines that are not supported by this version of PHP
-	* use Composer for additional libraries
-		* Twig 2.x
-		* PHPMailer 6.x
 	* remove signatures, creature images (make a separate plugins for them) - this way we save 2.5mb of space
 	* remove gesior backward support
 	* remove compat functions
