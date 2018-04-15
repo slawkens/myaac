@@ -12,6 +12,7 @@
 	* migrations: option to downgrade the database
 	* create account: create character
 	* csrf token protection
+	* team page - display outfits of the players (configurable)
 
 1.0
 	* use Composer for additional libraries
