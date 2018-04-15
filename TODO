@@ -30,6 +30,16 @@
 			* more examples: https://themes.getbootstrap.com/product-category/admin-dashboard/
 			* nice charts: http://www.chartjs.org/
 	* use bootstrap (https://getbootstrap.com/) for front end elements
+	* extend forum
+		* use avatars or player outfits (configurable)
+		* colorful nicknames for different groups
+		* profile page
+			* change signature
+			* update avatar
+		* member since (in forum post)
+		* better looking pagination (bootstrap) + configurable for each template (look: laravel)
+		* go to the last post
+		* select icon for the topic
 	* save plugin configuration in database
 		* table name: myaac_config_plugins, columns: plugin, name, type, default, required, extra (json data, like options for select)
 	* plugin auto-update and check-version
@@ -39,6 +49,7 @@
 		* minimum one big letter, one small letter, digit and one special character?
 		* should be configurable
 	* change /characters/First+Second to /characters/First_Second
+	* remove all copy-writed content
 
 2.0
 	* minimum PHP 7.0.0 required - use PHP 7 features
@@ -87,3 +98,4 @@ x.x - At any time between (version not specified)
 	* database towns table support for TFS 1.3
 	* two factor authentication for TFS 1.x
 	* support for .yml plugin file specification
+	* (configurable) auto login after registration
