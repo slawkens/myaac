@@ -18,16 +18,17 @@
 		* Twig 1.x
 		* PHPMailer 5.x
 		* semver
-	* mobile version
-		* switch do desktop/mobile version link
-		* inside templates/mobile
-		* using Mobile_Detect.php library
 	* i18n support (issue #1 on github)
 		* use some web-based translation tools
 			* most preferably https://weblate.org
 	* New Admin Panel layout and interface
-		* most preferably: https://adminlte.io/
+		* https://coreui.io/
 		* move all pages administration to this panel (like faq, forum, newses)
+		* useful resources
+			* another free: https://adminlte.io/
+			* more examples: https://themes.getbootstrap.com/product-category/admin-dashboard/
+			* nice charts: http://www.chartjs.org/
+	* use bootstrap (https://getbootstrap.com/) for front end elements
 	* save plugin configuration in database
 		* table name: myaac_config_plugins, columns: plugin, name, type, default, required, extra (json data, like options for select)
 	* plugin auto-update and check-version
@@ -36,6 +37,7 @@
 	* add some strong password requirements when creating new account
 		* minimum one big letter, one small letter, digit and one special character?
 		* should be configurable
+	* change /characters/First+Second to /characters/First_Second
 
 2.0
 	* minimum PHP 7.0.0 required - use PHP 7 features
@@ -67,6 +69,10 @@
 			* most preferably this one (inspired by Laravel) - https://github.com/skipperbent/simple-php-router
 	* configurable session handler: file, database, php
 	* change global variables pointing to classes like $db, $cache to Singleton Pattern
+	* mobile version
+		* switch do desktop/mobile version link
+		* inside templates/mobile
+		* using Mobile_Detect.php library
 
 x.x - At any time between (version not specified)
 	* better news archive with search function (like on tibia.com)
