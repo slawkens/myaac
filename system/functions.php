@@ -904,6 +904,10 @@ function load_config_lua($filename)
 						$result[$key] = (string) substr(substr($value, 1), 0, -1);
 					elseif(in_array($value, array('true', 'false')))
 						$result[$key] = ($value == 'true') ? true : false;
+					elseif(substr($value, 0 , 1) == '{' && substr($value, -1 , 1) == '}') {
+						// arrays are not supported yet
+						// just ignore the error
+					}
 					else
 					{
 						foreach($result as $tmp_key => $tmp_value) // load values definied by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
