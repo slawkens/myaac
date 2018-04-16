@@ -36,7 +36,7 @@ if(isset($_REQUEST['template'])) {
 					continue;
 				
 				try {
-					$db->insert(TABLE_PREFIX . 'menu', array('template' => $template, 'name' => $menu, 'link' => $post_menu_link[$category][$i], 'blank' => $post_menu_blank[$category][$i] == 'on', 'color' => str_replace('#', '', $post_menu_color[$category][$i]), 'category' => $category, 'ordering' => $i));
+					$db->insert(TABLE_PREFIX . 'menu', array('template' => $template, 'name' => $menu, 'link' => $post_menu_link[$category][$i], 'blank' => $post_menu_blank[$category][$i] == 'on' ? 1 : 0, 'color' => str_replace('#', '', $post_menu_color[$category][$i]), 'category' => $category, 'ordering' => $i));
 				}
 				catch(PDOException $error) {
 					warning('Error while adding menu item (' . $menu . '): ' . $error->getMessage());
