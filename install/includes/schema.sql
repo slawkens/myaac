@@ -148,7 +148,7 @@ CREATE TABLE `myaac_menu`
 	`name` VARCHAR(255) NOT NULL,
 	`link` VARCHAR(255) NOT NULL,
 	`blank` TINYINT(1) NOT NULL DEFAULT 0,
-	`color` CHAR(6) NOT NULL DEFAULT '',
+	`color` VARCHAR(6) NOT NULL DEFAULT '',
 	`category` INT(11) NOT NULL DEFAULT 1,
 	`ordering` INT(11) NOT NULL DEFAULT 0,
 	`enabled` INT(1) NOT NULL DEFAULT 1,
