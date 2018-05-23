@@ -19,12 +19,14 @@ $newchar_town = isset($_POST['town']) ? $_POST['town'] : NULL;
 $newchar_created = false;
 $save = isset($_POST['save']) && $_POST['save'] == 1;
 if($save) {
+	$minLength = $config['min_length'];
+	$maxLength = $config['maxinum_length'];
 	if(empty($newchar_name))
 		$errors['name'] = 'Please enter a name for your character!';
-	else if(strlen($newchar_name) > 21)
-		$errors['name'] = 'Name is too long. Max. lenght <b>21</b> letters.';
-	else if(strlen($newchar_name) < 4)
-		$errors['name'] = 'Name is too short. Min. lenght <b>4</b> letters.';
+	else if(strlen($newchar_name) > $maxLength)
+		$errors['name'] = 'Name is too long. Max. lenght <b>'.$maxLength.'</b> letters.';
+	else if(strlen($newchar_name) < $minLength)
+		$errors['name'] = 'Name is too short. Min. lenght <b>'.$minLength.'</b> letters.';
 	else {
 		if(!admin() && !Validator::newCharacterName($newchar_name)) {
 			$errors['name'] = Validator::getLastError();
