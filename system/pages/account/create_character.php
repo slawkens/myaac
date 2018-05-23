@@ -21,25 +21,25 @@ $save = isset($_POST['save']) && $_POST['save'] == 1;
 if($save) {
 	if(empty($newchar_name))
 		$errors['name'] = 'Please enter a name for your character!';
-	else if(strlen($newchar_name) > 25)
-		$errors['name'] = 'Name is too long. Max. lenght <b>25</b> letters.';
-	else if(strlen($newchar_name) < 3)
-		$errors['name'] = 'Name is too short. Min. lenght <b>3</b> letters.';
+	else if(strlen($newchar_name) > 21)
+		$errors['name'] = 'Name is too long. Max. lenght <b>21</b> letters.';
+	else if(strlen($newchar_name) < 4)
+		$errors['name'] = 'Name is too short. Min. lenght <b>4</b> letters.';
 	else {
 		if(!admin() && !Validator::newCharacterName($newchar_name)) {
 			$errors['name'] = Validator::getLastError();
 		}
-		
+
 		$exist = new OTS_Player();
 		$exist->find($newchar_name);
 		if($exist->isLoaded()) {
 			$errors['name'] = 'Character with this name already exist.';
 		}
 	}
-	
+
 	if(empty($newchar_sex) && $newchar_sex != "0")
 		$errors[] = 'Please select the sex for your character!';
-	
+
 	if(count($config['character_samples']) > 1)
 	{
 		if(!isset($newchar_vocation))
@@ -47,7 +47,7 @@ if($save) {
 	}
 	else
 		$newchar_vocation = $config['character_samples'][0];
-	
+
 	if(count($config['character_towns']) > 1) {
 		if(!isset($newchar_town))
 			$errors[] = 'Please select a town for your character.';
@@ -55,7 +55,7 @@ if($save) {
 	else {
 		$newchar_town = $config['character_towns'][0];
 	}
-	
+
 	if(empty($errors)) {
 		if(!isset($config['genders'][$newchar_sex]))
 			$errors[] = 'Sex is invalid.';
@@ -73,14 +73,14 @@ if($save) {
 		else
 			$newchar_vocation = 0;
 	}
-	
+
 	if(empty($errors))
 	{
 		$number_of_players_on_account = $account_logged->getPlayersList()->count();
 		if($number_of_players_on_account >= $config['characters_per_account'])
 			$errors[] = 'You have too many characters on your account <b>('.$number_of_players_on_account.'/'.$config['characters_per_account'].')</b>!';
 	}
-	
+
 	if(empty($errors))
 	{
 		$char_to_copy_name = $config['character_samples'][$newchar_vocation];
@@ -89,7 +89,7 @@ if($save) {
 		if(!$char_to_copy->isLoaded())
 			$errors[] = 'Wrong characters configuration. Try again or contact with admin. ADMIN: Edit file config/config.php and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
 	}
-	
+
 	if(empty($errors))
 	{
 		if($newchar_sex == "0")
@@ -104,19 +104,19 @@ if($save) {
 		$player->setVocation($char_to_copy->getVocation());
 		if($db->hasColumn('players', 'promotion'))
 			$player->setPromotion($char_to_copy->getPromotion());
-		
+
 		if($db->hasColumn('players', 'direction'))
 			$player->setDirection($char_to_copy->getDirection());
-		
+
 		$player->setConditions($char_to_copy->getConditions());
 		$rank = $char_to_copy->getRank();
 		if($rank->isLoaded()) {
 			$player->setRank($char_to_copy->getRank());
 		}
-		
+
 		if($db->hasColumn('players', 'lookaddons'))
 			$player->setLookAddons($char_to_copy->getLookAddons());
-		
+
 		$player->setTownId($newchar_town);
 		$player->setExperience($char_to_copy->getExperience());
 		$player->setLevel($char_to_copy->getLevel());
@@ -127,10 +127,10 @@ if($save) {
 		$player->setManaMax($char_to_copy->getManaMax());
 		$player->setManaSpent($char_to_copy->getManaSpent());
 		$player->setSoul($char_to_copy->getSoul());
-		
+
 		for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++)
 			$player->setSkill($skill, 10);
-		
+
 		$player->setLookBody($char_to_copy->getLookBody());
 		$player->setLookFeet($char_to_copy->getLookFeet());
 		$player->setLookHead($char_to_copy->getLookHead());
@@ -155,17 +155,17 @@ if($save) {
 			$player->setLossItems($char_to_copy->getLossItems());
 			$player->setLossContainers($char_to_copy->getLossContainers());
 		}
-		
+
 		$player->save();
 		$player->setCustomField("created", time());
-		
+
 		$newchar_created = true;
 		$account_logged->logAction('Created character <b>' . $player->getName() . '</b>.');
 		unset($player);
-		
+
 		$player = new OTS_Player();
 		$player->find($newchar_name);
-		
+
 		if($player->isLoaded()) {
 			if($db->hasTable('player_skills')) {
 				for($i=0; $i<7; $i++) {
@@ -175,11 +175,11 @@ if($save) {
 					}
 				}
 			}
-			
+
 			$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = ".$char_to_copy->getId()."");
 			foreach($loaded_items_to_copy as $save_item)
 				$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', '".$save_item['attributes']."');");
-			
+
 			echo $twig->render('success.html.twig', array(
 				'title' => 'Character Created',
 				'description' => 'The character <b>' . $newchar_name . '</b> has been created.<br/>
