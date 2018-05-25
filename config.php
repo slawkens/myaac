@@ -140,9 +140,9 @@ $config = array(
 	'character_towns' => array(1),
 
 	// characters lenght
-	// This is the mininum and the maxinum length that a player can create a character. It is highly recommend the maxinum lenght be 21.
-	'min_length' => 4,
-	'maxinum_length' => 21
+	// This is the minimum and the maximum length that a player can create a character. It is highly recommend the maximum lenght be 21.
+	'character_name_min_length' => 4,
+	'character_name_max_length' => 21
 
 	// list of towns
 	'towns' => array(

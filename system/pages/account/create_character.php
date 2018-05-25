@@ -19,8 +19,9 @@ $newchar_town = isset($_POST['town']) ? $_POST['town'] : NULL;
 $newchar_created = false;
 $save = isset($_POST['save']) && $_POST['save'] == 1;
 if($save) {
-	$minLength = $config['min_length'];
-	$maxLength = $config['maxinum_length'];
+	$minLength = $config['character_name_min_length'];
+	$maxLength = $config['character_name_max_length'];
+
 	if(empty($newchar_name))
 		$errors['name'] = 'Please enter a name for your character!';
 	else if(strlen($newchar_name) > $maxLength)
