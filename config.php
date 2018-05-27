@@ -125,7 +125,7 @@ $config = array(
 		0 => 'Female',
 		1 => 'Male'
 	),
-	
+
 	// new character config
 	'character_samples' => array( // vocations, format: ID_of_vocation => 'Name of Character to copy'
 		//0 => 'Rook Sample',
@@ -138,6 +138,11 @@ $config = array(
 	// town list used when creating character
 	// won't be displayed if there is only one item (rookgaard for example)
 	'character_towns' => array(1),
+
+	// characters lenght
+	// This is the minimum and the maximum length that a player can create a character. It is highly recommend the maximum lenght be 21.
+	'character_name_min_length' => 4,
+	'character_name_max_length' => 21
 
 	// list of towns
 	'towns' => array(
@@ -210,10 +215,10 @@ $config = array(
 
 	// gifts/shop system
 	'gifts_system' => false,
-	
+
 	// support/system
 	'bug_report' => true, // this configurable has no effect, its always enabled
-	
+
 	// forum
 	'forum' => 'site', // link to the server forum, set to "site" if you want to use build in forum system, otherwise leave empty if you aren't going to use any forum
 	'forum_level_required' => 0, // level required to post, 0 to disable
@@ -235,7 +240,7 @@ $config = array(
 	'experiencetable_columns' => 5, // how many columns to display in experience table page. * experiencetable_rows, 5 = 500 (will show up to 500 level)
 	'experiencetable_rows' => 100, // till how many levels in one column
 	'date_timezone' => 'Europe/Berlin', // more info at http://php.net/manual/en/timezones.php
-	
+
 	'monsters' => array(),
 	'npc' => array()
 );
