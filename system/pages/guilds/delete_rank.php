@@ -59,7 +59,7 @@ if(empty($guild_errors)) {
 							$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 						else
 							$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
-						
+
 						$players_with_rank_number = $players_with_rank->rowCount();
 						if($players_with_rank_number > 0) {
 							foreach($rank_list as $checkrank) {
@@ -69,7 +69,7 @@ if(empty($guild_errors)) {
 									}
 								}
 							}
-							
+
 							if(empty($new_rank)) {
 								$new_rank = new OTS_GuildRank();
 								$new_rank->setGuild($guild);
@@ -87,16 +87,16 @@ if(empty($guild_errors)) {
 				}
 			}
 			if($saved) {
-				echo $twig->render('success.html.twig', array(
+				$twig->display('success.html.twig', array(
 					'title' => 'Rank Deleted',
 					'description' => 'Rank <b>'.$rank->getName().'</b> has been deleted. Players with this rank has now other rank.',
 					'custom_buttons' => ''
 				));
 			} else {
-				echo $twig->render('error_box.html.twig', array('errors' => $guild_errors2));
+				$twig->display('error_box.html.twig', array('errors' => $guild_errors2));
 			}
-			
-			echo $twig->render('guilds.back_button.html.twig', array(
+
+			$twig->display('guilds.back_button.html.twig', array(
 				'new_line' => true,
 				'action' => '?subtopic=guilds&guild='.$guild->getName().'&action=manager'
 			));
@@ -112,9 +112,9 @@ if(empty($guild_errors)) {
 	}
 }
 if(!empty($guild_errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
-	
-	echo $twig->render('guilds.back_button.html.twig', array(
+	$twig->display('error_box.html.twig', array('errors' => $guild_errors));
+
+	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
 		'action' => '?subtopic=guilds'
 	));

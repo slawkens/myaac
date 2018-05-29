@@ -16,18 +16,18 @@ if($canEdit) {
 		if (!empty($action)) {
 			if ($action == 'delete' || $action == 'edit' || $action == 'hide' || $action == 'moveup' || $action == 'movedown')
 				$id = $_REQUEST['id'];
-			
+
 			if (isset($_REQUEST['comment']))
 				$comment = stripslashes($_REQUEST['comment']);
-			
+
 			if (isset($_REQUEST['image']))
 				$image = $_REQUEST['image'];
-			
+
 			if (isset($_REQUEST['author']))
 				$author = $_REQUEST['author'];
-			
+
 			$errors = array();
-			
+
 			if ($action == 'add') {
 				if (Gallery::add($comment, $image, $author, $errors))
 					$comment = $image = $author = '';
@@ -50,13 +50,13 @@ if($canEdit) {
 			} else if ($action == 'movedown') {
 				Gallery::move($id, 1, $errors);
 			}
-			
+
 			if (!empty($errors))
-				echo $twig->render('error_box.html.twig', array('errors' => $errors));
+				$twig->display('error_box.html.twig', array('errors' => $errors));
 		}
-		
+
 		if(!isset($_GET['image'])) {
-			echo $twig->render('gallery.form.html.twig', array(
+			$twig->display('gallery.form.html.twig', array(
 				'link' => getLink('gallery/' . ($action == 'edit' ? 'edit' : 'add')),
 				'action' => $action,
 				'id' => isset($id) ? $id : null,
@@ -92,8 +92,8 @@ if(isset($_GET['image']))
 		$next_image = $next_image->fetch();
 	else
 		$next_image = NULL;
-	
-	echo $twig->render('gallery.get.html.twig', array(
+
+	$twig->display('gallery.get.html.twig', array(
 		'previous' => $previous_image ? $previous_image['id'] : null,
 		'next' => $next_image ? $next_image['id'] : null,
 		'image' => $image
@@ -117,7 +117,7 @@ if(!$last)
 	return;
 }
 
-echo $twig->render('gallery.html.twig', array(
+$twig->display('gallery.html.twig', array(
 	'images' => $images,
 	'last' => $last,
 	'canEdit' => $canEdit
@@ -136,13 +136,13 @@ class Gallery
 					' FROM `' . TABLE_PREFIX . 'gallery`' .
 					' ORDER BY `ordering`' . ' DESC LIMIT 1'
 				);
-			
+
 			$ordering = 0;
 			if($query->rowCount() > 0) {
 				$query = $query->fetch();
 				$ordering = $query['ordering'] + 1;
 			}
-			
+
 			$pathinfo = pathinfo($image);
 			$extension = strtolower($pathinfo['extension']);
 			$thumb_filename = 'images/gallery/' . $pathinfo['filename'] . '_thumb.' . $extension;
@@ -158,22 +158,22 @@ class Gallery
 		}
 		else
 			$errors[] = 'Please fill all inputs.';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function get($id) {
 		global $db;
 		return $db->select(TABLE_PREFIX . 'gallery', array('id' => $id));
 	}
-	
+
 	static public function update($id, $comment, $image, $author) {
 		global $db;
-		
+
 		$pathinfo = pathinfo($image);
 		$extension = strtolower($pathinfo['extension']);
 		$filename = 'images/gallery/' . $pathinfo['filename'] . '.' . $extension;
-		
+
 		if($db->update(TABLE_PREFIX . 'gallery', array(
 			'comment' => $comment,
 			'image' => $filename, 'author' => $author),
@@ -183,7 +183,7 @@ class Gallery
 				self::resize($image, 650, 500, $filename, $errors);
 		}
 	}
-	
+
 	static public function delete($id, &$errors)
 	{
 		global $db;
@@ -196,10 +196,10 @@ class Gallery
 		}
 		else
 			$errors[] = 'id not set';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function toggleHidden($id, &$errors)
 	{
 		global $db;
@@ -213,10 +213,10 @@ class Gallery
 		}
 		else
 			$errors[] = 'id not set';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function move($id, $i, &$errors)
 	{
 		global $db;
@@ -227,20 +227,20 @@ class Gallery
 			$old_record = $db->select(TABLE_PREFIX . 'gallery', array('ordering' => $ordering));
 			if($old_record !== false)
 				$db->update(TABLE_PREFIX . 'gallery', array('ordering' => $query['ordering']), array('ordering' => $ordering));
-			
+
 			$db->update(TABLE_PREFIX . 'gallery', array('ordering' => $ordering), array('id' => $id));
 		}
 		else
 			$errors[] = 'Image with id ' . $id . ' does not exists.';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function resize($file, $new_width, $new_height, $new_file, &$errors)
 	{
 		$pathinfo = pathinfo($file);
 		$extension = strtolower($pathinfo['extension']);
-		
+
 		switch ($extension)
 		{
 			case 'gif': // GIF
@@ -257,45 +257,45 @@ class Gallery
 				$errors[] = 'Unsupported file format.';
 				return false;
 		}
-		
+
 		$width = imagesx($image);
 		$height = imagesy($image);
-		
+
 		// create a new temporary image
 		$tmp_img = imagecreatetruecolor($new_width, $new_height);
-		
+
 		// copy and resize old image into new image
 		imagecopyresized($tmp_img, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-		
+
 		// save thumbnail into a file
 		switch($extension)
 		{
 			case 'gif':
 				imagegif($tmp_img, $new_file);
 				break;
-			
+
 			case 'jpg':
 			case 'jpeg':
 				imagejpeg($tmp_img, $new_file);
 				break;
-			
+
 			case 'png':
 				imagepng($tmp_img, $new_file);
 				break;
 		}
-		
+
 		return true;
 	}
-	
+
 	static public function generateThumb($id, $file, &$errors)
 	{
 		$pathinfo = pathinfo($file);
 		$extension = strtolower($pathinfo['extension']);
 		$thumb_filename = 'images/gallery/' . $pathinfo['filename'] . '_thumb.' . $extension;
-		
+
 		if(!self::resize($file, 170, 110, $thumb_filename, $errors))
 			return false;
-		
+
 		global $db;
 		if(isset($id))
 		{
@@ -307,7 +307,7 @@ class Gallery
 		}
 		else
 			$errors[] = 'id not set';
-		
+
 		return !count($errors);
 	}
 }

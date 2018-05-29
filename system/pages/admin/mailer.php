@@ -30,14 +30,14 @@ $preview_done = false;
 if($preview) {
 	if(!empty($mail_content) && !empty($mail_subject)) {
 		$preview_done = _mail($account_logged->getCustomField('email'), $mail_subject, $mail_content);
-		
+
 		if(!$preview_done)
 			error('Error while sending preview mail: ' . $mailer->ErrorInfo);
 	}
 }
 
 
-echo $twig->render('admin.mailer.html.twig', array(
+$twig->display('admin.mailer.html.twig', array(
 	'mail_subject' => $mail_subject,
 	'mail_content' => $mail_content,
 	'preview_done' => $preview_done

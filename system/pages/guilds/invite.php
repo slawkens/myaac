@@ -45,7 +45,7 @@ if(empty($errors)) {
 						$guild_vice = true;
 						$level_in_guild = $player_rank->getLevel();
 					}
-					
+
 					if($guild->getOwner()->getId() == $player->getId()) {
 						$guild_vice = true;
 						$guild_leader = true;
@@ -64,7 +64,7 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 	if(!Validator::characterName($name)) {
 		$errors[] = 'Invalid name format.';
 	}
-	
+
 	if(empty($errors)) {
 		$player = new OTS_Player();
 		$player->find($name);
@@ -95,23 +95,23 @@ if(empty($errors)) {
 
 $show = true;
 if(!empty($errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 }
 else {
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$guild->invite($player);
-		echo $twig->render('success.html.twig', array(
+		$twig->display('success.html.twig', array(
 			'title' => 'Invite player',
 			'description' => 'Player with name <b>' . $player->getName() . '</b> has been invited to your guild.',
 			'custom_buttons' => ''
 		));
-		
+
 		$show = false;
 	}
 }
 
 if($show) {
-	echo $twig->render('success.html.twig', array(
+	$twig->display('success.html.twig', array(
 		'title' => 'Invite player',
 		'description' => $twig->render('guilds.invite.html.twig', array(
 			'guild_name' => $guild->getName()
@@ -120,6 +120,6 @@ if($show) {
 	));
 }
 
-echo $twig->render('guilds.back_button.html.twig', array(
+$twig->display('guilds.back_button.html.twig', array(
 	'action' => getLink('guilds') . '/' . $guild_name
 ));

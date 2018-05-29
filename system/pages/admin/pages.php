@@ -84,7 +84,7 @@ if(!empty($action))
 	}
 
 	if(!empty($errors))
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		$twig->display('error_box.html.twig', array('errors' => $errors));
 }
 
 $query =
@@ -100,7 +100,7 @@ foreach($query as $_page) {
 	);
 }
 
-echo $twig->render('admin.pages.form.html.twig', array(
+$twig->display('admin.pages.form.html.twig', array(
 	'action' => $action,
 	'id' => $action == 'edit' ? $id : null,
 	'name' => $name,
@@ -111,7 +111,7 @@ echo $twig->render('admin.pages.form.html.twig', array(
 	'access' => $access
 ));
 
-echo $twig->render('admin.pages.html.twig', array(
+$twig->display('admin.pages.html.twig', array(
 	'pages' => $pages
 ));
 

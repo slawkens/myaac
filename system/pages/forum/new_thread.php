@@ -19,7 +19,7 @@ if(Forum::canPost($account_logged))
 		if(isset($sections[$section_id]['name']) && Forum::hasAccess($section_id)) {
 			if ($sections[$section_id]['closed'] && !Forum::isModerator())
 				$errors[] = 'You cannot create topic on this board.';
-			
+
 			$quote = (int)(isset($_REQUEST['quote']) ? $_REQUEST['quote'] : 0);
 			$text = isset($_REQUEST['text']) ? stripslashes($_REQUEST['text']) : '';
 			$char_id = (int)(isset($_REQUEST['char_id']) ? $_REQUEST['char_id'] : 0);
@@ -29,7 +29,7 @@ if(Forum::canPost($account_logged))
 			$saved = false;
 			if (isset($_REQUEST['save'])) {
 				$errors = array();
-				
+
 				$lenght = 0;
 				for ($i = 0; $i < strlen($post_topic); $i++) {
 					if (ord($post_topic[$i]) >= 33 && ord($post_topic[$i]) <= 126)
@@ -44,11 +44,11 @@ if(Forum::canPost($account_logged))
 				}
 				if ($lenght < 1 || strlen($text) > 15000)
 					$errors[] = 'Too short or too long post (short: ' . $lenght . ' long: ' . strlen($text) . ' letters). Minimum 1 letter, maximum 15000 letters.';
-				
+
 				if ($char_id == 0)
 					$errors[] = 'Please select a character.';
 				$player_on_account = false;
-				
+
 				if (count($errors) == 0) {
 					foreach ($players_from_account as $player)
 						if ($char_id == $player['id'])
@@ -56,7 +56,7 @@ if(Forum::canPost($account_logged))
 					if (!$player_on_account)
 						$errors[] = 'Player with selected ID ' . $char_id . ' doesn\'t exist or isn\'t on your account';
 				}
-				
+
 				if (count($errors) == 0) {
 					$last_post = 0;
 					$query = $db->query('SELECT `post_date` FROM `' . TABLE_PREFIX . 'forum` ORDER BY `post_date` DESC LIMIT 1');
@@ -76,12 +76,12 @@ if(Forum::canPost($account_logged))
 					echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id) . '">GO BACK TO LAST THREAD</a>';
 				}
 			}
-			
+
 			if (!$saved) {
 				if (!empty($errors))
-					echo $twig->render('error_box.html.twig', array('errors' => $errors));
-				
-				echo $twig->render('forum.new_thread.html.twig', array(
+					$twig->display('error_box.html.twig', array('errors' => $errors));
+
+				$twig->display('forum.new_thread.html.twig', array(
 					'section_id' => $section_id,
 					'players' => $players_from_account,
 					'post_player_id' => $char_id,

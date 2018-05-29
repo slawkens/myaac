@@ -55,9 +55,9 @@ if(empty($errors)) {
 		}
 	}
 	if(!empty($errors)) {
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
-		
-		echo $twig->render('guilds.back_button.html.twig', array(
+		$twig->display('error_box.html.twig', array('errors' => $errors));
+
+		$twig->display('guilds.back_button.html.twig', array(
 			'new_line' => true,
 			'action' => '?subtopic=guilds&guild='.$guild_name.'&action=show'
 		));
@@ -66,9 +66,9 @@ if(empty($errors)) {
 else
 {
 	if(!empty($errors)) {
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
-		
-		echo $twig->render('guilds.back_button.html.twig', array(
+		$twig->display('error_box.html.twig', array('errors' => $errors));
+
+		$twig->display('guilds.back_button.html.twig', array(
 			'new_line' => true
 		));
 	}

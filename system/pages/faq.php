@@ -17,15 +17,15 @@ if($canEdit)
 	{
 		if($action == 'delete' || $action == 'edit' || $action == 'hide' || $action == 'moveup' || $action == 'movedown')
 			$id = $_REQUEST['id'];
-		
+
 		if(isset($_REQUEST['question']))
 			$question = $_REQUEST['question'];
-		
+
 		if(isset($_REQUEST['answer']))
 			$answer = stripslashes($_REQUEST['answer']);
-		
+
 		$errors = array();
-		
+
 		if($action == 'add') {
 			if(FAQ::add($question, $answer, $errors))
 				$question = $answer = '';
@@ -54,12 +54,12 @@ if($canEdit)
 		else if($action == 'movedown') {
 			FAQ::move($id, 1, $errors);
 		}
-		
+
 		if(!empty($errors))
-			echo $twig->render('error_box.html.twig', array('errors' => $errors));
+			$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
-	
-	echo $twig->render('faq.form.html.twig', array(
+
+	$twig->display('faq.form.html.twig', array(
 		'link' => getLink('faq/' . ($action == 'edit' ? 'edit' : 'add')),
 		'action' => $action,
 		'id' => isset($id) ? $id : null,
@@ -83,7 +83,7 @@ if(!$faqs->rowCount())
 }
 
 $last = $faqs->rowCount();
-echo $twig->render('faq.html.twig', array(
+$twig->display('faq.html.twig', array(
 	'faqs' => $faqs,
 	'last' => $last,
 	'canEdit' => $canEdit
@@ -97,7 +97,7 @@ class FAQ
 		if(isset($question[0]) && isset($answer[0]))
 		{
 			$query = $db->select(TABLE_PREFIX . 'faq', array('question' => $question));
-			
+
 			if($query === false)
 			{
 				$query =
@@ -106,7 +106,7 @@ class FAQ
 						' FROM ' . $db->tableName(TABLE_PREFIX . 'faq') .
 						' ORDER BY ' . $db->fieldName('ordering') . ' DESC LIMIT 1'
 					);
-				
+
 				$ordering = 0;
 				if($query->rowCount() > 0) {
 					$query = $query->fetch();
@@ -119,20 +119,20 @@ class FAQ
 		}
 		else
 			$errors[] = 'Please fill all inputs.';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function get($id) {
 		global $db;
 		return $db->select(TABLE_PREFIX . 'faq', array('id' => $id));
 	}
-	
+
 	static public function update($id, $question, $answer) {
 		global $db;
 		$db->update(TABLE_PREFIX . 'faq', array('question' => $question, 'answer' => $answer), array('id' => $id));
 	}
-	
+
 	static public function delete($id, &$errors)
 	{
 		global $db;
@@ -145,10 +145,10 @@ class FAQ
 		}
 		else
 			$errors[] = 'id not set';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function toggleHidden($id, &$errors)
 	{
 		global $db;
@@ -162,10 +162,10 @@ class FAQ
 		}
 		else
 			$errors[] = 'id not set';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function move($id, $i, &$errors)
 	{
 		global $db;
@@ -176,12 +176,12 @@ class FAQ
 			$old_record = $db->select(TABLE_PREFIX . 'faq', array('ordering' => $ordering));
 			if($old_record !== false)
 				$db->update(TABLE_PREFIX . 'faq', array('ordering' => $query['ordering']), array('ordering' => $ordering));
-			
+
 			$db->update(TABLE_PREFIX . 'faq', array('ordering' => $ordering), array('id' => $id));
 		}
 		else
 			$errors[] = 'FAQ with id ' . $id . ' does not exists.';
-		
+
 		return !count($errors);
 	}
 }

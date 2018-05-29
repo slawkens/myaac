@@ -13,7 +13,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 if(!$logged)
 {
 	echo "You are not logged in.";
-	echo $twig->render('guilds.back_button.html.twig');
+	$twig->display('guilds.back_button.html.twig');
 	return;
 }
 
@@ -50,7 +50,7 @@ if(count($players_list) > 0)
 				$player->setGuildNick('');
 				$changed_ranks_of[] = $player->getName();
 			}
-			
+
 		}
 	}
 	echo "<b>Deleted ranks (this ranks guilds doesn't exist [bug fix]):</b>";
@@ -64,6 +64,6 @@ if(count($players_list) > 0)
 }
 else
 	echo "0 players found.";
-	
-echo $twig->render('guilds.back_button.html.twig');
+
+$twig->display('guilds.back_button.html.twig');
 ?>

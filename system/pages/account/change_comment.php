@@ -25,7 +25,7 @@ if($player_name != null) {
 					$player->setCustomField("hidden", $new_hideacc);
 					$player->setCustomField("comment", $new_comment);
 					$account_logged->logAction('Changed comment for character <b>' . $player->getName() . '</b>.');
-					echo $twig->render('success.html.twig', array(
+					$twig->display('success.html.twig', array(
 						'title' => 'Character Information Changed',
 						'description' => 'The character information has been changed.'
 					));
@@ -47,11 +47,11 @@ else {
 
 if($show_form) {
 	if(!empty($errors)) {
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
-	
+
 	if(isset($player)) {
-		echo $twig->render('account.change_comment.html.twig', array(
+		$twig->display('account.change_comment.html.twig', array(
 			'player' => $player
 		));
 	}

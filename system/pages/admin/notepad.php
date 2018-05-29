@@ -27,7 +27,7 @@ else
 		$_content = $notepad_content;
 }
 
-echo $twig->render('admin.notepad.html.twig', array('content' => isset($_content) ? $_content : null));
+$twig->display('admin.notepad.html.twig', array('content' => isset($_content) ? $_content : null));
 
 class Notepad
 {

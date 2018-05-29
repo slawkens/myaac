@@ -183,7 +183,7 @@ if($save) {
 			foreach($loaded_items_to_copy as $save_item)
 				$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', '".$save_item['attributes']."');");
 
-			echo $twig->render('success.html.twig', array(
+			$twig->display('success.html.twig', array(
 				'title' => 'Character Created',
 				'description' => 'The character <b>' . $newchar_name . '</b> has been created.<br/>
 							Please select the outfit when you log in for the first time.<br/><br/>
@@ -199,11 +199,11 @@ if($save) {
 }
 
 if(count($errors) > 0) {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 }
 
 if(!$newchar_created) {
-	echo $twig->render('account.create_character.html.twig', array(
+	$twig->display('account.create_character.html.twig', array(
 		'name' => $newchar_name,
 		'sex' => $newchar_sex,
 		'vocation' => $newchar_vocation,

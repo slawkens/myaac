@@ -120,11 +120,11 @@ if($players > 0)
 	}
 }
 
-echo $twig->render('online.html.twig', array(
+$twig->display('online.html.twig', array(
 	'players' => $players_data,
 	'record' => $record
 ));
 
 //search bar
-echo $twig->render('online.form.html.twig');
+$twig->display('online.form.html.twig');
 ?>

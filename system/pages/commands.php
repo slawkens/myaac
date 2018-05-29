@@ -32,7 +32,7 @@ if($canEdit)
 
 		if(isset($_REQUEST['words']))
 			$words = $_REQUEST['words'];
-		
+
 		if(isset($_REQUEST['description']))
 			$description = stripslashes($_REQUEST['description']);
 
@@ -68,10 +68,10 @@ if($canEdit)
 		}
 
 		if(!empty($errors))
-			echo $twig->render('error_box.html.twig', array('errors' => $errors));
+			$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
-	
-	echo $twig->render('commands.form.html.twig', array(
+
+	$twig->display('commands.form.html.twig', array(
 		'link' => getLink('commands/' . ($action == 'edit' ? 'edit' : 'add')),
 		'action' => $action,
 		'id' => isset($id) ? $id : null,
@@ -88,7 +88,7 @@ $commands =
 		' ORDER BY `ordering`;');
 
 $last = $commands->rowCount();
-echo $twig->render('commands.html.twig', array(
+$twig->display('commands.html.twig', array(
 	'commands' => $commands,
 	'last' => $last,
 	'canEdit' => $canEdit

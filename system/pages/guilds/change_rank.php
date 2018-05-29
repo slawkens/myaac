@@ -29,9 +29,9 @@ if(empty($errors))
 
 if(!empty($errors))
 {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	echo $twig->render('guilds.back_button.html.twig');
-	
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+	$twig->display('guilds.back_button.html.twig');
+
 	return;
 }
 
@@ -74,23 +74,23 @@ if($guild_vice)
 			$ranks[$rid]['0'] = $rank->getId();
 			$ranks[$rid]['1'] = $rank->getName();
 			$rid++;
-			
+
 			if($db->hasColumn('players', 'rank_id'))
 				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 			else
 				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
-			
+
 			$players_with_rank_number = $players_with_rank->rowCount();
 			if(count($players_with_rank) > 0)
 			{
-				
+
 				foreach($players_with_rank as $result)
 				{
 					$player = new OTS_Player();
 					$player->load($result['id']);
 					if(!$player->isLoaded())
 						continue;
-					
+
 					if($guild->getOwner()->getId() != $player->getId() || $guild_leader)
 					{
 						$players_with_lower_rank[$sid][0] = $player->getName();
@@ -141,16 +141,16 @@ if($guild_vice)
 			if(!$player_has_lower_rank)
 				$change_errors[] = 'This player has higher rank in guild than you. You can\'t change his/her rank.';
 		}
-		
+
 		if(empty($change_errors))
 		{
 			$player_to_change->setRank($rank);
-			echo $twig->render('success.html.twig', array(
+			$twig->display('success.html.twig', array(
 				'title' => 'Rank Changed',
 				'description' => 'Rank of player <b>'.$player_to_change->getName().'</b> has been changed to <b>'.$rank->getName().'</b>.',
 				'custom_buttons' => ''
 			));
-			
+
 			unset($players_with_lower_rank);
 			unset($ranks);
 			$rid = 0;
@@ -162,12 +162,12 @@ if($guild_vice)
 					$ranks[$rid]['0'] = $rank->getId();
 					$ranks[$rid]['1'] = $rank->getName();
 					$rid++;
-					
+
 					if($db->hasColumn('players', 'rank_id'))
 						$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
 					else
 						$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
-					
+
 					$players_with_rank_number = $players_with_rank->rowCount();
 					if(count($players_with_rank) > 0)
 					{
@@ -177,7 +177,7 @@ if($guild_vice)
 							$player->load($result['id']);
 							if(!$player->isLoaded())
 								continue;
-							
+
 							if($guild->getOwner()->getId() != $player->getId() || $guild_leader)
 							{
 								$players_with_lower_rank[$sid][0] = $player->getName();
@@ -191,10 +191,10 @@ if($guild_vice)
 		}
 		else
 		{
-			echo $twig->render('error_box.html.twig', array('errors' => $change_errors));
+			$twig->display('error_box.html.twig', array('errors' => $change_errors));
 		}
 	}
-	echo $twig->render('guilds.change_rank.html.twig', array(
+	$twig->display('guilds.change_rank.html.twig', array(
 		'players' => $players_with_lower_rank,
 		'guild_name' => $guild->getName(),
 		'ranks' => $ranks
@@ -202,7 +202,7 @@ if($guild_vice)
 }
 else {
 	echo 'Error. You are not a leader or vice leader in guild ' . $guild->getName();
-	echo $twig->render('guilds.back_button.html.twig', array(
+	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
 		'action' => getLink('guilds') . '/' . $guild->getName()
 	));

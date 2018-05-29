@@ -19,10 +19,10 @@ if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1")
 		if(empty($old_key)) {
 			$show_form = false;
 			$new_rec_key = generateRandomString(10, false, true, true);
-			
+
 			$account_logged->setCustomField("key", $new_rec_key);
 			$account_logged->logAction('Generated recovery key.');
-			
+
 			if($config['mail_enabled'] && $config['send_mail_when_generate_reckey'])
 			{
 				$mailBody = $twig->render('mail.account.register.html.twig', array(
@@ -33,7 +33,7 @@ if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1")
 				else
 					$message = '<br /><p class="error">An error occorred while sending email with recovery key! You will not receive e-mail with this key. Error:<br/>' . $mailer->ErrorInfo . '</p>';
 			}
-			echo $twig->render('success.html.twig', array(
+			$twig->display('success.html.twig', array(
 				'title' => 'Account Registered',
 				'description' => 'Thank you for registering your account! You can now recover your account if you have lost access to the assigned email address by using the following<br/><br/><font size="5">&nbsp;&nbsp;&nbsp;<b>Recovery Key: '.$new_rec_key.'</b></font><br/><br/><br/><b>Important:</b><ul><li>Write down this recovery key carefully.</li><li>Store it at a safe place!</li>' . $message . '</ul>'
 			));
@@ -48,11 +48,11 @@ if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1")
 if($show_form) {
 	if(!empty($errors)) {
 		//show errors
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
-	
+
 	//show form
-	echo $twig->render('account.generate_recovery_key.html.twig');
+	$twig->display('account.generate_recovery_key.html.twig');
 }
 
 ?>

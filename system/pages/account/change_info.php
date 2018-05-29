@@ -17,21 +17,21 @@ $new_country = isset($_POST['info_country']) ? htmlspecialchars(stripslashes($_P
 if(isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
 	if(!isset($config['countries'][$new_country]))
 		$errors[] = 'Country is not correct.';
-	
+
 	if(empty($errors)) {
 		//save data from form
 		$account_logged->setCustomField("rlname", $new_rlname);
 		$account_logged->setCustomField("location", $new_location);
 		$account_logged->setCustomField("country", $new_country);
 		$account_logged->logAction('Changed Real Name to <b>' . $new_rlname . '</b>, Location to <b>' . $new_location . '</b> and Country to <b>' . $config['countries'][$new_country] . '</b>.');
-		echo $twig->render('success.html.twig', array(
+		$twig->display('success.html.twig', array(
 			'title' => 'Public Information Changed',
 			'description' => 'Your public information has been changed.'
 		));
 		$show_form = false;
 	}
 	else {
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
 }
 
@@ -41,17 +41,17 @@ if($show_form) {
 	$account_location = $account_logged->getCustomField("location");
 	if ($config['account_country'])
 		$account_country = $account_logged->getCustomField("country");
-	
+
 	$countries = array();
 	foreach (array('pl', 'se', 'br', 'us', 'gb',) as $country)
 		$countries[$country] = $config['countries'][$country];
-	
+
 	$countries['--'] = '----------';
-	
+
 	foreach ($config['countries'] as $code => $country)
 		$countries[$code] = $country;
-	
-	echo $twig->render('account.change_info.html.twig', array(
+
+	$twig->display('account.change_info.html.twig', array(
 		'countries' => $countries,
 		'account_rlname' => $account_rlname,
 		'account_location' => $account_location,

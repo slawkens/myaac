@@ -8,22 +8,22 @@ defined('MYAAC') or die('Direct access not allowed!');
 		<link rel="stylesheet" href="<?php echo $template_path; ?>/style.css" type="text/css" />
 		<script type="text/javascript">
 			<?php
-				echo $twig->render('menu.js.html.twig', array('categories' => $config['menu_categories']));
+				$twig->display('menu.js.html.twig', array('categories' => $config['menu_categories']));
 			?>
 		</script>
 		<script type="text/javascript" src="tools/basic.js"></script>
 		<script type="text/javascript">
 			<?php
 			$menus = get_template_menus();
-			
+
 			function get_template_pages($category) {
 				global $menus;
-				
+
 				$ret = array();
 				foreach($menus[$category] as $menu) {
 					$ret[] = $menu['link'];
 				}
-				
+
 				return $ret;
 			}
 			?>
@@ -40,7 +40,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 							$tmp = explode('/', URI);
 						}
 					}
-					
+
 				if(in_array($tmp[0], get_template_pages(MENU_CATEGORY_NEWS)))
 					echo 'news';
 				elseif(in_array($tmp[0], get_template_pages(MENU_CATEGORY_LIBRARY)))
@@ -86,12 +86,12 @@ defined('MYAAC') or die('Direct access not allowed!');
 					if(!isset($menus[$category])) {
 						continue;
 					}
-					
+
 					echo '<div id="' . $config['menu_categories'][$category]['id'] . '-submenu">';
-					
+
 					$size = count($menus[$category]);
 					$i = 0;
-					
+
 					foreach($menus[$category] as $menu) {
 						echo '<a href="' . $menu['link_full'] . '"' . ($menu['blank'] ? ' target="_blank"' : '') . ' style="color: #' . (strlen($menu['color']) == 0 ? $default_menu_color : $menu['color']) . ';">' . $menu['name'] . '</a>';
 
@@ -99,7 +99,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 							echo '<span class="separator"></span>';
 						}
 					}
-					
+
 					echo '</div>';
 				}
 				?>

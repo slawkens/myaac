@@ -171,7 +171,7 @@ if($save)
 
 			if(_mail($email, 'New account on ' . $config['lua']['serverName'], $body_html))
 			{
-				echo $twig->render('account.created.verify.html.twig', array(
+				$twig->display('account.created.verify.html.twig', array(
 					'account' => $tmp_account
 				));
 			}
@@ -184,7 +184,7 @@ if($save)
 		}
 		else
 		{
-			echo $twig->render('account.created.html.twig', array(
+			$twig->display('account.created.html.twig', array(
 				'account' => $tmp_account
 			));
 
@@ -223,7 +223,7 @@ if($config['account_country_recognize']) {
 }
 
 if(!empty($errors))
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 
 if($config['account_country']) {
 	$countries = array();
@@ -235,8 +235,8 @@ if($config['account_country']) {
 		$countries[$code] = $c;
 }
 
-echo $twig->render('account.create.js.html.twig');
-echo $twig->render('account.create.html.twig', array(
+$twig->display('account.create.js.html.twig');
+$twig->display('account.create.html.twig', array(
 	'account' => isset($_POST['account']) ? $_POST['account'] : '',
 	'email' => isset($_POST['email']) ? $_POST['email'] : '',
 	'countries' => isset($countries) ? $countries : null,

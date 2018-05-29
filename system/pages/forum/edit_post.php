@@ -17,7 +17,7 @@ if(Forum::canPost($account_logged))
 		echo 'Please enter post id.';
 		return;
 	}
-	
+
 	$thread = $db->query("SELECT `author_guid`, `author_aid`, `first_post`, `post_topic`, `post_date`, `post_text`, `post_smile`, `post_html`, `id`, `section` FROM `" . TABLE_PREFIX . "forum` WHERE `id` = ".$post_id." LIMIT 1")->fetch();
 	if(isset($thread['id']))
 	{
@@ -55,9 +55,9 @@ if(Forum::canPost($account_logged))
 					$errors[] = 'Please select a character.';
 				if(empty($post_topic) && $thread['id'] == $thread['first_post'])
 					$errors[] = 'Thread topic can\'t be empty.';
-				
+
 				$player_on_account = false;
-				
+
 				if(count($errors) == 0)
 				{
 					foreach($players_from_account as $player)
@@ -66,7 +66,7 @@ if(Forum::canPost($account_logged))
 					if(!$player_on_account)
 						$errors[] = 'Player with selected ID '.$char_id.' doesn\'t exist or isn\'t on your account';
 				}
-				
+
 				if(count($errors) == 0) {
 					$saved = true;
 					if($account_logged->getId() != $thread['author_aid'])
@@ -85,13 +85,13 @@ if(Forum::canPost($account_logged))
 				$smile = (int) $thread['post_smile'];
 				$html = (int) $thread['post_html'];
 			}
-			
+
 			if(!$saved)
 			{
 				if(!empty($errors))
-					echo $twig->render('error_box.html.twig', array('errors' => $errors));
-				
-				echo $twig->render('forum.edit_post.html.twig', array(
+					$twig->display('error_box.html.twig', array('errors' => $errors));
+
+				$twig->display('forum.edit_post.html.twig', array(
 					'post_id' => $post_id,
 					'players' => $players_from_account,
 					'player_id' => $char_id,

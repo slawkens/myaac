@@ -40,7 +40,7 @@ if(empty($errors)) {
 				$level_in_guild = 3;
 			}
 		}
-		
+
 		$saved = false;
 		if($guild_leader) {
 			if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
@@ -48,12 +48,12 @@ if(empty($errors)) {
 				$guild->setCustomField('motd', $motd);
 				$saved = true;
 			}
-			
+
 			if($saved) {
 				success('Changes has been saved');
 			}
-			
-			echo $twig->render('guilds.change_motd.html.twig', array(
+
+			$twig->display('guilds.change_motd.html.twig', array(
 				'guild' => $guild
 			));
 		}
@@ -66,9 +66,9 @@ if(empty($errors)) {
 	}
 }
 if(!empty($errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	
-	echo $twig->render('guilds.back_button.html.twig', array(
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+
+	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
 		'action' => '?subtopic=guilds'
 	));

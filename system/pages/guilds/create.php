@@ -47,12 +47,12 @@ if($todo == 'save')
 		$guild_errors[] = Validator::getLastError();
 		$guild_name = '';
 	}
-	
+
 	if(!Validator::characterName($name)) {
 		$guild_errors[] = 'Invalid character name format.';
 		$name = '';
 	}
-	
+
 	if(empty($guild_errors)) {
 		$player = new OTS_Player();
 		$player->find($name);
@@ -60,8 +60,8 @@ if($todo == 'save')
 			$guild_errors[] = 'Character <b>'.$name.'</b> doesn\'t exist.';
 		}
 	}
-	
-	
+
+
 	if(empty($guild_errors))
 	{
 		$guild = new OTS_Guild();
@@ -70,7 +70,7 @@ if($todo == 'save')
 			$guild_errors[] = 'Guild <b>'.$guild_name.'</b> already exist. Select other name.';
 		}
 	}
-	
+
 	if(empty($guild_errors))
 	{
 		$bad_char = true;
@@ -83,7 +83,7 @@ if($todo == 'save')
 			$guild_errors[] = 'Character <b>'.$name.'</b> isn\'t on your account or is already in guild.';
 		}
 	}
-	
+
 	if(empty($guild_errors)) {
 		if($player->getLevel() < $config['guild_need_level']) {
 			$guild_errors[] = 'Character <b>'.$name.'</b> has too low level. To create guild you need character with level <b>'.$config['guild_need_level'].'</b>.';
@@ -95,7 +95,7 @@ if($todo == 'save')
 }
 
 if(!empty($guild_errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
+	$twig->display('error_box.html.twig', array('errors' => $guild_errors));
 	unset($todo);
 }
 
@@ -115,18 +115,18 @@ if(isset($todo) && $todo == 'save')
 			$player->setRank($rank);
 		}
 	}
-	echo $twig->render('guilds.create.success.html.twig', array(
+	$twig->display('guilds.create.success.html.twig', array(
 		'guild_name' => $guild_name,
 		'leader_name' => $player->getName()
 	));
-	
+
 	/*$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "the Leader", 3)');
 	$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "a Vice-Leader", 2)');
 	$db->query('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "a Member", 1)');*/
 }
 else {
 	sort($array_of_player_nig);
-	echo $twig->render('guilds.create.html.twig', array(
+	$twig->display('guilds.create.html.twig', array(
 		'players' => $array_of_player_nig
 	));
 }

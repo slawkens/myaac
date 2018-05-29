@@ -13,7 +13,7 @@ $title = 'Load items.xml';
 require LIBS . 'items.php';
 require LIBS . 'weapons.php';
 
-echo $twig->render('admin.items.html.twig');
+$twig->display('admin.items.html.twig');
 
 $reload = isset($_REQUEST['reload']) && (int)$_REQUEST['reload'] == 1;
 if($reload) {

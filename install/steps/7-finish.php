@@ -115,7 +115,7 @@ else {
 			}
 		}
 
-		echo $twig->render('install.installer.html.twig', array(
+		$twig->display('install.installer.html.twig', array(
 			'url' => 'tools/7-finish.php',
 			'message' => $locale['importing_spinner']
 		));

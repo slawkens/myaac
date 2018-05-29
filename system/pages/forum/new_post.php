@@ -18,7 +18,7 @@ if(Forum::canPost($account_logged))
 		echo "Thread with this id doesn't exist.";
 		return;
 	}
-	
+
 	$thread = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." LIMIT 1")->fetch();
 	echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
 	if(isset($thread['id']) && Forum::hasAccess($thread['section']))
@@ -48,7 +48,7 @@ if(Forum::canPost($account_logged))
 				$errors[] = 'Too short or too long post (short: '.$lenght.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
 			if($char_id == 0)
 				$errors[] = 'Please select a character.';
-			
+
 			$player_on_account = false;
 			if(count($errors) == 0)
 			{
@@ -81,12 +81,12 @@ if(Forum::canPost($account_logged))
 				echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id, $_page) . '">GO BACK TO LAST THREAD</a>';
 			}
 		}
-		
+
 		if(!$saved)
 		{
 			if(!empty($errors))
-				echo $twig->render('error_box.html.twig', array('errors' => $errors));
-				
+				$twig->display('error_box.html.twig', array('errors' => $errors));
+
 			$threads = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`post_html`, `" . TABLE_PREFIX . "forum`.`author_aid` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 5")->fetchAll();
 			foreach($threads as &$thread) {
 				$player_account = new OTS_Account();
@@ -95,8 +95,8 @@ if(Forum::canPost($account_logged))
 					$thread['post'] = Forum::showPost(($thread['post_html'] > 0 ? $thread['post_topic'] : htmlspecialchars($thread['post_topic'])), ($thread['post_html'] > 0 ? $thread['post_text'] : htmlspecialchars($thread['post_text'])), $thread['post_smile'] == 0, $thread['post_html'] > 0);
 				}
 			}
-			
-			echo $twig->render('forum.new_post.html.twig', array(
+
+			$twig->display('forum.new_post.html.twig', array(
 				'thread_id' => $thread_id,
 				'post_player_id' => $char_id,
 				'players' => $players_from_account,
@@ -116,4 +116,4 @@ if(Forum::canPost($account_logged))
 else
 	echo "Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";
 
-echo $twig->render('forum.fullscreen.html.twig');
+$twig->display('forum.fullscreen.html.twig');

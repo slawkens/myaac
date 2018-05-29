@@ -38,7 +38,7 @@ if(empty($errors)) {
 			}
 		}
 		if($guild_leader) {
-			echo $twig->render('guilds.manager.html.twig', array(
+			$twig->display('guilds.manager.html.twig', array(
 				'guild' => $guild,
 				'rank_list' => $rank_list
 			));
@@ -54,7 +54,7 @@ if(empty($errors)) {
 	}
 }
 if(!empty($errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 }
 
 ?>

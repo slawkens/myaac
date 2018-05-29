@@ -18,7 +18,7 @@ for($i = 0; $i < $columns; $i++) {
 	}
 }
 
-echo $twig->render('experience_table.html.twig', array(
+$twig->display('experience_table.html.twig', array(
 	'experience' => $experience
 ));
 ?>

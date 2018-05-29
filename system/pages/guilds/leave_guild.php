@@ -36,7 +36,7 @@ if(empty($errors)) {
 		if(!Validator::characterName($name)) {
 			$errors[] = 'Invalid name format.';
 		}
-		
+
 		if(empty($errors)) {
 			$player = new OTS_Player();
 			$player->find($name);
@@ -49,7 +49,7 @@ if(empty($errors)) {
 				}
 			}
 		}
-		
+
 		if(empty($errors)) {
 			$player_loaded_rank = $player->getRank();
 			if($player_loaded_rank->isLoaded()) {
@@ -61,7 +61,7 @@ if(empty($errors)) {
 				$errors[] = "Character <b>" . $name . "</b> isn't in any guild.";
 			}
 		}
-		
+
 		if(empty($errors)) {
 			if($guild_owner_name == $player->getName()) {
 				$errors[] = "You can't leave guild. You are an owner of guild.";
@@ -85,8 +85,8 @@ if(empty($errors)) {
 }
 
 if(!empty($errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	echo $twig->render('guilds.back_button.html.twig', array(
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+	$twig->display('guilds.back_button.html.twig', array(
 		'action' => getLink('guilds') . '/' . $guild_name
 	));
 }
@@ -94,7 +94,7 @@ else
 {
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$player->setRank();
-		echo $twig->render('success.html.twig', array(
+		$twig->display('success.html.twig', array(
 			'title' => 'Leave guild',
 			'description' => 'Player with name <b>'.$player->getName().'</b> leaved guild <b>'.$guild->getName().'</b>.',
 			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array(
@@ -105,8 +105,8 @@ else
 	else
 	{
 		sort($array_of_player_ig);
-		
-		echo $twig->render('guilds.leave_guild.html.twig', array(
+
+		$twig->display('guilds.leave_guild.html.twig', array(
 			'players' => $array_of_player_ig,
 			'guild_name' => $guild_name
 		));

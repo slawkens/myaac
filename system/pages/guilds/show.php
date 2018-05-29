@@ -25,9 +25,9 @@ if(empty($errors))
 
 if(!empty($errors))
 {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	
-	echo $twig->render('guilds.back_button.html.twig');
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+
+	$twig->display('guilds.back_button.html.twig');
 }
 else
 {
@@ -102,13 +102,13 @@ else
 						<TD WIDTH=30%><B>Rank</B></TD>
 						<TD WIDTH=30%><B>Name, title, level & status</B></TD>
 					</TR>';
-	
+
 	//Slaw stats values
 	//$s_total_members = 0;
 	//$s_members_online = 0;
 	//$s_total_level = 0;
 	//End Slaw stats values
-	
+
 	$showed_players = 1;
 	foreach($rank_list as $rank)
 	{
@@ -116,7 +116,7 @@ else
 			$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
 		else if($db->hasColumn('players', 'rank_id'))
 			$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
-		
+
 		$players_with_rank_number = $players_with_rank->rowCount();
 		if($players_with_rank_number > 0)
 		{
@@ -133,7 +133,7 @@ else
 				$player->load($result['id']);
 				if(!$player->isLoaded())
 					continue;
-				
+
 				//$s_total_members++;
 				//$s_total_level += $player->getLevel();
 				echo '<TR><TD>' . getPlayerLink($player->getName()) . '<FORM ACTION="?subtopic=guilds&action=change_nick&name='.$player->getName().'" METHOD=post>';
@@ -151,11 +151,11 @@ else
 				else
 					if(!empty($guild_nick))
 						echo ' ('.htmlentities($player->getGuildNick()).')';
-				
+
 				if($level_in_guild > $rank->getLevel() || $guild_leader)
 					if($guild_leader_char->getName() != $player->getName())
 						echo '&nbsp;<font size=1>{<a href="?subtopic=guilds&action=kick_player&guild='.urlencode($guild->getName()).'&name='.urlencode($player->getName()).'">KICK</a>}</font>';
-				
+
 				echo '</FORM></TD><TD align="right" width="10%">'.$player->getLevel().'</TD><TD align="right" width="20%"><font color="'.($player->isOnline() ? 'green"><b>Online' : 'red"><b>Offline').'</b></font></TD></TR>';
 			}
 			echo '</TABLE></TD></TR>';
@@ -207,7 +207,7 @@ else
 	echo '</TABLE>';
 	*/
 	//End statistics
-	
+
 	//Lets update some stuff in database
 	//$db->query('UPDATE `guilds` SET `total_members` = '.$s_total_members.', `members_online` = '.$s_members_online.', `total_level` = '.$s_total_level.', `average_level` = '.ceil($s_total_level/$s_total_members).' WHERE `id` = '.$guild->getId());
 	include(SYSTEM . 'libs/pot/InvitesDriver.php');

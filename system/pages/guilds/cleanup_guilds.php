@@ -13,7 +13,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 if(!$logged)
 {
 	echo "You are not logged in.";
-	echo $twig->render('guilds.back_button.html.twig');
+	$twig->display('guilds.back_button.html.twig');
 	return;
 }
 
@@ -63,5 +63,5 @@ if(count($guilds_list) > 0)
 else
 	echo "0 guilds found.";
 
-echo $twig->render('guilds.back_button.html.twig');
+$twig->display('guilds.back_button.html.twig');
 ?>

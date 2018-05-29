@@ -18,7 +18,7 @@ else {
 			$locales[] = array('id' => $tmp_locale, 'name' => $locale['name']);
 		}
 	}
-	echo $twig->render('install.welcome.html.twig', array(
+	$twig->display('install.welcome.html.twig', array(
 		'locales' => $locales,
 		'locale' => $locale,
 		'buttons' => next_buttons(false, true)

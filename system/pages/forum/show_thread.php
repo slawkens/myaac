@@ -49,7 +49,7 @@ foreach($posts as &$post)
 		error('Forum error: Player not loaded.');
 		die();
 	}
-	
+
 	if($config['characters']['outfit']) {
 		$post['outfit'] = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($lookaddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
 	}
@@ -59,7 +59,7 @@ foreach($posts as &$post)
 	if($group->isLoaded()) {
 		$groupName = $group->getName();
 	}
-	
+
 	$post['group'] = $groupName;
 	$post['player_link'] = getPlayerLink($player->getName());
 
@@ -75,7 +75,7 @@ foreach($posts as &$post)
 
 	$player_account = $player->getAccount();
 	$post['content'] = Forum::showPost(($post['post_html'] > 0 ? $post['post_topic'] : htmlspecialchars($post['post_topic'])), ($post['post_html'] > 0 ? $post['post_text'] : htmlspecialchars($post['post_text'])), $post['post_smile'] == 0, $post['post_html'] > 0);
-	
+
 	$query = $db->query("SELECT COUNT(`id`) AS 'posts' FROM `" . TABLE_PREFIX . "forum` WHERE `author_aid`=".(int) $player_account->getId())->fetch();
 	$post['author_posts_count'] = (int)$query['posts'];
 
@@ -90,7 +90,7 @@ foreach($posts as &$post)
 	}
 }
 
-echo $twig->render('forum.show_thread.html.twig', array(
+$twig->display('forum.show_thread.html.twig', array(
 	'thread_id' => $thread_id,
 	'posts' => $posts,
 	'links_to_pages' => $links_to_pages,
@@ -100,4 +100,4 @@ echo $twig->render('forum.show_thread.html.twig', array(
 	'is_moderator' => Forum::isModerator()
 ));
 
-echo $twig->render('forum.fullscreen.html.twig');
+$twig->display('forum.fullscreen.html.twig');

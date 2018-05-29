@@ -61,7 +61,7 @@ if(empty($errors))
 			}
 		}
 	}
-	
+
 	if(!$guild_vice)
 		$errors[] = 'You are not a leader or vice leader of guild <b>' . $guild_name . '</b>.';
 }
@@ -92,23 +92,23 @@ if(empty($errors))
 }
 if(!empty($errors))
 {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	
-	echo $twig->render('guilds.back_button.html.twig', array('action' => '?subtopic=guilds&action=show&guild=' . $guild_name));
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+
+	$twig->display('guilds.back_button.html.twig', array('action' => '?subtopic=guilds&action=show&guild=' . $guild_name));
 }
 else
 {
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save')
 	{
 		$guild->deleteInvite($player);
-		echo $twig->render('success.html.twig', array(
+		$twig->display('success.html.twig', array(
 			'title' => 'Deleted player invitation',
 			'description' => 'Player with name <b>' . $player->getName() . '</b> has been deleted from invites list.',
 			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array('action' => '?subtopic=guilds&action=show&guild=' . $guild_name))
 		));
 	}
 	else {
-		echo $twig->render('guilds.delete_invite.html.twig', array(
+		$twig->display('guilds.delete_invite.html.twig', array(
 			'player_name' => $player->getName(),
 			'guild_name' => $guild->getName()
 		));

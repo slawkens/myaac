@@ -11,4 +11,4 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Server Rules';
 
-echo $twig->render('rules.html.twig');
+$twig->display('rules.html.twig');

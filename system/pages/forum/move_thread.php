@@ -38,17 +38,17 @@ else {
 	$post_id = (int)$_REQUEST['id'];
 	$post = $db->query("SELECT `id`, `section`, `first_post`, `post_topic`, `author_guid` FROM `" . TABLE_PREFIX . "forum` WHERE `id` = " . $post_id . " LIMIT 1")->fetch();
 	$name = $db->query("SELECT `name` FROM `players` WHERE `id` = " . $post['author_guid'] . " ")->fetch();
-	
+
 	$sections_allowed = array();
 	foreach($sections as $id => $section) {
 		if(Forum::hasAccess($id)) {
 			$sections_allowed[$id] = $section;
 		}
 	}
-	
+
 	if ($post['id'] == $post_id) {
 		if ($post['id'] == $post['first_post']) {
-			echo $twig->render('forum.move_thread.html.twig', array(
+			$twig->display('forum.move_thread.html.twig', array(
 				'thread' => $post['post_topic'],
 				'author' => $name['name'],
 				'board' => $sections[$post['section']]['name'],

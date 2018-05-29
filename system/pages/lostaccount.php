@@ -21,10 +21,10 @@ $config_salt_enabled = $db->hasColumn('accounts', 'salt');
 $action_type = isset($_REQUEST['action_type']) ? $_REQUEST['action_type'] : '';
 if($action == '')
 {
-	echo $twig->render('account.lost.form.html.twig');
+	$twig->display('account.lost.form.html.twig');
 }
 else if($action == 'step1' && $action_type == '') {
-	echo $twig->render('account.lost.noaction.html.twig');
+	$twig->display('account.lost.noaction.html.twig');
 }
 elseif($action == 'step1' && $action_type == 'email')
 {
@@ -36,7 +36,7 @@ elseif($action == 'step1' && $action_type == 'email')
 		$player->find($nick);
 		if($player->isLoaded())
 			$account = $player->getAccount();
-		
+
 		if($account->isLoaded())
 		{
 			if($account->getCustomField('email_next') < time())
@@ -83,7 +83,7 @@ elseif($action == 'sendcode')
 		$player->find($nick);
 		if($player->isLoaded())
 			$account = $player->getAccount();
-		
+
 		if($account->isLoaded())
 		{
 			if($account->getCustomField('email_next') < time())
@@ -290,20 +290,20 @@ elseif($action == 'step3')
 						if(Validator::email($new_email))
 						{
 							$account->setEMail($new_email);
-							
+
 							$tmp_new_pass = $new_pass;
 							if($config_salt_enabled)
 							{
 								$salt = generateRandomString(10, false, true, true);
 								$tmp_new_pass = $salt . $new_pass;
 							}
-							
+
 							$account->setPassword(encrypt($tmp_new_pass));
 							$account->save();
-							
+
 							if($config_salt_enabled)
 								$account->setCustomField('salt', $salt);
-							
+
 							echo 'Your account name, new password and new e-mail.<BR>
 							<FORM ACTION="?subtopic=accountmanagement" onsubmit="return validate_form(this)" METHOD=post>
 							<INPUT TYPE=hidden NAME="character" VALUE="">
@@ -487,7 +487,7 @@ elseif($action == 'setnewpassword')
 						$tmp_new_pass  = $salt . $newpassword;
 						$account->setCustomField('salt', $salt);
 					}
-					
+
 					$account->setPassword(encrypt($tmp_new_pass ));
 					$account->save();
 					$account->setCustomField('email_code', '');

@@ -31,11 +31,11 @@ foreach($changelogs as $key => &$log)
 
 	if ($i >= $limit)
 		$next_page = true;
-	
+
 	$i++;
 }
 
-echo $twig->render('changelog.html.twig', array(
+$twig->display('changelog.html.twig', array(
 	'changelogs' => $changelogs,
 	'page' => $_page,
 	'next_page' => $next_page,

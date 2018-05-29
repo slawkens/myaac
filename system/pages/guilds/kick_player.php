@@ -93,8 +93,8 @@ if(empty($errors)) {
 }
 
 if(!empty($errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	echo $twig->render('guilds.back_button.html.twig', array(
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+	$twig->display('guilds.back_button.html.twig', array(
 		'action' => getLink('guilds') . '/' . $guild_name
 	));
 }
@@ -102,8 +102,8 @@ else
 {
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$player->setRank();
-		
-		echo $twig->render('success.html.twig', array(
+
+		$twig->display('success.html.twig', array(
 			'title' => 'Kick player',
 			'description' => 'Player with name <b>'.$player->getName().'</b> has been kicked from your guild.',
 			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array(
@@ -112,7 +112,7 @@ else
 		));
 	}
 	else {
-		echo $twig->render('guilds.kick_player.html.twig', array(
+		$twig->display('guilds.kick_player.html.twig', array(
 			'player_name' => $player->getName(),
 			'guild_name' => $guild->getName()
 		));

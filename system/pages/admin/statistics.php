@@ -28,7 +28,7 @@ $total_houses = $query['how_much'];
 
 $points = $db->query('SELECT `premium_points`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
 
-echo $twig->render('admin.statistics.html.twig', array(
+$twig->display('admin.statistics.html.twig', array(
 	'total_accounts' => $total_accounts,
 	'total_players' => $total_players,
 	'total_guilds' => $total_guilds,

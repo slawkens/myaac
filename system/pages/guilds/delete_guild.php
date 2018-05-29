@@ -30,7 +30,7 @@ if(empty($errors)) {
 		$rank_list->orderBy('level', POT::ORDER_DESC);
 		$guild_leader = false;
 		$account_players = $account_logged->getPlayers();
-		
+
 		foreach($account_players as $player) {
 			if($guild->getOwner()->getId() == $player->getId()) {
 				$guild_vice = true;
@@ -38,24 +38,24 @@ if(empty($errors)) {
 				$level_in_guild = 3;
 			}
 		}
-		
+
 		if($guild_leader) {
 			$saved = false;
-			
+
 			if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
 				delete_guild($guild->getId());
 				$saved = true;
 			}
-			
+
 			if($saved) {
-				echo $twig->render('success.html.twig', array(
+				$twig->display('success.html.twig', array(
 					'title' => 'Guild Deleted',
 					'description' => 'Guild with name <b>'.$guild_name.'</b> has been deleted.',
 					'custom_buttons' => $twig->render('guilds.back_button.html.twig')
 				));
 			}
 			else {
-				echo $twig->render('guilds.delete_guild.html.twig', array(
+				$twig->display('guilds.delete_guild.html.twig', array(
 					'guild' => $guild
 				));
 			}
@@ -70,9 +70,9 @@ if(empty($errors)) {
 }
 
 if(!empty($errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	
-	echo $twig->render('guilds.back_button.html.twig', array(
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+
+	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true
 	));
 }

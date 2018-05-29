@@ -47,7 +47,7 @@ $tmp = '';
 if(fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
 
-echo $twig->render('admin.dashboard.html.twig', array(
+$twig->display('admin.dashboard.html.twig', array(
 	'is_closed' => $is_closed,
 	'closed_message' => $closed_message,
 	'status' => $status
@@ -60,7 +60,7 @@ function clearCache()
 	$tmp = '';
 	if($cache->fetch('status', $tmp))
 		$cache->delete('status');
-	
+
 	if($cache->fetch('templates', $tmp))
 		$cache->delete('templates');
 
@@ -90,7 +90,7 @@ function clearCache()
 
 	if($cache->fetch('news' . $template_name . '_' . TICKER, $tmp))
 		$cache->delete('news' . $template_name . '_' . TICKER);
-	
+
 	if($cache->fetch('template_ini' . $template_name, $tmp))
 		$cache->delete('template_ini' . $template_name);
 

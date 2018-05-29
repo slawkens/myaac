@@ -30,7 +30,7 @@ if(empty($errors)) {
 		$rank_list->orderBy('level', POT::ORDER_DESC);
 		$guild_leader = false;
 		$account_players = $account_logged->getPlayers();
-		
+
 		foreach($account_players as $player) {
 			if($guild_leader_char->getId() == $player->getId()) {
 				$guild_vice = true;
@@ -38,7 +38,7 @@ if(empty($errors)) {
 				$level_in_guild = 3;
 			}
 		}
-		
+
 		if($guild_leader) {
 			foreach($rank_list as $rank) {
 				$rank_id = $rank->getId();
@@ -56,12 +56,12 @@ if(empty($errors)) {
 				else {
 					$errors[] = 'Invalid rank level. Contact with admin. Rank ID <b>'.$rank_id.'</b>.';
 				}
-				
+
 				$rank->save();
 			}
 			//show errors or redirect
 			if(!empty($errors)) {
-				echo $twig->render('error_box.html.twig', array('errors' => $errors));
+				$twig->display('error_box.html.twig', array('errors' => $errors));
 			}
 			else
 			{
@@ -79,7 +79,7 @@ if(empty($errors)) {
 	}
 }
 if(!empty($errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 }
 
 ?>

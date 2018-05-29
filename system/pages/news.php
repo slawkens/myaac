@@ -55,7 +55,7 @@ if(isset($_GET['archive']))
 				}
 			}
 
-			echo $twig->render('news.html.twig', array(
+			$twig->display('news.html.twig', array(
 				'title' => stripslashes($news['title']),
 				'content' => $content_,
 				'date' => $news['date'],
@@ -68,7 +68,7 @@ if(isset($_GET['archive']))
 		else
 			echo "This news doesn't exist or is hidden.<br/>";
 
-		echo $twig->render('news.back_button.html.twig');
+		$twig->display('news.back_button.html.twig');
 		return;
 	}
 	?>
@@ -87,7 +87,7 @@ if(isset($_GET['archive']))
 		);
 	}
 
-	echo $twig->render('news.archive.html.twig', array(
+	$twig->display('news.archive.html.twig', array(
 		'newses' => $newses
 	));
 
@@ -164,7 +164,7 @@ if($canEdit)
 		}
 
 		if(!empty($errors))
-			echo $twig->render('error_box.html.twig', array('errors' => $errors));
+			$twig->display('error_box.html.twig', array('errors' => $errors));
 
 		if($cache->enabled())
 		{
@@ -259,7 +259,7 @@ if(!$news_cached)
 		$account_players = $account_logged->getPlayersList();
 		$account_players->orderBy('group_id', POT::ORDER_DESC);
 
-		echo $twig->render('news.add.html.twig', array(
+		$twig->display('news.add.html.twig', array(
 			'action' => $action,
 			'news_link' => getLink(PAGE),
 			'news_link_form' => getLink('news/' . ($action == 'edit' ? 'edit' : 'add')),
@@ -324,7 +324,7 @@ if(!$news_cached)
 				}
 			}
 
-			echo $twig->render('news.html.twig', array(
+			$twig->display('news.html.twig', array(
 				'id' => $news['id'],
 				'title' => stripslashes($news['title']),
 				'content' => $content_ . $admin_options,

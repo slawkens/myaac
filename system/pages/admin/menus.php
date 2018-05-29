@@ -101,7 +101,7 @@ if(isset($_REQUEST['template'])) {
 	echo '<input type="button" class="button" value="Cancel" onclick="window.location = \'' . ADMIN_URL . '?p=menus&template=' . $template . '\';">';
 	echo '</form>';
 
-	echo $twig->render('admin.menus.js.html.twig', array(
+	$twig->display('admin.menus.js.html.twig', array(
 		'menus' => $menus,
 		'last_id' => $last_id
 	));
@@ -115,7 +115,7 @@ else {
 		}
 	}
 
-	echo $twig->render('admin.menus.form.html.twig', array(
+	$twig->display('admin.menus.form.html.twig', array(
 		'templates' => $templates
 	));
 }

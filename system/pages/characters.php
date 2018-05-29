@@ -377,7 +377,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		}
 	}
 
-	echo $twig->render('characters.html.twig', array(
+	$twig->display('characters.html.twig', array(
 		'outfit' => isset($outfit) ? $outfit : null,
 		'player' => $player,
 		'account' => $account,
@@ -421,7 +421,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 else
 {
 	$search_errors[] = 'Character <b>' . $name . '</b> does not exist or has been deleted.';
-	echo $twig->render('error_box.html.twig', array('errors' => $search_errors));
+	$twig->display('error_box.html.twig', array('errors' => $search_errors));
 	$search_errors = array();
 
 	$promotion = '';
@@ -450,4 +450,4 @@ else
 }
 
 if(!empty($search_errors))
-	echo $twig->render('error_box.html.twig', array('errors' => $search_errors));
+	$twig->display('error_box.html.twig', array('errors' => $search_errors));

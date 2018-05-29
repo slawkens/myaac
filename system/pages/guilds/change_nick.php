@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 if(!$logged) {
 	echo 'You are not logged.';
-	echo $twig->render('guilds.back_button.html.twig');
+	$twig->display('guilds.back_button.html.twig');
 	return;
 }
 
@@ -62,5 +62,5 @@ if(strlen($new_nick) <= 40)
 else
 	echo 'Too long guild nick. Max. 40 chars, your length: '.strlen($new_nick);
 
-echo $twig->render('guilds.back_button.html.twig');
+$twig->display('guilds.back_button.html.twig');
 ?>

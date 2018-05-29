@@ -89,14 +89,14 @@ if($canEdit)
 		}
 
 		if(!empty($errors)) {
-			echo $twig->render('error_box.html.twig', array('errors' => $errors));
+			$twig->display('error_box.html.twig', array('errors' => $errors));
 			$action = '';
 		}
 	}
 
 	if(empty($action) || $action == 'edit_board') {
 		$guilds = $db->query('SELECT `id`, `name` FROM `guilds`')->fetchAll();
-		echo $twig->render('forum.add_board.html.twig', array(
+		$twig->display('forum.add_board.html.twig', array(
 			'link' => getLink('forum', ($action == 'edit_board' ? 'edit_board' : 'add_board')),
 			'action' => $action,
 			'id' => isset($id) ? $id : null,
@@ -163,7 +163,7 @@ if(empty($action))
 		}
 	}
 
-	echo $twig->render('forum.boards.html.twig', array(
+	$twig->display('forum.boards.html.twig', array(
 		'boards' => $boards,
 		'canEdit' => $canEdit,
 		'last' => count($sections)

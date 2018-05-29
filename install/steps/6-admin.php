@@ -9,7 +9,7 @@ if(!$error) {
 		error($database_error);
 	}
 
-	echo $twig->render('install.admin.html.twig', array(
+	$twig->display('install.admin.html.twig', array(
 		'locale' => $locale,
 		'session' => $_SESSION,
 		'errors' => isset($errors) ? $errors : null,

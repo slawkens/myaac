@@ -31,7 +31,7 @@ if(isset($_REQUEST['vocation_id'])) {
 }
 else {
 	$vocation = (isset($_REQUEST['vocation']) ? urldecode($_REQUEST['vocation']) : 'all');
-	
+
 	if($vocation == 'all') {
 		$vocation_id = 'all';
 	}
@@ -63,20 +63,20 @@ if((string)$vocation_id != 'all') {
 else {
 	foreach($spells_db->fetchAll() as $spell) {
 		$vocations = json_decode($spell['vocations'], true);
-		
+
 		foreach($vocations as &$tmp_vocation) {
 			if(isset($config['vocations'][$tmp_vocation]))
 				$tmp_vocation = $config['vocations'][$tmp_vocation];
 			else
 				$tmp_vocation = 'Unknown';
 		}
-		
+
 		$spell['vocations'] = implode('<br/>', $vocations);
 		$spells[] = $spell;
 	}
 }
 
-echo $twig->render('spells.html.twig', array(
+$twig->display('spells.html.twig', array(
 	'canEdit' => $canEdit,
 	'post_vocation_id' => $vocation_id,
 	'post_vocation' => $vocation,

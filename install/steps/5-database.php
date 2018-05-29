@@ -51,7 +51,7 @@ if(!$error) {
 			error($database_error);
 		}
 		else {
-			echo $twig->render('install.installer.html.twig', array(
+			$twig->display('install.installer.html.twig', array(
 				'url' => 'tools/5-database.php',
 				'message' => $locale['loading_spinner']
 			));

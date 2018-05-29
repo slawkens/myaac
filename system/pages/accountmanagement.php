@@ -21,7 +21,7 @@ $config_salt_enabled = $db->hasColumn('accounts', 'salt');
 
 if(ACTION == "logout" && !isset($_REQUEST['account_login'])) {
 	if(!defined('HOOK_LOGOUT_DISPLAY') || HOOK_LOGOUT_DISPLAY) { // plugin will take care of this message
-		echo $twig->render('account.logout.html.twig');
+		$twig->display('account.logout.html.twig');
 	}
 
 	return;
@@ -35,9 +35,9 @@ if(!$logged)
 	}
 
 	if(!empty($errors))
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		$twig->display('error_box.html.twig', array('errors' => $errors));
 
-	echo $twig->render('account.login.html.twig', array(
+	$twig->display('account.login.html.twig', array(
 		'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
 		'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
 		'error' => isset($errors[0]) ? $errors[0] : null
@@ -52,7 +52,7 @@ $errors = array();
 	{
 		$redirect = urldecode($_REQUEST['redirect']);
 
-		echo $twig->render('account.redirect.html.twig', array(
+		$twig->display('account.redirect.html.twig', array(
 			'redirect' => $redirect
 		));
 		return;
@@ -114,7 +114,7 @@ $errors = array();
 		$account_players = $account_logged->getPlayersList();
 		$account_players->orderBy('id');
 
-		echo $twig->render('account.management.html.twig', array(
+		$twig->display('account.management.html.twig', array(
 			'welcome_message' => $welcome_message,
 			'recovery_key' => $recovery_key,
 			'email_change' => $email_change,

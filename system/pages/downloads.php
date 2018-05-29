@@ -9,5 +9,5 @@
  */
 $title = 'Downloads';
 
-echo $twig->render('downloads.html.twig');
+$twig->display('downloads.html.twig');
 ?>

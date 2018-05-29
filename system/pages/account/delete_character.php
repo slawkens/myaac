@@ -32,7 +32,7 @@ if(isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) {
 							else
 								$player->setCustomField('deleted', 1);
 							$account_logged->logAction('Deleted character <b>' . $player->getName() . '</b>.');
-							echo $twig->render('success.html.twig', array(
+							$twig->display('success.html.twig', array(
 								'title' => 'Character Deleted',
 								'description' => 'The character <b>' . $player_name . '</b> has been deleted.'
 							));
@@ -62,8 +62,8 @@ if(isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) {
 }
 if($show_form) {
 	if(!empty($errors)) {
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
-	echo $twig->render('account.delete_character.html.twig');
+	$twig->display('account.delete_character.html.twig');
 }
 ?>

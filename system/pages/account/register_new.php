@@ -27,11 +27,11 @@ else
 			{
 				$show_form = false;
 				$new_rec_key = generateRandomString(10, false, true, true);
-				
+
 				$mailBody = $twig->render('mail.account.register.html.twig', array(
 					'recovery_key' => $new_rec_key
 				));
-				
+
 				if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - new recovery key", $mailBody))
 				{
 					$account_logged->setCustomField("key", $new_rec_key);
@@ -41,8 +41,8 @@ else
 				}
 				else
 					$message = '<br /><p class="error">An error occorred while sending email ( <b>'.$account_logged->getEMail().'</b> ) with recovery key! Recovery key not changed. Try again. Error:<br/>' . $mailer->ErrorInfo . '</p>';
-				
-				echo $twig->render('success.html.twig', array(
+
+				$twig->display('success.html.twig', array(
 					'title' => 'Account Registered',
 					'description' => '<ul>' . $message . '</ul>'
 				));
@@ -53,16 +53,16 @@ else
 		else
 			$errors[] = 'Wrong password to account.';
 	}
-	
+
 	//show errors if not empty
 	if(!empty($errors)) {
-		echo $twig->render('error_box.html.twig', array('errors' => $errors));
+		$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
-	
+
 	if($show_form)
 	{
 		//show form
-		echo $twig->render('account.generate_new_recovery_key.html.twig', array(
+		$twig->display('account.generate_new_recovery_key.html.twig', array(
 			'points' => $points
 		));
 	}

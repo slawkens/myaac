@@ -22,7 +22,7 @@ else
 	if(isset($_POST['changenamesave']) && $_POST['changenamesave'] == 1) {
 		if($points < $config['account_change_character_name_points'])
 			$errors[] = 'You need ' . $config['account_change_character_name_points'] . ' premium points to change name. You have <b>'.$points.'<b> premium points.';
-		
+
 		if(empty($errors) && empty($name))
 			$errors[] = 'Please enter a new name for your character!';
 		else if(strlen($name) > 25)
@@ -36,13 +36,13 @@ else
 				$errors[] = 'Character with this name already exist.';
 			}
 		}
-		
+
 		if(empty($errors))
 		{
 			if(!admin() && !Validator::newCharacterName($name))
 				$errors[] = Validator::getLastError();
 		}
-		
+
 		if(empty($errors)) {
 			$player = new OTS_Player();
 			$player->load($player_id);
@@ -52,7 +52,7 @@ else
 					if($player->isOnline()) {
 						$errors[] = 'This character is online.';
 					}
-					
+
 					if(empty($errors)) {
 						$show_form = false;
 						$old_name = $player->getName();
@@ -60,7 +60,7 @@ else
 						$player->save();
 						$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
 						$account_logged->logAction('Changed name from <b>' . $old_name . '</b> to <b>' . $player->getName() . '</b>.');
-						echo $twig->render('success.html.twig', array(
+						$twig->display('success.html.twig', array(
 							'title' => 'Character Name Changed',
 							'description' => 'The character <b>'.$old_name.'</b> name has been changed to <b>' . $player->getName() . '</b>.'
 						));
@@ -75,13 +75,13 @@ else
 			}
 		}
 	}
-	
+
 	if($show_form) {
 		if(!empty($errors)) {
-			echo $twig->render('error_box.html.twig', array('errors' => $errors));
+			$twig->display('error_box.html.twig', array('errors' => $errors));
 		}
-		
-		echo $twig->render('account.change_name.html.twig', array(
+
+		$twig->display('account.change_name.html.twig', array(
 			'points' => $points,
 			'errors' => $errors
 			//'account_players' => $account_logged->getPlayersList()

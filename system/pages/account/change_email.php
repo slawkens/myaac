@@ -20,11 +20,11 @@ if($email_new_time < 10) {
 	if(isset($_POST['changeemailsave']) && $_POST['changeemailsave'] == 1) {
 		$email_new = $_POST['new_email'];
 		$post_password = $_POST['password'];
-		
+
 		if(!Validator::email($email_new)) {
 			$errors[] = Validator::getLastError();
 		}
-		
+
 		if(empty($post_password)) {
 			$errors[] = 'Please enter password to your account.';
 		}
@@ -34,12 +34,12 @@ if($email_new_time < 10) {
 				$errors[] = 'Wrong password to account.';
 			}
 		}
-		
+
 		if(empty($errors)) {
 			$email_new_time = time() + $config['account_mail_change'] * 24 * 3600;
 			$account_logged->setCustomField("email_new", $email_new);
 			$account_logged->setCustomField("email_new_time", $email_new_time);
-			echo $twig->render('success.html.twig', array(
+			$twig->display('success.html.twig', array(
 				'title' => 'New Email Address Requested',
 				'description' => 'You have requested to change your email address to <b>' . $email_new . '</b>. The actual change will take place after <b>' . date("j F Y, G:i:s", $email_new_time) . '</b>, during which you can cancel the request at any time.'
 			));
@@ -47,21 +47,21 @@ if($email_new_time < 10) {
 		else
 		{
 			//show errors
-			echo $twig->render('error_box.html.twig', array('errors' => $errors));
-			
+			$twig->display('error_box.html.twig', array('errors' => $errors));
+
 			//show form
-			echo $twig->render('account.change_mail.html.twig', array(
+			$twig->display('account.change_mail.html.twig', array(
 				'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
 			));
 		}
 	}
 	else
 	{
-		echo $twig->render('account.change_mail.html.twig', array(
+		$twig->display('account.change_mail.html.twig', array(
 			'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
 		));
 	}
-	
+
 }
 else
 {
@@ -72,8 +72,8 @@ else
 			$account_logged->setEmail($email_new);
 			$account_logged->save();
 			$account_logged->logAction('Account email changed to <b>' . $email_new . '</b>');
-			
-			echo $twig->render('success.html.twig', array(
+
+			$twig->display('success.html.twig', array(
 				'title' => 'Email Address Change Accepted',
 				'description' => 'You have accepted <b>' . $account_logged->getEmail() . '</b> as your new email adress.'
 			));
@@ -103,7 +103,7 @@ else
 		<td width="30">&nbsp;</td>
 	</tr>
 </table>';
-			echo $twig->render('success.html.twig', array(
+			$twig->display('success.html.twig', array(
 				'title' => 'Email Address Change Accepted',
 				'description' => 'Do you accept <b>'.$email_new.'</b> as your new email adress?',
 				'custom_buttons' => $custom_buttons
@@ -140,7 +140,7 @@ else
 		</td>
 	</tr>
 </table>';
-		echo $twig->render('success.html.twig', array(
+		$twig->display('success.html.twig', array(
 			'title' => 'Change of Email Address',
 			'description' => 'A request has been submitted to change the email address of this account to <b>'.$email_new.'</b>.<br/>The actual change will take place on <b>'.date("j F Y, G:i:s", $email_new_time).'</b>.<br>If you do not want to change your email address, please click on "Cancel".',
 			'custom_buttons' => $custom_buttons
@@ -150,10 +150,10 @@ else
 if(isset($_POST['emailchangecancel']) && $_POST['emailchangecancel'] == 1) {
 	$account_logged->setCustomField("email_new", "");
 	$account_logged->setCustomField("email_new_time", 0);
-	
+
 	$custom_buttons = '<center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" >' . $twig->render('buttons.back.html.twig') . '</td></tr></form></table></center>';
-	
-	echo $twig->render('success.html.twig', array(
+
+	$twig->display('success.html.twig', array(
 		'title' => 'Email Address Change Cancelled',
 		'description' => 'Your request to change the email address of your account has been cancelled. The email address will not be changed.',
 		'custom_buttons' => $custom_buttons

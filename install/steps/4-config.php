@@ -6,11 +6,11 @@ foreach($config['clients'] as $client) {
 	$client_version = (string)($client / 100);
 	if(strpos($client_version, '.') == false)
 		$client_version .= '.0';
-	
+
 	$clients[$client] = $client_version;
 }
 
-echo $twig->render('install.config.html.twig', array(
+$twig->display('install.config.html.twig', array(
 	'clients' => $clients,
 	'timezones' => DateTimeZone::listIdentifiers(),
 	'locale' => $locale,

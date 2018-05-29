@@ -33,7 +33,7 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 	if(!Validator::characterName($name)) {
 		$errors[] = 'Invalid name format.';
 	}
-	
+
 	if(empty($errors)) {
 		$player = new OTS_Player();
 		$player->find($name);
@@ -63,7 +63,7 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 				}
 			}
 		}
-		
+
 		if(!$is_invited) {
 			$errors[] = 'Character '.$player->getName.' isn\'t invited to guild <b>'.$guild->getName().'</b>.';
 		}
@@ -77,7 +77,7 @@ else
 		include(SYSTEM . 'libs/pot/InvitesDriver.php');
 		new InvitesDriver($guild);
 		$invited_list = $guild->listInvites();
-		
+
 		if(count($invited_list) > 0) {
 			foreach($invited_list as $invited) {
 				foreach($account_players as $player_from_acc) {
@@ -96,16 +96,16 @@ else
 }
 
 if(!empty($errors)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	
-	echo $twig->render('guilds.back_button.html.twig', array(
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+
+	$twig->display('guilds.back_button.html.twig', array(
 		'action' => getLink('guilds') . '/' . $guild_name
 	));
 }
 else {
 	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$guild->acceptInvite($player);
-		echo $twig->render('success.html.twig', array(
+		$twig->display('success.html.twig', array(
 			'title' => 'Accept invitation',
 			'description' => 'Player with name <b>'.$player->getName().'</b> has been added to guild <b>'.$guild->getName() . '</b>.',
 			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array(
@@ -116,8 +116,8 @@ else {
 	else
 	{
 		sort($list_of_invited_players);
-		
-		echo $twig->render('guilds.accept_invite.html.twig', array(
+
+		$twig->display('guilds.accept_invite.html.twig', array(
 			'guild_name' => $guild_name,
 			'invited_players' => $list_of_invited_players
 		));

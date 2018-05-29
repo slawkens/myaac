@@ -238,5 +238,5 @@ else
 }
 
 //back button
-echo $twig->render('creatures.back_button.html.twig');
+$twig->display('creatures.back_button.html.twig');
 ?>

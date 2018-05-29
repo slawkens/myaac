@@ -12,7 +12,7 @@ $title = 'Plugin manager';
 
 require LIBS . 'plugins.php';
 
-echo $twig->render('admin.plugins.form.html.twig');
+$twig->display('admin.plugins.form.html.twig');
 
 if(isset($_REQUEST['uninstall'])){
 	$uninstall = $_REQUEST['uninstall'];
@@ -118,7 +118,7 @@ foreach(get_plugins() as $plugin)
 	}
 }
 
-echo $twig->render('admin.plugins.html.twig', array(
+$twig->display('admin.plugins.html.twig', array(
 	'plugins' => $plugins
 ));
 ?>

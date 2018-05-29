@@ -28,14 +28,14 @@ if(empty($guild_errors)) {
 		if(!Validator::characterName($pass_to)) {
 			$guild_errors2[] = 'Invalid player name format.';
 		}
-		
+
 		if(empty($guild_errors2)) {
 			$to_player = new OTS_Player();
 			$to_player->find($pass_to);
 			if(!$to_player->isLoaded()) {
 				$guild_errors2[] = 'Player with name <b>'.$pass_to.'</b> doesn\'t exist.';
 			}
-			
+
 			if(empty($guild_errors2)) {
 				$to_player_rank = $to_player->getRank();
 				if($to_player_rank->isLoaded()) {
@@ -63,7 +63,7 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 				$level_in_guild = 3;
 			}
 		}
-		
+
 		$saved = false;
 		if($guild_leader) {
 			if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
@@ -71,25 +71,25 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 				if($query) {
 					$guild_leader_char->setRankId($query['id'], $guild->getId());
 				}
-				
+
 				$query = $db->query('SELECT `id` FROM `guild_ranks` WHERE `guild_id` = ' . $guild->getId() . ' ORDER BY `level` DESC LIMIT 1')->fetch();
 				if($query) {
 					$to_player->setRankId($query['id'], $guild->getId());
 				}
-				
+
 				$guild->setOwner($to_player);
 				$guild->save();
 				$saved = true;
 			}
 			if($saved) {
-				echo $twig->render('success.html.twig', array(
+				$twig->display('success.html.twig', array(
 					'title' => 'Leadership passed',
 					'description' => '<b>'.$to_player->getName().'</b> is now a Leader of <b>'.$guild_name.'</b>.',
 					'custom_buttons' => '<center><form action="' . getLink('guilds') . '/' . $guild->getName().'" METHOD=post>' . $twig->render('buttons.back.html.twig') . '</form></center>'
 				));
 			}
 			else {
-				echo $twig->render('guilds.pass_leadership.html.twig', array(
+				$twig->display('guilds.pass_leadership.html.twig', array(
 					'guild' => $guild
 				));
 			}
@@ -103,16 +103,16 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 	}
 }
 if(empty($guild_errors) && !empty($guild_errors2)) {
-	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors2));
-	
+	$twig->display('error_box.html.twig', array('errors' => $guild_errors2));
+
 	echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=pass_leadership" method="post">' . $twig->render('buttons.back.html.twig') . '</form></center>';
 }
 if(!empty($guild_errors)) {
 	if(!empty($guild_errors2)) {
 		$guild_errors = array_merge($guild_errors, $guild_errors2);
 	}
-	echo $twig->render('error_box.html.twig', array('errors' => $guild_errors));
-	
+	$twig->display('error_box.html.twig', array('errors' => $guild_errors));
+
 	echo '<br/><center><form action="?subtopic=guilds" method="post">' . $twig->render('buttons.back.html.twig') . '</form></center>';
 }
 
