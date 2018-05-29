@@ -811,7 +811,7 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	if($add_html_tags && isset($body[0]))
 		$tmp_body = '<html><head></head><body>' . $body . '<br/><br/>' . $signature_html . '</body></html>';
 	else
-		$tmp_body .= '<br/><br/>' . $signature_html;
+		$tmp_body = $body . '<br/><br/>' . $signature_html;
 
 	if($config['smtp_enabled'])
 	{
