@@ -55,10 +55,8 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 	{
 		$ret = '';
 
-		$argc = func_num_args();
-		$argv = func_get_args();
-		for($i = 0; $i < $argc; $i++) {
-			$ret .= $this->fieldName($argv[$i]) . ',';
+		foreach(func_get_args() as $v) {
+			$ret .= $this->fieldName($v) . ',';
 		}
 
 		$ret[strlen($ret) - 1] = '';
@@ -77,7 +75,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
     }
 
 /**
- * @param stirng $string String to be quoted.
+ * @param string $string String to be quoted.
  * @return string Quoted string.
  * @deprecated 0.0.5 Use PDO::quote().
  * @version 0.0.7
@@ -113,9 +111,11 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		$fields = array_keys($data);
 		$values = array_values($data);
 		$query = 'SELECT * FROM ' . $this->tableName($table) . ' WHERE (';
-		for ($i = 0; $i < count($fields); $i++)
+
+		$count = count($fields);
+		for ($i = 0; $i < $count; $i++)
 			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).' AND ';
-		$query = substr($query, 0, strlen($query)-4);
+		$query = substr($query, 0, -4);
 		$query.=');';
 
 		$query = $this->query($query);
@@ -128,20 +128,25 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		$fields = array_keys($data);
 		$values = array_values($data);
 		$query = 'INSERT INTO ' . $this->tableName($table) . ' (';
-		foreach ($fields as $field)
+		foreach ($fields as $field) {
 			$query.= $this->fieldName($field).',';
+		}
 
-		$query = substr($query, 0, strlen($query) - 1);
+		$query = substr($query, 0, -1);
 		$query .= ') VALUES (';
-		foreach ($values as $value)
-			if ($value === null)
+		foreach ($values as $value) {
+			if ($value === null) {
 				$query .= 'NULL,';
-			else
+			}
+			else {
 				$query .= $this->quote($value).',';
+			}
+		}
 
-		$query = substr($query, 0, strlen($query) - 1);
+		$query = substr($query, 0, -1);
 		$query .= ')';
-		$this->query($query);
+
+		$this->exec($query);
 		return true;
 	}
 
@@ -153,7 +158,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		foreach ($fields as $field)
 			$query.= $this->fieldName($field).',';
 
-		$query = substr($query, 0, strlen($query) - 1);
+		$query = substr($query, 0, -1);
 		$query.= ') VALUES (';
 		foreach ($values as $value)
 			if ($value === null)
@@ -161,7 +166,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 			else
 				$query.= $this->quote($value).',';
 
-		$query = substr($query, 0, strlen($query) - 1);
+		$query = substr($query, 0, -1);
 		$query .= ')';
 
 		$this->query($query);
@@ -174,24 +179,27 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		$values = array_values($data);
 
 		$query = 'UPDATE '.$this->tableName($table).' SET ';
-		for ($i = 0; $i < count($fields); $i++)
+
+		$count = count($fields);
+		for ($i = 0; $i < $count; $i++)
 			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).', ';
 
-		$query = substr($query, 0, strlen($query)-2);
+		$query = substr($query, 0, -2);
 		$query.=' WHERE (';
 		$fields = array_keys($where);
 		$values = array_values($where);
 
-		for ($i = 0; $i < count($fields); $i++)
+		$count = count($fields);
+		for ($i = 0; $i < $count; $i++)
 			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).' AND ';
 
-		$query = substr($query, 0, strlen($query)-4);
+		$query = substr($query, 0, -4);
 		if (isset($limit))
 			$query .=') LIMIT '.$limit.';';
 		else
 			$query .=');';
 
-		$this->query($query);
+		$this->exec($query);
 		return true;
 	}
 
@@ -201,21 +209,26 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		$values = array_values($data);
 
 		$query = 'DELETE FROM ' . $this->tableName($table) . ' WHERE (';
-		for ($i = 0; $i < count($fields); $i++)
+
+		$count = count($fields);
+		for ($i = 0; $i < $count; $i++) {
 			$query .= $this->fieldName($fields[$i]) . ' = ' . $this->quote($values[$i]) . ' AND ';
+		}
 
-		$query = substr($query, 0, strlen($query) - 4);
-		if ($limit > 0)
+		$query = substr($query, 0, -4);
+		if ($limit > 0) {
 			$query.=') LIMIT '.$limit.';';
-		else
+		}
+		else {
 			$query.=');';
+		}
 
-		$this->query($query);
+		$this->exec($query);
 		return true;
 	}
 /**
  * LIMIT/OFFSET clause for queries.
- * 
+ *
  * @param int|bool $limit Limit of rows to be affected by query (false if no limit).
  * @param int|bool $offset Number of rows to be skipped before applying query effects (false if no offset).
  * @return string LIMIT/OFFSET SQL clause for query.

@@ -453,8 +453,8 @@ class POT
  *
  * @version 0.1.5
  * @since 0.0.5
- * @param string $ip IP to ban.
- * @param string $mask Mask for ban (by default bans only given IP).
+ * @param mixed|string $ip IP to ban.
+ * @param mixed|string $mask Mask for ban (by default bans only given IP).
  * @param int $time Time for time until expires (0 - forever).
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_IPBan class.
@@ -463,7 +463,7 @@ class POT
     {
         // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
         // it's because that PHP integer types are signed
-        if($ip == '255.255.255.255')
+        if($ip === '255.255.255.255')
         {
             $ip = 4294967295;
         }
@@ -472,7 +472,7 @@ class POT
             $ip = sprintf('%u', ip2long($ip) );
         }
 
-        if($mask == '255.255.255.255')
+        if($mask === '255.255.255.255')
         {
             $mask = 4294967295;
         }
@@ -500,7 +500,7 @@ class POT
  *
  * @version 0.1.5
  * @since 0.0.5
- * @param string $ip IP to ban.
+ * @param mixed|string $ip IP to ban.
  * @param string $mask Mask for ban (by default 255.255.255.255) - not used thought.
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_IPBan class.
@@ -509,7 +509,7 @@ class POT
     {
         // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
         // it's because that PHP integer types are signed
-        if($ip == '255.255.255.255')
+        if($ip === '255.255.255.255')
         {
             $ip = 4294967295;
         }
@@ -531,7 +531,7 @@ class POT
  *
  * @version 0.1.5
  * @since 0.0.5
- * @param string $ip IP to ban.
+ * @param mixed|string $ip IP to ban.
  * @return bool True if IP number is banned, false otherwise.
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_IPBan class.
@@ -540,7 +540,7 @@ class POT
     {
         // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
         // it's because that PHP integer types are signed
-        if($ip == '255.255.255.255')
+        if($ip === '255.255.255.255')
         {
             $ip = 4294967295;
         }
@@ -551,7 +551,7 @@ class POT
 
         // finds ban entry
         $ban = new OTS_IPBan();
-        $ban->find($ip, $mask);
+        $ban->find($ip);
         return $ban->isLoaded() && $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() );
     }
 

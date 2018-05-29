@@ -105,7 +105,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			$need_revalidation = true;
 			if($cache->fetch('database_checksum', $tmp) && $tmp) {
 				$tmp = unserialize($tmp);
-				if(sha1($config['database_host'] . '.' . $config['database_name']) == $tmp) {
+				if(sha1($config['database_host'] . '.' . $config['database_name']) === $tmp) {
 					$need_revalidation = false;
 				}
 			}
@@ -185,7 +185,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
 	private function hasTableInternal($name) {
 		global $config;
-		return ($this->has_table_cache[$name] = $this->query("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " . $this->quote($config['database_name']) . " AND `TABLE_NAME` = " . $this->quote($name) . " LIMIT 1;")->rowCount() > 0);
+		return ($this->has_table_cache[$name] = $this->query('SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = ' . $this->quote($config['database_name']) . ' AND `TABLE_NAME` = ' . $this->quote($name) . ' LIMIT 1;')->rowCount() > 0);
 	}
 
 	public function hasColumn($table, $column) {
@@ -197,7 +197,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 	}
 
 	private function hasColumnInternal($table, $column) {
-		return $this->hasTable($table) && ($this->has_column_cache[$table . '.' . $column] = count($this->query("SHOW COLUMNS FROM `" . $table . "` LIKE '" . $column . "'")->fetchAll()) > 0);
+		return $this->hasTable($table) && ($this->has_column_cache[$table . '.' . $column] = count($this->query('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $column . "'")->fetchAll()) > 0);
 	}
 
 	public function revalidateCache() {

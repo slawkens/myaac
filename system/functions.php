@@ -65,7 +65,7 @@ function getForumBoardLink($board_id, $page = NULL)
 
 function getPlayerLink($name, $generate = true)
 {
-	global $ots, $config;
+	global $config;
 
 	if(is_numeric($name))
 	{
@@ -431,10 +431,12 @@ function template_place_holder($type)
 	if(array_key_exists($type, $template_place_holders) && is_array($template_place_holders[$type]))
 		$ret = implode($template_place_holders[$type]);
 
-	if($type === 'head_start')
+	if($type === 'head_start') {
 		$ret .= template_header();
-	elseif($type === 'body_end')
+	}
+	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
+	}
 
 	return $ret;
 }
@@ -546,7 +548,7 @@ function getStyle($i)
 	return is_int($i / 2) ? $config['darkborder'] : $config['lightborder'];
 }
 
-$vowels = array("e", "y", "u", "i", "o", "a");
+$vowels = array('e', 'y', 'u', 'i', 'o', 'a');
 function getCreatureName($killer, $showStatus = false, $extendedInfo = false)
 {
 	global $vowels, $ots, $config;
@@ -710,7 +712,7 @@ function get_locales()
 	$ret = array();
 
 	$path = LOCALE;
-	foreach(scandir($path) as $file)
+	foreach(scandir($path, 0) as $file)
 	{
 		if($file[0] != '.' && $file != '..' && is_dir($path . $file))
 			$ret[] = $file;
@@ -746,7 +748,7 @@ function get_templates()
 	$ret = array();
 
 	$path = TEMPLATES;
-	foreach(scandir($path) as $file)
+	foreach(scandir($path, 0) as $file)
 	{
 		if($file[0] !== '.' && $file !== '..' && is_dir($path . $file))
 			$ret[] = $file;
@@ -764,7 +766,7 @@ function get_plugins()
 	$ret = array();
 
 	$path = PLUGINS;
-	foreach(scandir($path) as $file) {
+	foreach(scandir($path, 0) as $file) {
 		$file_ext = pathinfo($file, PATHINFO_EXTENSION);
 		$file_name = pathinfo($file, PATHINFO_FILENAME);
 		if ($file === '.' || $file === '..' || $file === 'disabled' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file))
@@ -815,7 +817,7 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 
 	if($config['smtp_enabled'])
 	{
-		$mailer->IsSMTP();
+		$mailer->isSMTP();
 		$mailer->Host = $config['smtp_host'];
 		$mailer->Port = (int)$config['smtp_port'];
 		$mailer->SMTPAuth = $config['smtp_auth'];
@@ -823,24 +825,26 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 		$mailer->Password = $config['smtp_pass'];
 		$mailer->SMTPSecure = isset($config['smtp_secure']) ? $config['smtp_secure'] : '';
 	}
-	else
-		$mailer->IsMail();
+	else {
+		$mailer->isMail();
+	}
 
-	$mailer->IsHTML(isset($body[0]) > 0);
+	$mailer->isHTML(isset($body[0]) > 0);
 	$mailer->From = $config['mail_address'];
 	$mailer->Sender = $config['mail_address'];
 	$mailer->CharSet = 'utf-8';
 	$mailer->FromName = $config['lua']['serverName'];
 	$mailer->Subject = $subject;
-	$mailer->AddAddress($to);
+	$mailer->addAddress($to);
 	$mailer->Body = $tmp_body;
 
 	$signature_plain = '';
 	if(isset($config['mail_signature']['plain']))
 		$signature_plain = $config['mail_signature']['plain'];
 
-	if(isset($altBody[0]))
+	if(isset($altBody[0])) {
 		$mailer->AltBody = $altBody . $signature_plain;
+	}
 	else { // automatically generate plain html
 		$mailer->AltBody = strip_tags(preg_replace('/<a(.*)href="([^"]*)"(.*)>/','$2', $body)) . "\n" . $signature_plain;
 	}
@@ -856,7 +860,7 @@ function convert_bytes($size)
 
 function log_append($file, $str)
 {
-	$f = fopen(LOGS . $file, 'a');
+	$f = fopen(LOGS . $file, 'ab');
 	fwrite($f, '[' . date(DateTime::RFC1123) . '] ' . $str . PHP_EOL);
 	fclose($f);
 }
@@ -875,7 +879,7 @@ function load_config_lua($filename)
 	$result = array();
 	$config_string = str_replace(array("\r\n", "\r"), "\n", file_get_contents($filename));
 	$lines = explode("\n", $config_string);
-	if(count($lines) > 0)
+	if(count($lines) > 0) {
 		foreach($lines as $ln => $line)
 		{
 			$tmp_exp = explode('=', $line, 2);
@@ -891,7 +895,7 @@ function load_config_lua($filename)
 			else if(count($tmp_exp) >= 2)
 			{
 				$key = trim($tmp_exp[0]);
-				if(substr($key, 0, 2) != '--')
+				if(0 !== strpos($key, '--'))
 				{
 					$value = trim($tmp_exp[1]);
 					if(strpos($value, '--') !== false) {// found some deep comment
@@ -900,11 +904,11 @@ function load_config_lua($filename)
 
 					if(is_numeric($value))
 						$result[$key] = (float) $value;
-					elseif(in_array(substr($value, 0 , 1), array("'", '"')) && in_array(substr($value, -1 , 1), array("'", '"')))
+					elseif(in_array(@$value[0], array("'", '"')) && in_array(@$value[strlen($value) - 1], array("'", '"')))
 						$result[$key] = (string) substr(substr($value, 1), 0, -1);
 					elseif(in_array($value, array('true', 'false')))
-						$result[$key] = ($value == 'true') ? true : false;
-					elseif(substr($value, 0 , 1) == '{' && substr($value, -1 , 1) == '}') {
+						$result[$key] = ($value === 'true') ? true : false;
+					elseif(@$value[0] === '{' && @$value[strlen($value) - 1] === '}') {
 						// arrays are not supported yet
 						// just ignore the error
 					}
@@ -922,7 +926,7 @@ function load_config_lua($filename)
 				}
 			}
 		}
-	
+	}
 
 	$result = array_merge($result, isset($config['lua']) ? $config['lua'] : array());
 	return $result;
@@ -1010,8 +1014,8 @@ function deleteDirectory($dir) {
 	if(!is_dir($dir)) {
 		return unlink($dir);
 	}
-	
-	foreach(scandir($dir) as $item) {
+
+	foreach(scandir($dir, 0) as $item) {
 		if($item === '.' || $item === '..') {
 			continue;
 		}
