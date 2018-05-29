@@ -430,7 +430,7 @@ if(superAdmin()) {
 	}
 
 	if($config['database_log']) {
-		echo PHP_EOL . '<!-- Database Queries Done by MyAAC:' . PHP_EOL . $db->getLog() . '-->';
+		echo PHP_EOL . '<!-- List of MySQL queries done:' . PHP_EOL . $db->getLog() . '-->';
 	}
 }
 
