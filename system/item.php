@@ -8,7 +8,7 @@
  * @link      http://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-require_once(SYSTEM . 'libs/items_images.php');
+require_once SYSTEM . 'libs/items_images.php';
 
 Items_Images::$files = array(
 	'otb' => SYSTEM . 'data/items.otb',

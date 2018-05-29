@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Account Management';
 
 if($config['account_country'])
-	require(SYSTEM . 'countries.conf.php');
+	require SYSTEM . 'countries.conf.php';
 
 $groups = new OTS_Groups_List();
 
@@ -30,7 +30,7 @@ if(ACTION == "logout" && !isset($_REQUEST['account_login'])) {
 if(!$logged)
 {
 	if(ACTION == 'confirm_email') {
-		require(PAGES . 'account/' . ACTION . '.php');
+		require PAGES . 'account/' . ACTION . '.php';
 		return;
 	}
 		
@@ -137,7 +137,7 @@ $errors = array();
 			error('Error: Action contains illegal characters.');
 		}
 		else if(file_exists(PAGES . 'account/' . $action . '.php')) {
-			require(PAGES . 'account/' . $action . '.php');
+			require PAGES . 'account/' . $action . '.php';
 		}
 		else {
 			error('This page does not exists.');

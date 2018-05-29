@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Who is online?';
 
 if($config['account_country'])
-	require(SYSTEM . 'countries.conf.php');
+	require SYSTEM . 'countries.conf.php';
 
 $promotion = '';
 if($db->hasColumn('players', 'promotion'))

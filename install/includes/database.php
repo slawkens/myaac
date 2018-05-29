@@ -1,9 +1,9 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
-require(SYSTEM . 'libs/pot/OTS.php');
+require SYSTEM . 'libs/pot/OTS.php';
 $ots = POT::getInstance();
-require(SYSTEM . 'database.php');
+require SYSTEM . 'database.php';
 
 if(!isset($db)) {
 	$database_error = $locale['step_database_error_mysql_connect'] . '<br/>' .

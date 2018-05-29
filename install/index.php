@@ -1,16 +1,16 @@
 <?php
-require('../common.php');
+require '../common.php';
 
 define('MYAAC_INSTALL', true);
 
 // includes
-require(SYSTEM . 'functions.php');
-require(BASE . 'install/includes/functions.php');
-require(BASE . 'install/includes/locale.php');
-require(SYSTEM . 'clients.conf.php');
+require SYSTEM . 'functions.php';
+require BASE . 'install/includes/functions.php';
+require BASE . 'install/includes/locale.php';
+require SYSTEM . 'clients.conf.php';
 
 if(file_exists(BASE . 'config.local.php'))
-	require(BASE . 'config.local.php');
+	require BASE . 'config.local.php';
 
 // twig
 require_once LIBS . 'Twig/Autoloader.php';
@@ -181,7 +181,7 @@ if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 			ob_start();
 
 			$step_id = array_search($step, $steps);
-			require('steps/' . $step_id . '-' . $step . '.php');
+			require 'steps/' . $step_id . '-' . $step . '.php';
 			$content = ob_get_contents();
 			ob_end_clean();
 		}
@@ -192,5 +192,5 @@ else {
 }
 
 // render
-require('template/template.php');
+require 'template/template.php';
 //$_SESSION['laststep'] = $step;

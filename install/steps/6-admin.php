@@ -1,10 +1,10 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
-require(BASE . 'install/includes/config.php');
+require BASE . 'install/includes/config.php';
 if(!$error) {
-	require(BASE . 'install/includes/database.php');
-	
+	require BASE . 'install/includes/database.php';
+
 	if(isset($database_error)) { // we failed connect to the database
 		error($database_error);
 	}

@@ -1,7 +1,7 @@
 <?php
 // few things we'll need
-require('../common.php');
-require_once(BASE . 'config.local.php');
+require '../common.php';
+require_once BASE . 'config.local.php';
 
 if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed']))
 {
@@ -21,17 +21,17 @@ if(empty($page) || preg_match("/[^a-zA-Z0-9_\-]/", $page))
 $page = strtolower($page);
 define('PAGE', $page);
 
-require(SYSTEM . 'functions.php');
-require(SYSTEM . 'init.php');
+require SYSTEM . 'functions.php';
+require SYSTEM . 'init.php';
 
 // event system
-require_once(SYSTEM . 'hooks.php');
+require_once SYSTEM . 'hooks.php';
 $hooks = new Hooks();
 $hooks->load();
 
-require(SYSTEM . 'status.php');
-require(SYSTEM . 'login.php');
-require(ADMIN . 'includes/functions.php');
+require SYSTEM . 'status.php';
+require SYSTEM . 'login.php';
+require ADMIN . 'includes/functions.php';
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
@@ -41,7 +41,7 @@ if(!$logged || !admin()) {
 	$page = 'login';
 }
 
-// include our page 
+// include our page
 $file = SYSTEM . 'pages/admin/' . $page . '.php';
 if(!@file_exists($file)) {
 	$page = '404';
@@ -56,5 +56,5 @@ ob_end_clean();
 
 // template
 $template_path = 'template/';
-require(ADMIN . $template_path . 'template.php');
+require ADMIN . $template_path . 'template.php';
 ?>

@@ -10,9 +10,9 @@
  */
 
 // we need some functions
-require('../common.php');
-require(SYSTEM . 'functions.php');
-require(SYSTEM . 'init.php');
+require '../common.php';
+require SYSTEM . 'functions.php';
+require SYSTEM . 'init.php';
 
 $error = '';
 if(isset($_GET['account']))

@@ -1,5 +1,5 @@
 <?php
-//require('../../common.php');
+//require '../../common.php';
 
 //$text = $_GET['text'];
 /*

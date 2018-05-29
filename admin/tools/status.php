@@ -1,9 +1,9 @@
 <?php
-require('../../common.php');
-require(SYSTEM . 'init.php');
-require(SYSTEM . 'functions.php');
-require(SYSTEM . 'status.php');
-require(SYSTEM . 'login.php');
+require '../../common.php';
+require SYSTEM . 'init.php';
+require SYSTEM . 'functions.php';
+require SYSTEM . 'status.php';
+require SYSTEM . 'login.php';
 
 if(!admin())
 	die('Access denied.');

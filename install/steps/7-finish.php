@@ -6,7 +6,7 @@ if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['save
 	warning($locale['already_installed']);
 }
 else {
-	require(SYSTEM . 'init.php');
+	require SYSTEM . 'init.php';
 	if(!$error) {
 		if(USE_ACCOUNT_NAME)
 			$account = isset($_SESSION['var_account']) ? $_SESSION['var_account'] : null;

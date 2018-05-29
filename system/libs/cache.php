@@ -19,27 +19,27 @@ class Cache
 		if(!self::$instance) {
 			switch(strtolower($engine)) {
 				case 'apc':
-					require('cache_apc.php');
+					require 'cache_apc.php';
 					self::$instance = new Cache_APC($prefix);
 					break;
 
 				case 'apcu':
-					require('cache_apcu.php');
+					require 'cache_apcu.php';
 					self::$instance = new Cache_APCu($prefix);
 					break;
 
 				case 'eaccelerator':
-					require('cache_eaccelerator.php');
+					require 'cache_eaccelerator.php';
 					self::$instance = new Cache_eAccelerator($prefix);
 					break;
 
 				case 'xcache':
-					require('cache_xcache.php');
+					require 'cache_xcache.php';
 					self::$instance = new Cache_XCache($prefix);
 					break;
 
 				case 'file':
-					require('cache_file.php');
+					require 'cache_file.php';
 					self::$instance = new Cache_File($prefix, CACHE);
 					break;
 

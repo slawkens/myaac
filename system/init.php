@@ -120,9 +120,9 @@ if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hid
 }
 
 // POT
-require_once(SYSTEM . 'libs/pot/OTS.php');
+require_once SYSTEM . 'libs/pot/OTS.php';
 $ots = POT::getInstance();
-require_once(SYSTEM . 'database.php');
+require_once SYSTEM . 'database.php';
 
 define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 // load vocation names

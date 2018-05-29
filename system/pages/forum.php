@@ -26,7 +26,7 @@ if(strtolower($config['forum']) != 'site')
 if(!$logged)
 	echo  'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum') . '">Log in</a> to post on the forum.<br /><br />';
 
-require_once(LIBS . 'forum.php');
+require_once LIBS . 'forum.php';
 
 $canEdit = Forum::isModerator();
 if($canEdit)

@@ -25,5 +25,5 @@ if(preg_match("/[^A-z0-9_\-]/", $tool))
 
 $file = BASE . 'admin/pages/tools/' . $tool . '.php';
 if(!@file_exists($file))
-	require($file);
+	require $file;
 ?>

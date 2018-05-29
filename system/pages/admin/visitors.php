@@ -18,7 +18,7 @@ You can enable it by editing this configurable in <b>config.local.php</b> file:<
 return;
 endif;
 
-require(SYSTEM . 'libs/visitors.php');
+require SYSTEM . 'libs/visitors.php';
 $visitors = new Visitors($config['visitors_counter_ttl']);
 
 function compare($a, $b) {

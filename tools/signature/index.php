@@ -8,9 +8,9 @@
 		exit;
 	}
 
-	require_once('../../common.php');
-	require_once(SYSTEM . 'functions.php');
-	require_once(SYSTEM . 'init.php');
+	require_once '../../common.php';
+	require_once SYSTEM . 'functions.php';
+	require_once SYSTEM . 'init.php';
 
 	// Definitions
 	define('SIGNATURES', TOOLS . 'signature/');
@@ -59,7 +59,7 @@
 		exit;
 	}
 
-	require($file);
+	require $file;
 	header('Content-type: image/png');
 	$seconds_to_cache = $config['signature_browser_cache'] * 60;
 	$ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";

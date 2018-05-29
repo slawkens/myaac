@@ -4,11 +4,11 @@ if(php_sapi_name() != "cli") {
 	die('This script can be run only in command line mode.');
 }
 
-require_once('../../common.php');
-require_once(SYSTEM . 'functions.php');
-require_once(SYSTEM . 'init.php');
-require_once(SYSTEM . 'hooks.php');
-require_once(LIBS . 'plugins.php');
+require_once '../../common.php';
+require_once SYSTEM . 'functions.php';
+require_once SYSTEM . 'init.php';
+require_once SYSTEM . 'hooks.php';
+require_once LIBS . 'plugins.php';
 
 if($argc != 2) {
 	exit('This command expects one parameter: zip file name (plugin)' . PHP_EOL);

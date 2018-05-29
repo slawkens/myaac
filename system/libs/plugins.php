@@ -236,7 +236,7 @@ class Plugins {
 							if (isset($plugin['install'])) {
 								if (file_exists(BASE . $plugin['install'])) {
 									$db->revalidateCache();
-									require(BASE . $plugin['install']);
+									require BASE . $plugin['install'];
 									$db->revalidateCache();
 								}
 								else

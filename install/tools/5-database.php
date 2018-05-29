@@ -1,19 +1,19 @@
 <?php
-require_once('../../common.php');
+require_once '../../common.php';
 
-require(SYSTEM . 'functions.php');
-require(BASE . 'install/includes/functions.php');
-require(BASE . 'install/includes/locale.php');
+require SYSTEM . 'functions.php';
+require BASE . 'install/includes/functions.php';
+require BASE . 'install/includes/locale.php';
 
 $error = false;
-require(BASE . 'install/includes/config.php');
+require BASE . 'install/includes/config.php';
 
 ini_set('max_execution_time', 300);
 ob_implicit_flush();
 ob_end_flush();
 
 if(!$error) {
-	require(BASE . 'install/includes/database.php');
+	require BASE . 'install/includes/database.php';
 	if(isset($database_error)) { // we failed connect to the database
 		error($database_error);
 		return;

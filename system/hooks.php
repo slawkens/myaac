@@ -47,7 +47,7 @@ class Hook
 		
 		global $db, $config, $template_path, $ots, $content, $twig;
 		if(file_exists(BASE . $this->_file)) {
-			$ret = require(BASE . $this->_file);
+			$ret = require BASE . $this->_file;
 		}
 
 		return $ret === null || $ret == 1 || $ret;

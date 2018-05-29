@@ -40,13 +40,13 @@ if(!$error) {
 			}
 		}
 	}
-				
-	require(BASE . 'install/includes/config.php');
-		
+
+	require BASE . 'install/includes/config.php';
+
 	if(!$error) {
 		success($locale['step_database_importing']);
-		require(BASE . 'install/includes/database.php');
-		
+		require BASE . 'install/includes/database.php';
+
 		if(isset($database_error)) { // we failed connect to the database
 			error($database_error);
 		}

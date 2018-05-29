@@ -14,7 +14,7 @@ else {
 		if(@file_exists($lang_file_main)
 			&& @file_exists($lang_file_install))
 		{
-			require($lang_file_main);
+			require $lang_file_main;
 			$locales[] = array('id' => $tmp_locale, 'name' => $locale['name']);
 		}
 	}

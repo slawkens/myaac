@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Create Account';
 
 if($config['account_country'])
-	require(SYSTEM . 'countries.conf.php');
+	require SYSTEM . 'countries.conf.php';
 
 if($logged)
 {

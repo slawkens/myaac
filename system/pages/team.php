@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Gamemasters List';
 
 if($config['account_country'])
-	require(SYSTEM . 'countries.conf.php');
+	require SYSTEM . 'countries.conf.php';
 
 $groups = new OTS_Groups_List();
 if(!$groups->count())

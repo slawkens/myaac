@@ -10,8 +10,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Load items.xml';
 
-require(LIBS . 'items.php');
-require(LIBS . 'weapons.php');
+require LIBS . 'items.php';
+require LIBS . 'weapons.php';
 
 echo $twig->render('admin.items.html.twig');
 

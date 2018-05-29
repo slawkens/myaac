@@ -10,7 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-require_once(LIBS . 'forum.php');
+require_once LIBS . 'forum.php';
 
 if(isset($_GET['archive']))
 {

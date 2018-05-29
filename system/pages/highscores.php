@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Highscores';
 
 if($config['account_country'] && $config['highscores_country_box'])
-	require(SYSTEM . 'countries.conf.php');
+	require SYSTEM . 'countries.conf.php';
 
 $list = isset($_GET['list']) ? $_GET['list'] : '';
 $_page = isset($_GET['page']) ? $_GET['page'] : 0;

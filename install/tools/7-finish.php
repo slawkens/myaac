@@ -1,9 +1,9 @@
 <?php
-require_once('../../common.php');
+require_once '../../common.php';
 
-require(SYSTEM . 'functions.php');
-require(BASE . 'install/includes/functions.php');
-require(BASE . 'install/includes/locale.php');
+require SYSTEM . 'functions.php';
+require BASE . 'install/includes/functions.php';
+require BASE . 'install/includes/locale.php';
 
 ini_set('max_execution_time', 300);
 ob_implicit_flush();
@@ -14,7 +14,7 @@ if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['save
 	return;
 }
 
-require(SYSTEM . 'init.php');
+require SYSTEM . 'init.php';
 
 $deleted = 'deleted';
 if($db->hasColumn('players', 'deletion'))
@@ -42,19 +42,19 @@ if($success) {
 	success($locale['step_database_imported_players']);
 }
 
-require(LIBS . 'items.php');
+require LIBS . 'items.php';
 if(Items::loadFromXML())
 	success($locale['step_database_loaded_items']);
 else
 	error(Items::getError());
 
-require(LIBS . 'weapons.php');
+require LIBS . 'weapons.php';
 if(Weapons::loadFromXML())
 	success($locale['step_database_loaded_weapons']);
 else
 	error(Weapons::getError());
 
-require(LIBS . 'creatures.php');
+require LIBS . 'creatures.php';
 if(Creatures::loadFromXML()) {
 	success($locale['step_database_loaded_monsters']);
 	
@@ -67,7 +67,7 @@ else {
 	error(Creatures::getLastError());
 }
 
-require(LIBS . 'spells.php');
+require LIBS . 'spells.php';
 if(Spells::loadFromXML()) {
 	success($locale['step_database_loaded_spells']);
 }
@@ -76,7 +76,7 @@ else {
 }
 
 // update config.highscores_ids_hidden
-require_once(SYSTEM . 'migrations/20.php');
+require_once SYSTEM . 'migrations/20.php';
 $database_migration_20 = true;
 $content = '';
 if(!databaseMigration20($content)) {
@@ -86,7 +86,7 @@ if(!databaseMigration20($content)) {
 }
 
 // add z_polls tables
-require_once(SYSTEM . 'migrations/22.php');
+require_once SYSTEM . 'migrations/22.php';
 
 $locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(str_replace('tools/', '',ADMIN_URL), $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
 $locale['step_finish_desc'] = str_replace('$HOMEPAGE$', generateLink(str_replace('tools/', '', BASE_URL), $locale['step_finish_homepage'], true), $locale['step_finish_desc']);

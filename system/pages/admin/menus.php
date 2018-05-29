@@ -49,7 +49,7 @@ if(isset($_REQUEST['template'])) {
 	
 	$file = TEMPLATES . $template . '/config.php';
 	if(file_exists($file)) {
-		require_once($file);
+		require_once $file;
 	}
 	else {
 		echo 'Cannot find template config.php file.';

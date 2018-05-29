@@ -31,13 +31,13 @@ else
 			}
 		}
 	}
-	
+
 	if(!isset($locale_))
 		$locale_ = 'en';
 }
 
-require(LOCALE . 'en/main.php');
-require(LOCALE . 'en/install.php');
+require LOCALE . 'en/main.php';
+require LOCALE . 'en/install.php';
 
 $file_main = LOCALE . $locale_ . '/main.php';
 if(!file_exists($file_main))
@@ -47,6 +47,6 @@ $file_install = LOCALE . $locale_ . '/install.php';
 if(!file_exists($file_install))
 	$file_install = LOCALE . 'en/install.php';
 
-require($file_main);
-require($file_install);
+require $file_main;
+require $file_install;
 ?>

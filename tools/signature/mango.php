@@ -6,7 +6,7 @@
 	**/
 
 	/** Load the MadGD class **/
-	require('gd.class.php');
+	require 'gd.class.php';
 	/** Default values **/
 	list( $i, $eachRow, $percent ) = array( .5, 14, array( 'size' => 7 ) );
 	/** Get experience points for a certain level **/

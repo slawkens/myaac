@@ -183,7 +183,7 @@ if(fetchDatabaseConfig('database_version', $tmp)) { // we got version
 	if($tmp < DATABASE_VERSION) { // import if older
 		$db->revalidateCache();
 		for($i = $tmp + 1; $i <= DATABASE_VERSION; $i++) {
-			require(SYSTEM . 'migrations/' . $i . '.php');
+			require SYSTEM . 'migrations/' . $i . '.php';
 			updateDatabaseConfig('database_version', $i);
 		}
 	}
@@ -192,7 +192,7 @@ else { // register first version
 	registerDatabaseConfig('database_version', 0);
 	$db->revalidateCache();
 	for($i = 1; $i <= DATABASE_VERSION; $i++) {
-		require(SYSTEM . 'migrations/' . $i . '.php');
+		require SYSTEM . 'migrations/' . $i . '.php';
 		updateDatabaseConfig('database_version', $i);
 	}
 }
@@ -408,12 +408,12 @@ if($config['backward_support']) {
 
 $title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
 if(file_exists($template_path . '/index.php'))
-	require($template_path . '/index.php');
+	require $template_path . '/index.php';
 else if(file_exists($template_path . '/template.php')) // deprecated
-	require($template_path . '/template.php');
+	require $template_path . '/template.php';
 else if($config['backward_support'] && file_exists($template_path . '/layout.php'))
 {
-	require($template_path . '/layout.php');
+	require $template_path . '/layout.php';
 }
 else
 {

@@ -10,10 +10,10 @@
  */
 
 // we need some functions
-require('../common.php');
-require_once(SYSTEM . 'functions.php');
-require_once(SYSTEM . 'init.php');
-require_once(SYSTEM . 'template.php');
+require '../common.php';
+require_once SYSTEM . 'functions.php';
+require_once SYSTEM . 'init.php';
+require_once SYSTEM . 'template.php';
 
 $error = '';
 if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $_GET['forum_section'], $_GET['template_path'], $_GET['type']))
