@@ -324,7 +324,7 @@ class POT
  * OTServ database connection object.
  * </p>
  *
- * @var PDO
+ * @var OTS_DB_MySQL
  */
     private $db;
 
@@ -433,7 +433,7 @@ class POT
  *
  * @version 0.0.4
  * @since 0.0.4
- * @return PDO Database connection handle.
+ * @return OTS_DB_MySQL Database connection handle.
  */
     public function getDBHandle()
     {
