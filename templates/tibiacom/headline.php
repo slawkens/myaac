@@ -18,7 +18,7 @@ if(!@file_exists($page_file))
 		$_GET['t'] = '';
 
 	// set font path
-	putenv('GDFONTPATH=' . dirname(__FILE__));
+	putenv('GDFONTPATH=' . __DIR__);
 
 	// create image
 	$image = imagecreatetruecolor(250, 28);
