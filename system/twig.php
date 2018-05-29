@@ -26,6 +26,11 @@ $function = new Twig_SimpleFunction('hook', function ($hook) {
 });
 $twig->addFunction($function);
 
+$function = new Twig_SimpleFunction('config', function ($key) {
+	return config($key);
+});
+$twig->addFunction($function);
+
 $filter = new Twig_SimpleFilter('urlencode', function ($s) {
 	return urlencode($s);
 });

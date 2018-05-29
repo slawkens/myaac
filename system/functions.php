@@ -948,16 +948,14 @@ function get_browser_real_ip() {
 	return '0';
 }
 function setSession($key, $data) {
-	global $config;
-	$_SESSION[$config['session_prefix'] . $key] = $data;
+	$_SESSION[config('session_prefix') . $key] = $data;
 }
 function getSession($key) {
-	global $config;
-	return (isset($_SESSION[$config['session_prefix'] . $key])) ? $_SESSION[$config['session_prefix'] . $key] : false;
+	$key = config('session_prefix') . $key;
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
 }
 function unsetSession($key) {
-	global $config;
-	unset($_SESSION[$config['session_prefix'] . $key]);
+	unset($_SESSION[config('session_prefix') . $key]);
 }
 
 function getTopPlayers($limit = 5) {
@@ -1024,6 +1022,15 @@ function deleteDirectory($dir) {
 	}
 	
 	return rmdir($dir);
+}
+
+function config($key) {
+	global $config;
+	if (is_array($key)) {
+		return $config[$key[0]] = $key[1];
+	}
+
+	return $config[$key];
 }
 
 // validator functions
