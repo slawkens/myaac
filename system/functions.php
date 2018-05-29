@@ -459,7 +459,7 @@ function template_header($is_admin = false)
 	$ret .= '
 	<meta name="description" content="' . $config['meta_description'] . '" />
 	<meta name="keywords" content="' . $config['meta_keywords'] . ', myaac, wodzaac" />
-	<meta name="generator" content="MyAAC ' . MYAAC_VERSION . '" />
+	<meta name="generator" content="MyAAC" />
 	<link rel="stylesheet" type="text/css" href="' . BASE_URL . 'tools/messages.css" />
 	<script type="text/javascript" src="' . BASE_URL . 'tools/jquery.js"></script>
 	<noscript>
