@@ -417,7 +417,7 @@ else
 	die('ERROR: Cannot load template.');
 }
 
-echo '<!-- MyAAC ' . MYAAC_VERSION . ' :: http://www.my-aac.org/ -->' . "\n";
+echo base64_decode('PCEtLSBQb3dlcmVkIGJ5IE15QUFDIDo6IGh0dHBzOi8vd3d3Lm15LWFhYy5vcmcvIC0tPg==') . PHP_EOL;
 if(($config['debug_level'] & 1) == 1)
 	echo '<!-- Generated in :: ' . round(microtime(true) - START_TIME, 4) . ' -->';
 

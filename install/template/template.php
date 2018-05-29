@@ -8,7 +8,7 @@
 	<div id="wrapper">
 		<!--div class="buffer"-->
 			<div id="header">
-				<h1>MyAAC v<?php echo MYAAC_VERSION . ' ' . $locale['installation']; ?></h1>
+				<h1>MyAAC <?php echo $locale['installation']; ?></h1>
 			</div>
 
 			<div id="body">
