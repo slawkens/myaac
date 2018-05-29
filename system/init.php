@@ -91,39 +91,28 @@ if(isset($config['lua']['houserentperiod']))
 if($config['item_images_url'][strlen($config['item_images_url']) - 1] !== '/')
 	$config['item_images_url'] .= '/';
 
-// localize data/ directory
-if(isset($config['lua']['dataDirectory'][0]))
-{
-	$tmp = $config['lua']['dataDirectory'];
-	if($tmp[0] !== '/')
-		$tmp = $config['server_path'] . $tmp;
+// localize data/ directory based on data directory set in config.lua
+foreach(array('dataDirectory', 'data_directory', 'datadir') as $key) {
+	if(!isset($config['lua'][$key][0])) {
+		break;
+	}
 
-	if($tmp[strlen($tmp) - 1] !== '/') // do not forget about trailing slash
-		$tmp .= '/';
+	$foundValue = $config['lua'][$key];
+	if($foundValue[0] !== '/') {
+		$foundValue = $config['server_path'] . $foundValue;
+	}
+
+	if($foundValue[strlen($foundValue) - 1] !== '/') {// do not forget about trailing slash
+		$foundValue .= '/';
+	}
 }
-else if(isset($config['lua']['data_directory'][0]))
-{
-	$tmp = $config['lua']['data_directory'];
-	if($tmp[0] !== '/')
-		$tmp = $config['server_path'] . $tmp;
 
-	if($tmp[strlen($tmp) - 1] !== '/') // do not forget about trailing slash
-		$tmp .= '/';
+if(!isset($foundValue)) {
+	$foundValue = $config['server_path'] . 'data/';
 }
-else if(isset($config['lua']['datadir'][0]))
-{
-	$tmp = $config['lua']['datadir'];
-	if($tmp[0] !== '/')
-		$tmp = $config['server_path'] . $tmp;
 
-	if($tmp[strlen($tmp) - 1] !== '/') // do not forget about trailing slash
-		$tmp .= '/';
-}
-else
-	$tmp = $config['server_path'] . 'data/';
-
-$config['data_path'] = $tmp;
-unset($tmp);
+$config['data_path'] = $foundValue;
+unset($foundValue);
 
 // new config values for compability
 if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hidden']) == 0) {
