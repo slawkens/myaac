@@ -46,7 +46,7 @@ else {
 	// import schema
 	try {
 		$db->query(file_get_contents(BASE . 'install/includes/schema.sql'));
-		
+
 		registerDatabaseConfig('database_version', DATABASE_VERSION);
 		$locale['step_database_success_schema'] = str_replace('$PREFIX$', TABLE_PREFIX, $locale['step_database_success_schema']);
 		success($locale['step_database_success_schema']);
@@ -201,7 +201,7 @@ if(!$db->hasColumn('players', 'comment')) {
 if($db->hasColumn('players', 'rank_id')) {
 	if(query("ALTER TABLE players MODIFY `rank_id` INT(11) NOT NULL DEFAULT 0;"))
 		success($locale['step_database_modifying_field'] . ' players.rank_id...');
-	
+
 	if($db->hasColumn('players', 'guildnick')) {
 		if(query("ALTER TABLE players MODIFY `guildnick` VARCHAR(255) NOT NULL DEFAULT '';")) {
 			success($locale['step_database_modifying_field'] . ' players.guildnick...');

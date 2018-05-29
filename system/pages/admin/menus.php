@@ -18,7 +18,7 @@ if(!hasFlag(FLAG_CONTENT_MENUS) && !superAdmin())
 
 if(isset($_REQUEST['template'])) {
 	$template = $_REQUEST['template'];
-	
+
 	if(isset($_REQUEST['menu'])) {
 		$post_menu = $_REQUEST['menu'];
 		$post_menu_link = $_REQUEST['menu_link'];
@@ -28,13 +28,13 @@ if(isset($_REQUEST['template'])) {
 			echo 'Menu count is not equal menu links. Something went wrong when sending form.';
 			return;
 		}
-		
+
 		$db->query('DELETE FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template));
 		foreach($post_menu as $category => $menus) {
 			foreach($menus as $i => $menu) {
 				if(empty($menu)) // don't save empty menu item
 					continue;
-				
+
 				try {
 					$db->insert(TABLE_PREFIX . 'menu', array('template' => $template, 'name' => $menu, 'link' => $post_menu_link[$category][$i], 'blank' => $post_menu_blank[$category][$i] == 'on' ? 1 : 0, 'color' => str_replace('#', '', $post_menu_color[$category][$i]), 'category' => $category, 'ordering' => $i));
 				}
@@ -43,10 +43,10 @@ if(isset($_REQUEST['template'])) {
 				}
 			}
 		}
-		
+
 		success('Saved at ' . date('H:i'));
 	}
-	
+
 	$file = TEMPLATES . $template . '/config.php';
 	if(file_exists($file)) {
 		require_once $file;
@@ -55,12 +55,12 @@ if(isset($_REQUEST['template'])) {
 		echo 'Cannot find template config.php file.';
 		return;
 	}
-	
+
 	if(!isset($config['menu_categories'])) {
 		echo "No menu categories set in template config.php.<br/>This template doesn't support dynamic menus.";
 		return;
 	}
-	
+
 	echo 'Hint: You can drag menu items.<br/>
 	Hint: Add links to external sites using: <b>http://</b> prefix.<br/>
 	Not all templates support blank and colorful links.<br/>
@@ -88,19 +88,19 @@ if(isset($_REQUEST['template'])) {
 				<input class="color-picker" type="text" name="menu_color[' . $id . '][]" value="#' . $menu['color'] . '" />
 				
 				<a class="remove-button" id="remove-button-' . $id . '-' . $i . '"><img src="' . BASE_URL . 'images/del.png"/></a></li>';
-				
+
 				$i++;
 				$last_id[$id] = $i;
 			}
 		}
-			
+
 		echo '</ul>';
 	}
-	
+
 	echo '<input type="submit" class="button" value="Update">';
 	echo '<input type="button" class="button" value="Cancel" onclick="window.location = \'' . ADMIN_URL . '?p=menus&template=' . $template . '\';">';
 	echo '</form>';
-	
+
 	echo $twig->render('admin.menus.js.html.twig', array(
 		'menus' => $menus,
 		'last_id' => $last_id
@@ -114,7 +114,7 @@ else {
 			unset($templates[$key]);
 		}
 	}
-	
+
 	echo $twig->render('admin.menus.form.html.twig', array(
 		'templates' => $templates
 	));

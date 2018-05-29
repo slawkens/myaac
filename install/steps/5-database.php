@@ -55,7 +55,7 @@ if(!$error) {
 				'url' => 'tools/5-database.php',
 				'message' => $locale['loading_spinner']
 			));
-			
+
 			if(!$error) {
 				if(!Validator::email($_SESSION['var_mail_admin'])) {
 					error($locale['step_config_mail_admin_error']);
@@ -65,7 +65,7 @@ if(!$error) {
 					error($locale['step_config_mail_address_error']);
 					$error = true;
 				}
-				
+
 				$content .= '$config[\'client_download\'] = \'http://tibia-clients.com/clients/download/\'. $config[\'client\'] . \'/exe/windows\';';
 				$content .= PHP_EOL;
 				$content .= '$config[\'client_download_linux\'] = \'http://tibia-clients.com/clients/download/\'. $config[\'client\'] . \'/tar/linux\';';
@@ -78,7 +78,7 @@ if(!$error) {
 				if(!$error) {
 					$saved = file_put_contents(BASE . 'config.local.php', $content);
 				}
-				
+
 				if($saved) {
 					if(!$error) {
 						$_SESSION['saved'] = true;
@@ -87,7 +87,7 @@ if(!$error) {
 				else {
 					$_SESSION['config_content'] = $content;
 					unset($_SESSION['saved']);
-					
+
 					$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
 					warning($locale['step_database_error_file'] . '<br/>
 						<textarea cols="70" rows="10">' . $content . '</textarea>');

@@ -21,7 +21,7 @@ if($reload) {
 		success('Successfully loaded items.');
 	else
 		error(Items::getError());
-	
+
 	if(Weapons::loadFromXML(true))
 		success('Successfully loaded weapons.');
 	else

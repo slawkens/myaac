@@ -14,11 +14,11 @@
 
 /**
  * MySQL connection interface.
- * 
+ *
  * <p>
  * At all everything that you really need to read from this class documentation is list of parameters for driver's constructor.
  * </p>
- * 
+ *
  * @package POT
  * @version 0.1.3
  */
@@ -28,15 +28,15 @@ class OTS_DB_MySQL extends OTS_Base_DB
 	private $has_column_cache = array();
 /**
  * Creates database connection.
- * 
+ *
  * <p>
  * Connects to MySQL database on given arguments.
  * </p>
- * 
+ *
  * <p>
  * List of parameters for this drivers:
  * </p>
- * 
+ *
  * <ul>
  * <li><var>host</var> - database server.</li>
  * <li><var>port</var> - port (optional, also it is possible to use host:port in <var>host</var> parameter).</li>
@@ -44,7 +44,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
  * <li><var>user</var> - user login.</li>
  * <li><var>password</var> - user password.</li>
  * </ul>
- * 
+ *
  * @version 0.0.6
  * @param array $params Connection parameters.
  * @throws PDOException On PDO operation error.
@@ -138,7 +138,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
 /**
  * Query-quoted field name.
- * 
+ *
  * @param string $name Field name.
  * @return string Quoted name.
  */
@@ -149,7 +149,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
 /**
  * LIMIT/OFFSET clause for queries.
- * 
+ *
  * @param int|bool $limit Limit of rows to be affected by query (false if no limit).
  * @param int|bool $offset Number of rows to be skipped before applying query effects (false if no offset).
  * @return string LIMIT/OFFSET SQL clause for query.
@@ -182,20 +182,20 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
 		return $this->hasTableInternal($name);
 	}
-	
+
 	private function hasTableInternal($name) {
 		global $config;
 		return ($this->has_table_cache[$name] = $this->query("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " . $this->quote($config['database_name']) . " AND `TABLE_NAME` = " . $this->quote($name) . " LIMIT 1;")->rowCount() > 0);
 	}
-	
+
 	public function hasColumn($table, $column) {
 		if(isset($this->has_column_cache[$table . '.' . $column])) {
 			return $this->has_column_cache[$table . '.' . $column];
 		}
-	
+
 		return $this->hasColumnInternal($table, $column);
 	}
-	
+
 	private function hasColumnInternal($table, $column) {
 		return $this->hasTable($table) && ($this->has_column_cache[$table . '.' . $column] = count($this->query("SHOW COLUMNS FROM `" . $table . "` LIKE '" . $column . "'")->fetchAll()) > 0);
 	}

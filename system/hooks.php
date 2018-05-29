@@ -44,7 +44,7 @@ class Hook
 			$tmp = $this->_callback;
 			$ret = $tmp($params);
 		}*/
-		
+
 		global $db, $config, $template_path, $ots, $content, $twig;
 		if(file_exists(BASE . $this->_file)) {
 			$ret = require BASE . $this->_file;
@@ -85,7 +85,7 @@ class Hooks
 	public function exist($type) {
 		return isset(self::$_hooks[$type]);
 	}
-	
+
 	public function load()
 	{
 		global $db;

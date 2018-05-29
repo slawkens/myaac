@@ -13,7 +13,7 @@ function message($message, $type, $return)
 {
 	if($return)
 		return '<div class="' . $type . '">' . $message . '</div>';
-	
+
 	echo '<div class="' . $type . '">' . $message . '</div>';
 	return true;
 }
@@ -74,7 +74,7 @@ function getPlayerLink($name, $generate = true)
 		if($player->isLoaded())
 			$name = $player->getName();
 	}
-	
+
 	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'characters/' . urlencode($name);
 
 	if(!$generate) return $url;
@@ -92,9 +92,9 @@ function getHouseLink($name, $generate = true)
 		if($house->rowCount() > 0)
 			$name = $house->fetchColumn();
 	}
-	
+
 	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'houses/' . urlencode($name);
-	
+
 	if(!$generate) return $url;
 	return generateLink($url, $name);
 }
@@ -124,14 +124,14 @@ function getItemNameById($id) {
 		$item = $query->fetch();
 		return $item['name'];
 	}
-	
+
 	return '';
 }
 
 function getItemImage($id, $count = 1)
 {
 	$tooltip = '';
-	
+
 	$name = getItemNameById($id);
 	if(!empty($name)) {
 		$tooltip = ' class="tooltip" title="' . $name . '"';
@@ -157,7 +157,7 @@ function getFlagImage($country)
 	if(!isset($config['countries'][$country])) {
 		return '';
 	}
-	
+
 	return '<img src="images/flags/' . $country . '.gif" title="' . $config['countries'][$country]. '"/>';
 }
 
@@ -227,7 +227,7 @@ function getForumBoards()
 		' ORDER BY `ordering`;');
 	if($sections)
 		return $sections->fetchAll();
-	
+
 	return array();
 }
 
@@ -350,7 +350,7 @@ function delete_player($name)
 		$player->delete();
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -365,7 +365,7 @@ function delete_guild($id)
 	$rank_list = $guild->getGuildRanksList();
 	if(count($rank_list) > 0) {
 		$rank_list->orderBy('level');
-		
+
 		global $db, $ots;
 		foreach($rank_list as $rank_in_guild) {
 			if($db->hasTable('guild_members'))
@@ -382,7 +382,7 @@ function delete_guild($id)
 					$player->load($result['id']);
 					if(!$player->isLoaded())
 						continue;
-						
+
 					$player->setRank();
 					$player->save();
 				}
@@ -408,7 +408,7 @@ function short_text($text, $limit)
 function tickers()
 {
 	global $tickers_content, $featured_article;
-	
+
 	if(PAGE === 'news') {
 		if(isset($tickers_content))
 			return $tickers_content . $featured_article;
@@ -467,7 +467,7 @@ function template_header($is_admin = false)
 			Please turn it on, or be aware that some features on this website will not work correctly.</div>
 	</noscript>
 ';
-	
+
 	if($config['recaptcha_enabled'])
 		$ret .= "<script src='https://www.google.com/recaptcha/api.js'></script>";
 	return $ret;
@@ -508,7 +508,7 @@ function template_ga_code()
 	global $config, $twig;
 	if(!isset($config['google_analytics_id'][0]))
 		return '';
-	
+
 	return $twig->render('google_analytics.html.twig');
 }
 
@@ -552,7 +552,7 @@ function getCreatureName($killer, $showStatus = false, $extendedInfo = false)
 	global $vowels, $ots, $config;
 	$str = "";
 	$players_rows = '';
-	
+
 	if(is_numeric($killer))
 	{
 		$player = new OTS_Player();
@@ -762,17 +762,17 @@ function get_templates()
 function get_plugins()
 {
 	$ret = array();
-	
+
 	$path = PLUGINS;
 	foreach(scandir($path) as $file) {
 		$file_ext = pathinfo($file, PATHINFO_EXTENSION);
 		$file_name = pathinfo($file, PATHINFO_FILENAME);
 		if ($file === '.' || $file === '..' || $file === 'disabled' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file))
 			continue;
-		
+
 		$ret[] = str_replace('.json', '', $file_name);
 	}
-	
+
 	return $ret;
 }
 function getWorldName($id)
@@ -780,7 +780,7 @@ function getWorldName($id)
 	global $config;
 	if(isset($config['worlds'][$id]))
 		return $config['worlds'][$id];
-	
+
 	return $config['lua']['serverName'];
 }
 
@@ -864,7 +864,7 @@ function log_append($file, $str)
 function load_config_lua($filename)
 {
 	global $config;
-	
+
 	$config_file = $filename;
 	if(!@file_exists($config_file))
 	{
@@ -884,7 +884,7 @@ function load_config_lua($filename)
 				$delimiter = '"';
 				if(strpos($line, $delimiter) === false)
 					$delimiter = "'";
-				
+
 				$tmp = explode($delimiter, $line);
 				$result = array_merge($result, load_config_lua($config['server_path'] . $tmp[1]));
 			}
@@ -897,7 +897,7 @@ function load_config_lua($filename)
 					if(strpos($value, '--') !== false) {// found some deep comment
 						$value = preg_replace('/--.*$/i', '', $value);
 					}
-					
+
 					if(is_numeric($value))
 						$result[$key] = (float) $value;
 					elseif(in_array(substr($value, 0 , 1), array("'", '"')) && in_array(substr($value, -1 , 1), array("'", '"')))
@@ -933,7 +933,7 @@ function str_replace_first($search, $replace, $subject) {
 	if ($pos !== false) {
 		return substr_replace($subject, $replace, $pos, strlen($search));
 	}
-	
+
 	return $subject;
 }
 
@@ -960,7 +960,7 @@ function unsetSession($key) {
 
 function getTopPlayers($limit = 5) {
 	global $cache, $config, $db;
-	
+
 	$fetch_from_db = true;
 	if($cache->enabled())
 	{
@@ -971,7 +971,7 @@ function getTopPlayers($limit = 5) {
 			$fetch_from_db = false;
 		}
 	}
-	
+
 	if($fetch_from_db)
 	{
 		$deleted = 'deleted';
@@ -994,11 +994,11 @@ function getTopPlayers($limit = 5) {
 			$player['rank'] = ++$i;
 		}
 		unset($player);
-		
+
 		if($cache->enabled())
 			$cache->set('top_' . $limit . '_level', serialize($players), 120);
 	}
-	
+
 	return $players;
 }
 
@@ -1006,7 +1006,7 @@ function deleteDirectory($dir) {
 	if(!file_exists($dir)) {
 		return true;
 	}
-	
+
 	if(!is_dir($dir)) {
 		return unlink($dir);
 	}
@@ -1015,12 +1015,12 @@ function deleteDirectory($dir) {
 		if($item === '.' || $item === '..') {
 			continue;
 		}
-		
+
 		if(!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
 			return false;
 		}
 	}
-	
+
 	return rmdir($dir);
 }
 
@@ -1036,4 +1036,3 @@ function config($key) {
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat.php';
-?>

@@ -80,15 +80,15 @@ if($player->isLoaded() && !$player->isDeleted())
 
 	if($config['characters']['outfit'])
 		$outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
-	
+
 	$flag = '';
 	if($config['account_country'])
 		$flag = getFlagImage($account->getCountry());
-	
+
 	$player_sex = 'Unknown';
 	if(isset($config['genders'][$player->getSex()]))
 		$player_sex = strtolower($config['genders'][$player->getSex()]);
-	
+
 	$marital_status = 'single';
 	$marriage_id = $player->getMarriage();
 	if($marriage_id > 0) {
@@ -108,14 +108,14 @@ if($player->isLoaded() && !$player->isDeleted())
 			'WHERE `player_id` = ' .$player->getId() . ' ' .
 			'GROUP BY `player_id`' .
 			'ORDER BY COUNT(`player_id`) DESC');
-		
+
 		if($query->rowCount() > 0)
 		{
 			$query = $query->fetch();
 			$frags_count = $query['frags'];
 		}
 	}
-	
+
 	$town_field = 'town';
 	if($db->hasColumn('houses', 'town_id'))
 		$town_field = 'town_id';
@@ -123,7 +123,7 @@ if($player->isLoaded() && !$player->isDeleted())
 		$town_field = 'townid';
 	else if(!$db->hasColumn('houses', 'town'))
 		$town_field = false;
-	
+
 	if($db->hasColumn('houses', 'name')) {
 		$house = $db->query('SELECT `id`, `paid`, `name`' . ($town_field != false ? ', `' . $town_field . '` as `town`' : '') . ' FROM `houses` WHERE `owner` = '.$player->getId())->fetch();
 		if(isset($house['id']))
@@ -133,7 +133,7 @@ if($player->isLoaded() && !$player->isDeleted())
 				$add = ' is paid until '.date("M d Y", $house['paid']);
 		}
 	}
-	
+
 	$rank_of_player = $player->getRank();
 	if($rank_of_player->isLoaded()) {
 		$guild = $rank_of_player->getGuild();
@@ -141,14 +141,14 @@ if($player->isLoaded() && !$player->isDeleted())
 			$guild_name = $guild->getName();
 		}
 	}
-	
+
 	$comment = $player->getComment();
-	
+
 	if($config['characters']['skills'])
 	{
 		if($db->hasColumn('players', 'skill_fist')) {// tfs 1.0+
 			$skills_db = $db->query('SELECT `skill_fist`, `skill_club`, `skill_sword`, `skill_axe`, `skill_dist`, `skill_shielding`, `skill_fishing` FROM `players` WHERE `id` = ' . $player->getId())->fetch();
-			
+
 			$skill_ids = array(
 				POT::SKILL_FIST => 'skill_fist',
 				POT::SKILL_CLUB => 'skill_club',
@@ -158,7 +158,7 @@ if($player->isLoaded() && !$player->isDeleted())
 				POT::SKILL_SHIELD => 'skill_shielding',
 				POT::SKILL_FISH => 'skill_fishing',
 			);
-			
+
 			$skills = array();
 			foreach($skill_ids as $skillid => $field_name) {
 				$skills[] = array('skillid' => $skillid, 'value' => $skills_db[$field_name]);
@@ -168,12 +168,12 @@ if($player->isLoaded() && !$player->isDeleted())
 			$skills_db = $db->query('SELECT `skillid`, `value` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' LIMIT 7');
 			$skills = $skills_db->fetchAll();
 		}
-		
+
 		foreach($skills as &$skill) {
 			$skill['name'] = getSkillName($skill['skillid']);
 		}
 	}
-	
+
 	$quests_enabled = $config['characters']['quests'] && !empty($config['quests']);
 	if($quests_enabled)
 	{
@@ -184,21 +184,21 @@ if($player->isLoaded() && !$player->isDeleted())
 		{
 			if($i != 0)
 				$sql_query_in .= ', ';
-			
+
 			$sql_query_in .= $quest_storage;
 			$i++;
 		}
-		
+
 		$storage_sql = $db->query('SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = '.$player->getId().' AND `key` IN (' . $sql_query_in . ')');
 		$player_storage = array();
 		foreach($storage_sql as $storage)
 			$player_storage[$storage['key']] = $storage['value'];
-		
+
 		foreach($quests as &$storage) {
 			$storage = isset($player_storage[$storage]) && $player_storage[$storage] > 0;
 		}
 	}
-	
+
 	if($config['characters']['equipment'])
 	{
 		global $db;
@@ -206,14 +206,14 @@ if($player->isLoaded() && !$player->isDeleted())
 		$equipment = array();
 		foreach($eq_sql as $eq)
 			$equipment[$eq['pid']] = $eq['itemtype'];
-		
+
 		$empty_slots = array("", "no_helmet", "no_necklace", "no_backpack", "no_armor", "no_handleft", "no_handright", "no_legs", "no_boots", "no_ring", "no_ammo");
 		for($i = 0; $i <= 10; $i++)
 		{
 			if(!isset($equipment[$i]) || $equipment[$i] == 0)
 				$equipment[$i] = $empty_slots[$i];
 		}
-		
+
 		for($i = 1; $i < 11; $i++)
 		{
 			if(Validator::number($equipment[$i]))
@@ -221,7 +221,7 @@ if($player->isLoaded() && !$player->isDeleted())
 			else
 				$equipment[$i] = '<img src="images/items/' . $equipment[$i] . '.gif" width="32" height="32" border="0" alt=" ' . $equipment[$i] . '" />';
 		}
-		
+
 		$skulls = array(
 			1 => 'yellow_skull',
 			2 => 'green_skull',
@@ -243,7 +243,7 @@ if($player->isLoaded() && !$player->isDeleted())
 				$killers = $db->query("SELECT environment_killers.name AS monster_name, players.name AS player_name, players.deleted AS player_exists FROM killers LEFT JOIN environment_killers ON killers.id = environment_killers.kill_id
 LEFT JOIN player_killers ON killers.id = player_killers.kill_id LEFT JOIN players ON players.id = player_killers.player_id
 WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, killers.id ASC")->fetchAll();
-				
+
 				$description = '';
 				$i = 0;
 				$count = count($killers);
@@ -258,11 +258,11 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 							$description .= " and";
 						else
 							$description .= ",";
-						
+
 						$description .= " by ";
 						if($killer['monster_name'] != "")
 							$description .= $killer['monster_name']." summoned by ";
-						
+
 						if($killer['player_exists'] == 0)
 							$description .= getPlayerLink($killer['player_name']);
 						else
@@ -276,11 +276,11 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 							$description .= " and";
 						else
 							$description .= ",";
-						
+
 						$description .= " by ".$killer['monster_name'];
 					}
 				}
-				
+
 				$deaths[] = array('time' => $death['date'], 'description' => $description . '.');
 			}
 		}
@@ -293,7 +293,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				`player_id`, `time`, `level`, `killed_by`, `is_player`' . $mostdamage . '
 				FROM `player_deaths`
 				WHERE `player_id` = ' . $player->getId() . ' ORDER BY `time` DESC LIMIT 10;')->fetchAll();
-		
+
 		if(count($deaths_db))
 		{
 			$number_of_rows = 0;
@@ -304,13 +304,13 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				if($death['unjustified']) {
 					$description .=  " <font color='red' style='font-style: italic;'>(unjustified)</font>";
 				}
-				
+
 				$mostdmg = ($death['mostdamage_by'] !== $death['killed_by']) ? true : false;
 				if($mostdmg)
 				{
 					$mostdmg = ($death['mostdamage_is_player']) ? getPlayerLink($death['mostdamage_by']) : $death['mostdamage_by'];
 					$description .=  ' and by ' . $mostdmg;
-					
+
 					if ($death['mostdamage_unjustified']) {
 						$description .=  " <font color='red' style='font-style: italic;'>(unjustified)</font>";
 					}
@@ -318,12 +318,12 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				else {
 					$description .=  " <b>(soloed)</b>";
 				}
-				
+
 				$deaths[] = array('time' => $death['time'], 'description' => $description);
 			}
 		}
 	}
-	
+
 	$frags = array();
 	$frag_add_content = '';
 	if($config['characters']['frags'])
@@ -342,12 +342,12 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			}
 		}
 	}
-	
+
 	// signature
 	if($config['signature_enabled']) {
 		$signature_url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . urlencode($player->getName()) . '.png';
 	}
-	
+
 	$hidden = $player->isHidden();
 	if(!$hidden) {
 		// check if account has been banned
@@ -364,7 +364,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		foreach($banned as $ban) {
 			$bannedUntil = $ban['expires'];
 		}
-		
+
 		$account_players = array();
 		$query = $db->query('SELECT `id` FROM `players` WHERE `account_id` = ' . $account->getId() . ' ORDER BY `name`')->fetchAll();
 		foreach($query as $p) {
@@ -376,7 +376,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			}
 		}
 	}
-	
+
 	echo $twig->render('characters.html.twig', array(
 		'outfit' => isset($outfit) ? $outfit : null,
 		'player' => $player,

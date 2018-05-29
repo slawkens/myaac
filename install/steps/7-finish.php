@@ -14,7 +14,7 @@ else {
 			$account_id = isset($_SESSION['var_account_id']) ? $_SESSION['var_account_id'] : null;
 
 		$password = $_SESSION['var_password'];
-		
+
 		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 		if($config_salt_enabled)
 		{
@@ -35,7 +35,7 @@ else {
 		{
 			$player = new OTS_Player();
 			$player->setName('Admin');
-			
+
 			$player_used = &$player;
 		}
 		else {
@@ -48,7 +48,7 @@ else {
 			$account_db->setPassword(encrypt($password));
 			$account_db->setEMail($_SESSION['var_mail_admin']);
 			$account_db->save();
-			
+
 			$account_used = &$account_db;
 		}
 		else {
@@ -59,16 +59,16 @@ else {
 			else {
 				$new_account->create(null, $account_id);
 			}
-			
+
 			$new_account->setPassword(encrypt($password));
 			$new_account->setEMail($_SESSION['var_mail_admin']);
-			
+
 			$new_account->unblock();
 			$new_account->save();
-			
+
 			$new_account->setCustomField('created', time());
 			$new_account->logAction('Account created.');
-			
+
 			$account_used = &$new_account;
 		}
 
@@ -114,7 +114,7 @@ else {
 				success($locale['step_database_created_news']);
 			}
 		}
-		
+
 		echo $twig->render('install.installer.html.twig', array(
 			'url' => 'tools/7-finish.php',
 			'message' => $locale['importing_spinner']

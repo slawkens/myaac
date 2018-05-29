@@ -32,7 +32,7 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 
 	$player = new OTS_Player();
 	$player->load($_GET['player_id']);
-	
+
 	$author = '';
 	if($player->isLoaded()) {
 		$author = $player->getName();
@@ -42,7 +42,7 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 		if(!isset($_GET['article_text'], $_GET['article_image'])) {
 			error_('Error: please fill all inputs.');
 		}
-	
+
 		$featured_article = '';
 		if($twig->getLoader()->exists('news.featured_article.html.twig')) {
 			$featured_article = $twig->render('news.featured_article.html.twig', array(
@@ -69,13 +69,13 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 			$ticker['icon'] = $categories[$ticker['category']]['icon_id'];
 			$ticker['body_short'] = short_text(strip_tags($ticker['body']), 100);
 		}
-		
+
 		$tickers_content = $twig->render('news.tickers.html.twig', array(
 			'tickers' => $tickers,
 			'canEdit' => false,
 			'i' => -1
 		));
-		
+
 		success_($tickers_content);
 	}
 	else {

@@ -28,7 +28,7 @@ if(Plugins::install($path_to_file)) {
 	foreach(Plugins::getWarnings() as $warning) {
 		echo 'WARNING: ' . $warning;
 	}
-	
+
 	$info = Plugins::getPlugin();
 	echo (isset($info['name']) ? $info['name'] . ' p' : 'P') . 'lugin has been successfully installed.';
 }

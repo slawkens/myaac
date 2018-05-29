@@ -46,7 +46,7 @@ define('URI', $uri);
 if(preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
 	$tmp = explode('.', $uri);
 	$_REQUEST['name'] = urldecode($tmp[0]);
-	
+
 	chdir(TOOLS . 'signature');
 	include TOOLS . 'signature/index.php';
 	exit();
@@ -122,20 +122,20 @@ else {
 			'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
 			'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2')
 		);
-		
+
 		foreach($rules as $rule => $redirect) {
 			if (preg_match($rule, $uri)) {
 				$tmp = explode('/', $uri);
 				foreach($redirect as $key => $value) {
-					
+
 					if(strpos($value, '$') !== false) {
 						$value = str_replace('$' . $value[1], $tmp[$value[1]], $value);
 					}
-					
+
 					$_REQUEST[$key] = $value;
 					$_GET[$key] = $value;
 				}
-				
+
 				$found = true;
 				break;
 			}
@@ -204,7 +204,7 @@ $hooks->trigger(HOOK_STARTUP);
 if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_statistics']) {
 	$report_time = 30 * 24 * 60 * 60; // report one time per 30 days
 	$should_report = true;
-	
+
 	$value = '';
 	if($cache->enabled() && $cache->fetch('last_usage_report', $value)) {
 		$should_report = time() > (int)$value + $report_time;
@@ -222,11 +222,11 @@ if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_stat
 			$should_report = false;
 		}
 	}
-	
+
 	if($should_report) {
-		require_once(LIBS . 'usage_statistics.php');
+		require_once LIBS . 'usage_statistics.php';
 		Usage_Statistics::report();
-		
+
 		updateDatabaseConfig('last_usage_report', time());
 		if($cache->enabled()) {
 			$cache->set('last_usage_report', time());
@@ -282,7 +282,7 @@ if($config['backward_support']) {
 	$tickers_content = '';
 	$subtopic = PAGE;
 	$main_content = '';
-	
+
 	$config['access_admin_panel'] = 2;
 	$group_id_of_acc_logged = 0;
 	if($logged && $account_logged)
@@ -302,7 +302,7 @@ if($config['backward_support']) {
 	$config['site']['download_page'] = true;
 	$config['site']['serverinfo_page'] = true;
 	$config['site']['screenshot_page'] = true;
-	
+
 	if($config['forum'] != '')
 		$config['forum_link'] = (strtolower($config['forum']) === 'site' ? getLink('forum') : $config['forum']);
 
@@ -367,7 +367,7 @@ if($load_it)
 		}
 		else
 			$content .= $query['body']; // plain html
-		
+
 		if(hasFlag(FLAG_CONTENT_PAGES) || superAdmin()) {
 			$content = $twig->render('admin.pages.links.html.twig', array(
 				'page' => array('id' => $query['id'], 'hidden' => $query['hidden'])
@@ -428,7 +428,7 @@ if(superAdmin()) {
 	if(function_exists('memory_get_peak_usage')) {
 		echo PHP_EOL . '<!-- Peak memory usage: ' . convert_bytes(memory_get_peak_usage(true)) . ' -->';
 	}
-	
+
 	if($config['database_log']) {
 		echo PHP_EOL . '<!-- Database Queries Done by MyAAC:' . PHP_EOL . $db->getLog() . '-->';
 	}

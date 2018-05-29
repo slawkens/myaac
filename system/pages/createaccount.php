@@ -132,7 +132,7 @@ if($save)
 		$new_account->setEMail($email);
 		$new_account->unblock();
 		$new_account->save();
-		
+
 		if($config_salt_enabled)
 			$new_account->setCustomField('salt', $salt);
 
@@ -156,7 +156,7 @@ if($save)
 		if($config['account_premium_points']) {
 			$new_account->setCustomField('premium_points', $config['account_premium_points']);
 		}
-	
+
 		$tmp_account = (USE_ACCOUNT_NAME ? $account_name : $account_id);
 		if($config['mail_enabled'] && $config['account_mail_verify'])
 		{
@@ -187,7 +187,7 @@ if($save)
 			echo $twig->render('account.created.html.twig', array(
 				'account' => $tmp_account
 			));
-			
+
 			if($config['mail_enabled'] && $config['account_welcome_mail'])
 			{
 				$mailBody = $twig->render('account.welcome_mail.html.twig', array(
@@ -229,7 +229,7 @@ if($config['account_country']) {
 	$countries = array();
 	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
 		$countries[$c] = $config['countries'][$c];
-	
+
 	$countries['--'] = '----------';
 	foreach ($config['countries'] as $code => $c)
 		$countries[$code] = $c;

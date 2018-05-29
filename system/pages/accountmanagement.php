@@ -33,10 +33,10 @@ if(!$logged)
 		require PAGES . 'account/' . ACTION . '.php';
 		return;
 	}
-		
+
 	if(!empty($errors))
 		echo $twig->render('error_box.html.twig', array('errors' => $errors));
-	
+
 	echo $twig->render('account.login.html.twig', array(
 		'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
 		'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
@@ -66,7 +66,7 @@ $errors = array();
 			$account_status = '<b><font color="red">Free Account</font></b>';
 		else
 			$account_status = '<b><font color="green">Premium Account, ' . ($freePremium ? 'Unlimited' : $account_logged->getPremDays() . ' days left') . '</font></b>';
-		
+
 		if(empty($recovery_key))
 			$account_registered = '<b><font color="red">No</font></b>';
 		else
@@ -91,7 +91,7 @@ $errors = array();
 				$welcome_message = '<font color="red">Your account is banished FOREVER!</font>';
 		else
 			$welcome_message = 'Welcome to your account!';
-		
+
 		$email_change = '';
 		$email_request = false;
 		if($email_new_time > 1)
@@ -104,12 +104,12 @@ $errors = array();
 				$email_request = true;
 			}
 		}
-		
+
 		$actions = array();
 		foreach($account_logged->getActionsLog(0, 1000) as $action) {
 			$actions[] = array('action' => $action['action'], 'date' => $action['date'], 'ip' => $action['ip'] != 0 ? long2ip($action['ip']) : inet_ntop($action['ipv6']));
 		}
-		
+
 		$players = array();
 		$account_players = $account_logged->getPlayersList();
 		$account_players->orderBy('id');

@@ -170,7 +170,7 @@ if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 				$allow = true;
 			}
 		}
-		
+
 		if(!$allow)
 		{
 			$content = warning('In file <b>install/ip.txt</b> must be your IP!<br/>

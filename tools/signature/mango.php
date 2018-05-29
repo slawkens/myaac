@@ -47,7 +47,7 @@
 	$vocation = 'Unknown';
 	if(isset($config['vocations'][$player->getVocation()]))
 		$vocation = $config['vocations'][$player->getVocation()];
-	
+
 	$MadGD->addText( 'Profession:', $MadGD->textBold )->setPosition( 10, $i * $eachRow );
 	$MadGD->addText( $vocation )->setPosition( ); $i++;
 	/** LEVEL **/
@@ -69,7 +69,7 @@
 		$town = 'town_id';
 	else if($db->hasColumn('houses', 'townid'))
 		$town = 'townid';
-	
+
 	$house = $db->query( 'SELECT `houses`.`name`, `houses`.`' . $town . '` as town FROM `houses` WHERE `houses`.`owner` = '.$player->getId().';' )->fetchAll();
 	if ( count( $house ) != 0 )
 	{

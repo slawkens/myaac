@@ -32,26 +32,26 @@ $canEdit = Forum::isModerator();
 if($canEdit)
 {
 	$groups = new OTS_Groups_List();
-	
+
 	if(!empty($action))
 	{
 		if($action == 'delete_board' || $action == 'edit_board' || $action == 'hide_board' || $action == 'moveup_board' || $action == 'movedown_board')
 			$id = $_REQUEST['id'];
-		
+
 		if(isset($_REQUEST['access']))
 			$access = $_REQUEST['access'];
-		
+
 		if(isset($_REQUEST['guild']))
 			$guild = $_REQUEST['guild'];
-		
+
 		if(isset($_REQUEST['name']))
 			$name = $_REQUEST['name'];
-		
+
 		if(isset($_REQUEST['description']))
 			$description = stripslashes($_REQUEST['description']);
-		
+
 		$errors = array();
-		
+
 		if($action == 'add_board') {
 			if(Forum::add_board($name, $description, $access, $guild, $errors))
 				$action = $name = $description = '';
@@ -87,13 +87,13 @@ if($canEdit)
 			Forum::move_board($id, 1, $errors);
 			$action = '';
 		}
-		
+
 		if(!empty($errors)) {
 			echo $twig->render('error_box.html.twig', array('errors' => $errors));
 			$action = '';
 		}
 	}
-	
+
 	if(empty($action) || $action == 'edit_board') {
 		$guilds = $db->query('SELECT `id`, `name` FROM `guilds`')->fetchAll();
 		echo $twig->render('forum.add_board.html.twig', array(
@@ -107,7 +107,7 @@ if($canEdit)
 			'groups' => $groups,
 			'guilds' => $guilds
 		));
-		
+
 		if($action == 'edit_board')
 			$action = '';
 	}
@@ -124,7 +124,7 @@ foreach(getForumBoards() as $section)
 		'guild' => $section['guild'],
 		'access' => $section['access']
 	);
-	
+
 	if($canEdit) {
 		$sections[$section['id']]['hidden'] = $section['hidden'];
 	}
@@ -137,7 +137,7 @@ $number_of_rows = 0;
 if(empty($action))
 {
 	$info = $db->query("SELECT `section`, COUNT(`id`) AS 'threads', SUM(`replies`) AS 'replies' FROM `" . TABLE_PREFIX . "forum` WHERE `first_post` = `id` GROUP BY `section`")->fetchAll();
-	
+
 	$boards = array();
 	foreach($info as $data)
 		$counters[$data['section']] = array('threads' => $data['threads'], 'posts' => $data['replies'] + $data['threads']);
@@ -162,13 +162,13 @@ if(empty($action))
 			);
 		}
 	}
-	
+
 	echo $twig->render('forum.boards.html.twig', array(
 		'boards' => $boards,
 		'canEdit' => $canEdit,
 		'last' => count($sections)
 	));
-	
+
 	return;
 }
 

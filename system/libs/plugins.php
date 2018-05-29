@@ -39,30 +39,30 @@ spl_autoload_register(function ($class) {
 });
 
 function is_sub_dir($path = NULL, $parent_folder = SITE_PATH) {
-	
+
 	//Get directory path minus last folder
 	$dir = dirname($path);
 	$folder = substr($path, strlen($dir));
-	
+
 	//Check the the base dir is valid
 	$dir = realpath($dir);
-	
+
 	//Only allow valid filename characters
 	$folder = preg_replace('/[^a-z0-9\.\-_]/i', '', $folder);
-	
+
 	//If this is a bad path or a bad end folder name
 	if( !$dir OR !$folder OR $folder === '.') {
 		return FALSE;
 	}
-	
+
 	//Rebuild path
 	$path = $dir. '/' . $folder;
-	
+
 	//If this path is higher than the parent folder
 	if( strcasecmp($path, $parent_folder) > 0 ) {
 		return $path;
 	}
-	
+
 	return FALSE;
 }
 
@@ -311,7 +311,7 @@ class Plugins {
 							self::$error = "You cannot use absolute paths (starting with slash - '/'): " . $file;
 							break;
 						}
-						
+
 						$file = str_replace('\\', '/', BASE . $file);
 						$realpath = str_replace('\\', '/', realpath(dirname($file)));
 						if(!is_sub_dir($file, BASE) || $realpath != dirname($file)) {
@@ -320,7 +320,7 @@ class Plugins {
 							break;
 						}
 					}
-					
+
 					if($success) {
 						foreach($plugin_info['uninstall'] as $file) {
 							if(!deleteDirectory(BASE . $file)) {
@@ -328,7 +328,7 @@ class Plugins {
 							}
 						}
 					}
-						
+
 					if (isset($plugin_info['hooks'])) {
 						foreach ($plugin_info['hooks'] as $_name => $info) {
 							if (defined('HOOK_'. $info['type'])) {
@@ -387,7 +387,7 @@ class Plugins {
 	public static function getPlugin() {
 		return self::$plugin;
 	}
-	
+
 	public static function removeComments($string) {
 		$string = preg_replace('!/\*.*?\*/!s', '', $string);
 		$string = preg_replace('/\n\s*\n/', "\n", $string);
@@ -400,7 +400,7 @@ class Plugins {
 
 		//  Strip blank lines
 		$string = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $string);
-		
+
 		return $string;
 	}
 }

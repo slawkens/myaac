@@ -32,25 +32,25 @@
 
 	if(!isset($_REQUEST['name']))
 		die('Please enter name as get or post parameter.');
-	
+
 	$name = stripslashes(ucwords(strtolower(trim($_REQUEST['name']))));
 	$player = new OTS_Player();
 	$player->find($name);
- 
+
 	if(!$player->isLoaded())
 	{
 		header('Content-type: image/png');
 		readfile(SIGNATURES_IMAGES.'nocharacter.png');
 		exit;
 	}
-	
+
 	if(!function_exists( 'imagecreatefrompng'))
 	{
 		header('Content-type: image/png');
 		readfile(SIGNATURES_IMAGES.'nogd.png');
 		exit;
 	}
-	
+
 	$cached = SIGNATURES_CACHE.$player->getId() . '.png';
 	if(file_exists($cached) && (time() < (filemtime($cached) + (60 * $config['signature_cache_time']))))
 	{

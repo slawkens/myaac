@@ -43,7 +43,7 @@ if(isset($_GET['archive']))
 				$query = $query->fetch();
 				$author = $query['name'];
 			}
-			
+
 			$content_ = $news['body'];
 			$firstLetter = '';
 			if($content_[0] != '<')
@@ -54,7 +54,7 @@ if(isset($_GET['archive']))
 					$content_ = $firstLetter . substr($content_, 1);
 				}
 			}
-			
+
 			echo $twig->render('news.html.twig', array(
 				'title' => stripslashes($news['title']),
 				'content' => $content_,
@@ -72,7 +72,7 @@ if(isset($_GET['archive']))
 		return;
 	}
 	?>
-	
+
 	<?php
 
 	$newses = array();
@@ -86,11 +86,11 @@ if(isset($_GET['archive']))
 			'date' => $news['date']
 		);
 	}
-	
+
 	echo $twig->render('news.archive.html.twig', array(
 		'newses' => $newses
 	));
-	
+
 	return;
 }
 
@@ -125,7 +125,7 @@ if($canEdit)
 			if(isset($forum_section) && $forum_section != '-1') {
 				$forum_add = Forum::add_thread($p_title, $body, $forum_section, $player_id, $account_logged->getId(), $errors);
 			}
-			
+
 			if(News::add($p_title, $body, $type, $category, $player_id, isset($forum_add) && $forum_add != 0 ? $forum_add : 0, $article_text, $article_image, $errors)) {
 				$p_title = $body = $comments = $article_text = $article_image = '';
 				$type = $category = $player_id = 0;
@@ -153,7 +153,7 @@ if($canEdit)
 					if(isset($forum_section) && Validator::number($forum_section)) {
 					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $player_id.", `post_text` = ".$db->quote($body).", `post_topic` = ".$db->quote($p_title).", `edit_date` = " . time() . " WHERE `id` = " . $db->quote($forum_section));
 					}
-					
+
 					$action = $p_title = $body = $comments = $article_text = $article_image = '';
 					$type = $category = $player_id = 0;
 				}
@@ -193,7 +193,7 @@ if(!$news_cached)
 			'SELECT * FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . TICKER .
 			($canEdit ? '' : ' AND `hidden` != 1') .
 			' ORDER BY `date` DESC LIMIT ' . $config['news_ticker_limit']);
-	
+
 	$tickers_content = '';
 	if($tickers_db->rowCount() > 0)
 	{
@@ -202,26 +202,26 @@ if(!$news_cached)
 			$ticker['icon'] = $categories[$ticker['category']]['icon_id'];
 			$ticker['body_short'] = short_text(strip_tags($ticker['body']), 100);
 		}
-		
+
 		$tickers_content = $twig->render('news.tickers.html.twig', array(
 			'tickers' => $tickers,
 			'canEdit' => $canEdit
 		));
 	}
-	
+
 	if($cache->enabled() && !$canEdit)
 		$cache->set('news_' . $template_name . '_' . TICKER, $tickers_content, 120);
-	
+
 	$featured_article_db =
 		$db->query(
 			'SELECT `id`, `title`, `article_text`, `article_image`, `hidden` FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . ARTICLE .
 			($canEdit ? '' : ' AND `hidden` != 1') .
 			' ORDER BY `date` DESC LIMIT 1');
-	
+
 	$article = '';
 	if($featured_article_db->rowCount() > 0) {
 		$article = $featured_article_db->fetch();
-		
+
 		$featured_article = '';
 		if($twig->getLoader()->exists('news.featured_article.html.twig')) {
 			$featured_article = $twig->render('news.featured_article.html.twig', array(
@@ -236,7 +236,7 @@ if(!$news_cached)
 				'canEdit' => $canEdit
 			));
 		}
-		
+
 		if($cache->enabled() && !$canEdit)
 			$cache->set('news_' . $template_name . '_' . ARTICLE, $featured_article, 120);
 	}
@@ -255,7 +255,7 @@ if(!$news_cached)
 			$player = new OTS_Player();
 			$player->load($player_id);
 		}
-		
+
 		$account_players = $account_logged->getPlayersList();
 		$account_players->orderBy('group_id', POT::ORDER_DESC);
 
@@ -312,7 +312,7 @@ if(!$news_cached)
 					' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '
 				</a>';
 			}
-			
+
 			$content_ = $news['body'];
 			$firstLetter = '';
 			if($content_[0] != '<')
@@ -323,7 +323,7 @@ if(!$news_cached)
 					$content_ = $firstLetter . substr($content_, 1);
 				}
 			}
-			
+
 			echo $twig->render('news.html.twig', array(
 				'id' => $news['id'],
 				'title' => stripslashes($news['title']),
@@ -362,22 +362,22 @@ class News
 			$errors[] = 'News title cannot be longer than ' . TITLE_LIMIT . ' characters.';
 			return false;
 		}
-	
+
 		if(strlen($body) > BODY_LIMIT) {
 			$errors[] = 'News content cannot be longer than ' . BODY_LIMIT . ' characters.';
 			return false;
 		}
-		
+
 		if(strlen($article_text) > ARTICLE_TEXT_LIMIT) {
 			$errors[] = 'Article text cannot be longer than ' . ARTICLE_TEXT_LIMIT . ' characters.';
 			return false;
 		}
-		
+
 		if(strlen($article_image) > ARTICLE_IMAGE_LIMIT) {
 			$errors[] = 'Article image cannot be longer than ' . ARTICLE_IMAGE_LIMIT . ' characters.';
 			return false;
 		}
-		
+
 		return true;
 	}
 

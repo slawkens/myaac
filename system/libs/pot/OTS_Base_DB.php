@@ -14,18 +14,18 @@
 
 /**
  * Base class for all database drivers.
- * 
+ *
  * <p>
  * It defines additional rotines required by database driver for POT using default SQL standard-compliant method.
  * </p>
- * 
+ *
  * @package POT
  */
 abstract class OTS_Base_DB extends PDO implements IOTS_DB
 {
 /**
  * Tables prefix.
- * 
+ *
  * @var string
  */
     protected $prefix = '';
@@ -42,7 +42,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 
 /**
  * Query-quoted field name.
- * 
+ *
  * @param string $name Field name.
  * @return string Quoted name.
  */
@@ -67,7 +67,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 
 /**
  * Query-quoted table name.
- * 
+ *
  * @param string $name Table name.
  * @return string Quoted name.
  */
@@ -242,7 +242,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 	public function queries() {
 		return $this->queries;
 	}
-	
+
 	public function getLog() {
 		return $this->log;
 	}

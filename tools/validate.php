@@ -66,17 +66,17 @@ else if(isset($_GET['name']))
 else if(isset($_GET['password']) && isset($_GET['password2'])) {
 	$password = $_GET['password'];
 	$password2 = $_GET['password2'];
-	
+
 	if(!isset($password[0])) {
 		error_('Please enter the password for your new account.');
 	}
-	
+
 	if(!Validator::password($password))
 		error_(Validator::getLastError());
-	
+
 	if($password != $password2)
 		error_('Passwords are not the same.');
-	
+
 	success_(1);
 }
 else

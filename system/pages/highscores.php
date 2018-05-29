@@ -25,13 +25,13 @@ if($config['highscores_vocation_box'] && isset($vocation))
 	foreach($config['vocations'] as $id => $name) {
 		if(strtolower($name) == $vocation) {
 			$add_vocs = array($id);
-	
+
 			$i = $id + $config['vocations_amount'];
 			while(isset($config['vocations'][$i])) {
 				$add_vocs[] = $i;
 				$i += $config['vocations_amount'];
 			}
-	
+
 			$add_sql = 'AND `vocation` IN (' . implode(', ', $add_vocs) . ')';
 			break;
 		}
@@ -226,7 +226,7 @@ echo '
 			<td>' . ($offset + $i) . '.</td>';
 			if($config['highscores_outfit'])
 			echo '<td><img style="position:absolute;margin-top:' . (in_array($player['looktype'], array(75, 266, 302)) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . $config['outfit_images_url'] . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" /></td>';
-		
+
 echo '
 			<td>
 				<a href="' . getPlayerLink($player['name'], false) . '">
@@ -319,7 +319,7 @@ echo '
 				'fist' => 'Fist',
 				'fishing' => 'Fishing',
 			);
-				
+
 			if($config['highscores_frags']) {
 				$types['frags'] = 'Frags';
 			}

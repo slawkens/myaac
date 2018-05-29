@@ -5,7 +5,7 @@ if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['save
 }
 else {
 	unset($_SESSION['saved']);
-	
+
 	$locales = array();
 	foreach(get_locales() as $tmp_locale)
 	{

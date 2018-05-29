@@ -16,7 +16,7 @@ echo $twig->render('admin.plugins.form.html.twig');
 
 if(isset($_REQUEST['uninstall'])){
 	$uninstall = $_REQUEST['uninstall'];
-	
+
 	if(Plugins::uninstall($uninstall)) {
 		success('Successfully uninstalled plugin ' . $uninstall);
 	}
@@ -72,7 +72,7 @@ else if(isset($_FILES["plugin"]["name"]))
 						foreach(Plugins::getWarnings() as $warning) {
 							warning($warning);
 						}
-						
+
 						$info = Plugins::getPlugin();
 						success((isset($info['name']) ? '<strong>' . $info['name'] . '</strong> p' : 'P') . 'lugin has been successfully installed.');
 					}
@@ -80,7 +80,7 @@ else if(isset($_FILES["plugin"]["name"]))
 						$error = Plugins::getError();
 						error(!empty($error) ? $error : 'Unexpected error happened while installing plugin. Please try again later.');
 					}
-						
+
 					unlink($targetzip); // delete the Zipped file
 				}
 				else

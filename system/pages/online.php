@@ -79,7 +79,7 @@ foreach($playersOnline as $player)
 		if((int)$player['promotion'] > 0)
 			$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
 	}
-	
+
 	$players_data[] = array(
 		'name' => getPlayerLink($player['name']),
 		'player' => $player,
@@ -88,7 +88,7 @@ foreach($playersOnline as $player)
 		'country_image' => $config['account_country'] ? getFlagImage($player['country']) : null,
 		'outfit' => $config['online_outfit'] ? $config['outfit_images_url'] . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] : null
 	);
-	
+
 	if($config['online_vocations'])
 		$vocs[($player['vocation'] > $config['vocations_amount'] ? $player['vocation'] - $config['vocations_amount'] : $player['vocation'])]++;
 }
@@ -111,7 +111,7 @@ if($players > 0)
 		}
 		else
 			$query = NULL;
-		
+
 		if(isset($query) && $query->rowCount() > 0)
 		{
 			$result = $query->fetch();
