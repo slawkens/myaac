@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $locale['direction']; ?>" lang="<?php echo $locale['lang']; ?>" xml:lang="<?php echo $locale['lang']; ?>">
+<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $locale['encoding']; ?>" />
 	<title>MyAAC - <?php echo $locale['installation']; ?></title>
 	<link rel="stylesheet" type="text/css" href="template/style.css" />
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>tools/jquery.js"></script>
-	
 </head>
 <body>
 	<div id="wrapper">
