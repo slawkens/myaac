@@ -81,7 +81,8 @@ if(isset($config['lua']['statustimeout']))
 
 // get status timeout from server config
 $status_timeout = eval('return ' . $config['lua']['statusTimeout'] . ';') / 1000 + 1;
-if($status_timeout < $config['status_interval']) {
+$status_interval = @$config['status_interval'];
+if($status_interval && $status_timeout < $config['status_interval']) {
 	$status_timeout = $config['status_interval'];
 }
 
