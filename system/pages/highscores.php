@@ -81,6 +81,7 @@ else
 			break;
 
 		case 'level':
+		case 'experience':
 			$skill = POT::SKILL_LEVEL;
 			break;
 
@@ -180,7 +181,7 @@ else
 					<td class="white"><b>Outfit</b></td>
 					<?php endif; ?>
 					<td width="75%" class="white"><b>Name</b></td>
-					<td width="15%" class="white"><b><?php echo ($skill != SKILL_FRAGS ? 'Level' : $skill == SKILL_BALANCE ? 'Balance' : 'Frags'); ?></b></td>
+					<td width="15%" class="white"><b><?php echo ($skill != SKILL_FRAGS && $skill != SKILL_BALANCE ? 'Level' : ($skill == SKILL_BALANCE ? 'Balance' : 'Frags')); ?></b></td>
 					<?php if($skill == POT::SKILL__LEVEL): ?>
 					<td class="white"><b>Points</b></td>
 					<?php endif; ?>
