@@ -64,16 +64,6 @@ class OTS_DB_MySQL extends OTS_Base_DB
             $params['port'] = $host[1];
         }
 
-        if( isset($params['host']) )
-        {
-            $dns[] = 'host=' . $params['host'];
-        }
-
-        if( isset($params['port']) )
-        {
-            $dns[] = 'port=' . $params['port'];
-        }
-
         if( isset($params['database']) )
         {
             $dns[] = 'dbname=' . $params['database'];
@@ -97,6 +87,10 @@ class OTS_DB_MySQL extends OTS_Base_DB
         if( isset($params['log']) && $params['log'] )
         {
             $this->logged = true;
+        }
+
+        if( !isset($params['persistent']) ) {
+            $params['persistent'] = false;
         }
 
 		global $cache, $config;
@@ -123,7 +117,27 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			}
 		}
 
-		parent::__construct('mysql:' . implode(';', $dns), $user, $password);
+		if(isset($params['socket'][0])) {
+			$dns[] = 'unix_socket=' . $params['socket'];
+
+			parent::__construct('mysql:' . implode(';', $dns), $user, $password, array(
+				PDO::ATTR_PERSISTENT => $params['persistent']
+			));
+
+			return;
+		}
+
+		if( isset($params['host']) ) {
+			$dns[] = 'host=' . $params['host'];
+		}
+
+		if( isset($params['port']) ) {
+			$dns[] = 'port=' . $params['port'];
+		}
+
+		parent::__construct('mysql:' . implode(';', $dns), $user, $password, array(
+			PDO::ATTR_PERSISTENT => $params['persistent']
+		));
     }
 
 	public function __destruct()

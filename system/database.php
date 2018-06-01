@@ -9,7 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-	if(!isset($config['database_type'][0], $config['database_user'][0], $config['database_password'][0], $config['database_name'][0]))
+	if(!isset($config['database_user'][0], $config['database_password'][0], $config['database_name'][0]))
 	{
 		if(isset($config['lua']['sqlType'])) {// tfs 0.3
 			if(isset($config['lua']['mysqlHost'])) {// tfs 0.2
@@ -45,6 +45,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 			$config['database_user'] = $config['lua']['mysqlUser'];
 			$config['database_password'] = $config['lua']['mysqlPass'];
 			$config['database_name'] = $config['lua']['mysqlDatabase'];
+			if(!isset($config['database_socket'][0])) {
+				$config['database_socket'] = isset($config['lua']['mysqlSock']) ? trim($config['lua']['mysqlSock']) : '';
+			}
 			$config['database_encryption'] = 'sha1';
 		}
 		else if(isset($config['lua']['database_type'])) // otserv
@@ -80,13 +83,19 @@ defined('MYAAC') or die('Direct access not allowed!');
 		$config['database_log'] = false;
 	}
 
+	if(!isset($config['database_socket'])) {
+		$config['database_socket'] = '';
+	}
+
 	try {
 		$ots->connect(array(
 				'host' => $config['database_host'],
 				'user' => $config['database_user'],
 				'password' => $config['database_password'],
 				'database' => $config['database_name'],
-				'log' => $config['database_log']
+				'log' => $config['database_log'],
+				'socket' => @$config['database_socket'],
+				'persistent' => @$config['database_persistent']
 			)
 		);
 
@@ -96,7 +105,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 		if(isset($cache) && $cache->enabled()) {
 			$cache->delete('config_lua');
 		}
-		
+
 		if(defined('MYAAC_INSTALL')) {
 			return; // installer will take care of this
 		}
