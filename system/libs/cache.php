@@ -52,7 +52,7 @@ class Cache
 					break;
 
 				default:
-					self::$instance = new Cache();
+					self::$instance = new self();
 					break;
 			}
 		}
