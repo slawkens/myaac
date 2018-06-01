@@ -39,12 +39,17 @@ class Twig_Autoloader
      */
     public static function autoload($class)
     {
-        if (0 !== strpos($class, 'Twig')) {
+        if (0 !== strpos($class, 'Twig')) {// || !isset($class[0])) {
             return;
         }
 
-        if (is_file($file = dirname(__FILE__).'/../'.str_replace(array('_', "\0"), array('/', ''), $class).'.php')) {
-            require $file;
+        $file = __DIR__.'/../'.str_replace(array('_', "\0"), array('/', ''), $class).'.php';
+
+        $dev_mode = (config('env') === 'dev');
+        if($dev_mode && !is_file($file)) {
+            return;
         }
+
+        require $file;
     }
 }

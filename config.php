@@ -20,6 +20,16 @@ $config = array(
 	// directories & files
 	'server_path' => '', // path to the server directory (same directory where config file is located)
 
+	/**
+	 * Environment Setting
+	 *
+	 * if you use this script on your live server - set to 'prod' (production)
+	 * if you want to test and debug the script locally, or develop plugins, set to 'dev' (development)
+	 * WARNING: on 'dev' cache is disabled, so site will be significantly slower !!!
+	 * Recommended: 'prod' cause of speed (page load time is better)
+	 */
+	'env' => 'prod', // 'prod' for production and 'dev' for development
+
 	'template' => 'kathrine', // template used by website (kathrine, tibiacom)
 	'template_allow_change' => true, // allow users to choose their own template while browsing website?
 

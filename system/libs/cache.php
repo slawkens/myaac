@@ -16,6 +16,10 @@ class Cache
 
 	static public function getInstance($engine = '', $prefix = '')
 	{
+		if(config('env') === 'dev') {
+			return new self();
+		}
+
 		if(!self::$instance) {
 			switch(strtolower($engine)) {
 				case 'apc':

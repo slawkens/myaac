@@ -17,6 +17,10 @@ if(!$error) {
 	$content .= PHP_EOL;
 	$content .= '$config[\'installed\'] = true;';
 	$content .= PHP_EOL;
+	// by default, set env to prod
+	// user can disable when he wants
+	$content .= '$config[\'env\'] = \'prod\'; // dev or prod';
+	$content .= PHP_EOL;
 	$content .= '$config[\'mail_enabled\'] = true;';
 	$content .= PHP_EOL;
 	foreach($_SESSION as $key => $value)

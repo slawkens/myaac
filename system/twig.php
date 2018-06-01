@@ -3,12 +3,14 @@
 require_once LIBS . 'Twig/Autoloader.php';
 Twig_Autoloader::register();
 
+$dev_mode = (config('env') === 'dev');
 $twig_loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
 $twig = new Twig_Environment($twig_loader, array(
 	'cache' => CACHE . 'twig/',
-	'auto_reload' => true,
-	//'debug' => true
+	'auto_reload' => $dev_mode,
+	'debug' => $dev_mode
 ));
+unset($dev_mode);
 
 $function = new Twig_SimpleFunction('getStyle', function ($i) {
 	return getStyle($i);
@@ -35,3 +37,4 @@ $filter = new Twig_SimpleFilter('urlencode', function ($s) {
 	return urlencode($s);
 });
 $twig->addFilter($filter);
+unset($function, $filter);
