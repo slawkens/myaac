@@ -181,6 +181,7 @@ $config = array(
 	'highscores_vocation_box' => true, // show 'Choose a vocation' box on the highscores (allowing peoples to sort highscores by vocation)?
 	'highscores_vocation' => true, // show player vocation under his nickname?
 	'highscores_frags' => false, // show 'Frags' tab (best fraggers on the server)? Only 0.3
+	'highscores_balance' => false, // show 'Balance' tab (richest players on the server)
 	'highscores_outfit' => true, // show player outfit?
 	'highscores_country_box' => false, // doesnt work yet! (not implemented)
 	'highscores_groups_hidden' => 3, // this group id and higher won't be shown on the highscores
