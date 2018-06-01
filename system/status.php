@@ -29,16 +29,23 @@ else if(isset($config['lua']['status_port'])) {
 	$status_port = $config['lua']['status_port'];
 }
 
-$status_port = $config['lua']['statusPort'];
-
+// ip check
 if(isset($config['status_ip'][0]))
 {
 	$status_ip = $config['status_ip'];
-	$status_port = $config['status_port'];
 }
-else if(!isset($status_ip[0])) // try localhost if no ip specified
+elseif(!isset($status_ip[0])) // try localhost if no ip specified
 {
 	$status_ip = '127.0.0.1';
+}
+
+// port check
+$status_port = $config['lua']['statusPort'];
+if(isset($config['status_port'][0])) {
+	$status_port = $config['status_port'];
+}
+elseif(!isset($status_port[0])) // try 7171 if no ip specified
+{
 	$status_port = 7171;
 }
 
@@ -74,6 +81,9 @@ if(isset($config['lua']['statustimeout']))
 
 // get status timeout from server config
 $status_timeout = eval('return ' . $config['lua']['statusTimeout'] . ';') / 1000 + 1;
+if($status_timeout < $config['status_interval']) {
+	$status_timeout = $config['status_interval'];
+}
 
 if($status['lastCheck'] + $status_timeout < time()) {
 	updateStatus();
@@ -81,7 +91,7 @@ if($status['lastCheck'] + $status_timeout < time()) {
 
 function updateStatus() {
 	global $db, $cache, $config, $status, $status_ip, $status_port;
-	
+
 	// get server status and save it to database
 	$serverInfo = new OTS_ServerInfo($status_ip, $status_port);
 	$serverStatus = $serverInfo->status();
@@ -109,7 +119,7 @@ function updateStatus() {
 			else {
 				$query = $db->query('SELECT COUNT(`id`) AS `playersTotal` FROM `players` WHERE `online` > 0');
 			}
-			
+
 			$status['playersTotal'] = 0;
 			if($query->rowCount() > 0)
 			{

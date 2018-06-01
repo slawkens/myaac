@@ -235,6 +235,11 @@ $config = array(
 	'status_port' => '',
 	'status_timeout' => 2, // how long to wait for the initial response from the server (default: 2 seconds)
 
+	// how often to connect to server and update status (default: every minute)
+	// if your status timeout in config.lua is bigger, that it will be used instead
+	// when server is offline, it will be checked every time web refreshes, ignoring this variable
+	'status_interval' => 60,
+
 	// other
 	'anonymous_usage_statistics' => true,
 	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam
