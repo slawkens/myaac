@@ -50,15 +50,14 @@ class OTS_ServerInfo
 /**
  * Sends packet to server.
  * 
- * @param OTS_Buffer $packet Buffer to send.
+ * @param OTS_Buffer|string $packet Buffer to send.
  * @return OTS_Buffer|null Respond buffer (null if server is offline).
  * @throws E_OTS_OutOfBuffer When there is read attemp after end of packet stream.
  */
     private function send(OTS_Buffer $packet)
     {
         // connects to server
-        // gives maximum 5 seconds to connect
-        $socket = @fsockopen($this->server, $this->port, $error, $message, 5);
+        $socket = @fsockopen($this->server, $this->port, $error, $message, config('status_timeout'));
 
         // if connected then checking statistics
         if($socket)
