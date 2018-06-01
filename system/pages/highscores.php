@@ -44,7 +44,7 @@ define('SKILL_BALANCE', -2);
 $skill = POT::SKILL__LEVEL;
 if(is_numeric($list))
 {
-	$list = intval($list);
+	$list = (int) $list;
 	if($list >= POT::SKILL_FIRST && $list <= SKILL__LAST)
 		$skill = $list;
 }
