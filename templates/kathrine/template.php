@@ -116,11 +116,11 @@ defined('MYAAC') or die('Direct access not allowed!');
 							<?php
 							if($status['online'])
 								echo '
-								<font color="green"><b>Server Online</b></font> &raquo;
+								<span style="color: green"><b>Server Online</b></span> &raquo;
 								Players Online: ' . $status['players'] . ' / ' . $status['playersMax'] . ' &raquo;
 								Monsters: ' . $status['monsters'] . ' &raquo; Uptime: ' . (isset($status['uptimeReadable']) ? $status['uptimeReadable'] : 'Unknown') . '';
 							else
-								echo '<font color="red"><b>Server Offline</b></font>';
+								echo '<span style="color: red"><b>Server Offline</b></span>';
 							?>
 							</td>
 						</tr>
@@ -136,7 +136,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 				<p><?php echo template_footer(); ?></p>
 <?php
 	if($config['template_allow_change'])
-		 echo '<font color="white">Template:</font><br/>' . template_form();
+		 echo '<span style="color: white">Template:</span><br/>' . template_form();
  ?>
 			</div>
 			<!-- End -->

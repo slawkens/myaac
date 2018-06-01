@@ -58,10 +58,10 @@ foreach($groupList as $id => $group)
 
 		$tmp .= '<td>' . $flag . ' ' . getPlayerLink($member->getName()) . '</td>';
 		if($config['team_display_status'])
-			$tmp .= '<td>' . ($member->isOnline() > 0 ? '<font color="green"><b>Online</b></font>' : '<font color="red"><b>Offline</b></font>') . '</td>';
+			$tmp .= '<td>' . ($member->isOnline() > 0 ? '<span style="color: green"><b>Online</b></span>' : '<span style="color: red"><b>Offline</b></span>') . '</td>';
 
 		if($config['multiworld'] || $config['team_display_world'])
-			$tmp .= '<td><font class="white"><b>' . getWorldName($member->getWorldId()) . '</b></font></td>';
+			$tmp .= '<td><span class="white"><b>' . getWorldName($member->getWorldId()) . '</b></span></td>';
 
 		$lastLogin = '';
 		if($config['team_display_lastlogin'])
@@ -107,18 +107,18 @@ function getGroupHeader($groupField = true)
 
 	$ret = '<tr bgcolor="' . $config['vdarkborder'] . '">';
 	if($groupField)
-		$ret .= '<td width="20%"><font class="white"><b>Group</b></font></td>';
+		$ret .= '<td width="20%"><span class="white"><b>Group</b></span></td>';
 
-	$ret .= '<td width="40%"><font class="white"><b>Name</b></font></td>';
+	$ret .= '<td width="40%"><span class="white"><b>Name</b></span></td>';
 
 	if($config['team_display_status'])
-		$ret .= '<td width="20%"><font class="white"><b>Status</b></font></td>';
+		$ret .= '<td width="20%"><span class="white"><b>Status</b></span></td>';
 
 	if($config['multiworld'] || $config['team_display_world'])
-		$ret .= '<td><font class="white"><b>World</b></font></td>';
+		$ret .= '<td><span class="white"><b>World</b></span></td>';
 
 	if($config['team_display_lastlogin'])
-		$ret .= '<td width="20%"><font class="white"><b>Last login</b></font></td>';
+		$ret .= '<td width="20%"><span class="white"><b>Last login</b></span></td>';
 
 	$ret .= '</tr>';
 	return $ret;

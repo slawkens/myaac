@@ -88,6 +88,6 @@ $locale['step_finish_homepage'] = 'hemsida';
 $locale['step_finish'] = 'Klar';
 $locale['step_finish_title'] = 'Installationen klar!';
 $locale['step_finish_desc'] = 'Grattis! <b>MyAAC</b> är redo att användas!<br/>Du kan logga in på $ADMIN_PANEL$, eller titta till $HOMEPAGE$.<br/><br/>
-<font color="red">Var vänligen ta bort installations mappen.</font><br/><br/>
+<span style="color: red">Var vänligen ta bort installations mappen.</span><br/><br/>
 Var vänligen rapportera buggar och förslag på $LINK$, tack!';
 ?>

@@ -230,7 +230,7 @@ echo '
 echo '
 			<td>
 				<a href="' . getPlayerLink($player['name'], false) . '">
-					<font color="' . ($player['online'] > 0 ? 'green' : 'red') . '">' . $player['name'] . '</font>
+					<span style="color: ' . ($player['online'] > 0 ? 'green' : 'red') . '">' . $player['name'] . '</span>
 				</a>';
 				if($config['highscores_vocation']) {
 					if(isset($player['promotion'])) {

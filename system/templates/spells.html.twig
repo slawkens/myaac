@@ -35,25 +35,25 @@
 <table border="0" cellspacing="1" cellpadding="4" width="100%">
 	<tr bgcolor="{{ config.vdarkborder }}">
 		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/spell' }}"><font class="white">Name</font></a></b>
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/spell' }}"><span class="white">Name</span></a></b>
 		</td>
 		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/words' }}"><font class="white">Words</font></a></b>
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/words' }}"><span class="white">Words</span></a></b>
 		</td>
 		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/type' }}"><font class="white">Type<br/>(count)</font></a></b>
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/type' }}"><span class="white">Type<br/>(count)</span></a></b>
 		</td>
 		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/mana' }}"><font class="white">Mana</font></a></b>
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/mana' }}"><span class="white">Mana</span></a></b>
 		</td>
 		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/level' }}"><font class="white">Level</font></a></b>
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/level' }}"><span class="white">Level</span></a></b>
 		</td>
 		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/maglevel' }}"><font class="white">Magic<br/>Level</font></a></b>
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/maglevel' }}"><span class="white">Magic<br/>Level</span></a></b>
 		</td>
 		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/soul' }}"><font class="white">Soul</font></a></b>
+			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/soul' }}"><span class="white">Soul</span></a></b>
 		</td>
 		<td class="white">
 			<b>Premium</b>
@@ -84,9 +84,9 @@
 		<td>{% if spell.premium == 1 %}yes{% else %}no{% endif %}</td>
 		<td>
 		{% if spell.vocations|length > 0 %}
-		<font size="1">
+		<span style="font-size: 10px">
 			{{ spell.vocations|raw }}
-		</font>
+		</span>
 		{% else %}
 		{{ config.vocations[post_vocation_id] }}
 		{% endif %}

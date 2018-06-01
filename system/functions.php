@@ -565,7 +565,7 @@ function getCreatureName($killer, $showStatus = false, $extendedInfo = false)
 			if(!$showStatus)
 				return $str.'<b>'.$player->getName().'</b></a>';
 
-			$str .= '<font color="'.($player->isOnline() ? 'green' : 'red').'">' . $player->getName() . '</font></b></a>';
+			$str .= '<span style="color: '.($player->isOnline() ? 'green' : 'red').'">' . $player->getName() . '</span></b></a>';
 			if($extendedInfo) {
 				$str .= '<br><small>'.$player->getLevel().' '.$player->getVocationName().'</small>';
 			}
@@ -684,25 +684,25 @@ function superAdmin() {
  *
  * @param int $exp Experience amount.
  * @param bool $color Should result be colorized?
- * @return string Resulted message attached in <font> tag.
+ * @return string Resulted message attached in <span> tag.
  */
 function formatExperience($exp, $color = true)
 {
 	$ret = '';
 	if($color)
 	{
-		$ret .= '<font';
-		if($exp > 0)
-			$ret .= ' color="green">';
-		elseif($exp < 0)
-			$ret .= ' color="red">';
-		else
+		$ret .= '<span';
+		if($exp != 0) {
+			$ret .= ' style="color: ' . ($exp > 0 ? 'green' : 'red') . '">';
+		}
+		else {
 			$ret .= '>';
+		}
 	}
 
 	$ret .= '<b>' . ($exp > 0 ? '+' : '') . number_format($exp) . '</b>';
 	if($color)
-		$ret .= '</font>';
+		$ret .= '</span>';
 
 	return $ret;
 }

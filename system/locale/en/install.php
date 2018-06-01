@@ -111,6 +111,6 @@ $locale['step_finish_homepage'] = 'homepage';
 $locale['step_finish'] = 'Finish';
 $locale['step_finish_title'] = 'Installation finished!';
 $locale['step_finish_desc'] = 'Congratulations! <b>MyAAC</b> is ready to use!<br/>You can now login to $ADMIN_PANEL$, or visit $HOMEPAGE$.<br/><br/>
-<font color="red">Please delete install/ directory.</font><br/><br/>
+<span style="color: red">Please delete install/ directory.</span><br/><br/>
 Post bugs and suggestions at $LINK$, thanks!';
 ?>

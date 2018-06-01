@@ -1,5 +1,5 @@
 To change a name of character select player and choose a new name.<br/>
-<font color="red">Change name cost {{ config.account_change_character_name_points }} premium points. You have {{ points }} premium points.</font><br/><br/>
+<span style="color: red">Change name cost {{ config.account_change_character_name_points }} premium points. You have {{ points }} premium points.</span><br/><br/>
 <form action="{{ getLink('account/character/name') }}" method="post">
 	<input type="hidden" name="changenamesave" value="1">
 	<div class="TableContainer">
@@ -37,9 +37,9 @@ To change a name of character select player and choose a new name.<br/>
 									<input type="text" name="name" id="character_name" size="25" maxlength="25" >
 									<img id="character_indicator" src="images/global/general/{% if not save or errors|length > 0 %}n{% endif %}ok.gif" />
 									<br/>
-									<font size="1" face="verdana,arial,helvetica">
+									<span style="font-size: 10px">
 										<div id="character_error">Please enter your character name.</div>
-									</font>
+									</span>
 								</td>
 							</tr>
 						</table>

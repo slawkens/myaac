@@ -63,18 +63,18 @@ $errors = array();
 		$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']);
 		$recovery_key = $account_logged->getCustomField('key');
 		if(!$account_logged->isPremium())
-			$account_status = '<b><font color="red">Free Account</font></b>';
+			$account_status = '<b><span style="color: red">Free Account</span></b>';
 		else
-			$account_status = '<b><font color="green">Premium Account, ' . ($freePremium ? 'Unlimited' : $account_logged->getPremDays() . ' days left') . '</font></b>';
+			$account_status = '<b><span style="color: green">Premium Account, ' . ($freePremium ? 'Unlimited' : $account_logged->getPremDays() . ' days left') . '</span></b>';
 
 		if(empty($recovery_key))
-			$account_registered = '<b><font color="red">No</font></b>';
+			$account_registered = '<b><span style="color: red">No</span></b>';
 		else
 		{
 			if($config['generate_new_reckey'] && $config['mail_enabled'])
-				$account_registered = '<b><font color="green">Yes ( <a href="' . getLink('account/register/new') . '"> Buy new Recovery Key </a> )</font></b>';
+				$account_registered = '<b><span style="color: green">Yes ( <a href="' . getLink('account/register/new') . '"> Buy new Recovery Key </a> )</span></b>';
 			else
-				$account_registered = '<b><font color="green">Yes</font></b>';
+				$account_registered = '<b><span style="color: green">Yes</span></b>';
 		}
 
 		$account_created = $account_logged->getCreated();
@@ -86,9 +86,9 @@ $errors = array();
 		$account_location = $account_logged->getLocation();
 		if($account_logged->isBanned())
 			if($account_logged->getBanTime() > 0)
-				$welcome_message = '<font color="red">Your account is banished until '.date("j F Y, G:i:s", $account_logged->getBanTime()).'!</font>';
+				$welcome_message = '<span style="color: red">Your account is banished until '.date("j F Y, G:i:s", $account_logged->getBanTime()).'!</span>';
 			else
-				$welcome_message = '<font color="red">Your account is banished FOREVER!</font>';
+				$welcome_message = '<span style="color: red">Your account is banished FOREVER!</span>';
 		else
 			$welcome_message = 'Welcome to your account!';
 

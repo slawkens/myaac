@@ -430,15 +430,15 @@
 												{% set i = i + 1 %}
 											<tr style="background-color: {{ getStyle(i) }};">
 												<td>
-													<nobr>{{ i }}. {{ player.getName() }}{% if player.isDeleted() %}<font color="red"><b> [ DELETED ] </b></font>{% endif %}</nobr>
+													<nobr>{{ i }}. {{ player.getName() }}{% if player.isDeleted() %}<span style="color: red"><b> [ DELETED ] </b></span>{% endif %}</nobr>
 												</td>
 												<td>
 													<nobr>{{ player.getLevel() }} {{ config.vocations[player.getVocation()] }}</nobr>
 												</td>
 												{% if player.isOnline() %}
-												<td><font color="green"><b>Online</b></font></td>
+												<td><span style="color: green"><b>Online</b></span></td>
 												{% else %}
-												<td><font color="red"><b>Offline</b></font></td>
+												<td><span style="color: red"><b>Offline</b></span></td>
 												{% endif %}
 												<td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]</td>
 											</tr>

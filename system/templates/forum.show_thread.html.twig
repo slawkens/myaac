@@ -6,18 +6,18 @@ Page: {{ links_to_pages|raw }}<br/>
 <table width="100%">
 	<tr bgcolor="{{ config.lightborder }}" width="100%">
 		<td colspan="2">
-			<font size="4"><b>{{ thread_starter.post_topic }}</b></font>
-			<font size="1"><br/>
-			by {{ author_link|raw }}</font>
+			<span style="font-size: 18px"><b>{{ thread_starter.post_topic }}</b></span>
+			<span style="font-size: 10px"><br/>
+			by {{ author_link|raw }}</span>
 		</td>
 	</tr>
 	<tr bgcolor="{{ config.vdarkborder }}">
 		<td width="200">
-			<font color="white" size="1"><b>Author</b></font>
+			<span style="color: white; font-size: 10px"><b>Author</b></span>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
-	
+
 	{% set i = 0 %}
 	{% for post in posts %}
 	<tr bgcolor="{{ getStyle(i) }}">
@@ -27,7 +27,7 @@ Page: {{ links_to_pages|raw }}<br/>
 			<img style="margin-left:{% if post.player.getLookType() in [75, 266, 302] %}-0px;margin-top:-0px;width:64px;height:64px;{% else %}-60px;margin-top:-60px;width:128px;height:128px;{% endif %}" src="{{ post.outfit }}" alt="player outfit"/>
 			<br />
 			{% endif %}
-			<font size="1">
+			<span style="font-size: 10px">
 				{% if post.group is defined %}
 					Position: {{ post.group }}<br />
 				{% endif %}
@@ -38,17 +38,17 @@ Page: {{ links_to_pages|raw }}<br/>
 					{{ guildRank }}<br />
 				{% endif %}
 				<br />Posts: {{ post.author_posts_count }}<br />
-			</font>
+			</span>
 		</td>
 		<td valign="top">{{ post.content|raw }} </td></tr>
 		<tr bgcolor="{{ getStyle(i) }}">
 			<td>
-				<font size="1">{{ post.date|date('d.m.y H:i:s') }}
+				<span style="font-size: 10px">{{ post.date|date('d.m.y H:i:s') }}
 					{% if post.edited_by is defined %}
 					<br />Edited by {{ post.edited_by }}
 					<br />on {{ post.edit_date|date('d.m.y H:i:s') }}
 					{% endif %}
-				</font>
+				</span>
 			</td>
 			<td>
 				{% if is_moderator %}

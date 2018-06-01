@@ -154,9 +154,9 @@ else
 
 				if($level_in_guild > $rank->getLevel() || $guild_leader)
 					if($guild_leader_char->getName() != $player->getName())
-						echo '&nbsp;<font size=1>{<a href="?subtopic=guilds&action=kick_player&guild='.urlencode($guild->getName()).'&name='.urlencode($player->getName()).'">KICK</a>}</font>';
+						echo '&nbsp;<span style="font-size: 10px">{<a href="?subtopic=guilds&action=kick_player&guild='.urlencode($guild->getName()).'&name='.urlencode($player->getName()).'">KICK</a>}</span>';
 
-				echo '</FORM></TD><TD align="right" width="10%">'.$player->getLevel().'</TD><TD align="right" width="20%"><font color="'.($player->isOnline() ? 'green"><b>Online' : 'red"><b>Offline').'</b></font></TD></TR>';
+				echo '</FORM></TD><TD align="right" width="10%">'.$player->getLevel().'</TD><TD align="right" width="20%"><span style="color: '.($player->isOnline() ? 'green"><b>Online' : 'red"><b>Offline').'</b></span></TD></TR>';
 			}
 			echo '</TABLE></TD></TR>';
 		}

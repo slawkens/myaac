@@ -17,7 +17,7 @@ function checkName()
 
 	if(document.getElementById("character_name").value=="")
 	{
-		$('#character_error').html('<font color="red">Please enter new character name.</font>');
+		$('#character_error').html('<span color="red">Please enter new character name.</span>');
 		return;
 	}
 
@@ -38,11 +38,11 @@ function checkName()
 	$.getJSON("tools/validate.php", { name: name, uid: Math.random() },
 		function(data){
 			if(data.hasOwnProperty('success')) {
-				$('#character_error').html ('<font color="green">' + data.success + '</font>');
+				$('#character_error').html ('<span style="color: green">' + data.success + '</span>');
 				$('#character_indicator').attr('src', 'images/global/general/ok.gif');
 			}
 			else if(data.hasOwnProperty('error')) {
-				$('#character_error').html('<font color="red">' + data.error + '</font>');
+				$('#character_error').html('<span style="color: red">' + data.error + '</span>');
 				$('#character_indicator').attr('src', 'images/global/general/nok.gif');
 			}
 

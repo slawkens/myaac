@@ -1,10 +1,10 @@
 <br/>
 <table border="0" cellspacing="1" cellpadding="4" width="100%">
 	<tr bgcolor="{{ config.vdarkborder }}">
-		<td width="22"><font class="white"><b>Type</b></font></td>
-		<td width="22"><font class="white"><b>Where</b></font></td>
-		<td width="50"><font class="white"><b>Date</b></font></td>
-		<td><font class="white"><b>Description</b></font></td>
+		<td width="22"><span class="white"><b>Type</b></span></td>
+		<td width="22"><span class="white"><b>Where</b></span></td>
+		<td width="50"><span class="white"><b>Date</b></span></td>
+		<td><span class="white"><b>Description</b></span></td>
 	</tr>
 	{% if changelogs|length > 0%}
 		{% set i = 0 %}
@@ -26,7 +26,7 @@
 		<td colspan="4" bgcolor="{{ config.darkborder }}">There are no changelogs for the moment.</td>
 	</tr>
 	{% endif %}
-	
+
 	<table border="0" cellspacing="1" cellpadding="4" width="100%">
 	{% if page > 0 %}
 		<tr><td width="100%" align="right" valign="bottom"><a href="{{ getLink('changelog/' ~ (page - 1)) }}" class="size_xxs">Previous Page</a></td></tr>

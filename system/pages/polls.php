@@ -231,7 +231,7 @@ function getColorByPercent($percent)
 							<td width=20%>
 								' . slaw_getPercentBar($percent[$i]) . '
 							</td>
-							<td>' . $answer['votes'] . '(<font color=' . getColorByPercent($percent[$i]) . '><b>' . $percent[$i] . '%</b></font>)</td>
+							<td>' . $answer['votes'] . '(<span style="color: ' . getColorByPercent($percent[$i]) . '"><b>' . $percent[$i] . '%</b></span>)</td>
 						</tr>';
 							$i++;
 						}
@@ -270,7 +270,7 @@ function getColorByPercent($percent)
 						<td width=20%>
 							' . slaw_getPercentBar($percent[$i]) . '
 						</td>
-						<td>' . $answer['votes'] . '(<font color=' . getColorByPercent($percent[$i]) . '><b>' . $percent[$i] . '%</b></font>)</td>
+						<td>' . $answer['votes'] . '(<span style="color:' . getColorByPercent($percent[$i]) . '"><b>' . $percent[$i] . '%</b></span>)</td>
 					</tr>';
                        $i++;
                     }
@@ -282,7 +282,7 @@ function getColorByPercent($percent)
 
                 }
                 $showed=true;
-                echo '<div class=\'hr1\'></div><a href="?subtopic='.$link.'"><font size="2"><b>Go to list of polls</b></font></a>';
+                echo '<div class=\'hr1\'></div><a href="?subtopic='.$link.'"><span style="font-size: 13px"><b>Go to list of polls</b></span></a>';
             }
         }
     }
@@ -300,7 +300,7 @@ function getColorByPercent($percent)
         if(isset($_POST['submit']))
         {
             setSession('answers', $_POST['answers']);
-            echo '<form method="post" action=""><b><font size=3>Adding Poll</font></b><br><br>
+            echo '<form method="post" action=""><b><span style="font-size: 16px">Adding Poll</span></b><br><br>
             <input type=text name=question value="" /> Question<br>
             <input type=text name=description value="" /> Description<br>
             <input type=text name=end value="" /> Time to end, in days<br>';
@@ -351,22 +351,22 @@ function getColorByPercent($percent)
         {
             if(!$check)
             {
-                echo '<form method="post" action=""><b><font size=3>Adding Poll</font></b><br><br>
+                echo '<form method="post" action=""><b><span style="font-size: 16px">Adding Poll</span></b><br><br>
                 <input type=text name=answers value="" /> Number of Answers<br>
                 <input type="submit" name="submit" value="Submit" class="input2"/></form><br><br>';
             }
             else
             {
-                echo '<b><font size=3><br>Cannot be two and more active polls.<br><br></font></b>';
+                echo '<b><span style="font-size: 16px"><br>Cannot be two and more active polls.<br><br></span></b>';
             }
         }
         $showed=true;
-        echo '<br><div class=\'hr1\'></div><a href="?subtopic='.$link.'"><font size="2"><b>Go to list of polls</b></font></a>';
+        echo '<br><div class=\'hr1\'></div><a href="?subtopic='.$link.'"><span style="font-size: 13px"><b>Go to list of polls</b></span></a>';
     }
 
     if(!$showed)
     {
         echo 'This poll doesn\'t exist.<br>';
-        echo '<div class=\'hr1\'></div><a href="?subtopic='.$link.'"><font size="2"><b>Go to list of  polls</b></font></a>';
+        echo '<div class=\'hr1\'></div><a href="?subtopic='.$link.'"><span style="font-size: 13px"><b>Go to list of  polls</b></span></a>';
     }
 ?>

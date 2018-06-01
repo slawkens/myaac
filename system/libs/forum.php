@@ -15,24 +15,24 @@ class Forum
 	static public function canPost($account)
 	{
 		global $db, $config;
-		
+
 		if(!$account->isLoaded() || $account->isBanned())
 			return false;
-		
+
 		if(self::isModerator())
 			return true;
-		
+
 		return
 			$db->query(
 				'SELECT `id` FROM `players` WHERE `account_id` = ' . $db->quote($account->getId()) .
 				' AND `level` >= ' . $db->quote($config['forum_level_required']) .
 				' LIMIT 1')->rowCount() > 0;
 	}
-	
+
 	static public function isModerator() {
 		return hasFlag(FLAG_CONTENT_FORUM) || superAdmin();
 	}
-	
+
 	static public function add_thread($title, $body, $section_id, $player_id, $account_id, &$errors)
 	{
 		global $db;
@@ -54,10 +54,10 @@ class Forum
 			$thread_id = $db->lastInsertId();
 			$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `first_post`=".(int) $thread_id." WHERE `id` = ".(int) $thread_id);
 		}
-		
+
 		return $thread_id;
 	}
-	
+
 	static public function add_post($thread_id, $section, $author_aid, $author_guid, $post_text, $post_topic, $smile, $html)
 	{
 		global $db;
@@ -80,7 +80,7 @@ class Forum
 		if(isset($name[0]) && isset($description[0]))
 		{
 			$query = $db->select(TABLE_PREFIX . 'forum_boards', array('name' => $name));
-			
+
 			if($query === false)
 			{
 				$query =
@@ -89,7 +89,7 @@ class Forum
 						' FROM ' . $db->tableName(TABLE_PREFIX . 'forum_boards') .
 						' ORDER BY ' . $db->fieldName('ordering') . ' DESC LIMIT 1'
 					);
-				
+
 				$ordering = 0;
 				if($query->rowCount() > 0) {
 					$query = $query->fetch();
@@ -102,20 +102,20 @@ class Forum
 		}
 		else
 			$errors[] = 'Please fill all inputs.';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function get_board($id) {
 		global $db;
 		return $db->select(TABLE_PREFIX . 'forum_boards', array('id' => $id));
 	}
-	
+
 	static public function update_board($id, $name, $access, $guild, $description) {
 		global $db;
 		$db->update(TABLE_PREFIX . 'forum_boards', array('name' => $name, 'description' => $description, 'access' => $access, 'guild' => $guild), array('id' => $id));
 	}
-	
+
 	static public function delete_board($id, &$errors)
 	{
 		global $db;
@@ -128,10 +128,10 @@ class Forum
 		}
 		else
 			$errors[] = 'id not set';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function toggleHidden_board($id, &$errors)
 	{
 		global $db;
@@ -145,10 +145,10 @@ class Forum
 		}
 		else
 			$errors[] = 'id not set';
-		
+
 		return !count($errors);
 	}
-	
+
 	static public function move_board($id, $i, &$errors)
 	{
 		global $db;
@@ -159,15 +159,15 @@ class Forum
 			$old_record = $db->select(TABLE_PREFIX . 'forum_boards', array('ordering' => $ordering));
 			if($old_record !== false)
 				$db->update(TABLE_PREFIX . 'forum_boards', array('ordering' => $query['ordering']), array('ordering' => $ordering));
-			
+
 			$db->update(TABLE_PREFIX . 'forum_boards', array('ordering' => $ordering), array('id' => $id));
 		}
 		else
 			$errors[] = 'Forum board with id ' . $id . ' does not exists.';
-		
+
 		return !count($errors);
 	}
-	
+
 	public static function parseSmiles($text)
 	{
 		$smileys = array(
@@ -192,13 +192,13 @@ class Forum
 			':d' => 9,
 			';)' => 10
 		);
-		
+
 		foreach($smileys as $search => $replace)
 			$text = str_replace($search, '<img src="images/forum/smile/'.$replace.'.gif" alt="'. $search .'" title="' . $search . '" />', $text);
-		
+
 		return $text;
 	}
-	
+
 	public static function parseBBCode($text, $smiles)
 	{
 		$rows = 0;
@@ -221,20 +221,20 @@ class Forum
 			$url = substr($text, stripos($text, '[url]')+5, stripos($text, '[/url]') - stripos($text, '[url]') - 5);
 			$text = str_ireplace('[url]'.$url.'[/url]', '<a href="'.$url.'" target="_blank">'.$url.'</a>', $text);
 		}
-		
+
 		$xhtml = false;
 		$tags = array(
 			'#\[b\](.*?)\[/b\]#si' => ($xhtml ? '<strong>\\1</strong>' : '<b>\\1</b>'),
 			'#\[i\](.*?)\[/i\]#si' => ($xhtml ? '<em>\\1</em>' : '<i>\\1</i>'),
 			'#\[u\](.*?)\[/u\]#si' => ($xhtml ? '<span style="text-decoration: underline;">\\1</span>' : '<u>\\1</u>'),
 			'#\[s\](.*?)\[/s\]#si' => ($xhtml ? '<strike>\\1</strike>' : '<s>\\1</s>'),
-			
+
 			'#\[guild\](.*?)\[/guild\]#si' => urldecode(generateLink(getGuildLink('$1', false), '$1', true)),
 			'#\[house\](.*?)\[/house\]#si' => urldecode(generateLink(getHouseLink('$1', false), '$1', true)),
 			'#\[player\](.*?)\[/player\]#si' => urldecode(generateLink(getPlayerLink('$1', false), '$1', true)),
 			// TODO: [poll] tag
-			
-			'#\[color=(.*?)\](.*?)\[/color\]#si' => ($xhtml ? '<span style="color: \\1;">\\2</span>' : '<font color="\\1">\\2</font>'),
+
+			'#\[color=(.*?)\](.*?)\[/color\]#si' => ($xhtml ? '<span style="color: \\1;">\\2</span>' : '<span style="color: \\1">\\2</span>'),
 			'#\[img\](.*?)\[/img\]#si' => ($xhtml ? '<img class="forum-image" style="max-width:550px; max-height; 550px;" src="\\1" border="0" alt="" />' : '<img class="forum-image" style="max-width:550px; max-height; 550px;" src="\\1" border="0" alt="">'),
 			'#\[url=(.*?)\](.*?)\[/url\]#si' => '<a href="\\1" title="\\2">\\2</a>',
 //		'#\[email\](.*?)\[/email\]#si' => '<a href="mailto:\\1" title="Email \\1">\\1</a>',
@@ -242,13 +242,13 @@ class Forum
 //		'#\[align=(.*?)\](.*?)\[/align\]#si' => ($xhtml ? '<div style="text-align: \\1;">\\2</div>' : '<div align="\\1">\\2</div>'),
 //		'#\[br\]#si' => ($xhtml ? '<br style="clear: both;" />' : '<br>'),
 		);
-		
+
 		foreach($tags as $search => $replace)
 			$text = preg_replace($search, $replace, $text);
-		
+
 		return ($smiles ? Forum::parseSmiles($text) : $text);
 	}
-	
+
 	public static function showPost($topic, $text, $smiles = true, $html = false)
 	{
 		if($html) {
@@ -262,12 +262,12 @@ class Forum
 		$post .= self::parseBBCode(nl2br($text), $smiles);
 		return $post;
 	}
-	
+
 	public static function hasAccess($board_id) {
 		global $sections, $logged, $account_logged, $logged_access;
 		if(!isset($sections[$board_id]))
 			return false;
-		
+
 		$hasAccess = true;
 		$section = $sections[$board_id];
 		if($section['guild'] > 0) {
@@ -283,20 +283,20 @@ class Forum
 						}
 					}
 				}
-				
+
 				if (!$status) $hasAccess = false;
 			}
 			else {
 				$hasAccess = false;
 			}
 		}
-		
+
 		if($section['access'] > 0) {
 			if($logged_access < $section['access']) {
 				$hasAccess = false;
 			}
 		}
-		
+
 		return $hasAccess;
 	}
 }

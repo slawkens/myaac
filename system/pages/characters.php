@@ -302,7 +302,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				$lasthit = ($death['is_player']) ? getPlayerLink($death['killed_by']) : $death['killed_by'];
 				$description =  'Killed at level ' . $death['level'] . ' by ' . $lasthit;
 				if($death['unjustified']) {
-					$description .=  " <font color='red' style='font-style: italic;'>(unjustified)</font>";
+					$description .=  ' <span style="color: red; font-style: italic;">(unjustified)</span>';
 				}
 
 				$mostdmg = ($death['mostdamage_by'] !== $death['killed_by']) ? true : false;
@@ -312,7 +312,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 					$description .=  ' and by ' . $mostdmg;
 
 					if ($death['mostdamage_unjustified']) {
-						$description .=  " <font color='red' style='font-style: italic;'>(unjustified)</font>";
+						$description .=  ' <span style="color: red; font-style: italic;">(unjustified)</span>';
 					}
 				}
 				else {

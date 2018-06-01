@@ -53,9 +53,9 @@
 
     foreach(getTopPlayers(5) as $player) {
 	    echo '<div style="text-align:left"><a href="'.getPlayerLink($player['name'], false).'" class="topfont ' . ($player['online'] == 1 ? 'online' : 'offline') . '">
-        <font color="#CCC">&nbsp;&nbsp;&nbsp;&nbsp;'.$player['rank'].' - </font>'.$player['name'].'
+        <span style="color: #CCC">&nbsp;&nbsp;&nbsp;&nbsp;'.$player['rank'].' - </span>'.$player['name'].'
         <br>
-        <small><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Level: ('.$player['level'].')</font></small>
+        <small><span style="color: white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Level: ('.$player['level'].')</span></small>
         <br>
       </a>
       </div>';

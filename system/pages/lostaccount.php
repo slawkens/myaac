@@ -441,7 +441,7 @@ elseif($action == 'checkcode')
 			$error = 'Account of this character or this character doesn\'t exist.';
 	}
 	if(!empty($error))
-				echo '<font color="red"><b>'.$error.'</b></font><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
+				echo '<span style="color: red"><b>'.$error.'</b></span><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
 				<FORM ACTION="?subtopic=lostaccount&action=checkcode" METHOD=post>
 				<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 				<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Code & character name</B></TD></TR>
@@ -462,7 +462,7 @@ elseif($action == 'setnewpassword')
 	$character = stripslashes($_REQUEST['character']);
 	echo '';
 	if(empty($code) || empty($character) || empty($newpassword))
-		echo '<font color="red"><b>Error. Try again.</b></font><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
+		echo '<span style="color: red"><b>Error. Try again.</b></span><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
 				<BR><FORM ACTION="?subtopic=lostaccount&action=checkcode" METHOD=post>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><div style="text-align:center">
 				<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></div>
@@ -533,7 +533,7 @@ elseif($action == 'setnewpassword')
 			$error = 'Account of this character or this character doesn\'t exist.';
 	}
 	if(!empty($error))
-				echo '<font color="red"><b>'.$error.'</b></font><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
+				echo '<span style="color: red"><b>'.$error.'</b></span><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
 				<FORM ACTION="?subtopic=lostaccount&action=checkcode" METHOD=post>
 				<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 				<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Code & character name</B></TD></TR>

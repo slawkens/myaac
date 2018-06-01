@@ -415,7 +415,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 			if($status['online'])
 				echo '<div id="players" style="display: inline;">' . $status['players'] . '</div><br>Players Online';
 			else
-				echo '<font color="red"><b>Server<br />OFFLINE</b></font>';
+				echo '<span style="color: red"><b>Server<br />OFFLINE</b></span>';
 			?></div>
         </div>
 
@@ -430,7 +430,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 			}
 
 	if($config['template_allow_change'])
-		 echo '<font color="white">Template:</font><br/>' . template_form();
+		 echo '<span style="color: white">Template:</span><br/>' . template_form();
  ?>
         </div>
       </div>

@@ -37,12 +37,12 @@ if(!$bans->rowCount())
 ?>
 <table border="0" cellspacing="1" cellpadding="4" width="100%">
 	<tr align="center" bgcolor="<?php echo $config['vdarkborder']; ?>" class="white">
-		<td><font color="white"><b>Nick</b></font></td>
-		<td><font color="white"><b>Type</b></font></td>
-		<td><font color="white"><b>Expires</b></font></td>
-		<td><font color="white"><b>Reason</b></font></td>
-		<td><font color="white"><b>Comment</b></font></td>
-		<td><font color="white"><b>Added by:</b></font></td>
+		<td><span style="color: white"><b>Nick</b></span></td>
+		<td><span style="color: white"><b>Type</b></span></td>
+		<td><span style="color: white"><b>Expires</b></span></td>
+		<td><span style="color: white"><b>Reason</b></span></td>
+		<td><span style="color: white"><b>Comment</b></span></td>
+		<td><span style="color: white"><b>Added by:</b></span></td>
 	</tr>
 <?php
 foreach($bans as $ban)

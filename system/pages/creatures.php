@@ -78,34 +78,34 @@ if(empty($_REQUEST['creature']))
 	$monsters = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1'.$whereandorder);
 	echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'>';
 	if($order == 'name' && !isset($_REQUEST['desc'])) {
-	echo '<TD class="white" width="200"><B><a href="?subtopic=creatures&order=name&desc=1"><font class="white">Name DESC</a></B></TD>';
+	echo '<TD class="white" width="200"><B><a href="?subtopic=creatures&order=name&desc=1"><span class="white">Name DESC</span></a></B></TD>';
 	} else {
-	echo '<TD class="white" width="200"><B><a href="?subtopic=creatures&order=name"><font class="white">Name</a></B></TD>';
+	echo '<TD class="white" width="200"><B><a href="?subtopic=creatures&order=name"><span class="white">Name</span></a></B></TD>';
 	}
 	if($order == 'health' && !isset($_REQUEST['desc'])) {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=health&desc=1"><font class="white">Health<br/>DESC</a></B></TD>';
+	echo '<TD class="white"><B><a href="?subtopic=creatures&order=health&desc=1"><span class="white">Health<br/>DESC</span></a></B></TD>';
 	} else {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=health"><font class="white">Health</a></B></TD>';
+	echo '<TD class="white"><B><a href="?subtopic=creatures&order=health"><span class="white">Health</span></a></B></TD>';
 	}
 	if($order == 'exp' && !isset($_REQUEST['desc'])) {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=exp&desc=1"><font class="white">Experience<br/>DESC</a></B></TD>';
+	echo '<TD class="white"><B><a href="?subtopic=creatures&order=exp&desc=1"><span class="white">Experience<br/>DESC</span></a></B></TD>';
 	} else {
-		echo '<TD class="white"><B><a href="?subtopic=creatures&order=exp"><font class="white">Experience</a></B></TD>';
+		echo '<TD class="white"><B><a href="?subtopic=creatures&order=exp"><span class="white">Experience</span></a></B></TD>';
 	}
 	if($order == 'summonable' && !isset($_REQUEST['desc'])) {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=summonable&desc=1"><font class="white">Summonable<br/>Mana DESC</a></B></TD>';
+	echo '<TD class="white"><B><a href="?subtopic=creatures&order=summonable&desc=1"><span class="white">Summonable<br/>Mana DESC</span></a></B></TD>';
 	} else {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=summonable"><font class="white">Summonable<br/>Mana</a></B></TD>';
+	echo '<TD class="white"><B><a href="?subtopic=creatures&order=summonable"><span class="white">Summonable<br/>Mana</span></a></B></TD>';
 	}
 	if($order == 'convinceable' && !isset($_REQUEST['desc'])) {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=convinceable&desc=1"><font class="white">Convinceable<br/>Mana DESC</a></B></TD>';
+	echo '<TD class="white"><B><a href="?subtopic=creatures&order=convinceable&desc=1"><span class="white">Convinceable<br/>Mana DESC</span></a></B></TD>';
 	} else {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=convinceable"><font class="white">Convinceable<br/>Mana</a></B></TD>';
+	echo '<TD class="white"><B><a href="?subtopic=creatures&order=convinceable"><span class="white">Convinceable<br/>Mana</span></a></B></TD>';
 	}
 	if($order == 'race' && !isset($_REQUEST['desc'])) {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=race&desc=1"><font class="white">Race<br/>DESC</a></B></TD></TR>';
+	echo '<TD class="white"><B><a href="?subtopic=creatures&order=race&desc=1"><span class="white">Race<br/>DESC</span></a></B></TD></TR>';
 	} else {
-	echo '<TD class="white"><B><a href="?subtopic=creatures&order=race"><font class="white">Race</a></B></TD></TR>';
+	echo '<TD class="white"><B><a href="?subtopic=creatures&order=race"><span class="white">Race</span></a></B></TD></TR>';
 	}
 	$number_of_rows = 0;
 	foreach($monsters as $monster) {

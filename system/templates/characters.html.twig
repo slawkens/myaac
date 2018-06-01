@@ -27,7 +27,7 @@
 			{% set rows = rows + 1 %}
 			<tr bgcolor="{{ getStyle(rows) }}">
 				<td width="20%">Name:</td>
-				<td>{{ flag|raw }} <font color="{% if player.isOnline() %}green{% else %}red{% endif %}"><b>{{ player.getName() }}</b></font>{{ oldName }}</td>
+				<td>{{ flag|raw }} <span style="color: {% if player.isOnline() %}green{% else %}red{% endif %}"><b>{{ player.getName() }}</b></span>{{ oldName }}</td>
 			</tr>
 
 			{% set rows = rows + 1 %}
@@ -263,7 +263,7 @@
 			{% for frag in frags %}
 			<tr bgcolor="{{ getStyle(i) }}">
 				<td width="20%" align="center">{{ frag.time|date("j M Y, H:i") }}</td>
-				<td>{{ frag.description|raw }}({% if frag.unjustified %}<font size="1" color="red">Unjustified</font>{% else %}<font size="1" color="green">Justified</font>{% endif %})</td>
+				<td>{{ frag.description|raw }}({% if frag.unjustified %}<span style="color: red; font-size: 10px">Unjustified</span>{% else %}<span style="color: green; font-size: 10px">Justified</span>{% endif %})</td>
 			</tr>
 			{% set i = i + 1 %}
 			{% endfor %}
@@ -357,7 +357,7 @@
 			<td width="20%">Created:</td>
 			<td>{{ account.getCreated()|date("j F Y, g:i a") }}
 				{% if bannedUntil matches '/^\\d+$/' or bannedUntil == '-1' %}
-					<font color="red">[Banished {% if bannedUntil == '-1' %}forever{% else %}until {{ bannedUntil|date('d F Y, h:s') }}{% endif %}]</font>
+					<span style="color: red">[Banished {% if bannedUntil == '-1' %}forever{% else %}until {{ bannedUntil|date('d F Y, h:s') }}{% endif %}]</span>
 				{% else %}
 				{{ bannedUntil|raw }}
 				{% endif %}
@@ -384,11 +384,11 @@
 				{% set i = i + 1 %}
 			<tr bgcolor="{{ getStyle(i) }}">
 				<td>
-					<nobr>{{ i }}.&#160;{{ player.getName() }}{% if player.isDeleted() %}<font color="red"> [DELETED]</font>{% endif %}</nobr>
+					<nobr>{{ i }}.&#160;{{ player.getName() }}{% if player.isDeleted() %}<span style="color: red"> [DELETED]</span>{% endif %}</nobr>
 				</td>
 
 				<td>{{ player.getLevel() }} {{ player.getVocationName() }}</td>
-				<td>{% if player.isOnline() %}<b><font color="green">Online</font></b>{% endif %}</td>
+				<td>{% if player.isOnline() %}<b><span style="color: green">Online</span></b>{% endif %}</td>
 				<td>
 					<table border="0" cellspacing="0" cellpadding="0">
 						<form action="{{ characters_link }}" method=post>
