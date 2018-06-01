@@ -94,7 +94,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
             $this->prefix = $params['prefix'];
         }
 
-        if( isset($params['log']) )
+        if( isset($params['log']) && $params['log'] )
         {
             $this->logged = true;
         }
