@@ -30,7 +30,7 @@ class Cache_eAccelerator
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($key, $tmp))
+		if($this->fetch($this->prefix . $key, $tmp))
 			return $tmp;
 
 		return '';
@@ -41,7 +41,7 @@ class Cache_eAccelerator
 	}
 
 	public function delete($key) {
-		eaccelerator_rm($key);
+		eaccelerator_rm($this->prefix . $key);
 	}
 
 	public function enabled() {

@@ -31,7 +31,7 @@ class Cache_APC
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($key, $tmp))
+		if($this->fetch($this->prefix . $key, $tmp))
 			return $tmp;
 
 		return '';
@@ -42,7 +42,7 @@ class Cache_APC
 	}
 
 	public function delete($key) {
-		apc_delete($key);
+		apc_delete($this->prefix . $key);
 	}
 
 	public function enabled() {
