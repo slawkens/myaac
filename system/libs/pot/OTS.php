@@ -373,8 +373,7 @@ class POT
 
         $this->db = new OTS_DB_MySQL($params);
 
-        $this->db->setAttribute(PDO_ATTR_ERRMODE, PDO_ERRMODE_EXCEPTION);
-//        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
 /**
