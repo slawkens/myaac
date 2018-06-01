@@ -1,4 +1,4 @@
-<center><h2>Change guild logo</h2></center>
+<div style="text-align:center"><h2>Change guild logo</h2></div>
 Here you can change logo of your guild.<br/>Actuall logo: <img src="images/guilds/{{ guild_logo }}" height="64" width="64"><br/><br/>
 <form enctype="multipart/form-data" action="?subtopic=guilds&guild={{ guild.getName() }}&action=change_logo" method="post" id="upload_form">
 	<input type="hidden" name="todo" value="save" />
@@ -9,13 +9,13 @@ Here you can change logo of your guild.<br/>Actuall logo: <img src="images/guild
 Only <b>jpg, gif, png, bmp</b> pictures. Max. size: <b>{{ config.guild_image_size_kb }} KB</b><br>
 <br/>
 {% spaceless %}
-<center>
+<div style="text-align:center">
 	<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=manager" method="post">
 		<div class="BigButton" style="background-image:url({{ template_path }}/images/global/buttons/sbutton.gif)">
 			{{ include('buttons.back.html.twig') }}
 		</div>
 	</form>
-</center>
+</div>
 {% endspaceless %}
 <script type="text/javascript">
 	$(function() {

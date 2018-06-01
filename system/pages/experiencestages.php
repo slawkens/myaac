@@ -26,7 +26,7 @@ if(!isset($config['lua']['experienceStages']) || !getBoolean($config['lua']['exp
 				$enabled = true;
 		}
 	}
-	
+
 	if(!$enabled) {
 		$rate_exp = 'not set';
 		if(isset($config['lua']['rateExperience']))
@@ -47,7 +47,7 @@ if(!$stages)
 	return;
 }
 
-echo '<center><h3>Experience stages</h3></center>
+echo '<div style="text-align:center"><h3>Experience stages</h3></div>
 <table bgcolor="'.$config['darkborder'].'" border="0" cellpadding="4" cellspacing="1" width="100%"><tbody>
 	<tr bgcolor="'.$config['vdarkborder'].'">
 		<td class="white" colspan="5"><b>Stages table</b></td>

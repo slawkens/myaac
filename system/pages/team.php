@@ -24,7 +24,7 @@ if(!$groups->count())
 $newStyle = ($config['team_style'] == 2);
 if(!$newStyle)
 {
-	echo '<center><h2>Support in game</h2></center>
+	echo '<div style="text-align:center"><h2>Support in game</h2></div>
 		<table border="0" cellspacing="1" cellpadding="4" width="100%">' . getGroupHeader();
 }
 
@@ -85,7 +85,7 @@ foreach($groupList as $id => $group)
 
 	if($newStyle && $members_count > 0)
 	{
-		$group_tmp[$id] = '<center><h2>' . ucfirst($group->getName()) . 's</h2></center>
+		$group_tmp[$id] = '<div style="text-align:center"><h2>' . ucfirst($group->getName()) . 's</h2></div>
 		<table border="0" cellspacing="1" cellpadding="4" width="100%">' . getGroupHeader(false) . $groupNames[$group->getName()] . '</table>';
 	}
 }

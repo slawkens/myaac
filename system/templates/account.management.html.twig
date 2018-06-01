@@ -65,7 +65,7 @@
 
 		{# if account dont have recovery key show hint #}
 		{% if recovery_key is empty %}
-		<div align="center">
+		<div style="text-align:center">
 			You can register your account for increased protection. Click on "Register Account" and get your free recovery key today!<br/>
 			<form action="{{ getLink('account/register') }}" method="post">
 				{% set button_name = 'Register Account' %}
@@ -76,7 +76,7 @@
 		{% endif %}
 
 		{% if email_request %}
-			<div align="center">
+			<div style="text-align:center">
 				A request has been submitted to change the email address of this account to <b>{{ email_new }}</b>. After <b>{{ email_new_time|date("j F Y, G:i:s") }}</b> you can accept the new email address and finish the process. Please cancel the request if you do not want your email address to be changed! Also cancel the request if you have no access to the new email address!
 
 				<form action="{{ getLink('account/email') }}" method="post">

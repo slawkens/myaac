@@ -151,7 +151,7 @@ if(isset($_POST['emailchangecancel']) && $_POST['emailchangecancel'] == 1) {
 	$account_logged->setCustomField("email_new", "");
 	$account_logged->setCustomField("email_new_time", 0);
 
-	$custom_buttons = '<center><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" >' . $twig->render('buttons.back.html.twig') . '</td></tr></form></table></center>';
+	$custom_buttons = '<div style="text-align:center"><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" >' . $twig->render('buttons.back.html.twig') . '</td></tr></form></table></div>';
 
 	$twig->display('success.html.twig', array(
 		'title' => 'Email Address Change Cancelled',

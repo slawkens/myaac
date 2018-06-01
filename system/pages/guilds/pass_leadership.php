@@ -85,7 +85,7 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 				$twig->display('success.html.twig', array(
 					'title' => 'Leadership passed',
 					'description' => '<b>'.$to_player->getName().'</b> is now a Leader of <b>'.$guild_name.'</b>.',
-					'custom_buttons' => '<center><form action="' . getLink('guilds') . '/' . $guild->getName().'" METHOD=post>' . $twig->render('buttons.back.html.twig') . '</form></center>'
+					'custom_buttons' => '<div style="text-align:center"><form action="' . getLink('guilds') . '/' . $guild->getName().'" METHOD=post>' . $twig->render('buttons.back.html.twig') . '</form></div>'
 				));
 			}
 			else {
@@ -105,7 +105,7 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 if(empty($guild_errors) && !empty($guild_errors2)) {
 	$twig->display('error_box.html.twig', array('errors' => $guild_errors2));
 
-	echo '<br/><center><form action="?subtopic=guilds&guild='.$guild->getName().'&action=pass_leadership" method="post">' . $twig->render('buttons.back.html.twig') . '</form></center>';
+	echo '<br/><div style="text-align:center"><form action="?subtopic=guilds&guild='.$guild->getName().'&action=pass_leadership" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }
 if(!empty($guild_errors)) {
 	if(!empty($guild_errors2)) {
@@ -113,7 +113,7 @@ if(!empty($guild_errors)) {
 	}
 	$twig->display('error_box.html.twig', array('errors' => $guild_errors));
 
-	echo '<br/><center><form action="?subtopic=guilds" method="post">' . $twig->render('buttons.back.html.twig') . '</form></center>';
+	echo '<br/><div style="text-align:center"><form action="?subtopic=guilds" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }
 
 ?>

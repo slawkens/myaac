@@ -62,7 +62,7 @@ function getColorByPercent($percent)
 
         if(!$empty_active)
         {
-            echo '<tr BGCOLOR="'.$bgcolor.'"><td colspan=2><center><i>There are no active polls.</i></center></td></tr>';
+            echo '<tr BGCOLOR="'.$bgcolor.'"><td colspan=2><div style="text-align:center"><i>There are no active polls.</i></div></td></tr>';
         }
 
         echo "</table><br><br>";
@@ -91,7 +91,7 @@ function getColorByPercent($percent)
 
         if(!$empty_closed)
         {
-            echo '<tr BGCOLOR="'.$bgcolor.'"><td colspan=2><center><i>There are no closed polls.</i></center></td></tr>';
+            echo '<tr BGCOLOR="'.$bgcolor.'"><td colspan=2><div style="text-align:center"><i>There are no closed polls.</i></div></td></tr>';
         }
 
         echo "</table>";

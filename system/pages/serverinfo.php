@@ -15,7 +15,7 @@ if(isset($config['lua']['experience_stages']))
 	$config['lua']['experienceStages'] = $config['lua']['experience_stages'];
 ?>
 
-<center>
+<div style="text-align:center">
 	<h1><?php echo $config['lua']['serverName']; ?></h1>
 	<h3>
 		<?php if(isset($config['lua']['experienceStages']) && getBoolean($config['lua']['experienceStages'])): ?>
@@ -24,7 +24,7 @@ if(isset($config['lua']['experience_stages']))
 		Commands: <a href="<?php echo getLink('commands'); ?>">Look here</a><br/>
 		Team: <a href="<?php echo getLink('team'); ?>">Look here</a><br/>
 	</h3>
-</center>
+</div>
 
 <ul>
 	<h2>Server Info:</h2>
@@ -41,7 +41,7 @@ if(isset($config['lua']['experience_stages']))
 	if(isset($config['lua']['min_pvp_level'])){
 		$config['lua']['protectionLevel'] = $config['lua']['min_pvp_level'];
 	}
-	
+
 	if(isset($config['lua']['protectionLevel'])):
 ?>
 	<li>World type: <b>PVP <i>(Protection level: ><?php echo $config['lua']['protectionLevel']; ?>)</i></b></li>
@@ -58,7 +58,7 @@ if(isset($config['lua']['experience_stages']))
 		if($cleanOld > 0)
 			echo '<li>Houses with inactive owners are cleaned after 30 days.</li>';
 	}
-	
+
 	if(isset($config['lua']['rate_exp']))
 		$config['lua']['rateExp'] = $config['lua']['rate_exp'];
 	if(isset($config['lua']['rate_mag']))
@@ -167,7 +167,7 @@ if(isset($config['lua']['experience_stages']))
 			<li><?php echo $config['lua']['weeklyFragsToBanishment']; ?> frags weekly</li>
 			<li><?php echo $config['lua']['monthlyFragsToBanishment']; ?> frags monthly</li>
 		</ul>
-		<?php endif; 
+		<?php endif;
 		endif; ?>
 	</li>
 	<?php

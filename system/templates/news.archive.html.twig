@@ -8,9 +8,9 @@
 	{% set i = i + 1 %}
 	<tr bgcolor="{{ getStyle(i) }}">
 		<td width=4%>
-			<center>
+			<div style="text-align:center">
 				<img src="{{ template_path }}/images/news/icon_{{ news.icon_id }}_small.gif"/>
-			</center>
+			</div>
 		</td>
 		<td>{{ news.date|date('j.n.Y') }}</td>
 		<td>

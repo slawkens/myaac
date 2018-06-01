@@ -13,11 +13,11 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = "Players Online Records";
 
 echo '
-<b><center>Players online records on '.$config['lua']['serverName'].'</center></b>
+<b><div style="text-align:center">Players online records on '.$config['lua']['serverName'].'</div></b>
 <TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%>
 	<TR BGCOLOR="'.$config['vdarkborder'].'">
-		<TD class="white"><b><center>Players</center></b></TD>
-		<TD class="white"><b><center>Date</center></b></TD>
+		<TD class="white"><b><div style="text-align:center">Players</div></b></TD>
+		<TD class="white"><b><div style="text-align:center">Date</div></b></TD>
 	</TR>';
 
 	$i = 0;
@@ -25,8 +25,8 @@ echo '
 	foreach($records_query as $data)
 	{
 		echo '<TR BGCOLOR=' . getStyle(++$i) . '>
-			<TD><center>' . $data['record'] . '</center></TD>
-			<TD><center>' . date("d/m/Y, G:i:s", $data['timestamp']) . '</center></TD>
+			<TD><div style="text-align:center">' . $data['record'] . '</div></TD>
+			<TD><div style="text-align:center">' . date("d/m/Y, G:i:s", $data['timestamp']) . '</div></TD>
 		</TR>';
 	}
 

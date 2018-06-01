@@ -139,7 +139,7 @@ if(isset($monster['name']))
 {
 	$title = $monster['name'] . " - Creatures";
 
-	echo '<center><h2>'.$monster['name'].'</h2></center>';
+	echo '<div style="text-align:center"><h2>'.$monster['name'].'</h2></div>';
 	echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><tr><td>
 	<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=60%>';
 	$number_of_rows = 0;

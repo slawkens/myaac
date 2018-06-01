@@ -1,4 +1,4 @@
-<center><h2>Welcome to guild manager!</h2></center>
+<div style="text-align:center"><h2>Welcome to guild manager!</h2></div>
 Here you can change names of ranks, delete and add ranks, pass leadership to other guild member and delete guild.
 <br/><br/>
 <table style="clear:both" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -87,7 +87,7 @@ Here you can change names of ranks, delete and add ranks, pass leadership to oth
 		</tr>
 	</table>
 </div>
-<center><h3>Change rank names and levels</h3></center>
+<div style="text-align:center"><h3>Change rank names and levels</h3></div>
 <form action="?subtopic=guilds&action=save_ranks&guild={{ guild.getName() }}" method="post">
 	<table style="clear:both" border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr bgcolor="{{ config.vdarkborder }}">
@@ -161,8 +161,8 @@ Here you can change names of ranks, delete and add ranks, pass leadership to oth
 <b>3. Member</b> - it's lowest rank in guild. Player with this rank can:
 <li>Be a member of guild
 <br/>
-<center>
+<div style="text-align:center">
 	<form action="?subtopic=guilds&action=show&guild={{ guild.getName() }}" method="post">
 		{{ include('buttons.back.html.twig') }}
 	</form>
-</center>
+</div>

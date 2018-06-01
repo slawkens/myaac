@@ -30,19 +30,19 @@
   .online {
 	  color: #008000;
   }
-  
+
   .offline {
 	  color: #FF0000;
   }
   a.topfont {
-	font-family: Verdana, Arial, Helvetica; 
-    font-size: 11px; 
+	font-family: Verdana, Arial, Helvetica;
+    font-size: 11px;
     text-decoration: none
   }
   a:hover.topfont {
-	font-family: Verdana, Arial, Helvetica; 
-    font-size: 11px; 
-    color: #CCC; 
+	font-family: Verdana, Arial, Helvetica;
+    font-size: 11px;
+    color: #CCC;
     text-decoration:none
   }
 </style>
@@ -50,9 +50,9 @@
 <div id="Topbar" class="Themebox" style="background-image:url(<?PHP echo $template_path; ?>/images/themeboxes/highscores/highscores.png);">
   <div class="top_level" style="background:url(<?PHP echo $template_path; ?>/images/themeboxes/bg_top.png)" align="	">
     <?php
-    
+
     foreach(getTopPlayers(5) as $player) {
-	    echo '<div align="left"><a href="'.getPlayerLink($player['name'], false).'" class="topfont ' . ($player['online'] == 1 ? 'online' : 'offline') . '">
+	    echo '<div style="text-align:left"><a href="'.getPlayerLink($player['name'], false).'" class="topfont ' . ($player['online'] == 1 ? 'online' : 'offline') . '">
         <font color="#CCC">&nbsp;&nbsp;&nbsp;&nbsp;'.$player['rank'].' - </font>'.$player['name'].'
         <br>
         <small><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Level: ('.$player['level'].')</font></small>
