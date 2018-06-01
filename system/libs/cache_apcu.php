@@ -31,7 +31,7 @@ class Cache_APCu
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($key, $tmp))
+		if($this->fetch($this->prefix . $key, $tmp))
 			return $tmp;
 
 		return '';
@@ -42,7 +42,7 @@ class Cache_APCu
 	}
 
 	public function delete($key) {
-		apcu_delete($key);
+		apcu_delete($this->prefix . $key);
 	}
 
 	public function enabled() {

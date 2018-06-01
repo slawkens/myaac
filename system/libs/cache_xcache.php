@@ -30,7 +30,7 @@ class Cache_XCache
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($key, $tmp))
+		if($this->fetch($this->prefix . $key, $tmp))
 			return $tmp;
 
 		return '';
@@ -47,7 +47,7 @@ class Cache_XCache
 	}
 
 	public function delete($key) {
-		xcache_unset($key);
+		xcache_unset($this->prefix . $key);
 	}
 
 	public function enabled() {
