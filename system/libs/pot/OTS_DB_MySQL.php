@@ -93,8 +93,9 @@ class OTS_DB_MySQL extends OTS_Base_DB
             $params['persistent'] = false;
         }
 
-		global $cache, $config;
-		if(isset($cache) && $cache->enabled()) {
+		global $config;
+		$cache = Cache::getInstance();
+		if($cache->enabled()) {
 			$tmp = null;
 			$need_revalidation = true;
 			if($cache->fetch('database_checksum', $tmp) && $tmp) {
@@ -142,8 +143,10 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
 	public function __destruct()
     {
-		global $cache, $config;
-		if(isset($cache) && $cache->enabled()) {
+		global $config;
+
+	    $cache = Cache::getInstance();
+		if($cache->enabled()) {
 			$cache->set('database_tables', serialize($this->has_table_cache));
 			$cache->set('database_columns', serialize($this->has_column_cache));
 			$cache->set('database_checksum', serialize(sha1($config['database_host'] . '.' . $config['database_name'])));

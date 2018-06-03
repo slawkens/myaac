@@ -10,6 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Dashboard';
 
+$cache = Cache::getInstance();
 if($cache->enabled()) {
 	if(isset($_GET['clear_cache'])) {
 		if(clearCache())
@@ -55,7 +56,8 @@ $twig->display('admin.dashboard.html.twig', array(
 
 function clearCache()
 {
-	global $cache, $template_name;
+	global $template_name;
+	$cache = Cache::getInstance();
 
 	$tmp = '';
 	if($cache->fetch('status', $tmp))

@@ -14,53 +14,72 @@ class Cache
 {
 	static private $instance;
 
-	static public function getInstance($engine = '', $prefix = '')
+	/**
+	 * @return Cache
+	 */
+	public static function getInstance()
 	{
-		if(config('env') === 'dev') {
-			return new self();
-		}
-
-		if(!self::$instance) {
-			switch(strtolower($engine)) {
-				case 'apc':
-					require 'cache_apc.php';
-					self::$instance = new Cache_APC($prefix);
-					break;
-
-				case 'apcu':
-					require 'cache_apcu.php';
-					self::$instance = new Cache_APCu($prefix);
-					break;
-
-				case 'eaccelerator':
-					require 'cache_eaccelerator.php';
-					self::$instance = new Cache_eAccelerator($prefix);
-					break;
-
-				case 'xcache':
-					require 'cache_xcache.php';
-					self::$instance = new Cache_XCache($prefix);
-					break;
-
-				case 'file':
-					require 'cache_file.php';
-					self::$instance = new Cache_File($prefix, CACHE);
-					break;
-
-				case 'auto':
-					self::$instance = self::getInstance(self::detect(), $prefix);
-					break;
-
-				default:
-					self::$instance = new self();
-					break;
-			}
+		if (!self::$instance) {
+			return self::generateInstance(config('cache_engine'), config('cache_prefix'));
 		}
 
 		return self::$instance;
 	}
 
-	static public function detect()
+	/**
+	 * @param string $engine
+	 * @param string $prefix
+	 * @return Cache
+	 */
+	public static function generateInstance($engine = '', $prefix = '')
+	{
+		if(config('env') === 'dev') {
+			self::$instance = new self();
+			return self::$instance;
+		}
+
+		switch(strtolower($engine)) {
+			case 'apc':
+				require 'cache_apc.php';
+				self::$instance = new Cache_APC($prefix);
+				break;
+
+			case 'apcu':
+				require 'cache_apcu.php';
+				self::$instance = new Cache_APCu($prefix);
+				break;
+
+			case 'eaccelerator':
+				require 'cache_eaccelerator.php';
+				self::$instance = new Cache_eAccelerator($prefix);
+				break;
+
+			case 'xcache':
+				require 'cache_xcache.php';
+				self::$instance = new Cache_XCache($prefix);
+				break;
+
+			case 'file':
+				require 'cache_file.php';
+				self::$instance = new Cache_File($prefix, CACHE);
+				break;
+
+			case 'auto':
+				self::$instance = self::generateInstance(self::detect(), $prefix);
+				break;
+
+			default:
+				self::$instance = new self();
+				break;
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function detect()
 	{
 		if(function_exists('apc_fetch'))
 			return 'apc';
@@ -74,6 +93,8 @@ class Cache
 		return 'file';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function enabled() {return false;}
 }
-?>

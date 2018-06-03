@@ -74,7 +74,7 @@ class Plugins {
 	private static $plugin = array();
 
 	public static function install($file) {
-		global $db, $cache;
+		global $db;
 
 		$zip = new ZipArchive();
 		if($zip->open($file)) {
@@ -259,6 +259,7 @@ class Plugins {
 								}
 							}
 
+							$cache = Cache::getInstance();
 							if($cache->enabled()) {
 								$cache->delete('templates');
 							}
@@ -283,7 +284,7 @@ class Plugins {
 	}
 
 	public static function uninstall($plugin_name) {
-		global $cache, $db;
+		global $db;
 
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
@@ -344,6 +345,7 @@ class Plugins {
 					}
 
 					if($success) {
+						$cache = Cache::getInstance();
 						if($cache->enabled()) {
 							$cache->delete('templates');
 						}

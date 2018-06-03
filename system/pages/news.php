@@ -97,6 +97,8 @@ if(isset($_GET['archive']))
 header('X-XSS-Protection: 0');
 $title = 'Latest News';
 
+$cache = Cache::getInstance();
+
 $news_cached = false;
 // some constants, used mainly by database (cannot by modified without schema changes)
 define('TITLE_LIMIT', 100);
@@ -441,7 +443,9 @@ class News
 
 	static public function getCached($type)
 	{
-		global $cache, $template_name;
+		global $template_name;
+
+		$cache = Cache::getInstance();
 		if($cache->enabled())
 		{
 			$tmp = '';

@@ -516,7 +516,9 @@ function template_ga_code()
 
 function template_form()
 {
-	global $cache, $template_name;
+	global $template_name;
+
+	$cache = Cache::getInstance();
 	if($cache->enabled())
 	{
 		$tmp = '';
@@ -963,8 +965,9 @@ function unsetSession($key) {
 }
 
 function getTopPlayers($limit = 5) {
-	global $cache, $config, $db;
+	global $config, $db;
 
+	$cache = Cache::getInstance();
 	$fetch_from_db = true;
 	if($cache->enabled())
 	{

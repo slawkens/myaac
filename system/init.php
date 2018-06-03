@@ -29,7 +29,7 @@ if($config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($
 
 // cache
 require_once SYSTEM . 'libs/cache.php';
-$cache = Cache::getInstance($config['cache_engine'], $config['cache_prefix']);
+$cache = Cache::getInstance();
 
 // twig
 require_once SYSTEM . 'twig.php';

@@ -57,7 +57,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			return;
 		}
 
-		global $cache;
+		$cache = Cache::getInstance();
 
 		$data = array();
 		if($cache->enabled())
