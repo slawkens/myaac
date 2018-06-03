@@ -33,40 +33,46 @@ if($config['template_allow_change'])
 }
 $template_path = 'templates/' . $template_name;
 
-if(!file_exists(BASE . $template_path . '/index.php') &&
-	!file_exists(BASE . $template_path . '/template.php') &&
-	!file_exists(BASE . $template_path . '/layout.php'))
-{
+if(file_exists(BASE . $template_path . '/index.php')) {
+	$template_index = 'index.php';
+}
+elseif(file_exists(BASE . $template_path . '/template.php')) {
+	$template_index = 'template.php';
+}
+elseif($config['backward_support'] && file_exists(BASE . $template_path . '/layout.php')) {
+	$template_index = 'layout.php';
+}
+else {
 	$template_name = 'kathrine';
 	$template_path = 'templates/' . $template_name;
+	$template_index = 'template.php';
 }
 
-$file = BASE . $template_path . '/config.ini';
-$exists = file_exists($file);
-if($exists || ($config['backward_support'] && file_exists(BASE . $template_path . '/layout_config.ini')))
-{
-	if(!$exists)
-		$file = BASE . $template_path . '/layout_config.ini';
-
-	if($cache->enabled())
-	{
-		$tmp = '';
-		if($cache->fetch('template_ini_' . $template_name, $tmp))
-				$template_ini = unserialize($tmp);
-		else
-		{
-			$template_ini = parse_ini_file($file);
-			$cache->set('template_ini_' . $template_name, serialize($template_ini));
-		}
-	}
-	else
-		$template_ini = parse_ini_file($file);
-
-	foreach($template_ini as $key => $value)
-		$config[$key] = $value;
-}
-else if(file_exists(BASE . $template_path . '/config.php'))
+if(file_exists(BASE . $template_path . '/config.php')) {
 	require BASE . $template_path . '/config.php';
+}
+else {
+	$file = BASE . $template_path . '/config.ini';
+	$exists = file_exists($file);
+	if ($exists || ($config['backward_support'] && file_exists(BASE . $template_path . '/layout_config.ini'))) {
+		if (!$exists)
+			$file = BASE . $template_path . '/layout_config.ini';
+
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('template_ini_' . $template_name, $tmp))
+				$template_ini = unserialize($tmp);
+			else {
+				$template_ini = parse_ini_file($file);
+				$cache->set('template_ini_' . $template_name, serialize($template_ini));
+			}
+		} else
+			$template_ini = parse_ini_file($file);
+
+		foreach ($template_ini as $key => $value)
+			$config[$key] = $value;
+	}
+}
 
 $template = array();
 $template['link_account_manage'] = getLink('account/manage');

@@ -407,19 +407,7 @@ if($config['backward_support']) {
 }
 
 $title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
-if(file_exists($template_path . '/index.php'))
-	require $template_path . '/index.php';
-else if(file_exists($template_path . '/template.php')) // deprecated
-	require $template_path . '/template.php';
-else if($config['backward_support'] && file_exists($template_path . '/layout.php'))
-{
-	require $template_path . '/layout.php';
-}
-else
-{
-	// TODO: save more info to log file
-	die('ERROR: Cannot load template.');
-}
+require $template_path . '/' . $template_index;
 
 echo base64_decode('PCEtLSBQb3dlcmVkIGJ5IE15QUFDIDo6IGh0dHBzOi8vd3d3Lm15LWFhYy5vcmcvIC0tPg==') . PHP_EOL;
 if(superAdmin()) {
@@ -435,4 +423,3 @@ if(superAdmin()) {
 }
 
 $hooks->trigger(HOOK_FINISH);
-?>
