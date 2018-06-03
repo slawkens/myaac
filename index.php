@@ -59,7 +59,7 @@ else if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|
 if(file_exists(BASE . 'config.local.php'))
 	require_once BASE . 'config.local.php';
 
-if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed']))
+if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE . 'install'))
 {
 	header('Location: ' . BASE_URL . 'install/');
 	die('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
