@@ -212,7 +212,8 @@ $config = array(
 		'quests' => true,
 		'skills' => true,
 		'equipment' => true,
-		'frags' => false
+		'frags' => false,
+		'deleted' => false, // should deleted characters from same account be still listed on the list of characters? When enabled it will show that character is "[DELETED]"
 	),
 	'quests' => array(), // quests list (displayed in character view), name => storage
 	'signature_enabled' => true,
