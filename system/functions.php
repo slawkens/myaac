@@ -800,12 +800,16 @@ function getWorldName($id)
  */
 function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 {
+	/** @var PHPMailer $mailer */
 	global $mailer, $config;
 	if(!$mailer)
 	{
 		require SYSTEM . 'libs/phpmailer/PHPMailerAutoload.php';
 		$mailer = new PHPMailer();
 		$mailer->setLanguage('en', LIBS . 'phpmailer/language/');
+	}
+	else {
+		$mailer->clearAllRecipients();
 	}
 
 	$signature_html = '';
