@@ -16,6 +16,9 @@ if(file_exists(BASE . 'config.local.php'))
 require_once LIBS . 'Twig/Autoloader.php';
 Twig_Autoloader::register();
 
+// ignore undefined index from Twig autoloader
+$config['env'] = 'prod';
+
 $twig_loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
 $twig = new Twig_Environment($twig_loader, array(
 	'cache' => CACHE . 'twig/',
