@@ -1,6 +1,6 @@
 <?php
 
-if(PAGE != 'news') {
+if(PAGE !== 'news') {
 	return;
 }
 

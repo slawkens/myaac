@@ -18,20 +18,20 @@ if(isset($config['boxes']))
 	<script type="text/javascript">
 		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
 		<?php
-			if(PAGE != 'news') {
+			if(PAGE !== 'news') {
 				if(strpos(URI, 'subtopic=') !== false) {
 					$tmp = $_REQUEST['subtopic'];
-					if($tmp == 'accountmanagement') {
+					if($tmp === 'accountmanagement') {
 						$tmp = 'accountmanage';
 					}
 				}
 				else {
 					$tmp = str_replace('/', '', URI);
 					$exp = explode('/', URI);
-					if(isset($exp[1]) && URI != 'account/create' && URI != 'account/lost') {
-						if ($exp[0] == 'account') {
+					if(URI !== 'account/create' && URI !== 'account/lost' && isset($exp[1])) {
+						if ($exp[0] === 'account') {
 							$tmp = 'accountmanage';
-						} else if ($exp[0] == 'news' && $exp[1] == 'archive') {
+						} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
 							$tmp = 'newsarchive';
 						}
 						else
