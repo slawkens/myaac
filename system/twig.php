@@ -10,6 +10,10 @@ $twig = new Twig_Environment($twig_loader, array(
 	'auto_reload' => $dev_mode,
 	'debug' => $dev_mode
 ));
+
+if($dev_mode) {
+	$twig->addExtension(new Twig_Extension_Debug());
+}
 unset($dev_mode);
 
 $function = new Twig_SimpleFunction('getStyle', function ($i) {
