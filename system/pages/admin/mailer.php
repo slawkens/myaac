@@ -50,8 +50,10 @@ $success = 0;
 $failed = 0;
 
 $add = '';
-if($config['account_mail_verify'])
+if($config['account_mail_verify']) {
+	note('Note: Sending only to users with verified E-Mail.');
 	$add = ' AND ' . $db->fieldName('email_verified') . ' = 1';
+}
 
 $query = $db->query('SELECT ' . $db->fieldName('email') . ' FROM ' . $db->tableName('accounts') . ' WHERE ' . $db->fieldName('email') . ' != ""' . $add);
 foreach($query  as $email)
@@ -65,7 +67,7 @@ foreach($query  as $email)
 		error('An error occorred while sending email to <b>' . $email['email'] . '</b>. Error: ' . $mailer->ErrorInfo);
 	}
 }
-?>
-	Mailing finished.<br/>
-	<p class="success"><?php echo $success; ?> emails delivered.</p><br/>
-	<p class="warning"><?php echo $failed; ?> emails failed.</p></br>
+
+	success('Mailing finished.');
+	success("$success emails delivered.");
+	warning("$failed emails failed.");
