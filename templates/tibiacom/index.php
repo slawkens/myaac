@@ -421,6 +421,8 @@ foreach($config['menu_categories'] as $id => $cat) {
 
         <div id="Themeboxes">
 			<?php
+			$twig_loader->prependPath(__DIR__ . '/boxes/templates');
+
 			foreach($config['boxes'] as $box) {
 				/** @var string $template_name */
 				$file = TEMPLATES . $template_name . '/boxes/' . $box . '.php';

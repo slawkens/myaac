@@ -12,7 +12,7 @@ $config['network_twitter'] = 'tibia'; // leave empty to disable
 
 $config['background_image'] = "background-artwork.jpg";
 $config['logo_image'] = "tibia-logo-artwork-top.gif";
-$config['gallery_image'] = 1;
+$config['gallery_image_id_from_database'] = 1;
 $config['menu_categories'] = array(
 	MENU_CATEGORY_NEWS => array('id' => 'news', 'name' => 'Latest News'),
 	MENU_CATEGORY_ACCOUNT => array('id' => 'account', 'name' => 'Account'),

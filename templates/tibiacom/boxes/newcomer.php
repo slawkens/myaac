@@ -1,5 +1,3 @@
-<div id="NewcomerBox" class="Themebox" style="background-image:url(<?php echo $template_path; ?>/images/themeboxes/newcomer/newcomerbox.gif);">
-	<a class="ThemeboxButton" href="<?php echo getLink('account/create'); ?>" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton.gif);"><div class="BigButtonOver" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/sbutton_over.gif);"></div><div class="ButtonText" style="background-image:url(<?php echo $template_path; ?>/images/global/buttons/_sbutton_jointibia.gif);"></div>
-	</a>
-	<div class="Bottom" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);"></div>
-</div>
+<?php
+
+$twig->display('newcomer.html.twig');
