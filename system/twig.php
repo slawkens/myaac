@@ -26,6 +26,11 @@ $function = new Twig_SimpleFunction('getLink', function ($s) {
 });
 $twig->addFunction($function);
 
+$function = new Twig_SimpleFunction('getPlayerLink', function ($s, $p) {
+	return getPlayerLink($s, $p);
+});
+$twig->addFunction($function);
+
 $function = new Twig_SimpleFunction('hook', function ($hook) {
 	global $hooks;
 	$hooks->trigger($hook);
