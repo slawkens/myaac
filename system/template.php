@@ -46,6 +46,9 @@ else {
 	$template_name = 'kathrine';
 	$template_path = 'templates/' . $template_name;
 	$template_index = 'template.php';
+	if(!file_exists(BASE . $template_path . '/' . $template_index)) {
+		throw new RuntimeException('Cannot load any template. Please ensure your templates directory is not empty, and you set correct name for template in configuration.');
+	}
 }
 
 if(file_exists(BASE . $template_path . '/config.php')) {
