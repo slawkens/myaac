@@ -18,7 +18,7 @@ $locale['loaded'] = 'Loaded';
 $locale['not_loaded'] = 'Not loaded';
 
 $locale['please_fill_all'] = 'Please fill all inputs!';
-$locale['already_installed'] = 'MyAAC has been already installed. Please delete <b>install/<b/> directory. If you want to re-install MyAAC - please delete <strong>config.local.php</strong> file from the main directory and refresh the page.';
+$locale['already_installed'] = 'MyAAC has been already installed. Please delete <b>install/<b/> directory. If you want to reinstall MyAAC - please delete <strong>config.local.php</strong> file from the main directory and refresh the page.';
 
 // welcome
 $locale['step_welcome'] = 'Welcome';
