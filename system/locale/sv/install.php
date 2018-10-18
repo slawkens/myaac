@@ -18,7 +18,7 @@ $locale['loaded'] = 'Laddad';
 $locale['not_loaded'] = 'Inte Laddad';
 
 $locale['please_fill_all'] = 'Vänligen fyll i allt!';
-$locale['already_installed'] = 'MyAAC är redan installerat. Vänligen ta bort <b>install/<b/> mappen.';
+$locale['already_installed'] = 'MyAAC är redan installerat. Vänligen ta bort <b>install/<b/> mappen. Om du vill installera MyAAC igen - ta bort filen <strong>config.local.php</strong> från huvudkatalogen och uppdatera sidan.';
 
 // welcome
 $locale['step_welcome'] = 'Välkommen';
