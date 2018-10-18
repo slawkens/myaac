@@ -179,7 +179,7 @@ $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
 
 // verify myaac tables exists in database
-if(!tableExist('myaac_account_actions')) {
+if(!$db->hasTable('myaac_account_actions')) {
 	die('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
 }
 
