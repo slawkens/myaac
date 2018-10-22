@@ -1785,6 +1785,37 @@ img {
   color: white;
 }
 
+/* BUTTONS */
+.MediumButtonText {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 37px;
+  width: 150px;
+  z-index: 20;
+}
+.MediumButtonBackground {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 150px;
+  height: 37px;
+  z-index: 10;
+}
+.MediumButtonOver {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 150px;
+  height: 37px;
+  visibility: hidden;
+  z-index: 15;
+}
+.MediumButtonForm {
+  margin: 0;
+  padding: 0;
+}
+
 .moduleRow { }
 
 .moduleRowOver {
