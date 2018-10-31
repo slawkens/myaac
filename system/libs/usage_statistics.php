@@ -39,11 +39,13 @@ class Usage_Statistics {
 		
 		$ret['myaac_version'] = MYAAC_VERSION;
 		$ret['myaac_db_version'] = DATABASE_VERSION;
-		
-		$query = $db->query('SELECT `value` FROM `server_config` WHERE `config` = ' . $db->quote('database_version'));
-		if($query->rowCount() == 1) {
-			$query = $query->fetch();
-			$ret['otserv_db_version'] = $query['value'];
+
+		if(tableExist('server_config')) {
+			$query = $db->query('SELECT `value` FROM `server_config` WHERE `config` = ' . $db->quote('database_version'));
+			if($query->rowCount() == 1) {
+				$query = $query->fetch();
+				$ret['otserv_db_version'] = $query['value'];
+			}
 		}
 		
 		$ret['client_version'] = $config['client'];
