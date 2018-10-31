@@ -60,8 +60,8 @@ class Usage_Statistics {
 		
 		$query = $db->query('SELECT SUM(ROUND(((DATA_LENGTH + INDEX_LENGTH) / 1024 ), 0)) AS "size"
 FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA = "forgottenserver";');
-		
+WHERE TABLE_SCHEMA = "' . $config['database_name'] . '";');
+
 		if($query->rowCount() == 1) {
 			$query = $query->fetch();
 			$ret['database_size'] = $query['size'];
