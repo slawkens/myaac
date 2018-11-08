@@ -152,6 +152,11 @@ if(!$db->hasColumn('accounts', 'premium_points')) {
 		success($locale['step_database_adding_field'] . ' accounts.premium_points...');
 }
 
+if(!$db->hasColumn('guilds', 'motd')) {
+	if(query("ALTER TABLE `guilds` MODIFY `motd` VARCHAR(255) NOT NULL DEFAULT '';"))
+		success($locale['step_database_modifying_field'] . ' guilds.motd...');
+}
+
 if(!$db->hasColumn('guilds', 'description')) {
 	if(query("ALTER TABLE `guilds` ADD `description` TEXT NOT NULL;"))
 		success($locale['step_database_adding_field'] . ' guilds.description...');
