@@ -48,12 +48,40 @@ $tmp = '';
 if(fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
 
-$twig->display('admin.dashboard.html.twig', array(
-	'is_closed' => $is_closed,
-	'closed_message' => $closed_message,
-	'status' => $status
+$query = $db->query('SELECT count(*) as `how_much` FROM `accounts`;');
+$query = $query->fetch();
+$total_accounts = $query['how_much'];
+
+$query = $db->query('SELECT count(*) as `how_much` FROM `players`;');
+$query = $query->fetch();
+$total_players = $query['how_much'];
+
+$query = $db->query('SELECT count(*) as `how_much` FROM `guilds`;');
+$query = $query->fetch();
+$total_guilds = $query['how_much'];
+
+$query = $db->query('SELECT count(*) as `how_much` FROM `houses`;');
+$query = $query->fetch();
+$total_houses = $query['how_much'];
+
+$points = $db->query('SELECT `premium_points`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
+$coins = $db->query('SELECT `coins`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
+
+$twig->display('admin.statistics.html.twig', array(
+	'total_accounts' => $total_accounts,
+	'total_players' => $total_players,
+	'total_guilds' => $total_guilds,
+	'total_houses' => $total_houses
 ));
 
+$twig->display('admin.dashboard.html.twig', array(
+    'is_closed' => $is_closed,
+    'closed_message' => $closed_message,
+    'status' => $status,
+	'account_type' => (USE_ACCOUNT_NAME ? 'name' : 'number'),
+	'points' => $points,
+	'coins' => $coins
+));
 function clearCache()
 {
 	global $template_name;

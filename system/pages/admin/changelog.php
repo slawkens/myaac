@@ -24,4 +24,3 @@ $changelog = preg_replace('/\s(\w+:\/\/)(\S+)/', ' <a href="\\1\\2" target="_bla
 $changelog = nl2br($changelog);
 
 echo '<div>' . $changelog . '</div>';
-?>
