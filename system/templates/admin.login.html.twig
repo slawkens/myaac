@@ -1,9 +1,38 @@
-Please login.
-<form method="post">
-	<input type="password" name="account_login" id="account-name-input" size="30" maxlength="30" autofocus/><br/>
-	<input type="password" name="password_login" size="30" maxlength="29"/><br/>
-	<input type="checkbox" id="remember_me" name="remember_me" value="true"/>
-	<label for="remember_me"> Remember me</label><br/>
-	<input type="hidden" name="admin" value="1"/>
-	<input type="submit" class="button" value="Login"/>
-</form>
+<div class="login-box">
+    {% if logout %}
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4><i class="icon fa fa-check"></i> Status</h4>
+            {{ logout }}
+        </div>
+    {% endif %}
+
+    <form method="post">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Please login.</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" class="form-control" id="account-name-input" name="account_login"
+                               placeholder="Username" required autofocus>
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                        <input type="password" class="form-control" placeholder="Password" name="password_login"
+                               placeholder="Password" required>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <label>
+                    <input type="checkbox" id="remember_me" name="remember_me" value="true"> Remember me
+                </label>
+                <input type="hidden" name="admin" value="1"/>
+                <button type="submit" class="btn btn-info pull-right">Sign in</button>
+            </div>
+        </div>
+    </form>
+</div>

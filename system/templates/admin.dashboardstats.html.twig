@@ -41,7 +41,60 @@
             </div>
         </div>
     </div>
+    {% if status.online %}
+        <div class="col-md-6">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Server Online</h3>
 
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <td>Status</td>
+                            <td>{{ status.uptimeReadable }}, {{ status.players }}/{{ status.playersMax }}</td>
+                        </tr>
+                        <tr>
+                            <td>Connection</td>
+                            <td>{{ config.lua.ip }} : {{ config.lua.loginPort }}</td>
+                        </tr>
+                        <tr>
+                            <td>Server</td>
+                            <td>{{ status.server }} {{ status.serverVersion }}</td>
+                        </tr>
+                        <tr>
+                            <td>Version</td>
+                            <td> {{ status.clientVersion }}</td>
+                        </tr>
+                        <tr>
+                            <td>Monsters</td>
+                            <td>{{ status.monsters }}</td>
+                        </tr>
+                        <tr>
+                            <td>Map</td>
+                            <td>{{ status.mapName }}, <b>author</b>: {{ status.mapAuthor }},
+                                <b>size</b>: {{ status.mapWidth }} x {{ status.mapHeight }}</td>
+                        </tr>
+                        <tr>
+                            <td>MOTD</td>
+                            <td>{{ status.motd }}</td>
+                        </tr>
+                        <tr>
+                            <td>Last updated</td>
+                            <td>{{ status.lastCheck|date("H:i:s") }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="col-md-3">
         <div class="box">

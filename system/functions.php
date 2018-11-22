@@ -11,25 +11,44 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 function message($message, $type, $return)
 {
-	if($return)
-		return '<div class="' . $type . '">' . $message . '</div>';
+    if($return)
+        return '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
 
-	echo '<div class="' . $type . '">' . $message . '</div>';
-	return true;
+    echo '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+    return true;
 }
 function success($message, $return = false) {
-	return message($message, 'success', $return);
+    return message($message, 'success', $return);
 }
 function warning($message, $return = false) {
-	return message($message, 'warning', $return);
+    return message($message, 'warning', $return);
 }
 function note($message, $return = false) {
-	return message($message, 'note', $return);
+    return message($message, 'note', $return);
 }
 function error($message, $return = false) {
-	return message($message, 'error', $return);
+    return message($message, 'error', $return);
 }
+function message1($head, $message, $type, $icon , $return)
+{//return '<div class="' . $type . '">' . $message . '</div>';
+    if($return)
+        return '<div class="alert alert-'.$type.' alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-'.$icon.'"></i>  '.$head.':</h4>'.$message.'</div>';
 
+    echo '<div class="alert alert-'.$type.' alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-'.$icon.'"></i> '.$head.':</h4>'.$message.'</div>';
+    return true;
+}
+function success1($message, $return = false) {
+    return message('Info', $message, 'success','success', $return);
+}
+function warning1($message, $return = false) {
+    return message('Warning',$message, 'warning','ban', $return);
+}
+function note1($message, $return = false) {
+    return message('Info',$message, 'info','info', $return);
+}
+function error1($message, $return = false) {
+    return message("Alert", $message, 'danger','check', $return);
+}
 function longToIp($ip)
 {
 	$exp = explode(".", long2ip($ip));

@@ -398,6 +398,35 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
         return $this->data['created'];
     }
+	
+/**
+ * Name.
+ *
+ * @version 0.7.5
+ * @since 0.7.5
+ * @return string Name.
+ * @throws E_OTS_NotLoaded If account is not loaded.
+ */
+    public function setPremDays($premdays)
+    {
+        $this->data['premdays'] = (int) $premdays;
+    }
+
+    public function setRLName($name)
+    {
+        $this->data['rlname'] = (string) $name;
+    }
+
+    public function setLocation($location)
+    {
+        $this->data['location'] = (string) $location;
+    }
+
+    public function setCountry($country)
+    {
+        $this->data['country'] = (string) $country;
+    }
+	
 
 /**
  * Name.
@@ -620,7 +649,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         {
             $value = $this->db->quote($value);
         }
-
         $this->db->query('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName($field) . ' = ' . $value . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
     }
 

@@ -1,27 +1,66 @@
-<table class="table" width="100%" cellspacing="1" cellpadding="4">
-	<tr>
-		<th><b>Name</b></th>
-		<th><b>Title</b></th>
-		<th><b>Options</b></th>
-	</tr>
-	{% for page in pages %}
-	<tr>
-		<td>{{ page.link|raw }}</td>
-		<td><i>{{ page.title }}</i></td>
-		<td>
-			<a href="?p=pages&action=edit&id={{ page.id }}" class="ico" title="Edit">
-				<img src="{{ constant('BASE_URL') }}images/edit.png"/>
-				Edit
-			</a>
-			<a href="?p=pages&action=delete&id={{ page.id }}" class="ico" onclick="return confirm('Are you sure?');" title="Delete">
-				<img src="{{ constant('BASE_URL') }}images/del.png"/>
-				Delete
-			</a>
-			<a href="?p=pages&action=hide&id={{ page.id }}" class="ico" title="<?php echo ($_page['hidden'] != 1 ? 'Hide' : 'Show'); ?>">
-				<img src="{{ constant('BASE_URL') }}images/{% if page.hidden != 1 %}success{% else %}error{% endif %}.png"/>
-				{% if page.hidden != 1 %}Hide{% else %}Show{% endif %}
-			</a>
-		</td>
-	</tr>
-	{% endfor %}
-</table>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Pages:</h3>
+        <div class="box-tools pull-right">
+            <a href="?p=pages&action=new"><span class="btn btn-success">New</span></a>
+        </div>
+    </div>
+    <div class="box-body">
+        <div id="tb_pages_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="tb_pages" class="table table-bordered table-striped dataTable" role="grid"
+                           aria-describedby="tb_pages_info">
+                        <thead>
+                        <tr role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="tb_pages" rowspan="1" colspan="1"
+                                aria-sort="ascending" aria-label="Name: activate to sort column descending">Name
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="tb_pages" rowspan="1" colspan="1"
+                                aria-sort="ascending" aria-label="Title: activate to sort column descending">Title
+                            </th>
+                            <th class="" tabindex="0" aria-controls="tb_pages" rowspan="1" colspan="1" style="width: 150px;">Options
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for page in pages %}
+                            <tr>
+                                <td>{{ page.link|raw }}</td>
+                                <td><i>{{ page.title }}</i></td>
+                                <td>
+                                    <a href="?p=pages&action=edit&id={{ page.id }}" class="ico" title="Edit"><span
+                                                class="btn btn-success btn-sm edit btn-flat"><i class="fa fa-edit"></i></span></a>
+                                    <a href="?p=pages&action=delete&id={{ page.id }}" class="ico"
+                                       onclick="return confirm('Are you sure?');" title="Delete"><span
+                                                class="btn btn-danger btn-sm delete btn-flat"><i
+                                                    class="fa fa-trash"></i></span></a>
+                                    <a href="?p=pages&action=hide&id={{ page.id }}" class="ico"
+                                       title="{% if page.hidden != 1 %}Hide{% else %}Show{% endif %}">
+                                        {% if page.hidden != 1 %}
+                                            <span class="btn btn-primary btn-sm btn-flat"><i class="fa fa-eye"></i></span>
+                                            {% else %}
+                                            <span class="btn btn-default btn-sm btn-flat"><i class="fa fa-eye-slash"></i></span>
+                                             {% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Title</th>
+                            <th>Options</th>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#tb_pages').DataTable()
+    })
+</script>

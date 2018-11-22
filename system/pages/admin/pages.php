@@ -84,7 +84,7 @@ if(!empty($action))
 	}
 
 	if(!empty($errors))
-		$twig->display('error_box.html.twig', array('errors' => $errors));
+		$twig->display('admin.error.html.twig', array('errors' => $errors));
 }
 
 $query =
