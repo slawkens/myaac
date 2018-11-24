@@ -36,8 +36,8 @@ function verify_number($number, $name, $max_length)
 
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/jquery.datetimepicker.css"/ >
-<script src="<?php echo BASE_URL; ?>tools/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
+<script src="<?php echo BASE_URL; ?>tools/js/jquery.datetimepicker.js"></script>
 
 <?php
 $id = 0;
@@ -327,7 +327,7 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
                                    value="<?php echo $account->getCustomField('web_lastlogin'); ?>"/>
                         </div>
                     </div>
-                    <!-- nav-tabs-custom -->
+
                     <input type="hidden" name="save" value="yes"/>
                     <div class="box-footer">
                         <a href="<?php echo ADMIN_URL; ?>?p=accounts"><span class="btn btn-danger">Cancel</span></a>
@@ -349,9 +349,7 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
             </div>
-            <!-- /.box-tools -->
         </div>
-        <!-- /.box-header -->
 
         <div class="box-body">
             <form action="<?php echo $base; ?>" method="post">
@@ -364,9 +362,7 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
                     </div>
             </form>
         </div>
-        <!-- /.box-body -->
     </div>
-    <!-- /.box -->
     <?php
     if (isset($account) && $account->isLoaded()) {
     $account_players = array();
@@ -377,7 +373,6 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
         <div class="box-header">
             <h3 class="box-title">Character List:</h3>
         </div>
-        <!-- /.box-header -->
         <div class="box-body no-padding">
             <table class="table table-striped">
                 <tbody><tr>
@@ -401,7 +396,6 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
                 </tbody>
             </table>
         </div>
-        <!-- /.box-body -->
     </div>
 
 <?php
@@ -409,51 +403,12 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 };
 ?>
 </div>
-<div class="row">
-<?php if (isset($accoun1t) && $account->isLoaded()) {
-    ?>
-    <div class="col-md-4">
-        <?php
-        $tableToDescribe = 'accounts';
-        $statement = $db->query('DESCRIBE ' . $tableToDescribe);
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        $val = 0;
-        foreach ($result as $column) {
-            // IF         val =  2 MAKE <TR> TODO
-            ($val == 2) ? "<tr>" : "";
-            ?>
-
-            <td><?php echo $column['Field'] ?></td>
-            <td><input type="text" name="lastip" size="8" maxlength="10"
-                       value="<?php echo $account->getCustomField($column['Field']); ?>"/></td>
-            <?php
-            echo $column['Field'] . ' - ' . $column['Type'], '<br>';
-
-            if ($val == 2) {
-                echo "</tr>";
-                $val = 1;
-            } else {
-                ++$val;
-            }
-
-        } ?>
-    </div>
-<?php } ?>
-</div>
 
 <script type="text/javascript">
-    $('#lastlogin').datetimepicker({
-        format: 'unixtime'
-    });
-    $('#lastlogout').datetimepicker({
-        format: 'unixtime'
-    });
-    $('#created').datetimepicker({
-        format: 'unixtime'
-    });
-    $('#web_lastlogin').datetimepicker({
-        format: 'unixtime'
-    });
+    $('#lastlogin').datetimepicker({ format: 'unixtime' });
+    $('#lastlogout').datetimepicker({ format: 'unixtime' });
+    $('#created').datetimepicker({ format: 'unixtime' });
+    $('#web_lastlogin').datetimepicker({ format: 'unixtime' });
     $(document).ready(function () {
         $('.input_control').change(function () {
             $('input[name=pass]')[0].disabled = !this.checked;

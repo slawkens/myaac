@@ -12,8 +12,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = "Creatures";
 
 ?>
-<script type="text/javascript" src="tools/tipped.js"></script>
-<link rel="stylesheet" type="text/css" href="tools/tipped.css"/>
+<script type="text/javascript" src="tools/js/tipped.js"></script>
+<link rel="stylesheet" type="text/css" href="tools/css/tipped.css"/>
 <script>
 	$(document).ready(function() {
 		Tipped.create('.tooltip');

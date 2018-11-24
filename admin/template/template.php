@@ -4,13 +4,13 @@
 <head>
     <?php echo template_header(true); ?>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="stylesheet" href="dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
-    <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/skins/skin-blue.min.css">
 
-    <link rel="stylesheet" href="dist/css/font-awesome.min.css">
-    <link rel="stylesheet" href="dist/css/ionicons.min.css">
-    <link rel="stylesheet" href="dist/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/ionicons.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $template_path; ?>style.css" />
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -211,11 +211,11 @@
         }
         ?>
 
-    <script src="dist/js/bootstrap.min.js"></script>
-    <script src="dist/js/jquery.min.js"></script>
-    <script src="dist/js/jquery-ui.min.js"></script>
-    <script src="dist/js/jquery.dataTables.min.js"></script>
-    <script src="dist/js/dataTables.bootstrap.min.js"></script>
-    <script src="dist/js/adminlte.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>tools/js/jquery.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>tools/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>tools/js/dataTables.bootstrap.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
 </body>
 </html>
