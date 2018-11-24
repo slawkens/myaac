@@ -11,42 +11,40 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Dashboard';
 
 $cache = Cache::getInstance();
-if($cache->enabled()) {
-	if(isset($_GET['clear_cache'])) {
-		if(clearCache())
-			success('Cache cleared.');
-		else
-			error('Error while clearing cache.');
-	}
+if ($cache->enabled()) {
+    if (isset($_GET['clear_cache'])) {
+        if (clearCache())
+            success('Cache cleared.');
+        else
+            error('Error while clearing cache.');
+    }
 }
-if(isset($_GET['maintenance'])) {
-	$_status = (int)$_POST['status'];
-	$message = $_POST['message'];
-	if(empty($message)) {
-		error('Message cannot be empty.');
-	}
-	else if(strlen($message) > 255) {
-		error('Message is too long. Maximum length allowed is 255 chars.');
-	}
-	else {
-		$tmp = '';
-		if(fetchDatabaseConfig('site_closed', $tmp))
-			updateDatabaseConfig('site_closed', $_status);
-		else
-			registerDatabaseConfig('site_closed', $_status);
+if (isset($_GET['maintenance'])) {
+    $_status = (int)$_POST['status'];
+    $message = $_POST['message'];
+    if (empty($message)) {
+        error('Message cannot be empty.');
+    } else if (strlen($message) > 255) {
+        error('Message is too long. Maximum length allowed is 255 chars.');
+    } else {
+        $tmp = '';
+        if (fetchDatabaseConfig('site_closed', $tmp))
+            updateDatabaseConfig('site_closed', $_status);
+        else
+            registerDatabaseConfig('site_closed', $_status);
 
-		if(fetchDatabaseConfig('site_closed_message', $tmp))
-			updateDatabaseConfig('site_closed_message', $message);
-		else
-			registerDatabaseConfig('site_closed_message', $message);
-	}
+        if (fetchDatabaseConfig('site_closed_message', $tmp))
+            updateDatabaseConfig('site_closed_message', $message);
+        else
+            registerDatabaseConfig('site_closed_message', $message);
+    }
 }
 $is_closed = getDatabaseConfig('site_closed') == '1';
 
 $closed_message = 'Server is under maintenance, please visit later.';
 $tmp = '';
-if(fetchDatabaseConfig('site_closed_message', $tmp))
-	$closed_message = $tmp;
+if (fetchDatabaseConfig('site_closed_message', $tmp))
+    $closed_message = $tmp;
 
 $query = $db->query('SELECT count(*) as `how_much` FROM `accounts`;');
 $query = $query->fetch();
@@ -64,64 +62,74 @@ $query = $db->query('SELECT count(*) as `how_much` FROM `houses`;');
 $query = $query->fetch();
 $total_houses = $query['how_much'];
 
-$points = $db->query('SELECT `premium_points`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
+if ($db->hasColumn('accounts', 'premium_points')) {
+    $points = $db->query('SELECT `premium_points`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
+} else {
+    $points = 0;
+}
 
+if ($db->hasColumn('accounts', 'coins')) {
+    $coins = $db->query('SELECT `coins`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `coins` DESC LIMIT 10;');
+} else {
+    $coins = 0;
+}
 
 $twig->display('admin.statistics.html.twig', array(
-	'total_accounts' => $total_accounts,
-	'total_players' => $total_players,
-	'total_guilds' => $total_guilds,
-	'total_houses' => $total_houses
+    'total_accounts' => $total_accounts,
+    'total_players' => $total_players,
+    'total_guilds' => $total_guilds,
+    'total_houses' => $total_houses
 ));
 
 $twig->display('admin.dashboard.html.twig', array(
     'is_closed' => $is_closed,
     'closed_message' => $closed_message,
     'status' => $status,
-	'account_type' => (USE_ACCOUNT_NAME ? 'name' : 'number'),
-	'points' => $points
+    'account_type' => (USE_ACCOUNT_NAME ? 'name' : 'number'),
+    'points' => $points,
+    'coins' => $coins,
 ));
 function clearCache()
 {
-	global $template_name;
-	$cache = Cache::getInstance();
+    global $template_name;
+    $cache = Cache::getInstance();
 
-	$tmp = '';
-	if($cache->fetch('status', $tmp))
-		$cache->delete('status');
+    $tmp = '';
+    if ($cache->fetch('status', $tmp))
+        $cache->delete('status');
 
-	if($cache->fetch('templates', $tmp))
-		$cache->delete('templates');
+    if ($cache->fetch('templates', $tmp))
+        $cache->delete('templates');
 
-	if($cache->fetch('config_lua', $tmp))
-		$cache->delete('config_lua');
+    if ($cache->fetch('config_lua', $tmp))
+        $cache->delete('config_lua');
 
-	if($cache->fetch('vocations', $tmp))
-		$cache->delete('vocations');
+    if ($cache->fetch('vocations', $tmp))
+        $cache->delete('vocations');
 
-	if($cache->fetch('towns', $tmp))
-		$cache->delete('towns');
+    if ($cache->fetch('towns', $tmp))
+        $cache->delete('towns');
 
-	if($cache->fetch('groups', $tmp))
-		$cache->delete('groups');
+    if ($cache->fetch('groups', $tmp))
+        $cache->delete('groups');
 
-	if($cache->fetch('visitors', $tmp))
-		$cache->delete('visitors');
+    if ($cache->fetch('visitors', $tmp))
+        $cache->delete('visitors');
 
-	if($cache->fetch('views_counter', $tmp))
-		$cache->delete('views_counter');
+    if ($cache->fetch('views_counter', $tmp))
+        $cache->delete('views_counter');
 
-	if($cache->fetch('failed_logins', $tmp))
-		$cache->delete('failed_logins');
+    if ($cache->fetch('failed_logins', $tmp))
+        $cache->delete('failed_logins');
 
-	if($cache->fetch('news' . $template_name . '_' . NEWS, $tmp))
-		$cache->delete('news' . $template_name . '_' . NEWS);
+    if ($cache->fetch('news' . $template_name . '_' . NEWS, $tmp))
+        $cache->delete('news' . $template_name . '_' . NEWS);
 
-	if($cache->fetch('news' . $template_name . '_' . TICKER, $tmp))
-		$cache->delete('news' . $template_name . '_' . TICKER);
+    if ($cache->fetch('news' . $template_name . '_' . TICKER, $tmp))
+        $cache->delete('news' . $template_name . '_' . TICKER);
 
-	if($cache->fetch('template_ini' . $template_name, $tmp))
-		$cache->delete('template_ini' . $template_name);
+    if ($cache->fetch('template_ini' . $template_name, $tmp))
+        $cache->delete('template_ini' . $template_name);
 
-	return true;
+    return true;
 }
