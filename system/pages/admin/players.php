@@ -45,8 +45,8 @@ $skills = array(
 );
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/jquery.datetimepicker.css"/ >
-<script src="<?php echo BASE_URL; ?>tools/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
+<script src="<?php echo BASE_URL; ?>tools/js/jquery.datetimepicker.js"></script>
 
 <?php
 $id = 0;
