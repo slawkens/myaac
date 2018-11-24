@@ -24,7 +24,9 @@ if(isset($errors)) {
 	}
 }
 
+
 $twig->display('admin.login.html.twig', array(
     'errors' => $search_errors,
-    'logout' => $logout
+    'logout' => $logout,
+    'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
     ));
