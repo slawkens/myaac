@@ -65,7 +65,7 @@ $query = $query->fetch();
 $total_houses = $query['how_much'];
 
 $points = $db->query('SELECT `premium_points`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
-$coins = $db->query('SELECT `coins`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
+
 
 $twig->display('admin.statistics.html.twig', array(
 	'total_accounts' => $total_accounts,
@@ -79,8 +79,7 @@ $twig->display('admin.dashboard.html.twig', array(
     'closed_message' => $closed_message,
     'status' => $status,
 	'account_type' => (USE_ACCOUNT_NAME ? 'name' : 'number'),
-	'points' => $points,
-	'coins' => $coins
+	'points' => $points
 ));
 function clearCache()
 {

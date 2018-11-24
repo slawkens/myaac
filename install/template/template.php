@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $locale['encoding']; ?>" />
 	<title>MyAAC - <?php echo $locale['installation']; ?></title>
 	<link rel="stylesheet" type="text/css" href="template/style.css" />
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>tools/jquery.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>tools/js/jquery.js"></script>
 </head>
 <body>
 	<div id="wrapper">
