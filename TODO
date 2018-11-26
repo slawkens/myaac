@@ -13,6 +13,9 @@
 	* create account: create character
 	* csrf token protection
 	* team page - display outfits of the players (configurable)
+	* guild wars support like in Gesior
+	* Install: create admin account: e-mail + Nazwa postaci
+	* move lostaccount.php to Twig
 
 1.0
 	* use Composer for additional libraries
@@ -87,6 +90,7 @@
 		* using Mobile_Detect.php library
 
 x.x - At any time between (version not specified)
+	* automatic updater of the AAC files (like in WordPress)
 	* better news archive with search function (like on tibia.com)
 	* guild wars management (issue #13 on github)
 	* update account.management page to be more realistic (like on tibia.com)
@@ -99,5 +103,14 @@ x.x - At any time between (version not specified)
 	* two factor authentication for TFS 1.x
 	* support for .yml plugin file specification
 	* (configurable) auto login after registration
+	* move manage newses to admin panel
 	* display password strength
 		* https://elboletaire.github.io/password-strength-meter/
+	* apache2, nginx and lighttpd conf like in phpmyadmin
+	* automated testing
+		* https://codeception.com/quickstart
+		* Travis CI
+	* some interface for this would be nice to have (phpmyadmin commands/queries)
+		* https://otland.net/threads/phpmyadmin-commands-to-edit-database.7751/
+	* replace spells, monsters tables with JavaScript Sortable Tables (DataTables?)
+	* add release script (bash) that will automatically create myaac-$VERSION.zip
