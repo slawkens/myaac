@@ -34,6 +34,7 @@ function verify_number($number, $name, $max_length)
         echo_error($name . ' cannot be longer than ' . $max_length . ' digits.');
 }
 
+$hasCoinsColumn = $db->hasColumn('accounts', 'coins');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -113,8 +114,10 @@ if ($id > 0) {
         verify_number($p_days, 'Prem days', 11);
 
         //tibia coins
-        $t_coins = $_POST['t_coins'];
-        verify_number($t_coins, 'Tibia coins', 12);
+	    if($hasCoinsColumn) {
+            $t_coins = $_POST['t_coins'];
+            verify_number($t_coins, 'Tibia coins', 12);
+	    }
 
         //prem points
         $p_points = $_POST['p_points'];
@@ -149,7 +152,9 @@ if ($id > 0) {
             $account->setCustomField('key', $key);
             $account->setEMail($email);
             $account->setPremDays($p_days);
-            $account->setCustomField('coins', $t_coins);
+	        if($hasCoinsColumn) {
+		        $account->setCustomField('coins', $t_coins);
+	        }
 
             $account->setRLName($rl_name);
             $account->setLocation($rl_loca);
@@ -271,12 +276,14 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
                                    autocomplete="off" maxlength="11"
                                    value="<?php echo $account->getPremDays(); ?>"/>
                         </div>
+                        <?php if($hasCoinsColumn): ?>
                         <div class="col-xs-6">
                             <label for="t_coins" class="control-label">Tibia Coins:</label>
                             <input type="text" class="form-control" id="t_coins" name="t_coins"
                                    autocomplete="off" maxlength="8"
                                    value="<?php echo $account->getCustomField('coins') ?>"/>
                         </div>
+                        <?php endif; ?>
                         <?php if ($db->hasColumn('players', 'blessings')): ?>
                             <div class="col-xs-6">
                                 <label for="p_points" class="control-label">Prem Points:</label>

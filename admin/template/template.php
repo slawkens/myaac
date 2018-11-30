@@ -48,7 +48,7 @@
             <aside class="main-sidebar">
                 <section class="sidebar">
                     <ul class="sidebar-menu" data-widget="tree">
-                        <li class="header">MyACC</li>
+                        <li class="header">MyAAC</li>
 
                     <?php
                     $icons_a = array(

@@ -26,7 +26,7 @@
 session_start();
 
 define('MYAAC', true);
-define('MYAAC_VERSION', '0.8.0-dev');
+define('MYAAC_VERSION', '0.8-dev');
 define('DATABASE_VERSION', 23);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
@@ -99,10 +99,10 @@ if(isset($_SERVER['HTTP_HOST'])) {
 		define('SERVER_URL', 'https://' . $_SERVER['HTTP_HOST']);
 	else
 		define('SERVER_URL', 'http://' . $_SERVER['HTTP_HOST']);
-	
+
 	define('BASE_URL', SERVER_URL . BASE_DIR . '/');
 	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/admin/');
-	
+
 	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
 }
 ?>
