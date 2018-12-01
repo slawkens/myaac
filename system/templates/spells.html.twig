@@ -1,3 +1,4 @@
+
 {% if canEdit %}
 <form method="post" action="{{ getLink('spells') }}">
 	<input type="hidden" name="reload_spells" value="yes"/>
@@ -20,7 +21,6 @@
 								<option value="{{ id }}"{% if id == post_vocation_id and post_vocation_id != "all" and post_vocation_id != '' %} selected{% endif %}>{{ vocation }}</option>
 								{% endfor %}
 							</select>
-							<input type="hidden" name="order" value="{{ post_order }}">
 						</td>
 						<td>
 							{{ include('buttons.submit.html.twig') }}
@@ -32,40 +32,14 @@
 	</table>
 </form>
 <br/>
-<table border="0" cellspacing="1" cellpadding="4" width="100%">
-	<tr bgcolor="{{ config.vdarkborder }}">
-		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/spell' }}"><span class="white">Name</span></a></b>
-		</td>
-		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/words' }}"><span class="white">Words</span></a></b>
-		</td>
-		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/type' }}"><span class="white">Type<br/>(count)</span></a></b>
-		</td>
-		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/mana' }}"><span class="white">Mana</span></a></b>
-		</td>
-		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/level' }}"><span class="white">Level</span></a></b>
-		</td>
-		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/maglevel' }}"><span class="white">Magic<br/>Level</span></a></b>
-		</td>
-		<td class="white">
-			<b><a href="{{ getLink('spells') ~ '/' ~ post_vocation|urlencode ~ '/soul' }}"><span class="white">Soul</span></a></b>
-		</td>
-		<td class="white">
-			<b>Premium</b>
-		</td>
-		<td class="white">
-			<b>Vocations:</b>
-		</td>
-	</tr>
+<table id="spellstb" class=""><thead>
+		<tr role="row"><th>Name</th><th>Words</th><th>Type<br/>(count)</th>
+	<th>Mana</th><th>Level</th><th>Magic Level</th><th>Soul</th><th>Premium</th><th>Vocations</th></tr>
+</thead><tbody>
 	{% set i = 0 %}
 	{% for spell in spells %}
 	{% set i = i + 1 %}
-	<tr bgcolor="{{ getStyle(i) }}">
+	<tr>
 		<td>{{ spell.name }}</td>
 		<td>{{ spell.words }}</td>
 		<td>
@@ -93,4 +67,4 @@
 		</td>
 	</tr>
 	{% endfor %}
-</table>
+</tbody></table>
