@@ -11,19 +11,16 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Notepad';
 
 $notepad_content = Notepad::get($account_logged->getId());
-if(isset($_POST['content']))
-{
+if (isset($_POST['content'])) {
 	$_content = html_entity_decode(stripslashes($_POST['content']));
-	if(!$notepad_content)
+	if (!$notepad_content)
 		Notepad::create($account_logged->getId(), $_content);
 	else
 		Notepad::update($account_logged->getId(), $_content);
 
 	echo '<div class="success" style="text-align: center;">Saved at ' . date('H:i') . '</div>';
-}
-else
-{
-	if($notepad_content !== false)
+} else {
+	if ($notepad_content !== false)
 		$_content = $notepad_content;
 }
 
@@ -35,7 +32,7 @@ class Notepad
 	{
 		global $db;
 		$query = $db->select(TABLE_PREFIX . 'notepad', array('account_id' => $account_id));
-		if($query !== false)
+		if ($query !== false)
 			return $query['content'];
 
 		return false;

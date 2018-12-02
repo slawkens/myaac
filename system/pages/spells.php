@@ -41,15 +41,8 @@ else {
 	}
 }
 
-$order = 'words';
-if(isset($_REQUEST['order']))
-	$order = $_REQUEST['order'];
-
-if(!in_array($order, array('words', 'type', 'mana', 'level', 'maglevel', 'soul')))
-	$order = 'level';
-
 $spells = array();
-$spells_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 3 ORDER BY ' . $order . ', level');
+$spells_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 3 ORDER BY name, level');
 
 if((string)$vocation_id != 'all') {
 	foreach($spells_db->fetchAll() as $spell) {
@@ -76,11 +69,23 @@ else {
 	}
 }
 
+?>
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/jquery.dataTables.min.css">
+<?php
 $twig->display('spells.html.twig', array(
 	'canEdit' => $canEdit,
 	'post_vocation_id' => $vocation_id,
 	'post_vocation' => $vocation,
-	'post_order' => $order,
 	'spells' => $spells,
 ));
 ?>
+
+<script>
+	$(document).ready( function () {
+		$('#spellstb').DataTable();
+	} );
+
+</script>
+
+<script src="<?php echo BASE_URL; ?>tools/js/jquery.min.js"></script>
+<script src="<?php echo BASE_URL; ?>tools/js/jquery.dataTables.min.js"></script>

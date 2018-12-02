@@ -14,7 +14,7 @@ $title = 'Version check';
 //$file = @fopen('http://my-aac.org/VERSION', 'r') or die('Error while fetching version.');
 //$myaac_version = fgets($file);
 $myaac_version = @file_get_contents('http://my-aac.org/VERSION');
-if(!$myaac_version) {
+if (!$myaac_version) {
 	warning('Error while fetching version info from http://my-aac.org<br/>
 	Please try again later.');
 	return;
@@ -22,15 +22,13 @@ if(!$myaac_version) {
 
 // compare them
 $version_compare = version_compare($myaac_version, MYAAC_VERSION);
-if($version_compare == 0) {
+if ($version_compare == 0) {
 	success('MyAAC latest version is ' . $myaac_version . '. You\'re using the latest version.
 	<br/>View CHANGELOG ' . generateLink(ADMIN_URL . '?p=changelog', 'here'));
-}
-else if($version_compare < 0) {
+} else if ($version_compare < 0) {
 	echo success('Woah, seems you\'re using newer version as latest released one! MyAAC latest released version is ' . $myaac_version . ', and you\'re using version ' . MYAAC_VERSION . '.
 	<br/>View CHANGELOG ' . generateLink(ADMIN_URL . '?p=changelog', 'here'));
-}
-else {
+} else {
 	warning('You\'re using outdated version.<br/>
 		Your version: <b>' . MYAAC_VERSION . '</b><br/>
 		Latest version: <b>' . $myaac_version . '</b><br/>

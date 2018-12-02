@@ -10,7 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'MyAAC Changelog';
 
-if(!file_exists(BASE . 'CHANGELOG')) {
+if (!file_exists(BASE . 'CHANGELOG')) {
 	echo 'File CHANGELOG doesn\'t exist.';
 	return;
 }

@@ -1,67 +1,67 @@
 <div class="row">
-    <div class="col-xs-12">
-        <div class="box">
-            <div class="box-header">
-                <h3 class="box-title">Installed plugins:</h3>
-            </div>
-            <div class="box-body">
-                <div id="plugins_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <table id="plugins" class="table table-bordered table-striped dataTable" role="grid"
-                                   aria-describedby="plugins_info">
-                                <thead>
-                                <tr role="row">
-                                    <th class="sorting_asc" tabindex="0" aria-controls="plugins" rowspan="1"
-                                        colspan="1" aria-sort="ascending"
-                                        aria-label="Name: activate to sort column descending">Name
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="plugins" rowspan="1" colspan="1"
-                                        aria-label="Description: activate to sort column ascending">Description
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="plugins" rowspan="1" colspan="1"
-                                        aria-label="Author: activate to sort column ascending">Author
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="plugins" rowspan="1" colspan="1"
-                                        aria-label="Filename: activate to sort column ascending">Filename
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="plugins" rowspan="1" colspan="1"
-                                        aria-label="Options: activate to sort column ascending"
-                                        style="width: 55px;">Options
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for plugin in plugins %}
-                                    <tr>
-                                        <td><b>{{ plugin.name }}</b><br>
-                                            <small>{{ plugin.description }}</small>
-                                        </td>
-                                        <td>{{ plugin.version }}</td>
-                                        <td><b>{{ plugin.author }}</b><br>
-                                            <small>{{ plugin.contact }}</small>
-                                        </td>
-                                        <td>{{ plugin.file }}.json</td>
-                                        <td>
-                                            {% if plugin.uninstall %}
-                                                <a href="?p=plugins&uninstall={{ plugin.file }}" title="Uninstall"
-                                                   onclick="return confirm('Are you sure?');"><span
-                                                            class="btn btn-danger btn-sm delete btn-flat"><i
-                                                                class="fa fa-trash"></i></span></a>
-                                            {% endif %}</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">Installed plugins:</h3>
+			</div>
+			<div class="box-body">
+				<div id="plugins_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+					<div class="row">
+						<div class="col-sm-12">
+							<table id="plugins" class="table table-bordered table-striped dataTable" role="grid"
+								   aria-describedby="plugins_info">
+								<thead>
+								<tr role="row">
+									<th class="sorting_asc" tabindex="0" aria-controls="plugins" rowspan="1"
+										colspan="1" aria-sort="ascending"
+										aria-label="Name: activate to sort column descending">Name
+									</th>
+									<th class="sorting" tabindex="0" aria-controls="plugins" rowspan="1" colspan="1"
+										aria-label="Description: activate to sort column ascending">Description
+									</th>
+									<th class="sorting" tabindex="0" aria-controls="plugins" rowspan="1" colspan="1"
+										aria-label="Author: activate to sort column ascending">Author
+									</th>
+									<th class="sorting" tabindex="0" aria-controls="plugins" rowspan="1" colspan="1"
+										aria-label="Filename: activate to sort column ascending">Filename
+									</th>
+									<th class="sorting" tabindex="0" aria-controls="plugins" rowspan="1" colspan="1"
+										aria-label="Options: activate to sort column ascending"
+										style="width: 55px;">Options
+									</th>
+								</tr>
+								</thead>
+								<tbody>
+								{% for plugin in plugins %}
+									<tr>
+										<td><b>{{ plugin.name }}</b><br>
+											<small>{{ plugin.description }}</small>
+										</td>
+										<td>{{ plugin.version }}</td>
+										<td><b>{{ plugin.author }}</b><br>
+											<small>{{ plugin.contact }}</small>
+										</td>
+										<td>{{ plugin.file }}.json</td>
+										<td>
+											{% if plugin.uninstall %}
+												<a href="?p=plugins&uninstall={{ plugin.file }}" title="Uninstall"
+												   onclick="return confirm('Are you sure?');"><span
+															class="btn btn-danger btn-sm delete btn-flat"><i
+																class="fa fa-trash"></i></span></a>
+											{% endif %}</td>
+									</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <script>
-    $(function () {
-        $('#plugins').DataTable()
-    })
+	$(function () {
+		$('#plugins').DataTable()
+	})
 </script>

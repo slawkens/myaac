@@ -16,13 +16,13 @@ require LIBS . 'weapons.php';
 $twig->display('admin.items.html.twig');
 
 $reload = isset($_REQUEST['reload']) && (int)$_REQUEST['reload'] == 1;
-if($reload) {
-	if(Items::loadFromXML(true))
+if ($reload) {
+	if (Items::loadFromXML(true))
 		success('Successfully loaded items.');
 	else
 		error(Items::getError());
 
-	if(Weapons::loadFromXML(true))
+	if (Weapons::loadFromXML(true))
 		success('Successfully loaded weapons.');
 	else
 		error(Weapons::getError());

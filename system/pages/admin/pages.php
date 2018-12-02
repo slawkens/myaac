@@ -10,8 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Pages';
 
-if(!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin())
-{
+if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 	echo 'Access denied.';
 	return;
 }
@@ -24,66 +23,59 @@ $groups = new OTS_Groups_List();
 $php = false;
 $access = 0;
 
-if(!empty($action))
-{
-	if($action == 'delete' || $action == 'edit' || $action == 'hide')
+if (!empty($action)) {
+	if ($action == 'delete' || $action == 'edit' || $action == 'hide')
 		$id = $_REQUEST['id'];
 
-	if(isset($_REQUEST['name']))
+	if (isset($_REQUEST['name']))
 		$name = $_REQUEST['name'];
 
-	if(isset($_REQUEST['title']))
+	if (isset($_REQUEST['title']))
 		$p_title = $_REQUEST['title'];
 
 	$php = isset($_REQUEST['php']) && $_REQUEST['php'] == 1;
-	if($php)
+	if ($php)
 		$body = $_REQUEST['body'];
-	else if(isset($_REQUEST['body'])) {
+	else if (isset($_REQUEST['body'])) {
 		//$body = $_REQUEST['body'];
 		$body = html_entity_decode(stripslashes($_REQUEST['body']));
 	}
 
-	if(isset($_REQUEST['access']))
+	if (isset($_REQUEST['access']))
 		$access = $_REQUEST['access'];
 
 	$errors = array();
 	$player_id = 1;
 
-	if($action == 'add') {
-		if(Pages::add($name, $p_title, $body, $player_id, $php, $access, $errors))
-		{
+	if ($action == 'add') {
+		if (Pages::add($name, $p_title, $body, $player_id, $php, $access, $errors)) {
 			$name = $p_title = $body = '';
 			$player_id = $access = 0;
 			$php = false;
 		}
-	}
-	else if($action == 'delete') {
-		if(Pages::delete($id, $errors))
+	} else if ($action == 'delete') {
+		if (Pages::delete($id, $errors))
 			success('Page with id ' . $id . ' has been deleted');
-	}
-	else if($action == 'edit')
-	{
-		if(isset($id) && !isset($_REQUEST['name'])) {
+	} else if ($action == 'edit') {
+		if (isset($id) && !isset($_REQUEST['name'])) {
 			$_page = Pages::get($id);
 			$name = $_page['name'];
 			$p_title = $_page['title'];
 			$body = $_page['body'];
 			$php = $_page['php'] == '1';
 			$access = $_page['access'];
-		}
-		else {
+		} else {
 			Pages::update($id, $name, $p_title, $body, $player_id, $php, $access);
 			$action = $name = $p_title = $body = '';
 			$player_id = 1;
 			$access = 0;
 			$php = false;
 		}
-	}
-	else if($action == 'hide') {
+	} else if ($action == 'hide') {
 		Pages::toggleHidden($id, $errors);
 	}
 
-	if(!empty($errors))
+	if (!empty($errors))
 		$twig->display('admin.error.html.twig', array('errors' => $errors));
 }
 
@@ -91,7 +83,7 @@ $query =
 	$db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'pages'));
 
 $pages = array();
-foreach($query as $_page) {
+foreach ($query as $_page) {
 	$pages[] = array(
 		'link' => getFullLink($_page['name'], $_page['name'], true),
 		'title' => substr($_page['title'], 0, 20),
@@ -121,7 +113,7 @@ class Pages
 	{
 		global $db;
 		$query = $db->select(TABLE_PREFIX . 'pages', array('id' => $id));
-		if($query !== false)
+		if ($query !== false)
 			return $query;
 
 		return false;
@@ -130,21 +122,20 @@ class Pages
 	static public function add($name, $title, $body, $player_id, $php, $access, &$errors)
 	{
 		global $db;
-		if(isset($name[0]) && isset($title[0]) && isset($body[0]) && $player_id != 0)
-		{
+		if (isset($name[0]) && isset($title[0]) && isset($body[0]) && $player_id != 0) {
 			$query = $db->select(TABLE_PREFIX . 'pages', array('name' => $name));
-			if($query === false)
+			if ($query === false)
 				$db->insert(TABLE_PREFIX . 'pages', array('name' => $name, 'title' => $title, 'body' => $body, 'player_id' => $player_id, 'php' => $php ? '1' : '0', 'access' => $access));
 			else
 				$errors[] = 'Page with this link already exists.';
-		}
-		else
+		} else
 			$errors[] = 'Please fill all inputs.';
 
 		return !count($errors);
 	}
 
-	static public function update($id, $name, $title, $body, $player_id, $php, $access) {
+	static public function update($id, $name, $title, $body, $player_id, $php, $access)
+	{
 		global $db;
 		$db->update(TABLE_PREFIX . 'pages', array('name' => $name, 'title' => $title, 'body' => $body, 'player_id' => $player_id, 'php' => $php ? '1' : '0', 'access' => $access), array('id' => $id));
 	}
@@ -152,14 +143,12 @@ class Pages
 	static public function delete($id, &$errors)
 	{
 		global $db;
-		if(isset($id))
-		{
-			if($db->select(TABLE_PREFIX . 'pages', array('id' => $id)) !== false)
+		if (isset($id)) {
+			if ($db->select(TABLE_PREFIX . 'pages', array('id' => $id)) !== false)
 				$db->delete(TABLE_PREFIX . 'pages', array('id' => $id));
 			else
 				$errors[] = 'Page with id ' . $id . ' does not exists.';
-		}
-		else
+		} else
 			$errors[] = 'id not set';
 
 		return !count($errors);
@@ -168,18 +157,17 @@ class Pages
 	static public function toggleHidden($id, &$errors)
 	{
 		global $db;
-		if(isset($id))
-		{
+		if (isset($id)) {
 			$query = $db->select(TABLE_PREFIX . 'pages', array('id' => $id));
-			if($query !== false)
+			if ($query !== false)
 				$db->update(TABLE_PREFIX . 'pages', array('hidden' => ($query['hidden'] == 1 ? 0 : 1)), array('id' => $id));
 			else
 				$errors[] = 'Page with id ' . $id . ' does not exists.';
-		}
-		else
+		} else
 			$errors[] = 'id not set';
 
 		return !count($errors);
 	}
 }
+
 ?>
