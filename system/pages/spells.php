@@ -41,8 +41,9 @@ else {
 	}
 }
 
+$order = 'name';
 $spells = array();
-$spells_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 3 ORDER BY name, level');
+$spells_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 4 AND `level` > 0 ORDER BY ' . $order . '');
 
 if((string)$vocation_id != 'all') {
 	foreach($spells_db->fetchAll() as $spell) {
@@ -77,12 +78,16 @@ $twig->display('spells.html.twig', array(
 	'post_vocation_id' => $vocation_id,
 	'post_vocation' => $vocation,
 	'spells' => $spells,
+	'item_path' => $config['item_images_url'],
 ));
 ?>
 
 <script>
 	$(document).ready( function () {
-		$('#spellstb').DataTable();
+
+		$("#tb_instantSpells").DataTable();
+		$("#tb_conjureSpells").DataTable();
+		$("#tb_runeSpells").DataTable();
 	} );
 
 </script>

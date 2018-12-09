@@ -14,7 +14,23 @@ class Spells {
 	private static $spellsList = null;
 	private static $lastError = '';
 	
-	public static function loadFromXML($show = false) {
+	// 1 - attack, 2 - healing, 3 - summon, 4 - supply, 5 - support
+	public static function loadGroup($tGroup) {
+		switch ($tGroup) {
+			case "attack":
+				return 1;
+			case "healing":
+				return 2;
+			case "summon":
+				return 3; 
+			case "supply":
+				return 4;
+			case "support":
+				return 5;
+		}
+	}
+		
+		public static function loadFromXML($show = false) {
 		global $config, $db;
 		
 		try { $db->query('DELETE FROM `' . TABLE_PREFIX . 'spells`;'); } catch(PDOException $error) {}
@@ -58,6 +74,8 @@ class Spells {
 					'premium' => $spell->isPremium() ? 1 : 0,
 					'vocations' => json_encode($spell->getVocations()),
 					'conjure_count' => $spell->getConjureCount(),
+					'conjure_id' => $spell->getConjureId(),
+					'reagent' => $spell->getReagentId(),
 					'hidden' => $spell->isEnabled() ? 0 : 1
 				));
 
@@ -121,7 +139,7 @@ class Spells {
 		foreach($runeslist as $spellname) {
 			$spell = self::$spellsList->getRune($spellname);
 
-			$name = $spell->getName() . ' (rune)';
+			$name = $spell->getName() . ' Rune';
 
 			try {
 				$db->insert(TABLE_PREFIX . 'spells', array(
