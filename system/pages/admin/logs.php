@@ -16,77 +16,68 @@ $title = 'Logs viewer';
 		<h3 class="box-title">Logs:</h3>
 	</div>
 	<div class="box-body">
-		<div id="logs_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-			<div class="row">
-				<div class="col-sm-12">
-					<table id="logs" class="table table-bordered table-striped dataTable" role="grid"
-						   aria-describedby="logs_info">
-						<thead>
-						<tr role="row">
-							<th class="sorting_asc" tabindex="0" aria-controls="logs" rowspan="1" colspan="1"
-								aria-sort="ascending" aria-label="Log name: activate to sort column descending"
-								style="width: 297px;">Log name
-							</th>
-							<th class="sorting" tabindex="0" aria-controls="logs" rowspan="1" colspan="1"
-								aria-label="Last updated: activate to sort column ascending" style="width: 361px;">Last
-								updated
-							</th>
-						</tr>
-						</thead>
-						<tbody>
-						<?php
-						$files = array();
-						$aac_path_logs = BASE . 'system/logs/';
-						foreach (scandir($aac_path_logs) as $f) {
-							if ($f[0] == '.' || $f == '..' || is_dir($aac_path_logs . $f))
-								continue;
-
-							$files[] = array($f, $aac_path_logs);
-						}
-
-						$server_path_logs = $config['server_path'] . 'logs/';
-						if (!file_exists($server_path_logs)) {
-							$server_path_logs = $config['data_path'] . 'logs/';
-						}
-
-						if (file_exists($server_path_logs)) {
-							foreach (scandir($server_path_logs) as $f) {
-								if ($f[0] == '.' || $f == '..')
-									continue;
-
-								if (is_dir($server_path_logs . $f)) {
-									foreach (scandir($server_path_logs . $f) as $f2) {
-										if ($f2[0] == '.' || $f2 == '..')
-											continue;
-										$files[] = array($f . '/' . $f2, $server_path_logs);
-									}
-
-									continue;
-								}
-
-								$files[] = array($f, $server_path_logs);
-							}
-						}
-
-						$i = 0;
-						foreach ($files as $f) {
-							?>
-							<tr>
-								<td>
-									<a href="<?php echo ADMIN_URL . '?p=logs&file=' . $f[0]; ?>"><?php echo $f[0]; ?></a>
-								</td>
-								<td><?php echo date("Y-m-d H:i:s", filemtime($f[1] . $f[0])); ?></td>
-							</tr>
-							<?php
-						}
-						?>
-						</tbody>
-						<tfoot>
+		<div class="row">
+			<div class="col-sm-6">
+				<table id="tb_logs">
+					<thead>
+					<tr>
 						<th>Log name</th>
 						<th>Last updated</th>
-						</tfoot>
-					</table>
-				</div>
+					</tr>
+					</thead>
+					<tbody>
+					<?php
+					$files = array();
+					$aac_path_logs = BASE . 'system/logs/';
+					foreach (scandir($aac_path_logs) as $f) {
+						if ($f[0] == '.' || $f == '..' || is_dir($aac_path_logs . $f))
+							continue;
+
+						$files[] = array($f, $aac_path_logs);
+					}
+
+					$server_path_logs = $config['server_path'] . 'logs/';
+					if (!file_exists($server_path_logs)) {
+						$server_path_logs = $config['data_path'] . 'logs/';
+					}
+
+					if (file_exists($server_path_logs)) {
+						foreach (scandir($server_path_logs) as $f) {
+							if ($f[0] == '.' || $f == '..')
+								continue;
+
+							if (is_dir($server_path_logs . $f)) {
+								foreach (scandir($server_path_logs . $f) as $f2) {
+									if ($f2[0] == '.' || $f2 == '..')
+										continue;
+									$files[] = array($f . '/' . $f2, $server_path_logs);
+								}
+
+								continue;
+							}
+
+							$files[] = array($f, $server_path_logs);
+						}
+					}
+
+					$i = 0;
+					foreach ($files as $f) {
+						?>
+						<tr>
+							<td>
+								<a href="<?php echo ADMIN_URL . '?p=logs&file=' . $f[0]; ?>"><?php echo $f[0]; ?></a>
+							</td>
+							<td><?php echo date("Y-m-d H:i:s", filemtime($f[1] . $f[0])); ?></td>
+						</tr>
+						<?php
+					}
+					?>
+					</tbody>
+					<tfoot>
+					<th>Log name</th>
+					<th>Last updated</th>
+					</tfoot>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -119,6 +110,6 @@ if (!empty($file)) {
 ?>
 <script>
 	$(function () {
-		$('#logs').DataTable()
+		$('#tb_logs').DataTable()
 	})
 </script>

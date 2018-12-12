@@ -56,7 +56,7 @@
 					'book', 'list',
 					'plug', 'user',
 					'edit', 'gavel',
-					'book', 'edit', 'book',
+					'wrench', 'edit', 'book', 'book',
 				);
 
 				$menus = array(
@@ -72,10 +72,17 @@
 					),
 					'Items' => 'items',
 					'Tools' => array(
+						'Notepad' => 'notepad',
 						'phpinfo' => 'phpinfo',
 					),
-					'Notepad' => 'notepad',
-					'Logs' => 'logs'
+					'Editor' => array(
+						'Accounts' => 'accounts',
+						'Players' => 'players',
+					),
+					'Logs' => array(
+						'Logs' => 'logs',
+						'Reports' => 'reports',
+					),
 				);
 
 				$i = 0;
