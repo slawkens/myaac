@@ -2,12 +2,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<?php echo template_header(true); ?>
+	<?php echo template_header(true);
+	$title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
+	?>
+
+	<title><?php echo $title_full ?></title>
+	<link rel="shortcut icon" href="<?php echo BASE_URL; ?>images/favicon.ico" type="image/x-icon" />
+	<link rel="icon" href="<?php echo BASE_URL; ?>images/favicon.ico" type="image/x-icon" />
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/AdminLTE.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/skins/skin-blue.min.css">
-
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/ionicons.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/jquery.dataTables.min.css">
@@ -16,13 +22,11 @@
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
-
 	<link rel="stylesheet"
 		  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-	<?php if ($page != 'tools'): ?>
 	<?php
 	if ($logged && admin()) {
 	?>
@@ -214,7 +218,7 @@
 	<div class="control-sidebar-bg"></div>
 </div>
 
-<?php } endif;
+<?php }
 if (!$logged && !admin()) {
 	echo $content;
 }

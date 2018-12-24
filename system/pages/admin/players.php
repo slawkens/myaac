@@ -43,6 +43,10 @@ $skills = array(
 	POT::SKILL_SHIELD => array('Shielding', 'shield'),
 	POT::SKILL_FISH => array('Fishing', 'fish')
 );
+
+
+$hasBlessingsColumn = $db->hasColumn('players', 'blessings');
+$hasBlessingColumn = $db->hasColumn('players', 'blessings1');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -100,7 +104,6 @@ if ($id > 0) {
 		$player_db->find($name);
 		if ($player_db->isLoaded() && $player->getName() != $name)
 			echo_error('This name is already used. Please choose another name!');
-
 
 		$account_id = $_POST['account_id'];
 		verify_number($account_id, 'Account id', 11);
@@ -181,13 +184,6 @@ if ($id > 0) {
 		verify_number($lastlogin, 'Last login', 20);
 		$lastlogout = $_POST['lastlogout'];
 		verify_number($lastlogout, 'Last logout', 20);
-		/* $lastip = $_POST['lastip'];
-		 $exp = explode(".", $lastip);
-		 $lastip = $exp[3] . '.' . $exp[2] . '.' . $exp[1] . '.' . $exp[0];
-		 $lastip_length = strlen($lastip);
-		 if ($lastip_length <= 0 || $lastip_length > 15)
-			 echo_error('IP cannot be longer than 15 digits.');
-		*/
 
 		$skull = $_POST['skull'];
 		verify_number($skull, 'Skull', 1);
@@ -211,9 +207,20 @@ if ($id > 0) {
 			verify_number($offlinetraining, 'Offline Training time', 11);
 		}
 
-		if ($db->hasColumn('players', 'blessings')) {
+		if ($hasBlessingsColumn) {
 			$blessings = $_POST['blessings'];
 			verify_number($blessings, 'Blessings', 2);
+		}
+
+		if ($hasBlessingColumn) {
+			$blessing1 = (isset($_POST['blessing1']) && $_POST['blessing1'] == 'true');
+			$blessing2 = (isset($_POST['blessing2']) && $_POST['blessing2'] == 'true');
+			$blessing3 = (isset($_POST['blessing3']) && $_POST['blessing3'] == 'true');
+			$blessing4 = (isset($_POST['blessing4']) && $_POST['blessing4'] == 'true');
+			$blessing5 = (isset($_POST['blessing5']) && $_POST['blessing5'] == 'true');
+			$blessing6 = (isset($_POST['blessing6']) && $_POST['blessing6'] == 'true');
+			$blessing7 = (isset($_POST['blessing7']) && $_POST['blessing7'] == 'true');
+			$blessing8 = (isset($_POST['blessing8']) && $_POST['blessing8'] == 'true');
 		}
 		$balance = $_POST['balance'];
 		verify_number($balance, 'Balance', 20);
@@ -278,6 +285,17 @@ if ($id > 0) {
 			}
 			if ($db->hasColumn('players', 'blessings'))
 				$player->setBlessings($blessings);
+
+			if ($hasBlessingColumn) {
+				$player->setCustomField('blessings1', $blessing1 ? '1' : '0');
+				$player->setCustomField('blessings2', $blessing2 ? '1' : '0');
+				$player->setCustomField('blessings3', $blessing3 ? '1' : '0');
+				$player->setCustomField('blessings4', $blessing4 ? '1' : '0');
+				$player->setCustomField('blessings5', $blessing5 ? '1' : '0');
+				$player->setCustomField('blessings6', $blessing6 ? '1' : '0');
+				$player->setCustomField('blessings7', $blessing7 ? '1' : '0');
+				$player->setCustomField('blessings8', $blessing8 ? '1' : '0');
+			}
 			$player->setBalance($balance);
 			if ($db->hasColumn('players', 'stamina'))
 				$player->setStamina($stamina);
@@ -318,7 +336,6 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 
 		<form action="<?php echo $base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post"
 			  class="form-horizontal">
-
 			<div class="col-md-8">
 				<div class="box box-primary">
 					<div class="box-body">
@@ -381,7 +398,7 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 											</select>
 										</div>
 										<div class="col-xs-6">
-											<label for="blessings" class="control-label">Town:</label>
+											<label for="town" class="control-label">Town:</label>
 											<select name="town" id="town" class="form-control">
 												<?php foreach ($config['towns'] as $id => $town): ?>
 													<option value="<?php echo $id; ?>" <?php echo($player->getTownId() == $id ? 'selected' : ''); ?>><?php echo $town; ?></option>
@@ -410,8 +427,32 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 										</div>
 									</div>
 									<div class="row">
-
-										<?php if ($db->hasColumn('players', 'blessings')): ?>
+										<?php if ($hasBlessingColumn):
+											$bless = $player->checkBlessings();
+											?>
+											<div class="col-xs-6">
+												<label for="blessings" class="control-label">Blessings:</label>
+												<div class="checkbox">
+													<label><input type="checkbox" name="blessing1" id="blessing1"
+																  value="true" <?php echo(($bless[0] == 1) ? ' checked' : ''); ?>/>1</label>
+													<label><input type="checkbox" name="blessing2" id="blessing2"
+																  value="true" <?php echo(($bless[1] == 1) ? ' checked' : ''); ?>/>2</label>
+													<label><input type="checkbox" name="blessing3" id="blessing3"
+																  value="true" <?php echo(($bless[2] == 1) ? ' checked' : ''); ?>/>3</label>
+													<label><input type="checkbox" name="blessing4" id="blessing4"
+																  value="true" <?php echo(($bless[3] == 1) ? ' checked' : ''); ?>/>4</label>
+													<label><input type="checkbox" name="blessing5" id="blessing5"
+																  value="true" <?php echo(($bless[4] == 1) ? ' checked' : ''); ?>/>5</label>
+													<label><input type="checkbox" name="blessing6" id="blessing6"
+																  value="true" <?php echo(($bless[5] == 1) ? ' checked' : ''); ?>/>6</label>
+													<label><input type="checkbox" name="blessing7" id="blessing7"
+																  value="true" <?php echo(($bless[6] == 1) ? ' checked' : ''); ?>/>7</label>
+													<label><input type="checkbox" name="blessing8" id="blessing8"
+																  value="true" <?php echo(($bless[7] == 1) ? ' checked' : ''); ?>/>8</label>
+												</div>
+											</div>
+										<?php endif; ?>
+										<?php if ($hasBlessingsColumn): ?>
 											<div class="col-xs-6">
 												<label for="blessings" class="control-label">Blessings:</label>
 												<input type="text" class="form-control" id="blessings" name="blessings"
@@ -421,7 +462,7 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 										<?php endif; ?>
 
 										<div class="col-xs-6">
-											<label for="balance" class="control-label">Balance:</label>
+											<label for="balance" class="control-label">Bank Balance:</label>
 											<input type="text" class="form-control" id="balance" name="balance"
 												   autocomplete="off" maxlength="20"
 												   value="<?php echo $player->getBalance(); ?>"/>
@@ -492,29 +533,13 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 									<div class="row">
 										<div class="col-xs-6 ">
 											<label for="mana" class="control-label">Mana:</label>
-											<input type="text" class="form-control" id="health" name="health"
-												   autocomplete="off"
-												   size="5" maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getHealth(); ?>"/>
-										</div>
-										<div class="col-xs-6">
-											<label for="mana_max" class="control-label">Mana max:</label>
-											<input type="text" class="form-control" id="health_max" name="health_max"
-												   autocomplete="off"
-												   size="5" maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getHealthMax(); ?>"/>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-6 ">
-											<label for="health" class="control-label">Health:</label>
 											<input type="text" class="form-control" id="mana" name="mana"
 												   autocomplete="off" size="3"
 												   maxlength="11" style="cursor: auto;"
 												   value="<?php echo $player->getMana(); ?>"/>
 										</div>
 										<div class="col-xs-6">
-											<label for="health_max" class="control-label">Health max:</label>
+											<label for="mana_max" class="control-label">Mana max:</label>
 											<input type="text" class="form-control" id="mana_max" name="mana_max"
 												   autocomplete="off"
 												   size="3" maxlength="11" style="cursor: auto;"
@@ -522,19 +547,19 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 										</div>
 									</div>
 									<div class="row">
-										<div class="col-xs-6 ">
-											<label for="soul" class="control-label">Soul:</label>
-											<input type="text" class="form-control" id="soul" name="soul"
-												   autocomplete="off" size="3"
-												   maxlength="10" style="cursor: auto;"
-												   value="<?php echo $player->getSoul(); ?>"/>
-										</div>
 										<div class="col-xs-6">
 											<label for="capacity" class="control-label">Capacity:</label>
 											<input type="text" class="form-control" id="capacity" name="capacity"
 												   autocomplete="off"
 												   size="3" maxlength="11" style="cursor: auto;"
 												   value="<?php echo $player->getCap(); ?>"/>
+										</div>
+										<div class="col-xs-6 ">
+											<label for="soul" class="control-label">Soul:</label>
+											<input type="text" class="form-control" id="soul" name="soul"
+												   autocomplete="off" size="3"
+												   maxlength="10" style="cursor: auto;"
+												   value="<?php echo $player->getSoul(); ?>"/>
 										</div>
 										<?php if ($db->hasColumn('players', 'stamina')): ?>
 											<div class="col-xs-6">
@@ -544,6 +569,16 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 													   maxlength="20" style="cursor: auto;"
 													   value="<?php echo $player->getStamina(); ?>"/>
 
+											</div>
+										<?php endif; ?>
+										<?php if ($db->hasColumn('players', 'offlinetraining_time')): ?>
+											<div class="col-xs-6">
+												<label for="offlinetraining" class="control-label">Offline Training
+													Time:</label>
+												<input type="text" class="form-control" id="offlinetraining"
+													   name="offlinetraining" autocomplete="off"
+													   maxlength="11"
+													   value="<?php echo $player->getCustomField('offlinetraining_time'); ?>"/>
 											</div>
 										<?php endif; ?>
 									</div>
@@ -653,16 +688,13 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 								</div>
 								<div class="tab-pane" id="tab_5">
 									<div class="row">
-										<?php if ($db->hasColumn('players', 'offlinetraining_time')): ?>
-											<div class="col-xs-6">
-												<label for="offlinetraining" class="control-label">Offline Training
-													Time:</label>
-												<input type="text" class="form-control" id="offlinetraining"
-													   name="offlinetraining" autocomplete="off"
-													   maxlength="11"
-													   value="<?php echo $player->getCustomField('offlinetraining_time'); ?>"/>
-											</div>
-										<?php endif; ?>
+										<div class="col-xs-6">
+											<label for="created" class="control-label">Created:</label>
+											<input type="text" class="form-control" id="created" name="created"
+												   autocomplete="off"
+												   maxlength="10"
+												   value="<?php echo $player->getCustomField('created'); ?>"/>
+										</div>
 										<div class="col-xs-6">
 											<label for="lastlogin" class="control-label">Last login:</label>
 											<input type="text" class="form-control" id="lastlogin" name="lastlogin"
@@ -681,13 +713,6 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 												   autocomplete="off"
 												   maxlength="10" value="<?php echo longToIp($player->getLastIP()); ?>"
 												   readonly/>
-										</div>
-										<div class="col-xs-6">
-											<label for="created" class="control-label">Created:</label>
-											<input type="text" class="form-control" id="created" name="created"
-												   autocomplete="off"
-												   maxlength="10"
-												   value="<?php echo $player->getCustomField('created'); ?>"/>
 										</div>
 									</div>
 									<?php if ($db->hasColumn('players', 'loss_experience')): ?>
@@ -727,14 +752,15 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 													   maxlength="11" value="<?php echo $player->getLossItems(); ?>"/>
 											</div>
 										</div>
-
 									<?php endif; ?>
 									<div class="row">
 										<div class="col-xs-12">
 											<label for="comment" class="control-label">Comment:</label>
 											<textarea class="form-control" name="comment" rows="10" cols="50"
-													  wrap="virtual"><?php echo $player->getCustomField("comment"); ?></textarea><br>[max.
-											length: 2000 chars, 50 lines (ENTERs)]
+													  wrap="virtual"><?php echo $player->getCustomField("comment"); ?></textarea>
+											<small>[max.
+												length: 2000 chars, 50 lines (ENTERs)]
+											</small>
 										</div>
 									</div>
 								</div>
@@ -784,7 +810,6 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 					<div class="box-header">
 						<h3 class="box-title">Character List:</h3>
 					</div>
-					<!-- /.box-header -->
 					<div class="box-body no-padding">
 						<table class="table table-striped">
 							<tbody>
@@ -809,9 +834,7 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 							</tbody>
 						</table>
 					</div>
-					<!-- /.box-body -->
 				</div>
-
 				<?php
 			};
 		};

@@ -17,7 +17,7 @@ $title = 'Logs viewer';
 	</div>
 	<div class="box-body">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-12">
 				<table id="tb_logs">
 					<thead>
 					<tr>
