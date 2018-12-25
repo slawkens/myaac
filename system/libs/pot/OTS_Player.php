@@ -2231,16 +2231,36 @@ class OTS_Player extends OTS_Row_DAO
         $this->data['blessings'] = (int) $blessings;
     }
 
-	public function checkBlessings()
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
-		$value = $this->db->query('SELECT `blessings1`,`blessings2`,`blessings3`,`blessings4`,`blessings5`,`blessings6`,`blessings7`,`blessings8` FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id'])->fetch();
-        return $value;
-    }
-	
+	public function countBlessings()
+	{
+		if( !isset($this->db) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
+		for( $i = 8; $i >= 1; $i-- ) {
+			if ($this->db->hasColumn('players', 'blessings' . $i)) {
+				break;
+			}
+		}
+		return $i;
+	}
+
+	public function checkBlessings($count)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
+
+		$fields = array();
+		for( $i = 1; $i <= $count;  $i++ ) {
+			$fields[] = 'blessings'.$i;
+		}
+
+		$value = $this->db->query('SELECT '. implode(', ', $fields) .' FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id'])->fetch();
+		return $value;
+	}
+
     public function getStamina()
     {
         if( !isset($this->data['stamina']) )
@@ -2250,7 +2270,7 @@ class OTS_Player extends OTS_Row_DAO
 
         return $this->data['stamina'];
     }
-
+	
     public function setStamina($stamina)
     {
         $this->data['stamina'] = (int) $stamina;

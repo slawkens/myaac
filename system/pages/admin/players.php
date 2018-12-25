@@ -212,16 +212,6 @@ if ($id > 0) {
 			verify_number($blessings, 'Blessings', 2);
 		}
 
-		if ($hasBlessingColumn) {
-			$blessing1 = (isset($_POST['blessing1']) && $_POST['blessing1'] == 'true');
-			$blessing2 = (isset($_POST['blessing2']) && $_POST['blessing2'] == 'true');
-			$blessing3 = (isset($_POST['blessing3']) && $_POST['blessing3'] == 'true');
-			$blessing4 = (isset($_POST['blessing4']) && $_POST['blessing4'] == 'true');
-			$blessing5 = (isset($_POST['blessing5']) && $_POST['blessing5'] == 'true');
-			$blessing6 = (isset($_POST['blessing6']) && $_POST['blessing6'] == 'true');
-			$blessing7 = (isset($_POST['blessing7']) && $_POST['blessing7'] == 'true');
-			$blessing8 = (isset($_POST['blessing8']) && $_POST['blessing8'] == 'true');
-		}
 		$balance = $_POST['balance'];
 		verify_number($balance, 'Balance', 20);
 		if ($db->hasColumn('players', 'stamina')) {
@@ -241,6 +231,14 @@ if ($id > 0) {
 			verify_number($value, $skills[$skill][0], 10);
 		foreach ($_POST['skills_tries'] as $skill => $value)
 			verify_number($value, $skills[$skill][0] . ' tries', 10);
+
+		$bless_count = $_POST['blesscount'];
+		if ($hasBlessingColumn) {
+			for ($i = 1; $i <= $bless_count; $i++) {
+				$a = 'blessing' . $i;
+				${'blessing' . $i} = (isset($_POST[$a]) && $_POST[$a] == 'true');
+			}
+		}
 
 		if (!$error) {
 			$player->setName($name);
@@ -287,14 +285,10 @@ if ($id > 0) {
 				$player->setBlessings($blessings);
 
 			if ($hasBlessingColumn) {
-				$player->setCustomField('blessings1', $blessing1 ? '1' : '0');
-				$player->setCustomField('blessings2', $blessing2 ? '1' : '0');
-				$player->setCustomField('blessings3', $blessing3 ? '1' : '0');
-				$player->setCustomField('blessings4', $blessing4 ? '1' : '0');
-				$player->setCustomField('blessings5', $blessing5 ? '1' : '0');
-				$player->setCustomField('blessings6', $blessing6 ? '1' : '0');
-				$player->setCustomField('blessings7', $blessing7 ? '1' : '0');
-				$player->setCustomField('blessings8', $blessing8 ? '1' : '0');
+				for ($i = 1; $i <= $bless_count; $i++) {
+					$a = 'blessing' . $i;
+					$player->setCustomField('blessings' . $i, ${'blessing' . $i} ? '1' : '0');
+				}
 			}
 			$player->setBalance($balance);
 			if ($db->hasColumn('players', 'stamina'))
@@ -428,27 +422,19 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 									</div>
 									<div class="row">
 										<?php if ($hasBlessingColumn):
-											$bless = $player->checkBlessings();
+											$blesscount = $player->countBlessings();
+											$bless = $player->checkBlessings($blesscount);
 											?>
+											<input type="hidden" name="blesscount" value="<?php echo $blesscount; ?>"/>
 											<div class="col-xs-6">
 												<label for="blessings" class="control-label">Blessings:</label>
 												<div class="checkbox">
-													<label><input type="checkbox" name="blessing1" id="blessing1"
-																  value="true" <?php echo(($bless[0] == 1) ? ' checked' : ''); ?>/>1</label>
-													<label><input type="checkbox" name="blessing2" id="blessing2"
-																  value="true" <?php echo(($bless[1] == 1) ? ' checked' : ''); ?>/>2</label>
-													<label><input type="checkbox" name="blessing3" id="blessing3"
-																  value="true" <?php echo(($bless[2] == 1) ? ' checked' : ''); ?>/>3</label>
-													<label><input type="checkbox" name="blessing4" id="blessing4"
-																  value="true" <?php echo(($bless[3] == 1) ? ' checked' : ''); ?>/>4</label>
-													<label><input type="checkbox" name="blessing5" id="blessing5"
-																  value="true" <?php echo(($bless[4] == 1) ? ' checked' : ''); ?>/>5</label>
-													<label><input type="checkbox" name="blessing6" id="blessing6"
-																  value="true" <?php echo(($bless[5] == 1) ? ' checked' : ''); ?>/>6</label>
-													<label><input type="checkbox" name="blessing7" id="blessing7"
-																  value="true" <?php echo(($bless[6] == 1) ? ' checked' : ''); ?>/>7</label>
-													<label><input type="checkbox" name="blessing8" id="blessing8"
-																  value="true" <?php echo(($bless[7] == 1) ? ' checked' : ''); ?>/>8</label>
+													<?php
+													for ($i = 1; $i <= $blesscount; $i++) {
+														echo '<label><input style="margin-left: -16px;" type="checkbox" name="blessing' . $i . '" id="blessing' . $i . '"
+																  value="true" ' . (($bless[$i - 1] == 1) ? ' checked' : '') . '/>' . $i . '</label>';
+													}
+													?>
 												</div>
 											</div>
 										<?php endif; ?>
