@@ -426,7 +426,11 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
         $this->data['country'] = (string) $country;
     }
-	
+
+	public function setLastLogin($lastlogin)
+    {
+        $this->data['lastday'] = (int) $lastlogin;
+    }
 
 /**
  * Name.

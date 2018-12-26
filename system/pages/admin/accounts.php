@@ -12,6 +12,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Account editor';
 $base = BASE_URL . 'admin/?p=accounts';
 
+if ($config['account_country'])
+	require SYSTEM . 'countries.conf.php';
+
 function echo_success($message)
 {
 	echo '<p class="success">' . $message . '</p>';
@@ -35,6 +38,17 @@ function verify_number($number, $name, $max_length)
 }
 
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
+$hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
+
+if ($config['account_country']) {
+	$countries = array();
+	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
+		$countries[$c] = $config['countries'][$c];
+
+	$countries['--'] = '----------';
+	foreach ($config['countries'] as $code => $c)
+		$countries[$code] = $c;
+}
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -69,7 +83,6 @@ else if (isset($_REQUEST['search_name'])) {
 	}
 }
 
-
 if ($id > 0) {
 	$account = new OTS_Account();
 	$account->load($id);
@@ -79,10 +92,6 @@ if ($id > 0) {
 
 		$name = $_POST['name'];
 		$_error = '';
-
-		//if (!Validator::check_account_name($name))
-		//    echo_error(Validator::getLastError());
-
 		$account_db = new OTS_Account();
 		$account_db->find($name);
 		if ($account_db->isLoaded() && $account->getName() != $name)
@@ -94,7 +103,6 @@ if ($id > 0) {
 
 		//type
 		$group = $_POST['group'];
-
 		$password = ((!empty($_POST["pass"]) ? $_POST['pass'] : null));
 		if (!Validator::password($password)) {
 			$errors['password'] = Validator::getLastError();
@@ -104,20 +112,18 @@ if ($id > 0) {
 		$secret = $_POST['secret'];
 		//key
 		$key = $_POST['key'];
-
 		$email = $_POST['email'];
 		if (!Validator::email($email))
 			$errors['email'] = Validator::getLastError();
-
-		// prem days
-		$p_days = $_POST['p_days'];
-		verify_number($p_days, 'Prem days', 11);
 
 		//tibia coins
 		if ($hasCoinsColumn) {
 			$t_coins = $_POST['t_coins'];
 			verify_number($t_coins, 'Tibia coins', 12);
 		}
+		// prem days
+		$p_days = $_POST['p_days'];
+		verify_number($p_days, 'Prem days', 11);
 
 		//prem points
 		$p_points = $_POST['p_points'];
@@ -132,18 +138,20 @@ if ($id > 0) {
 		//country
 		$rl_country = $_POST['rl_country'];
 
+		$web_flags = $_POST['web_flags'];
+		verify_number($web_flags, 'Web Flags', 1);
+
 		//created
 		$created = $_POST['created'];
-		verify_number($created, 'Created', 20);
+		verify_number($created, 'Created', 11);
 
 		//last login
 		$lastlogin = $_POST['lastlogin'];
-		verify_number($lastlogin, 'Last login', 20);
+		verify_number($lastlogin, 'Last login', 11);
 
 		//web last login
 		$web_lastlogin = $_POST['web_lastlogin'];
-		verify_number($web_lastlogin, 'Web Last logout', 20);
-
+		verify_number($web_lastlogin, 'Web Last logout', 11);
 
 		if (!$error) {
 			$account->setName($name);
@@ -151,18 +159,21 @@ if ($id > 0) {
 			$account->setCustomField('secret', $secret);
 			$account->setCustomField('key', $key);
 			$account->setEMail($email);
-			$account->setPremDays($p_days);
 			if ($hasCoinsColumn) {
 				$account->setCustomField('coins', $t_coins);
 			}
-
+			$account->setPremDays($p_days);
+			if ($hasPointsColumn) {
+				$account->setCustomField('premium_points', $p_points);
+			}
 			$account->setRLName($rl_name);
 			$account->setLocation($rl_loca);
 			$account->setCountry($rl_country);
+			$account->setCustomField('created', $created);
+			$account->setLastLogin($lastlogin);
+			$account->setWebFlags($web_flags);
+			$account->setCustomField('web_lastlogin', $web_lastlogin);
 
-			if ($db->hasColumn('accounts', 'premium_points')) {
-				$account->setCustomField('premium_points', $p_points);
-			}
 
 			if (isset($password)) {
 				$config_salt_enabled = $db->hasColumn('accounts', 'salt');
@@ -178,9 +189,6 @@ if ($id > 0) {
 				if ($config_salt_enabled)
 					$account->setCustomField('salt', $salt);
 			}
-
-			$account->setEMail($email);
-
 			//$account->setCustomField('created', time());
 
 			$account->save();
@@ -205,38 +213,22 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 	?>
 
 	<?php $acc_type = array("Normal", "Tutor", "Senior Tutor", "Gamemaster", "God"); ?>
+	<?php $web_acc = array("None", "Admin", "Super Admin", "(Admin + Super Admin)"); ?>
 	<form action="<?php echo $base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post"
 		  class="form-horizontal">
 		<div class="col-md-8">
 			<div class="box box-primary">
 				<div class="box-body">
 					<div class="row">
-						<div class="col-xs-6">
-							<label for="name" class="control-label">Account Name</label>
+						<div class="col-xs-4">
+							<label for="name" class="control-label">Account Name:</label>
 							<input type="text" class="form-control" id="name" name="name"
 								   autocomplete="off" style="cursor: auto;"
 								   value="<?php echo $account->getName(); ?>"/>
 						</div>
-						<div class="col-xs-6">
-							<label for="account_id" class="control-label">Account id:</label>
-							<input type="text" class="form-control" id="account_id" name="account_id"
-								   autocomplete="off" style="cursor: auto;" size="8" maxlength="11" disabled
-								   value="<?php echo $account->getId(); ?>"/>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">
-							<label for="group" class="control-label">Type</label>
-							<select name="group" id="group" class="form-control">
-								<?php foreach ($acc_type as $id => $a_type): ?>
-									<option value="<?php echo($id + 1); ?>" <?php echo($account->getCustomField('type') == ($id + 1) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
-								<?php endforeach; ?>
-							</select>
-						</div>
-						<div class="col-xs-6">
+						<div class="col-xs-5">
 							<label for="c_pass" class="control-label">Password: (check to change)</label>
 							<div class="input-group">
-
                             <span class="input-group-addon">
                               <input type="checkbox"
 									 name="c_pass"
@@ -248,6 +240,31 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 									   autocomplete="off" maxlength="20"
 									   value=""/>
 							</div>
+						</div>
+						<div class="col-xs-3">
+							<label for="account_id" class="control-label">Account ID:</label>
+							<input type="text" class="form-control" id="account_id" name="account_id"
+								   autocomplete="off" style="cursor: auto;" size="8" maxlength="11" disabled
+								   value="<?php echo $account->getId(); ?>"/>
+						</div>
+					</div>
+					<div class="row">
+
+						<div class="col-xs-6">
+							<label for="group" class="control-label">Account Type:</label>
+							<select name="group" id="group" class="form-control">
+								<?php foreach ($acc_type as $id => $a_type): ?>
+									<option value="<?php echo($id + 1); ?>" <?php echo($account->getCustomField('type') == ($id + 1) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+						<div class="col-xs-6">
+							<label for="web_flags" class="control-label">Website Access:</label>
+							<select name="web_flags" id="web_flags" class="form-control">
+								<?php foreach ($web_acc as $id => $a_type): ?>
+									<option value="<?php echo($id); ?>" <?php echo($account->getWebFlags() == ($id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
+								<?php endforeach; ?>
+							</select>
 						</div>
 					</div>
 					<div class="row">
@@ -271,12 +288,6 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 								   autocomplete="off" maxlength="20"
 								   value="<?php echo $account->getEMail(); ?>"/>
 						</div>
-						<div class="col-xs-6">
-							<label for="p_days" class="control-label">Prem Days:</label>
-							<input type="text" class="form-control" id="p_days" name="p_days"
-								   autocomplete="off" maxlength="11"
-								   value="<?php echo $account->getPremDays(); ?>"/>
-						</div>
 						<?php if ($hasCoinsColumn): ?>
 							<div class="col-xs-6">
 								<label for="t_coins" class="control-label">Tibia Coins:</label>
@@ -285,9 +296,15 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 									   value="<?php echo $account->getCustomField('coins') ?>"/>
 							</div>
 						<?php endif; ?>
-						<?php if ($db->hasColumn('players', 'blessings')): ?>
+						<div class="col-xs-6">
+							<label for="p_days" class="control-label">Premium Days:</label>
+							<input type="text" class="form-control" id="p_days" name="p_days"
+								   autocomplete="off" maxlength="11"
+								   value="<?php echo $account->getPremDays(); ?>"/>
+						</div>
+						<?php if ($hasPointsColumn): ?>
 							<div class="col-xs-6">
-								<label for="p_points" class="control-label">Prem Points:</label>
+								<label for="p_points" class="control-label">Premium Points:</label>
 								<input type="text" class="form-control" id="p_points" name="p_points"
 									   autocomplete="off" maxlength="8"
 									   value="<?php echo $account->getCustomField('premium_points') ?>"/>
@@ -309,12 +326,13 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 						</div>
 						<div class="col-xs-4">
 							<label for="rl_country" class="control-label">Country:</label>
-							<input type="text" class="form-control" id="rl_country" name="rl_country"
-								   autocomplete="off" maxlength="8"
-								   value="<?php echo $account->getCountry(); ?>"/>
+							<select name="rl_country" id="rl_country" class="form-control">
+								<?php foreach ($countries as $id => $a_type): ?>
+									<option value="<?php echo($id); ?>" <?php echo($account->getCountry() == ($id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
+								<?php endforeach; ?>
+							</select>
 						</div>
 					</div>
-
 					<div class="row">
 						<div class="col-xs-4">
 							<label for="created" class="control-label">Created:</label>
