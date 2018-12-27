@@ -712,15 +712,15 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 													   value="<?php echo $player->getLossExperience(); ?>"/>
 											</div>
 											<div class="col-xs-6">
-												<label for="loss_skills" class="control-label">Mana Loss:</label>
-												<input type="text" class="form-control" id="loss_skills"
-													   name="loss_skills" autocomplete="off"
+												<label for="loss_mana" class="control-label">Mana Loss:</label>
+												<input type="text" class="form-control" id="loss_mana"
+													   name="loss_mana" autocomplete="off"
 													   maxlength="11" value="<?php echo $player->getLossMana(); ?>"/>
 											</div>
 											<div class="col-xs-6">
-												<label for="loss_containers" class="control-label">Skills Loss:</label>
-												<input type="text" class="form-control" id="loss_containers"
-													   name="loss_containers" autocomplete="off"
+												<label for="loss_skills" class="control-label">Skills Loss:</label>
+												<input type="text" class="form-control" id="loss_skills"
+													   name="loss_skills" autocomplete="off"
 													   maxlength="11" value="<?php echo $player->getLossSkills(); ?>"/>
 											</div>
 											<div class="col-xs-6">
