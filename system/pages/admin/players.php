@@ -584,13 +584,12 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
                     </div>
                     <div class="col-xs-6">
                       <label for="skills_tries[' . $id . ']" class="control-label">' . $info[0] . ' tries</label>
-                        <input type="text" class="form-control" id="skills_tries[' . $id . ']" name="skills_tries[' . $id . ']" maxlength="10" autocomplete="off" style="cursor: auto;" value="' . $player->getSkill($id) . '"/>
+                        <input type="text" class="form-control" id="skills_tries[' . $id . ']" name="skills_tries[' . $id . ']" maxlength="10" autocomplete="off" style="cursor: auto;" value="' . $player->getSkillTries($id) . '"/>
                     </div>
                 </div>';
 										if ($i == 0)
 											echo '';
 									}
-
 									?>
 								</div>
 								<div class="tab-pane" id="tab_4">

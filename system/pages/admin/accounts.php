@@ -39,6 +39,8 @@ function verify_number($number, $name, $max_length)
 
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
 $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
+$hasTypeColumn = $db->hasColumn('accounts', 'type');
+$hasGroupColumn = $db->hasColumn('accounts', 'group_id');
 
 if ($config['account_country']) {
 	$countries = array();
@@ -82,7 +84,7 @@ else if (isset($_REQUEST['search_name'])) {
 		}
 	}
 }
-
+$groups = new OTS_Groups_List();
 if ($id > 0) {
 	$account = new OTS_Account();
 	$account->load($id);
@@ -101,7 +103,7 @@ if ($id > 0) {
 		if (!$account_db->isLoaded())
 			echo_error('Account with this id doesn\'t exist.');
 
-		//type
+		//type/group
 		$group = $_POST['group'];
 		$password = ((!empty($_POST["pass"]) ? $_POST['pass'] : null));
 		if (!Validator::password($password)) {
@@ -155,7 +157,13 @@ if ($id > 0) {
 
 		if (!$error) {
 			$account->setName($name);
-			$account->setCustomField('type', $group);
+
+			if ($hasTypeColumn) {
+				$account->setCustomField('type', $group);
+			} elseif ($hasGroupColumn) {
+				$account->setCustomField('group_id', $group);
+			}
+
 			$account->setCustomField('secret', $secret);
 			$account->setCustomField('key', $key);
 			$account->setEMail($email);
@@ -174,7 +182,6 @@ if ($id > 0) {
 			$account->setWebFlags($web_flags);
 			$account->setCustomField('web_lastlogin', $web_lastlogin);
 
-
 			if (isset($password)) {
 				$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 				if ($config_salt_enabled) {
@@ -189,7 +196,6 @@ if ($id > 0) {
 				if ($config_salt_enabled)
 					$account->setCustomField('salt', $salt);
 			}
-			//$account->setCustomField('created', time());
 
 			$account->save();
 			echo_success('Account saved at: ' . date('G:i'));
@@ -208,12 +214,8 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 
 ?>
 <div class="row">
-	<?php
-	if (isset($account) && $account->isLoaded()) {
-	?>
+	<?php if (isset($account) && $account->isLoaded()) { ?>
 
-	<?php $acc_type = array("Normal", "Tutor", "Senior Tutor", "Gamemaster", "God"); ?>
-	<?php $web_acc = array("None", "Admin", "Super Admin", "(Admin + Super Admin)"); ?>
 	<form action="<?php echo $base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post"
 		  class="form-horizontal">
 		<div class="col-md-8">
@@ -249,19 +251,36 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 						</div>
 					</div>
 					<div class="row">
-
-						<div class="col-xs-6">
-							<label for="group" class="control-label">Account Type:</label>
-							<select name="group" id="group" class="form-control">
-								<?php foreach ($acc_type as $id => $a_type): ?>
-									<option value="<?php echo($id + 1); ?>" <?php echo($account->getCustomField('type') == ($id + 1) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
-								<?php endforeach; ?>
-							</select>
-						</div>
+						<?php
+						$acc_group = $account->getAccGroupId();
+						if ($hasTypeColumn) {
+							$acc_type = array("Normal", "Tutor", "Senior Tutor", "Gamemaster", "God"); ?>
+							<div class="col-xs-6">
+								<label for="group" class="control-label">Account Type:</label>
+								<select name="group" id="group" class="form-control">
+									<?php foreach ($acc_type as $id => $a_type): ?>
+										<option value="<?php echo($id + 1); ?>" <?php echo($acc_group == ($id + 1) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+							<?php
+						} elseif ($hasGroupColumn) {
+							?>
+							<div class="col-xs-6">
+								<label for="group" class="control-label">Account Type:</label>
+								<select name="group" id="group" class="form-control">
+									<?php
+									foreach ($groups->getGroups() as $id => $group): ?>
+										<option value="<?php echo $id; ?>" <?php echo($acc_group == $id ? 'selected' : ''); ?>><?php echo $group->getName(); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						<?php } ?>
 						<div class="col-xs-6">
 							<label for="web_flags" class="control-label">Website Access:</label>
 							<select name="web_flags" id="web_flags" class="form-control">
-								<?php foreach ($web_acc as $id => $a_type): ?>
+								<?php $web_acc = array("None", "Admin", "Super Admin", "(Admin + Super Admin)");
+								foreach ($web_acc as $id => $a_type): ?>
 									<option value="<?php echo($id); ?>" <?php echo($account->getWebFlags() == ($id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
 								<?php endforeach; ?>
 							</select>

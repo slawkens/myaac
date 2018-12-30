@@ -432,6 +432,11 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $this->data['lastday'] = (int) $lastlogin;
     }
 
+    public function setWebFlags($webflags)
+    {
+        $this->data['web_flags'] = (int) $webflags;
+    }
+
 /**
  * Name.
  *
@@ -882,6 +887,32 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		return 0;
 	}
 
+	public function getAccGroupId()
+	{
+		if(isset($this->data['group_id'])) {
+			return $this->data['group_id'];
+		}
+
+		global $db;
+		if($db->hasColumn('accounts', 'group_id')) {
+			$query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
+			// if anything was found
+			if(isset($query['group_id'])) {
+				$this->data['group_id'] = $query['group_id'];
+				return $query['group_id'];
+			}
+		}
+		if($db->hasColumn('accounts', 'type')) {
+			$query = $this->db->query('SELECT `type` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
+			// if anything was found
+			if(isset($query['type'])) {
+				$this->data['type'] = $query['type'];
+				return $query['type'];
+			}
+		}
+		return 0;
+	}
+/**
 /**
  * Checks highest access level of account in given guild.
  *
