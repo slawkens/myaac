@@ -1,0 +1,156 @@
+<div class="TableContainer">
+	<table class="Table1" cellpadding="0" cellspacing="0">
+		<div class="CaptionContainer">
+			<div class="CaptionInnerContainer">
+				<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+				<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+				<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+				<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+				<div class="Text" >Support in game</div>
+				<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+				<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+				<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+				<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+			</div>
+		</div>
+
+		<tr>
+			<td>
+				<div class="InnerTableContainer">
+					<table cellspacing="1" cellpadding="4" border="0" width="100%">
+						{% if config.team_style == 1 %}
+						<tr>
+							<td width="10%">
+								<span><b>Group</b></span>
+							</td>
+
+							<td width="40%">
+								<span><b>Name</b></span>
+							</td>
+
+							{% if config.team_display_status %}
+							<td width="10%">
+								<span><b>Status</b></span>
+							</td>
+							{% endif %}
+
+							{% if (config.multiworld or config.team_display_world) %}
+							<td width="20%">
+								<span><b>World</b></span>
+							</td>
+							{% endif %}							
+
+							{% if config.team_display_lastlogin %}
+							<td width="20%">
+								<span><b>Last login</b></span>
+							</td>
+							{% endif %}
+						</tr>
+
+						{% for group in groupmember|reverse %}
+							{% for member in group.members|reverse %}
+							<tr>
+								<td>{{ group.group_name }}</td>
+
+								<td> 
+									{% if config.account_country %}
+										{{ member.flag_image|raw }}
+									{% endif %}		
+									{{ member.link|raw }}
+								</td>
+
+								{% if config.team_display_status %}
+								<td>
+									{% if member.status %}
+										<span style="color: green"><b>Online</b></span>
+									{% else %}
+										<span style="color: red"><b>Offline</b></span>
+									{% endif %}
+								</td>	
+								{% endif %}
+
+								{% if (config.multiworld or config.team_display_world) %}
+								<td>
+									<span><b>{{ member.world_name }}</b></span>
+								</td>
+								{% endif %}		
+
+								{% if config.team_display_lastlogin %}
+								<td>
+									{{ member.last_login }}
+								</td>
+								{% endif %}					
+							</tr>
+							{% endfor %}
+						{% endfor %}
+
+						{% elseif config.team_style == 2 %}			
+							{% for group in groupmember|reverse %}
+							<div style="text-align:center"><h2>{{ group.group_name }}</h2></div>
+
+							<table cellspacing="1" cellpadding="4" border="0" width="100%">
+								<tr>
+									<td width="40%">
+										<span><b>Name</b></span>
+									</td>
+
+									{% if config.team_display_status %}
+									<td width="20%">
+										<span><b>Status</b></span>
+									</td>
+									{% endif %}
+
+									{% if (config.multiworld or config.team_display_world) %}
+									<td width="20%">
+										<span><b>World</b></span>
+									</td>
+									{% endif %}							
+
+									{% if config.team_display_lastlogin %}
+									<td width="20%">
+										<span><b>Last login</b></span>
+									</td>
+									{% endif %}
+								</tr>
+
+								{% for member in group.members %}
+								<tr>	 					
+									<td> 
+										{% if config.account_country %}
+											{{ member.flag_image|raw }}
+										{% endif %}		
+										{{ member.link|raw }}
+									</td>
+
+									{% if config.team_display_status %}
+									<td>
+										{% if member.status %}
+											<span style="color: green"><b>Online</b></span>
+										{% else %}
+											<span style="color: red"><b>Offline</b></span>
+										{% endif %}
+									</td>	
+									{% endif %}
+
+									{% if (config.multiworld or config.team_display_world) %}
+									<td>
+										<span><b>{{ member.world_name }}</b></span>
+									</td>
+									{% endif %}		
+
+									{% if config.team_display_lastlogin %}
+									<td>
+										{{ member.last_login }}
+									</td>
+									{% endif %}	
+								</tr>
+								{% endfor %}
+							</table>
+							{% endfor %}
+						{% endif %}
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
