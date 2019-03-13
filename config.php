@@ -184,6 +184,7 @@ $config = array(
 	'team_display_status' => true,
 	'team_display_lastlogin' => true,
 	'team_display_world' => false,
+	'team_display_outfit' => true,
 
 	// bans page
 	'bans_limit' => 50,

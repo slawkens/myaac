@@ -12,7 +12,6 @@
 	* migrations: option to downgrade the database
 	* create account: create character
 	* csrf token protection
-	* team page - display outfits of the players (configurable)
 	* guild wars support like in Gesior
 	* Install: create admin account: e-mail + Nazwa postaci
 	* move lostaccount.php to Twig

@@ -24,24 +24,28 @@
 								<span><b>Group</b></span>
 							</td>
 
+							{% if config.team_display_outfit %}
+								<td width="5%"><span><b>Outfit</b></span></td>
+							{% endif %}						
+
 							<td width="40%">
 								<span><b>Name</b></span>
 							</td>
 
 							{% if config.team_display_status %}
-							<td width="10%">
+							<td>
 								<span><b>Status</b></span>
 							</td>
 							{% endif %}
 
 							{% if (config.multiworld or config.team_display_world) %}
-							<td width="20%">
+							<td>
 								<span><b>World</b></span>
 							</td>
 							{% endif %}							
 
 							{% if config.team_display_lastlogin %}
-							<td width="20%">
+							<td>
 								<span><b>Last login</b></span>
 							</td>
 							{% endif %}
@@ -51,6 +55,12 @@
 							{% for member in group.members|reverse %}
 							<tr>
 								<td>{{ group.group_name }}</td>
+
+								{% if config.team_display_outfit %}
+									<td>
+										<img style="position:absolute;margin-top:{% if member.player.looktype in [75, 266, 302] %}-20px;margin-left:-0px;{% else %}-45px;margin-left:-25px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
+									</td>
+								{% endif %}	
 
 								<td> 
 									{% if config.account_country %}
@@ -90,31 +100,41 @@
 
 							<table cellspacing="1" cellpadding="4" border="0" width="100%">
 								<tr>
+									{% if config.team_display_outfit %}
+										<td width="5%"><span><b>Outfit</b></span></td>
+									{% endif %}		
+
 									<td width="40%">
 										<span><b>Name</b></span>
 									</td>
 
 									{% if config.team_display_status %}
-									<td width="20%">
+									<td>
 										<span><b>Status</b></span>
 									</td>
 									{% endif %}
 
 									{% if (config.multiworld or config.team_display_world) %}
-									<td width="20%">
+									<td>
 										<span><b>World</b></span>
 									</td>
 									{% endif %}							
 
 									{% if config.team_display_lastlogin %}
-									<td width="20%">
+									<td>
 										<span><b>Last login</b></span>
 									</td>
 									{% endif %}
 								</tr>
 
 								{% for member in group.members %}
-								<tr>	 					
+								<tr>
+									{% if config.team_display_outfit %}
+										<td>
+											<img style="position:absolute;margin-top:{% if member.player.looktype in [75, 266, 302] %}-20px;margin-left:-0px;{% else %}-45px;margin-left:-25px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
+										</td>
+									{% endif %}	
+									 					
 									<td> 
 										{% if config.account_country %}
 											{{ member.flag_image|raw }}
