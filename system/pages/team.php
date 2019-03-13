@@ -21,6 +21,16 @@ if(!$groups->count())
 	return;
 }
 
+$outfit_addons = false;
+$outfit = '';
+if($config['team_display_outfit']) {
+	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
+	if($db->hasColumn('players', 'lookaddons')) {
+		$outfit .= ', lookaddons';
+		$outfit_addons = true;
+	}
+}
+
 $groupMember = array();
 $groupList = $groups->getGroups();
 foreach($groupList as $id => $group)
@@ -44,6 +54,8 @@ foreach($groupList as $id => $group)
 
 		$members[] = array(
 			'group_name' => $group->getName(),
+			'player' => $member,
+			'outfit' => $config['team_display_outfit'] ? $config['outfit_images_url'] . '?id=' . $member->getLookType() . ($outfit_addons ? '&addons=' . $member->getLookAddons() : '') . '&head=' . $member->getLookHead() . '&body=' . $member->getLookBody() . '&legs=' . $member->getLookLegs() . '&feet=' . $member->getLookFeet() : null,
 			'status' => $member->isOnline(),
 			'link' => getPlayerLink($member->getName()),
 			'flag_image' => getFlagImage($member->getAccount()->getCountry()),
