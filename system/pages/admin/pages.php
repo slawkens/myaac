@@ -76,7 +76,7 @@ if (!empty($action)) {
 	}
 
 	if (!empty($errors))
-		$twig->display('admin.error.html.twig', array('errors' => $errors));
+		error(implode(", ", $errors));
 }
 
 $query =
