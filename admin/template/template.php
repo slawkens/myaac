@@ -65,6 +65,7 @@
 
 				$menus = array(
 					'Dashboard' => 'dashboard',
+					'News' => 'news',
 					'Mailer' => 'mailer',
 					'Pages' => 'pages',
 					'Menus' => 'menus',
