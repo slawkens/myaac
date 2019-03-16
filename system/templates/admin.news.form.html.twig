@@ -20,7 +20,7 @@
 						</div>
 
 						<div class="form-group">
-							<label for="content" class="col-sm-2 control-label">Content</label>
+							<label for="body" class="col-sm-2 control-label">Content</label>
 
 							<div class="col-sm-10" id="body-parent">
                                 <textarea class="form-control" id="body" name="body" maxlength="65000" cols="50" rows="5">{{ body|raw }}</textarea>
@@ -28,7 +28,7 @@
 						</div>						
 
 						<div class="form-group">
-							<label for="type" class="col-sm-2 control-label">Type</label>
+							<label for="select-type" class="col-sm-2 control-label">Type</label>
 
 							<div class="col-sm-10">
 								<select class="form-control" name="type" id="select-type">
@@ -61,7 +61,7 @@
 								<label for="author" class="col-sm-2 control-label">Author</label>
 
 								<div class="col-sm-10">
-									<select class="form-control" name="original_id" disabled="disabled">
+									<select class="form-control" id="author" name="original_id" disabled="disabled">
 										<option value="{{ player.getId() }}">{{ player.getName() }}</option>
 									</select>
 								</div>
@@ -70,7 +70,7 @@
 						{% endif %}
 
 						<div class="form-group">
-							<label for="modifiedby" class="col-sm-2 control-label">{% if action == 'edit' %}Modified by{% else %}Author{% endif %}</label>
+							<label for="player_id" class="col-sm-2 control-label">{% if action == 'edit' %}Modified by{% else %}Author{% endif %}</label>
 
 							<div class="col-sm-10">
 								<select class="form-control" name="player_id" id="player_id">
@@ -84,6 +84,7 @@
 						{% if action != 'edit' %}
 						<div class="form-group">
 							<label for="forum_section" class="col-sm-2 control-label">Create forum thread in section:</label>
+
 							<div class="col-sm-10">
 								<select class="form-control" name="forum_section" id="forum_section">
 									<option value="-1">None</option>
@@ -99,9 +100,10 @@
 
 						<div class="form-group">
 							<label for="category" class="col-sm-2 control-label">Category</label>
+							
 							<div class="col-sm-10">
 								{% for id, cat in categories %}
-									<input type="radio" name="category" value="{{ id }}" {% if (category == 0 and id == 1) or (category == id) %}checked="yes"{% endif %}/> 
+									<input type="radio" name="category" id="category" value="{{ id }}" {% if (category == 0 and id == 1) or (category == id) %}checked="yes"{% endif %}/> 
 									<img src="{{ constant('BASE_URL') }}/images/news/icon_{{ cat.icon_id }}_small.gif" />
 								{% endfor %}
 							</div>	

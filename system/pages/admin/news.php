@@ -84,7 +84,8 @@ if(!empty($action))
 		}
 	}
 	else if($action == 'hide') {
-		News::toggleHidden($id, $errors);
+		News::toggleHidden($id, $errors, $status);
+		success(($status == 1 ? 'Show' : 'Hide') . " successful.");
 	}
 
 	if(!empty($errors))
@@ -100,32 +101,34 @@ foreach($db->query('SELECT `id`, `name`, `icon_id` FROM `' . TABLE_PREFIX . 'new
 	);
 }
 
-if($action == 'edit') {
-	$player = new OTS_Player();
-	$player->load($player_id);
-}
+if($action == 'edit' || $action == 'new') {
+	if($action == 'edit') {
+		$player = new OTS_Player();
+		$player->load($player_id);
+	}
 
-$account_players = $account_logged->getPlayersList();
-$account_players->orderBy('group_id', POT::ORDER_DESC);
-$twig->display('admin.news.form.html.twig', array(
-	'action' => $action,
-	'news_link' => getLink(PAGE),
-	'news_link_form' => '?p=news&action=' . ($action == 'edit' ? 'edit' : 'add'),
-	'news_id' => isset($id) ? $id : null,
-	'title' => isset($p_title) ? $p_title : '',
-	'body' => isset($body) ? htmlentities($body, ENT_COMPAT, 'UTF-8') : '',
-	'type' => isset($type) ? $type : null,
-	'player' => isset($player) && $player->isLoaded() ? $player : null,
-	'player_id' => isset($player_id) ? $player_id : null,
-	'account_players' => $account_players,
-	'category' => isset($category) ? $category : 0,
-	'categories' => $categories,
-	'forum_boards' => getForumBoards(),
-	'forum_section' => isset($forum_section) ? $forum_section : null,
-	'comments' => isset($comments) ? $comments : null,
-	'article_text' => isset($article_text) ? $article_text : null,
-	'article_image' => isset($article_image) ? $article_image : null
-));
+	$account_players = $account_logged->getPlayersList();
+	$account_players->orderBy('group_id', POT::ORDER_DESC);
+	$twig->display('admin.news.form.html.twig', array(
+		'action' => $action,
+		'news_link' => getLink(PAGE),
+		'news_link_form' => '?p=news&action=' . ($action == 'edit' ? 'edit' : 'add'),
+		'news_id' => isset($id) ? $id : null,
+		'title' => isset($p_title) ? $p_title : '',
+		'body' => isset($body) ? htmlentities($body, ENT_COMPAT, 'UTF-8') : '',
+		'type' => isset($type) ? $type : null,
+		'player' => isset($player) && $player->isLoaded() ? $player : null,
+		'player_id' => isset($player_id) ? $player_id : null,
+		'account_players' => $account_players,
+		'category' => isset($category) ? $category : 0,
+		'categories' => $categories,
+		'forum_boards' => getForumBoards(),
+		'forum_section' => isset($forum_section) ? $forum_section : null,
+		'comments' => isset($comments) ? $comments : null,
+		'article_text' => isset($article_text) ? $article_text : null,
+		'article_image' => isset($article_image) ? $article_image : null
+	));
+}
 
 $query = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news'));
 $newses = $tickers = $articles = array();
@@ -136,30 +139,33 @@ foreach ($query as $_news) {
 	if($_news['type'] == constant('NEWS')){
 		$newses[] = array(
 			'id' => $_news['id'],
+			'hidden' => $_news['hidden'],
 			'archive_link' => getLink('news') . '/archive/' . $_news['id'],
 			'title' => $_news['title'],
 			'date' => $_news['date'],
-			'player_name' => $_player->getName(),
-			'player_link' => getPlayerLink($_player->getName(), false),
+			'player_name' => isset($_player) && $_player->isLoaded() ? $_player->getName() : '',
+			'player_link' => isset($_player) && $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
 		);		
 	} else if ($_news['type'] == constant('TICKER')) {
 
 		$tickers[] = array(
 			'id' => $_news['id'],
+			'hidden' => $_news['hidden'],
 			'archive_link' => getLink('news') . '/archive/' . $_news['id'],
 			'title' => $_news['title'],
 			'date' => $_news['date'],
-			'player_name' => $_player->getName(),
-			'player_link' => getPlayerLink($_player->getName(), false),
+			'player_name' => isset($_player) && $_player->isLoaded() ? $_player->getName() : '',
+			'player_link' => isset($_player) && $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
 		);	
 	} else if ($_news['type'] == constant('ARTICLE')) {
 		$articles[] = array(
 			'id' => $_news['id'],
+			'hidden' => $_news['hidden'],
 			'archive_link' => getLink('news') . '/archive/' . $_news['id'],
 			'title' => $_news['title'],
 			'date' => $_news['date'],
-			'player_name' => $_player->getName(),
-			'player_link' => getPlayerLink($_player->getName(), false),
+			'player_name' => isset($_player) && $_player->isLoaded() ? $_player->getName() : '',
+			'player_link' => isset($_player) && $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
 		);
 	}
 }
@@ -238,14 +244,17 @@ class News
 		return !count($errors);
 	}
 
-	static public function toggleHidden($id, &$errors)
+	static public function toggleHidden($id, &$errors, &$status)
 	{
 		global $db;
 		if(isset($id))
 		{
 			$query = $db->select(TABLE_PREFIX . 'news', array('id' => $id));
 			if($query !== false)
+			{
 				$db->update(TABLE_PREFIX . 'news', array('hidden' => ($query['hidden'] == 1 ? 0 : 1)), array('id' => $id));
+				$status = $query['hidden'];
+			}
 			else
 				$errors[] = 'News with id ' . $id . ' does not exists.';
 		}

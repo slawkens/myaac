@@ -24,7 +24,7 @@
 							<td>{{ news.id|raw }}</td>
 							<td><i><a href="?p=news&action=edit&id={{ news.id }}">{{ news.title }}</a></i></td>
 							<td>{{ news.date|date(config.news_date_format) }}</td>
-							<td><a href="{{ news.player_link }}">{{ news.player_name }}</a></td>
+							<td><a target="_blank" rel="noopener noreferrer" href="{{ news.player_link }}">{{ news.player_name }}</a></td>
 							<td>
 								<a href="?p=news&action=edit&id={{ news.id }}" class="ico" title="Edit">
 									<span class="btn btn-success btn-sm edit btn-flat">
@@ -85,7 +85,7 @@
 							<td>{{ ticker.id|raw }}</td>
 							<td><i><a href="?p=news&action=edit&id={{ ticker.id }}">{{ ticker.title }}</a></i></td>
 							<td>{{ ticker.date|date(config.news_date_format) }}</td>
-							<td><a href="{{ ticker.player_link }}">{{ ticker.player_name }}</a></td>
+							<td><a target="_blank" rel="noopener noreferrer" href="{{ ticker.player_link }}">{{ ticker.player_name }}</a></td>
 							<td>
 								<a href="?p=news&action=edit&id={{ ticker.id }}" class="ico" title="Edit">
 									<span class="btn btn-success btn-sm edit btn-flat">
@@ -146,7 +146,7 @@
 							<td>{{ article.id|raw }}</td>
 							<td><i><a href="?p=news&action=edit&id={{ article.id }}">{{ article.title }}</a></i></td>
 							<td>{{ article.date|date(config.news_date_format) }}</td>
-							<td><a href="{{ article.player_link }}">{{ article.player_name }}</a></td>
+							<td><a target="_blank" rel="noopener noreferrer" href="{{ article.player_link }}">{{ article.player_name }}</a></td>
 							<td>
 								<a href="?p=news&action=edit&id={{ article.id }}" class="ico" title="Edit">
 									<span class="btn btn-success btn-sm edit btn-flat">

@@ -56,12 +56,12 @@
 
 				<?php
 				$icons_a = array(
-					'dashboard', 'envelope',
-					'book', 'list',
-					'plug', 'user',
-					'edit', 'gavel',
-					'wrench', 'edit', 'book', 'book',
-				);
+                    'dashboard','newspaper-o', 'envelope',
+                    'book', 'list',
+                    'plug', 'user',
+                    'edit', 'gavel',
+                    'wrench', 'edit', 'book', 'book',
+                );
 
 				$menus = array(
 					'Dashboard' => 'dashboard',
