@@ -62,18 +62,6 @@ $query = $db->query('SELECT count(*) as `how_much` FROM `houses`;');
 $query = $query->fetch();
 $total_houses = $query['how_much'];
 
-if ($db->hasColumn('accounts', 'premium_points')) {
-	$points = $db->query('SELECT `premium_points`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
-} else {
-	$points = 0;
-}
-
-if ($db->hasColumn('accounts', 'coins')) {
-	$coins = $db->query('SELECT `coins`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `coins` DESC LIMIT 10;');
-} else {
-	$coins = 0;
-}
-
 $twig->display('admin.statistics.html.twig', array(
 	'total_accounts' => $total_accounts,
 	'total_players' => $total_players,
@@ -86,9 +74,23 @@ $twig->display('admin.dashboard.html.twig', array(
 	'closed_message' => $closed_message,
 	'status' => $status,
 	'account_type' => (USE_ACCOUNT_NAME ? 'name' : 'number'),
-	'points' => $points,
-	'coins' => $coins,
+	
 ));
+
+echo '<div class="row">';
+$config['modules'] = "lastlogin,points,coins";
+if(isset($config['modules']))
+	$config['modules'] = explode(",", $config['modules']);
+
+$twig_loader->prependPath(__DIR__ . '/modules/templates');
+foreach($config['modules'] as $box) {
+	$file = __DIR__ . '/modules/' . $box . '.php';
+	if(file_exists($file)) {
+		include($file);
+	}
+}
+echo '</div>';
+
 function clearCache()
 {
 	global $template_name;
