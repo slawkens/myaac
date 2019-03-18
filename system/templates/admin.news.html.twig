@@ -3,7 +3,7 @@
 		<h3 class="box-title">News:</h3>
 		<div class="box-tools pull-right">
 			<a href="?p=news&action=new&type=1"><span class="btn btn-success">New</span></a>
-		</div>		
+		</div>
 	</div>
 	<div class="box-body">
 		<div class="row">
@@ -19,7 +19,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					{% for news in newses %}
+					{% for news in newses[constant('NEWS')] %}
 						<tr>
 							<td>{{ news.id|raw }}</td>
 							<td><i><a href="?p=news&action=edit&id={{ news.id }}">{{ news.title }}</a></i></td>
@@ -80,7 +80,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					{% for ticker in tickers %}
+					{% for ticker in newses[constant('TICKER')] %}
 						<tr>
 							<td>{{ ticker.id|raw }}</td>
 							<td><i><a href="?p=news&action=edit&id={{ ticker.id }}">{{ ticker.title }}</a></i></td>
@@ -141,7 +141,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					{% for article in articles %}
+					{% for article in newses[constant('ARTICLE')] %}
 						<tr>
 							<td>{{ article.id|raw }}</td>
 							<td><i><a href="?p=news&action=edit&id={{ article.id }}">{{ article.title }}</a></i></td>
@@ -183,6 +183,6 @@
 	$(function () {
 	    $('.tb_datatable').DataTable({
 	        "order": [[ 0, "desc" ]]
-	    });		
-	});	
+	    });
+	});
 </script>

@@ -131,49 +131,24 @@ if($action == 'edit' || $action == 'new') {
 }
 
 $query = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news'));
-$newses = $tickers = $articles = array();
+$newses = array();
 foreach ($query as $_news) {
 	$_player = new OTS_Player();
-	$_player->load($_news['player_id']);	
+	$_player->load($_news['player_id']);
 
-	if($_news['type'] == constant('NEWS')){
-		$newses[] = array(
-			'id' => $_news['id'],
-			'hidden' => $_news['hidden'],
-			'archive_link' => getLink('news') . '/archive/' . $_news['id'],
-			'title' => $_news['title'],
-			'date' => $_news['date'],
-			'player_name' => isset($_player) && $_player->isLoaded() ? $_player->getName() : '',
-			'player_link' => isset($_player) && $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
-		);		
-	} else if ($_news['type'] == constant('TICKER')) {
-
-		$tickers[] = array(
-			'id' => $_news['id'],
-			'hidden' => $_news['hidden'],
-			'archive_link' => getLink('news') . '/archive/' . $_news['id'],
-			'title' => $_news['title'],
-			'date' => $_news['date'],
-			'player_name' => isset($_player) && $_player->isLoaded() ? $_player->getName() : '',
-			'player_link' => isset($_player) && $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
-		);	
-	} else if ($_news['type'] == constant('ARTICLE')) {
-		$articles[] = array(
-			'id' => $_news['id'],
-			'hidden' => $_news['hidden'],
-			'archive_link' => getLink('news') . '/archive/' . $_news['id'],
-			'title' => $_news['title'],
-			'date' => $_news['date'],
-			'player_name' => isset($_player) && $_player->isLoaded() ? $_player->getName() : '',
-			'player_link' => isset($_player) && $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
-		);
-	}
+	$newses[$_news['type']][] = array(
+		'id' => $_news['id'],
+		'hidden' => $_news['hidden'],
+		'archive_link' => getLink('news') . '/archive/' . $_news['id'],
+		'title' => $_news['title'],
+		'date' => $_news['date'],
+		'player_name' => isset($_player) && $_player->isLoaded() ? $_player->getName() : '',
+		'player_link' => isset($_player) && $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
+	);
 }
 
 $twig->display('admin.news.html.twig', array(
-	'newses' => $newses,
-	'tickers' => $tickers,
-	'articles' => $articles	
+	'newses' => $newses
 ));
 
 class News
@@ -224,7 +199,7 @@ class News
 		if(!self::verify($title, $body, $article_text, $article_image, $errors))
 			return false;
 
-		$db->update(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'category' => $category, 'last_modified_by' => isset($player_id) ? $player_id : 0, 'last_modified_date' => time(), 'comments' => $comments, 'article_text' => $article_text, 'article_image' => $article_image), array('id' => $id));		
+		$db->update(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'category' => $category, 'last_modified_by' => isset($player_id) ? $player_id : 0, 'last_modified_date' => time(), 'comments' => $comments, 'article_text' => $article_text, 'article_image' => $article_image), array('id' => $id));
 		return true;
 	}
 
