@@ -103,7 +103,7 @@ else
 
 				$logged = true;
 				$logged_flags = $account_logged->getWebFlags();
-				
+
 				if(isset($_POST['admin']) && !admin()) {
 					$errors[] = 'This account has no admin privileges.';
 					unsetSession('account');
@@ -114,13 +114,13 @@ else
 				else {
 					$account_logged->setCustomField('web_lastlogin', time());
 				}
-				
+
 				$hooks->trigger(HOOK_LOGIN, array('account' => $account_logged, 'password' => $login_password, 'remember_me' => $remember_me));
 			}
 			else
 			{
 				$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
-				
+
 				// temporary solution for blocking failed login attempts
 				if($cache->enabled())
 				{
@@ -147,7 +147,7 @@ else
 		}
 		else {
 			$errors[] = 'Please enter your account ' . (USE_ACCOUNT_NAME ? 'name' : 'password') . ' and password.';
-			
+
 			$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
 		}
 	}
@@ -164,4 +164,3 @@ if(defined('PAGE')) {
 	setSession('last_page', PAGE);
 }
 setSession('last_uri', $_SERVER['REQUEST_URI']);
-?>
