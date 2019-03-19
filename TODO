@@ -102,7 +102,6 @@ x.x - At any time between (version not specified)
 	* two factor authentication for TFS 1.x
 	* support for .yml plugin file specification
 	* (configurable) auto login after registration
-	* move manage newses to admin panel
 	* display password strength
 		* https://elboletaire.github.io/password-strength-meter/
 	* apache2, nginx and lighttpd conf like in phpmyadmin
