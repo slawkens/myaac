@@ -12,7 +12,9 @@ $logged = false;
 $logged_flags = 0;
 
 $action = isset($_REQUEST['action']) ? strtolower($_REQUEST['action']) : '';
-define('ACTION', $action);
+if(!defined('ACTION')) {
+	define('ACTION', $action);
+}
 
 // stay-logged with sessions
 $current_session = getSession('account');
@@ -86,8 +88,8 @@ else
 			if(USE_ACCOUNT_NAME)
 				$account_logged->find($login_account);
 			else
-				$account_logged->load($login_account);
-	
+				$account_logged->load($login_account, true);
+
 			$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 			if($account_logged->isLoaded() && encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password) == $account_logged->getPassword()
 				&& (!isset($t) || $t['attempts'] < 5)

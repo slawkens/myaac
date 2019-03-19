@@ -90,6 +90,7 @@ $config = array(
 
 	// account
 	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)
+	'account_create_auto_login' => false, // auto login after creating account?
 	'account_mail_verify' => false, // force users to confirm their email addresses when registering account
 	'account_mail_unique' => true, // email addresses cannot be duplicated? (one account = one email)
 	'account_premium_days' => 0, // default premium days on new account

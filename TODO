@@ -101,7 +101,6 @@ x.x - At any time between (version not specified)
 	* database towns table support for TFS 1.3
 	* two factor authentication for TFS 1.x
 	* support for .yml plugin file specification
-	* (configurable) auto login after registration
 	* display password strength
 		* https://elboletaire.github.io/password-strength-meter/
 	* apache2, nginx and lighttpd conf like in phpmyadmin

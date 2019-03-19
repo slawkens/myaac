@@ -184,6 +184,14 @@ if($save)
 		}
 		else
 		{
+			if($config['account_create_auto_login']) {
+				$_POST['account_login'] = USE_ACCOUNT_NAME ? $account_name : $account_id;
+				$_POST['password_login'] = $password2;
+
+				require SYSTEM . 'login.php';
+				header('Location: ' . getLink('account/manage'));
+			}
+
 			$twig->display('account.created.html.twig', array(
 				'account' => $tmp_account
 			));
