@@ -11,13 +11,13 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
-$new_rank = isset($_REQUEST['rank_name']) ? $_REQUEST['rank_name'] : null;
+$rank_name = isset($_REQUEST['rank_name']) ? $_REQUEST['rank_name'] : null;
 if(!Validator::guildName($guild_name)) {
 	$errors[] = Validator::getLastError();
 }
 
 if(empty($errors)) {
-	if(!Validator::rankName($new_rank)) {
+	if(!Validator::rankName($rank_name)) {
 		$errors[] = 'Invalid rank name format.';
 	}
 	if(!$logged) {
@@ -45,7 +45,7 @@ if(empty($errors)) {
 			$new_rank = new OTS_GuildRank();
 			$new_rank->setGuild($guild);
 			$new_rank->setLevel(1);
-			$new_rank->setName($new_rank);
+			$new_rank->setName($rank_name);
 			$new_rank->save();
 			header("Location: ?subtopic=guilds&guild=".$guild->getName()."&action=manager");
 			echo 'New rank added. Redirecting...';
