@@ -143,6 +143,9 @@ else
 					$tmp[$ip] = $t;
 					$cache->set('failed_logins', serialize($tmp), 60 * 60); // save for 1 hour
 				}
+				else {
+					$errors[] = 'Account name or password is not correct.';
+				}
 			}
 		}
 		else {
