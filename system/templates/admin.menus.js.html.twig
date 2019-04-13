@@ -53,7 +53,9 @@
 <script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/spectrum.js"></script>
 <link type="text/css" rel="stylesheet" href="{{ constant('BASE_URL') }}tools/css/spectrum.css"/>
 <script type="text/javascript">
-	initialiceSpectrum();
+	$(document).ready(function () {
+		initialiceSpectrum();
+	});
 
 	function initialiceSpectrum() {
 		$(".color-picker").spectrum({
