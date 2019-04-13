@@ -482,7 +482,7 @@ function template_header($is_admin = false)
 	<meta name="keywords" content="' . $config['meta_keywords'] . ', myaac, wodzaac" />
 	<meta name="generator" content="MyAAC" />
 	<link rel="stylesheet" type="text/css" href="' . BASE_URL . 'tools/css/messages.css" />
-	<script type="text/javascript" src="' . BASE_URL . 'tools/js/jquery.js"></script>
+	<script type="text/javascript" src="' . BASE_URL . 'tools/js/jquery.min.js"></script>
 	<noscript>
 		<div class="warning" style="text-align: center; font-size: 14px;">Your browser does not support JavaScript or its disabled!<br/>
 			Please turn it on, or be aware that some features on this website will not work correctly.</div>

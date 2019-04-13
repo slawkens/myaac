@@ -226,7 +226,6 @@ if (!$logged && !admin()) {
 ?>
 
 <script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
-<script src="<?php echo BASE_URL; ?>tools/js/jquery.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>

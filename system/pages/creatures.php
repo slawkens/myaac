@@ -170,5 +170,4 @@ if (empty($_REQUEST['creature'])) {
 
 </script>
 
-<script src="<?php echo BASE_URL; ?>tools/js/jquery.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/jquery.dataTables.min.js"></script>
