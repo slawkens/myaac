@@ -10,15 +10,14 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Dashboard';
 
-$cache = Cache::getInstance();
-if ($cache->enabled()) {
-	if (isset($_GET['clear_cache'])) {
-		if (clearCache())
-			success('Cache cleared.');
-		else
-			error('Error while clearing cache.');
+if (isset($_GET['clear_cache'])) {
+	if (clearCache()) {
+		success('Cache cleared.');
+	} else {
+		error('Error while clearing cache.');
 	}
 }
+
 if (isset($_GET['maintenance'])) {
 	$_status = (int)$_POST['status'];
 	$message = $_POST['message'];
@@ -73,8 +72,7 @@ $twig->display('admin.dashboard.html.twig', array(
 	'is_closed' => $is_closed,
 	'closed_message' => $closed_message,
 	'status' => $status,
-	'account_type' => (USE_ACCOUNT_NAME ? 'name' : 'number'),
-	
+	'account_type' => USE_ACCOUNT_NAME ? 'name' : 'number'
 ));
 
 echo '<div class="row">';
@@ -96,42 +94,49 @@ function clearCache()
 	global $template_name;
 	$cache = Cache::getInstance();
 
-	$tmp = '';
-	if ($cache->fetch('status', $tmp))
-		$cache->delete('status');
+	if($cache->enabled()) {
+		$tmp = '';
 
-	if ($cache->fetch('templates', $tmp))
-		$cache->delete('templates');
+		if ($cache->fetch('status', $tmp))
+			$cache->delete('status');
 
-	if ($cache->fetch('config_lua', $tmp))
-		$cache->delete('config_lua');
+		if ($cache->fetch('templates', $tmp))
+			$cache->delete('templates');
 
-	if ($cache->fetch('vocations', $tmp))
-		$cache->delete('vocations');
+		if ($cache->fetch('config_lua', $tmp))
+			$cache->delete('config_lua');
 
-	if ($cache->fetch('towns', $tmp))
-		$cache->delete('towns');
+		if ($cache->fetch('vocations', $tmp))
+			$cache->delete('vocations');
 
-	if ($cache->fetch('groups', $tmp))
-		$cache->delete('groups');
+		if ($cache->fetch('towns', $tmp))
+			$cache->delete('towns');
 
-	if ($cache->fetch('visitors', $tmp))
-		$cache->delete('visitors');
+		if ($cache->fetch('groups', $tmp))
+			$cache->delete('groups');
 
-	if ($cache->fetch('views_counter', $tmp))
-		$cache->delete('views_counter');
+		if ($cache->fetch('visitors', $tmp))
+			$cache->delete('visitors');
 
-	if ($cache->fetch('failed_logins', $tmp))
-		$cache->delete('failed_logins');
+		if ($cache->fetch('views_counter', $tmp))
+			$cache->delete('views_counter');
 
-	if ($cache->fetch('news' . $template_name . '_' . NEWS, $tmp))
-		$cache->delete('news' . $template_name . '_' . NEWS);
+		if ($cache->fetch('failed_logins', $tmp))
+			$cache->delete('failed_logins');
 
-	if ($cache->fetch('news' . $template_name . '_' . TICKER, $tmp))
-		$cache->delete('news' . $template_name . '_' . TICKER);
+		if ($cache->fetch('news' . $template_name . '_' . NEWS, $tmp))
+			$cache->delete('news' . $template_name . '_' . NEWS);
 
-	if ($cache->fetch('template_ini' . $template_name, $tmp))
-		$cache->delete('template_ini' . $template_name);
+		if ($cache->fetch('news' . $template_name . '_' . TICKER, $tmp))
+			$cache->delete('news' . $template_name . '_' . TICKER);
+
+		if ($cache->fetch('template_ini' . $template_name, $tmp))
+			$cache->delete('template_ini' . $template_name);
+	}
+
+	deleteDirectory(CACHE . 'signatures', array('.htaccess'), true);
+	deleteDirectory(CACHE . 'twig', array('.htaccess'), true);
+	deleteDirectory(CACHE, array('signatures', 'twig', '.htaccess'), true);
 
 	return true;
 }
