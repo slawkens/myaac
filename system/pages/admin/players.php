@@ -232,8 +232,8 @@ if ($id > 0) {
 		foreach ($_POST['skills_tries'] as $skill => $value)
 			verify_number($value, $skills[$skill][0] . ' tries', 10);
 
-		$bless_count = $_POST['blesscount'];
 		if ($hasBlessingColumn) {
+		$bless_count = $_POST['blesscount'];
 			for ($i = 1; $i <= $bless_count; $i++) {
 				$a = 'blessing' . $i;
 				${'blessing' . $i} = (isset($_POST[$a]) && $_POST[$a] == 'true');
