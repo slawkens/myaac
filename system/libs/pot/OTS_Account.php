@@ -404,12 +404,12 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  *
  * @version 0.7.5
  * @since 0.7.5
- * @return string Name.
  * @throws E_OTS_NotLoaded If account is not loaded.
  */
     public function setPremDays($premdays)
     {
-        $this->data['premdays'] = (int) $premdays;
+		$this->data['premdays'] = (int) $premdays;
+		$this->data['premend'] = time() + ($premdays * 24 * 60 * 60);
     }
 
     public function setRLName($name)
