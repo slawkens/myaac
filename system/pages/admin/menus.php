@@ -59,8 +59,8 @@ if (isset($_REQUEST['template'])) {
 	}
 
 	echo 'Hint: You can drag menu items.<br/>
-	Hint: Add links to external sites using: <b>http://</b> prefix.<br/>
-	Not all templates support blank and colorful links.<br/>
+	Hint: Add links to external sites using: <b>http://</b> or <b>https://</b> prefix.<br/>
+	Not all templates support blank and colorful links.<br/><br/>
     <div class="row">';
 	$menus = array();
 	$menus_db = $db->query('SELECT `name`, `link`, `blank`, `color`, `category`, `ordering` FROM `' . TABLE_PREFIX . 'menu` WHERE `enabled` = 1 AND `template` = ' . $db->quote($template) . ' ORDER BY `ordering` ASC;')->fetchAll();
