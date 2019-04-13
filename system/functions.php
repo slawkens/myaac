@@ -1032,7 +1032,7 @@ function getTopPlayers($limit = 5) {
 	return $players;
 }
 
-function deleteDirectory($dir) {
+function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
 	if(!file_exists($dir)) {
 		return true;
 	}
@@ -1042,13 +1042,17 @@ function deleteDirectory($dir) {
 	}
 
 	foreach(scandir($dir, 0) as $item) {
-		if($item === '.' || $item === '..') {
+		if($item === '.' || $item === '..' || in_array($item, $ignore, true)) {
 			continue;
 		}
 
-		if(!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+		if(!in_array($item, $ignore, true) && !deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
 			return false;
 		}
+	}
+
+	if($contentOnly) {
+		return true;
 	}
 
 	return rmdir($dir);
