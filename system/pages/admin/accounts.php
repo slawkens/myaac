@@ -37,6 +37,7 @@ function verify_number($number, $name, $max_length)
 		echo_error($name . ' cannot be longer than ' . $max_length . ' digits.');
 }
 
+$hasSecretColumn = $db->hasColumn('accounts', 'secret');
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
 $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $hasTypeColumn = $db->hasColumn('accounts', 'type');
@@ -89,29 +90,38 @@ if ($id > 0) {
 	$account = new OTS_Account();
 	$account->load($id);
 
-	if (isset($account) && $account->isLoaded() && isset($_POST['save'])) {// we want to save
+	if (isset($account, $_POST['save']) && $account->isLoaded()) {// we want to save
 		$error = false;
 
-		$name = $_POST['name'];
 		$_error = '';
 		$account_db = new OTS_Account();
-		$account_db->find($name);
-		if ($account_db->isLoaded() && $account->getName() != $name)
-			echo_error('This name is already used. Please choose another name!');
+		if(USE_ACCOUNT_NAME) {
+			$name = $_POST['name'];
+
+			$account_db->find($name);
+			if ($account_db->isLoaded() && $account->getName() != $name)
+				echo_error('This name is already used. Please choose another name!');
+		}
 
 		$account_db->load($id);
 		if (!$account_db->isLoaded())
 			echo_error('Account with this id doesn\'t exist.');
 
 		//type/group
-		$group = $_POST['group'];
+		if($hasTypeColumn || $hasGroupColumn) {
+			$group = $_POST['group'];
+		}
+
 		$password = ((!empty($_POST["pass"]) ? $_POST['pass'] : null));
 		if (!Validator::password($password)) {
 			$errors['password'] = Validator::getLastError();
 		}
 
 		//secret
-		$secret = $_POST['secret'];
+		if($hasSecretColumn) {
+			$secret = $_POST['secret'];
+		}
+
 		//key
 		$key = $_POST['key'];
 		$email = $_POST['email'];
@@ -124,7 +134,7 @@ if ($id > 0) {
 			verify_number($t_coins, 'Tibia coins', 12);
 		}
 		// prem days
-		$p_days = $_POST['p_days'];
+		$p_days = (int)$_POST['p_days'];
 		verify_number($p_days, 'Prem days', 11);
 
 		//prem points
@@ -147,16 +157,14 @@ if ($id > 0) {
 		$created = $_POST['created'];
 		verify_number($created, 'Created', 11);
 
-		//last login
-		$lastlogin = $_POST['lastlogin'];
-		verify_number($lastlogin, 'Last login', 11);
-
 		//web last login
 		$web_lastlogin = $_POST['web_lastlogin'];
 		verify_number($web_lastlogin, 'Web Last logout', 11);
 
 		if (!$error) {
-			$account->setName($name);
+			if(USE_ACCOUNT_NAME) {
+				$account->setName($name);
+			}
 
 			if ($hasTypeColumn) {
 				$account->setCustomField('type', $group);
@@ -164,13 +172,24 @@ if ($id > 0) {
 				$account->setCustomField('group_id', $group);
 			}
 
-			$account->setCustomField('secret', $secret);
+			if($hasSecretColumn) {
+				$account->setCustomField('secret', $secret);
+			}
 			$account->setCustomField('key', $key);
 			$account->setEMail($email);
 			if ($hasCoinsColumn) {
 				$account->setCustomField('coins', $t_coins);
 			}
+
+			$lastDay = 0;
+			if($p_days != 0 && $p_days != PHP_INT_MAX ) {
+				$lastDay = time();
+			} else if ($lastDay != 0) {
+				$lastDay = 0;
+			}
+
 			$account->setPremDays($p_days);
+			$account->setLastLogin($lastDay);
 			if ($hasPointsColumn) {
 				$account->setCustomField('premium_points', $p_points);
 			}
@@ -178,7 +197,6 @@ if ($id > 0) {
 			$account->setLocation($rl_loca);
 			$account->setCountry($rl_country);
 			$account->setCustomField('created', $created);
-			$account->setLastLogin($lastlogin);
 			$account->setWebFlags($web_flags);
 			$account->setCustomField('web_lastlogin', $web_lastlogin);
 
@@ -203,14 +221,19 @@ if ($id > 0) {
 	}
 }
 
-$search_name = '';
 $search_account = '';
 if (isset($_REQUEST['search_name']))
-	$search_name = $_REQUEST['search_name'];
+	$search_account = $_REQUEST['search_name'];
 else if (isset($_REQUEST['search_account']))
 	$search_account = $_REQUEST['search_account'];
-else if ($id > 0 && isset($account) && $account->isLoaded())
-	$search_name = $account->getName();
+else if ($id > 0 && isset($account) && $account->isLoaded()) {
+	if(USE_ACCOUNT_NAME) {
+		$search_account = $account->getName();
+	}
+	else {
+		$search_account = $account->getId();
+	}
+}
 
 ?>
 <div class="row">
@@ -222,12 +245,14 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 			<div class="box box-primary">
 				<div class="box-body">
 					<div class="row">
+						<?php if(USE_ACCOUNT_NAME): ?>
 						<div class="col-xs-4">
 							<label for="name" class="control-label">Account Name:</label>
 							<input type="text" class="form-control" id="name" name="name"
 								   autocomplete="off" style="cursor: auto;"
 								   value="<?php echo $account->getName(); ?>"/>
 						</div>
+						<?php endif; ?>
 						<div class="col-xs-5">
 							<label for="c_pass" class="control-label">Password: (check to change)</label>
 							<div class="input-group">
@@ -287,12 +312,14 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 						</div>
 					</div>
 					<div class="row">
+						<?php if($hasSecretColumn): ?>
 						<div class="col-xs-6">
 							<label for="secret" class="control-label">Secret:</label>
 							<input type="text" class="form-control" id="secret" name="secret"
 								   autocomplete="off" style="cursor: auto;" size="8" maxlength="11"
 								   value="<?php echo $account->getCustomField('secret'); ?>"/>
 						</div>
+						<?php endif; ?>
 						<div class="col-xs-6">
 							<label for="key" class="control-label">Key:</label>
 							<input type="text" class="form-control" id="key" name="key"
@@ -360,12 +387,6 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 								   value="<?php echo $account->getCustomField('created'); ?>"/>
 						</div>
 						<div class="col-xs-4">
-							<label for="lastlogin" class="control-label">Last Login:</label>
-							<input type="text" class="form-control" id="lastlogin" name="lastlogin"
-								   autocomplete="off" maxlength="20"
-								   value="<?php echo $account->getLastLogin(); ?>"/>
-						</div>
-						<div class="col-xs-4">
 							<label for="web_lastlogin" class="control-label">Web Last Login:</label>
 							<input type="text" class="form-control" id="web_lastlogin" name="web_lastlogin"
 								   autocomplete="off" maxlength="20"
@@ -399,7 +420,7 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 		<div class="box-body">
 			<form action="<?php echo $base; ?>" method="post">
 				<div class="input-group input-group-sm">
-					<input type="text" class="form-control" name="search_name" value="<?php echo $search_name; ?>"
+					<input type="text" class="form-control" name="search_name" value="<?php echo $search_account; ?>"
 						   maxlength="32" size="32">
 					<span class="input-group-btn">
                           <button type="submit" type="button" class="btn btn-info btn-flat">Search</button>
@@ -451,7 +472,6 @@ else if ($id > 0 && isset($account) && $account->isLoaded())
 </div>
 
 <script type="text/javascript">
-	$('#lastlogin').datetimepicker({format: 'unixtime'});
 	$('#lastlogout').datetimepicker({format: 'unixtime'});
 	$('#created').datetimepicker({format: 'unixtime'});
 	$('#web_lastlogin').datetimepicker({format: 'unixtime'});
