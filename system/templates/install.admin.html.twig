@@ -1,13 +1,13 @@
+<style>
+	tr, td {
+		border-bottom: 1px solid #ddd;
+		padding: 15px;
+	}
+</style>
 <form action="{{ constant('BASE_URL') }}install/" method="post" autocomplete="off">
 	<input type="hidden" name="step" id="step" value="finish" />
 	<table>
-		{% if constant('USE_ACCOUNT_NAME') %}
-		{% set type = 'account' %}
-		{% else %}
-		{% set type = 'account_id' %}
-		{% endif %}
-
-		{% for value in [type, 'password'] %}
+		{% for value in ['email', account, 'password', 'player_name'] %}
 		<tr>
 			<td>
 				<label for="vars_{{ value }}">

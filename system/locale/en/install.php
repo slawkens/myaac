@@ -91,18 +91,28 @@ $locale['step_database_created_news'] = 'Newses has been created...';
 // admin account
 $locale['step_admin'] = 'Admin Account';
 $locale['step_admin_title'] = 'Create Admin Account';
+$locale['step_admin_email'] = 'Admin E-Mail address';
+$locale['step_admin_email_desc'] = 'E-Mail of your admin account, which can be used to reset the password.';
+$locale['step_admin_email_error_empty'] = 'Please enter the E-Mail address for your new account.';
+$locale['step_admin_email_error_format'] = 'Invalid E-Mail format.';
 $locale['step_admin_account'] = 'Admin account name';
 $locale['step_admin_account_desc'] = 'Name of your admin account, which will be used to login to website and server.';
+$locale['step_admin_account_error_empty'] = 'Please enter the account name.';
 $locale['step_admin_account_error_format'] = 'Invalid account name format. Use only a-Z and numbers 0-9. Minimum 3, maximum 32 characters.';
 $locale['step_admin_account_error_same'] = 'Password may not be the same as account name.';
 $locale['step_admin_account_id'] = 'Admin account number';
 $locale['step_admin_account_id_desc'] = 'Number of your admin account, which will be used to login to website and server.';
+$locale['step_admin_account_id_error_empty'] = 'Please enter the account number.';
 $locale['step_admin_account_id_error_format'] = 'Invalid account number format. Please use only numbers 0-9. Minimum 6, maximum 10 characters.';
 $locale['step_admin_account_id_error_same'] = 'Password may not be the same as account number.';
 $locale['step_admin_password'] = 'Admin account password';
 $locale['step_admin_password_desc'] = 'Password to your admin account.';
 $locale['step_admin_password_error_empty'] = 'Please enter the password for your new account.';
 $locale['step_admin_password_error_format'] = 'Invalid password format. Use only a-Z and numbers 0-9. Minimum 8, maximum 30 characters.';
+$locale['step_admin_player_name'] = 'Admin player name';
+$locale['step_admin_player_name_desc'] = 'Name of your admin character.';
+$locale['step_admin_player_name_error_empty'] = 'Please enter the name of your character.';
+$locale['step_admin_player_name_error_format'] = 'Invalid player name format. Use only A-Z, spaces and \'. Minimum 3, maximum 25 characters.';
 
 // finish
 $locale['step_finish_admin_panel'] = 'Admin Panel';

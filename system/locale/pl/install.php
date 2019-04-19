@@ -87,18 +87,28 @@ $locale['step_database_created_news'] = 'Utworzono newsy...';
 // admin account
 $locale['step_admin'] = 'Konto Admina';
 $locale['step_admin_title'] = 'Tworzenie Konta Admina';
+$locale['step_admin_email'] = 'Adres E-Mail Admina';
+$locale['step_admin_email_desc'] = 'E-Mail do Twojego konta admina, który może zostać użyty do przypomnienia hasła.';
+$locale['step_admin_email_error_empty'] = 'Proszę podać adres E-Mail do nowego konta.';
+$locale['step_admin_email_error_format'] = 'Niepoprawny format adresu E-Mail.';
 $locale['step_admin_account'] = 'Nazwa Konta Admina';
 $locale['step_admin_account_desc'] = 'Nazwa Twojego konta admina, która będzie używana do logowania na stronę i do serwera.';
+$locale['step_admin_account_error_empty'] = 'Proszę podać nazwę konta.';
 $locale['step_admin_account_error_format'] = 'Nieprawidłowy format nazwy konta. Używaj tylko znaków a-Z oraz liczb 0-9. Minimum 3, maksimum 32 znaków.';
 $locale['step_admin_account_error_same'] = 'Hasło nie może być takie same jak nazwa konta.';
 $locale['step_admin_account_id'] = 'Numer Konta Admina';
 $locale['step_admin_account_id_desc'] = 'Numer Twojego Konta Admina, który będzie używany do logowania do strony i na serwer.';
+$locale['step_admin_account_id_error_empty'] = 'Proszę podać numer konta.';
 $locale['step_admin_account_id_error_format'] = 'Nieprawidłowy format numeru konta. Używaj tylko liczb 0-9. Minimum 6, maksimum 10 znaków.';
 $locale['step_admin_account_id_error_same'] = 'Hasło nie może być takie same jak numer konta.';
 $locale['step_admin_password'] = 'Hasło Konta Admina';
 $locale['step_admin_password_desc'] = 'Hasło do Twojego Konta Admina.';
 $locale['step_admin_password_error_empty'] = 'Proszę podać hasło do Twojego nowego konta.';
-$locale['step_admin_password_error_format'] = 'Nieprawidłowy format hasła. Używaj tylko znaków a-Z oraz liczb 0-9. Minimum 8, maksimum 30 characters.';
+$locale['step_admin_password_error_format'] = 'Nieprawidłowy format hasła. Używaj tylko znaków a-Z oraz liczb 0-9. Minimum 8, maksimum 30 znaków.';
+$locale['step_admin_player_name'] = 'Nazwa postaci';
+$locale['step_admin_player_name_desc'] = 'Nazwa postaci Konta Admina.';
+$locale['step_admin_player_name_error_empty'] = 'Proszę podać nazwę postaci.';
+$locale['step_admin_player_name_error_format'] = 'Niepoprawny format nazwy postaci. Używaj tylko znaków A-Z, spacji oraz \'. Minimum 3, maksimum 25 znaków.';
 
 // finish
 $locale['step_finish_admin_panel'] = 'Panelu Admina';

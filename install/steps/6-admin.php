@@ -9,11 +9,16 @@ if(!$error) {
 		error($database_error);
 	}
 
+	$account = 'account';
+	if(!USE_ACCOUNT_NAME) {
+		$account = 'account_id';
+	}
+
 	$twig->display('install.admin.html.twig', array(
 		'locale' => $locale,
 		'session' => $_SESSION,
+		'account' => $account,
 		'errors' => isset($errors) ? $errors : null,
 		'buttons' => next_buttons(true, $error ? false : true)
 	));
 }
-?>

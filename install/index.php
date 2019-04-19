@@ -120,11 +120,24 @@ else if($step == 'admin') {
 	}
 }
 else if($step == 'finish') {
-	// password
+	$email = $_SESSION['var_email'];
 	$password = $_SESSION['var_password'];
+	$player_name = $_SESSION['var_player_name'];
 
+	// email check
+	if(empty($email)) {
+		$errors[] = $locale['step_admin_email_error_empty'];
+	}
+	else if(!Validator::email($email)) {
+		$errors[] = $locale['step_admin_email_error_format'];
+	}
+
+	// account check
 	if(isset($_SESSION['var_account'])) {
-		if(!Validator::accountName($_SESSION['var_account'])) {
+		if(empty($_SESSION['var_account'])) {
+			$errors[] = $locale['step_admin_account_error_empty'];
+		}
+		else if(!Validator::accountName($_SESSION['var_account'])) {
 			$errors[] = $locale['step_admin_account_error_format'];
 		}
 		else if(strtoupper($_SESSION['var_account']) == strtoupper($password)) {
@@ -132,7 +145,10 @@ else if($step == 'finish') {
 		}
 	}
 	else if(isset($_SESSION['var_account_id'])) {
-		if(!Validator::accountId($_SESSION['var_account_id'])) {
+		if(empty($_SESSION['var_account_id'])) {
+			$errors[] = $locale['step_admin_account_id_error_empty'];
+		}
+		else if(!Validator::accountId($_SESSION['var_account_id'])) {
 			$errors[] = $locale['step_admin_account_id_error_format'];
 		}
 		else if($_SESSION['var_account_id'] == $password) {
@@ -140,11 +156,20 @@ else if($step == 'finish') {
 		}
 	}
 
+	// password check
 	if(empty($password)) {
 		$errors[] = $locale['step_admin_password_error_empty'];
 	}
 	else if(!Validator::password($password)) {
 		$errors[] = $locale['step_admin_password_error_format'];
+	}
+
+	// player name check
+	if(empty($player_name)) {
+		$errors[] = $locale['step_admin_player_name_error_empty'];
+	}
+	else if(!Validator::characterName($player_name)) {
+		$errors[] = $locale['step_admin_player_name_error_format'];
 	}
 
 	if(!empty($errors)) {

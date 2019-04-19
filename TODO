@@ -13,7 +13,6 @@
 	* create account: create character
 	* csrf token protection
 	* guild wars support like in Gesior
-	* Install: create admin account: e-mail + Nazwa postaci
 	* move lostaccount.php to Twig
 
 1.0

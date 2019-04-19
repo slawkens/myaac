@@ -28,13 +28,14 @@ else {
 		else
 			$account_db->load($account_id);
 
+		$player_name = $_SESSION['var_player_name'];
 		$player_db = new OTS_Player();
-		$player_db->find('Admin');
-		$groups = new OTS_Groups_List();
+		$player_db->find($player_name);
+
 		if(!$player_db->isLoaded())
 		{
 			$player = new OTS_Player();
-			$player->setName('Admin');
+			$player->setName($player_name);
 
 			$player_used = &$player;
 		}
@@ -42,11 +43,13 @@ else {
 			$player_used = &$player_db;
 		}
 
+		$groups = new OTS_Groups_List();
 		$player_used->setGroupId($groups->getHighestId());
 
+		$email = $_SESSION['var_email'];
 		if($account_db->isLoaded()) {
 			$account_db->setPassword(encrypt($password));
-			$account_db->setEMail($_SESSION['var_mail_admin']);
+			$account_db->setEMail($email);
 			$account_db->save();
 
 			$account_used = &$account_db;
@@ -61,7 +64,7 @@ else {
 			}
 
 			$new_account->setPassword(encrypt($password));
-			$new_account->setEMail($_SESSION['var_mail_admin']);
+			$new_account->setEMail($email);
 
 			$new_account->unblock();
 			$new_account->save();
@@ -101,7 +104,7 @@ else {
 		}
 
 		$player_id = 0;
-		$query = $db->query("SELECT `id` FROM `players` WHERE `name` = " . $db->quote('Admin') . ";");
+		$query = $db->query("SELECT `id` FROM `players` WHERE `name` = " . $db->quote($player_name) . ";");
 		if($query->rowCount() == 1) {
 			$query = $query->fetch();
 			$player_id = $query['id'];
@@ -146,4 +149,3 @@ else {
 		}
 	}
 }
-?>
