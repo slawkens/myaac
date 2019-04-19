@@ -8,9 +8,9 @@ if(isset($_POST['lang']))
 
 if(isset($_COOKIE['locale']))
 {
-	$locale_ = $_COOKIE['locale'];
-	$lang_size = strlen($locale_);
-	if(!$lang_size || $lang_size > 4 || !preg_match("/[a-z]/", $locale_)) // validate locale
+	$detected_locale = $_COOKIE['locale'];
+	$lang_size = strlen($detected_locale);
+	if(!$lang_size || $lang_size > 4 || !preg_match("/[a-z]/", $detected_locale)) // validate locale
 		$_COOKIE['locale'] = "en";
 }
 else
@@ -18,7 +18,7 @@ else
 	// detect locale
 	$locale_s = get_browser_languages();
 	if(!count($locale_s))
-		$locale_ = 'en';
+		$detected_locale = 'en';
 	else
 	{
 		foreach($locale_s as $id => $tmp)
@@ -26,27 +26,26 @@ else
 			$tmp_file = LOCALE .  $tmp;
 			if(@file_exists($tmp_file))
 			{
-				$locale_ = $tmp;
+				$detected_locale = $tmp;
 				break;
 			}
 		}
 	}
 
-	if(!isset($locale_))
-		$locale_ = 'en';
+	if(!isset($detected_locale))
+		$detected_locale = 'en';
 }
 
 require LOCALE . 'en/main.php';
 require LOCALE . 'en/install.php';
 
-$file_main = LOCALE . $locale_ . '/main.php';
+$file_main = LOCALE . $detected_locale . '/main.php';
 if(!file_exists($file_main))
 	$file_main = LOCALE . 'en/main.php';
 
-$file_install = LOCALE . $locale_ . '/install.php';
+$file_install = LOCALE . $detected_locale . '/install.php';
 if(!file_exists($file_install))
 	$file_install = LOCALE . 'en/install.php';
 
 require $file_main;
 require $file_install;
-?>

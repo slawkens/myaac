@@ -23,6 +23,7 @@ else {
 		'locales' => $locales,
 		'locale' => $locale,
 		'cookie_locale' => @$_COOKIE['locale'],
+		'detected_locale' => @$detected_locale,
 		'buttons' => next_buttons(false, true)
 	));
 }
