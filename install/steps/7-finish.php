@@ -123,7 +123,9 @@ else {
 		));
 
 		if(!isset($_SESSION['installed'])) {
-			file_get_contents('http' . ini_get('allow_url_fopen')  ? "" : "s" .'://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL));
+			if(ini_get('allow_url_fopen') ) {
+				file_get_contents('http://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL));
+			}
 			$_SESSION['installed'] = true;
 		}
 
