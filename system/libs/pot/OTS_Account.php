@@ -39,7 +39,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @var array
  * @version 0.1.5
  */
-    private $data = array('email' => '', 'blocked' => false, 'rlname' => '','location' => '', 'country' => '','web_flags' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
+    private $data = array('email' => '', 'blocked' => false, 'rlname' => '','location' => '','web_flags' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
 
 	public static $cache = array();
 /**
@@ -398,7 +398,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
         return $this->data['created'];
     }
-
+	
 /**
  * Name.
  *
