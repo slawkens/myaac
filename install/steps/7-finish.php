@@ -121,7 +121,18 @@ else {
 		));
 
 		if(!isset($_SESSION['installed'])) {
-			file_get_contents('http://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL));
+			$report_url = 'http://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL);
+			if (function_exists('curl_version'))
+			{
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_URL, $report_url);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+				curl_exec($curl);
+				curl_close($curl);
+			}
+			else if (ini_get('allow_url_fopen') ) {
+				file_get_contents($report_url);
+			}
 			$_SESSION['installed'] = true;
 		}
 
