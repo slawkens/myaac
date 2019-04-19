@@ -47,7 +47,6 @@ else {
 		if($account_db->isLoaded()) {
 			$account_db->setPassword(encrypt($password));
 			$account_db->setEMail($_SESSION['var_mail_admin']);
-			$account_db->setCountry("--");
 			$account_db->save();
 
 			$account_used = &$account_db;
@@ -63,7 +62,6 @@ else {
 
 			$new_account->setPassword(encrypt($password));
 			$new_account->setEMail($_SESSION['var_mail_admin']);
-			$new_account->setCountry("--");
 
 			$new_account->unblock();
 			$new_account->save();
