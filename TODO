@@ -9,8 +9,6 @@
 		* hooks
 		* Menus in templates
 	* move highscores to twig
-	* migrations: option to downgrade the database
-	* create account: create character
 	* csrf token protection
 	* guild wars support like in Gesior
 	* move lostaccount.php to Twig
@@ -110,3 +108,5 @@ x.x - At any time between (version not specified)
 		* https://otland.net/threads/phpmyadmin-commands-to-edit-database.7751/
 	* replace spells, monsters tables with JavaScript Sortable Tables (DataTables?)
 	* add release script (bash) that will automatically create myaac-$VERSION.zip
+	* migrations: option to downgrade the database
+	* create account: create character
