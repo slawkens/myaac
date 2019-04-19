@@ -95,7 +95,7 @@ class Items_Images
 		if($id > self::$lastItem)
 			return false;
 
-		//ini_set('max_execution_time', 300); 
+		//ini_set('max_execution_time', 300);
 		// parse info from dat
 		for( $i = 100; $i <= $id; $i++ ) {
 			while( ( $byte = HEX_PREFIX.bin2hex( fgetc( self::$dat ) ) ) != 0xFF ) {
@@ -245,7 +245,7 @@ class Items_Images
 		/*
 		if ( $nostand )
 		{
-			for( $i = 0; $i < sizeof( $sprites ) / 4; $i++ )
+			for( $i = 0; $i < count( $sprites ) / 4; $i++ )
 			{
 				$sprites = array_merge( (array) $sprites, array_reverse( array_slice( $sprites, $i * 4, 4 ) ) );
 			}

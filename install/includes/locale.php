@@ -17,7 +17,7 @@ else
 {
 	// detect locale
 	$locale_s = get_browser_languages();
-	if(!sizeof($locale_s))
+	if(!count($locale_s))
 		$locale_ = 'en';
 	else
 	{
