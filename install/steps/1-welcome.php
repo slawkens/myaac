@@ -18,10 +18,11 @@ else {
 			$locales[] = array('id' => $tmp_locale, 'name' => $locale['name']);
 		}
 	}
+
 	$twig->display('install.welcome.html.twig', array(
 		'locales' => $locales,
 		'locale' => $locale,
+		'cookie_locale' => @$_COOKIE['locale'],
 		'buttons' => next_buttons(false, true)
 	));
 }
-?>
