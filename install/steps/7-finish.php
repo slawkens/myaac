@@ -47,6 +47,7 @@ else {
 		if($account_db->isLoaded()) {
 			$account_db->setPassword(encrypt($password));
 			$account_db->setEMail($_SESSION['var_mail_admin']);
+			$account_db->setCountry("--");
 			$account_db->save();
 
 			$account_used = &$account_db;
@@ -62,6 +63,7 @@ else {
 
 			$new_account->setPassword(encrypt($password));
 			$new_account->setEMail($_SESSION['var_mail_admin']);
+			$new_account->setCountry("--");
 
 			$new_account->unblock();
 			$new_account->save();
@@ -121,7 +123,7 @@ else {
 		));
 
 		if(!isset($_SESSION['installed'])) {
-			file_get_contents('http://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL));
+			file_get_contents('http' . ini_get('allow_url_fopen')  ? "" : "s" .'://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL));
 			$_SESSION['installed'] = true;
 		}
 
