@@ -21,13 +21,6 @@
 	* i18n support (issue #1 on github)
 		* use some web-based translation tools
 			* most preferably https://weblate.org
-	* New Admin Panel layout and interface
-		* https://coreui.io/
-		* move all pages administration to this panel (like faq, forum, newses)
-		* useful resources
-			* another free: https://adminlte.io/
-			* more examples: https://themes.getbootstrap.com/product-category/admin-dashboard/
-			* nice charts: http://www.chartjs.org/
 	* use bootstrap (https://getbootstrap.com/) for front end elements
 	* extend forum
 		* use avatars or player outfits (configurable)
