@@ -1067,6 +1067,58 @@ function config($key) {
 	return $config[$key];
 }
 
+function clearCache()
+{
+	global $template_name;
+	$cache = Cache::getInstance();
+
+	if($cache->enabled()) {
+		$tmp = '';
+
+		if ($cache->fetch('status', $tmp))
+			$cache->delete('status');
+
+		if ($cache->fetch('templates', $tmp))
+			$cache->delete('templates');
+
+		if ($cache->fetch('config_lua', $tmp))
+			$cache->delete('config_lua');
+
+		if ($cache->fetch('vocations', $tmp))
+			$cache->delete('vocations');
+
+		if ($cache->fetch('towns', $tmp))
+			$cache->delete('towns');
+
+		if ($cache->fetch('groups', $tmp))
+			$cache->delete('groups');
+
+		if ($cache->fetch('visitors', $tmp))
+			$cache->delete('visitors');
+
+		if ($cache->fetch('views_counter', $tmp))
+			$cache->delete('views_counter');
+
+		if ($cache->fetch('failed_logins', $tmp))
+			$cache->delete('failed_logins');
+
+		if ($cache->fetch('news' . $template_name . '_' . NEWS, $tmp))
+			$cache->delete('news' . $template_name . '_' . NEWS);
+
+		if ($cache->fetch('news' . $template_name . '_' . TICKER, $tmp))
+			$cache->delete('news' . $template_name . '_' . TICKER);
+
+		if ($cache->fetch('template_ini' . $template_name, $tmp))
+			$cache->delete('template_ini' . $template_name);
+	}
+
+	deleteDirectory(CACHE . 'signatures', array('.htaccess'), true);
+	deleteDirectory(CACHE . 'twig', array('.htaccess'), true);
+	deleteDirectory(CACHE, array('signatures', 'twig', '.htaccess'), true);
+
+	return true;
+}
+
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat.php';
