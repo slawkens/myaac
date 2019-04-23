@@ -119,7 +119,6 @@ $locale['step_finish_admin_panel'] = 'Painel de administração';
 $locale['step_finish_homepage'] = 'pagina inicial';
 $locale['step_finish'] = 'Finalizar';
 $locale['step_finish_title'] = 'Instalação terminada!';
-$locale['step_finish_desc'] = 'Congratulations! <b>MyAAC</b> is ready to use!<br/>You can now login to $ADMIN_PANEL$, or visit $HOMEPAGE$.<br/><br/>
-<span style="color: red">Please delete install/ directory.</span><br/><br/>
-Post bugs and suggestions at $LINK$, thanks!';
+$locale['step_finish_desc'] = 'Parabéns! <b>MyAAC</b> está pronto para uso!<br/>Agora você pode fazer login em $ADMIN_PANEL$ ou visitar $HOMEPAGE$.<br/><br/>
+<span style = "color: red">Por favor remova a pasta install/.</span><br/><br/>Postar bugs e sugestões em $LINK$, obrigado!';
 ?>
