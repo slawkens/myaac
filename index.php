@@ -24,11 +24,6 @@
  * @link      http://my-aac.org
  */
 
-// uncomment if your php.ini have display_errors disabled and you want to see errors
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';
 
@@ -57,8 +52,15 @@ if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|zip|r
 	exit;
 }
 
-if(file_exists(BASE . 'config.local.php'))
+if(file_exists(BASE . 'config.local.php')) {
 	require_once BASE . 'config.local.php';
+}
+
+if(config('env') === 'dev') {
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
+}
 
 if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE . 'install'))
 {
