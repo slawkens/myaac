@@ -11,6 +11,7 @@ require BASE . 'install/includes/config.php';
 ini_set('max_execution_time', 300);
 ob_implicit_flush();
 ob_end_flush();
+header('X-Accel-Buffering: no');
 
 if(!$error) {
 	require BASE . 'install/includes/database.php';
