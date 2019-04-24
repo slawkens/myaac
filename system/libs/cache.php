@@ -64,6 +64,11 @@ class Cache
 				self::$instance = new Cache_File($prefix, CACHE);
 				break;
 
+			case 'php':
+				require 'cache_php.php';
+				self::$instance = new Cache_PHP($prefix, CACHE);
+				break;
+
 			case 'auto':
 				self::$instance = self::generateInstance(self::detect(), $prefix);
 				break;

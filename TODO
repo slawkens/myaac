@@ -84,7 +84,6 @@ x.x - At any time between (version not specified)
 	* update account.management page to be more realistic (like on tibia.com)
 	* update guilds page to be more realistic (like on tibia.com)
 	* possibility to add extra cache engines with plugins
-		* new cache engine - plain php, is good with pure php 7.0+ and opcache
 	* preferably configurable (enable/disable) forum TinyMCE editor
 	* OTAdmin support in Admin Panel
 	* database towns table support for TFS 1.3
