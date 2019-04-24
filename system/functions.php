@@ -514,8 +514,9 @@ function template_footer()
 	if($config['views_counter'])
 		$ret .= '<br/>Page has been viewed ' . $views_counter . ' times.';
 
-	if(admin())
+	if(config('footer_show_load_time')) {
 		$ret .= '<br/>Load time: ' . round(microtime(true) - START_TIME, 4) . ' seconds.';
+	}
 
 	if(isset($config['footer'][0]))
 		$ret .= '<br/>' . $config['footer'];
