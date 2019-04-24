@@ -1064,7 +1064,7 @@ function config($key) {
 		return $config[$key[0]] = $key[1];
 	}
 
-	return $config[$key];
+	return @$config[$key];
 }
 
 function clearCache()
