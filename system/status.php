@@ -147,10 +147,17 @@ function updateStatus() {
 		$status['clientVersion'] = $serverStatus->getClientVersion();
 	}
 
-	if($cache->enabled())
+	if($cache->enabled()) {
 		$cache->set('status', serialize($status), 120);
+	}
 
+	$tmpVal = null;
 	foreach($status as $key => $value) {
-		updateDatabaseConfig('status_' . $key, $value);
+		if(fetchDatabaseConfig('status_' . $key, $tmpVal)) {
+			updateDatabaseConfig('status_' . $key, $value);
+		}
+		else {
+			registerDatabaseConfig('status_' . $key, $value);
+		}
 	}
 }
