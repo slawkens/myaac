@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.7.11 - 27.04.2019]
+### Added:
+* support for some old servers, where arrays are used in config.lua
+* an additional text to the install page informing that user can reinstall MyAAC by deleting config.local.php
+
+### Fixed:
+* XSS in forum show_thread
+* fixed guilds - "Add new rank" function
+* multiple mail recipients when using admin mailer function
+* Admin Panel - MyAAC logs not shown if servers logs directory doesn't exist (#47)
+* fixed missing prefix for cache get() and delete() functions
+* add fatal error message when myaac tables in database do not exist
+* the mystical defect where "Create Account" button was not highlighted (on the account/manage page)
+* bug where server_config table does not exist (OTHire as an example)
+* database_name in Usage_Statistics
+* forgot to open <head> in install template
+
+### Changed:
+* do not display software version
+
 ## [0.7.10 - 03.03.2018]
 ### Added:
 * new configurable: smtp_secure
@@ -94,7 +114,7 @@
 	* fixed account.login redirect not working on tibiacom template
 	* installation: warn about wrong admin account name/id and password
 	* fixed last menu closing in tibiacom template
-	* updated polish locale (translation) on install 
+	* updated polish locale (translation) on install
 	* (internal) removed some duplicated code on install finish
 	* (internal) renamed installation step files to be in correct order
 	* added TODO file
@@ -143,7 +163,7 @@
 	* (internal) added some compat functions that are used by shop system
 	* (internal) renamed constant TICKET -> TICKER
 	* (internal) shortened message functions
-	
+
 ## [0.6.6 - 22.10.2017]
 	* fixed some php fatal error on spells page
 	* changed spells.vocations field in db size to 300
@@ -152,15 +172,15 @@
 ## [0.6.5 - 21.10.2017]
 	* fixed displaying custom pages
 	* fixed adding new group forum board
-	
+
 ## [0.6.4 - 20.10.2017]
 	* reverted OTS_Account::getLastLogin() cause its used by tibia11-login plugin
-	
+
 ## [0.6.3 - 20.10.2017]
 	* fixed creating account
-	* fixed viewing thread without being logged 
+	* fixed viewing thread without being logged
 	* fixed showing premium account status
-	
+
 ## [0.6.2 - 20.10.2017]
 	* added forums for guilds and groups
 	* added nice looking menu for my account page in default template
@@ -193,7 +213,7 @@
 	* (internal) optimized Spells class
 	* (internal) new function: OTS_Guild::hasMember(OTS_Player $player)
 	* (internal) new function: Forum::hasAccess($board_id)
-	
+
 ## [0.6.1 - 17.10.2017]
 	* fixed signatures loading
 	* new configurable: session_prefix, to allow more websites on one machine (must be unique for every website on your dedicated server!)
@@ -412,7 +432,7 @@
 	* fixed bug when creating character (not showing errors) (one more time)
 	* fixed support for TFS 0.2 series
 	* added FAQ link
-	
+
 ## [0.0.5 - 05.05.2017]
 	* fixed bug when creating character (not showing errors)
 	* Fixed characters loading with names that has been created with other AAC
