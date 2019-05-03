@@ -1,9 +1,9 @@
 <?php
 /**
- * english language file
+ * Brazilian Portuguese language file
  * install.php
  *
- * @author Slawkens <slawkens@gmail.com>
+ * @author Ivens Pontes <ivenscardoso@hotmail.com>
  */
 $locale['installation'] = 'Instalação';
 $locale['steps'] = 'Passos';

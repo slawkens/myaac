@@ -1,9 +1,9 @@
 <?php
 /**
- * english language file
+ * Brazilian Portuguese language file
  * admin.php
  *
- * @author Slawkens <slawkens@gmail.com>
+ * @author Ivens Pontes <ivenscardoso@hotmail.com>
  */
 $locale['title'] = 'MyAAC Admin';
 ?>
