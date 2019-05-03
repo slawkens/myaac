@@ -31,54 +31,56 @@
                             <br><br>
                         {% endif %}
 
-                        {% if houses is not empty %}
+                        {% if houses is not empty or housesSearch %}
                         <table border="0" cellspacing="1" cellpadding="4" width="100%">
                             <tbody>
                                 <tr bgcolor="{{ config.vdarkborder }}">
-                                    <td colspan="6" class="white"><b>Available {{ houseType }} {% if townName is not empty %}in {{ townName }}{% endif %}on <b>{{ config.lua.serverName }}</b></b></td>
+                                    <td colspan="6" class="white"><b>Available {{ houseType }}{% if townName is not empty %} in {{ townName }}{% endif %} on <b>{{ config.lua.serverName }}</b></b></td>
                                 </tr>
 
                                 <tr bgcolor="{{ config.darkborder }}">
-                                    {% if housesCount > 0 %}
+                                    {% if houses is not empty %}
                                         <td width="40%"><b>Name</b></td>
                                         <td width="10%"><b>Size</b></td>
                                         <td width="10%"><b>Rent</b></td>
 
                                         <td width="40%"><b>Status</b></td>
                                         <td>&nbsp;</td>
-                                    {% else %}
+                                    {% elseif housesSearch %}
                                         <td>No {{ houseType }} with specified criterias.</td>
                                     {% endif %}
                                 </tr>
 
-                                {% set i = 0 %}
-                                {% for house in houses %}
-                                    {% set i = i + 1 %}
-                                    <tr bgcolor="{{ getStyle(i) }}">
-                                        <td width="40%">
-                                            {{ house.name }}
-                                        </td>
+                                {% if houses is not empty %}
+                                    {% set i = 0 %}
+                                    {% for house in houses %}
+                                        {% set i = i + 1 %}
+                                        <tr bgcolor="{{ getStyle(i) }}">
+                                            <td width="40%">
+                                                {{ house.name }}
+                                            </td>
 
-                                        <td width="10%">
-                                            {{ house.size }}
-                                        </td>
+                                            <td width="10%">
+                                                {{ house.size }}
+                                            </td>
 
-                                        <td width="10%">
-                                            {{ house.rent }} golds
-                                        </td>
+                                            <td width="10%">
+                                                {{ house.rent }} golds
+                                            </td>
 
-                                        <td width="40%">
-                                            {{ house.rentedBy|raw }}
-                                        </td>
+                                            <td width="40%">
+                                                {{ house.rentedBy|raw }}
+                                            </td>
 
-                                        <td>
-                                            <form action="{{ getLink('houses/view') }}" method="post">
-                                                <input type="hidden" name="house" value="{{ house.name }}">
-                                                <button name="View" alt="View" class="btn btn-secondary" width="120" height="18">View</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
+                                            <td>
+                                                <form action="{{ getLink('houses/view') }}" method="post">
+                                                    <input type="hidden" name="house" value="{{ house.name }}">
+                                                    <button name="View" alt="View" class="btn btn-secondary" width="120" height="18">View</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
                             </tbody>
                         </table>
                         <br>

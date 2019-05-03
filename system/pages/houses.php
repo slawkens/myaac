@@ -114,6 +114,7 @@ if(isset($config['lua']['houseCleanOld'])) {
     $cleanOldHouse = (int)(eval('return ' . $config['lua']['houseCleanOld'] . ';') / (24 * 60 * 60));
 }
 
+$housesSearch = false;
 if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order']) && (isset($_POST['type']) || !$db->hasColumn('houses', 'guild')))
 {
     $townName = $config['towns'][$_POST['town']];
@@ -146,7 +147,6 @@ if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order']) && 
         $whereby .= ' AND `guild` ' . ($type == 'guildhalls' ? '!' : '') . '= 0';
 
     $houses_info = $db->query('SELECT * FROM `houses` WHERE ' . $whereby. ' ORDER BY ' . $orderby);
-    $houses_count = $houses_info->rowCount();
 
     $players_info = $db->query("SELECT `houses`.`id` AS `houseid` , `players`.`name` AS `ownername` FROM `houses` , `players` , `accounts` WHERE `players`.`id` = `houses`.`owner` AND `accounts`.`id` = `players`.`account_id`");
     $players = array();
@@ -175,6 +175,8 @@ if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order']) && 
 
         $houses[] = array('owner' => $owner, 'name' => $house['name'], 'size' => $house['size'], 'rent' => $house['rent'], 'rentedBy' => $houseRent);
     }
+
+    $housesSearch = true;
 }
 
 $guild = $db->hasTable('houses', 'guild') ? ' or guildhall' : '';
@@ -187,6 +189,6 @@ $twig->display('houses.html.twig', array(
     'townId' => isset($_POST['town']) ? $_POST['town'] : null,
     'guild' => $guild,
     'cleanOldHouse' => isset($cleanOld) ? $cleanOld : null,
-    'housesCount' => isset($houses_count) ? $houses_count : null,
+    'housesSearch' => $housesSearch,
     'houses' => isset($houses) ? $houses : null
 ));
