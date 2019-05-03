@@ -1,6 +1,6 @@
 <?php
 /**
- * Lists of guilds
+ * List of guilds
  *
  * @package   MyAAC
  * @author    Gesior <jerzyskalski@wp.pl>
