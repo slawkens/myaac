@@ -1,16 +1,16 @@
 # Changelog
 
-## [0.7.11 - 27.04.2019]
+## [0.7.11 - 04.05.2019]
 ### Added:
 * support for some old servers, where arrays are used in config.lua
 * an additional text to the install page informing that user can reinstall MyAAC by deleting config.local.php
 
 ### Fixed:
 * XSS in forum show_thread
-* fixed guilds - "Add new rank" function
+* guilds - "Add new rank" function
 * multiple mail recipients when using admin mailer function
 * Admin Panel - MyAAC logs not shown if servers logs directory doesn't exist (#47)
-* fixed missing prefix for cache get() and delete() functions
+* missing prefix for cache get() and delete() functions
 * add fatal error message when myaac tables in database do not exist
 * the mystical defect where "Create Account" button was not highlighted (on the account/manage page)
 * bug where server_config table does not exist (OTHire as an example)
