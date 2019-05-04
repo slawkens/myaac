@@ -1,0 +1,160 @@
+<div class="TableContainer">
+    <div class="CaptionContainer">
+        <div class="CaptionInnerContainer">
+            <span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+            <span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+            <span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+            <span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+            <div class="Text">Active Guilds on {{ config.lua.serverName }}</div>
+            <span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
+            <span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
+            <span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+            <span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
+        </div>
+    </div>
+
+    <table class="Table3" cellpadding="0" cellspacing="0">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="InnerTableContainer">
+                        <table style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="TableContentContainer">
+                                            <table class="TableContent" width="100%">
+                                                <tbody>
+                                                    {% if guilds|length > 0 %}
+                                                    <tr bgcolor="{{ config.vdarkborder }}">
+                                                        <td width="64"><b>Logo</b></td>
+                                                        <td><b>Description</b></td>
+                                                        <td width="12%"><b>&nbsp;</b></td>
+                                                    </tr>
+
+                                                        {% set i = 0 %}
+                                                        {% for guild in guilds %}
+                                                        {% set i = i + 1 %}
+                                                        <tr bgcolor="{{ getStyle(i) }}">
+                                                            <td>
+                                                                <img src="images/guilds/{{ guild.logo }}" width="64" height="64">
+                                                            </td>
+
+                                                            <td>
+                                                                <span{% if guild.description is not empty %} valign="top"{% endif %}>
+                                                                    <b>{{ guild.name }}</b>{% if isAdmin %}<a href="?subtopic=guilds&action=delete_by_admin&guild={{ guild.name }}"> - Delete this guild (for ADMIN only!)</a>{% endif %}
+                                                                </span>
+
+                                                                {% if guild.description is not empty %}
+                                                                <br>
+                                                                <span>{{ guild.description }}</span>
+                                                                {% endif %}
+                                                            </td>
+
+                                                            <td>
+                                                                <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td style="border:0px;">
+                                                                                <form action="{{ guild.link }}" method="post">
+                                                                                    <button name="View" alt="View" class="btn btn-secondary" src="{{ template_path }}/images/global/buttons/sbutton_view.gif" style="width: 100%; height: 20px;">
+                                                                                        View
+                                                                                    </button>
+                                                                                </form>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                    <tr bgcolor="{{ config.lightborder }}">
+                                                        <td valign="top">
+                                                            <b>Create Guild</b>
+                                                            <br/>
+                                                            Actually there is no guild on server.{% if logged %} Create first! Press button "Create Guild"{% endif %}
+                                                        </td>
+
+                                                        {% if logged %}
+                                                        <td>
+                                                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                                <form action="?subtopic=guilds&action=create" method=post>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <button name="Create Guild" alt="Create Guild" class="btn btn-secondary" style="width: 100%; height: 20px;">Create Guild</button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </form>
+                                                            </table>
+                                                        </td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+
+<table border="0" cellspacing="1" cellpadding="4" width="100%">
+    <tbody>
+        <tr>
+            <td align="center">
+                <img src="{{ template_path }}images/general/blank.gif" width="80" height="1" border="0">
+            </td>
+
+            <td align="center">
+                <table border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                        {% if logged %}
+                        <form action="?subtopic=guilds&action=create" method=post>
+                            <tr>
+                                <td>
+                                    <input type="image" name="Create Guild" alt="Create Guild" src="{{ template_path }}/images/global/buttons/sbutton_createguild.png" border=0 style="width: 120px; height: 18px;">
+                                </td>
+                            </tr>
+                        </form>
+                        {% else %}
+                        <b>Before you can create guild you must login.</b>
+                        <br/>
+                        <form action="?subtopic=accountmanagement&redirect={{ getLink('guilds') }}" method=post>
+                            <tr>
+                                <td>
+                                    <input type="image" name="Login" alt="Login" src="{{ template_path }}/images/global/buttons/sbutton_login.gif" border=0 style="width: 120px; height: 18px;">
+                                </td>
+                            </tr>
+                        </form>
+                        {% endif %}
+                    </tbody>
+                </table>
+
+                {% if logged %}
+                    <br/>
+                    If you have any problem with guilds try:
+                    <br/>
+                    <a href="?subtopic=guilds&action=cleanup_players">Cleanup players</a> - can\'t join guild/be invited? Can\'t create guild? Try cleanup players.
+                    <br/>
+                    <a href="?subtopic=guilds&action=cleanup_guilds">Cleanup guilds</a> - made guild, you are a leader, but you are not on players list? Cleanup guilds!';
+                {% endif %}
+            </td>
+
+            <td align="center">
+                <img src="{{ template_path }}/images/general/blank.gif" width="80" height="1" border="0">
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
