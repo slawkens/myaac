@@ -31,6 +31,11 @@ $function = new Twig_SimpleFunction('getPlayerLink', function ($s, $p) {
 });
 $twig->addFunction($function);
 
+$function = new Twig_SimpleFunction('getGuildLink', function ($s, $p) {
+    return getGuildLink($s, $p);
+});
+$twig->addFunction($function);
+
 $function = new Twig_SimpleFunction('hook', function ($hook) {
 	global $hooks;
 	$hooks->trigger($hook);
