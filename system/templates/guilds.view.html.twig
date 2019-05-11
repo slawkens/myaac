@@ -139,30 +139,28 @@
                                                                         <form action="?subtopic=guilds&action=change_nick&name={{ playerName }}" method="post">
                                                                             {{ getPlayerLink(playerName, true)|raw }}
 
-                                                                            {% if useGuildNick %}
-                                                                                {% set showGuildNick = false %}
-                                                                                {% if player.getGuildNick() is not empty %}
-                                                                                    {% set showGuildNick = true %}
-                                                                                    {% set guildNickRaw = player.getGuildNick()|raw %}
-                                                                                {% endif %}
+                                                                            {% set showGuildNick = false %}
+                                                                            {% if player.getGuildNick() is not empty %}
+                                                                                {% set showGuildNick = true %}
+                                                                                {% set guildNickRaw = player.getGuildNick()|raw %}
+                                                                            {% endif %}
 
-                                                                                {% if logged %}
-                                                                                    {% if player.getId() in players_from_account_ids %}
-                                                                                        (<input type="text" name="nick" value="{{ guildNickRaw }}"><input type="submit" value="Change">)
-                                                                                    {% else %}
-                                                                                        {% if showGuildNick %} ({{ guildNickRaw }}){% endif %}
-                                                                                    {% endif %}
-
-                                                                                    {% if level_in_guild > rank.rank_level or isLeader %}
-                                                                                        {% if guildOwnerName != playerName %}
-                                                                                            <span style="font-size: 10px; float: right">
-                                                                                                {<a href="?subtopic=guilds&action=kick_player&guild={{ guild_name|url_encode }}&name={{ playerName|url_encode }}">KICK</a>}
-                                                                                            </span>
-                                                                                        {% endif %}
-                                                                                    {% endif %}
+                                                                            {% if logged %}
+                                                                                {% if player.getId() in players_from_account_ids %}
+                                                                                    (<input type="text" name="nick" value="{{ guildNickRaw }}"><input type="submit" value="Change">)
                                                                                 {% else %}
                                                                                     {% if showGuildNick %} ({{ guildNickRaw }}){% endif %}
                                                                                 {% endif %}
+
+                                                                                {% if level_in_guild > rank.rank_level or isLeader %}
+                                                                                    {% if guildOwnerName != playerName %}
+                                                                                        <span style="font-size: 10px; float: right">
+                                                                                            {<a href="?subtopic=guilds&action=kick_player&guild={{ guild_name|url_encode }}&name={{ playerName|url_encode }}">KICK</a>}
+                                                                                        </span>
+                                                                                    {% endif %}
+                                                                                {% endif %}
+                                                                            {% else %}
+                                                                                {% if showGuildNick %} ({{ guildNickRaw }}){% endif %}
                                                                             {% endif %}
                                                                         </form>
                                                                     </td>
