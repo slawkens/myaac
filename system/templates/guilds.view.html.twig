@@ -139,30 +139,28 @@
                                                                         <form action="?subtopic=guilds&action=change_nick&name={{ playerName }}" method="post">
                                                                             {{ getPlayerLink(playerName, true)|raw }}
 
-                                                                            {% if useGuildNick %}
-                                                                                {% set showGuildNick = false %}
-                                                                                {% if player.getGuildNick() is not empty %}
-                                                                                    {% set showGuildNick = true %}
-                                                                                    {% set guildNickRaw = player.getGuildNick()|raw %}
-                                                                                {% endif %}
+                                                                            {% set showGuildNick = false %}
+                                                                            {% if player.getGuildNick() is not empty %}
+                                                                                {% set showGuildNick = true %}
+                                                                                {% set guildNickRaw = player.getGuildNick()|raw %}
+                                                                            {% endif %}
 
-                                                                                {% if logged %}
-                                                                                    {% if player.getId() in players_from_account_ids %}
-                                                                                        (<input type="text" name="nick" value="{{ guildNickRaw }}"><input type="submit" value="Change">)
-                                                                                    {% else %}
-                                                                                        {% if showGuildNick %} ({{ guildNickRaw }}){% endif %}
-                                                                                    {% endif %}
-
-                                                                                    {% if level_in_guild > rank.rank_level or isLeader %}
-                                                                                        {% if guildOwnerName != playerName %}
-                                                                                            <span style="font-size: 10px; float: right">
-                                                                                                {<a href="?subtopic=guilds&action=kick_player&guild={{ guild_name|url_encode }}&name={{ playerName|url_encode }}">KICK</a>}
-                                                                                            </span>
-                                                                                        {% endif %}
-                                                                                    {% endif %}
+                                                                            {% if logged %}
+                                                                                {% if player.getId() in players_from_account_ids %}
+                                                                                    (<input type="text" name="nick" value="{{ guildNickRaw }}"><input type="submit" value="Change">)
                                                                                 {% else %}
                                                                                     {% if showGuildNick %} ({{ guildNickRaw }}){% endif %}
                                                                                 {% endif %}
+
+                                                                                {% if level_in_guild > rank.rank_level or isLeader %}
+                                                                                    {% if guildOwnerName != playerName %}
+                                                                                        <span style="font-size: 10px; float: right">
+                                                                                            {<a href="?subtopic=guilds&action=kick_player&guild={{ guild_name|url_encode }}&name={{ playerName|url_encode }}">KICK</a>}
+                                                                                        </span>
+                                                                                    {% endif %}
+                                                                                {% endif %}
+                                                                            {% else %}
+                                                                                {% if showGuildNick %} ({{ guildNickRaw }}){% endif %}
                                                                             {% endif %}
                                                                         </form>
                                                                     </td>
@@ -283,46 +281,46 @@
                                                     <tr>
                                                         {% if not logged %}
                                                             <form action="?subtopic=accountmanagement&redirect={{ getGuildLink(guild_name|url_encode, false) }}" method="post">
-                                                                <th>
+                                                                <td>
                                                                     <input type="image" name="Login" alt="Login" src="{{ template_path }}/images/global/buttons/sbutton_login.gif" style="width: 120px; height: 20px;">
-                                                                </th>
+                                                                </td>
                                                             </form>
                                                         {% else %}
                                                             {% if show_accept_invite > 0 %}
                                                                 <form action="?subtopic=guilds&action=accept_invite&guild={{ guild_name|url_encode }}" method="post">
-                                                                    <th>
+                                                                    <td>
                                                                         <input type="image" name="Accept Invite" alt="Accept Invite" src="{{ template_path }}/images/global/buttons/sbutton_acceptinvite.png" style="width: 120px; height: 20px;">
-                                                                    </th>
+                                                                    </td>
                                                                 </form>
                                                             {% endif %}
 
                                                             {% if isVice %}
                                                                 <form action="?subtopic=guilds&action=invite&guild={{ guild_name|url_encode }}" method="post">
-                                                                    <th>
+                                                                    <td>
                                                                         <input type="image" name="Invite Player" alt="Invite Player" src="{{ template_path }}/images/global/buttons/sbutton_inviteplayer.png" style="width: 120px; height: 20px;">
-                                                                    </th>
+                                                                    </td>
                                                                 </form>
 
                                                                 <form action="?subtopic=guilds&action=change_rank&guild={{ guild_name|url_encode }}" method="post">
-                                                                    <th>
+                                                                    <td>
                                                                         <input type="image" name="Change Rank" alt="Change Rank" src="{{ template_path }}/images/global/buttons/sbutton_changerank.png" style="width: 120px; height: 20px;">
-                                                                    </th>
+                                                                    </td>
                                                                 </form>
                                                             {% endif %}
 
                                                             {% if players_from_account_in_guild|length > 0 %}
                                                                 <form action="?subtopic=guilds&action=leave_guild&guild={{ guild_name|url_encode }}" method="post">
-                                                                    <th>
+                                                                    <td>
                                                                         <input type="image" name="Leave Guild" alt="Leave Guild" src="{{ template_path }}/images/global/buttons/sbutton_leaveguild.png" style="width: 120px; height: 20px;">
-                                                                    </th>
+                                                                    </td>
                                                                 </form>
                                                             {% endif %}
                                                         {% endif %}
 
                                                         <form action="{{ getLink('guilds') }}" method="post">
-                                                            <th style="float: right">
+                                                            <td style="float: right">
                                                                 {{ include('buttons.back.html.twig') }}
-                                                            </th>
+                                                            </td>
                                                         </form>
                                                     </tr>
                                                     </tbody>
