@@ -72,7 +72,7 @@ class Visitors
 		}
 
 		global $db;
-		$db->query('DELETE FROM ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' WHERE ' . $db->fieldName('lastvisit') . ' < ' . (time() - $this->sessionTime * 60));
+		$db->exec('DELETE FROM ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' WHERE ' . $db->fieldName('lastvisit') . ' < ' . (time() - $this->sessionTime * 60));
 	}
 
 	private function updateVisitor($ip, $page)
@@ -83,7 +83,7 @@ class Visitors
 		}
 
 		global $db;
-		$db->query('UPDATE ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' SET ' . $db->fieldName('lastvisit') . ' = ' . time() . ', ' . $db->fieldName('page') . ' = ' . $db->quote($page) . ' WHERE ' . $db->fieldName('ip') . ' = ' . $db->quote($ip));
+		$db->exec('UPDATE ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' SET ' . $db->fieldName('lastvisit') . ' = ' . time() . ', ' . $db->fieldName('page') . ' = ' . $db->quote($page) . ' WHERE ' . $db->fieldName('ip') . ' = ' . $db->quote($ip));
 	}
 
 	private function addVisitor($ip, $page)
@@ -94,7 +94,7 @@ class Visitors
 		}
 
 		global $db;
-		$db->query('INSERT INTO ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' (' . $db->fieldName('ip') . ' ,' . $db->fieldName('lastvisit') . ', ' . $db->fieldName('page') . ') VALUE (' . $db->quote($ip) . ', ' . time() . ', ' . $db->quote($page) . ')');
+		$db->exec('INSERT INTO ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' (' . $db->fieldName('ip') . ' ,' . $db->fieldName('lastvisit') . ', ' . $db->fieldName('page') . ') VALUE (' . $db->quote($ip) . ', ' . time() . ', ' . $db->quote($page) . ')');
 	}
 
 	public function getVisitors()
