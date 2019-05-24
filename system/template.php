@@ -107,21 +107,36 @@ if($twig_loader && file_exists(BASE . $template_path))
 	$twig_loader->prependPath(BASE . $template_path);
 
 function get_template_menus() {
-	global $db, $config, $template_name;
-	
+	global $db, $template_name;
+
+	$cache = Cache::getInstance();
+	if ($cache->enabled()) {
+		$tmp = '';
+		if ($cache->fetch('template_menus', $tmp)) {
+			$result = unserialize($tmp);
+		}
+	}
+
+	if (!isset($result)) {
+		$query = $db->query('SELECT `name`, `link`, `blank`, `color`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `category`, `ordering` ASC');
+		$result = $query->fetchAll();
+
+		if ($cache->enabled()) {
+			$cache->set('template_menus', serialize($result), 600);
+		}
+	}
+
 	$menus = array();
-	$query = $db->query('SELECT `name`, `link`, `blank`, `color`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `category`, `ordering` ASC');
-	foreach($query->fetchAll() as $menu) {
+	foreach($result as $menu) {
 		$link_full = strpos(trim($menu['link']), 'http') === 0 ? $menu['link'] : getLink($menu['link']);
 		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'link_full' => $link_full, 'blank' => $menu['blank'] == 1, 'color' => $menu['color']);
 	}
-	
+
 	$new_menus = array();
-	foreach($config['menu_categories'] as $id => $options) {
+	foreach(config('menu_categories') as $id => $options) {
 		if(isset($menus[$id]))
 			$new_menus[$id] = $menus[$id];
 	}
-	
+
 	return $new_menus;
 }
-?>

@@ -73,10 +73,12 @@ class Hooks
 		$ret = true;
 		if(isset(self::$_hooks[$type]))
 		{
-			foreach(self::$_hooks[$type] as $name => $hook)
-				if(!$hook->execute($params)) {
+			foreach(self::$_hooks[$type] as $name => $hook) {
+				/** @var $hook Hook */
+				if (!$hook->execute($params)) {
 					$ret = false;
 				}
+			}
 		}
 
 		return $ret;
@@ -89,9 +91,26 @@ class Hooks
 	public function load()
 	{
 		global $db;
-		$hooks = $db->query('SELECT `name`, `type`, `file` FROM `' . TABLE_PREFIX . 'hooks` WHERE `enabled` = 1 ORDER BY `ordering`;');
-		foreach($hooks as $hook)
+
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('hooks', $tmp)) {
+				$hooks = unserialize($tmp);
+			}
+		}
+
+		if (!isset($hooks)) {
+			$hooks = $db->query('SELECT `name`, `type`, `file` FROM `' . TABLE_PREFIX . 'hooks` WHERE `enabled` = 1 ORDER BY `ordering`;')->fetchAll();
+
+			if ($cache->enabled()) {
+				$cache->set('hooks', serialize($hooks), 600);
+			}
+		}
+
+		foreach($hooks as $hook) {
 			$this->register($hook['name'], $hook['type'], $hook['file']);
+		}
 	}
 }
 ?>

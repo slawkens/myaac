@@ -42,6 +42,11 @@ if (isset($_REQUEST['template'])) {
 			}
 		}
 
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$cache->delete('template_menus');
+		}
+
 		success('Saved at ' . date('H:i'));
 	}
 

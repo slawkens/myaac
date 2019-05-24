@@ -5,9 +5,6 @@
 	* sandbox for plugins, don't install when requirements are not passed
 	* add changelog management interface
 	* kathrine tickets - show/hide
-	* cache:
-		* hooks
-		* Menus in templates
 	* csrf token protection
 	* guild wars support like in Gesior
 	* move rest of the pages to Twig: lostaccount, highscores, guilds, etc.
