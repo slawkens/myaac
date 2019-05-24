@@ -74,27 +74,6 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
         return $this->fieldName($this->prefix . $name);
     }
 
-/**
- * @param string $string String to be quoted.
- * @return string Quoted string.
- * @deprecated 0.0.5 Use PDO::quote().
- * @version 0.0.7
- */
-    public function SQLquote($string)
-    {
-        return parent::quote($string, PDO_PARAM_STR);
-    }
-
-/**
- * @param string $query SQL query.
- * @return PDOStatement|bool Query results.
- * @deprecated 0.0.5 Use PDO::query().
- */
-    public function SQLquery($query)
-    {
-        return query($query);
-    }
-
     public function query($query)
     {
 		if($this->logged) {
