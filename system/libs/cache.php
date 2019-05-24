@@ -10,6 +10,14 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+/**
+ * Class Cache
+ *
+ * @method set($key, $var, $ttl = 0)
+ * @method get($key)
+ * @method fetch($key, &$var)
+ * @method delete($key)
+ */
 class Cache
 {
 	static private $instance;

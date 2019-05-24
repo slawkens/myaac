@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 class Cache_XCache
 {
-	private $prefix = '';
+	private $prefix;
 	private $enabled;
 
 	public function __construct($prefix = '') {
@@ -30,8 +30,9 @@ class Cache_XCache
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($this->prefix . $key, $tmp))
+		if($this->fetch($this->prefix . $key, $tmp)) {
 			return $tmp;
+		}
 
 		return '';
 	}
@@ -39,8 +40,9 @@ class Cache_XCache
 	public function fetch($key, &$var)
 	{
 		$key = $this->prefix . $key;
-		if(!xcache_isset($key))
+		if(!xcache_isset($key)) {
 			return false;
+		}
 
 		$var = xcache_get($key);
 		return true;
@@ -54,4 +56,3 @@ class Cache_XCache
 		return $this->enabled;
 	}
 }
-?>

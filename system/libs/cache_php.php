@@ -42,8 +42,9 @@ class Cache_PHP
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($key, $tmp))
+		if($this->fetch($key, $tmp)) {
 			return $tmp;
+		}
 
 		return '';
 	}
@@ -51,8 +52,9 @@ class Cache_PHP
 	public function fetch($key, &$var)
 	{
 		$file = $this->_name($key);
-		if(!file_exists($file) || filemtime($file) < time())
+		if(!file_exists($file) || filemtime($file) < time()) {
 			return false;
+		}
 
 		@include $file;
 		$var = isset($var) ? $var : null;
@@ -62,8 +64,9 @@ class Cache_PHP
 	public function delete($key)
 	{
 		$file = $this->_name($key);
-		if(file_exists($file))
+		if(file_exists($file)) {
 			unlink($file);
+		}
 	}
 
 	public function enabled() {
@@ -74,4 +77,3 @@ class Cache_PHP
 		return sprintf('%s%s%s', $this->dir, $this->prefix, sha1($key) . '.php');
 	}
 }
-?>

@@ -30,8 +30,9 @@ class Cache_eAccelerator
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($this->prefix . $key, $tmp))
+		if($this->fetch($this->prefix . $key, $tmp)) {
 			return $tmp;
+		}
 
 		return '';
 	}
@@ -48,4 +49,3 @@ class Cache_eAccelerator
 		return $this->enabled;
 	}
 }
-?>

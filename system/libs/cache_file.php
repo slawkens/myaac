@@ -11,8 +11,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 class Cache_File
 {
-	private $prefix = '';
-	private $dir = '';
+	private $prefix;
+	private $dir;
 	private $enabled;
 
 	public function __construct($prefix = '', $dir = '') {
@@ -25,17 +25,21 @@ class Cache_File
 	{
 		$file = $this->_name($key);
 		file_put_contents($file, $var);
-		if($ttl != 0)
+
+		if($ttl !== 0) {
 			touch($file, time() + $ttl);
-		else
+		}
+		else {
 			touch($file, time() + 24 * 60 * 60);
+		}
 	}
 
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($key, $tmp))
+		if($this->fetch($key, $tmp)) {
 			return $tmp;
+		}
 
 		return '';
 	}
@@ -43,8 +47,9 @@ class Cache_File
 	public function fetch($key, &$var)
 	{
 		$file = $this->_name($key);
-		if(!file_exists($file) || filemtime($file) < time())
+		if(!file_exists($file) || filemtime($file) < time()) {
 			return false;
+		}
 
 		$var = file_get_contents($file);
 		return true;
@@ -53,8 +58,9 @@ class Cache_File
 	public function delete($key)
 	{
 		$file = $this->_name($key);
-		if(file_exists($file))
+		if(file_exists($file)) {
 			unlink($file);
+		}
 	}
 
 	public function enabled() {
@@ -62,7 +68,6 @@ class Cache_File
 	}
 
 	private function _name($key) {
-		return sprintf("%s%s%s", $this->dir, $this->prefix, sha1($key));
+		return sprintf('%s%s%s', $this->dir, $this->prefix, sha1($key));
 	}
 }
-?>

@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 class Cache_APC
 {
-	private $prefix = '';
+	private $prefix;
 	private $enabled;
 
 	public function __construct($prefix = '')
@@ -31,8 +31,9 @@ class Cache_APC
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($this->prefix . $key, $tmp))
+		if($this->fetch($this->prefix . $key, $tmp)) {
 			return $tmp;
+		}
 
 		return '';
 	}
@@ -49,4 +50,3 @@ class Cache_APC
 		return $this->enabled;
 	}
 }
-?>
