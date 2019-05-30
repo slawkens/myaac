@@ -255,6 +255,9 @@ $config = array(
 	// when server is offline, it will be checked every time web refreshes, ignoring this variable
 	'status_interval' => 60,
 
+	// admin panel
+	'admin_panel_modules' => 'lastlogin,points,coins',
+
 	// other
 	'anonymous_usage_statistics' => true,
 	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam

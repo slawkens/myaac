@@ -76,12 +76,13 @@ $twig->display('admin.dashboard.html.twig', array(
 ));
 
 echo '<div class="row">';
-$config['modules'] = "lastlogin,points,coins";
-if(isset($config['modules']))
-	$config['modules'] = explode(",", $config['modules']);
+
+$configAdminPanelModules = config('admin_panel_modules');
+if(isset($configAdminPanelModules))
+	$configAdminPanelModules = explode(',', $configAdminPanelModules);
 
 $twig_loader->prependPath(__DIR__ . '/modules/templates');
-foreach($config['modules'] as $box) {
+foreach($configAdminPanelModules as $box) {
 	$file = __DIR__ . '/modules/' . $box . '.php';
 	if(file_exists($file)) {
 		include($file);
