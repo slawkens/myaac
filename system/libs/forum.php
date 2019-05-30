@@ -12,7 +12,12 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 class Forum
 {
-	static public function canPost($account)
+	/**
+	 * @param OTS_Account $account
+	 * @return bool
+	 * @throws E_OTS_NotLoaded
+	 */
+	public static function canPost($account)
 	{
 		global $db, $config;
 
@@ -29,11 +34,11 @@ class Forum
 				' LIMIT 1')->rowCount() > 0;
 	}
 
-	static public function isModerator() {
+	public static function isModerator() {
 		return hasFlag(FLAG_CONTENT_FORUM) || superAdmin();
 	}
 
-	static public function add_thread($title, $body, $section_id, $player_id, $account_id, &$errors)
+	public static function add_thread($title, $body, $section_id, $player_id, $account_id, &$errors)
 	{
 		global $db;
 		$thread_id = 0;
@@ -58,7 +63,7 @@ class Forum
 		return $thread_id;
 	}
 
-	static public function add_post($thread_id, $section, $author_aid, $author_guid, $post_text, $post_topic, $smile, $html)
+	public static function add_post($thread_id, $section, $author_aid, $author_guid, $post_text, $post_topic, $smile, $html)
 	{
 		global $db;
 		$db->insert(TABLE_PREFIX . 'forum', array(
@@ -74,7 +79,7 @@ class Forum
 			'post_ip' => $_SERVER['REMOTE_ADDR']
 		));
 	}
-	static public function add_board($name, $description, $access, $guild, &$errors)
+	public static function add_board($name, $description, $access, $guild, &$errors)
 	{
 		global $db;
 		if(isset($name[0]) && isset($description[0]))
@@ -106,17 +111,17 @@ class Forum
 		return !count($errors);
 	}
 
-	static public function get_board($id) {
+	public static function get_board($id) {
 		global $db;
 		return $db->select(TABLE_PREFIX . 'forum_boards', array('id' => $id));
 	}
 
-	static public function update_board($id, $name, $access, $guild, $description) {
+	public static function update_board($id, $name, $access, $guild, $description) {
 		global $db;
 		$db->update(TABLE_PREFIX . 'forum_boards', array('name' => $name, 'description' => $description, 'access' => $access, 'guild' => $guild), array('id' => $id));
 	}
 
-	static public function delete_board($id, &$errors)
+	public static function delete_board($id, &$errors)
 	{
 		global $db;
 		if(isset($id))
@@ -132,7 +137,7 @@ class Forum
 		return !count($errors);
 	}
 
-	static public function toggleHidden_board($id, &$errors)
+	public static function toggleHidden_board($id, &$errors)
 	{
 		global $db;
 		if(isset($id))
@@ -149,7 +154,7 @@ class Forum
 		return !count($errors);
 	}
 
-	static public function move_board($id, $i, &$errors)
+	public static function move_board($id, $i, &$errors)
 	{
 		global $db;
 		$query = self::get_board($id);
