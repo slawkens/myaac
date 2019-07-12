@@ -27,14 +27,14 @@ if(!$error) {
 	{
 		if(strpos($key, 'var_') !== false)
 		{
-			if($key == 'var_server_path')
+			if($key === 'var_server_path')
 			{
 				$value = str_replace("\\", "/", $value);
-				if($value[strlen($value) - 1] != '/')
+				if($value[strlen($value) - 1] !== '/')
 					$value .= '/';
 			}
 
-			if($key == 'var_usage') {
+			if($key === 'var_usage') {
 				$content .= '$config[\'anonymous_usage_statistics\'] = ' . ((int)$value == 1 ? 'true' : 'false') . ';';
 				$content .= PHP_EOL;
 			}
