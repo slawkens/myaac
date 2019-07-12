@@ -38,7 +38,7 @@ if(!$error) {
 				$content .= '$config[\'anonymous_usage_statistics\'] = ' . ((int)$value == 1 ? 'true' : 'false') . ';';
 				$content .= PHP_EOL;
 			}
-			else if($key !== 'var_account' && $key !== 'var_account_id' && $key !== 'var_password' && $key !== 'var_step' && $key !== 'var_email' && $key !== 'var_player_name') {
+			else if(!in_array($key, array('var_account', 'var_account_id', 'var_password', 'var_step', 'var_email', 'var_player_name'), true)) {
 				$content .= '$config[\'' . str_replace('var_', '', $key) . '\'] = \'' . $value . '\';';
 				$content .= PHP_EOL;
 			}
