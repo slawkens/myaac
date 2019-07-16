@@ -105,4 +105,5 @@ if(isset($_SERVER['HTTP_HOST'])) {
 
 	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
 }
-?>
+
+require SYSTEM . 'exception.php';
