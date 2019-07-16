@@ -11,13 +11,12 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Last Kills';
 
-$deaths_list = array();
+$last_kills = array();
 $players_deaths_count = 0;
 
 $tmp = null;
-if($cache->enabled() && $cache->fetch('lastkills', $tmp)) {
-	$tmp = unserialize($tmp);
-	$deaths_list = $tmp['deaths_list'];
+if($cache->enabled() && $cache->fetch('last_kills', $tmp)) {
+	$last_kills = unserialize($tmp);
 }
 else {
 	if($db->hasTable('player_killers')) // tfs 0.3
@@ -74,7 +73,7 @@ else {
 
 				$killers_string .= '.';
 
-				$deaths_list[] = array(
+				$last_kills[] = array(
 					'id' => $players_deaths_count,
 					'date' => $death['date'],
 					'killers_string' => $killers_string,
@@ -85,7 +84,7 @@ else {
 	} else {
 		//$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `player_deaths`.`killed_by` as `killed_by`, `player_deaths`.`time` as `time`, `player_deaths`.`is_player` as `is_player`, `player_deaths`.`level` as `level` FROM `player_deaths`, `players` as `d` INNER JOIN `players` as `p` ON player_deaths.player_id = p.id WHERE player_deaths.`is_player`='1' ORDER BY `time` DESC LIMIT " . $config['last_kills_limit'] . ";");
 
-		$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `d`.`killed_by` as `killed_by`, `d`.`time` as `time`, `d`.`level`, `d`.`is_player` FROM `player_deaths` as `d` INNER JOIN `players` as `p` ON d.player_id = p.id ORDER BY `time` DESC LIMIT 20;");
+		$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `d`.`killed_by` as `killed_by`, `d`.`time` as `time`, `d`.`level`, `d`.`is_player` FROM `player_deaths` as `d` INNER JOIN `players` as `p` ON d.player_id = p.id ORDER BY `time` DESC LIMIT " . $config['last_kills_limit'] . ";");
 		if(!empty($players_deaths)) {
 			foreach($players_deaths as $death) {
 				$killers_string .= getPlayerLink($death['victim']) . ' died at level ' . $death['level'] . ' by ';
@@ -96,21 +95,20 @@ else {
 
 				$killers_string .= '.';
 
-				$deaths_list[] = array(
+				$last_kills[] = array(
 					'id' => $players_deaths_count,
 					'date' => $death['date'],
 					'killers_string' => $killers_string,
-				);				
+				);
 			}
-		}		
+		}
 	}
 
 	if($cache->enabled()) {
-		$cache->set('lastkills', serialize(array('deaths_list' => $deaths_list)), 60);
+		$cache->set('last_kills', serialize($last_kills), 120);
 	}
 }
 
 $twig->display('lastkills.html.twig', array(
-	'lastkills' => $deaths_list
+	'lastkills' => $last_kills
 ));
-?>
