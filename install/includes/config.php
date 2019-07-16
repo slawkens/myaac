@@ -26,7 +26,7 @@ if(!isset($error) || !$error) {
 		$config['database_type'] = $config['lua']['database_type'];
 	else if(isset($config['lua']['sql_type'])) // otserv
 		$config['database_type'] = $config['lua']['sql_type'];
-	
+
 	$config['database_type'] = strtolower($config['database_type']);
 	if(empty($config['database_type'])) {
 		error($locale['step_database_error_database_empty']);

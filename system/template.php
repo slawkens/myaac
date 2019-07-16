@@ -54,26 +54,30 @@ else {
 if(file_exists(BASE . $template_path . '/config.php')) {
 	require BASE . $template_path . '/config.php';
 }
+
+$tmp = '';
+if ($cache->enabled() && $cache->fetch('template_ini_' . $template_name, $tmp)) {
+	$template_ini = unserialize($tmp);
+}
 else {
 	$file = BASE . $template_path . '/config.ini';
 	$exists = file_exists($file);
 	if ($exists || ($config['backward_support'] && file_exists(BASE . $template_path . '/layout_config.ini'))) {
-		if (!$exists)
+		if (!$exists) {
 			$file = BASE . $template_path . '/layout_config.ini';
+		}
+
+		$template_ini = parse_ini_file($file);
 
 		if ($cache->enabled()) {
-			$tmp = '';
-			if ($cache->fetch('template_ini_' . $template_name, $tmp))
-				$template_ini = unserialize($tmp);
-			else {
-				$template_ini = parse_ini_file($file);
-				$cache->set('template_ini_' . $template_name, serialize($template_ini));
-			}
-		} else
-			$template_ini = parse_ini_file($file);
+			$cache->set('template_ini_' . $template_name, serialize($template_ini));
+		}
+	}
+}
 
-		foreach ($template_ini as $key => $value)
-			$config[$key] = $value;
+if (isset($template_ini)) {
+	foreach ($template_ini as $key => $value) {
+		$config[$key] = $value;
 	}
 }
 
@@ -134,9 +138,16 @@ function get_template_menus() {
 	}
 
 	$new_menus = array();
-	foreach(config('menu_categories') as $id => $options) {
-		if(isset($menus[$id]))
+	/**
+	 * @var array $configMenuCategories
+	 * @var int $id
+	 * @var array $options
+	 */
+	$configMenuCategories = config('menu_categories');
+	foreach($configMenuCategories as $id => $options) {
+		if(isset($menus[$id])) {
 			$new_menus[$id] = $menus[$id];
+		}
 	}
 
 	return $new_menus;
