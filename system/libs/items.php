@@ -16,14 +16,14 @@ class Items
 
 	public static function loadFromXML($show = false)
 	{
-		global $config, $db;
+		global $db;
 		
 		try {
-			$db->query("DELETE FROM `myaac_items`;");
+			$db->exec("DELETE FROM `myaac_items`;");
 		} catch (PDOException $error) {
 		}
 		
-		$file_path = $config['data_path'] . 'items/items.xml';
+		$file_path = config('data_path') . 'items/items.xml';
 		if (!file_exists($file_path)) {
 			self::$error = 'Cannot load file ' . $file_path;
 			return false;
@@ -82,7 +82,7 @@ class Items
 	}
 	
 	public static function getDescription($id, $count = 1) {
-		global $config, $db;
+		global $db;
 		
 		$item = self::getItem($id);
 		
@@ -115,7 +115,7 @@ class Items
 		else
 			$s .= 'an item of type ' . $item['id'];
 		
-		if(strtolower($attr['type']) == 'rune') {
+		if(isset($attr['type']) && strtolower($attr['type']) == 'rune') {
 			$query = $db->query('SELECT `level`, `maglevel`, `vocations` FROM `' . TABLE_PREFIX . 'spells` WHERE `item_id` = ' . $id);
 			if($query->rowCount() == 1) {
 				$query = $query->fetch();
@@ -124,11 +124,12 @@ class Items
 					$s .= '. ' . ($count > 1 ? "They" : "It") . ' can only be used by ';
 				}
 				
+				$configVocations = config('vocations');
 				if(!empty(trim($query['vocations']))) {
 					$vocations = json_decode($query['vocations']);
 					if(count($vocations) > 0) {
 						foreach($vocations as $voc => $show) {
-							$vocations[$config['vocations'][$voc]] = $show;
+							$vocations[$configVocations[$voc]] = $show;
 						}
 					}
 				}
