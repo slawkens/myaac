@@ -103,8 +103,9 @@ if($config['forum'] != '')
 }
 
 $twig->addGlobal('template_path', $template_path);
-if($twig_loader && file_exists(BASE . $template_path))
+if($twig_loader) {
 	$twig_loader->prependPath(BASE . $template_path);
+}
 
 function get_template_menus() {
 	global $db, $template_name;
