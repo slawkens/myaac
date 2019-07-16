@@ -15,15 +15,21 @@ require LIBS . 'weapons.php';
 
 $twig->display('admin.items.html.twig');
 
-$reload = isset($_REQUEST['reload']) && (int)$_REQUEST['reload'] == 1;
+$reload = isset($_REQUEST['reload']) && (int)$_REQUEST['reload'] === 1;
 if ($reload) {
-	if (Items::loadFromXML(true))
-		success('Successfully loaded items.');
-	else
+	$items_start_time = microtime(true);
+	if (Items::loadFromXML(true)) {
+		success('Successfully loaded items (in ' . round(microtime(true) - $items_start_time, 4) . ' seconds).');
+	}
+	else {
 		error(Items::getError());
+	}
 
-	if (Weapons::loadFromXML(true))
-		success('Successfully loaded weapons.');
-	else
+	$weapons_start_time = microtime(true);
+	if (Weapons::loadFromXML(true)) {
+		success('Successfully loaded weapons (in ' . round(microtime(true) - $weapons_start_time, 4) . ' seconds).');
+	}
+	else {
 		error(Weapons::getError());
+	}
 }
