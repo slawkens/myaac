@@ -13,16 +13,10 @@ defined('MYAAC') or die('Direct access not allowed!');
 class Items
 {
 	private static $error = '';
+	private static $items;
 
 	public static function loadFromXML($show = false)
 	{
-		global $db;
-		
-		try {
-			$db->exec("DELETE FROM `myaac_items`;");
-		} catch (PDOException $error) {
-		}
-		
 		$file_path = config('data_path') . 'items/items.xml';
 		if (!file_exists($file_path)) {
 			self::$error = 'Cannot load file ' . $file_path;
@@ -32,22 +26,26 @@ class Items
 		$xml = new DOMDocument;
 		$xml->load($file_path);
 		
+		$items = array();
 		foreach ($xml->getElementsByTagName('item') as $item) {
 			if ($item->getAttribute('fromid')) {
 				for ($id = $item->getAttribute('fromid'); $id <= $item->getAttribute('toid'); $id++) {
-					self::parseNode($id, $item, $show);
+					$tmp = self::parseNode($id, $item, $show);
+					$items[$tmp['id']] = $tmp['content'];
 				}
-			} else
-				self::parseNode($item->getAttribute('id'), $item, $show);
-			
+			} else {
+				$tmp = self::parseNode($item->getAttribute('id'), $item, $show);
+				$items[$tmp['id']] = $tmp['content'];
+				}
 		}
 		
+		require_once LIBS . 'cache_php.php';
+		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE);
+		$cache_php->set('items', $items);
 		return true;
 	}
 	
 	public static function parseNode($id, $node, $show = false) {
-		global $db;
-		
 		$name = $node->getAttribute('name');
 		$article = $node->getAttribute('article');
 		$plural = $node->getAttribute('plural');
@@ -57,28 +55,26 @@ class Items
 			$attributes[strtolower($attr->getAttribute('key'))] = $attr->getAttribute('value');
 		}
 		
-		$exist = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'items` WHERE `id` = ' . $id);
-		if($exist->rowCount() > 0) {
-			if($show) {
-				warning('Duplicated item with id: ' . $id);
-			}
-		}
-		else {
-			$db->insert(TABLE_PREFIX . 'items', array('id' => $id, 'article' => $article, 'name' => $name, 'plural' => $plural, 'attributes' => json_encode($attributes)));
-		}
+		return array('id' => $id, 'content' => array('article' => $article, 'name' => $name, 'plural' => $plural, 'attributes' => $attributes));
 	}
 	
 	public static function getError() {
 		return self::$error;
 	}
 	
+	public static function loadItems() {
+		if(self::$items) {
+			return;
+		}
+		
+		require_once LIBS . 'cache_php.php';
+		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE);
+		self::$items = $cache_php->get('items');
+	}
+		
 	public static function getItem($id) {
-		global $db;
-		
-		$item = $db->select(TABLE_PREFIX . 'items', array('id' => $id));
-		$item['attributes'] = json_decode($item['attributes']);
-		
-		return $item;
+		self::loadItems();
+		return self::$items[$id];
 	}
 	
 	public static function getDescription($id, $count = 1) {
