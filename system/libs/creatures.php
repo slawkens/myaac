@@ -11,33 +11,33 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Creatures {
-	private static $monstersList = null;
+	private static $monstersList;
 	private static $lastError = '';
-	
+
 	public static function loadFromXML($show = false) {
-		global $config, $db;
-		
-		try { $db->query("DELETE FROM `myaac_monsters`;"); } catch(PDOException $error) {}
-		
+		global $db;
+
+		try { $db->exec('DELETE FROM `' . TABLE_PREFIX . 'monsters`;'); } catch(PDOException $error) {}
+
 		if($show) {
 			echo '<h2>Reload monsters.</h2>';
-			echo "<h2>All records deleted from table 'myaac_monsters' in database.</h2>";
+			echo "<h2>All records deleted from table '" . TABLE_PREFIX . "monsters' in database.</h2>";
 		}
-		
+
 		try {
-			self::$monstersList = new OTS_MonstersList($config['data_path'].'monster/');
+			self::$monstersList = new OTS_MonstersList(config('data_path') . 'monster/');
 		}
 		catch(Exception $e) {
 			self::$lastError = $e->getMessage();
 			return false;
 		}
-		
+
 		$items = array();
-		$items_db = $db->query('SELECT `id`, `name` FROM `' . TABLE_PREFIX . 'items`;');
-		foreach($items_db->fetchAll() as $item) {
-			$items[$item['name']] = $item['id'];
+		Items::load();
+		foreach((array)Items::$items as $id => $item) {
+			$items[$item['name']] = $id;
 		}
-		
+
 		//$names_added must be an array
 		$names_added[] = '';
 		//add monsters
@@ -49,7 +49,7 @@ class Creatures {
 				}
 				continue;
 			}
-			
+
 			//load monster mana needed to summon/convince
 			$mana = $monster->getManaCost();
 
@@ -72,7 +72,7 @@ class Creatures {
 					$use_haste = 1;
 				}
 			}
-			
+
 			//load race
 			$race = $monster->getRace();
 
@@ -82,7 +82,7 @@ class Creatures {
 				$flags['summonable'] = '0';
 			if(!isset($flags['convinceable']))
 				$flags['convinceable'] = '0';
-			
+
 			$loot = $monster->getLoot();
 			foreach($loot as &$item) {
 				if(!Validator::number($item['id'])) {
@@ -107,7 +107,7 @@ class Creatures {
 						'race' => $race,
 						'loot' => json_encode($loot)
 					));
-					
+
 					if($show) {
 						success('Added: ' . $name . '<br/>');
 					}
@@ -117,18 +117,18 @@ class Creatures {
 						warning('Error while adding monster (' . $name . '): ' . $error->getMessage());
 					}
 				}
-				
+
 				$names_added[] = $name;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public static function getMonstersList() {
 		return self::$monstersList;
 	}
-	
+
 	public static function getLastError() {
 		return self::$lastError;
 	}

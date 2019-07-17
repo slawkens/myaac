@@ -13,7 +13,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 class Items
 {
 	private static $error = '';
-	private static $items;
+	public static $items;
 
 	public static function loadFromXML($show = false)
 	{
@@ -22,10 +22,10 @@ class Items
 			self::$error = 'Cannot load file ' . $file_path;
 			return false;
 		}
-		
+
 		$xml = new DOMDocument;
 		$xml->load($file_path);
-		
+
 		$items = array();
 		foreach ($xml->getElementsByTagName('item') as $item) {
 			if ($item->getAttribute('fromid')) {
@@ -36,52 +36,52 @@ class Items
 			} else {
 				$tmp = self::parseNode($item->getAttribute('id'), $item, $show);
 				$items[$tmp['id']] = $tmp['content'];
-				}
+			}
 		}
-		
+
 		require_once LIBS . 'cache_php.php';
 		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE);
 		$cache_php->set('items', $items);
 		return true;
 	}
-	
+
 	public static function parseNode($id, $node, $show = false) {
 		$name = $node->getAttribute('name');
 		$article = $node->getAttribute('article');
 		$plural = $node->getAttribute('plural');
-		
+
 		$attributes = array();
 		foreach($node->getElementsByTagName('attribute') as $attr) {
 			$attributes[strtolower($attr->getAttribute('key'))] = $attr->getAttribute('value');
 		}
-		
+
 		return array('id' => $id, 'content' => array('article' => $article, 'name' => $name, 'plural' => $plural, 'attributes' => $attributes));
 	}
-	
+
 	public static function getError() {
 		return self::$error;
 	}
-	
-	public static function loadItems() {
+
+	public static function load() {
 		if(self::$items) {
 			return;
 		}
-		
+
 		require_once LIBS . 'cache_php.php';
 		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE);
 		self::$items = $cache_php->get('items');
 	}
-		
-	public static function getItem($id) {
-		self::loadItems();
+
+	public static function get($id) {
+		self::load();
 		return self::$items[$id];
 	}
-	
+
 	public static function getDescription($id, $count = 1) {
 		global $db;
-		
-		$item = self::getItem($id);
-		
+
+		$item = self::get($id);
+
 		$attr = $item['attributes'];
 		$s = '';
 		if(!empty($item['name'])) {
@@ -89,7 +89,7 @@ class Items
 				if($attr['showcount']) {
 					$s .= $count . ' ';
 				}
-				
+
 				if(!empty($item['plural'])) {
 					$s .= $item['plural'];
 				}
@@ -104,22 +104,22 @@ class Items
 				if(!empty($item['aticle'])) {
 					$s .= $item['article'] . ' ';
 				}
-				
+
 				$s .= $item['name'];
 			}
 		}
 		else
 			$s .= 'an item of type ' . $item['id'];
-		
+
 		if(isset($attr['type']) && strtolower($attr['type']) == 'rune') {
 			$query = $db->query('SELECT `level`, `maglevel`, `vocations` FROM `' . TABLE_PREFIX . 'spells` WHERE `item_id` = ' . $id);
 			if($query->rowCount() == 1) {
 				$query = $query->fetch();
-				
+
 				if($query['level'] > 0 && $query['maglevel'] > 0) {
 					$s .= '. ' . ($count > 1 ? "They" : "It") . ' can only be used by ';
 				}
-				
+
 				$configVocations = config('vocations');
 				if(!empty(trim($query['vocations']))) {
 					$vocations = json_decode($query['vocations']);
@@ -132,9 +132,9 @@ class Items
 				else {
 					$s .= 'players';
 				}
-			
+
 				$s .= ' with';
-				
+
 			}
 		}
 		return $s;
