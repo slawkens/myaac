@@ -38,7 +38,7 @@ Official website: https://my-aac.org
 
 ### OTHER NOTES
 
-	If you have a great idea or want contribute to the project - visit our website at http://www.my-aac.org
+	If you have a great idea or want contribute to the project - visit our website at https://www.my-aac.org
 
 ### LICENSING
 

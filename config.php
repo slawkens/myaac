@@ -12,8 +12,8 @@
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2017 MyAAC
- * @link      http://my-aac.org
+ * @copyright 2019 MyAAC
+ * @link      https://my-aac.org
  */
 
 $config = array(
@@ -40,7 +40,7 @@ $config = array(
 	'client' => 1098, // 954 = client 9.54
 
 	'session_prefix' => 'myaac_', // must be unique for every site on your server
-	'friendly_urls' => false, // mod_rewrite is required for this, it makes links looks more elegant to eye, and also are SEO friendly (example: http://my-aac.org/guilds/Testing instead of http://my-aac.org/?subtopic=guilds&name=Testing). Remember to rename .htaccess.dist to .htaccess
+	'friendly_urls' => false, // mod_rewrite is required for this, it makes links looks more elegant to eye, and also are SEO friendly (example: https://my-aac.org/guilds/Testing instead of https://my-aac.org/?subtopic=guilds&name=Testing). Remember to rename .htaccess.dist to .htaccess
 	'gzip_output' => false, // gzip page content before sending it to the browser, uses less bandwidth but more cpu cycles
 
 	// gesior backward support (templates & pages)

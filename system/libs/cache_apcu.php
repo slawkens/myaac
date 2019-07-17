@@ -5,8 +5,8 @@
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @author    Mark Samman (Talaturen) <marksamman@gmail.com>
- * @copyright 2017 MyAAC
- * @link      http://my-aac.org
+ * @copyright 2019 MyAAC
+ * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
 

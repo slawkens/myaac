@@ -4,18 +4,18 @@
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2017 MyAAC
- * @link      http://my-aac.org
+ * @copyright 2019 MyAAC
+ * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Version check';
 
 // fetch version
-//$file = @fopen('http://my-aac.org/VERSION', 'r') or die('Error while fetching version.');
+//$file = @fopen('https://my-aac.org/VERSION', 'r') or die('Error while fetching version.');
 //$myaac_version = fgets($file);
-$myaac_version = @file_get_contents('http://my-aac.org/VERSION');
+$myaac_version = @file_get_contents('https://my-aac.org/VERSION');
 if (!$myaac_version) {
-	warning('Error while fetching version info from http://my-aac.org<br/>
+	warning('Error while fetching version info from https://my-aac.org<br/>
 	Please try again later.');
 	return;
 }
@@ -32,7 +32,7 @@ if ($version_compare == 0) {
 	warning('You\'re using outdated version.<br/>
 		Your version: <b>' . MYAAC_VERSION . '</b><br/>
 		Latest version: <b>' . $myaac_version . '</b><br/>
-		Download available at: <a href="http://my-aac.org" target="_blank">www.my-aac.org</a>');
+		Download available at: <a href="https://my-aac.org" target="_blank">www.my-aac.org</a>');
 }
 
 /*
