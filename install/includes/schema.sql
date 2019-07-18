@@ -228,7 +228,7 @@ CREATE TABLE `myaac_monsters` (
 	`summonable` tinyint(1) NOT NULL,
 	`convinceable` tinyint(1) NOT NULL,
 	`race` varchar(255) NOT NULL,
-	`loot` varchar(10000) NOT NULL,
+	`loot` text NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
