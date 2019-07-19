@@ -7,7 +7,7 @@
  * @author    Slawkens <slawkens@gmail.com>
  * @author    whiteblXK
  * @copyright 2019 MyAAC
- * @link      http://my-aac.org
+ * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Houses';

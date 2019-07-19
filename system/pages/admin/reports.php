@@ -5,7 +5,7 @@
  * @package   MyAAC
  * @author    Lee
  * @copyright 2018 MyAAC
- * @link      http://my-aac.org
+ * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Report viewer';
