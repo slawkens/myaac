@@ -100,7 +100,7 @@ class OTS_ServerStatus
 /**
  * Server software info.
  */
-    const REQUEST_SERVER_SOFTWARE_INFO = 0x23;
+    const RESPOND_SERVER_SOFTWARE_INFO = 0x23;
 /**
  * Server name.
  * 
@@ -278,7 +278,7 @@ class OTS_ServerStatus
                     }
                     break;
 				
-				case self::REQUEST_SERVER_SOFTWARE_INFO:
+				case self::RESPOND_SERVER_SOFTWARE_INFO:
 					$this->softwareName = $info->getString();
 					$this->softwareVersion = $info->getString();
 					$this->softwareProtocol = $info->getString();
