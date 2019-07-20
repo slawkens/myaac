@@ -7,7 +7,7 @@ php:
   - '7.2'
 
 before_script:
-  - composer require jakub-onderka/php-parallel-lint --no-suggest --no-progress --no-interaction --no-ansi --optimize-autoloader
+  - composer require jakub-onderka/php-parallel-lint --no-suggest --no-progress --no-interaction --no-ansi --quiet --optimize-autoloader
 
 script:
-  - php vendor/bin/parallel-lint --no-progress --no-colors . 
+  - php vendor/bin/parallel-lint --no-progress --no-colors --exclude=vendor . 
