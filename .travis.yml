@@ -10,4 +10,4 @@ before_script:
   - composer require jakub-onderka/php-parallel-lint --no-suggest --no-progress --no-interaction --no-ansi --optimize-autoloader
 
 script:
-  - php vendor/bin/php-parallel-lint --no-progress --no-colors . 
+  - php vendor/bin/parallel-lint --no-progress --no-colors . 
