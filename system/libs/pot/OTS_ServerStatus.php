@@ -14,7 +14,7 @@
 
 /**
  * Wrapper for binary server status request.
- * 
+ *
  * @package POT
  * @property-read int $uptime Uptime.
  * @property-read string $ip IP number.
@@ -103,116 +103,116 @@ class OTS_ServerStatus
     const RESPOND_SERVER_SOFTWARE_INFO = 0x23;
 /**
  * Server name.
- * 
+ *
  * @var string
  */
     private $name;
 /**
  * Server IP.
- * 
+ *
  * @var string
  */
     private $ip;
 /**
  * Server port.
- * 
+ *
  * @var string
  */
     private $port;
 /**
  * Owner name.
- * 
+ *
  * @var string
  */
     private $owner;
 /**
  * Owner's e-mail.
- * 
+ *
  * @var string
  */
     private $eMail;
 /**
  * Message of the day.
- * 
- * @var stirng
+ *
+ * @var string
  */
     private $motd;
 /**
  * Server location.
- * 
+ *
  * @var string
  */
     private $location;
 /**
  * Website URL.
- * 
- * @var stirng
+ *
+ * @var string
  */
     private $url;
 /**
  * Uptime.
- * 
+ *
  * @var int
  */
     private $uptime;
 /**
  * Status version.
- * 
+ *
  * @var string
  */
     private $version;
 /**
  * Players online.
- * 
+ *
  * @var int
  */
     private $online;
 /**
  * Maximum players.
- * 
+ *
  * @var int
  */
     private $max;
 /**
  * Players peak.
- * 
+ *
  * @var int
  */
     private $peak;
 /**
  * Map name.
- * 
+ *
  * @var string
  */
     private $map;
 /**
  * Map author.
- * 
+ *
  * @var string
  */
     private $author;
 /**
  * Map width.
- * 
+ *
  * @var int
  */
     private $width;
 /**
  * Map height.
- * 
+ *
  * @var int
  */
     private $height;
 /**
  * Players online list.
- * 
+ *
  * @var array
  */
     private $players = array();
 
 /**
  * Server software.
- * 
+ *
  * @var string
  */
 	private $softwareName;
@@ -221,7 +221,7 @@ class OTS_ServerStatus
 
 /**
  * Reads info from respond packet.
- * 
+ *
  * @param OTS_Buffer $info Information packet.
  */
     public function __construct(OTS_Buffer $info)
@@ -277,7 +277,7 @@ class OTS_ServerStatus
                         $this->players[$name] = $info->getLong();
                     }
                     break;
-				
+
 				case self::RESPOND_SERVER_SOFTWARE_INFO:
 					$this->softwareName = $info->getString();
 					$this->softwareVersion = $info->getString();
@@ -289,7 +289,7 @@ class OTS_ServerStatus
 
 /**
  * Returns server uptime.
- * 
+ *
  * @return int Uptime.
  */
     public function getUptime()
@@ -299,7 +299,7 @@ class OTS_ServerStatus
 
 /**
  * Returns server IP.
- * 
+ *
  * @return string IP.
  */
     public function getIP()
@@ -309,7 +309,7 @@ class OTS_ServerStatus
 
 /**
  * Returns server name.
- * 
+ *
  * @return string Name.
  */
     public function getName()
@@ -319,7 +319,7 @@ class OTS_ServerStatus
 
 /**
  * Returns server port.
- * 
+ *
  * @return int Port.
  */
     public function getPort()
@@ -329,7 +329,7 @@ class OTS_ServerStatus
 
 /**
  * Returns server location.
- * 
+ *
  * @return string Location.
  */
     public function getLocation()
@@ -339,7 +339,7 @@ class OTS_ServerStatus
 
 /**
  * Returns server website.
- * 
+ *
  * @return string Website URL.
  */
     public function getURL()
@@ -349,7 +349,7 @@ class OTS_ServerStatus
 
 /**
  * Returns server version.
- * 
+ *
  * @return string Version.
  */
     public function getServerVersion()
@@ -359,7 +359,7 @@ class OTS_ServerStatus
 
 /**
  * Returns owner name.
- * 
+ *
  * @return string Owner name.
  */
     public function getOwner()
@@ -369,7 +369,7 @@ class OTS_ServerStatus
 
 /**
  * Returns owner e-mail.
- * 
+ *
  * @return string Owner e-mail.
  */
     public function getEMail()
@@ -379,7 +379,7 @@ class OTS_ServerStatus
 
 /**
  * Returns current amount of players online.
- * 
+ *
  * @return int Count of players.
  */
     public function getOnlinePlayers()
@@ -389,7 +389,7 @@ class OTS_ServerStatus
 
 /**
  * Returns maximum amount of players online.
- * 
+ *
  * @return int Maximum allowed count of players.
  */
     public function getMaxPlayers()
@@ -399,7 +399,7 @@ class OTS_ServerStatus
 
 /**
  * Returns record of online players.
- * 
+ *
  * @return int Players online record.
  */
     public function getPlayersPeak()
@@ -409,7 +409,7 @@ class OTS_ServerStatus
 
 /**
  * Returns map name.
- * 
+ *
  * @return string Map name.
  */
     public function getMapName()
@@ -419,7 +419,7 @@ class OTS_ServerStatus
 
 /**
  * Returns map author.
- * 
+ *
  * @return string Mapper name.
  */
     public function getMapAuthor()
@@ -429,7 +429,7 @@ class OTS_ServerStatus
 
 /**
  * Returns map width.
- * 
+ *
  * @return int Map width.
  */
     public function getMapWidth()
@@ -439,7 +439,7 @@ class OTS_ServerStatus
 
 /**
  * Returns map height.
- * 
+ *
  * @return int Map height.
  */
     public function getMapHeight()
@@ -449,7 +449,7 @@ class OTS_ServerStatus
 
 /**
  * Returns server's Message Of The Day
- * 
+ *
  * @return string Server MOTD.
  */
     public function getMOTD()
@@ -459,7 +459,7 @@ class OTS_ServerStatus
 
 /**
  * Returns list of players currently online.
- * 
+ *
  * @return array List of players in format 'name' => level.
  */
     public function getPlayers()
@@ -468,7 +468,7 @@ class OTS_ServerStatus
 
 /**
  * Returns software name.
- * 
+ *
  * @return string Software name.
  */
     public function getSoftwareName()
@@ -478,7 +478,7 @@ class OTS_ServerStatus
 
 /**
  * Returns software version.
- * 
+ *
  * @return string Software version.
  */
     public function getSoftwareVersion()
@@ -488,7 +488,7 @@ class OTS_ServerStatus
 
 /**
  * Returns software protocol.
- * 
+ *
  * @return string Software protocol.
  */
     public function getSoftwareProtocol()
@@ -498,7 +498,7 @@ class OTS_ServerStatus
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @param string $name Property name.
  * @return mixed Property value.
  * @throws OutOfBoundsException For non-supported properties.
