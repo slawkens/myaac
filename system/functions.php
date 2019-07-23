@@ -1063,6 +1063,15 @@ function config($key) {
 	return @$config[$key];
 }
 
+function configLua($key) {
+	global $config;
+	if (is_array($key)) {
+		return $config['lua'][$key[0]] = $key[1];
+	}
+
+	return @$config['lua'][$key];
+}
+
 function clearCache()
 {
 	global $template_name;
