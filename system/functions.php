@@ -137,14 +137,9 @@ function getGuildLink($name, $generate = true)
 }
 
 function getItemNameById($id) {
-	global $db;
-	$query = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'items` WHERE `id` = ' . $db->quote($id) . ' LIMIT 1;');
-	if($query->rowCount() === 1) {
-		$item = $query->fetch();
-		return $item['name'];
-	}
-
-	return '';
+	require_once LIBS . 'items.php';
+	$item = Items::get($id);
+	return $item['name'];
 }
 
 function getItemImage($id, $count = 1)
