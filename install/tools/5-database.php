@@ -182,7 +182,7 @@ if(!$db->hasColumn('players', 'created')) {
 
 if(!$db->hasColumn('players', 'deleted') && !$db->hasColumn('players', 'deletion')) {
 	if(query("ALTER TABLE `players` ADD `deleted` TINYINT(1) NOT NULL DEFAULT 0;"))
-		success($locale['step_database_adding_field'] . ' players.comment...');
+		success($locale['step_database_adding_field'] . ' players.deleted...');
 }
 
 if($db->hasColumn('players', 'hide_char')) {
