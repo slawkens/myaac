@@ -114,8 +114,8 @@ CREATE TABLE `myaac_forum`
 	`last_edit_aid` int(20) NOT NULL default '0',
 	`edit_date` int(20) NOT NULL default '0',
 	`post_ip` varchar(32) NOT NULL default '0.0.0.0',
-	`sticked` INT(11) NOT NULL DEFAULT '0',
-	`closed` INT(11) NOT NULL DEFAULT '0',
+	`sticked` tinyint(1) NOT NULL DEFAULT '0',
+	`closed` tinyint(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`),
 	KEY `section` (`section`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
