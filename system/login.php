@@ -149,7 +149,7 @@ else
 			}
 		}
 		else {
-			$errors[] = 'Please enter your account ' . (USE_ACCOUNT_NAME ? 'name' : 'password') . ' and password.';
+			$errors[] = 'Please enter your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' and password.';
 
 			$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
 		}
