@@ -45,7 +45,7 @@ In any case the name must not violate the naming conventions stated in the <a hr
 												</tr>
 												<tr class="Odd">
 													<td>
-														<input name="name" id="character_name" value="{{ name }}" size="25" maxlength="25" >
+														<input name="name" id="character_name" value="{{ name }}" size="{{ config.character_name_max_length }}" maxlength="{{ config.character_name_max_length }}" >
 														<img id="character_indicator" src="images/global/general/{% if not save or errors.name is defined %}n{% endif %}ok.gif" />
 														<br/>
 														<span style="font-size: 10px">
