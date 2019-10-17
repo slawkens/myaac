@@ -64,11 +64,15 @@ $errors = array();
 
 if($step == 'database') {
 	foreach($_SESSION as $key => $value) {
-		if(strpos($key, 'var_') === false || strpos($key, 'account') !== false || strpos($key, 'password') !== false) {
+		if(strpos($key, 'var_') === false) {
 			continue;
 		}
 
 		$key = str_replace('var_', '', $key);
+
+		if(in_array($key, array('account', 'password', 'email', 'player_name'))) {
+			continue;
+		}
 
 		if($key != 'usage' && empty($value)) {
 			$errors[] = $locale['please_fill_all'];
