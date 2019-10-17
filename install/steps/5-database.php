@@ -48,9 +48,11 @@ if(!$error) {
 	require BASE . 'install/includes/config.php';
 
 	if(!$error) {
-		success($locale['step_database_importing']);
 		require BASE . 'install/includes/database.php';
 
+		$locale['step_database_importing'] = str_replace('$DATABASE_NAME$', config('database_name'), $locale['step_database_importing']);
+		success($locale['step_database_importing']);
+		
 		if(isset($database_error)) { // we failed connect to the database
 			error($database_error);
 		}

@@ -62,7 +62,7 @@ $locale['step_config_usage_desc'] = 'Permitir que o MyAAC informe estatísticas 
 // database
 $locale['step_database'] = 'Importar schema';
 $locale['step_database_title'] = 'Importar MySQL schema';
-$locale['step_database_importing'] = 'Seu banco de dados é o MySQL. Importando schema agora...';
+$locale['step_database_importing'] = 'Seu banco de dados é o MySQL. O nome do banco de dados é: "$DATABASE_NAME$". Importando schema agora...';
 $locale['step_database_error_path'] = 'Por favor, especifique o caminho da pasta do servidor.';
 $locale['step_database_error_config'] = 'Não é possível encontrar o arquivo config.lua. O caminho da pasta do seu servidor está correto? Volte e verifique novamente.';
 $locale['step_database_error_database_empty'] = 'Não é possível determinar o tipo de banco de dados a partir do config.lua. Seu OTS não é suportado por este AAC.';

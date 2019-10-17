@@ -62,7 +62,7 @@ $locale['step_config_usage_desc'] = 'Allow MyAAC to report anonymous usage stati
 // database
 $locale['step_database'] = 'Import schema';
 $locale['step_database_title'] = 'Import MySQL schema';
-$locale['step_database_importing'] = 'Your database is MySQL. Importing schema now...';
+$locale['step_database_importing'] = 'Your database is MySQL. Database name is: "$DATABASE_NAME$". Importing schema now...';
 $locale['step_database_error_path'] = 'Please specify server path.';
 $locale['step_database_error_config'] = 'Cannot find config.lua file. Is your server path correct? Go back and check again.';
 $locale['step_database_error_database_empty'] = 'Cannot determine database type from config.lua. Your OTS is unsupported by this AAC.';

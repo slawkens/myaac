@@ -56,7 +56,7 @@ $locale['step_config_client_desc'] = 'Används för nerladdningssidan och teman.
 // database
 $locale['step_database'] = 'Importera schema';
 $locale['step_database_title'] = 'Importera MySQL schema';
-$locale['step_database_importing'] = 'Din databas är MySQL. Importerar schema nu...';
+$locale['step_database_importing'] = 'Din databas är MySQL. Databasnamnet är: "$DATABASE_NAME$". Importerar schema nu...';
 $locale['step_database_error_path'] = 'Ange server mapp.';
 $locale['step_database_error_config'] = 'Kan inte hitta konfigurations fil. Är din server mapp korrekt? Gå tillbaka och kolla igen.';
 $locale['step_database_error_database_empty'] = 'Kan inte bestämma databas typ från config.lua. Din OTS stöds inte av MyAAC.';
