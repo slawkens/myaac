@@ -23,11 +23,11 @@ if($save) {
 		return;
 	}
 
-	$post = $db->query("SELECT `id`, `first_post`, `section` FROM `" . TABLE_PREFIX . "forum` WHERE `id` = " . $post_id . " LIMIT 1")->fetch();
+	$post = $db->query("SELECT `id`, `first_post`, `section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `id` = " . $post_id . " LIMIT 1")->fetch();
 	if ($post['id'] == $post_id) {
 		if ($post['id'] == $post['first_post']) {
-			$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `section` = " . $board . " WHERE `id` = " . $post['id'] . "");
-			$nPost = $db->query('SELECT `section` FROM `' . TABLE_PREFIX . 'forum` WHERE `id` = \'' . $post_id . '\' LIMIT 1;')->fetch();
+			$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `section` = " . $board . " WHERE `id` = " . $post['id'] . "");
+			$nPost = $db->query('SELECT `section` FROM `' . FORUM_TABLE_PREFIX . 'forum` WHERE `id` = \'' . $post_id . '\' LIMIT 1;')->fetch();
 			header('Location: ' . getForumBoardLink($nPost['section']));
 		}
 	}
@@ -36,7 +36,7 @@ if($save) {
 }
 else {
 	$post_id = (int)$_REQUEST['id'];
-	$post = $db->query("SELECT `id`, `section`, `first_post`, `post_topic`, `author_guid` FROM `" . TABLE_PREFIX . "forum` WHERE `id` = " . $post_id . " LIMIT 1")->fetch();
+	$post = $db->query("SELECT `id`, `section`, `first_post`, `post_topic`, `author_guid` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `id` = " . $post_id . " LIMIT 1")->fetch();
 	$name = $db->query("SELECT `name` FROM `players` WHERE `id` = " . $post['author_guid'] . " ")->fetch();
 
 	$sections_allowed = array();

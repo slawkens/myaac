@@ -59,7 +59,7 @@ if(Forum::canPost($account_logged))
 
 				if (count($errors) == 0) {
 					$last_post = 0;
-					$query = $db->query('SELECT `post_date` FROM `' . TABLE_PREFIX . 'forum` ORDER BY `post_date` DESC LIMIT 1');
+					$query = $db->query('SELECT `post_date` FROM `' . FORUM_TABLE_PREFIX . 'forum` ORDER BY `post_date` DESC LIMIT 1');
 					if ($query->rowCount() > 0) {
 						$query = $query->fetch();
 						$last_post = $query['post_date'];
@@ -69,9 +69,9 @@ if(Forum::canPost($account_logged))
 				}
 				if (count($errors) == 0) {
 					$saved = true;
-					$db->query("INSERT INTO `" . TABLE_PREFIX . "forum` (`first_post` ,`last_post` ,`section` ,`replies` ,`views` ,`author_aid` ,`author_guid` ,`post_text` ,`post_topic` ,`post_smile`, `post_html` ,`post_date` ,`last_edit_aid` ,`edit_date`, `post_ip`) VALUES ('0', '" . time() . "', '" . (int)$section_id . "', '0', '0', '" . $account_logged->getId() . "', '" . (int)$char_id . "', " . $db->quote($text) . ", " . $db->quote($post_topic) . ", '" . (int)$smile . "', '" . (int)$html . "', '" . time() . "', '0', '0', '" . $_SERVER['REMOTE_ADDR'] . "')");
+					$db->query("INSERT INTO `" . FORUM_TABLE_PREFIX . "forum` (`first_post` ,`last_post` ,`section` ,`replies` ,`views` ,`author_aid` ,`author_guid` ,`post_text` ,`post_topic` ,`post_smile`, `post_html` ,`post_date` ,`last_edit_aid` ,`edit_date`, `post_ip`) VALUES ('0', '" . time() . "', '" . (int)$section_id . "', '0', '0', '" . $account_logged->getId() . "', '" . (int)$char_id . "', " . $db->quote($text) . ", " . $db->quote($post_topic) . ", '" . (int)$smile . "', '" . (int)$html . "', '" . time() . "', '0', '0', '" . $_SERVER['REMOTE_ADDR'] . "')");
 					$thread_id = $db->lastInsertId();
-					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `first_post`=" . (int)$thread_id . " WHERE `id` = " . (int)$thread_id);
+					$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `first_post`=" . (int)$thread_id . " WHERE `id` = " . (int)$thread_id);
 					header('Location: ' . getForumThreadLink($thread_id));
 					echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id) . '">GO BACK TO LAST THREAD</a>';
 				}

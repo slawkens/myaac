@@ -10,6 +10,23 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$configForumTablePrefix = config('forum_table_prefix');
+if(!empty(trim($configForumTablePrefix))) {
+	if(!in_array($configForumTablePrefix, array('myaac_', 'z_'))) {
+		throw new RuntimeException('Invalid value for forum_table_prefix in config.php. Can be only: "myaac_" or "z_".');
+	}
+
+	define('FORUM_TABLE_PREFIX', $configForumTablePrefix);
+}
+else {
+	if($db->hasTable('z_forum')) {
+		define('FORUM_TABLE_PREFIX', 'z_');
+	}
+	else {
+		define('FORUM_TABLE_PREFIX', 'myaac_');
+	}
+}
+
 class Forum
 {
 	/**
@@ -42,7 +59,7 @@ class Forum
 	{
 		global $db;
 		$thread_id = 0;
-		if($db->insert(TABLE_PREFIX . 'forum', array(
+		if($db->insert(FORUM_TABLE_PREFIX . 'forum', array(
 			'first_post' => 0,
 			'last_post' => time(),
 			'section' => $section_id,
@@ -57,7 +74,7 @@ class Forum
 			'post_ip' => $_SERVER['REMOTE_ADDR']
 		))) {
 			$thread_id = $db->lastInsertId();
-			$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `first_post`=".(int) $thread_id." WHERE `id` = ".(int) $thread_id);
+			$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `first_post`=".(int) $thread_id." WHERE `id` = ".(int) $thread_id);
 		}
 
 		return $thread_id;
@@ -66,7 +83,7 @@ class Forum
 	public static function add_post($thread_id, $section, $author_aid, $author_guid, $post_text, $post_topic, $smile, $html)
 	{
 		global $db;
-		$db->insert(TABLE_PREFIX . 'forum', array(
+		$db->insert(FORUM_TABLE_PREFIX . 'forum', array(
 			'first_post' => $thread_id,
 			'section' => $section,
 			'author_aid' => $author_aid,

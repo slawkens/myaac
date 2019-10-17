@@ -241,6 +241,8 @@ $config = array(
 	'forum_post_interval' => 30, // in seconds
 	'forum_posts_per_page' => 20,
 	'forum_threads_per_page' => 20,
+	// uncomment to force use table for forum
+	//'forum_table_prefix' => 'z_', // what forum mysql table to use, z_ (for gesior old forum) or myaac_ (for myaac)
 
 	// last kills
 	'last_kills_limit' => 50, // max. number of deaths shown on the last kills page

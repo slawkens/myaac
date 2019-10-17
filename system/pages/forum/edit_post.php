@@ -18,10 +18,10 @@ if(Forum::canPost($account_logged))
 		return;
 	}
 
-	$thread = $db->query("SELECT `author_guid`, `author_aid`, `first_post`, `post_topic`, `post_date`, `post_text`, `post_smile`, `post_html`, `id`, `section` FROM `" . TABLE_PREFIX . "forum` WHERE `id` = ".$post_id." LIMIT 1")->fetch();
+	$thread = $db->query("SELECT `author_guid`, `author_aid`, `first_post`, `post_topic`, `post_date`, `post_text`, `post_smile`, `post_html`, `id`, `section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `id` = ".$post_id." LIMIT 1")->fetch();
 	if(isset($thread['id']))
 	{
-		$first_post = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`author_guid`, `" . TABLE_PREFIX . "forum`.`author_aid`, `" . TABLE_PREFIX . "forum`.`first_post`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread['first_post']." LIMIT 1")->fetch();
+		$first_post = $db->query("SELECT `" . FORUM_TABLE_PREFIX . "forum`.`author_guid`, `" . FORUM_TABLE_PREFIX . "forum`.`author_aid`, `" . FORUM_TABLE_PREFIX . "forum`.`first_post`, `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_smile`, `" . FORUM_TABLE_PREFIX . "forum`.`id`, `" . FORUM_TABLE_PREFIX . "forum`.`section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $thread['first_post']." LIMIT 1")->fetch();
 		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread['first_post']) . '">'.$first_post['post_topic'].'</a> >> <b>Edit post</b>';
 		if(Forum::hasAccess($thread['section'] && ($account_logged->getId() == $thread['author_aid'] || Forum::isModerator())))
 		{
@@ -71,8 +71,8 @@ if(Forum::canPost($account_logged))
 					$saved = true;
 					if($account_logged->getId() != $thread['author_aid'])
 						$char_id = $thread['author_guid'];
-					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $char_id.", `post_text` = ".$db->quote($text).", `post_topic` = ".$db->quote($post_topic).", `post_smile` = ".$smile.", `post_html` = ".$html.", `last_edit_aid` = ".(int) $account_logged->getId().",`edit_date` = ".time()." WHERE `id` = ".(int) $thread['id']);
-					$post_page = $db->query("SELECT COUNT(`" . TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`post_date` <= ".$thread['post_date']." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['first_post'])->fetch();
+					$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $char_id.", `post_text` = ".$db->quote($text).", `post_topic` = ".$db->quote($post_topic).", `post_smile` = ".$smile.", `post_html` = ".$html.", `last_edit_aid` = ".(int) $account_logged->getId().",`edit_date` = ".time()." WHERE `id` = ".(int) $thread['id']);
+					$post_page = $db->query("SELECT COUNT(`" . FORUM_TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`post_date` <= ".$thread['post_date']." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['first_post'])->fetch();
 					$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
 					header('Location: ' . getForumThreadLink($thread['first_post'], $_page));
 					echo '<br />Thank you for editing post.<br /><a href="' . getForumThreadLink($thread['first_post'], $_page) . '">GO BACK TO LAST THREAD</a>';

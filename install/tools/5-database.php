@@ -214,3 +214,23 @@ if($db->hasColumn('players', 'rank_id')) {
 		}
 	}
 }
+
+if($db->hasTable('z_forum')) {
+	if(!$db->hasColumn('z_forum', 'post_html')) {
+		if(query("ALTER TABLE `z_forum` ADD `post_html` tinyint(1) NOT NULL DEFAULT '0' AFTER `post_smile`;")) {
+			success($locale['step_database_adding_field'] . ' z_forum.post_html...');
+		}
+	}
+
+	if(!$db->hasColumn('z_forum', 'sticked')) {
+		if(query("ALTER TABLE `z_forum` ADD `sticked` tinyint(1) NOT NULL DEFAULT '0';")) {
+			success($locale['step_database_adding_field'] . ' z_forum.sticked...');
+		}
+	}
+
+	if(!$db->hasColumn('z_forum', 'closed')) {
+		if(query("ALTER TABLE `z_forum` ADD `closed` tinyint(1) NOT NULL DEFAULT '0';")) {
+			success($locale['step_database_adding_field'] . ' z_forum.closed...');
+		}
+	}
+}

@@ -19,7 +19,7 @@ if(Forum::canPost($account_logged))
 		return;
 	}
 
-	$thread = $db->query("SELECT `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`id`, `" . TABLE_PREFIX . "forum`.`section` FROM `" . TABLE_PREFIX . "forum` WHERE `" . TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." LIMIT 1")->fetch();
+	$thread = $db->query("SELECT `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`id`, `" . FORUM_TABLE_PREFIX . "forum`.`section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." LIMIT 1")->fetch();
 	echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
 	if(isset($thread['id']) && Forum::hasAccess($thread['section']))
 	{
@@ -32,7 +32,7 @@ if(Forum::canPost($account_logged))
 		$saved = false;
 		if(isset($_REQUEST['quote']))
 		{
-			$quoted_post = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`id` = ".(int) $quote)->fetchAll();
+			$quoted_post = $db->query("SELECT `players`.`name`, `" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $quote)->fetchAll();
 			if(isset($quoted_post[0]['name']))
 				$text = '[i]Originally posted by '.$quoted_post[0]['name'].' on '.date('d.m.y H:i:s', $quoted_post[0]['post_date']).':[/i][quote]'.$quoted_post[0]['post_text'].'[/quote]';
 		}
@@ -61,7 +61,7 @@ if(Forum::canPost($account_logged))
 			if(count($errors) == 0)
 			{
 				$last_post = 0;
-				$query = $db->query('SELECT post_date FROM ' . TABLE_PREFIX . 'forum ORDER BY post_date DESC LIMIT 1');
+				$query = $db->query('SELECT post_date FROM ' . FORUM_TABLE_PREFIX . 'forum ORDER BY post_date DESC LIMIT 1');
 				if($query->rowCount() > 0)
 				{
 					$query = $query->fetch();
@@ -74,8 +74,8 @@ if(Forum::canPost($account_logged))
 			{
 				$saved = true;
 				Forum::add_post($thread['id'], $thread['section'], $account_logged->getId(), (int) $char_id, $text, $post_topic, $smile, $html, time(), $_SERVER['REMOTE_ADDR']);
-				$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".(int) $thread_id);
-				$post_page = $db->query("SELECT COUNT(`" . TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`post_date` <= ".time()." AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id'])->fetch();
+				$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".(int) $thread_id);
+				$post_page = $db->query("SELECT COUNT(`" . FORUM_TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`post_date` <= ".time()." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id'])->fetch();
 				$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
 				header('Location: ' . getForumThreadLink($thread_id, $_page));
 				echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id, $_page) . '">GO BACK TO LAST THREAD</a>';
@@ -87,7 +87,7 @@ if(Forum::canPost($account_logged))
 			if(!empty($errors))
 				$twig->display('error_box.html.twig', array('errors' => $errors));
 
-			$threads = $db->query("SELECT `players`.`name`, `" . TABLE_PREFIX . "forum`.`post_text`, `" . TABLE_PREFIX . "forum`.`post_topic`, `" . TABLE_PREFIX . "forum`.`post_smile`, `" . TABLE_PREFIX . "forum`.`post_html`, `" . TABLE_PREFIX . "forum`.`author_aid` FROM `players`, `" . TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . TABLE_PREFIX . "forum`.`author_guid` AND `" . TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 5")->fetchAll();
+			$threads = $db->query("SELECT `players`.`name`, `" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`post_smile`, `" . FORUM_TABLE_PREFIX . "forum`.`post_html`, `" . FORUM_TABLE_PREFIX . "forum`.`author_aid` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . FORUM_TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 5")->fetchAll();
 			foreach($threads as &$thread) {
 				$player_account = new OTS_Account();
 				$player_account->load($thread['author_aid']);
