@@ -879,8 +879,12 @@ function convert_bytes($size)
 	return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
 }
 
-function log_append($file, $str)
+function log_append($file, $str, array $params = [])
 {
+	if(count($params) > 0) {
+		$str .= print_r($params, true);
+	}
+
 	$f = fopen(LOGS . $file, 'ab');
 	fwrite($f, '[' . date(DateTime::RFC1123) . '] ' . $str . PHP_EOL);
 	fclose($f);
