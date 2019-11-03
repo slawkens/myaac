@@ -94,7 +94,7 @@ x.x - At any time between (version not specified)
 		* Travis CI
 	* some interface for this would be nice to have (phpmyadmin commands/queries)
 		* https://otland.net/threads/phpmyadmin-commands-to-edit-database.7751/
-	* replace spells, monsters tables with JavaScript Sortable Tables (DataTables?)
-	* add release script (bash) that will automatically create myaac-$VERSION.zip
 	* migrations: option to downgrade the database
 	* create account: create character
+    * suggest name option in create character:
+        * https://github.com/nubs/random-name-generator
