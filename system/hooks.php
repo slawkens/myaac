@@ -50,7 +50,7 @@ class Hook
 			$ret = require BASE . $this->_file;
 		}
 
-		return $ret === null || $ret == 1 || $ret;
+		return !isset($ret) || $ret == 1 || $ret;
 	}
 
 	public function name() {return $this->_name;}
