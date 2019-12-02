@@ -4,7 +4,7 @@
  *
  * @package   MyAAC
  * @author    Lee
- * @copyright 2018 MyAAC
+ * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
