@@ -110,12 +110,11 @@ defined('MYAAC') or die('Direct access not allowed!');
 			return; // installer will take care of this
 		}
 
-		die('ERROR: Cannot connect to MySQL database.<br/>' .
+		throw new RuntimeException('ERROR: Cannot connect to MySQL database.<br/>' .
 			'Possible reasons:' .
 			'<ul>' .
 				'<li>MySQL is not configured propertly in <i>config.lua</i>.</li>' .
 				'<li>MySQL server is not running.</li>' .
-			'</ul>' . $error);
+			'</ul>' . $error->getMessage());
 
 	}
-?>
