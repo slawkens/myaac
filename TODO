@@ -95,6 +95,5 @@ x.x - At any time between (version not specified)
 	* some interface for this would be nice to have (phpmyadmin commands/queries)
 		* https://otland.net/threads/phpmyadmin-commands-to-edit-database.7751/
 	* migrations: option to downgrade the database
-	* create account: create character
     * suggest name option in create character:
         * https://github.com/nubs/random-name-generator

@@ -20,6 +20,16 @@ if($logged)
 	return;
 }
 
+if(config('account_create_character_create')) {
+	require_once LIBS . 'CreateCharacter.php';
+	$createCharacter = new CreateCharacter();
+}
+
+$account_type = 'number';
+if(USE_ACCOUNT_NAME) {
+	$account_type = 'name';
+}
+
 $errors = array();
 $save = isset($_POST['save']) && $_POST['save'] == 1;
 if($save)
@@ -27,8 +37,9 @@ if($save)
 	if(USE_ACCOUNT_NAME) {
 		$account_name = $_POST['account'];
 	}
-	else
+	else {
 		$account_id = $_POST['account'];
+	}
 
 	$email = $_POST['email'];
 	$password = $_POST['password'];
@@ -86,32 +97,38 @@ if($save)
 		$errors['password'] = 'Password may not be the same as account name.';
 	}
 
-	if(empty($errors))
+	if($config['account_mail_unique'])
 	{
-		if($config['account_mail_unique'])
-		{
-			$test_email_account = new OTS_Account();
-			$test_email_account->findByEMail($email);
-			if($test_email_account->isLoaded())
-				$errors['email'] = 'Account with this e-mail address already exist.';
-		}
-
-		$account_db = new OTS_Account();
-		if(USE_ACCOUNT_NAME)
-			$account_db->find($account_name);
-		else
-			$account_db->load($account_id);
-
-		if($account_db->isLoaded()) {
-			if(USE_ACCOUNT_NAME)
-				$errors['account'] = 'Account with this name already exist.';
-			else
-				$errors['account'] = 'Account with this id already exist.';
-		}
+		$test_email_account = new OTS_Account();
+		$test_email_account->findByEMail($email);
+		if($test_email_account->isLoaded())
+			$errors['email'] = 'Account with this e-mail address already exist.';
 	}
 
-	if(!isset($_POST['accept_rules']) || $_POST['accept_rules'] != 'true')
+	$account_db = new OTS_Account();
+	if(USE_ACCOUNT_NAME)
+		$account_db->find($account_name);
+	else
+		$account_db->load($account_id);
+
+	if($account_db->isLoaded()) {
+		if(USE_ACCOUNT_NAME)
+			$errors['account'] = 'Account with this name already exist.';
+		else
+			$errors['account'] = 'Account with this id already exist.';
+	}
+
+	if(!isset($_POST['accept_rules']) || $_POST['accept_rules'] !== 'true')
 		$errors['accept_rules'] = 'You have to agree to the ' . $config['lua']['serverName'] . ' Rules in order to create an account!';
+
+	if(config('account_create_character_create')) {
+		$character_name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : null;
+		$character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
+		$character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;
+		$character_town = isset($_POST['town']) ? (int)$_POST['town'] : null;
+
+		$createCharacter->check($character_name, $character_sex, $character_vocation, $character_town, $errors);
+	}
 
 	if(empty($errors))
 	{
@@ -171,8 +188,13 @@ if($save)
 
 			if(_mail($email, 'New account on ' . $config['lua']['serverName'], $body_html))
 			{
-				$twig->display('account.created.verify.html.twig', array(
-					'account' => $tmp_account
+				echo 'Your account has been created.<br/><br/>';
+				$twig->display('success.html.twig', array(
+					'title' => 'Account Created',
+					'description' => 'Your account ' . $account_type . ' is <b>' . $tmp_account . '</b><br/>You will need the account ' . $account_type . ' and your password to play on ' . configLua('serverName') . '.
+						Please keep your account ' . $account_type . ' and password in a safe place and
+						never give your account ' . $account_type . ' or password to anybody.',
+					'custom_buttons' => config('account_create_character_create') ? '' : null
 				));
 			}
 			else
@@ -192,8 +214,26 @@ if($save)
 				header('Location: ' . getLink('account/manage'));
 			}
 
-			$twig->display('account.created.html.twig', array(
-				'account' => $tmp_account
+			echo 'Your account';
+			if(config('account_create_character_create')) {
+				echo ' and character have';
+			}
+			else {
+				echo ' has';
+			}
+
+			echo ' been created.';
+			if(!config('account_create_character_create')) {
+				echo ' Now you can login and create your first character.';
+			}
+
+			echo ' See you in Tibia!<br/><br/>';
+			$twig->display('success.html.twig', array(
+				'title' => 'Account Created',
+				'description' => 'Your account ' . $account_type . ' is <b>' . $tmp_account . '</b><br/>You will need the account ' . $account_type . ' and your password to play on ' . configLua('serverName') . '.
+						Please keep your account ' . $account_type . ' and password in a safe place and
+						never give your account ' . $account_type . ' or password to anybody.',
+				'custom_buttons' => config('account_create_character_create') ? '' : null
 			));
 
 			if($config['mail_enabled'] && $config['account_welcome_mail'])
@@ -207,6 +247,14 @@ if($save)
 				else {
 					error('An error occorred while sending email (<b>' . $email . '</b>)! Error:<br/>' . $mailer->ErrorInfo . '<br/>More info in system/logs/error.log');
 					log_append('error.log', '[createaccount.php] An error occorred while sending email: ' . $mailer->ErrorInfo . '. Error: ' . print_r(error_get_last(), true));
+				}
+			}
+
+			if(config('account_create_character_create')) {
+				// character creation
+				$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
+				if (!$character_created) {
+					error('There was an error creating your character. Please create your character later in account management page.');
 				}
 			}
 		}
@@ -244,7 +292,8 @@ if($config['account_country']) {
 }
 
 $twig->display('account.create.js.html.twig');
-$twig->display('account.create.html.twig', array(
+
+$params = array(
 	'account' => isset($_POST['account']) ? $_POST['account'] : '',
 	'email' => isset($_POST['email']) ? $_POST['email'] : '',
 	'countries' => isset($countries) ? $countries : null,
@@ -253,5 +302,15 @@ $twig->display('account.create.html.twig', array(
 	'country' => isset($country) ? $country : null,
 	'errors' => $errors,
 	'save' => $save
-));
-?>
+);
+
+if($save && config('account_create_character_create')) {
+	$params = array_merge($params, array(
+		'name' => $character_name,
+		'sex' => $character_sex,
+		'vocation' => $character_vocation,
+		'town' => $character_town
+	));
+}
+
+$twig->display('account.create.html.twig', $params);
