@@ -8,7 +8,7 @@ require LIBS . 'SensitiveException.php';
 function exception_handler($exception) {
 	$message = $exception->getMessage();
 	if($exception instanceof SensitiveException) {
-		$message = 'This error is sensitive and has been logged into system/logs/error.log.<br/>View this file for more information.';
+		$message = 'This error is sensitive and has been logged into ' . LOGS . 'error.log.<br/>View this file for more information.';
 
 		// log error to file
 		$f = fopen(LOGS . 'error.log', 'ab');
