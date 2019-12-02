@@ -110,10 +110,12 @@ defined('MYAAC') or die('Direct access not allowed!');
 			return; // installer will take care of this
 		}
 
-		throw new SensitiveException('ERROR: Cannot connect to MySQL database.' . PHP_EOL .
-			'Possible reasons:' . PHP_EOL .
-				'    * MySQL is not configured propertly in config.lua.' . PHP_EOL .
-				'    * MySQL server is not running.' . PHP_EOL .
-			$error->getMessage());
+		die('ERROR: Cannot connect to MySQL database.<br/>' .
+			'Possible reasons:' .
+			'<ul>' .
+				'<li>MySQL is not configured propertly in <i>config.lua</i>.</li>' .
+				'<li>MySQL server is not running.</li>' .
+			'</ul>' . $error);
 
 	}
+?>
