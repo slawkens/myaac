@@ -1936,7 +1936,6 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @version 0.1.0
  * @return OTS_GuildRank|null Guild rank (null if not member of any).
- * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
     public function getRank()
@@ -1946,27 +1945,26 @@ class OTS_Player extends OTS_Row_DAO
 			$query = $this->db->query('SELECT `rank_id` FROM `guild_members` WHERE `player_id`= ' . $this->data['id'] . ' LIMIT 1;');
 			if($query->rowCount() == 1) {
 				$query = $query->fetch();
-				$rank_id = $query['rank_id'];
+				$rank_id = (int)$query['rank_id'];
 			}
 		}
 		else if($this->db->hasTable('guild_membership')) {
 			$query = $this->db->query('SELECT `rank_id` FROM `guild_membership` WHERE `player_id`= ' . $this->data['id'] . ' LIMIT 1;');
 			if($query->rowCount() == 1) {
 				$query = $query->fetch();
-				$rank_id = $query['rank_id'];
+				$rank_id = (int)$query['rank_id'];
 			}
 		}
 		else if($this->db->hasColumn('players', 'rank_id')) {
 			$query = $this->db->query('SELECT `rank_id` FROM `players` WHERE `id`= ' . $this->data['id'] . ';')->fetch();
-			$rank_id = $query['rank_id'];
+			$rank_id = (int)$query['rank_id'];
 		}
 
-		if($rank_id == 0) {
-			return new OTS_GuildRank();
+	    $guildRank = new OTS_GuildRank();
+		if($rank_id !== 0) {
+			$guildRank->load($rank_id);
 		}
 
-        $guildRank = new OTS_GuildRank();
-        $guildRank->load($rank_id);
         return $guildRank;
     }
 
