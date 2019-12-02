@@ -91,7 +91,7 @@ if($save)
 		if($config['account_mail_unique'])
 		{
 			$test_email_account = new OTS_Account();
-			$test_email_account->findByEmail($email);
+			$test_email_account->findByEMail($email);
 			if($test_email_account->isLoaded())
 				$errors['email'] = 'Account with this e-mail address already exist.';
 		}
