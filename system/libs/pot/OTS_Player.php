@@ -162,7 +162,7 @@ class OTS_Player extends OTS_Row_DAO
 
 			$__load['guild_info'] = $guild_info;
 		}
-		
+
 		if(!isset($__load['skull_type']))
 		{
 			$skull_type = 'skull';
@@ -179,7 +179,7 @@ class OTS_Player extends OTS_Row_DAO
 			if($this->db->hasColumn('players', 'skull_time')) {
 				$skull_time = 'skull_time';
 			}
-		
+
 			$__load['skull_time'] = $skull_time;
 		}
 
@@ -214,14 +214,14 @@ class OTS_Player extends OTS_Row_DAO
 					unset($fields[array_search('promotion', $fields)]);
 				}
 			}
-			
+
 			if(in_array('deleted', $fields)) {
 				if($this->db->hasColumn('players', 'deletion')) {
 					unset($fields[array_search('deleted', $fields)]);
 					$fields[] = 'deletion';
 				}
 			}
-			
+
 			if(in_array('online', $fields)) {
 				if(!$this->db->hasColumn('players', 'online')) {
 					unset($fields[array_search('online', $fields)]);
@@ -236,7 +236,7 @@ class OTS_Player extends OTS_Row_DAO
 
 		if(!isset($this->data['guildnick']))
 			$this->data['guildnick'] = '';
-		
+
 		if(!isset($this->data['rank_id']))
 			$this->data['rank_id'] = 0;
 
@@ -254,16 +254,16 @@ class OTS_Player extends OTS_Row_DAO
 					'skill_shielding' => POT::SKILL_SHIELD,
 					'skill_fishing' => POT::SKILL_FISH
 				);
-				
+
 				$select = '';
 				$i = count($skill_ids);
 				foreach($skill_ids as $name => $id) {
 					$select .= '`' . $name . '`,';
 					$select .= '`' . $name . '_tries`';
-					
+
 					if($id != $i - 1)
 						$select .= ',';
-						
+
 				}
 				//echo $select;
 				$skills = $this->db->query('SELECT ' . $select . ' FROM `players` WHERE `id` = ' . $this->data['id'])->fetch();
@@ -358,13 +358,13 @@ class OTS_Player extends OTS_Row_DAO
 
 		if(!isset($this->data['direction']))
 			$this->data['direction'] = 0;
-		
+
 		if(!isset($this->data['conditions']))
 			$this->data['conditions'] = '';
 
 		if(!isset($this->data['town_id']))
 			$this->data['town_id'] = 1;
-		
+
         // updates existing player
         if( isset($this->data['id']) )
         {
@@ -372,12 +372,12 @@ class OTS_Player extends OTS_Row_DAO
 			if($this->db->hasColumn('players', 'loss_experience')) {
 				$loss = ', `loss_experience` = ' . $this->data['loss_experience'] . ', `loss_mana` = ' . $this->data['loss_mana'] . ', `loss_skills` = ' . $this->data['loss_skills'];
 			}
-			
+
 			$loss_items = '';
 			if($this->db->hasColumn('players', 'loss_items')) {
 				$loss_items = ', `loss_items` = ' . $this->data['loss_items'] . ', `loss_containers` = ' . $this->data['loss_containers'];
 			}
-			
+
 			$guild_info = '';
 			if(!$this->db->hasTable('guild_members') && $this->db->hasColumn('players', 'guildnick')) {
 				$guild_info = ', `guildnick` = ' . $this->db->quote($this->data['guildnick']) . ', ' . $this->db->fieldName('rank_id') . ' = ' . $this->data['rank_id'];
@@ -392,17 +392,17 @@ class OTS_Player extends OTS_Row_DAO
 			if($this->db->hasColumn('players', 'blessings')) {
 				$blessings = ', `blessings` = ' . $this->db->quote($this->data['blessings']);
 			}
-			
+
 			$stamina = '';
 			if($this->db->hasColumn('players', 'stamina')) {
 				$stamina = ', `stamina` = ' . $this->db->quote($this->data['stamina']);
 			}
-			
+
 			$lookaddons = '';
 			if($this->db->hasColumn('players', 'lookaddons')) {
 				$lookaddons = ', `lookaddons` = ' . $this->db->quote($this->data['lookaddons']);
 			}
-			
+
             // UPDATE query on database
             $this->db->query('UPDATE ' . $this->db->tableName('players') . ' SET ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($this->data['name']) . ', ' . $this->db->fieldName('account_id') . ' = ' . $this->data['account_id'] . ', ' . $this->db->fieldName('group_id') . ' = ' . $this->data['group_id'] . ', ' . $this->db->fieldName('sex') . ' = ' . $this->data['sex'] . ', ' . $this->db->fieldName('vocation') . ' = ' . $this->data['vocation'] . ', ' . $this->db->fieldName('experience') . ' = ' . $this->data['experience'] . ', ' . $this->db->fieldName('level') . ' = ' . $this->data['level'] . ', ' . $this->db->fieldName('maglevel') . ' = ' . $this->data['maglevel'] . ', ' . $this->db->fieldName('health') . ' = ' . $this->data['health'] . ', ' . $this->db->fieldName('healthmax') . ' = ' . $this->data['healthmax'] . ', ' . $this->db->fieldName('mana') . ' = ' . $this->data['mana'] . ', ' . $this->db->fieldName('manamax') . ' = ' . $this->data['manamax'] . ', ' . $this->db->fieldName('manaspent') . ' = ' . $this->data['manaspent'] . ', ' . $this->db->fieldName('soul') . ' = ' . $this->data['soul'] . ', ' . $this->db->fieldName('lookbody') . ' = ' . $this->data['lookbody'] . ', ' . $this->db->fieldName('lookfeet') . ' = ' . $this->data['lookfeet'] . ', ' . $this->db->fieldName('lookhead') . ' = ' . $this->data['lookhead'] . ', ' . $this->db->fieldName('looklegs') . ' = ' . $this->data['looklegs'] . ', ' . $this->db->fieldName('looktype') . ' = ' . $this->data['looktype'] . $lookaddons . ', ' . $this->db->fieldName('posx') . ' = ' . $this->data['posx'] . ', ' . $this->db->fieldName('posy') . ' = ' . $this->data['posy'] . ', ' . $this->db->fieldName('posz') . ' = ' . $this->data['posz'] . ', ' . $this->db->fieldName('cap') . ' = ' . $this->data['cap'] . ', ' . $this->db->fieldName('lastlogin') . ' = ' . $this->data['lastlogin'] . ', ' . $this->db->fieldName('lastlogout') . ' = ' . $this->data['lastlogout'] . ', ' . $this->db->fieldName('lastip') . ' = ' . $this->data['lastip'] . ', ' . $this->db->fieldName('save') . ' = ' . (int) $this->data['save'] . ', ' . $this->db->fieldName('conditions') . ' = ' . $this->db->quote($this->data['conditions']) . ', `' . $skull_time . '` = ' . $this->data['skulltime'] . ', `' . $skull_type . '` = ' . (int) $this->data['skull'] . $guild_info . ', ' . $this->db->fieldName('town_id') . ' = ' . $this->data['town_id'] . $loss . $loss_items . ', ' . $this->db->fieldName('balance') . ' = ' . $this->data['balance'] . $blessings . $stamina . $direction . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
         }
@@ -429,42 +429,42 @@ class OTS_Player extends OTS_Row_DAO
 				$guild_info = ', `guildnick`, `rank_id`';
 				$guild_info_data = ', ' . $this->db->quote($this->data['guildnick']) . ', ' . $this->data['rank_id'];
 			}
-			
+
 			$promotion = '';
-			$promotion_data = ''; 
+			$promotion_data = '';
 			if($this->db->hasColumn('players', 'promotion')) {
 				$promotion = ', `promotion`';
 				$promotion_data = ', ' . $this->data['promotion'];
 			}
-			
+
 			$direction = '';
-			$direction_data = ''; 
+			$direction_data = '';
 			if($this->db->hasColumn('players', 'direction')) {
 				$direction = ', `direction`';
 				$direction_data = ', ' . $this->data['direction'];
 			}
-			
+
 			$blessings = '';
-			$blessings_data = ''; 
+			$blessings_data = '';
 			if($this->db->hasColumn('players', 'blessings')) {
 				$blessings = ', `blessings`';
 				$blessings_data = ', ' . $this->data['blessings'];
 			}
-			
+
 			$stamina = '';
-			$stamina_data = ''; 
+			$stamina_data = '';
 			if($this->db->hasColumn('players', 'stamina')) {
 				$stamina = ', `stamina`';
 				$stamina_data = ', ' . $this->data['stamina'];
 			}
-			
+
 			$lookaddons = '';
-			$lookaddons_data = ''; 
+			$lookaddons_data = '';
 			if($this->db->hasColumn('players', 'lookaddons')) {
 				$lookaddons = ', `lookaddons`';
 				$lookaddons_data = ', ' . $this->data['lookaddons'];
 			}
-			
+
             // INSERT query on database
             $this->db->query('INSERT INTO `players` (`name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . $lookaddons . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $skull_time . '`, `' . $skull_type . '`' . $guild_info . ', `town_id`' . $loss . $loss_items . ', `balance`' . $blessings . $stamina . $direction . ', `created`' . $promotion . ', `comment`) VALUES (' . $this->db->quote($this->data['name']) . ', ' . $this->data['account_id'] . ', ' . $this->data['group_id'] . ', ' . $this->data['sex'] . ', ' . $this->data['vocation'] . ', ' . $this->data['experience'] . ', ' . $this->data['level'] . ', ' . $this->data['maglevel'] . ', ' . $this->data['health'] . ', ' . $this->data['healthmax'] . ', ' . $this->data['mana'] . ', ' . $this->data['manamax'] . ', ' . $this->data['manaspent'] . ', ' . $this->data['soul'] . ', ' . $this->data['lookbody'] . ', ' . $this->data['lookfeet'] . ', ' . $this->data['lookhead'] . ', ' . $this->data['looklegs'] . ', ' . $this->data['looktype'] . $lookaddons_data . ', ' . $this->data['posx'] . ', ' . $this->data['posy'] . ', ' . $this->data['posz'] . ', ' . $this->data['cap'] . ', ' . $this->data['lastlogin'] . ', ' . $this->data['lastlogout'] . ', ' . $this->data['lastip'] . ', ' . (int) $this->data['save'] . ', ' . $this->db->quote($this->data['conditions']) . ', ' . $this->data['skulltime'] . ', ' . (int) $this->data['skull'] . $guild_info_data . ', ' . $this->data['town_id'] . $loss_data . $loss_items_data . ', ' . $this->data['balance'] . $blessings_data . $stamina_data . $direction_data . ', ' . time() . $promotion_data . ', "")');
             // ID of new group
@@ -474,7 +474,7 @@ class OTS_Player extends OTS_Row_DAO
         // updates skills - doesn't matter if we have just created character - trigger inserts new skills
 		if($this->db->hasColumn('players', 'skill_fist')) { // tfs 1.0
 			$set = '';
-			
+
 			$skill_ids = array(
 				'skill_fist' => POT::SKILL_FIST,
 				'skill_club' => POT::SKILL_CLUB,
@@ -484,12 +484,12 @@ class OTS_Player extends OTS_Row_DAO
 				'skill_shielding' => POT::SKILL_SHIELD,
 				'skill_fishing' => POT::SKILL_FISH
 			);
-			
+
 			$i = count($skill_ids);
 			foreach($skill_ids as $name => $id) {
 				$set .= '`' . $name . '` = ' . $this->skills[$id]['value'] . ',';
 				$set .= '`' . $name . '_tries` = ' . $this->skills[$id]['tries'];
-				
+
 				if($id != $i - 1)
 					$set .= ',';
 			}
@@ -539,7 +539,7 @@ class OTS_Player extends OTS_Row_DAO
     {
         $this->data['hidden'] = (int) $hidden;
     }
-	
+
     public function getMarriage()
     {
 		if(!$this->db->hasColumn('players', 'marriage'))
@@ -635,7 +635,7 @@ class OTS_Player extends OTS_Row_DAO
     {
         $this->data['account_id'] = $account->getId();
     }
-	
+
 	public function setAccountId($account_id)
     {
         $this->data['account_id'] = (int)$account_id;
@@ -704,7 +704,7 @@ class OTS_Player extends OTS_Row_DAO
     {
         $this->data['group_id'] = $group->getId();
     }
-	
+
     public function setGroupId($group_id)
     {
         $this->data['group_id'] = $group_id;
@@ -755,7 +755,7 @@ class OTS_Player extends OTS_Row_DAO
 		$field = 'deleted';
 		if($this->db->hasColumn('players', 'deletion'))
 			$field = 'deletion';
-		
+
         if( !isset($this->data[$field]) )
         {
             throw new E_OTS_NotLoaded();
@@ -1605,7 +1605,7 @@ class OTS_Player extends OTS_Row_DAO
 
         return $this->data['lastlogin'];
     }
-	
+
     public function getLastLogout()
     {
         if( !isset($this->data['lastlogout']) )
@@ -1869,7 +1869,7 @@ class OTS_Player extends OTS_Row_DAO
 		$table = 'guild_membership';
 		if($this->db->hasTable('guild_members'))
 			$table = 'guild_members';
-		
+
 		$ranks = $this->db->query('SELECT `rank_id`, `nick` FROM `' . $table . '` WHERE `player_id` = ' . $this->db->quote($this->getID()))->fetch();
 		if($ranks)
 		{
@@ -1977,10 +1977,10 @@ class OTS_Player extends OTS_Row_DAO
 		if( isset($rank_id) && isset($guild)) {
 			if($rank_id == 0) {
 				if($this->db->hasTable('guild_membership')) {
-					$this->db->query('DELETE FROM `guild_membership` WHERE `player_id` = ' . $this->getId());	
+					$this->db->query('DELETE FROM `guild_membership` WHERE `player_id` = ' . $this->getId());
 				}
 				else if($this->db->hasTable('guild_members')) {
-					$this->db->query('DELETE FROM `guild_members` WHERE `player_id` = ' . $this->getId());	
+					$this->db->query('DELETE FROM `guild_members` WHERE `player_id` = ' . $this->getId());
 				}
 				else {
 					$this->data['rank_id'] = 0;
@@ -2223,7 +2223,7 @@ class OTS_Player extends OTS_Row_DAO
 
         return $this->data['blessings'];
     }
-	
+
     public function setBlessings($blessings)
     {
         $this->data['blessings'] = (int) $blessings;
@@ -2268,7 +2268,7 @@ class OTS_Player extends OTS_Row_DAO
 
         return $this->data['stamina'];
     }
-	
+
     public function setStamina($stamina)
     {
         $this->data['stamina'] = (int) $stamina;
@@ -2383,7 +2383,7 @@ class OTS_Player extends OTS_Row_DAO
         {
             $value = $this->db->quote($value);
         }
-        
+
         $this->db->query('UPDATE `players` SET `' . $field . '` = ' . $value . ' WHERE `id` = ' . $this->data['id']);
     }
 
@@ -2470,7 +2470,7 @@ class OTS_Player extends OTS_Row_DAO
 			'skill_shielding' => POT::SKILL_SHIELD,
 			'skill_fishing' => POT::SKILL_FISH
 		);
-		
+
 		if(Validator::number($skill))
 			$this->skills[ (int) $skill]['tries'] = (int) $tries;
 		else {
@@ -3218,7 +3218,7 @@ class OTS_Player extends OTS_Row_DAO
 
         $this->db->query('DELETE FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('name') . ' = ' . $this->db->quote( $spell->getName() ) );
     }
-	
+
 	public static function getPercentLevel($count, $nextLevelCount)
 	{
 		if($nextLevelCount > 0)
@@ -3325,7 +3325,7 @@ class OTS_Player extends OTS_Row_DAO
 
             case 'lastLogout':
                 return $this->getLastLogout();
-				
+
             case 'lastIP':
                 return $this->getLastIP();
 
@@ -3370,7 +3370,7 @@ class OTS_Player extends OTS_Row_DAO
 
             case 'lossContainers':
                 return $this->getLossContainers();
-				
+
             case 'balance':
                 return $this->getBalance();
 
@@ -3534,7 +3534,7 @@ class OTS_Player extends OTS_Row_DAO
             case 'skull':
                 $this->setSkull($value);
                 break;
-				
+
             case 'skullTime':
                 $this->setSkullTime($value);
                 break;
