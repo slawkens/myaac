@@ -1,4 +1,16 @@
 Thumbs.db
 .DS_Store
 .idea
+
 releases
+config.local.php
+
+# cache
+system/cache/*
+!system/cache/signatures/.htaccess
+!system/cache/twig/.htaccess
+!system/cache/.htaccess
+
+# logs
+system/logs/*
+!system/logs/.htaccess
