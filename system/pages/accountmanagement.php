@@ -61,6 +61,9 @@ $errors = array();
 	if($action == '')
 	{
 		$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']);
+		/**
+		 * @var OTS_Account $account_logged
+		 */
 		$recovery_key = $account_logged->getCustomField('key');
 		if(!$account_logged->isPremium())
 			$account_status = '<b><span style="color: red">Free Account</span></b>';
@@ -111,6 +114,7 @@ $errors = array();
 		}
 
 		$players = array();
+		/** @var OTS_Players_List $account_players */
 		$account_players = $account_logged->getPlayersList();
 		$account_players->orderBy('id');
 
