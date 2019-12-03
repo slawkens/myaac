@@ -298,7 +298,8 @@ CREATE TABLE `myaac_pages`
 	`php` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0 - plain html, 1 - php',
 	`access` TINYINT(2) NOT NULL DEFAULT 0,
 	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE `myaac_gallery`
