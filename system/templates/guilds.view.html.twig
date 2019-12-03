@@ -297,13 +297,17 @@
                                                             {% if isVice %}
                                                                 <form action="?subtopic=guilds&action=invite&guild={{ guild_name|url_encode }}" method="post">
                                                                     <td>
-                                                                        <input type="image" name="Invite Player" alt="Invite Player" src="{{ template_path }}/images/global/buttons/sbutton_inviteplayer.png" style="width: 120px; height: 20px;">
+                                                                        {% set button_name = 'Invite Character' %}
+                                                                        {% set button_image = '_sbutton_invitecharacter' %}
+                                                                        {% include('buttons.base.html.twig') %}
                                                                     </td>
                                                                 </form>
 
                                                                 <form action="?subtopic=guilds&action=change_rank&guild={{ guild_name|url_encode }}" method="post">
                                                                     <td>
-                                                                        <input type="image" name="Change Rank" alt="Change Rank" src="{{ template_path }}/images/global/buttons/sbutton_changerank.png" style="width: 120px; height: 20px;">
+                                                                        {% set button_name = 'Edit Ranks' %}
+                                                                        {% set button_image = '_sbutton_editranks' %}
+                                                                        {% include('buttons.base.html.twig') %}
                                                                     </td>
                                                                 </form>
                                                             {% endif %}
@@ -311,7 +315,9 @@
                                                             {% if players_from_account_in_guild|length > 0 %}
                                                                 <form action="?subtopic=guilds&action=leave_guild&guild={{ guild_name|url_encode }}" method="post">
                                                                     <td>
-                                                                        <input type="image" name="Leave Guild" alt="Leave Guild" src="{{ template_path }}/images/global/buttons/sbutton_leaveguild.png" style="width: 120px; height: 20px;">
+                                                                        {% set button_name = 'Leave Guild' %}
+                                                                        {% set button_image = '_sbutton_leaveguild' %}
+                                                                        {% include('buttons.base.html.twig') %}
                                                                     </td>
                                                                 </form>
                                                             {% endif %}
