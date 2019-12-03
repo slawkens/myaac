@@ -23,3 +23,8 @@ system/cache/*
 # logs
 system/logs/*
 !system/logs/.htaccess
+
+# plugins
+plugins/*
+!plugins/.htaccess
+!plugins/example.json
