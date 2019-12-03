@@ -5,6 +5,11 @@ Thumbs.db
 releases
 config.local.php
 
+# all custom templates
+templates/*
+!templates/tibiacom
+!templates/kathrine
+
 # guild images
 images/guilds/*
 !images/guilds/default.gif
