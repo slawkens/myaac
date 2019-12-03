@@ -115,7 +115,7 @@ Here you can change names of ranks, delete and add ranks, pass leadership to oth
 		{% set i = 0 %}
 		{% for rank in rank_list %}
 		<tr bgcolor="{{ getStyle(i) }}">
-			<td align="center">{{ rank.getId() }} // <a href="?subtopic=guilds&guild={{ guild.getName() }}&action=delete_rank&rankid={{ rank.getId() }}" border="0"><img src="{{ template_path }}/images/news/delete.png" border="0" alt="Delete Rank"></a>
+			<td align="center">{{ rank.getId() }} // <a href="?subtopic=guilds&guild={{ guild.getName() }}&action=delete_rank&rankid={{ rank.getId() }}" border="0"><img src="/images/news/delete.png" border="0" alt="Delete Rank"></a>
 			</td>
 			<td>
 				<input type="text" name="{{ rank.getId() }}_name" value="{{ rank.getName() }}" size="35"/>
