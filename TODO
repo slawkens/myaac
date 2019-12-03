@@ -83,7 +83,6 @@ x.x - At any time between (version not specified)
 	* possibility to add extra cache engines with plugins
 	* preferably configurable (enable/disable) forum TinyMCE editor
 	* OTAdmin support in Admin Panel
-	* database towns table support for TFS 1.3
 	* two factor authentication for TFS 1.x
 	* support for .yml plugin file specification
 	* display password strength

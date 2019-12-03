@@ -171,4 +171,41 @@ else {
 	}
 }
 */
-?>
+
+////////////////////////////////////////
+// load towns from database (TFS 1.3) //
+////////////////////////////////////////
+
+$towns = array();
+if($cache->enabled() && $cache->fetch('towns', $tmp)) {
+	$towns = unserialize($tmp);
+}
+else {
+	if($db->hasTable('towns')) {
+		$query = $db->query('SELECT `id`, `name` FROM `towns`;')->fetchAll(PDO::FETCH_ASSOC);
+
+		foreach($query as $town) {
+			$towns[$town['id']] = $town['name'];
+		}
+
+		unset($query);
+		if($cache->enabled()) {
+			$cache->set('towns', serialize($towns), 600);
+		}
+	}
+	else if($cache->enabled()) {
+		$cache->set('towns', serialize(array()), 600);
+	}
+}
+
+$configTowns = config('towns');
+if($configTowns !== null && (!isset($configTowns[1]) || $configTowns[1] !== 'Sample town')) {
+	$towns = array_replace(
+		$towns, $configTowns
+	);
+}
+
+config(['towns', $towns]);
+//////////////////////////////////////////////
+// END - load towns from database (TFS 1.3) //
+//////////////////////////////////////////////
