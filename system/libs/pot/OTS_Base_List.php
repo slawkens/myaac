@@ -17,19 +17,19 @@
 
 /**
  * Basic list class routines.
- * 
+ *
  * <p>
  * This class defines entire lists mechanism for classes that represents records set from OTServ database. All child classes only have to define {@link OTS_Base_List::init() init() method} to set table info for queries.
  * </p>
- * 
+ *
  * <p>
  * Table on which list will operate has to contain integer <var>"id"</var> field and single row representing class has to support loading by this filed as key.
  * </p>
- * 
+ *
  * <p>
  * This class is mostly usefull when you create own extensions for POT code.
  * </p>
- * 
+ *
  * @package POT
  * @version 0.1.5
  * @property-write int $limit Sets LIMIT clause.
@@ -40,7 +40,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 {
 /**
  * Database connection.
- * 
+ *
  * @var PDO
  * @version 0.1.5
  */
@@ -48,35 +48,35 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Limit for SELECT query.
- * 
+ *
  * @var int
  */
     private $limit = false;
 
 /**
  * Offset for SELECT query.
- * 
+ *
  * @var int
  */
     private $offset = false;
 
 /**
  * WHERE clause filter.
- * 
+ *
  * @var OTS_SQLFilter
  */
     private $filter = null;
 
 /**
  * List of sorting criteriums.
- * 
+ *
  * @var array
  */
     private $orderBy = array();
 
 /**
  * Query results.
- * 
+ *
  * @var array
  * @version 0.1.5
  */
@@ -84,21 +84,21 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Default table name for queries.
- * 
+ *
  * @var string
  */
     protected $table;
 
 /**
  * Class of generated objects.
- * 
+ *
  * @var string
  */
     protected $class;
 
 /**
  * Sets database connection handler.
- * 
+ *
  * @version 0.1.0
  */
     public function __construct()
@@ -114,11 +114,11 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * <p>
  * Allows object serialisation.
  * </p>
- * 
+ *
  * @return array List of properties that should be saved.
  */
     public function __sleep()
@@ -128,7 +128,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * <p>
  * Allows object unserialisation.
  * </p>
@@ -139,42 +139,12 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
     }
 
 /**
- * Magic PHP5 method.
- * 
- * <p>
- * Allows object importing from {@link http://www.php.net/manual/en/function.var-export.php var_export()}.
- * </p>
- * 
- * @version 0.1.3
- * @param array $properties List of object properties.
- */
-    public static function __set_state($properties)
-    {
-        // deletes database handle
-        if( isset($properties['db']) )
-        {
-            unset($properties['db']);
-        }
-
-        // initializes new object with current database connection
-        $object = new self();
-
-        // loads properties
-        foreach($properties as $name => $value)
-        {
-            $object->$name = $value;
-        }
-
-        return $object;
-    }
-
-/**
  * Sets LIMIT clause.
- * 
+ *
  * <p>
  * Reduces amount of seleced rows up to given number.
  * </p>
- * 
+ *
  * @param int|bool $limit Limit for SELECT (false to reset).
  */
     public function setLimit($limit = false)
@@ -191,11 +161,11 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Sets OFFSET clause.
- * 
+ *
  * <p>
  * Moves starting rows of selected set to given position.
  * </p>
- * 
+ *
  * @param int|bool $offset Offset for SELECT (false to reset).
  */
     public function setOffset($offset = false)
@@ -212,11 +182,11 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Returns current row.
- * 
+ *
  * <p>
  * Returns object of class which handle single row representation. Object is initialised with ID of current position in result cursor.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @return OTS_Base_DAO Current row.
  */
@@ -230,7 +200,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Select rows from database.
- * 
+ *
  * @throws PDOException On PDO operation error.
  */
     public function rewind()
@@ -248,7 +218,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Current cursor position.
- * 
+ *
  * @return mixed Array key.
  */
     public function key()
@@ -258,7 +228,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Checks if there are any rows left.
- * 
+ *
  * @return bool Does next row exist.
  */
     public function valid()
@@ -268,7 +238,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Returns number of rows on list in current criterium.
- * 
+ *
  * @version 0.1.5
  * @return int Number of rows.
  * @throws PDOException On PDO operation error.
@@ -280,11 +250,11 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Sets filter on list.
- * 
+ *
  * <p>
  * Call without argument to reset filter.
  * </p>
- * 
+ *
  * @param OTS_SQLFilter|null $filter Filter for list.
  */
     public function setFilter(OTS_SQLFilter $filter = null)
@@ -302,15 +272,15 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Appends sorting rule.
- * 
+ *
  * <p>
  * First parameter may be of type string, then it will be used as literal field name, or object of {@link OTS_SQLField OTS_SQLField class}, then it's representation will be used as qualiffied SQL identifier name.
  * </p>
- * 
+ *
  * <p>
  * Note: Since 0.0.7 version <var>$field</var> parameter can be instance of {@link OTS_SQLField OTS_SQLField class}.
  * </p>
- * 
+ *
  * @version 0.0.7
  * @param OTS_SQLField|string $field Field name.
  * @param int $order Sorting order (ascending by default).
@@ -341,7 +311,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Returns SQL query for SELECT.
- * 
+ *
  * @version 0.1.5
  * @param bool $count Shows if the SQL should be generated for COUNT() variant.
  * @return string SQL query part.
@@ -363,7 +333,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Returns generic SQL query that can be adaptated by child classes.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param array $fields Fields to be selected.
@@ -402,7 +372,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
         }
 
         // ORDER BY clause
-        if(isset($count) || empty($this->orderBy) )
+        if(empty($this->orderBy) )
         {
             $orderBy = '';
         }
@@ -432,7 +402,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $name Property name.
