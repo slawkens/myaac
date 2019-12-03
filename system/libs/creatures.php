@@ -11,6 +11,9 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Creatures {
+	/**
+	 * @var OTS_MonstersList
+	 */
 	private static $monstersList;
 	private static $lastError = '';
 
