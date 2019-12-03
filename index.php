@@ -375,8 +375,19 @@ if($load_it)
 				var_dump($php_errors);
 			}
 		}
-		else
-			$content .= $query['body']; // plain html
+		else {
+			$oldLoader = $twig->getLoader();
+
+			$twig_loader_array = new Twig_Loader_Array(array(
+				'content.html' => $query['body']
+			));
+
+			$twig->setLoader($twig_loader_array);
+
+			$content .= $twig->render('content.html');
+
+			$twig->setLoader($oldLoader);
+		}
 
 		if(hasFlag(FLAG_CONTENT_PAGES) || superAdmin()) {
 			$content = $twig->render('admin.pages.links.html.twig', array(
