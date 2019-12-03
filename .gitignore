@@ -5,6 +5,10 @@ Thumbs.db
 releases
 config.local.php
 
+# guild images
+images/guilds/*
+!images/guilds/default.gif
+
 # cache
 system/cache/*
 !system/cache/signatures/.htaccess
