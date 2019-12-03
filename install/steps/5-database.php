@@ -52,7 +52,7 @@ if(!$error) {
 
 		$locale['step_database_importing'] = str_replace('$DATABASE_NAME$', config('database_name'), $locale['step_database_importing']);
 		success($locale['step_database_importing']);
-		
+
 		if(isset($database_error)) { // we failed connect to the database
 			error($database_error);
 		}
@@ -72,10 +72,6 @@ if(!$error) {
 					$error = true;
 				}
 
-				$content .= '$config[\'client_download\'] = \'http://tibia-clients.com/clients/download/\'. $config[\'client\'] . \'/exe/windows\';';
-				$content .= PHP_EOL;
-				$content .= '$config[\'client_download_linux\'] = \'http://tibia-clients.com/clients/download/\'. $config[\'client\'] . \'/tar/linux\';';
-				$content .= PHP_EOL;
 				$content .= '$config[\'session_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
 				$content .= PHP_EOL;
 				$content .= '$config[\'cache_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';

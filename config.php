@@ -274,9 +274,3 @@ $config = array(
 	'monsters' => array(),
 	'npc' => array()
 );
-
-// download link to client.
-$config['client_download'] = 'http://tibia-clients.com/clients/download/'. $config['client'] .'/exe/windows';
-$config['client_download_linux'] = 'http://tibia-clients.com/clients/download/'. $config['client'] .'/tar/linux';
-
-?>
