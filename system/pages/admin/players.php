@@ -47,6 +47,7 @@ $skills = array(
 
 $hasBlessingsColumn = $db->hasColumn('players', 'blessings');
 $hasBlessingColumn = $db->hasColumn('players', 'blessings1');
+$hasLookAddons = $db->hasColumn('players', 'lookaddons');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -157,7 +158,7 @@ if ($id > 0) {
 		verify_number($look_legs, 'Look legs', 11);
 		$look_type = $_POST['look_type'];
 		verify_number($look_type, 'Look type', 11);
-		if ($db->hasColumn('players', 'lookaddons')) {
+		if ($hasLookAddons) {
 			$look_addons = $_POST['look_addons'];
 			verify_number($look_addons, 'Look addons', 11);
 		}
@@ -258,7 +259,7 @@ if ($id > 0) {
 			$player->setLookHead($look_head);
 			$player->setLookLegs($look_legs);
 			$player->setLookType($look_type);
-			if ($db->hasColumn('players', 'lookaddons'))
+			if ($hasLookAddons)
 				$player->setLookAddons($look_addons);
 			if ($db->hasColumn('players', 'offlinetraining_time'))
 				$player->setCustomField('offlinetraining_time', $offlinetraining);
@@ -593,9 +594,9 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 									?>
 								</div>
 								<div class="tab-pane" id="tab_4">
-									<?php $outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet(); ?>
+									<?php $outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($hasLookAddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet(); ?>
 									<div id="imgchar"
-										 style="width:64px;height:64px;position:absolute; top:30px; right:30px"><img
+										 style="width:64px;height:64px;position:absolute; top:30px; right:30px"><img id="player_outfit"
 												style="margin-left:0;margin-top:0px;width:64px;height:64px;"
 												src="<?php echo $outfit; ?>"
 												alt="player outfit"/></div>
@@ -661,7 +662,7 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 												   maxlength="11" style="cursor: auto;"
 												   value="<?php echo $player->getLookType(); ?>"/>
 										</div>
-										<?php if ($db->hasColumn('players', 'lookaddons')): ?>
+										<?php if ($hasLookAddons): ?>
 											<div class="col-xs-6">
 												<label for="look_addons" class="control-label">Addons:</label>
 												<input type="text" class="form-control" id="look_addons"
@@ -866,4 +867,30 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 		slider_feet.oninput = function () {
 			output_feet.innerHTML = this.value;
 		}
+
+        $('#look_head').change(function() {updateOutfit()});
+        $('#look_body').change(function() {updateOutfit()});
+        $('#look_legs').change(function() {updateOutfit()});
+        $('#look_feet').change(function() {updateOutfit()});
+        $('#look_type').change(function() {updateOutfit()});
+
+        function updateOutfit()
+        {
+            var look_head = $('#look_head').val();
+            var look_body = $('#look_body').val();
+            var look_legs = $('#look_legs').val();
+            var look_feet = $('#look_feet').val();
+            var look_type = $('#look_type').val();
+
+            <?php if($hasLookAddons): ?>
+                var look_addons = '&addons=' + $('#look_addons').val();
+	        <?php
+	        else: ?>
+	            var look_addons = '';
+	        <?php endif; ?>
+
+            new_outfit = '<?= $config['outfit_images_url']; ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet;
+            $("#player_outfit").attr("src", new_outfit);
+            console.log(new_outfit);
+        }
 	</script>
