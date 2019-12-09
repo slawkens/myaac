@@ -8,108 +8,74 @@
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-$title = 'Logs viewer';
-?>
+$title = 'Logs Viewer';
 
-<div class="box">
-	<div class="box-header">
-		<h3 class="box-title">Logs:</h3>
-	</div>
-	<div class="box-body">
-		<div class="row">
-			<div class="col-sm-12">
-				<table id="tb_logs">
-					<thead>
-					<tr>
-						<th>Log name</th>
-						<th>Last updated</th>
-					</tr>
-					</thead>
-					<tbody>
-					<?php
-					$files = array();
-					$aac_path_logs = BASE . 'system/logs/';
-					foreach (scandir($aac_path_logs) as $f) {
-						if ($f[0] == '.' || $f == '..' || is_dir($aac_path_logs . $f))
-							continue;
+$files = array();
+$aac_path_logs = BASE . 'system/logs/';
+foreach (scandir($aac_path_logs, SCANDIR_SORT_ASCENDING) as $f) {
+    if ($f[0] === '.' || is_dir($aac_path_logs . $f)) {
+	    continue;
+    }
 
-						$files[] = array($f, $aac_path_logs);
-					}
+    $files[] = array($f, $aac_path_logs);
+}
 
-					$server_path_logs = $config['server_path'] . 'logs/';
-					if (!file_exists($server_path_logs)) {
-						$server_path_logs = $config['data_path'] . 'logs/';
-					}
+$server_path_logs = $config['server_path'] . 'logs/';
+if (!file_exists($server_path_logs)) {
+    $server_path_logs = $config['data_path'] . 'logs/';
+}
 
-					if (file_exists($server_path_logs)) {
-						foreach (scandir($server_path_logs) as $f) {
-							if ($f[0] == '.' || $f == '..')
-								continue;
+if (file_exists($server_path_logs)) {
+    foreach (scandir($server_path_logs, SCANDIR_SORT_ASCENDING) as $f) {
+        if ($f[0] === '.') {
+	        continue;
+        }
 
-							if (is_dir($server_path_logs . $f)) {
-								foreach (scandir($server_path_logs . $f) as $f2) {
-									if ($f2[0] == '.' || $f2 == '..')
-										continue;
-									$files[] = array($f . '/' . $f2, $server_path_logs);
-								}
+        if (is_dir($server_path_logs . $f)) {
+            foreach (scandir($server_path_logs . $f, SCANDIR_SORT_ASCENDING) as $f2) {
+                if ($f2[0] === '.') {
+	                continue;
+                }
 
-								continue;
-							}
+                $files[] = array($f . '/' . $f2, $server_path_logs);
+            }
 
-							$files[] = array($f, $server_path_logs);
-						}
-					}
+            continue;
+        }
 
-					$i = 0;
-					foreach ($files as $f) {
-						?>
-						<tr>
-							<td>
-								<a href="<?php echo ADMIN_URL . '?p=logs&file=' . $f[0]; ?>"><?php echo $f[0]; ?></a>
-							</td>
-							<td><?php echo date("Y-m-d H:i:s", filemtime($f[1] . $f[0])); ?></td>
-						</tr>
-						<?php
-					}
-					?>
-					</tbody>
-					<tfoot>
-					<th>Log name</th>
-					<th>Last updated</th>
-					</tfoot>
-				</table>
-			</div>
-		</div>
-	</div>
-</div>
+        $files[] = array($f, $server_path_logs);
+    }
+}
 
-<?php
+foreach ($files as &$f) {
+    $f['mtime'] = filemtime($f[1] . $f[0]);
+    $f['name'] = $f[0];
+}
+unset($f);
 
-$file = isset($_GET['file']) ? $_GET['file'] : NULL;
+$twig->display('admin.logs.html.twig', array('files' => $files));
+
+define('EXIST_NONE', 0);
+define('EXIST_SERVER_LOG', 1);
+define('EXIST_AAC_LOG', 2);
+
+$exist = EXIST_NONE;
+$file = isset($_GET['file']) ? $_GET['file'] : null;
 if (!empty($file)) {
 	if (!preg_match('/[^A-z0-9\' _\/\-\.]/', $file)) {
 		if (file_exists($aac_path_logs . $file)) {
-			echo '
-             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"><b>' . $file . '</b></h3>
-                </div>
-                <div class="box-body">';
-			echo nl2br(file_get_contents($aac_path_logs . $file));
-			echo '</div>
-             </div>';
+			$exist = EXIST_AAC_LOG;
 		} else if (file_exists($server_path_logs . $file)) {
-			echo '<div class="box"><div class="box-header"><h3 class="box-title"><b>' . $file . '</b></h3></div><div class="box-body">';
-			echo nl2br(file_get_contents($server_path_logs . $file));
-			echo '</div></div>';
-		} else
+			$exist = EXIST_SERVER_LOG;
+		} else {
 			echo 'Specified file does not exist.';
-	} else
+		}
+
+		if ($exist !== EXIST_NONE) {
+			$content = nl2br(file_get_contents(($exist === EXIST_SERVER_LOG ? $server_path_logs : $aac_path_logs) . $file));
+			$twig->display('admin.logs.view.html.twig', array('file' => $file, 'content' => $content));
+		}
+	} else {
 		echo 'Invalid file name specified.';
+	}
 }
-?>
-<script>
-	$(function () {
-		$('#tb_logs').DataTable()
-	})
-</script>
