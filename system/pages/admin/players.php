@@ -873,6 +873,9 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
         $('#look_legs').change(function() {updateOutfit()});
         $('#look_feet').change(function() {updateOutfit()});
         $('#look_type').change(function() {updateOutfit()});
+		<?php if($hasLookAddons): ?>
+        $('#look_addons').change(function() {updateOutfit()});
+		<?php endif; ?>
 
         function updateOutfit()
         {
