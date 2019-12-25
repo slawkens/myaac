@@ -87,7 +87,10 @@ else {
 		$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `d`.`killed_by` as `killed_by`, `d`.`time` as `time`, `d`.`level`, `d`.`is_player` FROM `player_deaths` as `d` INNER JOIN `players` as `p` ON d.player_id = p.id ORDER BY `time` DESC LIMIT " . $config['last_kills_limit'] . ";");
 		if(!empty($players_deaths)) {
 			foreach($players_deaths as $death) {
-				$killers_string .= getPlayerLink($death['victim']) . ' died at level ' . $death['level'] . ' by ';
+				$players_deaths_count++;
+				$killers_string = '';
+
+				$killers_string .= getPlayerLink($death['victim']) . ' died at level <strong>' . $death['level'] . '</strong> by ';
 				if($death['is_player'] == '1')
 					$killers_string .= getPlayerLink($death['killed_by']);
 				else
@@ -97,7 +100,7 @@ else {
 
 				$last_kills[] = array(
 					'id' => $players_deaths_count,
-					'date' => $death['date'],
+					'time' => $death['time'],
 					'killers_string' => $killers_string,
 				);
 			}
