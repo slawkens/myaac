@@ -75,7 +75,7 @@ else {
 
 				$last_kills[] = array(
 					'id' => $players_deaths_count,
-					'date' => $death['date'],
+					'time' => $death['date'],
 					'killers_string' => $killers_string,
 					'world_id' => isset($config['worlds'][(int)$death['world_id']]) ? $config['worlds'][(int)$death['world_id']] : null,
 				);
