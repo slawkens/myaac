@@ -40,7 +40,7 @@ class Usage_Statistics {
 		$ret['myaac_version'] = MYAAC_VERSION;
 		$ret['myaac_db_version'] = DATABASE_VERSION;
 
-		if(tableExist('server_config')) {
+		if($db->hasTable('server_config')) {
 			$query = $db->query('SELECT `value` FROM `server_config` WHERE `config` = ' . $db->quote('database_version'));
 			if($query->rowCount() == 1) {
 				$query = $query->fetch();
