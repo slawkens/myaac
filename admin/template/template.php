@@ -80,10 +80,6 @@
 						'Notepad' => 'notepad',
 						'phpinfo' => 'phpinfo',
 					),
-					'Editor' => array(
-						'Accounts' => 'accounts',
-						'Players' => 'players',
-					),
 					'Logs' => array(
 						'Logs' => 'logs',
 						'Reports' => 'reports',
