@@ -10,7 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Plugin manager';
 
-require LIBS . 'plugins.php';
+require_once LIBS . 'plugins.php';
 
 $twig->display('admin.plugins.form.html.twig');
 
@@ -111,4 +111,3 @@ foreach (get_plugins() as $plugin) {
 $twig->display('admin.plugins.html.twig', array(
 	'plugins' => $plugins
 ));
-?>

@@ -1,4 +1,5 @@
 {
+	"enabled": 0,
 	"name": "Example Plugin",
 	"description": "This is just an example of a Plugin for MyAAC.",
 	"version": "1.0",

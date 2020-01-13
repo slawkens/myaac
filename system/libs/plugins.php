@@ -73,6 +73,51 @@ class Plugins {
 	private static $error = null;
 	private static $plugin = array();
 
+	public static function getHooks()
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('hooks', $tmp)) {
+				return unserialize($tmp);
+			}
+		}
+
+		$hooks = [];
+		foreach(get_plugins() as $filename) {
+			$string = file_get_contents(PLUGINS . $filename . '.json');
+			$string = self::removeComments($string);
+			$plugin = json_decode($string, true);
+			self::$plugin = $plugin;
+			if ($plugin == null) {
+				self::$warnings[] = 'Cannot load ' . $filename . '.json. File might be not a valid json code.';
+				continue;
+			}
+
+			if(isset($plugin['enabled']) && $plugin['enabled'] === 0) {
+				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
+				continue;
+			}
+
+			if (isset($plugin['hooks'])) {
+				foreach ($plugin['hooks'] as $_name => $info) {
+					if (defined('HOOK_'. $info['type'])) {
+						$hook = constant('HOOK_'. $info['type']);
+						$hooks[] = ['name' => $_name, 'type' => $hook, 'file' => $info['file']];
+					} else {
+						self::$warnings[] = 'Plugin: ' . $filename . '. Unknown event type: ' . $info['type'];
+					}
+				}
+			}
+		}
+
+		if ($cache->enabled()) {
+			$cache->set('hooks', serialize($hooks), 600);
+		}
+
+		return $hooks;
+	}
+
 	public static function install($file) {
 		global $db;
 
@@ -97,7 +142,7 @@ class Plugins {
 				}
 				else {
 					$string = file_get_contents($file_name);
-					$string = Plugins::removeComments($string);
+					$string = self::removeComments($string);
 					$plugin = json_decode($string, true);
 					self::$plugin = $plugin;
 					if ($plugin == null) {
@@ -241,22 +286,6 @@ class Plugins {
 								}
 								else
 									self::$warnings[] = 'Cannot load install script. Your plugin might be not working correctly.';
-							}
-
-							if (isset($plugin['hooks'])) {
-								foreach ($plugin['hooks'] as $_name => $info) {
-									if (defined('HOOK_'. $info['type'])) {
-										$hook = constant('HOOK_'. $info['type']);
-										$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
-										if ($query->rowCount() == 1) { // found something
-											$query = $query->fetch();
-											$db->update(TABLE_PREFIX . 'hooks', array('type' => $hook, 'file' => $info['file']), array('id' => (int)$query['id']));
-										} else {
-											$db->insert(TABLE_PREFIX . 'hooks', array('id' => null, 'name' => $_name, 'type' => $hook, 'file' => $info['file']));
-										}
-									} else
-										self::$warnings[] = 'Unknown event type: ' . $info['type'];
-								}
 							}
 
 							$cache = Cache::getInstance();

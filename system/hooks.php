@@ -27,6 +27,7 @@ define('HOOK_LOGOUT', 15);
 define('HOOK_FIRST', HOOK_STARTUP);
 define('HOOK_LAST', HOOK_LOGOUT);
 
+require_once LIBS . 'plugins.php';
 class Hook
 {
 	private $_name, $_type, $_file;
@@ -90,27 +91,8 @@ class Hooks
 
 	public function load()
 	{
-		global $db;
-
-		$cache = Cache::getInstance();
-		if ($cache->enabled()) {
-			$tmp = '';
-			if ($cache->fetch('hooks', $tmp)) {
-				$hooks = unserialize($tmp);
-			}
-		}
-
-		if (!isset($hooks)) {
-			$hooks = $db->query('SELECT `name`, `type`, `file` FROM `' . TABLE_PREFIX . 'hooks` WHERE `enabled` = 1 ORDER BY `ordering`;')->fetchAll();
-
-			if ($cache->enabled()) {
-				$cache->set('hooks', serialize($hooks), 600);
-			}
-		}
-
-		foreach($hooks as $hook) {
+		foreach(Plugins::getHooks() as $hook) {
 			$this->register($hook['name'], $hook['type'], $hook['file']);
 		}
 	}
 }
-?>
