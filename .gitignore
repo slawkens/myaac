@@ -28,3 +28,4 @@ system/logs/*
 plugins/*
 !plugins/.htaccess
 !plugins/example.json
+landing
