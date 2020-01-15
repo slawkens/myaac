@@ -1,2 +1,11 @@
-Options -Indexes
-Deny from all
+<IfModule mod_autoindex.c>
+	Options -Indexes
+</IfModule>
+
+<IfVersion < 2.4>
+    order allow,deny
+    deny from all
+</IfVersion>
+<IfVersion >= 2.4>
+    Require all denied
+</IfVersion>
