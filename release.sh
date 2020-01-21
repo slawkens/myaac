@@ -34,12 +34,12 @@ cd "tmp/$dir"
 
 # remove unneeded files
 echo "Removing unneeded files.."
-rm -r .git .github .idea
+rm -rf .git .github .idea
 rm .gitattributes .gitignore
 rm release.sh
 rm _config.yml
-rm -R releases
-rm -R tmp
+rm -Rf releases
+rm -Rf tmp
 
 # tar.gz
 echo "Creating .tar.gz package.."
