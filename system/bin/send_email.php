@@ -1,7 +1,8 @@
 <?php
 
 if(PHP_SAPI !== 'cli') {
-	die('This script can be run only in command line mode.');
+	echo 'This script can be run only in command line mode.';
+	exit(1);
 }
 
 require_once __DIR__ . '/../../common.php';
@@ -9,7 +10,8 @@ require_once SYSTEM . 'functions.php';
 require_once SYSTEM . 'init.php';
 
 if($argc !== 3) {
-	exit('This command expects two parameters: account_name_or_id|player_name|email address, subject.' . PHP_EOL);
+	echo 'This command expects two parameters: account_name_or_id|player_name|email address, subject.' . PHP_EOL;
+	exit(2);
 }
 
 $email_account_name = $argv[1];
@@ -35,21 +37,25 @@ if(strpos($email_account_name, '@') === false) {
 			$email_account_name = $player->getAccount()->getEMail();
 		}
 		else {
-			exit('Cannot find player or account with name: ' . $email_account_name . '.' . PHP_EOL);
+			echo 'Cannot find player or account with name: ' . $email_account_name . '.' . PHP_EOL;
+			exit(3);
 		}
 	}
 }
 
 if(!Validator::email($email_account_name)) {
-	exit('Invalid E-Mail format.' . PHP_EOL);
+	echo 'Invalid E-Mail format.' . PHP_EOL;
+	exit(4);
 }
 
 if(strlen($subject) > 255) {
-	exit('Subject max length is 255 characters.' . PHP_EOL);
+	echo 'Subject max length is 255 characters.' . PHP_EOL;
+	exit(5);
 }
 
 if(!_mail($email_account_name, $subject, $message)) {
-	exit('Error while sending mail: ' . $mailer->ErrorInfo . PHP_EOL);
+	echo 'Error while sending mail: ' . $mailer->ErrorInfo . PHP_EOL;
+	exit(6);
 }
 
 echo 'Mail sent to ' . $email_account_name . '.' . PHP_EOL;
