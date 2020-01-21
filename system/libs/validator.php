@@ -375,7 +375,34 @@ class Validator
 		
 		return true;
 	}
-	
+
+	/**
+	 * Validate guild nick
+	 * Nick lenght must be 3-40 chars
+	 *
+	 * @param  string $name Name to check
+	 * @return bool Is name valid?
+	 */
+	public static function guildNick($name)
+	{
+		if(empty($name)) {
+			self::$lastError = 'Please enter guild nick.';
+			return false;
+		}
+
+		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789- ") != strlen($name)) {
+			self::$lastError = 'Invalid guild nick format.';
+			return false;
+		}
+
+		if(!preg_match("/[A-z ]{3,40}/", $name)) {
+			self::$lastError = 'Invalid guild nick format.';
+			return false;
+		}
+
+		return true;
+	}
+
 	/**
 	 * Validate rank name
 	 * Rank lenght must be 1-32 chars

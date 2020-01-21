@@ -11,56 +11,84 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 if(!$logged) {
-	echo 'You are not logged.';
+	$errors[] = "You are not logged in. You can't change nick.";
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 	$twig->display('guilds.back_button.html.twig');
 	return;
 }
 
 $name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : null;
 $new_nick = isset($_REQUEST['nick']) ? stripslashes($_REQUEST['nick']) : null;
+$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 
 if(!$name) {
-	echo 'Please enter new name.';
+	$errors[] = 'Please enter new name.';
 	return;
 }
 
 if(!$new_nick) {
-	echo 'Please enter new nick.';
+	$errors[] = 'Please enter new nick.';
+	return;
+}
+
+if(empty($errors))
+{
+	$guild = new OTS_Guild();
+	$guild->find($guild_name);
+	if(!$guild->isLoaded())
+		$errors[] = 'Guild with name <b>' . $guild_name . "</b> doesn't exist.";
+}
+
+if(!empty($errors))
+{
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+	$twig->display('guilds.back_button.html.twig');
 	return;
 }
 
 $player = new OTS_Player();
 $player->find($name);
 $player_from_account = false;
-if(strlen($new_nick) <= 40)
-{
-	if($player->isLoaded())
-	{
-		$account_players = $account_logged->getPlayersList();
-		if(count($account_players))
-		{
-			foreach($account_players as $acc_player)
-			{
-				if($acc_player->getId() == $player->getId())
-					$player_from_account = true;
-			}
-			if($player_from_account)
-			{
-				$player->setGuildNick($new_nick);
-				echo 'Guild nick of player <b>'.$player->getName().'</b> changed to <b>'.htmlentities($new_nick).'</b>.';
-				$addtolink = '&action=show&guild='.$player->getRank()->getGuild()->getName();
-			}
-			else
-				echo 'This player is not from your account.';
-		}
-		else
-			echo 'This player is not from your account.';
-	}
-	else
-		echo 'Unknow error occured.';
-}
-else
-	echo 'Too long guild nick. Max. 40 chars, your length: '.strlen($new_nick);
 
-$twig->display('guilds.back_button.html.twig');
-?>
+if(!Validator::guildNick($new_nick)) {
+	$errors[] = Validator::getLastError();
+}
+
+if(!$player->isLoaded()) {
+	$errors[] = 'Unknow error occured. Player cannot be loaded';
+}
+
+$account_players = $account_logged->getPlayersList();
+if(!count($account_players)) {
+	$errors[] = 'This player is not from your account.';
+}
+
+if(empty($errors)) {
+	foreach($account_players as $acc_player) {
+		if($acc_player->getId() == $player->getId())
+			$player_from_account = true;
+	}
+
+	if(!$player_from_account) {
+		$errors[] = 'This player is not from your account.';
+	}
+
+	if(empty($errors))
+	{
+		$player->setGuildNick($new_nick);
+		$twig->display('success.html.twig', array(
+			'title' => 'Nick Changed',
+			'description' => 'Guild nick of player <b>'.$player->getName().'</b> changed to <b>'.htmlentities($new_nick).'</b>.',
+			'custom_buttons' => ''
+		));
+	}
+}
+
+if(!empty($errors)) {
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+}
+
+$twig->display('guilds.back_button.html.twig', array(
+	'new_line' => true,
+	'action' => getLink('guilds') . '/' . $guild->getName()
+));

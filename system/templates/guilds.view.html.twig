@@ -136,7 +136,7 @@
 
                                                                     <td>
                                                                         {% set playerName = player.getName() %}
-                                                                        <form action="?subtopic=guilds&action=change_nick&name={{ playerName }}" method="post">
+                                                                        <form action="?subtopic=guilds&action=change_nick&name={{ playerName }}&guild={{ guild_name }}" method="post">
                                                                             {{ getPlayerLink(playerName, true)|raw }}
 
                                                                             {% set showGuildNick = false %}

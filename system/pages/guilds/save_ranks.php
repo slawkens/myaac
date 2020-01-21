@@ -48,7 +48,7 @@ if(empty($errors)) {
 					$rank->setName($name);
 				}
 				else {
-					$errors[] = 'Invalid rank name. Please use only a-Z, 0-9 and spaces. Rank ID <b>'.$rank_id.'</b>.';
+					$errors[] = Validator::getLastError() . ' Rank ID <b>'.$rank_id.'</b>.';
 				}
 				if($level > 0 && $level < 4) {
 					$rank->setLevel($level);
@@ -60,11 +60,7 @@ if(empty($errors)) {
 				$rank->save();
 			}
 			//show errors or redirect
-			if(!empty($errors)) {
-				$twig->display('error_box.html.twig', array('errors' => $errors));
-			}
-			else
-			{
+			if(empty($errors)) {
 				header("Location: ?subtopic=guilds&action=manager&guild=".$guild->getName());
 			}
 		}
@@ -78,8 +74,7 @@ if(empty($errors)) {
 		$errors[] = 'You are not logged. You can\'t manage guild.';
 	}
 }
+
 if(!empty($errors)) {
 	$twig->display('error_box.html.twig', array('errors' => $errors));
 }
-
-?>
