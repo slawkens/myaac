@@ -17,10 +17,10 @@ class Validator
 			self::$lastError = 'Invalid number format.';
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Validate account id
 	 * Id lenght must be 6-10 chars
@@ -35,28 +35,28 @@ class Validator
 			self::$lastError = 'Please enter your account number!';
 			return false;
 		}
-		
+
 		if(!Validator::number($id)) {
 			self::$lastError = 'Invalid account number format. Please use only numbers 0-9.';
 			return false;
 		}
-		
+
 		$length = strlen($id);
 		if($length < 6)
 		{
 			self::$lastError = 'Account is too short (min. 6 chars).';
 			return false;
 		}
-		
+
 		if($length > 10)
 		{
 			self::$lastError = 'Account is too long (max. 10 chars).';
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Validate account name
 	 * Name lenght must be 3-32 chars
@@ -71,29 +71,29 @@ class Validator
 			self::$lastError = 'Please enter your account name!';
 			return false;
 		}
-		
+
 		$length = strlen($name);
 		if($length < 3)
 		{
 			self::$lastError = 'Account name is too short (min. 3 chars).';
 			return false;
 		}
-		
+
 		if($length > 32)
 		{
 			self::$lastError = 'Account name is too long (max. 32 chars).';
 			return false;
 		}
-		
+
 		if(!preg_match("/[A-Z0-9]/i", $name))
 		{
 			self::$lastError = 'Invalid account name format. Use only A-Z and numbers 0-9.';
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Advanced mail validator
 	 *
@@ -105,17 +105,17 @@ class Validator
 			self::$lastError = 'Please enter your new email address.';
 			return false;
 		}
-		
+
 		if(strlen($email) > 255) {
 			self::$lastError = 'E-mail is too long (max. 255 chars).';
 			return false;
 		}
-		
+
 		if(!preg_match('/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[A-z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/', $email)) {
 			self::$lastError = 'Invalid e-mail format.';
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -132,35 +132,35 @@ class Validator
 			self::$lastError = 'Please enter the password.';
 			return false;
 		}
-		
+
 		if (strlen($password) < 8 || strlen($password) > 30) {
 			self::$lastError = 'The password must have at least 8 and maximum 30 letters!';
 			return false;
 		}
-		
+
 		if(strspn($password, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890") != strlen($password)) {
 			self::$lastError = 'Password contains illegal letters (a-z, A-Z and 0-9 only!).';
 			return false;
 		}
-		
+
 		if(!ctype_alnum($password)) {
 			self::$lastError = 'Password contains illegal letters (a-z, A-Z and 0-9 only!).';
 			return false;
 		}
-		
+
 		if(!preg_match('/[a-zA-Z]/', $password)) {
 			self::$lastError = 'The password must contain at least one letter A-Z or a-z!';
 			return false;
 		}
-		
+
 		if(!preg_match('/[0-9]/', $password)) {
 			self::$lastError = 'The password must contain at least one letter other than A-Z or a-z!';
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Validate character name.
 	 * Name lenght must be 3-25 chars
@@ -175,20 +175,20 @@ class Validator
 			self::$lastError = 'Please enter character name.';
 			return false;
 		}
-		
+
 		$length = strlen($name);
 		if($length < 3)
 		{
 			self::$lastError = 'Character name is too short. Min. lenght <b>3</b> characters.';
 			return false;
 		}
-		
+
 		if($length > 25)
 		{
 			self::$lastError = 'Character name is too long. Max. lenght <b>25</b> characters.';
 			return false;
 		}
-		
+
 		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- [ ] '") != $length)
 		{
 			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
@@ -199,10 +199,10 @@ class Validator
 			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Validate new character name.
 	 * Name lenght must be 3-25 chars
@@ -213,9 +213,9 @@ class Validator
 	public static function newCharacterName($name)
 	{
 		global $db, $config;
-		
+
 		$name_lower = strtolower($name);
-		
+
 		$first_words_blocked = array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ', "'", '-');
 		foreach($first_words_blocked as $word)
 		{
@@ -224,27 +224,27 @@ class Validator
 				return false;
 			}
 		}
-		
+
 		if(substr($name_lower, -1) == "'" || substr($name_lower, -1) == "-") {
 			self::$lastError = 'Your name contains illegal characters.';
 			return false;
 		}
-		
+
 		if(substr($name_lower, 1, 1) == ' ') {
 			self::$lastError = 'Your name contains illegal space.';
 			return false;
 		}
-		
+
 		if(substr($name_lower, -2, 1) == " ") {
 			self::$lastError = 'Your name contains illegal space.';
 			return false;
 		}
-		
+
 		if(strtolower($config['lua']['serverName']) == $name_lower) {
 			self::$lastError = 'Your name cannot be same as server name.';
 			return false;
 		}
-		
+
 		$names_blocked = array('admin', 'administrator', 'gm', 'cm', 'god', 'tutor');
 		foreach($names_blocked as $word)
 		{
@@ -253,7 +253,7 @@ class Validator
 				return false;
 			}
 		}
-		
+
 		$words_blocked = array('admin', 'administrator', 'gamemaster', 'game master', 'game-master', "game'master", '--', "''","' ", " '", '- ', ' -', "-'", "'-", 'fuck', 'sux', 'suck', 'noob', 'tutor');
 		foreach($words_blocked as $word)
 		{
@@ -262,7 +262,7 @@ class Validator
 				return false;
 			}
 		}
-		
+
 		$name_length = strlen($name_lower);
 		for($i = 0; $i < $name_length; $i++)
 		{
@@ -271,7 +271,7 @@ class Validator
 				return false;
 			}
 		}
-		
+
 		for($i = 0; $i < $name_length; $i++)
 		{
 			if(isset($name_lower[$i - 1]) && $name_lower[$i - 1] == ' ' && isset($name_lower[$i + 1]) && $name_lower[$i + 1] == ' ') {
@@ -279,7 +279,7 @@ class Validator
 				return false;
 			}
 		}
-		
+
 		if(isset($config['monsters']))
 		{
 			if(in_array($name_lower, $config['monsters'])) {
@@ -287,14 +287,14 @@ class Validator
 				return false;
 			}
 		}
-		
+
 		$player = new OTS_Player();
 		$player->find($name);
 		if($player->isLoaded()) {
 			self::$lastError = 'Character with this name already exist.';
 			return false;
 		}
-		
+
 		//check if was namelocked previously
 		if($db->hasTable('player_namelocks') && $db->hasColumn('player_namelocks', 'name')) {
 			$namelock = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));
@@ -303,25 +303,25 @@ class Validator
 				return false;
 			}
 		}
-		
+
 		$monsters = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'monsters` WHERE `name` LIKE ' . $db->quote($name_lower));
 		if($monsters->rowCount() > 0) {
 			self::$lastError = 'Your name cannot contains monster name.';
 			return false;
 		}
-		
+
 		$spells_name = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'spells` WHERE `name` LIKE ' . $db->quote($name_lower));
 		if($spells_name->rowCount() > 0) {
 			self::$lastError = 'Your name cannot contains spell name.';
 			return false;
 		}
-		
+
 		$spells_words = $db->query('SELECT `words` FROM `' . TABLE_PREFIX . 'spells` WHERE `words` = ' . $db->quote($name_lower));
 		if($spells_words->rowCount() > 0) {
 			self::$lastError = 'Your name cannot contains spell name.';
 			return false;
 		}
-		
+
 		if(isset($config['npc']))
 		{
 			if(in_array($name_lower, $config['npc'])) {
@@ -329,26 +329,26 @@ class Validator
 				return false;
 			}
 		}
-		
+
 		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- '") != $name_length) {
 			self::$lastError = 'This name contains invalid letters, words or format. Please use only a-Z, - , \' and space.';
 			return false;
 		}
-		
+
 		if($name_length < 3 || $name_length  > 28) {
 			self::$lastError = 'Your name cannot be shorter than 3 characters and longer than 28 characters.';
 			return false;
 		}
-		
-		
+
+
 		if(!preg_match("/[A-z ']{3,28}/", $name)) {
 			self::$lastError = 'Your name containst illegal characters.';
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Validate guild name
 	 * Name lenght must be 3-32 chars
@@ -362,17 +362,17 @@ class Validator
 			self::$lastError = 'Please enter guild name.';
 			return false;
 		}
-		
+
 		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789- ") != strlen($name)) {
 			self::$lastError = 'Invalid guild name format.';
 			return false;
 		}
-		
+
 		if(!preg_match("/[A-z ]{3,32}/", $name)) {
 			self::$lastError = 'Invalid guild name format.';
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -416,17 +416,17 @@ class Validator
 			self::$lastError = 'Please enter rank name.';
 			return false;
 		}
-		
+
 		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789-[ ] ") != strlen($name)) {
 			self::$lastError = 'Invalid rank name. Please use only a-Z, 0-9 and spaces.';
 			return false;
 		}
-		
+
 		if(!preg_match("/[A-z ]{1,32}/", $name)) {
 			self::$lastError = 'Invalid rank name. Please use only a-Z, 0-9 and spaces.';
 			return false;
 		}
-		
+
 		return true;
 	}
 	/**
@@ -438,7 +438,7 @@ class Validator
 	public static function str($str, $numbers = false) {
 		return preg_match('/^[a-z0-9\ ]*$/i', $str);
 	}
-	
+
 	public static function getLastError() {
 		return self::$lastError;
 	}
