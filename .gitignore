@@ -14,6 +14,12 @@ templates/*
 images/guilds/*
 !images/guilds/default.gif
 
+# cache
+system/cache/*
+!system/cache/index.html
+!system/cache/twig/index.html
+!system/cache/signatures/index.html
+
 # logs
 system/logs/*
 !system/logs/index.html
