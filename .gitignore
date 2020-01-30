@@ -14,15 +14,9 @@ templates/*
 images/guilds/*
 !images/guilds/default.gif
 
-# cache
-system/cache/*
-!system/cache/signatures/.htaccess
-!system/cache/twig/.htaccess
-!system/cache/.htaccess
-
 # logs
 system/logs/*
-!system/logs/.htaccess
+!system/logs/index.html
 
 # plugins
 plugins/*
