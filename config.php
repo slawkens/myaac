@@ -114,13 +114,13 @@ $config = array(
 		'plain' => ""/*"--\nMy Server,\nhttp://www.myserver.com"*/,
 		'html' => ''/*'<br/>My Server,\n<a href="http://www.myserver.com">myserver.com</a>'*/
 	),
-	'smtp_enabled' => false, // send by smtp or mail function (set false if use mail function)
-	'smtp_host' => '', // mail host
-	'smtp_port' => 25, // 25 (default) / 465 (ssl, e.g. gmail)
+	'smtp_enabled' => false, // send by smtp or mail function (set false if use mail function, set to true if you use GMail or Microsoft Outlook)
+	'smtp_host' => '', // mail host. smtp.gmail.com for GMail / smtp-mail.outlook.com for Microsoft Outlook
+	'smtp_port' => 25, // 25 (default) / 465 (ssl, GMail) / 587 (tls, Microsoft Outlook)
 	'smtp_auth' => true, // need authorization?
-	'smtp_user' => 'admin@example.org',
+	'smtp_user' => 'admin@example.org', // here your email username
 	'smtp_pass' => '',
-	'smtp_secure' => '', // What kind of encryption to use on the SMTP connection. Options: '', 'ssl' or 'tls', use 'ssl' for gmail
+	'smtp_secure' => '', // What kind of encryption to use on the SMTP connection. Options: '', 'ssl' (GMail) or 'tls' (Microsoft Outlook)
 	'smtp_debug' => false, // set true to debug (you will see more info in error.log)
 
 	// reCAPTCHA (prevent spam bots)
