@@ -121,6 +121,7 @@ $config = array(
 	'smtp_user' => 'admin@example.org',
 	'smtp_pass' => '',
 	'smtp_secure' => '', // What kind of encryption to use on the SMTP connection. Options: '', 'ssl' or 'tls', use 'ssl' for gmail
+	'smtp_debug' => false, // set true to debug (you will see more info in error.log)
 
 	// reCAPTCHA (prevent spam bots)
 	'recaptcha_enabled' => false, // enable recaptcha verification code

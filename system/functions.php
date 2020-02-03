@@ -859,6 +859,11 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	$mailer->addAddress($to);
 	$mailer->Body = $tmp_body;
 
+	if(config('smtp_debug')) {
+		$mailer->SMTPDebug = 2;
+		$mailer->Debugoutput = 'echo';
+	}
+
 	$signature_plain = '';
 	if(isset($config['mail_signature']['plain']))
 		$signature_plain = $config['mail_signature']['plain'];
