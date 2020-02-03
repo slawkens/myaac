@@ -361,24 +361,12 @@ class Plugins {
 						}
 					}
 
-					if (isset($plugin_info['hooks'])) {
-						foreach ($plugin_info['hooks'] as $_name => $info) {
-							if (defined('HOOK_'. $info['type'])) {
-								//$hook = constant('HOOK_'. $info['type']);
-								$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'hooks` WHERE `name` = ' . $db->quote($_name) . ';');
-								if ($query->rowCount() == 1) { // found something
-									$query = $query->fetch();
-									$db->delete(TABLE_PREFIX . 'hooks', array('id' => (int)$query['id']));
-								}
-							} else
-								self::$warnings[] = 'Unknown event type: ' . $info['type'];
-						}
-					}
-
 					if($success) {
 						$cache = Cache::getInstance();
 						if($cache->enabled()) {
 							$cache->delete('templates');
+							$cache->delete('hooks');
+							$cache->delete('template_menus');
 						}
 
 						return true;
