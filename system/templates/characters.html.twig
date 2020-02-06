@@ -354,15 +354,15 @@
 
 			{% set rows = rows + 1 %}
 			<tr bgcolor="{{ getStyle(rows) }}">
-			<td width="20%">Created:</td>
-			<td>{{ account.getCreated()|date("j F Y, g:i a") }}
-				{% if bannedUntil matches '/^\\d+$/' or bannedUntil == '-1' %}
-					<span style="color: red">[Banished {% if bannedUntil == '-1' %}forever{% else %}until {{ bannedUntil|date('d F Y, h:s') }}{% endif %}]</span>
-				{% else %}
-				{{ bannedUntil|raw }}
-				{% endif %}
-			</td>
-		</tr>
+				<td width="20%">Created:</td>
+				<td>{{ account.getCreated()|date("j F Y, g:i a") }}
+					{% if bannedUntil matches '/^\\d+$/' or bannedUntil == '-1' %}
+						<span style="color: red">[Banished {% if bannedUntil == '-1' %}forever{% else %}until {{ bannedUntil|date('d F Y, h:s') }}{% endif %}]</span>
+					{% else %}
+					{{ bannedUntil|raw }}
+					{% endif %}
+				</td>
+			</tr>
 		</table>
 		<!-- ACCOUNT_INFORMATION_END -->
 		{{ hook(constant('HOOK_CHARACTERS_AFTER_ACCOUNT')) }}
@@ -404,15 +404,15 @@
 			</tr>
 				{% endif %}
 			{% endfor %}
-			</table>
-			<!-- CHARACTERS_LIST_END -->
-			{% endif %}
-			{{ hook(constant('HOOK_CHARACTERS_AFTER_CHARACTERS')) }}
-			{% if canEdit %}
-				<a href="admin/?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
-					<img src="images/edit.png"/>Edit
-				</a>
-			{% endif %}
+		</table>
+		<!-- CHARACTERS_LIST_END -->
+		{% endif %}
+		{{ hook(constant('HOOK_CHARACTERS_AFTER_CHARACTERS')) }}
+		{% if canEdit %}
+			<a href="admin/?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
+				<img src="images/edit.png"/>Edit
+			</a>
+		{% endif %}
 		</td>
 		<td>
 			<img src="{{ template_path }}/images/general/blank.gif" width="10" height="1" border="0">
