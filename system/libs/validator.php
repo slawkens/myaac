@@ -280,14 +280,6 @@ class Validator
 			}
 		}
 
-		if(isset($config['monsters']))
-		{
-			if(in_array($name_lower, $config['monsters'])) {
-				self::$lastError = 'Your name cannot contains monster name.';
-				return false;
-			}
-		}
-
 		$player = new OTS_Player();
 		$player->find($name);
 		if($player->isLoaded()) {

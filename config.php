@@ -272,6 +272,5 @@ $config = array(
 	'date_timezone' => 'Europe/Berlin', // more info at http://php.net/manual/en/timezones.php
 	'footer_show_load_time' => true, // display load time of the page in the footer
 
-	'monsters' => array(),
 	'npc' => array()
 );
