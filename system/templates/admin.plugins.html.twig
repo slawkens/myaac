@@ -21,7 +21,7 @@
 							{% for plugin in plugins %}
 								<tr>
 									<td><b>{{ plugin.name }}</b><br>
-										<small>{{ plugin.description }}</small>
+										<small>{{ plugin.description|raw }}</small>
 									</td>
 									<td>{{ plugin.version }}</td>
 									<td><b>{{ plugin.author }}</b><br>
