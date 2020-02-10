@@ -38,6 +38,11 @@ $twig->addFunction($function);
 
 $function = new Twig_SimpleFunction('hook', function ($hook) {
 	global $hooks;
+
+	if(is_string($hook)) {
+		$hook = constant($hook);
+	}
+
 	$hooks->trigger($hook);
 });
 $twig->addFunction($function);
