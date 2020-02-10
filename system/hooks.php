@@ -40,6 +40,7 @@ class Hook
 
 	public function execute($params)
 	{
+		extract($params);
 		/*if(is_callable($this->_callback))
 		{
 			$tmp = $this->_callback;
