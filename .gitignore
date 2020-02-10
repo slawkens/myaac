@@ -28,4 +28,6 @@ system/logs/*
 plugins/*
 !plugins/.htaccess
 !plugins/example.json
+!plugins/account-create-hint.json
+!plugins/account-create-hint
 landing

@@ -1,6 +1,4 @@
-To play on {{ config.lua.serverName }} you need an account.
-All you have to do to create your new account is to enter an account {% if constant('USE_ACCOUNT_NAME') %}name{% else %}number{% endif %}, password{% if config.recaptcha_enabled %}, confirm reCAPTCHA{% endif %}{% if config.account_country %}, country{% endif %} and your email address.
-Also you have to agree to the terms presented below. If you have done so, your account {% if constant('USE_ACCOUNT_NAME') %}name{% else %}number{% endif %} will be shown on the following page and your account password will be sent to your email address along with further instructions. If you do not receive the email with your password, please check your spam filter.<br/><br/>
+{{ hook('HOOK_ACCOUNT_CREATE_BEFORE_FORM') }}
 <form action="{{ getLink('account/create') }}" method="post" id="createaccount">
 	<div class="TableContainer" >
 		<table class="Table5" cellpadding="0" cellspacing="0" >
@@ -21,6 +19,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 				<td>
 					<div class="InnerTableContainer" >
 						<table style="width:100%;" >
+							{{ hook('HOOK_ACCOUNT_CREATE_BEFORE_BOXES') }}
 							<tr>
 								<td>
 									<div class="TableShadowContainerRightTop"> <div class="TableShadowRightTop" style="background-image:url({{ template_path }}/images/global/content/table-shadow-rt.gif);"></div></div>
@@ -28,6 +27,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 										<div class="TableContentContainer">
 											<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
 												<tbody>
+
+												{{ hook('HOOK_ACCOUNT_CREATE_BEFORE_ACCOUNT') }}
+
 												<tr>
 													<td class="LabelV" style="width: 150px">
 														<span{% if errors.account is defined %} class="red"{% endif %}>Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</span>
@@ -38,6 +40,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 													</td>
 												</tr>
 												<tr><td></td><td><span id="account_error" class="FormFieldError">{% if errors.account is defined %}{{ errors.account }}{% endif %}</span></td></tr>
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_ACCOUNT') }}
 												<tr>
 													<td class="LabelV" style="width: 150px">
 														<span{% if errors.email is defined %} class="red"{% endif %}>Email Address:</span>
@@ -47,7 +50,12 @@ Also you have to agree to the terms presented below. If you have done so, your a
 														<img id="email_indicator" src="images/global/general/{% if not save or errors.email is defined %}n{% endif %}ok.gif" style="display: none;" />
 													</td>
 												</tr>
-												<tr><td></td><td><span id="email_error" class="FormFieldError">{% if errors.email is defined %}{{ errors.email }}{% endif %}</span></td></tr>
+												<tr>
+													<td></td><td><span id="email_error" class="FormFieldError">{% if errors.email is defined %}{{ errors.email }}{% endif %}</span></td>
+												</tr>
+
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_EMAIL') }}
+
                                                 {% if config.account_country %}
 													<tr>
 														<td class="LabelV" style="width: 150px">
@@ -66,6 +74,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 														<tr><td></td><td><span class="FormFieldError">{{ errors.country }}</span></td></tr>
                                                     {% endif %}
                                                 {% endif %}
+
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_COUNTRY') }}
+
 												<tr>
 													<td class="LabelV" style="width: 150px">
 														<span{% if errors.password is defined %} class="red"{% endif %}>Password:</span>
@@ -86,6 +97,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 													</td>
 												</tr>
 												<tr><td></td><td><span id="password2_error" class="FormFieldError">{% if errors.password is defined %}{{ errors.password }}{% endif %}</span></td></tr>
+
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_PASSWORDS') }}
+
                                                 {% if config.recaptcha_enabled %}
 													<tr>
 														<td class="LabelV" style="width: 150px">
@@ -99,6 +113,8 @@ Also you have to agree to the terms presented below. If you have done so, your a
 														<tr><td></td><td><span class="FormFieldError">{{ errors.verification }}</span></td></tr>
                                                     {% endif %}
                                                 {% endif %}
+
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_RECAPTCHA') }}
 												</tbody>
 											</table>
 										</div>
@@ -107,6 +123,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 										<div class="TableBottomShadow" style="background-image:url({{ template_path }}/images/global/content/table-shadow-bm.gif);"> <div class="TableBottomLeftShadow" style="background-image:url({{ template_path }}/images/global/content/table-shadow-bl.gif);"></div> <div class="TableBottomRightShadow" style="background-image:url({{ template_path }}/images/global/content/table-shadow-br.gif);"></div> </div></div>
 								</td>
 							</tr>
+
+							{{ hook('HOOK_ACCOUNT_CREATE_BETWEEN_BOXES_1') }}
+
 							{% if (not config.mail_enabled or not config.account_mail_verify) and config.account_create_character_create %}
 							<tr>
 								<td>
@@ -117,6 +136,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 										<div class="TableContentContainer">
 											<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
 												<tbody>
+
+												{{ hook('HOOK_ACCOUNT_CREATE_BEFORE_CHARACTER_NAME') }}
+
 												<tr>
 													<td class="LabelV" style="width: 150px">
 														<span{% if errors.name is defined %} class="red"{% endif %}>Character Name:</span>
@@ -133,6 +155,8 @@ Also you have to agree to the terms presented below. If you have done so, your a
 														<span id="character_error" class="FormFieldError">{% if errors.name is defined %}{{ errors.name }}{% endif %}</span>
 													</td>
 												</tr>
+
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_CHARACTER_NAME') }}
 
 												<tr>
 													<td class="LabelV" style="width: 150px">
@@ -165,6 +189,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 														<span id="sex_error" class="FormFieldError">{% if errors.sex is defined %}{{ errors.sex }}{% endif %}</span>
 													</td>
 												</tr>
+
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_SEX') }}
+
                                                 {% if config.character_samples|length > 1 %}
 												<tr>
 													<td class="LabelV" style="width: 150px">
@@ -195,6 +222,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 													</td>
 												</tr>
 												{% endif %}
+
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_VOCATION') }}
+
                                                 {% if config.character_towns|length > 1 %}
 												<tr>
 													<td class="LabelV" style="width: 150px">
@@ -219,6 +249,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 													</td>
 												</tr>
                                                 {% endif %}
+
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_TOWNS') }}
+
 												</tbody>
 											</table>
 										</div>
@@ -232,6 +265,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 								</td>
 							</tr>
 							{% endif %}
+
+							{{ hook('HOOK_ACCOUNT_CREATE_BETWEEN_BOXES_2') }}
+
 							<tr>
 								<td>
 									<div class="TableShadowContainerRightTop">
@@ -266,6 +302,9 @@ Also you have to agree to the terms presented below. If you have done so, your a
 									</div>
 								</td>
 							</tr>
+
+							{{ hook('HOOK_ACCOUNT_CREATE_AFTER_BOXES') }}
+
 						</table>
 					</div>
 				</td>
@@ -273,6 +312,7 @@ Also you have to agree to the terms presented below. If you have done so, your a
 		</table>
 	</div>
 	<br/>
+	{{ hook('HOOK_ACCOUNT_CREATE_BEFORE_SUBMIT_BUTTON') }}
 	<table width="100%">
 		<tr align="center">
 			<td>
@@ -288,4 +328,5 @@ Also you have to agree to the terms presented below. If you have done so, your a
 		</tr>
 	</table>
 </form>
+{{ hook('HOOK_ACCOUNT_CREATE_AFTER_FORM') }}
 <script type="text/javascript" src="tools/check_name.js"></script>

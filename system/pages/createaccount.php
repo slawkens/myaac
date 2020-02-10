@@ -121,6 +121,24 @@ if($save)
 	if(!isset($_POST['accept_rules']) || $_POST['accept_rules'] !== 'true')
 		$errors['accept_rules'] = 'You have to agree to the ' . $config['lua']['serverName'] . ' Rules in order to create an account!';
 
+	$params = array(
+		'account' => $account_db,
+		'email' => $email,
+		'country' => $country,
+		'password' => $password,
+		'password2' => $password2,
+		'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] === 'true' : false,
+	);
+
+	if(USE_ACCOUNT_NAME) {
+		$params['account_name'] = $_POST['account'];
+	}
+	else {
+		$params['account_id'] = $_POST['account'];
+	}
+
+	$hooks->trigger(HOOK_ACCOUNT_CREATE_AFTER_SUBMIT, $params);
+
 	if(config('account_create_character_create')) {
 		$character_name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : null;
 		$character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
