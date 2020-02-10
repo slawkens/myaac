@@ -87,6 +87,7 @@ foreach ($query as $_page) {
 	$pages[] = array(
 		'link' => getFullLink($_page['name'], $_page['name'], true),
 		'title' => substr($_page['title'], 0, 20),
+		'php' => $_page['php'] == '1',
 		'id' => $_page['id'],
 		'hidden' => $_page['hidden']
 	);

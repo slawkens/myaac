@@ -13,6 +13,7 @@
 					<tr>
 						<th>Name</th>
 						<th>Title</th>
+						<th>PHP</th>
 						<th style="width: 150px;">Options</th>
 					</tr>
 					</thead>
@@ -21,6 +22,7 @@
 						<tr>
 							<td>{{ page.link|raw }}</td>
 							<td><i>{{ page.title }}</i></td>
+							<td>{% if page.php %}Yes{% else %}No{% endif %}</td>
 							<td>
 								<a href="?p=pages&action=edit&id={{ page.id }}" class="ico" title="Edit"><span
 											class="btn btn-success btn-sm edit btn-flat"><i
