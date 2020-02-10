@@ -3,10 +3,6 @@
 	var lastSend = 0;
 
 	$(function() {
-		$('#createaccount').submit(function () {
-			return validate_form(this);
-		});
-
 		updateFlag();
 		$('#account_country').change(function() {
 			updateFlag();
@@ -195,58 +191,5 @@
 		);
 
 		lastSend = timeNow;
-	}
-
-	function validate_required(field,alerttxt)
-	{
-		with (field)
-		{
-			if (value==null || value=="" || value==" ")
-			{
-				alert(alerttxt);
-				return false;
-			}
-			else
-				return true
-		}
-	}
-
-	function validate_email(field,alerttxt)
-	{
-		with (field)
-		{
-			apos=value.indexOf("@");
-			dotpos=value.lastIndexOf(".");
-			if (apos<1 || dotpos-apos<2)
-			{
-				alert(alerttxt);
-				return false;
-			}
-			else
-				return true;
-		}
-	}
-
-	function validate_form(thisform)
-	{
-		with (thisform)
-		{
-			if (validate_required(account_input,"Please enter name of new account!")==false)
-			{account_input.focus();return false;}
-			if (validate_required(email,"Please enter your e-mail!")==false)
-			{email.focus();return false;}
-			if (validate_email(email,"Invalid e-mail format!")==false)
-			{email.focus();return false;}
-		{% if not config.account_mail_verify %}
-			if (validate_required(passor,"Please enter password!")==false)
-			{passor.focus();return false;}
-			if (validate_required(passor2,"Please repeat password!")==false)
-			{passor2.focus();return false;}
-			if (passor2.value!=passor.value)
-			{alert('Repeated password is not equal to password!');return false;}
-		{% endif %}
-			if(accept_rules.checked==false)
-			{alert('To create account you must accept server rules!');return false;}
-		}
 	}
 </script>
