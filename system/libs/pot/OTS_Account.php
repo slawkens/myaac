@@ -781,7 +781,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         }
 		if( !isset($this->data['banned']) )
 			$this->loadBan();
-        return ($this->data['banned'] == 1);
+        return ($this->data['banned'] === true);
     }
 
     public function getBanTime()
@@ -807,19 +807,23 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		if($this->db->hasTable('account_bans')) {
 			$ban = $this->db->query('SELECT `expires_at` FROM `account_bans` WHERE `account_id` = ' . $this->data['id'] . ' AND (`expires_at` > ' . time() .' OR `expires_at` = -1) ORDER BY `expires_at` DESC')->fetch();
 			$this->data['banned'] = isset($ban['expires_at']);
-			$this->data['banned_time'] = $ban['expires_at'];
+			$this->data['banned_time'] = isset($ban['expires_at']) ? $ban['expires_at'] : 0;
 		}
 		else if($this->db->hasTable('bans')) {
 			if($this->db->hasColumn('bans', 'active')) {
 				$ban = $this->db->query('SELECT `active`, `expires` FROM `bans` WHERE (`type` = 3 OR `type` = 5) AND `active` = 1 AND `value` = ' . $this->data['id'] . ' AND (`expires` > ' . time() .' OR `expires` = -1) ORDER BY `expires` DESC')->fetch();
-				$this->data['banned'] = $ban['active'];
-				$this->data['banned_time'] = $ban['expires'];
+				$this->data['banned'] = isset($ban['active']);
+				$this->data['banned_time'] = isset($ban['expires']) ? $ban['expires'] : 0;
 			}
 			else { // tfs 0.2
 				$ban = $this->db->query('SELECT `time` FROM `bans` WHERE (`type` = 3 OR `type` = 5) AND `account` = ' . $this->data['id'] . ' AND (`time` > ' . time() .' OR `time` = -1) ORDER BY `time` DESC')->fetch();
-				$this->data['banned'] = $ban['time'] == -1 || $ban['time'] > 0;
-				$this->data['banned_time'] = $ban['time'];
+				$this->data['banned'] = isset($ban['time']) && ($ban['time'] == -1 || $ban['time'] > 0);
+				$this->data['banned_time'] = isset($ban['time']) ? $ban['time'] : 0;
 			}
+		}
+		else {
+			$this->data['banned'] = false;
+			$this->data['banned_time'] = 0;
 		}
     }
 
