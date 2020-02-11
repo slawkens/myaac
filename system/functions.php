@@ -1129,6 +1129,85 @@ function clearCache()
 	return true;
 }
 
+function getCustomPageInfo($page)
+{
+	global $db, $logged_access;
+	$query =
+		$db->query(
+			'SELECT `id`, `title`, `body`, `php`, `hidden`' .
+			' FROM `' . TABLE_PREFIX . 'pages`' .
+			' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
+	if($query->rowCount() > 0) // found page
+	{
+		return $query->fetch(PDO::FETCH_ASSOC);
+	}
+
+	return null;
+}
+function getCustomPage($page, &$success)
+{
+	global $db, $twig, $title, $ignore, $logged_access;
+
+	$success = false;
+	$content = '';
+	$query =
+		$db->query(
+			'SELECT `id`, `title`, `body`, `php`, `hidden`' .
+			' FROM `' . TABLE_PREFIX . 'pages`' .
+			' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
+	if($query->rowCount() > 0) // found page
+	{
+		$success = $ignore = true;
+		$query = $query->fetch();
+		$title = $query['title'];
+
+		if($query['php'] == '1') // execute it as php code
+		{
+			$tmp = substr($query['body'], 0, 10);
+			if(($pos = strpos($tmp, '<?php')) !== false) {
+				$tmp = preg_replace('/<\?php/', '', $query['body'], 1);
+			}
+			else if(($pos = strpos($tmp, '<?')) !== false) {
+				$tmp = preg_replace('/<\?/', '', $query['body'], 1);
+			}
+			else
+				$tmp = $query['body'];
+
+			$php_errors = array();
+			function error_handler($errno, $errstr) {
+				global $php_errors;
+				$php_errors[] = array('errno' => $errno, 'errstr' => $errstr);
+			}
+			set_error_handler('error_handler');
+
+			ob_start();
+			eval($tmp);
+			$content .= ob_get_contents();
+			ob_end_clean();
+
+			restore_error_handler();
+			if(isset($php_errors[0]) && superAdmin()) {
+				var_dump($php_errors);
+			}
+		}
+		else {
+			$oldLoader = $twig->getLoader();
+
+			$twig_loader_array = new Twig_Loader_Array(array(
+				'content.html' => $query['body']
+			));
+
+			$twig->setLoader($twig_loader_array);
+
+			$content .= $twig->render('content.html');
+
+			$twig->setLoader($oldLoader);
+		}
+	}
+
+	return $content;
+}
+
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat.php';

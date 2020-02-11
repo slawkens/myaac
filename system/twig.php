@@ -52,8 +52,15 @@ $function = new Twig_SimpleFunction('config', function ($key) {
 });
 $twig->addFunction($function);
 
+$function = new Twig_SimpleFunction('getCustomPage', function ($name) {
+	$success = false;
+	return getCustomPage($name, $success);
+});
+$twig->addFunction($function);
+
 $filter = new Twig_SimpleFilter('urlencode', function ($s) {
 	return urlencode($s);
 });
+
 $twig->addFilter($filter);
 unset($function, $filter);

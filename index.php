@@ -335,68 +335,17 @@ if($load_it)
 		$logged_access = $account_logged->getAccess();
 	}
 
-	$query =
-		$db->query(
-			'SELECT `id`, `title`, `body`, `php`, `hidden`' .
-			' FROM `' . TABLE_PREFIX . 'pages`' .
-			' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
-	if($query->rowCount() > 0) // found page
-	{
-		$ignore = true;
-		$query = $query->fetch();
-		$title = $query['title'];
-
-		if($query['php'] == '1') // execute it as php code
-		{
-			$tmp = substr($query['body'], 0, 10);
-			if(($pos = strpos($tmp, '<?php')) !== false) {
-				$tmp = preg_replace('/<\?php/', '', $query['body'], 1);
-			}
-			else if(($pos = strpos($tmp, '<?')) !== false) {
-				$tmp = preg_replace('/<\?/', '', $query['body'], 1);
-			}
-			else
-				$tmp = $query['body'];
-
-			$php_errors = array();
-			function error_handler($errno, $errstr) {
-				global $php_errors;
-				$php_errors[] = array('errno' => $errno, 'errstr' => $errstr);
-			}
-			set_error_handler('error_handler');
-
-			ob_start();
-			eval($tmp);
-			$content .= ob_get_contents();
-			ob_end_clean();
-
-			restore_error_handler();
-			if(isset($php_errors[0]) && superAdmin()) {
-				var_dump($php_errors);
-			}
-		}
-		else {
-			$oldLoader = $twig->getLoader();
-
-			$twig_loader_array = new Twig_Loader_Array(array(
-				'content.html' => $query['body']
-			));
-
-			$twig->setLoader($twig_loader_array);
-
-			$content .= $twig->render('content.html');
-
-			$twig->setLoader($oldLoader);
-		}
-
+	$success = false;
+	$tmp_content = getCustomPage($page, $success);
+	if($success) {
+		$content .= $tmp_content;
 		if(hasFlag(FLAG_CONTENT_PAGES) || superAdmin()) {
+			$pageInfo = getCustomPageInfo($page);
 			$content = $twig->render('admin.pages.links.html.twig', array(
-				'page' => array('id' => $query['id'], 'hidden' => $query['hidden'])
-			)) . $content;
+					'page' => array('id' => $pageInfo !== null ? $pageInfo['id'] : 0, 'hidden' => $pageInfo !== null ? $pageInfo['hidden'] : '0')
+				)) . $content;
 		}
-	}
-	else
-	{
+	} else {
 		$file = SYSTEM . 'pages/' . $page . '.php';
 		if(!@file_exists($file))
 		{
