@@ -285,6 +285,7 @@ CREATE TABLE `myaac_pages`
 	`date` INT(11) NOT NULL DEFAULT 0,
 	`player_id` INT(11) NOT NULL DEFAULT 0,
 	`php` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0 - plain html, 1 - php',
+	`enable_tinymce` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1 - enabled, 0 - disabled',
 	`access` TINYINT(2) NOT NULL DEFAULT 0,
 	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`),

@@ -21,6 +21,7 @@ $name = $p_title = '';
 $groups = new OTS_Groups_List();
 
 $php = false;
+$enable_tinymce = true;
 $access = 0;
 
 if (!empty($action)) {
@@ -34,6 +35,7 @@ if (!empty($action)) {
 		$p_title = $_REQUEST['title'];
 
 	$php = isset($_REQUEST['php']) && $_REQUEST['php'] == 1;
+	$enable_tinymce = isset($_REQUEST['enable_tinymce']) && $_REQUEST['enable_tinymce'] == 1;
 	if ($php)
 		$body = $_REQUEST['body'];
 	else if (isset($_REQUEST['body'])) {
@@ -48,10 +50,11 @@ if (!empty($action)) {
 	$player_id = 1;
 
 	if ($action == 'add') {
-		if (Pages::add($name, $p_title, $body, $player_id, $php, $access, $errors)) {
+		if (Pages::add($name, $p_title, $body, $player_id, $php, $enable_tinymce, $access, $errors)) {
 			$name = $p_title = $body = '';
 			$player_id = $access = 0;
 			$php = false;
+			$enable_tinymce = true;
 		}
 	} else if ($action == 'delete') {
 		if (Pages::delete($id, $errors))
@@ -63,13 +66,15 @@ if (!empty($action)) {
 			$p_title = $_page['title'];
 			$body = $_page['body'];
 			$php = $_page['php'] == '1';
+			$enable_tinymce = $_page['enable_tinymce'] == '1';
 			$access = $_page['access'];
 		} else {
-			Pages::update($id, $name, $p_title, $body, $player_id, $php, $access);
+			Pages::update($id, $name, $p_title, $body, $player_id, $php, $enable_tinymce, $access);
 			$action = $name = $p_title = $body = '';
 			$player_id = 1;
 			$access = 0;
 			$php = false;
+			$enable_tinymce = true;
 		}
 	} else if ($action == 'hide') {
 		Pages::toggleHidden($id, $errors);
@@ -99,6 +104,7 @@ $twig->display('admin.pages.form.html.twig', array(
 	'name' => $name,
 	'title' => $p_title,
 	'php' => $php,
+	'enable_tinymce' => $enable_tinymce,
 	'body' => isset($body) ? htmlentities($body, ENT_COMPAT, 'UTF-8') : '',
 	'groups' => $groups->getGroups(),
 	'access' => $access
@@ -120,13 +126,23 @@ class Pages
 		return false;
 	}
 
-	static public function add($name, $title, $body, $player_id, $php, $access, &$errors)
+	static public function add($name, $title, $body, $player_id, $php, $enable_tinymce, $access, &$errors)
 	{
 		global $db;
 		if (isset($name[0]) && isset($title[0]) && isset($body[0]) && $player_id != 0) {
 			$query = $db->select(TABLE_PREFIX . 'pages', array('name' => $name));
 			if ($query === false)
-				$db->insert(TABLE_PREFIX . 'pages', array('name' => $name, 'title' => $title, 'body' => $body, 'player_id' => $player_id, 'php' => $php ? '1' : '0', 'access' => $access));
+				$db->insert(TABLE_PREFIX . 'pages',
+					array(
+						'name' => $name,
+						'title' => $title,
+						'body' => $body,
+						'player_id' => $player_id,
+						'php' => $php ? '1' : '0',
+						'enable_tinymce' => $enable_tinymce ? '1' : '0',
+						'access' => $access
+					)
+				);
 			else
 				$errors[] = 'Page with this link already exists.';
 		} else
@@ -135,10 +151,20 @@ class Pages
 		return !count($errors);
 	}
 
-	static public function update($id, $name, $title, $body, $player_id, $php, $access)
+	static public function update($id, $name, $title, $body, $player_id, $php, $enable_tinymce, $access)
 	{
 		global $db;
-		$db->update(TABLE_PREFIX . 'pages', array('name' => $name, 'title' => $title, 'body' => $body, 'player_id' => $player_id, 'php' => $php ? '1' : '0', 'access' => $access), array('id' => $id));
+		$db->update(TABLE_PREFIX . 'pages',
+			array(
+				'name' => $name,
+				'title' => $title,
+				'body' => $body,
+				'player_id' => $player_id,
+				'php' => $php ? '1' : '0',
+				'enable_tinymce' => $enable_tinymce ? '1' : '0',
+				'access' => $access
+			),
+			array('id' => $id));
 	}
 
 	static public function delete($id, &$errors)
