@@ -57,8 +57,7 @@ if(isset($last_threads[0]))
 
 		$player->load($thread['player_id']);
 		if(!$player->isLoaded()) {
-			error('Forum error: Player not loaded.');
-			die();
+			throw new RuntimeException('Forum error: Player not loaded.');
 		}
 
 		$player_account = $player->getAccount();

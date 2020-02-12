@@ -57,7 +57,7 @@ if($step == 'finish' && (!isset($config['installed']) || !$config['installed']))
 // step verify
 $steps = array(1 => 'welcome', 2 => 'license', 3 => 'requirements', 4 => 'config', 5 => 'database', 6 => 'admin', 7 => 'finish');
 if(!in_array($step, $steps)) // check if step is valid
-	die('ERROR: Unknown step.');
+	throw new RuntimeException('ERROR: Unknown step.');
 
 $install_status['step'] = $step;
 $errors = array();

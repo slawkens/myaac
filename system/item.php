@@ -24,7 +24,7 @@ function generateItem($id = 100, $count = 1) {
 function itemImageExists($id, $count = 1)
 {
 	if(!isset($id))
-		die('ERROR - itemImageExists: id has been not set!');
+		throw new RuntimeException('ERROR - itemImageExists: id has been not set!');
 
 	$file_name = $id;
 	if($count > 1)

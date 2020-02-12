@@ -241,7 +241,7 @@ class Items_Images
 		self::$spr = fopen(self::$files['spr'], 'rb');
 
 		if(!self::$otb || !self::$dat || !self::$spr)
-			die('ERROR: Cannot load data files.');
+			throw new RuntimeException('ERROR: Cannot load data files.');
 		/*
 		if ( $nostand )
 		{

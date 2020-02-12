@@ -903,7 +903,7 @@ function load_config_lua($filename)
 	if(!@file_exists($config_file))
 	{
 		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $filename . '). Error: ' . print_r(error_get_last(), true));
-		die('ERROR: Cannot find ' . $filename . ' file. More info in system/logs/error.log');
+		throw new RuntimeException('ERROR: Cannot find ' . $filename . ' file. More info in system/logs/error.log');
 	}
 
 	$result = array();
@@ -949,7 +949,7 @@ function load_config_lua($filename)
 						$ret = @eval("return $value;");
 						if((string) $ret == '') // = parser error
 						{
-							die('ERROR: Loading config.lua file. Line <b>' . ($ln + 1) . '</b> of LUA config file is not valid [key: <b>' . $key . '</b>]');
+							throw new RuntimeException('ERROR: Loading config.lua file. Line <b>' . ($ln + 1) . '</b> of LUA config file is not valid [key: <b>' . $key . '</b>]');
 						}
 						$result[$key] = $ret;
 					}

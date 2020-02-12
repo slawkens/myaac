@@ -46,8 +46,7 @@ foreach($posts as &$post)
 	$player = $post['player'];
 	$player->load($post['player_id']);
 	if(!$player->isLoaded()) {
-		error('Forum error: Player not loaded.');
-		die();
+		throw new RuntimeException('Forum error: Player not loaded.');
 	}
 
 	if($config['characters']['outfit']) {

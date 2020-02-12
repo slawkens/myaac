@@ -65,7 +65,7 @@ if(config('env') === 'dev') {
 if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE . 'install'))
 {
 	header('Location: ' . BASE_URL . 'install/');
-	die('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
+	throw new RuntimeException('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
 }
 
 $found = false;
@@ -183,7 +183,7 @@ $twig->addGlobal('status', $status);
 
 // verify myaac tables exists in database
 if(!$db->hasTable('myaac_account_actions')) {
-	die('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
+	throw new RuntimeException('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
 }
 
 // database migrations
