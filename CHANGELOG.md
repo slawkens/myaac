@@ -1,4 +1,63 @@
-[0.7.7 - 08.01.2018]
+# Changelog
+
+## [0.7.11 - 04.05.2019]
+### Added:
+* support for some old servers, where arrays are used in config.lua
+* an additional text to the install page informing that user can reinstall MyAAC by deleting config.local.php
+
+### Fixed:
+* XSS in forum show_thread
+* guilds - "Add new rank" function
+* multiple mail recipients when using admin mailer function
+* Admin Panel - MyAAC logs not shown if servers logs directory doesn't exist (#47)
+* missing prefix for cache get() and delete() functions
+* add fatal error message when myaac tables in database do not exist
+* the mystical defect where "Create Account" button was not highlighted (on the account/manage page)
+* bug where server_config table does not exist (OTHire as an example)
+* database_name in Usage_Statistics
+* forgot to open <head> in install template
+
+### Changed:
+* do not display software version
+
+## [0.7.10 - 03.03.2018]
+### Added:
+* new configurable: smtp_secure
+* robots.txt
+
+### Fixed:
+* editing an existing page that had php enabled
+* chrome bug on save (when editing page) ERR_BLOCKED_BY_XSS_AUDITOR
+* showing IP and Port in admin panel (#44, by miqueiaspenha)
+* deleting plugin showing "You don't have rights to delete"
+* some bug with PHPMailer not finding its language file
+* default accounts.vote value
+* saving some really high long ip addresses
+
+### Changed:
+* update config.highscores_ids_hidden on install when there are samples already in database
+* auto add z_polls table on install
+
+### Internal:
+* changed mb_strtolower functions to strtolower()
+* added new function: $hooks->exist($type)
+
+## [0.7.9 - 13.01.2018]
+	* removed 6mb of trash (some useless things)
+	* (fix) TFS 1.x not showing promoted vocations in highscores
+	* otserv 0.6.x: fixed some warning (on the characters page) and fatal mysql error (on the mango signature)
+	* fixed default stamina on otserv 0.6.x engine (and some others perhaps)
+	* install: change permission check to is_writable
+	* changed highscores_groups_hidden to 3 (for TFS 1.x)
+	* updated background-artwork (tibiacom template) to the latest version, removed other ones
+
+## [0.7.8 - 12.01.2018]
+	* fixed installation error " call to undefined method OTS_DB_MySQL::hasColumn()"
+	* updated tinymce to the latest (4.7.4) version
+	* enabled emoticons plugin in tinymce :)
+	* some security fixes
+
+## [0.7.7 - 08.01.2018]
 	* important fix for servers with promotion column (caused player.vocation to be resetted when saving player, for example: on change name, accept invite to guild, leave guild)
 	* immediately reload config.lua when there's change in config.server_path detected
 	* added new forum option: "Enable HTML" (only for moderators)
@@ -17,14 +76,14 @@
 	* don't add extra <br/> to the TinyMCE news forum posts
 	* (internal) using $player->getVocationName() where possible instead of older method
 
-[0.7.6 - 05.01.2017]
+## [0.7.6 - 05.01.2017]
 	* fixed othire account creating/installation
 	* fixed table name players -> players_online
 	* fixed unexpected error logging about email fail
 	* added max_execution_time to the install finish step
 	* some small fix regarding highscores vocation box
 
-[0.7.5 - 04.01.2017]
+## [0.7.5 - 04.01.2017]
 	* fixed bug on othire with config.account_premium_days
 	* fixed bug on TFS 1.x when online_afk is enabled
 	* warning about leaving news page with changes
@@ -37,7 +96,7 @@
 	* fixed template path finding
 	* fixed displaying article_text when it was empty saved
 
-[0.7.4 - 24.12.2017]
+## [0.7.4 - 24.12.2017]
 	* fixed mysql fatal error on tibiacom template - top 5 box
 	* fixed displaying of level percent bar on tibian signature
 	* inform user about Twig cache failure on installation, instead of http 500 error
@@ -45,7 +104,7 @@
 	* remember client version select and usage stats checkbox in session on install
 	* automatically update highscores_ids_hidden for users who installed myaac before (migration)
 
-[0.7.3 - 18.12.2017]
+## [0.7.3 - 18.12.2017]
 	* auto generate myaac cache & session prefix on install to be unique across installations
 	* fixed hiding shop system menu on tibiacom template when disabled in config
 	* prevent adding duplicated newses with installation
@@ -55,12 +114,12 @@
 	* fixed account.login redirect not working on tibiacom template
 	* installation: warn about wrong admin account name/id and password
 	* fixed last menu closing in tibiacom template
-	* updated polish locale (translation) on install 
+	* updated polish locale (translation) on install
 	* (internal) removed some duplicated code on install finish
 	* (internal) renamed installation step files to be in correct order
 	* added TODO file
 
-[0.7.1 - 13.12.2017]
+## [0.7.1 - 13.12.2017]
 	* added changelog menu item to kathrine template
 	* fixed some php short tag in changelogs page
 	* fixed guild change description back button
@@ -68,7 +127,7 @@
 	* changed some notice when version check is failed
 	* (internal) moved changelog to twig
 
-[0.7.0 - 20.11.2017]
+## [0.7.0 - 20.11.2017]
 	* moved template menus to database, they're now dynamically loaded
 	* added anonymous usage statistics reporting (only if user agrees, first usage report will be send after 7 days)
 	* you can edit them in Admin Panel under 'Menus' option
@@ -104,25 +163,25 @@
 	* (internal) added some compat functions that are used by shop system
 	* (internal) renamed constant TICKET -> TICKER
 	* (internal) shortened message functions
-	
-[0.6.6 - 22.10.2017]
+
+## [0.6.6 - 22.10.2017]
 	* fixed some php fatal error on spells page
 	* changed spells.vocations field in db size to 300
 	* please reload your spells after this update!
 
-[0.6.5 - 21.10.2017]
+## [0.6.5 - 21.10.2017]
 	* fixed displaying custom pages
 	* fixed adding new group forum board
-	
-[0.6.4 - 20.10.2017]
+
+## [0.6.4 - 20.10.2017]
 	* reverted OTS_Account::getLastLogin() cause its used by tibia11-login plugin
-	
-[0.6.3 - 20.10.2017]
+
+## [0.6.3 - 20.10.2017]
 	* fixed creating account
-	* fixed viewing thread without being logged 
+	* fixed viewing thread without being logged
 	* fixed showing premium account status
-	
-[0.6.2 - 20.10.2017]
+
+## [0.6.2 - 20.10.2017]
 	* added forums for guilds and groups
 	* added nice looking menu for my account page in default template
 	* new command line tool: install_plugin.php - can be used to install plugins from command line. Usage: "php install_plugin.php path_to_file"
@@ -154,8 +213,8 @@
 	* (internal) optimized Spells class
 	* (internal) new function: OTS_Guild::hasMember(OTS_Player $player)
 	* (internal) new function: Forum::hasAccess($board_id)
-	
-[0.6.1 - 17.10.2017]
+
+## [0.6.1 - 17.10.2017]
 	* fixed signatures loading
 	* new configurable: session_prefix, to allow more websites on one machine (must be unique for every website on your dedicated server!)
 	* better error handling for monsters and spells loader (save errors to system/logs/error.log)
@@ -165,7 +224,7 @@
 	* (internal) moved forum actions (pages) to forum/ directory
 	* (internal) moved forum.edit_post to twig templates
 
-[0.6.0 - 16.10.2017]
+## [0.6.0 - 16.10.2017]
 	* added faq management - add/edit/move/hide/delete from website
 	* new account.login view for tibiacom template
 	* monsters and spells are now being loaded at the installation of the AAC
@@ -188,7 +247,7 @@
 	* ajax requests returns now json instead of xml
 	* added 404 response when file is not found
 
-[0.5.1 - 11.10.2017]
+## [0.5.1 - 11.10.2017]
 	* fixed forum add/edit board
 	* new configurable: highscores_length, how much highscores to display
 	* fixed highscores links (ALL, previous and next page)
@@ -198,7 +257,7 @@
 	* check if plugin exist before uninstalling
 	* fixed some warning in OTS_Base_DB
 
-[0.5.0 - 10.10.2017]
+## [0.5.0 - 10.10.2017]
 	* moved .htaccess rules to plain php (index.php)
 	* updated tinymce to the latest (4.7.0) version, you can now embed code, for example youtube videos
 	* added option to uninstall plugin
@@ -217,7 +276,7 @@
 	* added new twig function getLink that convert link taking into account config.friendly_urls
 	* internalLayoutLink -> getLink
 
-[0.4.3 - 05.10.2017]
+## [0.4.3 - 05.10.2017]
 	* better config loader taken from latest gesior, you can now include files in your config by doing dofile('config.local.lua')
 	* fixed country detection in create account
 	* fixed showing of character deaths and frags
@@ -231,14 +290,14 @@
 	* added bugtracker to kathrine template
 	* added CREDITS file
 
-[0.4.2 - 14.09.2017]
+## [0.4.2 - 14.09.2017]
 	* updated version number
 
-[0.4.1 - 13.09.2017]
+## [0.4.1 - 13.09.2017]
 	* fixed log in to admin panel
 	* fixed File is not .zip plugin upload error
 
-[0.4.0 - 13.09.2017
+## [0.4.0 - 13.09.2017
 	* added option to add/edit/delete/hide/move forum boards
 	* moved some of HTML-in-PHP code to Twig templates
 	* added bug_report configurable which can enable/disable bug tracker
@@ -255,7 +314,7 @@
 	* some small improvements
 	* fixed some separators in kathrine template
 
-[0.3.0 - 28.08.2017]
+## [0.3.0 - 28.08.2017]
 	* added administration panel for screenshots management with auto thumbnail generator and image auto-resizing
 	* added Twig template engine and moved some html-in-php code to it
 	* automatically detect player country based on user location (IP) on create account
@@ -273,7 +332,7 @@
 	* moved news adding at installation from schema.sql to finish.php
 	* some optimizations
 
-[0.2.4 - 09.06.2017]
+## [0.2.4 - 09.06.2017]
 	* fixed invite to guild
 	* added id field on monsters, so you can delete them in phpmyadmin
 	* fixed adding some creatures with ' and "
@@ -282,7 +341,7 @@
 	* fixed typo loss_items => loss_containers
 	* more elegant way of showing message on reload creatures and spells
 
-[0.2.3 - 31.05.2017]
+## [0.2.3 - 31.05.2017]
 	* fixed guild management on OTHire 0.0.3
 	* set default skills to 10 when creating new character
 	* fixed displaying of "Create forum thread" in newses
@@ -294,15 +353,15 @@
 	* fixed Undefined variable (https://otland.net/threads/myaac-v0-0-1.251454/page-7#post-2444034)
 	* fixed Undefined offset (https://otland.net/threads/myaac-v0-0-1.251454/page-7#post-2444035)
 
-[0.2.2 - 22.05.2017]
+## [0.2.2 - 22.05.2017]
 	* added missing cache/signature directory
 	* fixed https://otland.net/threads/myaac-v0-0-1.251454/page-7#post-2443868
 
-[0.2.1 - 21.05.2017]
+## [0.2.1 - 21.05.2017]
 	* added Swedish translation by Sizaro
 	* fixed some bugs with installlation & characters & houses
 
-[0.2.0 - 21.05.2017]
+## [0.2.0 - 21.05.2017]
 	* added option to change character sex for premium points
 	* moved site_closed to database, now you can close your site through admin panel
 	* added option to admin panel: clear cache
@@ -322,10 +381,10 @@
 	* fixed movies unexpected comment
 	* added template_place_holder('center_top') to kathrine template
 
-[0.1.5 - 13.05.2017]
+## [0.1.5 - 13.05.2017]
 	* fixed bug with "Integrity constraint violation: 1048 Column 'ip' cannot be null"
 
-[0.1.4 - 13.05.2017]
+## [0.1.4 - 13.05.2017]
 	* added outfit shower, in characters, online, and highscores
 	* updated database to version 2
 	* fixed item images (now using item-images.ots.me host by default)
@@ -334,17 +393,17 @@
 	* removed some unused code from my old server
 	* added spells & monsters to kathrine template
 
-[0.1.3 - 11.05.2017]
+## [0.1.3 - 11.05.2017]
 	* this is just release to update version number
 
-[0.1.2 - 11.05.2017]
+## [0.1.2 - 11.05.2017]
 	* forgot to update CHANGELOG and MYAAC_VERSION
 
-[0.1.1 - 11.05.2017]
+## [0.1.1 - 11.05.2017]
 	* fixed updating myaac_config with database_version to 1
 	* fixed database updater
 
-[0.1.0 - 11.05.2017]
+## [0.1.0 - 11.05.2017]
 	* added new feature: change character name for premium points (disabled by default, you can enable it in config under account_change_character_name in config.php)
 	* added automatic database updater (data migrations)
 	* renamed events to hooks
@@ -368,13 +427,13 @@
 	* fixed signatures (many fixes)
 	* added missing gesior signature system
 
-[0.0.6 - 06.05.2017]
+## [0.0.6 - 06.05.2017]
 	* fixed bug while installing (https://otland.net/threads/myaac-v0-0-1.251454/page-3#post-2440543)
 	* fixed bug when creating character (not showing errors) (one more time)
 	* fixed support for TFS 0.2 series
 	* added FAQ link
-	
-[0.0.5 - 05.05.2017]
+
+## [0.0.5 - 05.05.2017]
 	* fixed bug when creating character (not showing errors)
 	* Fixed characters loading with names that has been created with other AAC
 	* fixed links to shop in default template
@@ -387,7 +446,7 @@
 	* fixes when $config['database_*'] is set
 	* added CHANGELOG
 
-[0.0.3 - 03.05.2017]
+## [0.0.3 - 03.05.2017]
 	* Full support for OTHire 0.0.3
 	* added support for otservers that doesn't use account.name field, instead just account number will be used
 	* fixed encryption detection on TFS 0.3
@@ -398,7 +457,7 @@
 	* fixed installation errors
 	* fixed config.lua loading with some weird comments
 
-[0.0.2 - 02.05.2017]
+## [0.0.2 - 02.05.2017]
 	* updated forum links to use friendly_urls
 	* some more info will be shown when cannot connect to database
 	* show more error infos when creating character
@@ -409,7 +468,7 @@
 	* fixed support for gesior pages and templates
 	* added function OTS_Acount:getGroupId()
 
-[0.0.1 - 01.05.2017]
+## [0.0.1 - 01.05.2017]
 	This is first official release of MyAAC.
 	Features are listed here
 
