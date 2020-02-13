@@ -1,5 +1,150 @@
 # Changelog
 
+## [0.8.0 - x.02.2020]
+
+### Added:
+* new Awesome Bootstrap Admin Panel by Lee (@Leesneaks)
+	* using Bootstrap 3
+	* all existing pages were adjusted 
+	* new editors: Accounts
+	* improved editor: Players
+	* new Reports View page
+	* Modules directory, which can be added using Plugins (@Leesneaks, @whiteblXK)
+	* move News Management here (@whiteblXK)
+	* interactive player outfit chooser (@tobi132)
+* added Highscores by balance
+* possibility to define colors and "Open in New Tab" on Template Menus (needs to be supported by Template)
+* support for database persistent and socket connections (performance boost)
+* Team page - display outfits of the players (configurable)
+* removed configurables: debug_level
+* added clear_cache.php, send_email.php bin commands (@slawkens, @tobi132)
+* added locale pt_br (@ivenspontes)
+* added load time into items & weapons loading admin page
+* new, beautiful exception handler
+* added travisci to prevent mistype (@gpedro, #89)
+* added showing database name into installation script (@tobi132)
+* compatibility with old z_ gesior table (@tobi132, #46)
+* added nginx-sample.conf, .editorconfig, VERSION
+* database towns table support for TFS 1.3 (@tobi132)
+* added enable_tinymce option to Pages editor
+
+### Fixed:
+* account login redirect with special chars (like '&' and '?')
+* black skull info at serverInfo (@tornadia)
+* zse correct limit at lastkills page from config (anyeor from OtLand)
+* myaac_monsters table column loot problem (#79)
+* players column deleted install description (@tobi132, #91)
+* experience table being to wide and buggy on some templates (@tobi132, #90)
+* fix errors with .htaccess files
+* added index.html to prevent indexing the folder by mod_index
+
+### Changed:
+* Environment is now configurable by env setting (Significantly better load times with 'prod')
+* replace spells, monsters tables with JavaScript Sortable Tables - DataTables (@Leesneaks)
+* change default MySQL Storage Engine to InnoDB and Default Character Set to utf8
+* updated OTS_House class to support latest TFS 1.x (new columns)
+* updated monster images to the original ones from tibia.com
+* increased the minimum length (3 -> 4) and decreased the maximum length (25 -> 21) of the New Character Name (by @vankk)
+* use $db->exec instead of $db->query optimisation
+* move items from database to Cache_PHP (Much more faster load time)
+* allow simultaneous loading of config.ini and config.php in templates
+* updated copyright year and SSL link (@EPuncker, #88)
+* move commands, rules and downloads pages into database (@tobi132)
+* better view of guilds (new buttons, table look and feel) (@tobi132)
+* remove stupid alerts on account create
+* remove .dist extension from .htaccess
+
+### New Configurables (config.php)
+* env (Environment)
+* account_create_auto_login (Auto Login after Create Account - Registration)
+* account_create_character_create (Create Character directly on Create Account page) (@tobi132)
+* footer_show_load_time (display load time of the page in the footer)
+* database_socket (Connection via Unix Socket)
+* database_persistent (Database Persistent Connection)
+* database_log (Logging of Database Queries)
+* admin_panel_modules (Modules displayed in Admin Panel Dashboard)
+* status_timeout, status_interval
+* smtp_debug (More info about SMTP errors in error.log)
+* team_display_outfit (Display outfit of the team members on teams page)
+* highscores_balance (Display highscores by balance)
+* character_name_min/max_length (Minimum and maximum length of character name)
+* characters.deleted (display deleted characters on characters page)
+
+### Forum:
+* show image in full screen on click
+* show user avatar (outfit) in posts
+* replaced forum actions links (move, remove, edit, quote) with images
+* redirect directly to the thread on user login (on new reply)
+
+### Installer:
+* AJAX loader for the important stuff
+* create admin account: ask for e-mail + character name
+* load items & weapons
+* check user IP on install to prevent install by random user
+* remember status of the installation
+* remember language on first step (welcome)
+* ask user for timezone
+* auto detected browser language in select language
+
+### Plugins
+* allow comments inside plugin json file (php style - // and /**/)
+* new require options for plugins: (look into example.json)
+	* require database version of the MyAAC schema
+	* require php-extension, table or column
+	* require semantic-version (like in composer.json)
+* new hooks:  LOGIN, LOGIN_ATTEMPT, LOGOUT, HOOK_ACCOUNT_CREATE_*
+
+### Cache
+* php 7.x APCu cache support (faster cache engine)
+* new cache engine: plain PHP (is good with pure php 7.0+ and opcache)
+* cache lastkills.php, $db->hasTable, $db->hasColumn, hooks and template menus
+* stop using global $cache variable, use Singleton pattern instead
+
+### Twig
+* move pages to Twig templates: team, lastkills, serverinfo, houses, guilds.list, guild.view, admin.logs, admin.reports (@whiteblXK, @tobi132)
+* replace "$twig->render()" with "$this->display"
+* move Twig functions to separate file
+* move tibiacom boxes to Twig templates
+* allow Pages to be loaded as Twig template (this allows using Twig variables in Pages) (@tobi132)
+* allow string to be passed to hook twig function
+
+### Functions
+* config($key), configLua($key)
+* clearCache()
+* OTS_Account:
+	* getCountry()
+	* setLastLogin($lastlogin) (@Leesneaks)
+	* setWebFlags(webflags) (@Leesneaks)
+* OTS_Player:
+	* getAccountId()
+	* countBlessings() (@Leesneaks)
+	* checkBlessings($count) (@Leesneaks)
+* is_sub_dir (in system/libs/plugins.php)
+* Twig:
+	* getPlayerLink($name, $generate = true)
+* removed SQLquote and SQLquery from OTS_Base_DB
+* Add optional $params param into log_append (will log arrays) (@tobi132)
+
+### Internal
+* moved clients list to the new file (clients.conf.php)
+* changed tableExist and fieldExist to $db->hasTable(table) + $db->hasColumn(table, column)
+* changed deprecated $ots->createObject() functions with their OTS_ equivalents
+* add global helper config($key) function + twig binding
+	* use config() instead of global $config
+* remove unnecessary parentheses in include/require PHP functions
+* use __DIR__ instead of dirname(__FILE__) - since PHP 5.3.0
+* change intval() function to (int) casting (up to 6x faster)
+* add release.sh script (for GitHub releases)
+* use curl as alternative option for reporting install
+
+### Libraries
+* updated Twig to version v1.35.0
+* updated TinyMCE to version v4.7.4
+
+### Deprecations
+* change deprecated HTML <center> tag to <div style="text-align:center">
+* replace deprecated HTML <font> tag with <span>
+
 ## [0.7.11 - 04.05.2019]
 ### Added:
 * support for some old servers, where arrays are used in config.lua
