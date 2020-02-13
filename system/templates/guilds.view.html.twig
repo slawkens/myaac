@@ -282,7 +282,7 @@
                                                         {% if not logged %}
                                                             <form action="?subtopic=accountmanagement&redirect={{ getGuildLink(guild_name|url_encode, false) }}" method="post">
                                                                 <td>
-                                                                    <input type="image" name="Login" alt="Login" src="{{ template_path }}/images/global/buttons/sbutton_login.gif" style="width: 120px; height: 20px;">
+                                                                    {{ include('buttons.login.html.twig') }}
                                                                 </td>
                                                             </form>
                                                         {% else %}
