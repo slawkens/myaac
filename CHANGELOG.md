@@ -87,7 +87,7 @@
 * auto detected browser language in select language
 
 ### Plugins
-* allow comments inside plugin json file (php style - // and /**/)
+* allow comments inside plugin json file (php style)
 * new require options for plugins: (look into example.json)
 	* require database version of the MyAAC schema
 	* require php-extension, table or column
