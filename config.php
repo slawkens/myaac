@@ -26,6 +26,7 @@ $config = array(
 	 * if you use this script on your live server - set to 'prod' (production)
 	 * if you want to test and debug the script locally, or develop plugins, set to 'dev' (development)
 	 * WARNING: on 'dev' cache is disabled, so site will be significantly slower !!!
+	 * WARNING2: on 'dev' all PHP errors/warnings are displayed
 	 * Recommended: 'prod' cause of speed (page load time is better)
 	 */
 	'env' => 'prod', // 'prod' for production and 'dev' for development
