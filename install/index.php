@@ -1,4 +1,8 @@
 <?php
+
+use Twig\Environment as Twig_Environment;
+use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
+
 require '../common.php';
 
 define('MYAAC_INSTALL', true);
@@ -12,14 +16,10 @@ require SYSTEM . 'clients.conf.php';
 if(file_exists(BASE . 'config.local.php'))
 	require BASE . 'config.local.php';
 
-// twig
-require_once LIBS . 'Twig/Autoloader.php';
-Twig_Autoloader::register();
-
 // ignore undefined index from Twig autoloader
 $config['env'] = 'prod';
 
-$twig_loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
+$twig_loader = new Twig_FilesystemLoader(SYSTEM . 'templates');
 $twig = new Twig_Environment($twig_loader, array(
 	'cache' => CACHE . 'twig/',
 	'auto_reload' => true

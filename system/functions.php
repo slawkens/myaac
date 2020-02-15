@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 function message($message, $type, $return)
@@ -1190,7 +1193,7 @@ function getCustomPage($page, &$success)
 		else {
 			$oldLoader = $twig->getLoader();
 
-			$twig_loader_array = new Twig_Loader_Array(array(
+			$twig_loader_array = new Twig_ArrayLoader(array(
 				'content.html' => $query['body']
 			));
 

@@ -1,10 +1,13 @@
 <?php
 
-require_once LIBS . 'Twig/Autoloader.php';
-Twig_Autoloader::register();
+use Twig\Environment as Twig_Environment;
+use Twig\Extension\DebugExtension as Twig_DebugExtension;
+use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 $dev_mode = (config('env') === 'dev');
-$twig_loader = new Twig_Loader_Filesystem(SYSTEM . 'templates');
+$twig_loader = new Twig_FilesystemLoader(SYSTEM . 'templates');
 $twig = new Twig_Environment($twig_loader, array(
 	'cache' => CACHE . 'twig/',
 	'auto_reload' => $dev_mode,
@@ -12,31 +15,31 @@ $twig = new Twig_Environment($twig_loader, array(
 ));
 
 if($dev_mode) {
-	$twig->addExtension(new Twig_Extension_Debug());
+	$twig->addExtension(new Twig_DebugExtension());
 }
 unset($dev_mode);
 
-$function = new Twig_SimpleFunction('getStyle', function ($i) {
+$function = new TwigFunction('getStyle', function ($i) {
 	return getStyle($i);
 });
 $twig->addFunction($function);
 
-$function = new Twig_SimpleFunction('getLink', function ($s) {
+$function = new TwigFunction('getLink', function ($s) {
 	return getLink($s);
 });
 $twig->addFunction($function);
 
-$function = new Twig_SimpleFunction('getPlayerLink', function ($s, $p) {
+$function = new TwigFunction('getPlayerLink', function ($s, $p) {
 	return getPlayerLink($s, $p);
 });
 $twig->addFunction($function);
 
-$function = new Twig_SimpleFunction('getGuildLink', function ($s, $p) {
+$function = new TwigFunction('getGuildLink', function ($s, $p) {
     return getGuildLink($s, $p);
 });
 $twig->addFunction($function);
 
-$function = new Twig_SimpleFunction('hook', function ($hook) {
+$function = new TwigFunction('hook', function ($hook) {
 	global $hooks;
 
 	if(is_string($hook)) {
@@ -47,18 +50,18 @@ $function = new Twig_SimpleFunction('hook', function ($hook) {
 });
 $twig->addFunction($function);
 
-$function = new Twig_SimpleFunction('config', function ($key) {
+$function = new TwigFunction('config', function ($key) {
 	return config($key);
 });
 $twig->addFunction($function);
 
-$function = new Twig_SimpleFunction('getCustomPage', function ($name) {
+$function = new TwigFunction('getCustomPage', function ($name) {
 	$success = false;
 	return getCustomPage($name, $success);
 });
 $twig->addFunction($function);
 
-$filter = new Twig_SimpleFilter('urlencode', function ($s) {
+$filter = new TwigFilter('urlencode', function ($s) {
 	return urlencode($s);
 });
 
