@@ -1122,9 +1122,9 @@ function clearCache()
 			$cache->delete('template_ini' . $template_name);
 	}
 
-	deleteDirectory(CACHE . 'signatures', array('.htaccess'), true);
-	deleteDirectory(CACHE . 'twig', array('.htaccess'), true);
-	deleteDirectory(CACHE, array('signatures', 'twig', '.htaccess'), true);
+	deleteDirectory(CACHE . 'signatures', array('.htaccess', 'index.html'), true);
+	deleteDirectory(CACHE . 'twig', array('.htaccess', 'index.html'), true);
+	deleteDirectory(CACHE, array('signatures', 'twig', '.htaccess', 'index.html'), true);
 
 	return true;
 }
