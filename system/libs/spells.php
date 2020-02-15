@@ -13,7 +13,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 class Spells {
 	private static $spellsList = null;
 	private static $lastError = '';
-	
+
 	// 1 - attack, 2 - healing, 3 - summon, 4 - supply, 5 - support
 	public static function loadGroup($tGroup) {
 		switch ($tGroup) {
@@ -22,24 +22,24 @@ class Spells {
 			case "healing":
 				return 2;
 			case "summon":
-				return 3; 
+				return 3;
 			case "supply":
 				return 4;
 			case "support":
 				return 5;
 		}
 	}
-		
+
 		public static function loadFromXML($show = false) {
 		global $config, $db;
-		
-		try { $db->query('DELETE FROM `' . TABLE_PREFIX . 'spells`;'); } catch(PDOException $error) {}
-		
+
+		try { $db->exec('DELETE FROM `' . TABLE_PREFIX . 'spells`;'); } catch(PDOException $error) {}
+
 		if($show) {
 			echo '<h2>Reload spells.</h2>';
 			echo '<h2>All records deleted from table <b>' . TABLE_PREFIX . 'spells</b> in database.</h2>';
 		}
-		
+
 		try {
 			self::$spellsList = new OTS_SpellsList($config['data_path'].'spells/spells.xml');
 		}
@@ -47,21 +47,21 @@ class Spells {
 			self::$lastError = $e->getMessage();
 			return false;
 		}
-		
+
 		//add conjure spells
 		$conjurelist = self::$spellsList->getConjuresList();
 		if($show) {
 			echo "<h3>Conjure:</h3>";
 		}
-		
+
 		foreach($conjurelist as $spellname) {
 			$spell = self::$spellsList->getConjure($spellname);
 			$name = $spell->getName();
-			
+
 			$words = $spell->getWords();
 			if(strpos($words, '#') !== false)
 				continue;
-			
+
 			try {
 				$db->insert(TABLE_PREFIX . 'spells', array(
 					'name' => $name,
@@ -89,21 +89,21 @@ class Spells {
 				}
 			}
 		}
-		
+
 		// add instant spells
 		$instantlist = self::$spellsList->getInstantsList();
 		if($show) {
 			echo "<h3>Instant:</h3>";
 		}
-		
+
 		foreach($instantlist as $spellname) {
 			$spell = self::$spellsList->getInstant($spellname);
 			$name = $spell->getName();
-			
+
 			$words = $spell->getWords();
 			if(strpos($words, '#') !== false)
 				continue;
-			
+
 			try {
 				$db->insert(TABLE_PREFIX . 'spells', array(
 					'name' => $name,
@@ -118,7 +118,7 @@ class Spells {
 					'conjure_count' => 0,
 					'hidden' => $spell->isEnabled() ? 0 : 1
 				));
-				
+
 				if($show) {
 					success('Added: ' . $name . '<br/>');
 				}
@@ -129,13 +129,13 @@ class Spells {
 				}
 			}
 		}
-		
+
 		// add runes
 		$runeslist = self::$spellsList->getRunesList();
 		if($show) {
 			echo "<h3>Runes:</h3>";
 		}
-		
+
 		foreach($runeslist as $spellname) {
 			$spell = self::$spellsList->getRune($spellname);
 
@@ -156,7 +156,7 @@ class Spells {
 					'item_id' => $spell->getID(),
 					'hidden' => $spell->isEnabled() ? 0 : 1
 				));
-				
+
 				if($show) {
 					success('Added: ' . $name . '<br/>');
 				}
@@ -167,14 +167,14 @@ class Spells {
 				}
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public static function getSpellsList() {
 		return self::$spellsList;
 	}
-	
+
 	public static function getLastError() {
 		return self::$lastError;
 	}

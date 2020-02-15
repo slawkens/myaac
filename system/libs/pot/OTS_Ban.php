@@ -11,7 +11,7 @@
 
 /**
  * OTServ ban generic class. For particular purpose use {@link OTS_AccountBan OTS_AccountBan}, {@link OTS_PlayerBan OTS_PlayerBan} or {@link OTS_IPBan OTS_IPBan} classes respectively.
- * 
+ *
  * @package POT
  * @version 0.1.5
  * @since 0.1.5
@@ -30,7 +30,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 {
 /**
  * Ban data.
- * 
+ *
  * @var array
  * @version 0.1.5
  * @since 0.1.5
@@ -39,7 +39,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Loads ban with given id.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param int $id Ban ID.
@@ -53,7 +53,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Checks if object is loaded.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return bool Load state.
@@ -65,11 +65,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Saves ban in database.
- * 
+ *
  * <p>
  * If object is not loaded to represent any existing ban it will create new row for it.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @throws PDOException On PDO operation error.
@@ -80,13 +80,13 @@ abstract class OTS_Ban extends OTS_Row_DAO
         if( isset($this->data['id']) )
         {
             // UPDATE query on database
-            $this->db->query('UPDATE ' . $this->db->tableName('bans') . ' SET ' . $this->db->fieldName('type') . ' = ' . $this->data['type'] . ', ' . $this->db->fieldName('value') . ' = ' . $this->data['value'] . ', ' . $this->db->fieldName('param') . ' = ' . $this->data['param'] . ', ' . $this->db->fieldName('active') . ' = ' . (int) $this->data['active'] . ', ' . $this->db->fieldName('expires') . ' = ' . $this->data['expires'] . ', ' . $this->db->fieldName('added') . ' = ' . $this->data['added'] . ', ' . $this->db->fieldName('admin_id') . ' = ' . $this->data['admin_id'] . ', ' . $this->db->fieldName('comment') . ' = ' . $this->db->quote($this->data['comment']) . ', ' . $this->db->fieldName('reason') . ' = ' . $this->data['reason'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+            $this->db->exec('UPDATE ' . $this->db->tableName('bans') . ' SET ' . $this->db->fieldName('type') . ' = ' . $this->data['type'] . ', ' . $this->db->fieldName('value') . ' = ' . $this->data['value'] . ', ' . $this->db->fieldName('param') . ' = ' . $this->data['param'] . ', ' . $this->db->fieldName('active') . ' = ' . (int) $this->data['active'] . ', ' . $this->db->fieldName('expires') . ' = ' . $this->data['expires'] . ', ' . $this->db->fieldName('added') . ' = ' . $this->data['added'] . ', ' . $this->db->fieldName('admin_id') . ' = ' . $this->data['admin_id'] . ', ' . $this->db->fieldName('comment') . ' = ' . $this->db->quote($this->data['comment']) . ', ' . $this->db->fieldName('reason') . ' = ' . $this->data['reason'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
         }
         // creates new ban
         else
         {
             // INSERT query on database
-            $this->db->query('INSERT INTO ' . $this->db->tableName('bans') . ' (' . $this->db->fieldName('type') . ', ' . $this->db->fieldName('value') . ', ' . $this->db->fieldName('param') . ', ' . $this->db->fieldName('active') . ', ' . $this->db->fieldName('expires') . ', ' . $this->db->fieldName('added') . ', ' . $this->db->fieldName('admin_id') . ', ' . $this->db->fieldName('comment') . ', ' . $this->db->fieldName('reason') . ') VALUES (' . $this->data['type'] . ', ' . $this->data['value'] . ', ' . $this->data['param'] . ', ' . (int) $this->data['active'] . ', ' . $this->data['expires'] . ', ' . $this->data['added'] . ', ' . $this->data['admin_id'] . ', ' . $this->db->quote($this->data['comment']) . ', ' . $this->data['reason'] . ')');
+            $this->db->exec('INSERT INTO ' . $this->db->tableName('bans') . ' (' . $this->db->fieldName('type') . ', ' . $this->db->fieldName('value') . ', ' . $this->db->fieldName('param') . ', ' . $this->db->fieldName('active') . ', ' . $this->db->fieldName('expires') . ', ' . $this->db->fieldName('added') . ', ' . $this->db->fieldName('admin_id') . ', ' . $this->db->fieldName('comment') . ', ' . $this->db->fieldName('reason') . ') VALUES (' . $this->data['type'] . ', ' . $this->data['value'] . ', ' . $this->data['param'] . ', ' . (int) $this->data['active'] . ', ' . $this->data['expires'] . ', ' . $this->data['added'] . ', ' . $this->data['admin_id'] . ', ' . $this->db->quote($this->data['comment']) . ', ' . $this->data['reason'] . ')');
             // ID of new ban
             $this->data['id'] = $this->db->lastInsertId();
         }
@@ -94,7 +94,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Ban ID.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return int Ban ID.
@@ -112,7 +112,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Deletes ban.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @throws E_OTS_NotLoaded If ban is not loaded.
@@ -126,7 +126,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
         }
 
         // deletes row from database
-        $this->db->query('DELETE FROM ' . $this->db->tableName('bans') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+        $this->db->exec('DELETE FROM ' . $this->db->tableName('bans') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
 
         // resets object handle
         unset($this->data['id']);
@@ -134,7 +134,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Banned target.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return int Target identifier.
@@ -152,11 +152,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Sets banned target.
- * 
+ *
  * <p>
  * This method only updates object state. To save changes in database you need to use {@link OTS_Ban::save() save() method} to flush changed to database.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param int $value Banned target identifier.
@@ -168,7 +168,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Additional parameter.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return int Parameter value (usualy used as IP mask).
@@ -186,11 +186,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Sets additional parameter.
- * 
+ *
  * <p>
  * This method only updates object state. To save changes in database you need to use {@link OTS_Ban::save() save() method} to flush changed to database.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param int $param Parameter value (usualy used as IP mask).
@@ -202,7 +202,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Activation state.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return bool Is ban active.
@@ -220,11 +220,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Activates ban.
- * 
+ *
  * <p>
  * This method only updates object state. To save changes in database you need to use {@link OTS_Ban::save() save() method} to flush changed to database.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  */
@@ -235,11 +235,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Deactivates ban.
- * 
+ *
  * <p>
  * This method only updates object state. To save changes in database you need to use {@link OTS_Ban::save() save() method} to flush changed to database.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  */
@@ -250,7 +250,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Expiration time.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return int Ban expiration time (0 - forever).
@@ -268,11 +268,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Sets expiration time.
- * 
+ *
  * <p>
  * This method only updates object state. To save changes in database you need to use {@link OTS_Ban::save() save() method} to flush changed to database.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param int $expires Ban expiration time (0 - forever).
@@ -284,7 +284,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Banned time.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return int Ban creation time.
@@ -302,11 +302,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Sets banned time.
- * 
+ *
  * <p>
  * This method only updates object state. To save changes in database you need to use {@link OTS_Ban::save() save() method} to flush changed to database.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param int $added Ban creation time.
@@ -318,7 +318,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Ban creator.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return int ID of administrator who created ban entry.
@@ -336,11 +336,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Sets ban creator.
- * 
+ *
  * <p>
  * This method only updates object state. To save changes in database you need to use {@link OTS_Ban::save() save() method} to flush changed to database.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param int $adminId ID of administrator who created ban entry.
@@ -352,7 +352,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Explaination comment.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return string Ban description.
@@ -370,11 +370,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Sets explaination comment.
- * 
+ *
  * <p>
  * This method only updates object state. To save changes in database you need to use {@link OTS_Ban::save() save() method} to flush changed to database.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param string $comment Ban description.
@@ -386,7 +386,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Ban reason.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return int Reason for which ban was created.
@@ -404,11 +404,11 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Sets ban reason.
- * 
+ *
  * <p>
  * This method only updates object state. To save changes in database you need to use {@link OTS_Ban::save() save() method} to flush changed to database.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param int $reason Reason for which ban was created.
@@ -420,15 +420,15 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Reads custom field.
- * 
+ *
  * <p>
  * Reads field by it's name. Can read any field of given record that exists in database.
  * </p>
- * 
+ *
  * <p>
  * Note: You should use this method only for fields that are not provided in standard setters/getters (SVN fields). This method runs SQL query each time you call it so it highly overloads used resources.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param string $field Field name.
@@ -449,19 +449,19 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Writes custom field.
- * 
+ *
  * <p>
  * Write field by it's name. Can write any field of given record that exists in database.
  * </p>
- * 
+ *
  * <p>
  * Note: You should use this method only for fields that are not provided in standard setters/getters (SVN fields). This method runs SQL query each time you call it so it highly overloads used resources.
  * </p>
- * 
+ *
  * <p>
  * Note: Make sure that you pass $value argument of correct type. This method determinates whether to quote field name. It is safe - it makes you sure that no unproper queries that could lead to SQL injection will be executed, but it can make your code working wrong way. For example: $object->setCustomField('foo', '1'); will quote 1 as as string ('1') instead of passing it as a integer.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param string $field Field name.
@@ -482,12 +482,12 @@ abstract class OTS_Ban extends OTS_Row_DAO
             $value = $this->db->quote($value);
         }
 
-        $this->db->query('UPDATE ' . $this->db->tableName('bans') . ' SET ' . $this->db->fieldName($field) . ' = ' . $value . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+        $this->db->exec('UPDATE ' . $this->db->tableName('bans') . ' SET ' . $this->db->fieldName($field) . ' = ' . $value . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
     }
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param string $name Property name.
@@ -537,7 +537,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @param string $name Property name.

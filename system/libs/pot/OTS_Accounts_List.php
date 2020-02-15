@@ -10,7 +10,7 @@
 
 /**
  * List of accounts.
- * 
+ *
  * @package POT
  * @version 0.1.3
  */
@@ -23,16 +23,16 @@ class OTS_Accounts_List extends OTS_Base_List
  */
     public function deleteAccount(OTS_Account $account)
     {
-        $this->db->query('DELETE FROM ' . $this->db->tableName('account') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $account->getId() );
+        $this->db->exec('DELETE FROM ' . $this->db->tableName('account') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $account->getId() );
     }
 
 /**
  * Sets list parameters.
- * 
+ *
  * <p>
  * This method is called at object creation.
  * </p>
- * 
+ *
  * @version 0.0.5
  * @since 0.0.5
  */
@@ -44,11 +44,11 @@ class OTS_Accounts_List extends OTS_Base_List
 
 /**
  * Returns string representation of object.
- * 
+ *
  * <p>
  * If any display driver is currently loaded then it uses it's method.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @return string String representation of object.

@@ -10,7 +10,7 @@
 
 /**
  * List of players.
- * 
+ *
  * @package POT
  * @version 0.1.3
  */
@@ -23,16 +23,16 @@ class OTS_Players_List extends OTS_Base_List
  */
     public function deletePlayer(OTS_Player $player)
     {
-        $this->db->query('DELETE FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $player->getId() );
+        $this->db->exec('DELETE FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $player->getId() );
     }
 
 /**
  * Sets list parameters.
- * 
+ *
  * <p>
  * This method is called at object creation.
  * </p>
- * 
+ *
  * @version 0.0.5
  * @since 0.0.5
  */
@@ -44,11 +44,11 @@ class OTS_Players_List extends OTS_Base_List
 
 /**
  * Returns string representation of object.
- * 
+ *
  * <p>
  * If any display driver is currently loaded then it uses it's method.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @return string String representation of object.
