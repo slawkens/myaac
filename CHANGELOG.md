@@ -6,7 +6,7 @@
 * new Awesome Bootstrap Admin Panel by Lee (@Leesneaks)
 	* using Bootstrap 3
 	* all existing pages were adjusted 
-	* new editors: Accounts
+	* new editor: Accounts
 	* improved editor: Players
 	* new Reports View page
 	* Modules directory, which can be added using Plugins (@Leesneaks, @whiteblXK)
@@ -16,7 +16,6 @@
 * possibility to define colors and "Open in New Tab" on Template Menus (needs to be supported by Template)
 * support for database persistent and socket connections (performance boost)
 * Team page - display outfits of the players (configurable)
-* removed configurables: debug_level
 * added clear_cache.php, send_email.php bin commands (@slawkens, @tobi132)
 * added locale pt_br (@ivenspontes)
 * added load time into items & weapons loading admin page
@@ -31,9 +30,9 @@
 ### Fixed:
 * account login redirect with special chars (like '&' and '?')
 * black skull info at serverInfo (@tornadia)
-* zse correct limit at lastkills page from config (anyeor from OtLand)
+* set correct limit at lastkills page from config (anyeor from OtLand)
 * myaac_monsters table column loot problem (#79)
-* players column deleted install description (@tobi132, #91)
+* players column deleted install description (@gpedro, #91)
 * experience table being to wide and buggy on some templates (@tobi132, #90)
 * fix errors with .htaccess files
 * added index.html to prevent indexing the folder by mod_index
@@ -90,10 +89,10 @@
 * sandbox for plugins, don't install when requirements are not satisfied
 * allow comments inside plugin json file (php style)
 * new require options for plugins: (look into example.json)
-	* require database version of the MyAAC schema
-	* require php-extension, table or column
+	* require database version, table or column of the MyAAC schema
+	* require php-extension
 	* require semantic-version (like in composer.json)
-* new hooks:  LOGIN, LOGIN_ATTEMPT, LOGOUT, HOOK_ACCOUNT_CREATE_*
+* new hooks: LOGIN, LOGIN_ATTEMPT, LOGOUT, HOOK_ACCOUNT_CREATE_*
 
 ### Cache
 * php 7.x APCu cache support (faster cache engine)
