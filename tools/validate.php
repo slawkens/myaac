@@ -1,7 +1,7 @@
 <?php
 /**
  * Ajax validator
- * Returns xml file with result
+ * Returns json with result
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>

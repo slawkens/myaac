@@ -84,7 +84,7 @@ if(tableExist('player_killers')) // tfs 0.3
 else {
 	//$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `player_deaths`.`killed_by` as `killed_by`, `player_deaths`.`time` as `time`, `player_deaths`.`is_player` as `is_player`, `player_deaths`.`level` as `level` FROM `player_deaths`, `players` as `d` INNER JOIN `players` as `p` ON player_deaths.player_id = p.id WHERE player_deaths.`is_player`='1' ORDER BY `time` DESC LIMIT " . $config['last_kills_limit'] . ";");
 	
-$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `d`.`killed_by` as `killed_by`, `d`.`time` as `time`, `d`.`level`, `d`.`is_player` FROM `player_deaths` as `d` INNER JOIN `players` as `p` ON d.player_id = p.id ORDER BY `time` DESC LIMIT 20;");
+$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `d`.`killed_by` as `killed_by`, `d`.`time` as `time`, `d`.`level`, `d`.`is_player` FROM `player_deaths` as `d` INNER JOIN `players` as `p` ON d.player_id = p.id ORDER BY `time` DESC LIMIT " . $config['last_kills_limit'] . ";");
 
 	if(!empty($players_deaths))
 	{

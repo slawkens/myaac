@@ -236,7 +236,7 @@ CREATE TABLE `myaac_monsters` (
 	`summonable` tinyint(1) NOT NULL,
 	`convinceable` tinyint(1) NOT NULL,
 	`race` varchar(255) NOT NULL,
-	`loot` varchar(500) NOT NULL,
+	`loot` text NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE = MyISAM;
 

@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 if(!Validator::guildName($guild_name)) {
-	$errors[] = Validator::get;
+	$errors[] = Validator::getLastError();
 }
 
 if(empty($errors)) {

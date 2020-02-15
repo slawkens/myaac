@@ -95,7 +95,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 			'<ul>' .
 				'<li>MySQL is not configured propertly in <i>config.lua</i>.</li>' .
 				'<li>MySQL server is not running.</li>' .
-			'</ul>' . $error);
+			'</ul>' . $error->getMessage());
 
 	}
 	$db = POT::getInstance()->getDBHandle();

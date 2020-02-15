@@ -20,7 +20,7 @@
 	if($rank->isLoaded())
 	{
 		imagettftext($image , $fontsize, 0, 20, 75, $color, $font, 'Guild:');
-		imagettftext($image , $fontsize, 0, 70, 75, $color, $font, $player->getRank()->getName() . ' of the ' . $$rank->getGuild()->getName());
+		imagettftext($image , $fontsize, 0, 70, 75, $color, $font, $player->getRank()->getName() . ' of the ' . $rank->getGuild()->getName());
 	}
 	imagettftext($image , $fontsize, 0, 20, 95, $color, $font, 'Last Login:');
 	imagettftext($image , $fontsize, 0, 100, 95, $color, $font, (($player->getLastLogin() > 0) ? date("j F Y, g:i a", $player->getLastLogin()) : 'Never logged in.'));
