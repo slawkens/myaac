@@ -131,6 +131,10 @@ if($cache->enabled() && $cache->fetch('vocations', $tmp)) {
 	$config['vocations'] = unserialize($tmp);
 }
 else {
+	if(!class_exists('DOMDocument')) {
+		throw new RuntimeException('Please install PHP xml extension. MyAAC will not work without it.');
+	}
+
 	$vocations = new DOMDocument();
 	$file = $config['data_path'] . 'XML/vocations.xml';
 	if(!@file_exists($file))

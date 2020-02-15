@@ -93,6 +93,10 @@ class Plugins {
 	public static function install($file) {
 		global $db;
 
+		if(!\class_exists('ZipArchive')) {
+			throw new RuntimeException('Please install PHP zip extension. Plugins upload disabled until then.');
+		}
+
 		$zip = new ZipArchive();
 		if($zip->open($file)) {
 			for ($i = 0; $i < $zip->numFiles; $i++) {

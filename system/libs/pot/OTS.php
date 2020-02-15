@@ -366,9 +366,8 @@ class POT
     public function connect($params)
     {
         // checks if PDO extension is loaded
-        if( !extension_loaded('PDO') )
-        {
-            throw new LogicException();
+        if( !extension_loaded('PDO') ) {
+            throw new RuntimeException('Please install PHP pdo extension. MyAAC will not work without it.');
         }
 
         $this->db = new OTS_DB_MySQL($params);
