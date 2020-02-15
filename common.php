@@ -108,3 +108,4 @@ if(isset($_SERVER['HTTP_HOST'])) {
 }
 
 require SYSTEM . 'exception.php';
+require SYSTEM . 'autoload.php';
