@@ -217,8 +217,7 @@ if($save)
 			}
 			else
 			{
-				error('An error occorred while sending email! Account not created. Try again. Error:<br/>' . $mailer->ErrorInfo . '<br/>More info in system/logs/error.log');
-				log_append('error.log', '[createaccount.php] An error occorred while sending email: ' . $mailer->ErrorInfo . '. Error: ' . print_r(error_get_last(), true));
+				error('An error occorred while sending email! Account not created. Try again. For Admin: More info can be found in system/logs/mailer-error.log');
 				$new_account->delete();
 			}
 		}
@@ -263,8 +262,7 @@ if($save)
 				if(_mail($email, 'Your account on ' . $config['lua']['serverName'], $mailBody))
 					echo '<br /><small>These informations were send on email address <b>' . $email . '</b>.';
 				else {
-					error('An error occorred while sending email (<b>' . $email . '</b>)! Error:<br/>' . $mailer->ErrorInfo . '<br/>More info in system/logs/error.log');
-					log_append('error.log', '[createaccount.php] An error occorred while sending email: ' . $mailer->ErrorInfo . '. Error: ' . print_r(error_get_last(), true));
+					error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
 				}
 			}
 

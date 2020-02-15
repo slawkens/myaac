@@ -54,7 +54,7 @@ if(strlen($subject) > 255) {
 }
 
 if(!_mail($email_account_name, $subject, $message)) {
-	echo 'Error while sending mail: ' . $mailer->ErrorInfo . PHP_EOL;
+	echo 'An error occurred while sending email. More info can be found in system/logs/mailer-error.log';
 	exit(6);
 }
 

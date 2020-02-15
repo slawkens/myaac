@@ -30,7 +30,7 @@ if ($preview) {
 		$preview_done = _mail($account_logged->getCustomField('email'), $mail_subject, $mail_content);
 
 		if (!$preview_done)
-			error('Error while sending preview mail: ' . $mailer->ErrorInfo);
+			error('Error while sending preview mail. More info can be found in system/logs/mailer-error.log');
 	}
 }
 
@@ -60,7 +60,7 @@ foreach ($query as $email) {
 	else {
 		$failed++;
 		echo '<br />';
-		error('An error occorred while sending email to <b>' . $email['email'] . '</b>. Error: ' . $mailer->ErrorInfo);
+		error('An error occorred while sending email to <b>' . $email['email'] . '</b>. For Admin: More info can be found in system/logs/mailer-error.log');
 	}
 }
 

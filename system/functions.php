@@ -878,7 +878,14 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 		$mailer->AltBody = strip_tags(preg_replace('/<a(.*)href="([^"]*)"(.*)>/','$2', $body)) . "\n" . $signature_plain;
 	}
 
-	return $mailer->Send();
+	ob_start();
+	if(!$mailer->Send()) {
+		log_append('mailer-error.log', PHP_EOL . $mailer->ErrorInfo . PHP_EOL . ob_get_clean());
+		return false;
+	}
+
+	ob_end_clean();
+	return true;
 }
 
 function convert_bytes($size)
