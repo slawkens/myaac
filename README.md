@@ -5,7 +5,7 @@ Official website: https://my-aac.org
 
 ### REQUIREMENTS
 
-	- PHP 5.3.3 or later
+	- PHP 5.5 or later
 	- MySQL database
 	- PDO PHP Extension
 	- XML PHP Extension
