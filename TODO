@@ -54,7 +54,8 @@
 			* js/, css/
 			* images/
 			* storage/ (all dynamic content like guild images)
-		* system/ (for php files, twig templates, locales and other classess)
+		* system/ (for php files, twig views, locales and other classess)
+			* views (old templates)
 	* rename templates to themes as templates is meant to be used for twig templates
 	* change gifts_system to shop_system configurable
 	* move most used options in system/templates dir to separate directories (more transparent)
