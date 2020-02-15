@@ -211,7 +211,13 @@ if($db->hasTable('players_online') && count($players) > 0) {
 
 foreach($skills as $player)
 {
-	$player['online'] = (isset($is_online[$player['id']]) ? 1 : 0);
+    if(isset($is_online)) {
+	    $player['online'] = (isset($is_online[$player['id']]) ? 1 : 0);
+    } else {
+        if(!isset($player['online'])) {
+	        $player['online'] = 0;
+        }
+    }
 
 	if(++$i <= $config['highscores_length'])
 	{
