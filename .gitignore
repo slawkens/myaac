@@ -32,3 +32,4 @@ plugins/*
 !plugins/account-create-hint.json
 !plugins/account-create-hint
 landing
+system/pages/downloads.php
