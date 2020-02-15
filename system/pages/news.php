@@ -38,7 +38,7 @@ if(isset($_GET['archive']))
 		{
 			$news = $news->fetch();
 			$author = '';
-			$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id'] . ' LIMIT 1;'));
+			$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id']) . ' LIMIT 1;');
 			if($query->rowCount() > 0) {
 				$query = $query->fetch();
 				$author = $query['name'];
@@ -172,7 +172,7 @@ if(!$news_cached)
 		foreach($newses as $news)
 		{
 			$author = '';
-			$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id'] . ' LIMIT 1'));
+			$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id']) . ' LIMIT 1');
 			if($query->rowCount() > 0) {
 				$query = $query->fetch();
 				$author = $query['name'];
