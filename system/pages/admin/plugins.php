@@ -69,7 +69,7 @@ if (isset($_REQUEST['uninstall'])) {
 							warning($warning);
 						}
 
-						$info = Plugins::getPlugin();
+						$info = Plugins::getPluginJson();
 						success((isset($info['name']) ? '<strong>' . $info['name'] . '</strong> p' : 'P') . 'lugin has been successfully installed.');
 					} else {
 						$error = Plugins::getError();
@@ -93,6 +93,7 @@ foreach (get_plugins() as $plugin) {
 	$string = file_get_contents(BASE . 'plugins/' . $plugin . '.json');
 	$string = Plugins::removeComments($string);
 	$plugin_info = json_decode($string, true);
+
 	if ($plugin_info == false) {
 		warning('Cannot load plugin info ' . $plugin . '.json');
 	} else {

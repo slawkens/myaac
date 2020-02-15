@@ -33,7 +33,7 @@ if(Plugins::install($path_to_file)) {
 		echo 'WARNING: ' . $warning;
 	}
 
-	$info = Plugins::getPlugin();
+	$info = Plugins::getPluginJson();
 	echo (isset($info['name']) ? $info['name'] . ' p' : 'P') . 'lugin has been successfully installed.' . PHP_EOL;
 }
 else {

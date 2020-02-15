@@ -87,6 +87,7 @@
 * auto detected browser language in select language
 
 ### Plugins
+* sandbox for plugins, don't install when requirements are not satisfied
 * allow comments inside plugin json file (php style)
 * new require options for plugins: (look into example.json)
 	* require database version of the MyAAC schema

@@ -2,7 +2,6 @@
 
 0.*
 	* support duplicated vocation names with different ids
-	* sandbox for plugins, don't install when requirements are not passed
 	* add changelog management interface
 	* kathrine tickets - show/hide
 	* csrf token protection
