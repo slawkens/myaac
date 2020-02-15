@@ -32,6 +32,12 @@ if(!$new_nick) {
 $player = new OTS_Player();
 $player->find($name);
 $player_from_account = false;
+
+if(!Validator::guildNick($new_nick)) {
+    echo Validator::getLastError();
+    return;
+}
+
 if(strlen($new_nick) <= 40)
 {
 	if($player->isLoaded())
