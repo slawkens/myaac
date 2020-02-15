@@ -10,34 +10,6 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-spl_autoload_register(function ($class) {
-	// project-specific namespace prefix
-	$prefix = 'Composer\\Semver\\';
-
-	// base directory for the namespace prefix
-	$base_dir = LIBS . '/semver/';
-
-	// does the class use the namespace prefix?
-	$len = strlen($prefix);
-	if (strncmp($prefix, $class, $len) !== 0) {
-		// no, move to the next registered autoloader
-		return;
-	}
-
-	// get the relative class name
-	$relative_class = substr($class, $len);
-
-	// replace the namespace prefix with the base directory, replace namespace
-	// separators with directory separators in the relative class name, append
-	// with .php
-	$file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
-
-	// if the file exists, require it
-	if (file_exists($file)) {
-		require $file;
-	}
-});
-
 function is_sub_dir($path = NULL, $parent_folder = SITE_PATH) {
 
 	//Get directory path minus last folder
