@@ -11,6 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 require_once LIBS . 'forum.php';
+require_once LIBS . 'news.php';
 
 if(isset($_GET['archive']))
 {
@@ -131,7 +132,7 @@ if(!$news_cached)
 	}
 
 	if($cache->enabled() && !$canEdit)
-		$cache->set('news_' . $template_name . '_' . TICKER, $tickers_content, 120);
+		$cache->set('news_' . $template_name . '_' . TICKER, $tickers_content, 60 * 60);
 
 	$featured_article_db =$db->query('SELECT `id`, `title`, `article_text`, `article_image`, `hidden` FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . ARTICLE . ($canEdit ? '' : ' AND `hidden` != 1') .' ORDER BY `date` DESC LIMIT 1');
 	$article = '';
@@ -154,7 +155,7 @@ if(!$news_cached)
 		}
 
 		if($cache->enabled() && !$canEdit)
-			$cache->set('news_' . $template_name . '_' . ARTICLE, $featured_article, 120);
+			$cache->set('news_' . $template_name . '_' . ARTICLE, $featured_article, 60 * 60);
 	}
 }
 else {
@@ -221,29 +222,9 @@ if(!$news_cached)
 	ob_end_clean();
 
 	if($cache->enabled() && !$canEdit)
-		$cache->set('news_' . $template_name . '_' . NEWS, $tmp_content, 120);
+		$cache->set('news_' . $template_name . '_' . NEWS, $tmp_content, 60 * 60);
 
 	echo $tmp_content;
 }
 else
 	echo $news_cached;
-
-class News
-{
-	static public function getCached($type)
-	{
-		global $template_name;
-
-		$cache = Cache::getInstance();
-		if($cache->enabled())
-		{
-			$tmp = '';
-			if($cache->fetch('news_' . $template_name . '_' . $type, $tmp) && isset($tmp[0])) {
-				return $tmp;
-			}
-		}
-
-		return false;
-	}
-}
-?>

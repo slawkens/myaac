@@ -1079,7 +1079,9 @@ function configLua($key) {
 
 function clearCache()
 {
-	global $template_name;
+	require_once LIBS . 'news.php';
+	News::clearCache();
+
 	$cache = Cache::getInstance();
 
 	if($cache->enabled()) {
@@ -1112,12 +1114,7 @@ function clearCache()
 		if ($cache->fetch('failed_logins', $tmp))
 			$cache->delete('failed_logins');
 
-		if ($cache->fetch('news' . $template_name . '_' . NEWS, $tmp))
-			$cache->delete('news' . $template_name . '_' . NEWS);
-
-		if ($cache->fetch('news' . $template_name . '_' . TICKER, $tmp))
-			$cache->delete('news' . $template_name . '_' . TICKER);
-
+		global $template_name;
 		if ($cache->fetch('template_ini' . $template_name, $tmp))
 			$cache->delete('template_ini' . $template_name);
 	}
