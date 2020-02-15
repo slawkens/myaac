@@ -149,6 +149,10 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			$cache->set('database_columns', serialize($this->has_column_cache));
 			$cache->set('database_checksum', serialize(sha1($config['database_host'] . '.' . $config['database_name'])));
 		}
+
+		if($this->logged) {
+			log_append('database.log', PHP_EOL . $this->getLog());
+		}
 	}
 
 /**

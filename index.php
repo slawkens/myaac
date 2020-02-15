@@ -386,10 +386,6 @@ if(superAdmin()) {
 	if(function_exists('memory_get_peak_usage')) {
 		echo PHP_EOL . '<!-- Peak memory usage: ' . convert_bytes(memory_get_peak_usage(true)) . ' -->';
 	}
-
-	if($config['database_log']) {
-		echo PHP_EOL . '<!-- List of MySQL queries done:' . PHP_EOL . $db->getLog() . '-->';
-	}
 }
 
 $hooks->trigger(HOOK_FINISH);
