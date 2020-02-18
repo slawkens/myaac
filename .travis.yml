@@ -6,6 +6,10 @@ php:
   - '7.1'
   - '7.2'
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 before_script:
   - composer require jakub-onderka/php-parallel-lint --no-suggest --no-progress --no-interaction --no-ansi --quiet --optimize-autoloader
 
