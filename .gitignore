@@ -1,6 +1,7 @@
 Thumbs.db
 .DS_Store
 .idea
+tmp
 
 releases
 config.local.php
