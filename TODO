@@ -73,6 +73,7 @@
 		* switch do desktop/mobile version link
 		* inside templates/mobile
 		* using Mobile_Detect.php library
+	* new command to install the AAC from command line
 
 x.x - At any time between (version not specified)
 	* automatic updater of the AAC files (like in WordPress)
