@@ -74,7 +74,7 @@ $config = array(
 	'database_user' => '',
 	'database_password' => '',
 	'database_name' => '',
-	'database_log' => false, // should database queries be logged and displayed in the page source? They will be included at the end of the .html source of the page
+	'database_log' => false, // should database queries be logged and and saved into system/logs/database.log?
 	'database_socket' => '', // set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)
 	'database_persistent' => false, // use database permanent connection (like server), may speed up your site
 
