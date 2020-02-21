@@ -7,6 +7,8 @@
 	* csrf token protection
 	* guild wars support like in Gesior
 	* move rest of the pages to Twig: lostaccount, highscores, etc.
+	* add Google ReCAPTCHA to the login page and admin login page
+		* + support for ReCAPTCHA v3
 
 1.0
 	* use Composer for additional libraries
