@@ -5,55 +5,59 @@
 # places compressed archives into releases/ directory
 #
 
-# define release version
-version=`cat VERSION`
-
-echo "Preparing to release version $version of the MyAAC Project!"
-
-# make required directories
-mkdir -p releases
-mkdir -p tmp && cd tmp
-
-dir="myaac-$version"
-if [ -d "$dir" ] ; then
-	echo "Fatal error: Version $version already exists!!"
+if [ $# -eq 0 ]; then
+	echo "No arguments supplied"
+	echo "Usage: release.sh prepare/pack"
+	exit 1
 fi
 
-# make version directory
-mkdir "$dir"
+if [ $1 = "prepare" ]; then
+	# define release version
+	version=`cat VERSION`
 
-# copy all AAC files into new created directory
-echo "Copying required files.."
-cd .. # we are now in the main directory
+	echo "Preparing to release version $version of the MyAAC Project!"
 
-shopt -s dotglob # turn on hidden files with *
-#cp -r * "tmp/$dir"
-rsync -Rr --info=progress2 . "tmp/$dir"
+	# get myaac from git archive
+	git archive --format zip --output tmp/myaac.zip master
 
-cd "tmp/$dir"
+	# make required directories
+	mkdir -p releases
+	mkdir -p tmp && cd tmp
 
-# remove unneeded files
-echo "Removing unneeded files.."
-rm -rf .git .github .idea
-rm .gitattributes .gitignore
-rm release.sh
-rm _config.yml
-rm -Rf releases
-rm -Rf tmp
+	dir="myaac-$version"
+	if [ -d "$dir" ] ; then
+		echo "Fatal error: Version $version already exists!!"
+		exit
+	fi
 
-# tar.gz
-echo "Creating .tar.gz package.."
-file="myaac-$version.tar.gz"
-tar -czf $file *
-mv $file ../../releases/
+	unzip -q myaac.zip -d $dir
+	rm myaac.zip
 
-# zip
-echo "Creating .zip package.."
-file="myaac-$version.zip"
-zip -rq $file *
-mv $file ../../releases/
+	echo "Now you can make changes to $dir. When you are ready, type 'release.sh pack'"
+	exit
+fi
 
-cd ../..
-shopt -u dotglob
-rm -R tmp
-echo "Done. Released files can be found in 'releases' directory."
+if [ $1 = "pack" ]; then
+	# define release version
+	version=`cat VERSION`
+
+	cd tmp
+
+	# tar.gz
+	echo "Creating .tar.gz package.."
+	file="myaac-$version.tar.gz"
+	tar -czf $file *
+	mv $file ../releases/
+
+	# zip
+	echo "Creating .zip package.."
+	file="myaac-$version.zip"
+	zip -rq $file *
+	mv $file ../releases/
+
+	cd ..
+	rm -R tmp
+	echo "Done. Released files can be found in 'releases' directory."
+
+	exit
+fi
