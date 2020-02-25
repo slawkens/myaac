@@ -110,8 +110,8 @@ if (isset($_REQUEST['template'])) {
 ';
 	}
 	echo ' </div><div class="row"><div class="col-md-6">';
-	echo '<input type="submit" class="button" value="Update">';
-	echo '<input type="button" class="button" value="Cancel" onclick="window.location = \'' . ADMIN_URL . '?p=menus&template=' . $template . '\';">';
+	echo '<input type="submit" class="btn btn-info" value="Save">';
+	echo '<input type="button" class="btn btn-default pull-right" value="Cancel" onclick="window.location = \'' . ADMIN_URL . '?p=menus&template=' . $template . '\';">';
 	echo '</div></div>';
 	echo '</form>';
 
