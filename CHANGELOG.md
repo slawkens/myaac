@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.1 - x.x.x]
+
+### Fixed
+* Some weird behaviour with installation of plugins
+
 ## [0.8.0 - x.02.2020]
 
 ### Added:
