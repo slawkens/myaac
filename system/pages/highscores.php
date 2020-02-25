@@ -268,7 +268,7 @@ if($config['highscores_country_box'])
 	echo
 	'<TABLE BORDER=0 width="100%" CELLPADDING=4 CELLSPACING=1>
 		<TR BGCOLOR="' . $config['vdarkborder'] . '">
-			<TD CLASS=whites><B>Choose a country</B></TD>
+			<TD CLASS=white><B>Choose a country</B></TD>
 		</TR>
 		<TR BGCOLOR="'.$config['lightborder'].'">
 			<TD>
@@ -284,7 +284,7 @@ if($config['highscores_country_box'])
 echo '
 <TABLE BORDER=0 width="100%" CELLPADDING=4 CELLSPACING=1>
 	<TR BGCOLOR="'.$config['vdarkborder'].'">
-		<TD CLASS=whites><B>Choose a skill</B></TD>
+		<TD CLASS=white><B>Choose a skill</B></TD>
 	</TR>
 	<TR BGCOLOR="'.$config['lightborder'].'">
 		<TD>';
@@ -315,7 +315,7 @@ if($config['highscores_vocation_box'])
 	echo
 	'<table border="0" width="100%" cellpadding="4" cellspacing="1">
 		<tr bgcolor="' . $config['vdarkborder'] . '">
-			<td class=whites><b>Choose a vocation</b></td>
+			<td class="white"><b>Choose a vocation</b></td>
 		</tr>
 		<tr bgcolor="'.$config['lightborder'].'">
 			<td>
