@@ -39,7 +39,7 @@ if (isset($_REQUEST['uninstall'])) {
 				break;
 			case UPLOAD_ERR_INI_SIZE:
 			case UPLOAD_ERR_FORM_SIZE:
-				$error .= ' - file too large (limit of ' . ini_get('upload_max_filesize') . ' bytes).';
+				$error .= ' - file too large (limit of ' . ini_get('upload_max_filesize') . ' bytes). You can enlarge the limits by changing "upload_max_filesize" in php.ini';
 				break;
 			case UPLOAD_ERR_PARTIAL:
 				$error .= ' - file upload was not completed.';
