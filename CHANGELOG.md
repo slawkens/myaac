@@ -4,8 +4,9 @@
 
 ### Fixed
 * Some weird behaviour with installation of plugins
+* CHANGELOG.md loading in Admin Panel
 
-## [0.8.0 - x.02.2020]
+## [0.8.0 - 19.02.2020]
 
 ### Added:
 * new Awesome Bootstrap Admin Panel by Lee (@Leesneaks)

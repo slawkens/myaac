@@ -10,17 +10,17 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'MyAAC Changelog';
 
-if (!file_exists(BASE . 'CHANGELOG')) {
-	echo 'File CHANGELOG doesn\'t exist.';
+if (!file_exists(BASE . 'CHANGELOG.md')) {
+	echo 'File CHANGELOG.md doesn\'t exist.';
 	return;
 }
 
-$changelog = file_get_contents(BASE . 'CHANGELOG');
-$changelog = htmlspecialchars($changelog);
+require LIBS . 'Parsedown.php';
 
-// replace URLs with <a href...> elements
-$changelog = preg_replace('/\s(\w+:\/\/)(\S+)/', ' <a href="\\1\\2" target="_blank">\\1\\2</a>', $changelog);
+$changelog = file_get_contents(BASE . 'CHANGELOG.md');
 
-$changelog = nl2br($changelog);
+$Parsedown = new Parsedown();
+
+$changelog = $Parsedown->text($changelog); # prints: <p>Hello <em>Parsedown</em>!</p>
 
 echo '<div>' . $changelog . '</div>';
