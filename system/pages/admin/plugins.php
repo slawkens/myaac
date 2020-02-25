@@ -17,7 +17,7 @@ echo $twig->render('admin.plugins.form.html.twig');
 
 if(isset($_REQUEST['uninstall'])){
 	$uninstall = $_REQUEST['uninstall'];
-	
+
 	if(Plugins::uninstall($uninstall)) {
 		success('Successfully uninstalled plugin ' . $uninstall);
 	}
@@ -43,7 +43,7 @@ else if(isset($_FILES["plugin"]["name"]))
 				break;
 			case UPLOAD_ERR_INI_SIZE:
 			case UPLOAD_ERR_FORM_SIZE:
-				$error .= ' - file too large (limit of '.ini_get('upload_max_filesize').' bytes).';
+				$error .= ' - file too large (limit of '.ini_get('upload_max_filesize').' bytes). You can enlarge the limits by changing "upload_max_filesize" in php.ini';
 				break;
 			case UPLOAD_ERR_PARTIAL:
 				$error .= ' - file upload was not completed.';
@@ -78,7 +78,7 @@ else if(isset($_FILES["plugin"]["name"]))
 					}
 					else
 						error(Plugins::getError());
-					
+
 					unlink($targetzip); // delete the Zipped file
 				}
 				else
