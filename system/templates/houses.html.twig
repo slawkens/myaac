@@ -141,9 +141,12 @@
 
                                     <tr bgcolor="{{ config.darkborder }}">
                                         <td valign="top">
-                                            <input type="radio" name="type" value=""{% if type is empty %} checked{% endif %}> all<br>
-                                            <input type="radio" name="type" value="houses"{% if type == 'houses' %} checked{% endif %}> houses and flats<br>
-                                            <input type="radio" name="type" value="guildhalls"{% if type == 'guildhalls' %} checked{% endif %}> guildhalls<br>
+                                            <input type="radio" name="type" id="type_all" value=""{% if type is empty %} checked{% endif %}>
+                                            <label for="type"> all</label><br>
+                                            <input type="radio" name="type" id="type_houses" value="houses"{% if type == 'houses' %} checked{% endif %}>
+                                            <label for="type_houses"> houses and flats</label><br>
+                                            <input type="radio" name="type" id="type_guildhalls" value="guildhalls"{% if type == 'guildhalls' %} checked{% endif %}>
+                                            <label for="type_guildhalls"> guildhalls</label><br>
                                         </td>
                                     </tr>
                                 </tbody>
