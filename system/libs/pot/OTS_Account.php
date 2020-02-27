@@ -127,12 +127,11 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * </p>
  *
  * @version 0.1.5
- * @param int $min Minimum number.
- * @param int $max Maximum number.
  * @param string $name Account name.
+ * @param int $id Account id.
  * @return int Created account number.
- * @throws E_OTS_Generic When there are no free account numbers.
  * @throws PDOException On PDO operation error.
+ * @throws Exception ON lastInsertId error.
  * @deprecated 0.1.5 Use createNamed().
  */
     public function create($name = NULL, $id = NULL)
@@ -143,7 +142,17 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		if(isset($name))
 			$this->data['name'] = $name;
 
-		$this->data['id'] = $this->db->lastInsertId();
+		$lastInsertId = $this->db->lastInsertId();
+		if($lastInsertId != 0) {
+			$this->data['id'] = $lastInsertId;
+		}
+		elseif (isset($id)) {
+			$this->data['id'] = $id;
+		}
+		else {
+			throw new Exception(__CLASS__ . ':' . __METHOD__ . ' unexpected error. Please report to MyAAC Developers.');
+		}
+
         return $this->data['id'];
     }
 

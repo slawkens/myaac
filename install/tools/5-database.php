@@ -58,6 +58,11 @@ else {
 	}
 }
 
+if(!$db->hasColumn('accounts', 'email')) {
+	if(query("ALTER TABLE `accounts` ADD `email` varchar(255) NOT NULL DEFAULT '';"))
+		success($locale['step_database_adding_field'] . ' accounts.email...');
+}
+
 if($db->hasColumn('accounts', 'key')) {
 	if(query("ALTER TABLE `accounts` MODIFY `key` VARCHAR(64) NOT NULL DEFAULT '';"))
 		success($locale['step_database_modifying_field'] . ' accounts.key...');
