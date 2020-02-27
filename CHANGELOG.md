@@ -2,6 +2,9 @@
 
 ## [0.8.1 - x.x.x]
 
+### Added
+* Support for Nostalrius OTS
+
 ### Fixed
 * Some weird behaviour with installation of plugins
 * CHANGELOG.md loading in Admin Panel
