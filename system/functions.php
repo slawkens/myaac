@@ -142,7 +142,7 @@ function getGuildLink($name, $generate = true)
 function getItemNameById($id) {
 	require_once LIBS . 'items.php';
 	$item = Items::get($id);
-	return $item['name'];
+	return !empty($item['name']) ? $item['name'] : '';
 }
 
 function getItemImage($id, $count = 1)
