@@ -18,7 +18,7 @@ $title = "Creatures";
 
 <script>
 	$(document).ready(function () {
-		Tipped.create('.tooltip');
+		Tipped.create('.item_image');
 	});
 </script>
 
@@ -146,7 +146,7 @@ if (empty($_REQUEST['creature'])) {
 				$name = getItemNameById($item['id']);
 				$tooltip = $name . '<br/>Chance: ' . round($item['chance'] / 1000, 2) . '%<br/>Max count: ' . $item['count'];
 
-				echo '<img src="' . $config['item_images_url'] . $item['id'] . '.gif" class="tooltip" title="' . $tooltip . '" width="32" height="32" border="0" alt=" ' . $name . '" />';
+				echo getItemImage($item['id']);
 				$i++;
 			}
 
