@@ -1500,42 +1500,7 @@ img {
   right: 0px;
   z-index: 55;
 }
-.Content .BoxContent .Odd {
-  background-color: #D4C0A1;
-  padding: 2px;
-}
 
-.Content .BoxContent .Even {
-  background-color: #F1E0C6;
-  padding: 2px;
-}
-
-.Content .NewsCategoryIconSmall {
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  height: 16px;
-  width: 16px;
-  background-repeat: no-repeat;
-}
-.Content .BoxContent .Odd {
-  background-color: #D4C0A1;
-  padding: 2px;
-}
-
-.Content .BoxContent .Even {
-  background-color: #F1E0C6;
-  padding: 2px;
-}
-
-.Content .NewsCategoryIconSmall {
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  height: 16px;
-  width: 16px;
-  background-repeat: no-repeat;
-}
 .Content .BoxContent .Odd {
   background-color: #D4C0A1;
   padding: 2px;
@@ -1819,7 +1784,7 @@ img {
 .moduleRow { }
 
 .moduleRowOver {
-	background-color: #D4C0A1; 
+	background-color: #D4C0A1;
 	cursor: pointer;
 	cursor: hand;
 }
