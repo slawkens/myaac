@@ -144,6 +144,10 @@ function get_template_menus() {
 	 * @var array $options
 	 */
 	$configMenuCategories = config('menu_categories');
+	if($configMenuCategories === null) {
+		return [];
+	}
+
 	foreach($configMenuCategories as $id => $options) {
 		if(isset($menus[$id])) {
 			$new_menus[$id] = $menus[$id];
