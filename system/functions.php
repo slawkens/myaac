@@ -1188,6 +1188,11 @@ function getCustomPage($page, &$success)
 			}
 			set_error_handler('error_handler');
 
+			global $config;
+			if($config['backward_support']) {
+				global $SQL, $main_content, $subtopic;
+			}
+
 			ob_start();
 			eval($tmp);
 			$content .= ob_get_contents();
