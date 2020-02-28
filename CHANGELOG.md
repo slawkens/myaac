@@ -6,8 +6,10 @@
 * Support for Nostalrius OTS
 
 ### Fixed
+* Loading custom pages with old Gesior variables [#108](https://github.com/slawkens/myaac/issues/107)
 * Some weird behaviour with installation of plugins
 * CHANGELOG.md loading in Admin Panel
+* Some PHP warnings and notices
 
 ## [0.8.0 - 19.02.2020]
 
