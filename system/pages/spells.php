@@ -43,7 +43,7 @@ else {
 
 $order = 'name';
 $spells = array();
-$spells_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 4 AND `level` > 0 ORDER BY ' . $order . '');
+$spells_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'spells` WHERE `hidden` != 1 AND `type` < 4 ORDER BY ' . $order . '');
 
 if((string)$vocation_id != 'all') {
 	foreach($spells_db->fetchAll() as $spell) {
