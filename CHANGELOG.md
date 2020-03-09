@@ -1,14 +1,20 @@
 # Changelog
 
-## [0.8.1 - x.x.x]
+## [0.8.1 - 10.03.2020]
 
 ### Added
 * Support for Nostalrius OTS
 
+### Changed
+* Move TODO to wiki
+* .tooltip css class to .item_image (bootstrap conflict)
+
 ### Fixed
+* Reloading of creatures/monsters throwing an exception
 * Loading custom pages with old Gesior variables [#108](https://github.com/slawkens/myaac/issues/107)
 * Some weird behaviour with installation of plugins
 * CHANGELOG.md loading in Admin Panel
+* spells displaying when level = 0
 * Some PHP warnings and notices
 
 ## [0.8.0 - 19.02.2020]
