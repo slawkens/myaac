@@ -10,6 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require_once LIBS . 'items.php';
 class Creatures {
 	/**
 	 * @var OTS_MonstersList
