@@ -17,7 +17,10 @@ function checkName()
 
 	if(document.getElementById("character_name").value=="")
 	{
-		$('#character_error').html('<span color="red">Please enter new character name.</span>');
+		$('#character_error').html('<span style="color: red">Please enter new character name.</span>');
+		var $characterIndicator = $('#character_indicator');
+		$characterIndicator.attr('src', 'images/global/general/nok.gif');
+		$characterIndicator.show();
 		return;
 	}
 
@@ -36,16 +39,18 @@ function checkName()
 
 	var name = document.getElementById("character_name").value;
 	$.getJSON("tools/validate.php", { name: name, uid: Math.random() },
-		function(data){
+		function(data) {
+			var $characterIndicator = $('#character_indicator');
 			if(data.hasOwnProperty('success')) {
 				$('#character_error').html ('<span style="color: green">' + data.success + '</span>');
-				$('#character_indicator').attr('src', 'images/global/general/ok.gif');
+				$characterIndicator.attr('src', 'images/global/general/ok.gif');
 			}
 			else if(data.hasOwnProperty('error')) {
 				$('#character_error').html('<span style="color: red">' + data.error + '</span>');
-				$('#character_indicator').attr('src', 'images/global/general/nok.gif');
+				$characterIndicator.attr('src', 'images/global/general/nok.gif');
 			}
 
-            lastSend = timeNow;
+			$characterIndicator.show();
+			lastSend = timeNow;
 	});
 }
