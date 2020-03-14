@@ -151,7 +151,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 		}
 
 		if($this->logged) {
-			log_append('database.log', PHP_EOL . $this->getLog());
+			log_append('database.log', $_SERVER['REQUEST_URI'] . PHP_EOL . $this->getLog());
 		}
 	}
 
