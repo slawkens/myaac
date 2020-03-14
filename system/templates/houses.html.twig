@@ -75,7 +75,7 @@
                                             <td>
                                                 <form action="{{ getLink('houses/view') }}" method="post">
                                                     <input type="hidden" name="house" value="{{ house.name }}">
-                                                    <button name="View" alt="View" class="btn btn-secondary" width="120" height="18">View</button>
+                                                    {{ include('buttons.view.html.twig') }}
                                                 </form>
                                             </td>
                                         </tr>
