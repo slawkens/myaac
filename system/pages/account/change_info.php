@@ -39,23 +39,24 @@ if(isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
 if($show_form) {
 	$account_rlname = $account_logged->getCustomField("rlname");
 	$account_location = $account_logged->getCustomField("location");
-	if ($config['account_country'])
+	if ($config['account_country']) {
 		$account_country = $account_logged->getCustomField("country");
 
-	$countries = array();
-	foreach (array('pl', 'se', 'br', 'us', 'gb',) as $country)
-		$countries[$country] = $config['countries'][$country];
+		$countries = array();
+		foreach (array('pl', 'se', 'br', 'us', 'gb',) as $country)
+			$countries[$country] = $config['countries'][$country];
 
-	$countries['--'] = '----------';
+		$countries['--'] = '----------';
 
-	foreach ($config['countries'] as $code => $country)
-		$countries[$code] = $country;
+		foreach ($config['countries'] as $code => $country)
+			$countries[$code] = $country;
+	}
 
 	$twig->display('account.change_info.html.twig', array(
-		'countries' => $countries,
+		'countries' => isset($countries) ? $countries : [],
 		'account_rlname' => $account_rlname,
 		'account_location' => $account_location,
-		'account_country' => $account_country
+		'account_country' => isset($account_country) ? $account_country : ''
 	));
 }
 ?>
