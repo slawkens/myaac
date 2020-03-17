@@ -43,7 +43,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
         foreach( $houses->getElementsByTagName('house') as $house)
         {
-            $this->houses[ (int) $house->getAttribute('houseid') ] = new OTS_House($house);
+            $this->houses[ (int) $house->getAttribute('houseid') ] = new OTS_House($house->getAttribute('houseid'));
         }
     }
 
