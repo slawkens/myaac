@@ -48,17 +48,6 @@ CREATE TABLE `myaac_changelog`
 
 INSERT INTO `myaac_changelog` (`id`, `type`, `where`, `date`, `body`, `hidden`) VALUES (1, 3, 2, UNIX_TIMESTAMP(), 'MyAAC installed. (:', 0);
 
-CREATE TABLE `myaac_commands`
-(
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`words` VARCHAR(30) NOT NULL DEFAULT 0,
-	`description` VARCHAR(300) NOT NULL,
-	`ordering` INT(11) NOT NULL DEFAULT 0,
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
-	PRIMARY KEY (`id`),
-	UNIQUE (`words`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
 CREATE TABLE `myaac_config`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
