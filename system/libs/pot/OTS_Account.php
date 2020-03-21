@@ -39,9 +39,9 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @var array
  * @version 0.1.5
  */
-    private $data = array('email' => '', 'blocked' => false, 'rlname' => '','location' => '', 'country' => '','web_flags' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
+    private $data = array('email' => '', 'blocked' => false, 'rlname' => '', 'location' => '', 'country' => '', 'web_flags' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
 
-	public static $cache = array();
+    public static $cache = array();
 /**
  * Creates new account.
  *
@@ -68,11 +68,9 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function createNamed($name = null)
     {
         // if name is not passed then it will be generated randomly
-        if( !isset($name) )
-        {
+        if (!isset($name)) {
             // reads already existing names
-            foreach( $this->db->query('SELECT ' . $this->db->fieldName('name') . ' FROM ' . $this->db->tableName('accounts') )->fetchAll() as $account)
-            {
+            foreach ($this->db->query('SELECT ' . $this->db->fieldName('name') . ' FROM ' . $this->db->tableName('accounts'))->fetchAll() as $account) {
                 $exist[] = $account['name'];
             }
 
@@ -80,8 +78,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
             $name = uniqid();
 
             // repeats until name is unique
-            while( in_array($name, $exist) )
-            {
+            while (in_array($name, $exist)) {
                 $name .= '_';
             }
 
@@ -134,24 +131,23 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws Exception ON lastInsertId error.
  * @deprecated 0.1.5 Use createNamed().
  */
-    public function create($name = NULL, $id = NULL)
+    public function create($name = null, $id = null)
     {
         // saves blank account info
         $this->db->exec('INSERT INTO `accounts` (' . (isset($id) ? '`id`,' : '') . (isset($name) ? '`name`,' : '') . '`password`, `email`, `created`) VALUES (' . (isset($id) ? $id . ',' : '') . (isset($name) ? $this->db->quote($name) . ',' : '') . ' \'\', \'\',' . time() . ')');
 
-		if(isset($name))
-			$this->data['name'] = $name;
+        if (isset($name)) {
+            $this->data['name'] = $name;
+        }
 
-		$lastInsertId = $this->db->lastInsertId();
-		if($lastInsertId != 0) {
-			$this->data['id'] = $lastInsertId;
-		}
-		elseif (isset($id)) {
-			$this->data['id'] = $id;
-		}
-		else {
-			throw new Exception(__CLASS__ . ':' . __METHOD__ . ' unexpected error. Please report to MyAAC Developers.');
-		}
+        $lastInsertId = $this->db->lastInsertId();
+        if ($lastInsertId != 0) {
+            $this->data['id'] = $lastInsertId;
+        } elseif (isset($id)) {
+            $this->data['id'] = $id;
+        } else {
+            throw new Exception(__CLASS__ . ':' . __METHOD__ . ' unexpected error. Please report to MyAAC Developers.');
+        }
 
         return $this->data['id'];
     }
@@ -179,14 +175,14 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function load($id, $fresh = false)
     {
-		if(!$fresh && isset(self::$cache[$id])) {
-			$this->data = self::$cache[$id];
-			return;
-		}
+        if (!$fresh && isset(self::$cache[$id])) {
+            $this->data = self::$cache[$id];
+            return;
+        }
 
         // SELECT query on database
-		$this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : '')) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
-		self::$cache[$id] = $this->data;
+        $this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : '')) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
+        self::$cache[$id] = $this->data;
     }
 
 /**
@@ -204,11 +200,10 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function find($name)
     {
         // finds player's ID
-        $id = $this->db->query('SELECT `id` FROM `accounts` WHERE `name` = ' . $this->db->quote($name) )->fetch();
+        $id = $this->db->query('SELECT `id` FROM `accounts` WHERE `name` = ' . $this->db->quote($name))->fetch();
 
         // if anything was found
-        if( isset($id['id']) )
-        {
+        if (isset($id['id'])) {
             $this->load($id['id']);
         }
     }
@@ -224,11 +219,10 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function findByEMail($email)
     {
         // finds player's ID
-        $id = $this->db->query('SELECT `id` FROM `accounts` WHERE `email` = ' . $this->db->quote($email) )->fetch();
+        $id = $this->db->query('SELECT `id` FROM `accounts` WHERE `email` = ' . $this->db->quote($email))->fetch();
 
         // if anything was found
-        if( isset($id['id']) )
-        {
+        if (isset($id['id'])) {
             $this->load($id['id']);
         }
     }
@@ -260,18 +254,17 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function save()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-	$field = 'lastday';
-	if($this->db->hasColumn('accounts', 'premend')) { // othire
-    		$field = 'premend';
-		if(!isset($this->data['premend'])) {
-			$this->data['premend'] = 0;
-		}
-	}
+        $field = 'lastday';
+        if ($this->db->hasColumn('accounts', 'premend')) { // othire
+            $field = 'premend';
+            if (!isset($this->data['premend'])) {
+                $this->data['premend'] = 0;
+            }
+        }
 
         // UPDATE query on database
         $this->db->exec('UPDATE `accounts` SET ' . ($this->db->hasColumn('accounts', 'name') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `blocked` = ' . (int) $this->data['blocked'] . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `country` = ' . $this->db->quote($this->data['country']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $field . '` = ' . (int) $this->data[$field] . ' WHERE `id` = ' . $this->data['id']);
@@ -290,9 +283,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getId()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         return $this->data['id'];
@@ -300,9 +292,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
     public function getRLName()
     {
-        if( !isset($this->data['rlname']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['rlname'])) {
+            throw new E_OTS_NotLoaded("Null value in 'rlname' colunm. | Account id: $this");
         }
 
         return $this->data['rlname'];
@@ -310,9 +301,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
     public function getLocation()
     {
-        if( !isset($this->data['location']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['location'])) {
+            throw new E_OTS_NotLoaded("Null value in 'location' colunm. | Account id: $this");
         }
 
         return $this->data['location'];
@@ -320,9 +310,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
     public function getCountry()
     {
-        if( !isset($this->data['country']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['country'])) {
+            throw new E_OTS_NotLoaded("Null value in 'country' colunm. | Account id: $this");
         }
 
         return $this->data['country'];
@@ -330,57 +319,58 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
     public function getWebFlags()
     {
-        if( !isset($this->data['web_flags']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['web_flags'])) {
+            throw new E_OTS_NotLoaded("Null value in 'web_flags' colunm. | Account id: $this");
         }
 
         return $this->data['web_flags'];
     }
 
-	public function hasFlag($flag)
-	{
-		if(!isset($this->data['web_flags'])) {
-			throw new E_OTS_NotLoaded();
-		}
-
-		return ($this->data['web_flags'] & $flag) == $flag;
-	}
-
-	public function isAdmin()
-	{
-		return $this->hasFlag(FLAG_ADMIN) || $this->isSuperAdmin();
-	}
-
-	public function isSuperAdmin()
-	{
-		return $this->hasFlag(FLAG_SUPER_ADMIN);
-	}
-
-	public function getPremDays()
-	{
-		if(!isset($this->data['lastday']) && !isset($this->data['premend'])) {
-			throw new E_OTS_NotLoaded();
-		}
-
-		if(isset($this->data['premend'])) {
-			return round(($this->data['premend'] - time()) / (24 * 60 * 60), 2);
-		}
-
-		if($this->data['premdays'] == 0) {
-			return 0;
-		}
-
-		global $config;
-        if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
-		return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
-	}
-
-   public function getLastLogin()
+    public function hasFlag($flag)
     {
-        if( !isset($this->data['lastday']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['web_flags'])) {
+            throw new E_OTS_NotLoaded("Null value in 'web_flags' colunm. | Account id: $this");
+        }
+
+        return ($this->data['web_flags'] & $flag) == $flag;
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasFlag(FLAG_ADMIN) || $this->isSuperAdmin();
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->hasFlag(FLAG_SUPER_ADMIN);
+    }
+
+    public function getPremDays()
+    {
+        if (!isset($this->data['lastday']) && !isset($this->data['premend'])) {
+            throw new E_OTS_NotLoaded("Null value in 'lastday' or 'premend' colunm. | Account id: $this");
+        }
+
+        if (isset($this->data['premend'])) {
+            return round(($this->data['premend'] - time()) / (24 * 60 * 60), 2);
+        }
+
+        if ($this->data['premdays'] == 0) {
+            return 0;
+        }
+
+        global $config;
+        if (isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) {
+            return -1;
+        }
+
+        return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
+    }
+
+    public function getLastLogin()
+    {
+        if (!isset($this->data['lastday'])) {
+            throw new E_OTS_NotLoaded("Null value in 'lastday' colunm. | Account id: $this");
         }
 
         return $this->data['lastday'];
@@ -388,21 +378,22 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
     public function isPremium()
     {
-		global $config;
-        if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return true;
+        global $config;
+        if (isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) {
+            return true;
+        }
 
-		if(isset($this->data['premend'])) {
-			return $this->data['premend'] > time();
-		}
+        if (isset($this->data['premend'])) {
+            return $this->data['premend'] > time();
+        }
 
-		return ($this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday'])) > 0);
-	}
+        return ($this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday'])) > 0);
+    }
 
     public function getCreated()
     {
-        if( !isset($this->data['created']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['created'])) {
+            throw new E_OTS_NotLoaded("Null value in 'created' colunm. | Account id: $this");
         }
 
         return $this->data['created'];
@@ -417,8 +408,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function setPremDays($premdays)
     {
-		$this->data['premdays'] = (int) $premdays;
-		$this->data['premend'] = time() + ($premdays * 24 * 60 * 60);
+        $this->data['premdays'] = (int) $premdays;
+        $this->data['premend'] = time() + ($premdays * 24 * 60 * 60);
     }
 
     public function setRLName($name)
@@ -436,7 +427,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $this->data['country'] = (string) $country;
     }
 
-	public function setLastLogin($lastlogin)
+    public function setLastLogin($lastlogin)
     {
         $this->data['lastday'] = (int) $lastlogin;
     }
@@ -456,9 +447,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getName()
     {
-        if( !isset($this->data['name']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['name'])) {
+            throw new E_OTS_NotLoaded("Null value in 'name' colunm. | Account id: $this");
         }
 
         return $this->data['name'];
@@ -497,9 +487,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getPassword()
     {
-        if( !isset($this->data['password']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['password'])) {
+            throw new E_OTS_NotLoaded("Null value in 'password' colunm. | Account id: $this");
         }
 
         return $this->data['password'];
@@ -535,9 +524,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getEMail()
     {
-        if( !isset($this->data['email']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['email'])) {
+            throw new E_OTS_NotLoaded("Null value in 'email' colunm. | Account id: $this");
         }
 
         return $this->data['email'];
@@ -570,9 +558,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function isBlocked()
     {
-        if( !isset($this->data['blocked']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['blocked'])) {
+            throw new E_OTS_NotLoaded("Null value in 'blocked' colunm. | Account id: $this");
         }
 
         return $this->data['blocked'];
@@ -602,8 +589,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $this->data['blocked'] = true;
     }
 
-
-
 /**
  * Reads custom field.
  *
@@ -624,9 +609,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getCustomField($field)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         $value = $this->db->query('SELECT ' . $this->db->fieldName($field) . ' FROM ' . $this->db->tableName('accounts') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id'])->fetch();
@@ -657,14 +641,12 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function setCustomField($field, $value)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // quotes value for SQL query
-        if(!( is_int($value) || is_float($value) ))
-        {
+        if (!(is_int($value) || is_float($value))) {
             $value = $this->db->quote($value);
         }
         $this->db->exec('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName($field) . ' = ' . $value . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
@@ -678,15 +660,13 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getPlayers()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         $players = array();
 
-        foreach( $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('account_id') . ' = ' . $this->data['id'])->fetchAll() as $player)
-        {
+        foreach ($this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('account_id') . ' = ' . $this->data['id'])->fetchAll() as $player) {
             // creates new object
             $object = new OTS_Player();
             $object->load($player['id']);
@@ -714,9 +694,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getPlayersList()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // creates filter
@@ -740,16 +719,15 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function ban($time = 0)
     {
         // can't ban nothing
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!$this->isLoaded()) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // creates ban entry
         $ban = new OTS_AccountBan();
         $ban->setValue($this->data['id']);
         $ban->setExpires($time);
-        $ban->setAdded( time() );
+        $ban->setAdded(time());
         $ban->activate();
         $ban->save();
     }
@@ -763,9 +741,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function unban()
     {
         // can't unban nothing
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!$this->isLoaded()) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // deletes ban entry
@@ -784,56 +761,54 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function isBanned()
     {
         // nothing can't be banned
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!$this->isLoaded()) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
-		if( !isset($this->data['banned']) )
-			$this->loadBan();
+        if (!isset($this->data['banned'])) {
+            $this->loadBan();
+        }
+
         return ($this->data['banned'] === true);
     }
 
     public function getBanTime()
     {
         // nothing can't be banned
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!$this->isLoaded()) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
-		if( !isset($this->data['banned_time']) )
-			$this->loadBan();
+        if (!isset($this->data['banned_time'])) {
+            $this->loadBan();
+        }
+
         return $this->data['banned_time'];
     }
 
     public function loadBan()
     {
         // nothing can't be banned
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!$this->isLoaded()) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-		if($this->db->hasTable('account_bans')) {
-			$ban = $this->db->query('SELECT `expires_at` FROM `account_bans` WHERE `account_id` = ' . $this->data['id'] . ' AND (`expires_at` > ' . time() .' OR `expires_at` = -1) ORDER BY `expires_at` DESC')->fetch();
-			$this->data['banned'] = isset($ban['expires_at']);
-			$this->data['banned_time'] = isset($ban['expires_at']) ? $ban['expires_at'] : 0;
-		}
-		else if($this->db->hasTable('bans')) {
-			if($this->db->hasColumn('bans', 'active')) {
-				$ban = $this->db->query('SELECT `active`, `expires` FROM `bans` WHERE (`type` = 3 OR `type` = 5) AND `active` = 1 AND `value` = ' . $this->data['id'] . ' AND (`expires` > ' . time() .' OR `expires` = -1) ORDER BY `expires` DESC')->fetch();
-				$this->data['banned'] = isset($ban['active']);
-				$this->data['banned_time'] = isset($ban['expires']) ? $ban['expires'] : 0;
-			}
-			else { // tfs 0.2
-				$ban = $this->db->query('SELECT `time` FROM `bans` WHERE (`type` = 3 OR `type` = 5) AND `account` = ' . $this->data['id'] . ' AND (`time` > ' . time() .' OR `time` = -1) ORDER BY `time` DESC')->fetch();
-				$this->data['banned'] = isset($ban['time']) && ($ban['time'] == -1 || $ban['time'] > 0);
-				$this->data['banned_time'] = isset($ban['time']) ? $ban['time'] : 0;
-			}
-		}
-		else {
-			$this->data['banned'] = false;
-			$this->data['banned_time'] = 0;
-		}
+        if ($this->db->hasTable('account_bans')) {
+            $ban = $this->db->query('SELECT `expires_at` FROM `account_bans` WHERE `account_id` = ' . $this->data['id'] . ' AND (`expires_at` > ' . time() . ' OR `expires_at` = -1) ORDER BY `expires_at` DESC')->fetch();
+            $this->data['banned'] = isset($ban['expires_at']);
+            $this->data['banned_time'] = isset($ban['expires_at']) ? $ban['expires_at'] : 0;
+        } else if ($this->db->hasTable('bans')) {
+            if ($this->db->hasColumn('bans', 'active')) {
+                $ban = $this->db->query('SELECT `active`, `expires` FROM `bans` WHERE (`type` = 3 OR `type` = 5) AND `active` = 1 AND `value` = ' . $this->data['id'] . ' AND (`expires` > ' . time() . ' OR `expires` = -1) ORDER BY `expires` DESC')->fetch();
+                $this->data['banned'] = isset($ban['active']);
+                $this->data['banned_time'] = isset($ban['expires']) ? $ban['expires'] : 0;
+            } else { // tfs 0.2
+                $ban = $this->db->query('SELECT `time` FROM `bans` WHERE (`type` = 3 OR `type` = 5) AND `account` = ' . $this->data['id'] . ' AND (`time` > ' . time() . ' OR `time` = -1) ORDER BY `time` DESC')->fetch();
+                $this->data['banned'] = isset($ban['time']) && ($ban['time'] == -1 || $ban['time'] > 0);
+                $this->data['banned_time'] = isset($ban['time']) ? $ban['time'] : 0;
+            }
+        } else {
+            $this->data['banned'] = false;
+            $this->data['banned_time'] = 0;
+        }
     }
 
 /**
@@ -850,9 +825,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function delete()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // deletes row from database
@@ -870,61 +844,60 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getAccess()
     {
-		return $this->getGroupId();
+        return $this->getGroupId();
     }
 
-	public function getGroupId()
-	{
-		if(isset($this->data['group_id'])) {
-			return $this->data['group_id'];
-		}
+    public function getGroupId()
+    {
+        if (isset($this->data['group_id'])) {
+            return $this->data['group_id'];
+        }
 
-		global $db;
-		if($db->hasColumn('accounts', 'group_id')) {
-			$query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
-			// if anything was found
-			if(isset($query['group_id'])) {
-				$this->data['group_id'] = $query['group_id'];
-				return $query['group_id'];
-			}
-		}
+        global $db;
+        if ($db->hasColumn('accounts', 'group_id')) {
+            $query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
+            // if anything was found
+            if (isset($query['group_id'])) {
+                $this->data['group_id'] = $query['group_id'];
+                return $query['group_id'];
+            }
+        }
 
-		$query = $this->db->query('SELECT `group_id` FROM `players` WHERE `account_id` = ' . (int) $this->getId() .  ' ORDER BY `group_id` DESC LIMIT 1');
-		if($query->rowCount() == 1)
-		{
-			$query = $query->fetch();
-			$this->data['group_id'] = $query['group_id'];
-			return $query['group_id'];
-		}
+        $query = $this->db->query('SELECT `group_id` FROM `players` WHERE `account_id` = ' . (int) $this->getId() . ' ORDER BY `group_id` DESC LIMIT 1');
+        if ($query->rowCount() == 1) {
+            $query = $query->fetch();
+            $this->data['group_id'] = $query['group_id'];
+            return $query['group_id'];
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	public function getAccGroupId()
-	{
-		if(isset($this->data['group_id'])) {
-			return $this->data['group_id'];
-		}
+    public function getAccGroupId()
+    {
+        if (isset($this->data['group_id'])) {
+            return $this->data['group_id'];
+        }
 
-		global $db;
-		if($db->hasColumn('accounts', 'group_id')) {
-			$query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
-			// if anything was found
-			if(isset($query['group_id'])) {
-				$this->data['group_id'] = $query['group_id'];
-				return $query['group_id'];
-			}
-		}
-		if($db->hasColumn('accounts', 'type')) {
-			$query = $this->db->query('SELECT `type` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
-			// if anything was found
-			if(isset($query['type'])) {
-				$this->data['type'] = $query['type'];
-				return $query['type'];
-			}
-		}
-		return 0;
-	}
+        global $db;
+        if ($db->hasColumn('accounts', 'group_id')) {
+            $query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
+            // if anything was found
+            if (isset($query['group_id'])) {
+                $this->data['group_id'] = $query['group_id'];
+                return $query['group_id'];
+            }
+        }
+        if ($db->hasColumn('accounts', 'type')) {
+            $query = $this->db->query('SELECT `type` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
+            // if anything was found
+            if (isset($query['type'])) {
+                $this->data['type'] = $query['type'];
+                return $query['type'];
+            }
+        }
+        return 0;
+    }
 /**
 /**
  * Checks highest access level of account in given guild.
@@ -939,13 +912,11 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $access = 0;
 
         // finds ranks of all characters
-        foreach($this->getPlayersList() as $player)
-        {
+        foreach ($this->getPlayersList() as $player) {
             $rank = $player->getRank();
 
             // checks if rank's access level is higher then previouls found highest
-            if( isset($rank) && $rank->isLoaded() && $rank->getGuild()->getId() == $guild->getId() && $rank->getLevel() > $access)
-            {
+            if (isset($rank) && $rank->isLoaded() && $rank->getGuild()->getId() == $guild->getId() && $rank->getLevel() > $access) {
                 $access = $rank->getLevel();
             }
         }
@@ -953,29 +924,29 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         return $access;
     }
 
-	public function logAction($action)
-	{
-		$ip = get_browser_real_ip();
-		if(strpos($ip, ":") === false) {
-			$ipv6 = '0';
-		}
-		else {
-			$ipv6 = $ip;
-			$ip = '';
-		}
+    public function logAction($action)
+    {
+        $ip = get_browser_real_ip();
+        if (strpos($ip, ":") === false) {
+            $ipv6 = '0';
+        } else {
+            $ipv6 = $ip;
+            $ip = '';
+        }
 
-		return $this->db->exec('INSERT INTO `' . TABLE_PREFIX . 'account_actions` (`account_id`, `ip`, `ipv6`, `date`, `action`) VALUES (' . $this->db->quote($this->getId()).', ' . ($ip == '' ? '0' : $this->db->quote(ip2long($ip))) . ', (' . ($ipv6 == '0' ? $this->db->quote('') : $this->db->quote(inet_pton($ipv6))) . '), UNIX_TIMESTAMP(NOW()), ' . $this->db->quote($action).')');
-	}
+        return $this->db->exec('INSERT INTO `' . TABLE_PREFIX . 'account_actions` (`account_id`, `ip`, `ipv6`, `date`, `action`) VALUES (' . $this->db->quote($this->getId()) . ', ' . ($ip == '' ? '0' : $this->db->quote(ip2long($ip))) . ', (' . ($ipv6 == '0' ? $this->db->quote('') : $this->db->quote(inet_pton($ipv6))) . '), UNIX_TIMESTAMP(NOW()), ' . $this->db->quote($action) . ')');
+    }
 
-	public function getActionsLog($limit1, $limit2)
-	{
-		$actions = array();
+    public function getActionsLog($limit1, $limit2)
+    {
+        $actions = array();
 
-		foreach($this->db->query('SELECT `ip`, `ipv6`, `date`, `action` FROM `' . TABLE_PREFIX . 'account_actions` WHERE `account_id` = ' . $this->data['id'] . ' ORDER by `date` DESC LIMIT ' . $limit1 . ', ' . $limit2 . '')->fetchAll() as $a)
-			$actions[] = array('ip' => $a['ip'], 'ipv6' => $a['ipv6'], 'date' => $a['date'], 'action' => $a['action']);
+        foreach ($this->db->query('SELECT `ip`, `ipv6`, `date`, `action` FROM `' . TABLE_PREFIX . 'account_actions` WHERE `account_id` = ' . $this->data['id'] . ' ORDER by `date` DESC LIMIT ' . $limit1 . ', ' . $limit2 . '')->fetchAll() as $a) {
+            $actions[] = array('ip' => $a['ip'], 'ipv6' => $a['ipv6'], 'date' => $a['date'], 'action' => $a['action']);
+        }
 
-		return $actions;
-	}
+        return $actions;
+    }
 /**
  * Returns players iterator.
  *
@@ -1021,8 +992,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function __get($name)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'id':
                 return $this->getId();
 
@@ -1074,8 +1044,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function __set($name, $value)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'name':
                 $this->setName($name);
                 break;
@@ -1093,34 +1062,25 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
                 break;
 
             case 'blocked':
-                if($value)
-                {
+                if ($value) {
                     $this->block();
-                }
-                else
-                {
+                } else {
                     $this->unblock();
                 }
                 break;
 
             case 'deleted':
-                if($value)
-                {
+                if ($value) {
                     $this->setDeleted();
-                }
-                else
-                {
+                } else {
                     $this->unsetDeleted();
                 }
                 break;
 
             case 'banned':
-                if($value)
-                {
+                if ($value) {
                     $this->ban();
-                }
-                else
-                {
+                } else {
                     $this->unban();
                 }
                 break;
@@ -1146,8 +1106,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $ots = POT::getInstance();
 
         // checks if display driver is loaded
-        if( $ots->isDisplayDriverLoaded() )
-        {
+        if ($ots->isDisplayDriverLoaded()) {
             return $ots->getDisplayDriver()->displayAccount($this);
         }
 

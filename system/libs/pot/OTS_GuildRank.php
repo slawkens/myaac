@@ -65,8 +65,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
         $where = '';
 
         // additional guild id criterium
-        if( isset($guild) )
-        {
+        if (isset($guild)) {
             $where = ' AND ' . $this->db->fieldName('guild_id') . ' = ' . $guild->getId();
         }
 
@@ -74,8 +73,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
         $id = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('guilds') . ' WHERE ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($name) . $where)->fetch();
 
         // if anything was found
-        if( isset($id['id']) )
-        {
+        if (isset($id['id'])) {
             $this->load($id['id']);
         }
     }
@@ -103,14 +101,12 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function save()
     {
         // updates existing rank
-        if( isset($this->data['id']) )
-        {
+        if (isset($this->data['id'])) {
             // UPDATE query on database
             $this->db->exec('UPDATE ' . $this->db->tableName('guild_ranks') . ' SET ' . $this->db->fieldName('guild_id') . ' = ' . $this->db->quote($this->data['guild_id']) . ', ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($this->data['name']) . ', ' . $this->db->fieldName('level') . ' = ' . $this->data['level'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
         }
         // creates new rank
-        else
-        {
+        else {
             // INSERT query on database
             $this->db->exec('INSERT INTO ' . $this->db->tableName('guild_ranks') . ' (' . $this->db->fieldName('guild_id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('level') . ') VALUES (' . $this->data['guild_id'] . ', ' . $this->db->quote($this->data['name']) . ', ' . $this->data['level'] . ')');
             // ID of new rank
@@ -126,9 +122,8 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getId()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         return $this->data['id'];
@@ -142,9 +137,8 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getName()
     {
-        if( !isset($this->data['name']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['name'])) {
+            throw new E_OTS_NotLoaded("Null value in 'name' colunm | Rank id: {$this->data['id']}");
         }
 
         return $this->data['name'];
@@ -174,8 +168,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getGuild()
     {
-        if( !isset($this->data['guild_id']) )
-        {
+        if (!isset($this->data['guild_id'])) {
             return new OTS_Guild();
         }
 
@@ -207,9 +200,8 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getLevel()
     {
-        if( !isset($this->data['level']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['level'])) {
+            throw new E_OTS_NotLoaded("Null value in 'level' colunm | Rank id: {$this->data['id']}");
         }
 
         return $this->data['level'];
@@ -248,9 +240,8 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getCustomField($field)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         $value = $this->db->query('SELECT ' . $this->db->fieldName($field) . ' FROM ' . $this->db->tableName('guild_ranks') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id'])->fetch();
@@ -280,14 +271,12 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function setCustomField($field, $value)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // quotes value for SQL query
-        if(!( is_int($value) || is_float($value) ))
-        {
+        if (!(is_int($value) || is_float($value))) {
             $value = $this->db->quote($value);
         }
 
@@ -302,15 +291,13 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getPlayers()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         $players = array();
 
-        foreach( $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('rank_id') . ' = ' . $this->data['id'])->fetchAll() as $player)
-        {
+        foreach ($this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('rank_id') . ' = ' . $this->data['id'])->fetchAll() as $player) {
             // creates new object
             $object = new OTS_Player();
             $object->load($player['id']);
@@ -338,26 +325,24 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getPlayersList()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // creates filter
-		if($this->db->hasColumn('players', 'rank_id')) {
-			$filter = new OTS_SQLFilter();
-			$filter->compareField('rank_id', (int) $this->data['id']);
-		}
-		else {
-			$filter = new OTS_SQLFilter(new OTS_SQLField('rank_id', 'guild_membership'), OTS_SQLFilter::OPERATOR_EQUAL, $this->getID());
-			$filterPlayer = new OTS_SQLFilter(new OTS_SQLField('id', 'players'), OTS_SQLFilter::OPERATOR_EQUAL, new OTS_SQLField('player_id', 'guild_membership'));
-		}
+        if ($this->db->hasColumn('players', 'rank_id')) {
+            $filter = new OTS_SQLFilter();
+            $filter->compareField('rank_id', (int) $this->data['id']);
+        } else {
+            $filter = new OTS_SQLFilter(new OTS_SQLField('rank_id', 'guild_membership'), OTS_SQLFilter::OPERATOR_EQUAL, $this->getID());
+            $filterPlayer = new OTS_SQLFilter(new OTS_SQLField('id', 'players'), OTS_SQLFilter::OPERATOR_EQUAL, new OTS_SQLField('player_id', 'guild_membership'));
+        }
         $filter->compareField('deleted', 0);
 
         // creates list object
         $list = new OTS_Players_List();
-        $list->setFilter(new OTS_SQLFilter($filter, OTS_SQLFilter::CRITERIUM_AND, $filterPlayer));;
-		//$list->addOrder(new OTS_SQLOrder(new OTS_SQLField('name', 'players')));
+        $list->setFilter(new OTS_SQLFilter($filter, OTS_SQLFilter::CRITERIUM_AND, $filterPlayer));
+        //$list->addOrder(new OTS_SQLOrder(new OTS_SQLField('name', 'players')));
         return $list;
     }
 
@@ -371,9 +356,8 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function delete()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // deletes row from database
@@ -427,8 +411,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function __get($name)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'loaded':
                 return $this->isLoaded();
 
@@ -464,8 +447,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function __set($name, $value)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'name':
                 $this->setName($value);
                 break;
@@ -499,8 +481,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
         $ots = POT::getInstance();
 
         // checks if display driver is loaded
-        if( $ots->isDisplayDriverLoaded() )
-        {
+        if ($ots->isDisplayDriverLoaded()) {
             return $ots->getDisplayDriver()->displayGuildRank($this);
         }
 

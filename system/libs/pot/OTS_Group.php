@@ -49,7 +49,7 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function __construct($data = array())
     {
-		$this->data = $data;
+        $this->data = $data;
     }
 
 /**
@@ -73,23 +73,23 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function load($element)
     {
         // SELECT query on database
- //       $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('flags') . ', ' . $this->db->fieldName('access') . ', ' . $this->db->fieldName('maxdepotitems') . ', ' . $this->db->fieldName('maxviplist') . ' FROM ' . $this->db->tableName('groups') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
+        //       $this->data = $this->db->query('SELECT ' . $this->db->fieldName('id') . ', ' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('flags') . ', ' . $this->db->fieldName('access') . ', ' . $this->db->fieldName('maxdepotitems') . ', ' . $this->db->fieldName('maxviplist') . ' FROM ' . $this->db->tableName('groups') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . (int) $id)->fetch();
 
-		        $this->element = $element;
- //       $groups = new DOMDocument();
-  //      $groups->load($path);
-  //      foreach($groups->getElementsByTagName('group') as $group)
-  //      {
-	//		if($group->getAttribute('id') == $_id)
-	//		{
+        $this->element = $element;
+        //       $groups = new DOMDocument();
+        //      $groups->load($path);
+        //      foreach($groups->getElementsByTagName('group') as $group)
+        //      {
+        //        if($group->getAttribute('id') == $_id)
+        //        {
 
-				$this->data['id'] = $element->getAttribute('id');
-				$this->data['access'] = $element->getAttribute('access');
-				$this->data['name'] = $element->getAttribute('name');
-				$this->data['maxviplist'] = $element->getAttribute('maxVips');
-				$this->data['maxdepotitems'] = $element->getAttribute('depotLimit');
-	//		}
-    //    }
+        $this->data['id'] = $element->getAttribute('id');
+        $this->data['access'] = $element->getAttribute('access');
+        $this->data['name'] = $element->getAttribute('name');
+        $this->data['maxviplist'] = $element->getAttribute('maxVips');
+        $this->data['maxdepotitems'] = $element->getAttribute('depotLimit');
+        //        }
+        //    }
     }
 
 /**
@@ -103,11 +103,10 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function find($name)
     {
         // finds group's ID
-        $id = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('groups') . ' WHERE ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($name) )->fetch();
+        $id = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('groups') . ' WHERE ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($name))->fetch();
 
         // if anything was found
-        if( isset($id['id']) )
-        {
+        if (isset($id['id'])) {
             $this->load($id['id']);
         }
     }
@@ -125,14 +124,12 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function save()
     {
         // updates existing group
-        if( isset($this->data['id']) )
-        {
+        if (isset($this->data['id'])) {
             // UPDATE query on database
             $this->db->exec('UPDATE ' . $this->db->tableName('groups') . ' SET ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($this->data['name']) . ', ' . $this->db->fieldName('flags') . ' = ' . $this->data['flags'] . ', ' . $this->db->fieldName('access') . ' = ' . $this->data['access'] . ', ' . $this->db->fieldName('maxdepotitems') . ' = ' . $this->data['maxdepotitems'] . ', ' . $this->db->fieldName('maxviplist') . ' = ' . $this->data['maxviplist'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
         }
         // creates new group
-        else
-        {
+        else {
             // INSERT query on database
             $this->db->exec('INSERT INTO ' . $this->db->tableName('groups') . ' (' . $this->db->fieldName('name') . ', ' . $this->db->fieldName('flags') . ', ' . $this->db->fieldName('access') . ', ' . $this->db->fieldName('maxdepotitems') . ', ' . $this->db->fieldName('maxviplist') . ') VALUES (' . $this->db->quote($this->data['name']) . ', ' . $this->data['flags'] . ', ' . $this->data['access'] . ', ' . $this->data['maxdepotitems'] . ', ' . $this->data['maxviplist'] . ')');
             // ID of new group
@@ -153,9 +150,8 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getId()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         return $this->data['id'];
@@ -174,9 +170,8 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getName()
     {
-        if( !isset($this->data['name']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['name'])) {
+            throw new E_OTS_NotLoaded("Null value in 'name' colunm | Group id: {$this->data['id']}");
         }
 
         return $this->data['name'];
@@ -209,9 +204,8 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getFlags()
     {
-        if( !isset($this->data['flags']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['flags'])) {
+            throw new E_OTS_NotLoaded("Null value in 'flags' colunm | Group id: {$this->data['id']}");
         }
 
         return $this->data['flags'];
@@ -244,9 +238,8 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getCustomFlags()
     {
-        if( !isset($this->data['customFlags']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['customFlags'])) {
+            throw new E_OTS_NotLoaded("Null value in 'customFlags' colunm | Group id: {$this->data['id']}");
         }
 
         return $this->data['customFlags'];
@@ -279,9 +272,8 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getAccess()
     {
-        if( !isset($this->data['access']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['access'])) {
+            throw new E_OTS_NotLoaded("Null value in 'access' colunm | Group id: {$this->data['id']}");
         }
 
         return $this->data['access'];
@@ -314,9 +306,8 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getMaxDepotItems()
     {
-        if( !isset($this->data['maxdepotitems']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['maxdepotitems'])) {
+            throw new E_OTS_NotLoaded("Null value in 'maxdepotitems' colunm | Group id: {$this->data['id']}");
         }
 
         return $this->data['maxdepotitems'];
@@ -349,9 +340,8 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getMaxVIPList()
     {
-        if( !isset($this->data['maxviplist']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['maxviplist'])) {
+            throw new E_OTS_NotLoaded("Null value in 'maxviplist' colunm | Group id: {$this->data['id']}");
         }
 
         return $this->data['maxviplist'];
@@ -391,9 +381,8 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getCustomField($field)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         $value = $this->db->query('SELECT ' . $this->db->fieldName($field) . ' FROM ' . $this->db->tableName('groups') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id'])->fetch();
@@ -424,14 +413,12 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function setCustomField($field, $value)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // quotes value for SQL query
-        if(!( is_int($value) || is_float($value) ))
-        {
+        if (!(is_int($value) || is_float($value))) {
             $value = $this->db->quote($value);
         }
 
@@ -446,15 +433,13 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getPlayers()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         $players = array();
 
-        foreach( $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('group_id') . ' = ' . $this->data['id'])->fetchAll() as $player)
-        {
+        foreach ($this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('group_id') . ' = ' . $this->data['id'])->fetchAll() as $player) {
             // creates new object
             $object = new OTS_Player();
             $object->load($player['id']);
@@ -482,19 +467,19 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getPlayersList()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // creates filter
         $filter = new OTS_SQLFilter();
         $filter->compareField('group_id', (int) $this->data['id']);
-		global $db;
-		if($db->hasColumn('players', 'deletion'))
-			$filter->compareField('deletion', 0);
-		else
-      	  $filter->compareField('deleted', 0);
+        global $db;
+        if ($db->hasColumn('players', 'deletion')) {
+            $filter->compareField('deletion', 0);
+        } else {
+            $filter->compareField('deleted', 0);
+        }
 
         // creates list object
         $list = new OTS_Players_List();
@@ -513,9 +498,8 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function delete()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // deletes row from database
@@ -570,8 +554,7 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function __get($name)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'loaded':
                 return $this->isLoaded();
 
@@ -613,11 +596,10 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function __set($name, $value)
     {
-        switch($name)
-        {
-			case 'id':
-				$this->data['id'] = $value;
-				break;
+        switch ($name) {
+            case 'id':
+                $this->data['id'] = $value;
+                break;
 
             case 'name':
                 $this->setName($value);
@@ -660,8 +642,7 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
         $ots = POT::getInstance();
 
         // checks if display driver is loaded
-        if( $ots->isDisplayDriverLoaded() )
-        {
+        if ($ots->isDisplayDriverLoaded()) {
             return $ots->getDisplayDriver()->displayGroup($this);
         }
 

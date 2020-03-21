@@ -46,34 +46,33 @@ class POT
  */
     const DIRECTION_WEST = 3;
 
-
 /**
  * Skill enum.
  *
  */
-	const SKILL_FIRST = 0;
+    const SKILL_FIRST = 0;
 
-	const SKILL_FIST = 0;
-	const SKILL_CLUB = 1;
-	const SKILL_SWORD = 2;
-	const SKILL_AXE = 3;
-	const SKILL_DISTANCE = 4;
-	const SKILL_DIST = 4;
-	const SKILL_SHIELDING = 5;
-	const SKILL_SHIELD = 5;
-	const SKILL_FISHING = 6;
-	const SKILL_FISH = 6;
+    const SKILL_FIST = 0;
+    const SKILL_CLUB = 1;
+    const SKILL_SWORD = 2;
+    const SKILL_AXE = 3;
+    const SKILL_DISTANCE = 4;
+    const SKILL_DIST = 4;
+    const SKILL_SHIELDING = 5;
+    const SKILL_SHIELD = 5;
+    const SKILL_FISHING = 6;
+    const SKILL_FISH = 6;
 
-	const SKILL_MAGLEVEL = 7;
-	const SKILL__MAGLEVEL = 7;
-	const SKILL_MAGIC = 7;
-	const SKILL__MAGIC = 7;
+    const SKILL_MAGLEVEL = 7;
+    const SKILL__MAGLEVEL = 7;
+    const SKILL_MAGIC = 7;
+    const SKILL__MAGIC = 7;
 
-	const SKILL_LEVEL = 8;
-	const SKILL__LEVEL = 8;
+    const SKILL_LEVEL = 8;
+    const SKILL__LEVEL = 8;
 
-	const SKILL_LAST = self::SKILL_FISH;
-	const SKILL__LAST = self::SKILL__LEVEL;
+    const SKILL_LAST = self::SKILL_FISH;
+    const SKILL__LAST = self::SKILL__LEVEL;
 /**
  * Head slot.
  *
@@ -225,8 +224,7 @@ class POT
         static $instance;
 
         // creates new instance
-        if( !isset($instance) )
-        {
+        if (!isset($instance)) {
             $instance = new self();
         }
 
@@ -260,8 +258,7 @@ class POT
         $this->path = str_replace('\\', '/', $path);
 
         // appends ending slash to directory path
-        if( substr($this->path, -1) !== '/')
-        {
+        if (substr($this->path, -1) !== '/') {
             $this->path .= '/';
         }
     }
@@ -288,7 +285,7 @@ class POT
         // default POT directory
         $this->path = __DIR__ . '/';
         // registers POT autoload mechanism
-        spl_autoload_register( array($this, 'loadClass') );
+        spl_autoload_register(array($this, 'loadClass'));
     }
 
 /**
@@ -311,9 +308,8 @@ class POT
  */
     public function loadClass($class)
     {
-        if( preg_match('/^(I|E_)?OTS_/', $class) > 0)
-        {
-            include_once($this->path . $class . '.php');
+        if (preg_match('/^(I|E_)?OTS_/', $class) > 0) {
+            include_once $this->path . $class . '.php';
         }
     }
 
@@ -366,7 +362,7 @@ class POT
     public function connect($params)
     {
         // checks if PDO extension is loaded
-        if( !extension_loaded('PDO') ) {
+        if (!extension_loaded('PDO')) {
             throw new RuntimeException('Please install PHP pdo extension. MyAAC will not work without it.');
         }
 
@@ -461,22 +457,16 @@ class POT
     {
         // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
         // it's because that PHP integer types are signed
-        if($ip === '255.255.255.255')
-        {
+        if ($ip === '255.255.255.255') {
             $ip = 4294967295;
-        }
-        else
-        {
-            $ip = sprintf('%u', ip2long($ip) );
+        } else {
+            $ip = sprintf('%u', ip2long($ip));
         }
 
-        if($mask === '255.255.255.255')
-        {
+        if ($mask === '255.255.255.255') {
             $mask = 4294967295;
-        }
-        else
-        {
-            $mask = sprintf('%u', ip2long($mask) );
+        } else {
+            $mask = sprintf('%u', ip2long($mask));
         }
 
         // creates ban entry
@@ -484,7 +474,7 @@ class POT
         $ban->setValue($ip);
         $ban->setParam($mask);
         $ban->setExpires($time);
-        $ban->setAdded( time() );
+        $ban->setAdded(time());
         $ban->activate();
         $ban->save();
     }
@@ -507,13 +497,10 @@ class POT
     {
         // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
         // it's because that PHP integer types are signed
-        if($ip === '255.255.255.255')
-        {
+        if ($ip === '255.255.255.255') {
             $ip = 4294967295;
-        }
-        else
-        {
-            $ip = sprintf('%u', ip2long($ip) );
+        } else {
+            $ip = sprintf('%u', ip2long($ip));
         }
 
         // mask is not used anymore
@@ -538,19 +525,16 @@ class POT
     {
         // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
         // it's because that PHP integer types are signed
-        if($ip === '255.255.255.255')
-        {
+        if ($ip === '255.255.255.255') {
             $ip = 4294967295;
-        }
-        else
-        {
-            $ip = sprintf('%u', ip2long($ip) );
+        } else {
+            $ip = sprintf('%u', ip2long($ip));
         }
 
         // finds ban entry
         $ban = new OTS_IPBan();
         $ban->find($ip);
-        return $ban->isLoaded() && $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() );
+        return $ban->isLoaded() && $ban->isActive() && ($ban->getExpires() == 0 || $ban->getExpires() > time());
     }
 
 /**
@@ -567,12 +551,10 @@ class POT
         $list = array();
 
         // generates bans array
-        foreach( new OTS_IPBans_List() as $ban)
-        {
+        foreach (new OTS_IPBans_List() as $ban) {
             // checks if ban is active
-            if( $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() ) )
-            {
-                $list[] = array('ip' => $ban->getValue(), 'mask' => $ban->getParam() );
+            if ($ban->isActive() && ($ban->getExpires() == 0 || $ban->getExpires() > time())) {
+                $list[] = array('ip' => $ban->getValue(), 'mask' => $ban->getParam());
             }
         }
 
@@ -662,12 +644,11 @@ class POT
  */
     public function getVocationsList()
     {
-        if( isset($this->vocations) )
-        {
+        if (isset($this->vocations)) {
             return $this->vocations;
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get vocation list.");
     }
 
 /**
@@ -680,12 +661,11 @@ class POT
  */
     public function getVocationId($name)
     {
-        if( isset($this->vocations) )
-        {
+        if (isset($this->vocations)) {
             return $this->vocations->getVocationId($name);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get vocation id.");
     }
 
 /**
@@ -698,12 +678,12 @@ class POT
  */
     public function getVocationName($id)
     {
-        if( isset($this->vocations) )
-        {
+        if (isset($this->vocations)) {
             return $this->vocations->getVocationName($id);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get vocation name.");
+
     }
 
 /**
@@ -777,12 +757,12 @@ class POT
  */
     public function getMonstersList()
     {
-        if( isset($this->monsters) )
-        {
+        if (isset($this->monsters)) {
             return $this->monsters;
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get monster list.");
+
     }
 
 /**
@@ -795,12 +775,12 @@ class POT
  */
     public function getMonster($name)
     {
-        if( isset($this->monsters) )
-        {
+        if (isset($this->monsters)) {
             return $this->monsters->getMonster($name);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get monster.");
+
     }
 
 /**
@@ -870,12 +850,12 @@ class POT
  */
     public function getSpellsList()
     {
-        if( isset($this->spells) )
-        {
+        if (isset($this->spells)) {
             return $this->spells;
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get spells list.");
+
     }
 
 /**
@@ -887,12 +867,12 @@ class POT
  */
     public function getRunesList()
     {
-        if( isset($this->spells) )
-        {
+        if (isset($this->spells)) {
             return $this->spells->getRunesList();
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get runes list.");
+
     }
 
 /**
@@ -905,12 +885,12 @@ class POT
  */
     public function getRune($name)
     {
-        if( isset($this->spells) )
-        {
+        if (isset($this->spells)) {
             return $this->spells->getRune($name);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get rune.");
+
     }
 
 /**
@@ -922,12 +902,12 @@ class POT
  */
     public function getInstantsList()
     {
-        if( isset($this->spells) )
-        {
+        if (isset($this->spells)) {
             return $this->spells->getInstantsList();
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get instant spells list.");
+
     }
 
 /**
@@ -940,12 +920,12 @@ class POT
  */
     public function getInstant($name)
     {
-        if( isset($this->spells) )
-        {
+        if (isset($this->spells)) {
             return $this->spells->getInstant($name);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get instant spell.");
+
     }
 
 /**
@@ -957,12 +937,12 @@ class POT
  */
     public function getConjuresList()
     {
-        if( isset($this->spells) )
-        {
+        if (isset($this->spells)) {
             return $this->spells->getConjuresList();
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get conjures spells list.");
+
     }
 
 /**
@@ -975,12 +955,11 @@ class POT
  */
     public function getConjure($name)
     {
-        if( isset($this->spells) )
-        {
+        if (isset($this->spells)) {
             return $this->spells->getConjure($name);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get conjure spell.");
     }
 
 /**
@@ -1046,12 +1025,11 @@ class POT
  */
     public function getHousesList()
     {
-        if( isset($this->houses) )
-        {
+        if (isset($this->houses)) {
             return $this->houses;
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get house list.");
     }
 
 /**
@@ -1064,12 +1042,11 @@ class POT
  */
     public function getHouse($id)
     {
-        if( isset($this->houses) )
-        {
+        if (isset($this->houses)) {
             return $this->houses->getHouse($id);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get house.");
     }
 
 /**
@@ -1082,12 +1059,11 @@ class POT
  */
     public function getHouseId($name)
     {
-        if( isset($this->houses) )
-        {
+        if (isset($this->houses)) {
             return $this->houses->getHouseId($name);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get house id.");
     }
 
 /**
@@ -1139,8 +1115,7 @@ class POT
         $this->items = new OTS_ItemsList();
 
         // sets items cache if any
-        if( isset($this->itemsCache) )
-        {
+        if (isset($this->itemsCache)) {
             $this->items->setCacheDriver($this->itemsCache);
         }
 
@@ -1184,12 +1159,11 @@ class POT
  */
     public function getItemsList()
     {
-        if( isset($this->items) )
-        {
+        if (isset($this->items)) {
             return $this->items;
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get items list.");
     }
 
 /**
@@ -1202,12 +1176,11 @@ class POT
  */
     public function getItemType($id)
     {
-        if( isset($this->items) )
-        {
+        if (isset($this->items)) {
             return $this->items->getItemType($id);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get item type.");
     }
 
 /**
@@ -1220,12 +1193,11 @@ class POT
  */
     public function getItemTypeId($name)
     {
-        if( isset($this->items) )
-        {
+        if (isset($this->items)) {
             return $this->items->getItemTypeId($name);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get item type id.");
     }
 
 /**
@@ -1280,8 +1252,7 @@ class POT
         $this->map = new OTS_OTBMFile();
 
         // sets items cache if any
-        if( isset($this->mapCache) )
-        {
+        if (isset($this->mapCache)) {
             $this->map->setCacheDriver($this->mapCache);
         }
 
@@ -1326,12 +1297,11 @@ class POT
  */
     public function getMap()
     {
-        if( isset($this->map) )
-        {
+        if (isset($this->map)) {
             return $this->map;
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get map.");
     }
 
 /**
@@ -1343,12 +1313,11 @@ class POT
  */
     public function getMapWidth()
     {
-        if( isset($this->map) )
-        {
+        if (isset($this->map)) {
             return $this->map->getWidth();
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get map width.");
     }
 
 /**
@@ -1360,12 +1329,11 @@ class POT
  */
     public function getMapHeight()
     {
-        if( isset($this->map) )
-        {
+        if (isset($this->map)) {
             return $this->map->getHeight();
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get map height.");
     }
 
 /**
@@ -1377,12 +1345,11 @@ class POT
  */
     public function getMapDescription()
     {
-        if( isset($this->map) )
-        {
+        if (isset($this->map)) {
             return $this->map->getDescription();
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get map description.");
     }
 
 /**
@@ -1395,12 +1362,11 @@ class POT
  */
     public function getTownId($name)
     {
-        if( isset($this->map) )
-        {
+        if (isset($this->map)) {
             return $this->map->getTownId($name);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get town id.");
     }
 
 /**
@@ -1413,12 +1379,11 @@ class POT
  */
     public function getTownName($id)
     {
-        if( isset($this->map) )
-        {
+        if (isset($this->map)) {
             return $this->map->getTownName($id);
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get town name.");
     }
 
 /**
@@ -1483,12 +1448,11 @@ class POT
  */
     public function getDisplayDriver()
     {
-        if( isset($this->display) )
-        {
+        if (isset($this->display)) {
             return $this->display;
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get display driver.");
     }
 
 /**
@@ -1553,12 +1517,11 @@ class POT
  */
     public function getDataDisplayDriver()
     {
-        if( isset($this->dataDisplay) )
-        {
+        if (isset($this->dataDisplay)) {
             return $this->dataDisplay;
         }
 
-        throw new E_OTS_NotLoaded();
+        throw new E_OTS_NotLoaded("Failed to get data display driver.");
     }
 }
 
@@ -1566,8 +1529,7 @@ class POT
  * This part is for PHP 5.0 compatibility.
  */
 
-if( !defined('PDO_PARAM_STR') )
-{
+if (!defined('PDO_PARAM_STR')) {
 /**
  * @ignore
  * @version 0.0.7
@@ -1577,8 +1539,7 @@ if( !defined('PDO_PARAM_STR') )
     define('PDO_PARAM_STR', PDO::PARAM_STR);
 }
 
-if( !defined('PDO_ATTR_STATEMENT_CLASS') )
-{
+if (!defined('PDO_ATTR_STATEMENT_CLASS')) {
 /**
  * @ignore
  * @version 0.0.7
@@ -1588,8 +1549,7 @@ if( !defined('PDO_ATTR_STATEMENT_CLASS') )
     define('PDO_ATTR_STATEMENT_CLASS', PDO::ATTR_STATEMENT_CLASS);
 }
 
-if( !defined('PDO_ATTR_ERRMODE') )
-{
+if (!defined('PDO_ATTR_ERRMODE')) {
 /**
  * @ignore
  * @version 0.1.3
@@ -1599,8 +1559,7 @@ if( !defined('PDO_ATTR_ERRMODE') )
     define('PDO_ATTR_ERRMODE', PDO::ATTR_ERRMODE);
 }
 
-if( !defined('PDO_ERRMODE_EXCEPTION') )
-{
+if (!defined('PDO_ERRMODE_EXCEPTION')) {
 /**
  * @ignore
  * @version 0.1.3

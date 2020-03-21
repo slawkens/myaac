@@ -75,23 +75,23 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @version 0.1.3
  */
 /*
-    public function __clone()
-    {
-        unset($this->data['id']);
+public function __clone()
+{
+unset($this->data['id']);
 
-        if( isset($this->invites) )
-        {
-            $this->invites = clone $this->invites;
-            $this->invites->__construct($this);
-        }
+if( isset($this->invites) )
+{
+$this->invites = clone $this->invites;
+$this->invites->__construct($this);
+}
 
-        if( isset($this->requests) )
-        {
-            $this->requests = clone $this->requests;
-            $this->requests->__construct($this);
-        }
-    }
-*/
+if( isset($this->requests) )
+{
+$this->requests = clone $this->requests;
+$this->requests->__construct($this);
+}
+}
+ */
 /**
  * Assigns invites handler.
  *
@@ -121,15 +121,17 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function load($id)
     {
-		$ownerid = 'ownerid';
-		if($this->db->hasColumn('guilds', 'owner_id'))
-			$ownerid = 'owner_id';
+        $ownerid = 'ownerid';
+        if ($this->db->hasColumn('guilds', 'owner_id')) {
+            $ownerid = 'owner_id';
+        }
 
-		$creationdata = 'creationdata';
-		if($this->db->hasColumn('guilds', 'creationdate'))
-			$creationdata = 'creationdate';
-		else if($this->db->hasColumn('guilds', 'creation_time'))
-			$creationdata = 'creation_time';
+        $creationdata = 'creationdata';
+        if ($this->db->hasColumn('guilds', 'creationdate')) {
+            $creationdata = 'creationdate';
+        } else if ($this->db->hasColumn('guilds', 'creation_time')) {
+            $creationdata = 'creation_time';
+        }
 
         // SELECT query on database
         $this->data = $this->db->query('SELECT `id`, `name`, `' . $ownerid . '` as `ownerid`, `' . $creationdata . '` as `creationdata` FROM `guilds` WHERE `id` = ' . (int) $id)->fetch();
@@ -145,11 +147,10 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function find($name)
     {
         // finds player's ID
-        $id = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('guilds') . ' WHERE ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($name) )->fetch();
+        $id = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('guilds') . ' WHERE ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($name))->fetch();
 
         // if anything was found
-        if( isset($id['id']) )
-        {
+        if (isset($id['id'])) {
             $this->load($id['id']);
         }
     }
@@ -176,25 +177,25 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function save()
     {
-		$ownerid = 'ownerid';
-		if($this->db->hasColumn('guilds', 'owner_id'))
-			$ownerid = 'owner_id';
+        $ownerid = 'ownerid';
+        if ($this->db->hasColumn('guilds', 'owner_id')) {
+            $ownerid = 'owner_id';
+        }
 
-		$creationdata = 'creationdata';
-		if($this->db->hasColumn('guilds', 'creationdate'))
-			$creationdata = 'creationdate';
-		else if($this->db->hasColumn('guilds', 'creation_time'))
-			$creationdata = 'creation_time';
+        $creationdata = 'creationdata';
+        if ($this->db->hasColumn('guilds', 'creationdate')) {
+            $creationdata = 'creationdate';
+        } else if ($this->db->hasColumn('guilds', 'creation_time')) {
+            $creationdata = 'creation_time';
+        }
 
         // updates existing guild
-        if( isset($this->data['id']) )
-        {
+        if (isset($this->data['id'])) {
             // UPDATE query on database
             $this->db->exec('UPDATE `guilds` SET `name` = ' . $this->db->quote($this->data['name']) . ', `' . $ownerid . '` = ' . $this->data['ownerid'] . ', `' . $creationdata . '` = ' . $this->data['creationdata'] . ' WHERE `id` = ' . $this->data['id']);
         }
         // creates new guild
-        else
-        {
+        else {
             // INSERT query on database
             $this->db->exec("INSERT INTO `guilds` (`name`, `" . $ownerid . "`, `" . $creationdata . "`, `description`) VALUES (" . $this->db->quote($this->data['name']) . ", " . $this->data['ownerid'] . ", " . $this->data['creationdata'] . ", '')");
             // ID of new group
@@ -210,9 +211,8 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getId()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         return $this->data['id'];
@@ -226,9 +226,8 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getName()
     {
-        if( !isset($this->data['name']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['name'])) {
+            throw new E_OTS_NotLoaded("Null value in 'name' colunm | Guild id: {$this->data['id']}");
         }
 
         return $this->data['name'];
@@ -258,9 +257,8 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getOwner()
     {
-        if( !isset($this->data['ownerid']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['ownerid'])) {
+            throw new E_OTS_NotLoaded("Null value in 'ownerid' colunm | Guild id: {$this->data['id']}");
         }
 
         $owner = new OTS_Player();
@@ -283,21 +281,22 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
         $this->data['ownerid'] = $owner->getId();
     }
 
-    public function hasMember(OTS_Player $player) {
+    public function hasMember(OTS_Player $player)
+    {
         global $db;
 
-        if(!$player || !$player->isLoaded()) {
+        if (!$player || !$player->isLoaded()) {
             return false;
         }
 
-	    $player_rank = $player->getRank();
-	    if(!$player_rank->isLoaded()) {
-	        return false;
-	    }
+        $player_rank = $player->getRank();
+        if (!$player_rank->isLoaded()) {
+            return false;
+        }
 
-	    foreach($this->getGuildRanksList() as $rank) {
-		    if($rank->getId() == $player_rank->getId()) {
-		        return true;
+        foreach ($this->getGuildRanksList() as $rank) {
+            if ($rank->getId() == $player_rank->getId()) {
+                return true;
             }
         }
 
@@ -311,9 +310,8 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getCreationData()
     {
-        if( !isset($this->data['creationdata']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['creationdata'])) {
+            throw new E_OTS_NotLoaded("Null value in 'creationdata' colunm | Guild id: {$this->data['id']}");
         }
 
         return $this->data['creationdata'];
@@ -352,9 +350,8 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getCustomField($field)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         $value = $this->db->query('SELECT ' . $this->db->fieldName($field) . ' FROM ' . $this->db->tableName('guilds') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id'])->fetch();
@@ -384,14 +381,12 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function setCustomField($field, $value)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // quotes value for SQL query
-        if(!( is_int($value) || is_float($value) ))
-        {
+        if (!(is_int($value) || is_float($value))) {
             $value = $this->db->quote($value);
         }
 
@@ -406,15 +401,13 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getGuildRanks()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         $guildRanks = array();
 
-        foreach( $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('guild_ranks') . ' WHERE ' . $this->db->fieldName('guild_id') . ' = ' . $this->data['id'])->fetchAll() as $guildRank)
-        {
+        foreach ($this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('guild_ranks') . ' WHERE ' . $this->db->fieldName('guild_id') . ' = ' . $this->data['id'])->fetchAll() as $guildRank) {
             // creates new object
             $object = new OTS_GuildRank();
             $object->load($guildRank['id']);
@@ -442,9 +435,8 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function getGuildRanksList()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // creates filter
@@ -471,13 +463,11 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function listInvites()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-        if( !isset($this->invites) )
-        {
+        if (!isset($this->invites)) {
             throw new E_OTS_NoDriver();
         }
 
@@ -498,13 +488,11 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function invite(OTS_Player $player)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-        if( !isset($this->invites) )
-        {
+        if (!isset($this->invites)) {
             throw new E_OTS_NoDriver();
         }
 
@@ -525,13 +513,11 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function deleteInvite(OTS_Player $player)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-        if( !isset($this->invites) )
-        {
+        if (!isset($this->invites)) {
             throw new E_OTS_NoDriver();
         }
 
@@ -552,13 +538,11 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function acceptInvite(OTS_Player $player)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-        if( !isset($this->invites) )
-        {
+        if (!isset($this->invites)) {
             throw new E_OTS_NoDriver();
         }
 
@@ -579,13 +563,11 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function listRequests()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-        if( !isset($this->requests) )
-        {
+        if (!isset($this->requests)) {
             throw new E_OTS_NoDriver();
         }
 
@@ -606,13 +588,11 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function request(OTS_Player $player)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-        if( !isset($this->requests) )
-        {
+        if (!isset($this->requests)) {
             throw new E_OTS_NoDriver();
         }
 
@@ -633,13 +613,11 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function deleteRequest(OTS_Player $player)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-        if( !isset($this->requests) )
-        {
+        if (!isset($this->requests)) {
             throw new E_OTS_NoDriver();
         }
 
@@ -660,13 +638,11 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function acceptRequest(OTS_Player $player)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
-        if( !isset($this->requests) )
-        {
+        if (!isset($this->requests)) {
             throw new E_OTS_NoDriver();
         }
 
@@ -684,9 +660,8 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function delete()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // deletes row from database
@@ -740,8 +715,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function __get($name)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'loaded':
                 return $this->isLoaded();
 
@@ -783,8 +757,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function __set($name, $value)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'name':
                 $this->setName($value);
                 break;
@@ -826,8 +799,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
         $ots = POT::getInstance();
 
         // checks if display driver is loaded
-        if( $ots->isDisplayDriverLoaded() )
-        {
+        if ($ots->isDisplayDriverLoaded()) {
             return $ots->getDisplayDriver()->displayGuild($this);
         }
 
