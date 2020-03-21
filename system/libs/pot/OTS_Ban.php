@@ -77,14 +77,12 @@ abstract class OTS_Ban extends OTS_Row_DAO
     public function save()
     {
         // updates existing ban
-        if( isset($this->data['id']) )
-        {
+        if (isset($this->data['id'])) {
             // UPDATE query on database
             $this->db->exec('UPDATE ' . $this->db->tableName('bans') . ' SET ' . $this->db->fieldName('type') . ' = ' . $this->data['type'] . ', ' . $this->db->fieldName('value') . ' = ' . $this->data['value'] . ', ' . $this->db->fieldName('param') . ' = ' . $this->data['param'] . ', ' . $this->db->fieldName('active') . ' = ' . (int) $this->data['active'] . ', ' . $this->db->fieldName('expires') . ' = ' . $this->data['expires'] . ', ' . $this->db->fieldName('added') . ' = ' . $this->data['added'] . ', ' . $this->db->fieldName('admin_id') . ' = ' . $this->data['admin_id'] . ', ' . $this->db->fieldName('comment') . ' = ' . $this->db->quote($this->data['comment']) . ', ' . $this->db->fieldName('reason') . ' = ' . $this->data['reason'] . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
         }
         // creates new ban
-        else
-        {
+        else {
             // INSERT query on database
             $this->db->exec('INSERT INTO ' . $this->db->tableName('bans') . ' (' . $this->db->fieldName('type') . ', ' . $this->db->fieldName('value') . ', ' . $this->db->fieldName('param') . ', ' . $this->db->fieldName('active') . ', ' . $this->db->fieldName('expires') . ', ' . $this->db->fieldName('added') . ', ' . $this->db->fieldName('admin_id') . ', ' . $this->db->fieldName('comment') . ', ' . $this->db->fieldName('reason') . ') VALUES (' . $this->data['type'] . ', ' . $this->data['value'] . ', ' . $this->data['param'] . ', ' . (int) $this->data['active'] . ', ' . $this->data['expires'] . ', ' . $this->data['added'] . ', ' . $this->data['admin_id'] . ', ' . $this->db->quote($this->data['comment']) . ', ' . $this->data['reason'] . ')');
             // ID of new ban
@@ -102,9 +100,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function getId()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         return $this->data['id'];
@@ -120,9 +117,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function delete()
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // deletes row from database
@@ -142,9 +138,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function getValue()
     {
-        if( !isset($this->data['value']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['value'])) {
+            throw new E_OTS_NotLoaded("Null value in 'value' colunm | Ban id: {$this->data['id']}");
         }
 
         return $this->data['value'];
@@ -176,9 +171,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function getParam()
     {
-        if( !isset($this->data['param']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['param'])) {
+            throw new E_OTS_NotLoaded("Null value in 'param' colunm | Ban id: {$this->data['id']}");
         }
 
         return $this->data['param'];
@@ -210,9 +204,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function isActive()
     {
-        if( !isset($this->data['active']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['active'])) {
+            throw new E_OTS_NotLoaded("Null value in 'active' colunm | Ban id: {$this->data['id']}");
         }
 
         return $this->data['active'];
@@ -258,9 +251,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function getExpires()
     {
-        if( !isset($this->data['expires']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['expires'])) {
+            throw new E_OTS_NotLoaded("Null value in 'expires' colunm | Ban id: {$this->data['id']}");
         }
 
         return $this->data['expires'];
@@ -292,9 +284,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function getAdded()
     {
-        if( !isset($this->data['added']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['added'])) {
+            throw new E_OTS_NotLoaded("Null value in 'added' colunm | Ban id: {$this->data['id']}");
         }
 
         return $this->data['added'];
@@ -326,9 +317,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function getAdminId()
     {
-        if( !isset($this->data['admin_id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['admin_id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'admin_id' colunm | Ban id: {$this->data['id']}");
         }
 
         return $this->data['admin_id'];
@@ -360,9 +350,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function getComment()
     {
-        if( !isset($this->data['comment']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['comment'])) {
+            throw new E_OTS_NotLoaded("Null value in 'comment' colunm | Ban id: {$this->data['id']}");
         }
 
         return $this->data['comment'];
@@ -394,9 +383,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function getReason()
     {
-        if( !isset($this->data['reason']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['reason'])) {
+            throw new E_OTS_NotLoaded("Null value in 'reason' colunm | Ban id: {$this->data['id']}");
         }
 
         return $this->data['reason'];
@@ -438,9 +426,8 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function getCustomField($field)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         $value = $this->db->query('SELECT ' . $this->db->fieldName($field) . ' FROM ' . $this->db->tableName('bans') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id'])->fetch();
@@ -471,14 +458,12 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function setCustomField($field, $value)
     {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
+        if (!isset($this->data['id'])) {
+            throw new E_OTS_NotLoaded("Null value in 'id' colunm.");
         }
 
         // quotes value for SQL query
-        if(!( is_int($value) || is_float($value) ))
-        {
+        if (!(is_int($value) || is_float($value))) {
             $value = $this->db->quote($value);
         }
 
@@ -498,8 +483,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function __get($name)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'loaded':
                 return $this->isLoaded();
 
@@ -547,8 +531,7 @@ abstract class OTS_Ban extends OTS_Row_DAO
  */
     public function __set($name, $value)
     {
-        switch($name)
-        {
+        switch ($name) {
             case 'value':
                 $this->setValue($value);
                 break;
@@ -558,12 +541,9 @@ abstract class OTS_Ban extends OTS_Row_DAO
                 break;
 
             case 'active':
-                if($value)
-                {
+                if ($value) {
                     $this->activate();
-                }
-                else
-                {
+                } else {
                     $this->deactivate();
                 }
                 break;

@@ -30,7 +30,7 @@
 
 		.wide{
 			min-width: 350px;
-			max-width: 350px;
+			max-width: fit-content;
 		}
 
 		.big{
@@ -62,8 +62,8 @@
 </head>
 <body>
 	<div class="center wide">
-		<h2 class="wide">Whoops something went wrong...</h2>
 		<div class="error wide">
+		<h2 class="wide">Whoops something went wrong...</h2>
 			{{ message }}
 			<br/><br/><br/>
 			<b>Backtrace:</b><br/><br/>
