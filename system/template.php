@@ -18,6 +18,12 @@ if($config['template_allow_change'])
 		if(!preg_match("/[^A-z0-9_\-]/", $template_name)) { // validate template
 			//setcookie('template', $template_name, 0, BASE_DIR . '/', $_SERVER["SERVER_NAME"]);
 			$template_name = $_GET['template'];
+
+			$cache = Cache::getInstance();
+			if($cache->enabled()) {
+				$cache->delete('template_menus');
+			}
+
 			setSession('template', $template_name);
 			header('Location:' . getSession('last_uri'));
 		}
