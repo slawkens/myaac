@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.8.2 - x.x.2020]
+
+### Added
+* $_SERVER['REQUEST_URI'] to database.log
+
+### Changed
+* account_login input type from password to text
+
+### Fixed
+* Updating template menus on template change
+* Account change info when config.account_country is disabled
+* Show character indicator in check_name.js
+* Houses list View button
+* Fix OTS_House houseid parameter
+
 ## [0.8.1 - 10.03.2020]
 
 ### Added
