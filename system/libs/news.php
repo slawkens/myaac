@@ -125,16 +125,16 @@ class News
 
 		$tmp = '';
 		foreach (get_templates() as $template) {
-			if ($cache->fetch('news' . $template . '_' . NEWS, $tmp)) {
-				$cache->delete('news' . $template . '_' . NEWS);
+			if ($cache->fetch('news_' . $template . '_' . NEWS, $tmp)) {
+				$cache->delete('news_' . $template . '_' . NEWS);
 			}
 
-			if ($cache->fetch('news' . $template . '_' . TICKER, $tmp)) {
-				$cache->delete('news' . $template . '_' . TICKER);
+			if ($cache->fetch('news_' . $template . '_' . TICKER, $tmp)) {
+				$cache->delete('news_' . $template . '_' . TICKER);
 			}
 
-			if ($cache->fetch('news' . $template . '_' . ARTICLE, $tmp)) {
-				$cache->delete('news' . $template . '_' . ARTICLE);
+			if ($cache->fetch('news_' . $template . '_' . ARTICLE, $tmp)) {
+				$cache->delete('news_' . $template . '_' . ARTICLE);
 			}
 		}
 	}
