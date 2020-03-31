@@ -1,50 +1,42 @@
-<div class="row">
-	<div class="col-xs-12">
-		<div class="box">
-			<div class="box-header">
-				<h3 class="box-title">Installed plugins:</h3>
-			</div>
-			<div class="box-body">
-				<div class="row">
-					<div class="col-sm-12">
-						<table id="tb_plugins">
-							<thead>
-							<tr>
-								<th>Name</th>
-								<th>Description</th>
-								<th>Author</th>
-								<th>Filename</th>
-								<th style="width: 55px;">Options</th>
-							</tr>
-							</thead>
-							<tbody>
-							{% for plugin in plugins %}
-								<tr>
-									<td><b>{{ plugin.name }}</b><br>
-										<small>{{ plugin.description|raw }}</small>
-									</td>
-									<td>{{ plugin.version }}</td>
-									<td><b>{{ plugin.author }}</b><br>
-										<small>{{ plugin.contact }}</small>
-									</td>
-									<td>{{ plugin.file }}.json</td>
-									<td>
-										{% if plugin.uninstall %}
-											<a href="?p=plugins&uninstall={{ plugin.file }}" title="Uninstall"
-											   onclick="return confirm('Are you sure?');"><span
-														class="btn btn-danger btn-sm delete btn-flat"><i
-															class="fa fa-trash"></i></span></a>
-										{% endif %}</td>
-								</tr>
-							{% endfor %}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
+<div class="card card-info card-outline">
+	<div class="card-header">
+		<h5 class="m-0">Installed plugins<span class="float-right"><a class="" data-toggle="collapse" href="#install_plugin">Install Plugin</a></span></h5>
+	</div>
+	<div class="card-body">
+		<table class="table table-striped table-bordered" id="tb_plugins">
+			<thead>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Author</th>
+				<th>Filename</th>
+				<th style="width: 55px;">Options</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for plugin in plugins %}
+				<tr>
+					<td><b>{{ plugin.name }}</b><br>
+						<small>{{ plugin.description|raw }}</small>
+					</td>
+					<td>{{ plugin.version }}</td>
+					<td><b>{{ plugin.author }}</b><br>
+						<small>{{ plugin.contact }}</small>
+					</td>
+					<td>{{ plugin.file }}.json</td>
+					<td>
+						{% if plugin.uninstall %}
+							<a href="?p=plugins&uninstall={{ plugin.file }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');" title="Uninstall">
+								<i class="fas fa-trash"></i>
+							</a>
+						{% endif %}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
 	</div>
 </div>
+
 <script>
 	$(function () {
 		$('#tb_plugins').DataTable()

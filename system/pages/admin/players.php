@@ -10,29 +10,9 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Player editor';
-$base = BASE_URL . 'admin/?p=players';
+$player_base = BASE_URL . 'admin/?p=players';
 
-function echo_success($message)
-{
-	echo '<p class="success">' . $message . '</p>';
-}
-
-function echo_error($message)
-{
-	global $error;
-	echo '<p class="error">' . $message . '</p>';
-	$error = true;
-}
-
-function verify_number($number, $name, $max_length)
-{
-	if (!Validator::number($number))
-		echo_error($name . ' can contain only numbers.');
-
-	$number_length = strlen($number);
-	if ($number_length <= 0 || $number_length > $max_length)
-		echo_error($name . ' cannot be longer than ' . $max_length . ' digits.');
-}
+require_once LIBS . 'forum.php';
 
 $skills = array(
 	POT::SKILL_FIST => array('Fist fighting', 'fist'),
@@ -44,10 +24,11 @@ $skills = array(
 	POT::SKILL_FISH => array('Fishing', 'fish')
 );
 
-
 $hasBlessingsColumn = $db->hasColumn('players', 'blessings');
 $hasBlessingColumn = $db->hasColumn('players', 'blessings1');
 $hasLookAddons = $db->hasColumn('players', 'lookaddons');
+
+$skull_type = array("None", "Yellow", "Green", "White", "Red", "Black", "Orange");
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -55,28 +36,33 @@ $hasLookAddons = $db->hasColumn('players', 'lookaddons');
 
 <?php
 $id = 0;
+$search_player = '';
 if (isset($_REQUEST['id']))
 	$id = (int)$_REQUEST['id'];
-else if (isset($_REQUEST['search_name'])) {
-	if (strlen($_REQUEST['search_name']) < 3 && !Validator::number($_REQUEST['search_name'])) {
-		echo 'Player name is too short.';
+else if (isset($_REQUEST['search'])) {
+	$search_player = $_REQUEST['search'];
+	if (strlen($search_player) < 3 && !Validator::number($search_player)) {
+		echo_error('Player name is too short.');
 	} else {
-		if (Validator::number($_REQUEST['search_name']))
-			$id = $_REQUEST['search_name'];
+		if (Validator::number($search_player))
+			$id = (int)$search_player;
 		else {
-			$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($_REQUEST['search_name']));
+			$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($search_player));
 			if ($query->rowCount() == 1) {
 				$query = $query->fetch();
-				$id = $query['id'];
+				$id = (int)$query['id'];
 			} else {
-				$query = $db->query('SELECT `id`, `name` FROM `players` WHERE `name` LIKE ' . $db->quote('%' . $_REQUEST['search_name'] . '%'));
+				$query = $db->query('SELECT `id`, `name` FROM `players` WHERE `name` LIKE ' . $db->quote('%' . $search_player . '%'));
 				if ($query->rowCount() > 0 && $query->rowCount() <= 10) {
-					echo 'Do you mean?<ul>';
+					$str_construct = 'Do you mean?<ul>';
 					foreach ($query as $row)
-						echo '<li><a href="' . $base . '&id=' . $row['id'] . '">' . $row['name'] . '</a></li>';
-					echo '</ul>';
+						$str_construct .= '<li><a href="' . $player_base . '&id=' . $row['id'] . '">' . $row['name'] . '</a></li>';
+					$str_construct .= '</ul>';
+					echo_error($str_construct);
 				} else if ($query->rowCount() > 10)
-					echo 'Specified name resulted with too many players.';
+					echo_error('Specified name resulted with too many players.');
+				else
+					echo_error('No entries found.');
 			}
 		}
 	}
@@ -173,6 +159,7 @@ if ($id > 0) {
 
 		$soul = $_POST['soul'];
 		verify_number($soul, 'Soul', 10);
+
 		$town = $_POST['town'];
 		verify_number($town, 'Town', 11);
 
@@ -181,9 +168,9 @@ if ($id > 0) {
 		$sex = $_POST['sex'];
 		verify_number($sex, 'Sex', 1);
 
-		$lastlogin = $_POST['lastlogin'];
+		$lastlogin = strtotime($_POST['lastlogin']);
 		verify_number($lastlogin, 'Last login', 20);
-		$lastlogout = $_POST['lastlogout'];
+		$lastlogout = strtotime($_POST['lastlogout']);
 		verify_number($lastlogout, 'Last logout', 20);
 
 		$skull = $_POST['skull'];
@@ -223,7 +210,7 @@ if ($id > 0) {
 		$deleted = (isset($_POST['deleted']) && $_POST['deleted'] == 'true');
 		$hidden = (isset($_POST['hidden']) && $_POST['hidden'] == 'true');
 
-		$created = $_POST['created'];
+		$created = strtotime($_POST['created']);
 		verify_number($created, 'Created', 11);
 
 		$comment = isset($_POST['comment']) ? htmlspecialchars(stripslashes(substr($_POST['comment'], 0, 2000))) : NULL;
@@ -234,7 +221,7 @@ if ($id > 0) {
 			verify_number($value, $skills[$skill][0] . ' tries', 10);
 
 		if ($hasBlessingColumn) {
-		$bless_count = $_POST['blesscount'];
+			$bless_count = $_POST['blesscount'];
 			for ($i = 1; $i <= $bless_count; $i++) {
 				$a = 'blessing' . $i;
 				${'blessing' . $i} = (isset($_POST[$a]) && $_POST[$a] == 'true');
@@ -311,589 +298,547 @@ if ($id > 0) {
 			}
 			$player->save();
 			echo_success('Player saved at: ' . date('G:i'));
+			$player->load($id);
 		}
 	}
 }
-
-$search_name = '';
-if (isset($_REQUEST['search_name']))
-	$search_name = $_REQUEST['search_name'];
-else if ($id > 0 && isset($player) && $player->isLoaded())
-	$search_name = $player->getName();
-
 ?>
 <div class="row">
-
 	<?php
 	if (isset($player) && $player->isLoaded()) {
 		$account = $player->getAccount();
 		?>
-
-		<form action="<?php echo $base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post"
-			  class="form-horizontal">
-			<div class="col-md-8">
-				<div class="box box-primary">
-					<div class="box-body">
-						<div class="nav-tabs-custom">
-							<ul class="nav nav-tabs">
-								<li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Player</a>
-								</li>
-								<li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Stats</a></li>
-								<li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Skills</a></li>
-								<li class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">Pos/Look</a></li>
-								<li class=""><a href="#tab_5" data-toggle="tab" aria-expanded="false">Misc</a></li>
-								<li class="pull-right"><a
-											href="<?php echo ADMIN_URL; ?>?p=accounts&search_name=<?php echo $account->getId(); ?>"
-											class="text-muted"><i class="fa fa-gear" title="Edit Account"></i></a></li>
-							</ul>
-							<div class="tab-content">
-								<div class="tab-pane active" id="tab_1">
-									<div class="row">
-										<div class="col-xs-6">
-											<label for="name" class="control-label">Name</label>
-											<input type="text" class="form-control" id="name" name="name"
-												   autocomplete="off" style="cursor: auto;"
-												   value="<?php echo $player->getName(); ?>"/>
-										</div>
-										<div class="col-xs-6">
-											<label for="account_id" class="control-label">Account id:</label>
-											<input type="text" class="form-control" id="account_id" name="account_id"
-												   autocomplete="off" style="cursor: auto;" size="8" maxlength="11"
-												   value="<?php echo $account->getId(); ?>"/>
-										</div>
+		<div class="col-12 col-sm-12 col-lg-10">
+			<div class="card card-primary card-outline card-outline-tabs">
+				<div class="card-header p-0 border-bottom-0">
+					<ul class="nav nav-tabs" id="tabs-tab" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" id="tabs-home-tab" data-toggle="pill" href="#tabs-home">Player</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="tabs-home-tab" data-toggle="pill" href="#tabs-stats">Stats</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="tabs-home-tab" data-toggle="pill" href="#tabs-skills">Skills</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="tabs-home-tab" data-toggle="pill" href="#tabs-pos">Pos/Look</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="tabs-home-tab" data-toggle="pill" href="#tabs-misc">Misc</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="tabs-posts-tab" data-toggle="pill" href="#tabs-posts">Posts</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="tabs-chars-tab" data-toggle="pill" href="#tabs-chars">Characters</a>
+						</li>
+					</ul>
+				</div>
+				<form action="<?php echo $player_base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post">
+					<div class="card-body">
+						<div class="tab-content" id="tabs-tabContent">
+							<div class="tab-pane fade active show" id="tabs-home">
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="name" class="control-label">Name</label>
+										<input type="text" class="form-control" id="name" name="name" autocomplete="off" value="<?php echo $player->getName(); ?>"/>
 									</div>
-									<div class="row">
-										<div class="col-xs-6 ">
-											<label for="group" class="control-label">Group:</label>
-											<select name="group" id="group" class="form-control">
-												<?php foreach ($groups->getGroups() as $id => $group): ?>
-													<option value="<?php echo $id; ?>" <?php echo($player->getGroup()->getId() == $id ? 'selected' : ''); ?>><?php echo $group->getName(); ?></option>
-												<?php endforeach; ?>
-											</select>
-										</div>
-										<div class="col-xs-6">
-											<label for="vocation" class="control-label">Vocation</label>
-											<select name="vocation" id="vocation" class="form-control">
-												<?php
-												foreach ($config['vocations'] as $id => $name) {
-													echo '<option value=' . $id . ($id == $player->getVocation() ? ' selected' : '') . '>' . $name . '</option>';
-												}
-												?>
-											</select>
-										</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="account_id">Account id:</label>
+										<input type="text" class="form-control" id="account_id" name="account_id" autocomplete="off" size="8" maxlength="11" value="<?php echo $account->getId(); ?>"/>
 									</div>
-
-									<div class="row">
-										<div class="col-xs-6">
-											<label for="sex" class="control-label">Sex:</label>
-											<select name="sex" id="sex" class="form-control">>
-												<?php foreach ($config['genders'] as $id => $sex): ?>
-													<option value="<?php echo $id; ?>" <?php echo($player->getSex() == $id ? 'selected' : ''); ?>><?php echo strtolower($sex); ?></option>
-												<?php endforeach; ?>
-											</select>
-										</div>
-										<div class="col-xs-6">
-											<label for="town" class="control-label">Town:</label>
-											<select name="town" id="town" class="form-control">
-												<?php foreach ($config['towns'] as $id => $town): ?>
-													<option value="<?php echo $id; ?>" <?php echo($player->getTownId() == $id ? 'selected' : ''); ?>><?php echo $town; ?></option>
-												<?php endforeach; ?>
-											</select>
-										</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="group">Group:</label>
+										<select name="group" id="group" class="form-control custom-select">
+											<?php foreach ($groups->getGroups() as $id => $group): ?>
+												<option value="<?php echo $id; ?>" <?php echo($player->getGroup()->getId() == $id ? 'selected' : ''); ?>><?php echo $group->getName(); ?></option>
+											<?php endforeach; ?>
+										</select>
 									</div>
-
-									<div class="row">
-										<div class="col-xs-6">
-											<label for="skull" class="control-label">Skull:</label>
-											<select name="skull" id="skull" class="form-control">
-												<?php
-												$skull_type = array("None", "Yellow", "Green", "White", "Red", "Black", "Orange");
-												foreach ($skull_type as $id => $s_name) {
-													echo '<option value=' . $id . ($id == $player->getSkull() ? ' selected' : '') . '>' . $s_name . '</option>';
-												}
-												?>
-											</select>
-										</div>
-										<div class="col-xs-6">
-											<label for="skull_time" class="control-label">Skull time:</label>
-											<input type="text" class="form-control" id="skull_time" name="skull_time"
-												   autocomplete="off" maxlength="11"
-												   value="<?php echo $player->getSkullTime(); ?>"/>
-										</div>
-									</div>
-									<div class="row">
-										<?php if ($hasBlessingColumn):
-											$blesscount = $player->countBlessings();
-											$bless = $player->checkBlessings($blesscount);
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="vocation">Vocation</label>
+										<select name="vocation" id="vocation" class="form-control custom-select">
+											<?php
+											foreach ($config['vocations'] as $id => $name) {
+												echo '<option value=' . $id . ($id == $player->getVocation() ? ' selected' : '') . '>' . $name . '</option>';
+											}
 											?>
-											<input type="hidden" name="blesscount" value="<?php echo $blesscount; ?>"/>
-											<div class="col-xs-6">
-												<label for="blessings" class="control-label">Blessings:</label>
-												<div class="checkbox">
-													<?php
-													for ($i = 1; $i <= $blesscount; $i++) {
-														echo '<label><input style="margin-left: -16px;" type="checkbox" name="blessing' . $i . '" id="blessing' . $i . '"
-																  value="true" ' . (($bless[$i - 1] == 1) ? ' checked' : '') . '/>' . $i . '</label>';
-													}
-													?>
-												</div>
-											</div>
-										<?php endif; ?>
-										<?php if ($hasBlessingsColumn): ?>
-											<div class="col-xs-6">
-												<label for="blessings" class="control-label">Blessings:</label>
-												<input type="text" class="form-control" id="blessings" name="blessings"
-													   autocomplete="off" maxlength="11"
-													   value="<?php echo $player->getBlessings(); ?>"/>
-											</div>
-										<?php endif; ?>
-
-										<div class="col-xs-6">
-											<label for="balance" class="control-label">Bank Balance:</label>
-											<input type="text" class="form-control" id="balance" name="balance"
-												   autocomplete="off" maxlength="20"
-												   value="<?php echo $player->getBalance(); ?>"/>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-6">
-											<label for="deleted" class="control-label">Deleted:</label>
-											<input type="checkbox" name="deleted" id="deleted"
-												   value="true" <?php echo($player->getCustomField($db->hasColumn('players', 'deletion') ? 'deletion' : 'deleted') == '1' ? ' checked' : ''); ?>/>
-										</div>
-										<div class="col-xs-6">
-											<label for="hidden" class="control-label">Hidden:</label>
-											<input type="checkbox" name="hidden" id="hidden"
-												   value="true" <?php echo($player->isHidden() ? ' checked' : ''); ?>/>
-										</div>
-
+										</select>
 									</div>
 								</div>
-								<div class="tab-pane" id="tab_2">
-									<div class="row">
-										<div class="col-xs-6 ">
-											<label for="level" class="control-label">Level:</label>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="sex">Sex:</label>
+										<select name="sex" id="sex" class="form-control custom-select">>
+											<?php foreach ($config['genders'] as $id => $sex): ?>
+												<option value="<?php echo $id; ?>" <?php echo($player->getSex() == $id ? 'selected' : ''); ?>><?php echo strtolower($sex); ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="town">Town:</label>
+										<select name="town" id="town" class="form-control">
+											<?php foreach ($config['towns'] as $id => $town): ?>
+												<option value="<?php echo $id; ?>" <?php echo($player->getTownId() == $id ? 'selected' : ''); ?>><?php echo $town; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="skull">Skull:</label>
+										<select name="skull" id="skull" class="form-control custom-select">
+											<?php
 
-											<input type="text" class="form-control" id="level" name="level"
-												   autocomplete="off"
-												   style="cursor: auto;" value="<?php echo $player->getLevel(); ?>"/>
-										</div>
-										<div class="col-xs-6">
-											<label for="magic_level" class="control-label">Magic level:</label>
-											<input type="text" class="form-control" id="magic_level" name="magic_level"
-												   autocomplete="off" size="8" maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getMagLevel(); ?>"/>
-										</div>
+											foreach ($skull_type as $id => $s_name) {
+												echo '<option value=' . $id . ($id == $player->getSkull() ? ' selected' : '') . '>' . $s_name . '</option>';
+											}
+											?>
+										</select>
 									</div>
-									<div class="row">
-										<div class="col-xs-6 ">
-											<label for="experience" class="control-label">Experience:</label>
-											<input type="text" class="form-control" id="experience" name="experience"
-												   autocomplete="off"
-												   style="cursor: auto;"
-												   value="<?php echo $player->getExperience(); ?>"/>
-										</div>
-										<div class="col-xs-6">
-											<label for="mana_spent" class="control-label">Mana spent:</label>
-											<input type="text" class="form-control" id="mana_spent" name="mana_spent"
-												   autocomplete="off"
-												   size="3" maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getManaSpent(); ?>"/>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-6 ">
-											<label for="health" class="control-label">Health:</label>
-											<input type="text" class="form-control" id="health" name="health"
-												   autocomplete="off"
-												   size="5" maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getHealth(); ?>"/>
-										</div>
-										<div class="col-xs-6">
-											<label for="health_max" class="control-label">Health max:</label>
-											<input type="text" class="form-control" id="health_max" name="health_max"
-												   autocomplete="off"
-												   size="5" maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getHealthMax(); ?>"/>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-6 ">
-											<label for="mana" class="control-label">Mana:</label>
-											<input type="text" class="form-control" id="mana" name="mana"
-												   autocomplete="off" size="3"
-												   maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getMana(); ?>"/>
-										</div>
-										<div class="col-xs-6">
-											<label for="mana_max" class="control-label">Mana max:</label>
-											<input type="text" class="form-control" id="mana_max" name="mana_max"
-												   autocomplete="off"
-												   size="3" maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getManaMax(); ?>"/>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-6">
-											<label for="capacity" class="control-label">Capacity:</label>
-											<input type="text" class="form-control" id="capacity" name="capacity"
-												   autocomplete="off"
-												   size="3" maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getCap(); ?>"/>
-										</div>
-										<div class="col-xs-6 ">
-											<label for="soul" class="control-label">Soul:</label>
-											<input type="text" class="form-control" id="soul" name="soul"
-												   autocomplete="off" size="3"
-												   maxlength="10" style="cursor: auto;"
-												   value="<?php echo $player->getSoul(); ?>"/>
-										</div>
-										<?php if ($db->hasColumn('players', 'stamina')): ?>
-											<div class="col-xs-6">
-												<label for="stamina" class="control-label">Stamina:</label>
-												<input type="text" class="form-control" id="stamina" name="stamina"
-													   autocomplete="off"
-													   maxlength="20" style="cursor: auto;"
-													   value="<?php echo $player->getStamina(); ?>"/>
-
-											</div>
-										<?php endif; ?>
-										<?php if ($db->hasColumn('players', 'offlinetraining_time')): ?>
-											<div class="col-xs-6">
-												<label for="offlinetraining" class="control-label">Offline Training
-													Time:</label>
-												<input type="text" class="form-control" id="offlinetraining"
-													   name="offlinetraining" autocomplete="off"
-													   maxlength="11"
-													   value="<?php echo $player->getCustomField('offlinetraining_time'); ?>"/>
-											</div>
-										<?php endif; ?>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="skull_time">Skull time:</label>
+										<input type="text" class="form-control" id="skull_time" name="skull_time"
+											   autocomplete="off" maxlength="11"
+											   value="<?php echo $player->getSkullTime(); ?>"/>
 									</div>
 								</div>
-								<div class="tab-pane" id="tab_3">
-									<?php
-									$i = 0;
-									foreach ($skills as $id => $info) {
-										if ($i == 0 || $i++ == 2) {
-											$i = 0;
-										}
-										echo '
-                <div class="row">
-                    <div class="col-xs-6 ">
-                        <label for="skills[' . $id . ']" class="control-label">' . $info[0] . '</label>
-                        <input type="text" class="form-control" id="skills[' . $id . ']" name="skills[' . $id . ']" maxlength="10" autocomplete="off" style="cursor: auto;" value="' . $player->getSkill($id) . '"/>
-                    </div>
-                    <div class="col-xs-6">
-                      <label for="skills_tries[' . $id . ']" class="control-label">' . $info[0] . ' tries</label>
-                        <input type="text" class="form-control" id="skills_tries[' . $id . ']" name="skills_tries[' . $id . ']" maxlength="10" autocomplete="off" style="cursor: auto;" value="' . $player->getSkillTries($id) . '"/>
-                    </div>
-                </div>';
-										if ($i == 0)
-											echo '';
-									}
-									?>
-								</div>
-								<div class="tab-pane" id="tab_4">
-									<?php $outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($hasLookAddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet(); ?>
-									<div id="imgchar"
-										 style="width:64px;height:64px;position:absolute; top:30px; right:30px"><img id="player_outfit"
-												style="margin-left:0;margin-top:0px;width:64px;height:64px;"
-												src="<?php echo $outfit; ?>"
-												alt="player outfit"/></div>
-									<?php ?>
-									<td>Position:</td>
-									<div class="row">
-										<div class="col-xs-4">
-											<label for="pos_x" class="control-label">X:</label>
-											<input type="text" class="form-control" id="pos_x" name="pos_x"
-												   autocomplete="off"
-												   maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getPosX(); ?>"/>
-										</div>
-										<div class="col-xs-4">
-											<label for="pos_y" class="control-label">Y:</label>
-											<input type="text" class="form-control" id="pos_y" name="pos_y"
-												   autocomplete="off"
-												   maxlength="11" value="<?php echo $player->getPosY(); ?>"/>
-										</div>
-										<div class="col-xs-4">
-											<label for="pos_z" class="control-label">Z:</label>
-											<input type="text" class="form-control" id="pos_z" name="pos_z"
-												   autocomplete="off"
-												   maxlength="11" value="<?php echo $player->getPosZ(); ?>"/>
-										</div>
-									</div>
-									<td>Look:</td>
-									<div class="row">
-										<div class="col-xs-3">
-											<label for="look_head" class="control-label">Head: <span
-														id="look_head_val"></span></label>
-											<input type="range" min="0" max="132"
-												   value="<?php echo $player->getLookHead(); ?>"
-												   class="slider form-control" id="look_head" name="look_head">
-										</div>
-										<div class="col-xs-3">
-											<label for="look_body" class="control-label">Body: <span
-														id="look_body_val"></span></label>
-											<input type="range" min="0" max="132"
-												   value="<?php echo $player->getLookBody(); ?>"
-												   class="slider form-control" id="look_body" name="look_body">
-										</div>
-										<div class="col-xs-3">
-											<label for="look_legs" class="control-label">Legs: <span
-														id="look_legs_val"></span></label>
-											<input type="range" min="0" max="132"
-												   value="<?php echo $player->getLookLegs(); ?>"
-												   class="slider form-control" id="look_legs" name="look_legs">
-										</div>
-										<div class="col-xs-3">
-											<label for="look_feet" class="control-label">Feet: <span
-														id="look_feet_val"></span></label>
-											<input type="range" min="0" max="132"
-												   value="<?php echo $player->getLookBody(); ?>"
-												   class="slider form-control" id="look_feet" name="look_feet">
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-6">
-											<label for="look_type" class="control-label">Type:</label>
-											<input type="text" class="form-control" id="look_type" name="look_type"
-												   autocomplete="off"
-												   maxlength="11" style="cursor: auto;"
-												   value="<?php echo $player->getLookType(); ?>"/>
-										</div>
-										<?php if ($hasLookAddons): ?>
-											<div class="col-xs-6">
-												<label for="look_addons" class="control-label">Addons:</label>
-												<input type="text" class="form-control" id="look_addons"
-													   name="look_addons" autocomplete="off"
-													   maxlength="11" value="<?php echo $player->getLookAddons(); ?>"/>
-											</div>
-										<?php endif; ?>
-									</div>
-								</div>
-								<div class="tab-pane" id="tab_5">
-									<div class="row">
-										<div class="col-xs-6">
-											<label for="created" class="control-label">Created:</label>
-											<input type="text" class="form-control" id="created" name="created"
-												   autocomplete="off"
-												   maxlength="10"
-												   value="<?php echo $player->getCustomField('created'); ?>"/>
-										</div>
-										<div class="col-xs-6">
-											<label for="lastlogin" class="control-label">Last login:</label>
-											<input type="text" class="form-control" id="lastlogin" name="lastlogin"
-												   autocomplete="off"
-												   maxlength="20" value="<?php echo $player->getLastLogin(); ?>"/>
-										</div>
-										<div class="col-xs-6">
-											<label for="lastlogout" class="control-label">Last logout:</label>
-											<input type="text" class="form-control" id="lastlogout" name="lastlogout"
-												   autocomplete="off"
-												   maxlength="20" value="<?php echo $player->getLastLogout(); ?>"/>
-										</div>
-										<div class="col-xs-6">
-											<label for="lastip" class="control-label">Last IP:</label>
-											<input type="text" class="form-control" id="lastip" name="lastip"
-												   autocomplete="off"
-												   maxlength="10" value="<?php echo longToIp($player->getLastIP()); ?>"
-												   readonly/>
-										</div>
-									</div>
-									<?php if ($db->hasColumn('players', 'loss_experience')): ?>
-										<div class="row">
-											<div class="col-xs-6">
-												<label for="loss_experience" class="control-label">Experience
-													Loss:</label>
-												<input type="text" class="form-control" id="loss_experience"
-													   name="loss_experience" autocomplete="off"
-													   maxlength="11"
-													   value="<?php echo $player->getLossExperience(); ?>"/>
-											</div>
-											<div class="col-xs-6">
-												<label for="loss_mana" class="control-label">Mana Loss:</label>
-												<input type="text" class="form-control" id="loss_mana"
-													   name="loss_mana" autocomplete="off"
-													   maxlength="11" value="<?php echo $player->getLossMana(); ?>"/>
-											</div>
-											<div class="col-xs-6">
-												<label for="loss_skills" class="control-label">Skills Loss:</label>
-												<input type="text" class="form-control" id="loss_skills"
-													   name="loss_skills" autocomplete="off"
-													   maxlength="11" value="<?php echo $player->getLossSkills(); ?>"/>
-											</div>
-											<div class="col-xs-6">
-												<label for="loss_containers" class="control-label">Containers
-													Loss:</label>
-												<input type="text" class="form-control" id="loss_containers"
-													   name="loss_containers" autocomplete="off"
-													   maxlength="11"
-													   value="<?php echo $player->getLossContainers(); ?>"/>
-											</div>
-											<div class="col-xs-6">
-												<label for="loss_items" class="control-label">Items Loss:</label>
-												<input type="text" class="form-control" id="loss_items"
-													   name="loss_items" autocomplete="off"
-													   maxlength="11" value="<?php echo $player->getLossItems(); ?>"/>
-											</div>
+								<div class="form-group row">
+									<?php if ($hasBlessingColumn):
+										$bless_count = $player->countBlessings();
+										$bless = $player->checkBlessings($bless_count); ?>
+										<input type="hidden" name="blesscount" value="<?php echo $bless_count; ?>"/>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label>Blessings:</label><br/>
+											<?php for ($i = 1; $i <= $bless_count; $i++): ?>
+												<label><input class="" type="checkbox" name="blessing<?php echo $i; ?>" id="blessing<?php echo $i; ?>" value="true"<?php echo(($bless[$i - 1] == 1) ? ' checked' : '') ?>/><?php echo $i; ?></label>
+											<?php endfor ?>
 										</div>
 									<?php endif; ?>
-									<div class="row">
-										<div class="col-xs-12">
-											<label for="comment" class="control-label">Comment:</label>
-											<textarea class="form-control" name="comment" rows="10" cols="50"
-													  wrap="virtual"><?php echo $player->getCustomField("comment"); ?></textarea>
-											<small>[max.
-												length: 2000 chars, 50 lines (ENTERs)]
-											</small>
+									<?php if ($hasBlessingsColumn): ?>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="blessings">Blessings:</label>
+											<input type="text" class="form-control" id="blessings" name="blessings" autocomplete="off" maxlength="11" value="<?php echo $player->getBlessings(); ?>"/>
+										</div>
+									<?php endif; ?>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="balance" class="control-label">Bank Balance:</label>
+										<input type="text" class="form-control" id="balance" name="balance" autocomplete="off" maxlength="20" value="<?php echo $player->getBalance(); ?>"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<div class="custom-control custom-switch custom-switch-on-danger">
+											<input type="checkbox" class="custom-control-input" name="deleted" id="deleted" value="true" <?php echo($player->getCustomField($db->hasColumn('players', 'deletion') ? 'deletion' : 'deleted') == '1' ? ' checked' : ''); ?>>
+											<label class="custom-control-label" for="deleted">Deleted</label>
+										</div>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<div class="custom-control custom-switch custom-switch-on-success">
+											<input type="checkbox" class="custom-control-input" name="hidden" id="hidden" value="true" <?php echo($player->isHidden() ? ' checked' : ''); ?>>
+											<label class="custom-control-label" for="hidden">Hidden</label>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-					<input type="hidden" name="save" value="yes"/>
-					<div class="box-footer">
-						<a href="<?php echo ADMIN_URL; ?>?p=players"><span class="btn btn-danger">Cancel</span></a>
-						<div class="pull-right">
-							<input type="submit" class="btn btn-primary" value="Update">
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
-	<?php } ?>
-	<div class="col-md-4">
-		<div class="box box-primary">
-			<div class="box-header with-border">
-				<h3 class="box-title">Search Player:</h3>
-				<div class="box-tools pull-right">
-					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-					</button>
-				</div>
-			</div>
+							<div class="tab-pane fade" id="tabs-stats">
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="level" class="control-label">Level:</label>
+										<input type="text" class="form-control" id="level" name="level" autocomplete="off" value="<?php echo $player->getLevel(); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="experience" class="control-label">Experience:</label>
+										<input type="text" class="form-control" id="experience" name="experience" autocomplete="off" value="<?php echo $player->getExperience(); ?>"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="magic_level" class="control-label">Magic level:</label>
+										<input type="text" class="form-control" id="magic_level" name="magic_level" autocomplete="off" size="8" maxlength="11" value="<?php echo $player->getMagLevel(); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="mana_spent" class="control-label">Mana spent:</label>
+										<input type="text" class="form-control" id="mana_spent" name="mana_spent" autocomplete="off" size="3" maxlength="11" value="<?php echo $player->getManaSpent(); ?>"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="health" class="control-label">Health:</label>
+										<input type="text" class="form-control" id="health" name="health" autocomplete="off" size="5" maxlength="11" value="<?php echo $player->getHealth(); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="health_max" class="control-label">Health max:</label>
+										<input type="text" class="form-control" id="health_max" name="health_max" autocomplete="off" size="5" maxlength="11" value="<?php echo $player->getHealthMax(); ?>"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="mana" class="control-label">Mana:</label>
+										<input type="text" class="form-control" id="mana" name="mana" autocomplete="off" size="3" maxlength="11" value="<?php echo $player->getMana(); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="mana_max" class="control-label">Mana max:</label>
+										<input type="text" class="form-control" id="mana_max" name="mana_max" autocomplete="off" size="3" maxlength="11" value="<?php echo $player->getManaMax(); ?>"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="capacity" class="control-label">Capacity:</label>
+										<input type="text" class="form-control" id="capacity" name="capacity" autocomplete="off" size="3" maxlength="11" value="<?php echo $player->getCap(); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="soul" class="control-label">Soul:</label>
+										<input type="text" class="form-control" id="soul" name="soul" autocomplete="off" size="3" maxlength="10" value="<?php echo $player->getSoul(); ?>"/>
+									</div>
+									<?php if ($db->hasColumn('players', 'stamina')): ?>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="stamina" class="control-label">Stamina:</label>
+											<input type="text" class="form-control" id="stamina" name="stamina" autocomplete="off" maxlength="20" value="<?php echo $player->getStamina(); ?>"/>
+										</div>
+									<?php endif; ?>
+									<?php if ($db->hasColumn('players', 'offlinetraining_time')): ?>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="offlinetraining" class="control-label">Offline Training
+												Time:</label>
+											<input type="text" class="form-control" id="offlinetraining" name="offlinetraining" autocomplete="off" maxlength="11" value="<?php echo $player->getCustomField('offlinetraining_time'); ?>"/>
+										</div>
+									<?php endif; ?>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="tabs-skills">
+								<?php
+								foreach ($skills as $id => $info) {
+									?>
+									<div class="form-group row">
+										<div class="col-12 col-sm-12 col-lg-6">
+											<?php echo '<label for="skills[' . $id . ']" class="control-label">' . $info[0] . '</label>
+									<input type="text" class="form-control" id="skills[' . $id . ']" name="skills[' . $id . ']" maxlength="10" autocomplete="off" value="' . $player->getSkill($id) . '"/>'; ?>
+										</div>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<?php echo '<label for="skills_tries[' . $id . ']" class="control-label">' . $info[0] . ' tries</label>
+									<input type="text" class="form-control" id="skills_tries[' . $id . ']" name="skills_tries[' . $id . ']" maxlength="10" autocomplete="off" value="' . $player->getSkillTries($id) . '"/>'; ?>
+										</div>
+									</div>
+								<?php } ?>
+							</div>
+							<div class="tab-pane fade" id="tabs-pos">
+								<?php $outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($hasLookAddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet(); ?>
+								<div id="imgchar" style="width:64px;height:64px;position:absolute; top:30px; right:30px">
+									<img id="player_outfit" style="margin-left:0;margin-top:0;width:64px;height:64px;" src="<?php echo $outfit; ?>" alt="player outfit"/>
+								</div>
+								<td>Position:</td>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-4">
+										<label for="pos_x" class="control-label">X:</label>
+										<input type="text" class="form-control" id="pos_x" name="pos_x" autocomplete="off" maxlength="11" value="<?php echo $player->getPosX(); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-4">
+										<label for="pos_y" class="control-label">Y:</label>
+										<input type="text" class="form-control" id="pos_y" name="pos_y" autocomplete="off" maxlength="11" value="<?php echo $player->getPosY(); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-4">
+										<label for="pos_z" class="control-label">Z:</label>
+										<input type="text" class="form-control" id="pos_z" name="pos_z" autocomplete="off" maxlength="11" value="<?php echo $player->getPosZ(); ?>"/>
+									</div>
+								</div>
+								<td>Look:</td>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-3">
+										<label for="look_head" class="control-label">Head: <span id="look_head_val" class="font-weight-bold text-primary"></span></label>
+										<input class="custom-range" type="range" min="0" max="132" id="look_head" name="look_head" value="<?php echo $player->getLookHead(); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-3">
+										<label for="look_body" class="control-label">Body: <span id="look_body_val" class="font-weight-bold text-primary"></span></label>
+										<input type="range" min="0" max="132"
+											   value="<?php echo $player->getLookBody(); ?>"
+											   class="custom-range" id="look_body" name="look_body">
+									</div>
+									<div class="col-12 col-sm-12 col-lg-3">
+										<label for="look_legs" class="control-label">Legs: <span id="look_legs_val" class="font-weight-bold text-primary"></span></label>
+										<input type="range" min="0" max="132"
+											   value="<?php echo $player->getLookLegs(); ?>"
+											   class="custom-range" id="look_legs" name="look_legs">
+									</div>
+									<div class="col-12 col-sm-12 col-lg-3">
+										<label for="look_feet" class="control-label">Feet: <span id="look_feet_val" class="font-weight-bold text-primary"></span></label>
+										<input type="range" min="0" max="132"
+											   value="<?php echo $player->getLookBody(); ?>"
+											   class="custom-range" id="look_feet" name="look_feet">
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="look_type" class="control-label">Type:</label>
+										<?php
+										$outfitlist = null;
+										$outfitlist = Outfits_loadfromXML();
+										if ($outfitlist) { ?>
+											<select name="look_type" id="look_type" class="form-control custom-select">
+												<?php
+												foreach ($outfitlist as $id => $outfit) {
+													if ($outfit['enabled'] == 'yes') ;
+													echo '<option value=' . $outfit['id'] . ($outfit['id'] == $player->getLookType() ? ' selected' : '') . '>' . $outfit['name'] . ' - ' . ($outfit['type'] == 1 ? 'Male' : 'Female') . '</option>';
+												}
+												?>
+											</select>
+										<?php } else { ?>
+											<input type="text" class="form-control" id="look_type" name="look_type" autocomplete="off" maxlength="11" value="<?php echo $player->getLookType(); ?>"/>
+										<?php } ?>
+									</div>
+									<?php if ($hasLookAddons): ?>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="look_addons" class="control-label">Addons:</label>
+											<select name="look_addons" id="look_addons" class="form-control custom-select">
+												<?php
+												$addon_type = array(0, 1, 2, 3);
+												foreach ($addon_type as $id => $s_name) {
+													echo '<option value=' . $s_name . ($id == $player->getLookAddons() ? ' selected' : '') . '>' . $s_name . '</option>';
+												}
+												?>
+											</select>
+										</div>
+									<?php endif; ?>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="tabs-misc">
+								<div class="form-group row">
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="created" class="control-label">Created:</label>
+										<input type="text" class="form-control" id="created" name="created"
+											   autocomplete="off"
+											   maxlength="10"
+											   value="<?php echo date("M d Y, H:i:s", $player->getCustomField('created')); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="lastlogin" class="control-label">Last login:</label>
+										<input type="text" class="form-control" id="lastlogin" name="lastlogin" autocomplete="off" maxlength="20" value="<?php echo date("M d Y, H:i:s", $player->getLastLogin()); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="lastlogout" class="control-label">Last logout:</label>
+										<input type="text" class="form-control" id="lastlogout" name="lastlogout" autocomplete="off" maxlength="20" value="<?php echo date("M d Y, H:i:s", $player->getLastLogout()); ?>"/>
+									</div>
+									<div class="col-12 col-sm-12 col-lg-6">
+										<label for="lastip" class="control-label">Last IP:</label>
+										<input type="text" class="form-control" id="lastip" name="lastip" autocomplete="off" maxlength="10" value="<?php echo longToIp($player->getLastIP()); ?>" readonly/>
+									</div>
+								</div>
+								<?php if ($db->hasColumn('players', 'loss_experience')): ?>
+									<div class="form-group row">
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="loss_experience" class="control-label">Experience
+												Loss:</label>
+											<input type="text" class="form-control" id="loss_experience" name="loss_experience" autocomplete="off" maxlength="11" value="<?php echo $player->getLossExperience(); ?>"/>
+										</div>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="loss_mana" class="control-label">Mana Loss:</label>
+											<input type="text" class="form-control" id="loss_mana" name="loss_mana" autocomplete="off" maxlength="11" value="<?php echo $player->getLossMana(); ?>"/>
+										</div>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="loss_skills" class="control-label">Skills Loss:</label>
+											<input type="text" class="form-control" id="loss_skills" name="loss_skills" autocomplete="off" maxlength="11" value="<?php echo $player->getLossSkills(); ?>"/>
+										</div>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="loss_containers" class="control-label">Containers Loss:</label>
+											<input type="text" class="form-control" id="loss_containers" name="loss_containers" autocomplete="off" maxlength="11" value="<?php echo $player->getLossContainers(); ?>"/>
+										</div>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="loss_items" class="control-label">Items Loss:</label>
+											<input type="text" class="form-control" id="loss_items" name="loss_items" autocomplete="off" maxlength="11" value="<?php echo $player->getLossItems(); ?>"/>
+										</div>
+									</div>
+								<?php endif; ?>
+								<div class="form-group row">
+									<div class="col-12">
+										<label for="comment" class="control-label">Comment:</label>
+										<textarea class="form-control" name="comment" rows="10" cols="50" wrap="virtual"><?php echo $player->getCustomField("comment"); ?></textarea>
+										<small>[max. length: 2000 chars, 50 lines (ENTERs)]</small>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="tabs-posts">
+								<table class="table table-striped table-condensed">
+									<thead>
+									<tr>
+										<th class="w-25">Topic</th>
+										<th>Content</th>
+									</tr>
+									</thead>
+									<tbody>
+									<?php
+									$posts = $db->query('SELECT `author_guid`,`section`,`first_post`,`post_text`,`post_date`, `post_topic`,`post_html`,`post_smile`,`' . TABLE_PREFIX . 'forum_boards`.`name` AS `forum_Name` FROM `' .
+										TABLE_PREFIX . 'forum` LEFT JOIN `' . TABLE_PREFIX . 'forum_boards` ON `' .
+										TABLE_PREFIX . 'forum`.section = `' . TABLE_PREFIX . 'forum_boards`.id WHERE `author_guid` = "' . $player->getId() . '" ORDER BY `post_date` DESC LIMIT 10');
+									if ($posts->rowCount() > 0) {
+										$posts = $posts->fetchAll();
+										foreach ($posts as $post) {
+											$text = ($post['post_html'] > 0 ? $post['post_text'] : htmlspecialchars($post['post_text']));
+											$post['content'] = ($post['post_html'] > 0 ? $text : Forum::parseBBCode(nl2br($text), $post['post_smile'] == 0));
+											?>
+											<tr>
+												<th><?php echo htmlspecialchars($post['post_topic']); ?><br/><small><?php echo date('d M y H:i:s', $post['post_date']); ?></small><br/>
+													Topic: <a href="<?php echo getForumThreadLink($post['first_post']); ?>" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Link</a><br/>
+													Forum: <a href="<?php echo getForumBoardLink($post['section']); ?>" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> <?php echo $post['forum_Name']; ?></a></th>
+												<th><?php echo $post['content']; ?></th>
+											</tr>
+											<?php
+										}
+										unset($post);
+									} else {
+										echo '<tr><td colspan="2">This user has no posts</td></tr>';
+									}; ?>
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane fade" id="tabs-chars">
+								<div class="row">
+									<?php
+									if (isset($account) && $account->isLoaded()) {
+										$account_players = $account->getPlayersList();
+										$account_players->orderBy('id');
+										if (isset($account_players)) { ?>
+											<table class="table table-striped table-condensed">
+												<thead>
+												<tr>
+													<th>#</th>
+													<th>Name</th>
+													<th>Level</th>
+													<th>Vocation</th>
+													<th style="width: 40px">Edit</th>
+												</tr>
+												</thead>
+												<tbody>
+												<?php foreach ($account_players as $i => $player):
+													$player_vocation = $player->getVocation();
+													$player_promotion = $player->getPromotion();
+													if (isset($player_promotion)) {
+														if ((int)$player_promotion > 0)
+															$player_vocation += ($player_promotion * $config['vocations_amount']);
+													}
 
-			<div class="box-body">
-				<form action="<?php echo $base; ?>" method="post">
-					<div class="input-group input-group-sm">
-						<input type="text" class="form-control" name="search_name" value="<?php echo $search_name; ?>"
-							   maxlength="32" size="32">
-						<span class="input-group-btn">
-                          <button type="submit" type="button" class="btn btn-info btn-flat">Search</button>
-                        </span>
+													if (isset($config['vocations'][$player_vocation])) {
+														$vocation_name = $config['vocations'][$player_vocation];
+													} ?>
+													<tr>
+														<th><?php echo $i; ?></th>
+														<td><?php echo $player->getName(); ?></td>
+														<td><?php echo $player->getLevel(); ?></td>
+														<td><?php echo $vocation_name; ?></td>
+														<td><a href="?p=players&id=<?php echo $player->getId() ?>" class=" btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></a></td>
+													</tr>
+												<?php endforeach ?>
+												</tbody>
+											</table>
+											<?php
+										}
+									} ?>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer text-center">
+						<input type="hidden" name="save" value="yes"/>
+						<button type="submit" class="btn btn-info float-left"><i class="fas fa-update"></i> Update</button>
+						<a href="<?php echo ADMIN_URL; ?>?p=accounts&id=<?php echo $account->getId(); ?>" class="btn btn-secondary">Edit Account</a>
+						<a href="<?php echo ADMIN_URL; ?>?p=players" class="btn btn-danger float-right"><i class="fas fa-cancel"></i> Cancel</a>
 					</div>
 				</form>
 			</div>
 		</div>
-		<?php
-		if (isset($account) && $account->isLoaded()) {
-			$account_players = array();
-			$query = $db->query('SELECT `name`,`level`,`vocation`  FROM `players` WHERE `account_id` = ' . $account->getId() . ' ORDER BY `name`')->fetchAll();
-			if (isset($query)) {
-				?>
-				<div class="box">
-					<div class="box-header">
-						<h3 class="box-title">Character List:</h3>
+
+		<script type="text/javascript">
+			$('#lastlogin').datetimepicker({format: "M d Y, H:i:s",});
+			$('#lastlogout').datetimepicker({format: "M d Y, H:i:s",});
+			$('#created').datetimepicker({format: "M d Y, H:i:s",});
+
+			$(document).ready(function () {
+				const $headSpan = $('#look_head_val');
+				const $headvalue = $('#look_head');
+				$headSpan.html($headvalue.val());
+				$headvalue.on('input', () => {
+					$headSpan.html($headvalue.val());
+				});
+				$headvalue.on('change', () => {
+					updateOutfit();
+				});
+
+				const $bodySpan = $('#look_body_val');
+				const $bodyvalue = $('#look_body');
+				$bodySpan.html($bodyvalue.val());
+				$bodyvalue.on('input', () => {
+					$bodySpan.html($bodyvalue.val());
+				});
+				$bodyvalue.on('change', () => {
+					updateOutfit();
+				});
+
+				const $legsSpan = $('#look_legs_val');
+				const $legsvalue = $('#look_legs');
+				$legsSpan.html($legsvalue.val());
+				$legsvalue.on('input', () => {
+					$legsSpan.html($legsvalue.val());
+				});
+				$legsvalue.on('change', () => {
+					updateOutfit();
+				});
+
+				const $feetSpan = $('#look_feet_val');
+				const $feetvalue = $('#look_feet');
+				$feetSpan.html($feetvalue.val());
+				$feetvalue.on('input', () => {
+					$feetSpan.html($feetvalue.val());
+				});
+				$feetvalue.on('change', () => {
+					updateOutfit();
+				});
+
+				const $lookvalue = $('#look_type');
+				$lookvalue.on('change', () => {
+					updateOutfit();
+				});
+
+				<?php if($hasLookAddons): ?>
+				const $addonvalue = $('#look_addons');
+				$('#look_addons').on('change', () => {
+					updateOutfit();
+				});
+				<?php endif; ?>
+			});
+
+			function updateOutfit() {
+				const look_head = $('#look_head').val();
+				const look_body = $('#look_body').val();
+				const look_legs = $('#look_legs').val();
+				const look_feet = $('#look_feet').val();
+				const look_type = $('#look_type').val();
+
+			<?php if($hasLookAddons): ?>
+				const look_addons = '&addons=' + $('#look_addons').val();
+			<?php else: ?>
+				const look_addons = '';
+			<?php endif; ?>
+				$("#player_outfit").attr("src", '<?= $config['outfit_images_url']; ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet);
+			}
+		</script>
+	<?php } ?>
+	<div class="col-12 col-sm-12 col-lg-2">
+		<div class="card card-info card-outline">
+			<div class="card-header">
+				<h5 class="m-0">Search Player</h5>
+			</div>
+			<div class="card-body">
+				<form action="<?php echo $player_base; ?>" method="post">
+					<div class="input-group input-group-sm">
+						<input type="text" class="form-control" name="search" value="<?php echo $search_player; ?>" maxlength="32" size="32">
+						<span class="input-group-append">
+                    <button type="submit" class="btn btn-info btn-flat">Search</button>
+                  </span>
 					</div>
-					<div class="box-body no-padding">
-						<table class="table table-striped">
-							<tbody>
-							<tr>
-								<th style="width: 10px">#</th>
-								<th>Name</th>
-								<th>Level</th>
-								<th style="width: 40px">Edit</th>
-							</tr>
-							<?php
-							$i = 1;
-							foreach ($query as $p) {
-								$account_players[] = $p;
-								echo '<tr>
-                            <td>' . $i . '.</td>
-                            <td>' . $p['name'] . '</td>
-                            <td>' . $p['level'] . '</td>
-                            <td><a href="?p=players&search_name=' . $p['name'] . '"><span class="btn btn-success btn-sm edit btn-flat"><i class="fa fa-edit"></i></span></a></span></td>
-                        </tr>';
-								$i++;
-							} ?>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<?php
-			};
-		};
-		?>
+				</form>
+			</div>
+		</div>
 	</div>
-
-
-	<script type="text/javascript">
-		$('#lastlogin').datetimepicker({
-			format: 'unixtime'
-		});
-		$('#lastlogout').datetimepicker({
-			format: 'unixtime'
-		});
-		$('#created').datetimepicker({
-			format: 'unixtime'
-		});
-
-		var slider_head = document.getElementById("look_head");
-		var output_head = document.getElementById("look_head_val");
-
-		var slider_body = document.getElementById("look_body");
-		var output_body = document.getElementById("look_body_val");
-
-		var slider_legs = document.getElementById("look_legs");
-		var output_legs = document.getElementById("look_legs_val");
-
-		var slider_feet = document.getElementById("look_feet");
-		var output_feet = document.getElementById("look_feet_val");
-		output_head.innerHTML = slider_head.value;
-		output_body.innerHTML = slider_body.value;
-		output_legs.innerHTML = slider_legs.value;
-		output_feet.innerHTML = slider_feet.value;
-
-		slider_head.oninput = function () {
-			output_head.innerHTML = this.value;
-		}
-		slider_body.oninput = function () {
-			output_body.innerHTML = this.value;
-		}
-		slider_legs.oninput = function () {
-			output_legs.innerHTML = this.value;
-		}
-		slider_feet.oninput = function () {
-			output_feet.innerHTML = this.value;
-		}
-
-        $('#look_head').change(function() {updateOutfit()});
-        $('#look_body').change(function() {updateOutfit()});
-        $('#look_legs').change(function() {updateOutfit()});
-        $('#look_feet').change(function() {updateOutfit()});
-        $('#look_type').change(function() {updateOutfit()});
-		<?php if($hasLookAddons): ?>
-        $('#look_addons').change(function() {updateOutfit()});
-		<?php endif; ?>
-
-        function updateOutfit()
-        {
-            var look_head = $('#look_head').val();
-            var look_body = $('#look_body').val();
-            var look_legs = $('#look_legs').val();
-            var look_feet = $('#look_feet').val();
-            var look_type = $('#look_type').val();
-
-            <?php if($hasLookAddons): ?>
-                var look_addons = '&addons=' + $('#look_addons').val();
-	        <?php
-	        else: ?>
-	            var look_addons = '';
-	        <?php endif; ?>
-
-            new_outfit = '<?= $config['outfit_images_url']; ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet;
-            $("#player_outfit").attr("src", new_outfit);
-            console.log(new_outfit);
-        }
-	</script>
+</div>

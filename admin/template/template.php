@@ -1,229 +1,206 @@
 <?php defined('MYAAC') or die('Direct access not allowed!'); ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<?php echo template_header(true);
-	$title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
+	$title_full = (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
 	?>
-
 	<title><?php echo $title_full ?></title>
-	<link rel="shortcut icon" href="<?php echo BASE_URL; ?>images/favicon.ico" type="image/x-icon" />
-	<link rel="icon" href="<?php echo BASE_URL; ?>images/favicon.ico" type="image/x-icon" />
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/bootstrap.min.css">
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/AdminLTE.min.css">
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/skins/skin-blue.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/adminlte.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/ionicons.min.css">
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo $template_path; ?>style.css"/>
 	<!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
-	<link rel="stylesheet"
-		  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
-	<?php
-	if ($logged && admin()) {
-	?>
-	<header class="main-header">
-		<a href="." class="logo">
-			<span class="logo-mini"><b>M</b>A</span>
-			<span class="logo-lg"><b>My</b>AAC</span>
-		</a>
-
-		<nav class="navbar navbar-static-top" role="navigation">
-			<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-				<span class="sr-only">Toggle navigation</span>
-			</a>
-			<div class="navbar-custom-menu">
-				<ul class="nav navbar-nav">
-					<li>
-						<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-					</li>
-				</ul>
-			</div>
+<body class="sidebar-mini ">
+<?php if ($logged && admin()) { ?>
+	<div class="wrapper">
+		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<a href="<?php echo ADMIN_URL; ?>" class="nav-link">Home</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i class="fas fa-th-large"></i></a>
+				</li>
+			</ul>
 		</nav>
-	</header>
-	<aside class="main-sidebar">
-		<section class="sidebar">
-			<ul class="sidebar-menu" data-widget="tree">
-				<li class="header">MyAAC</li>
 
-				<?php
-				$icons_a = array(
-                    'dashboard','newspaper-o', 'envelope',
-                    'book', 'list',
-                    'plug', 'user',
-                    'edit', 'gavel',
-                    'wrench', 'edit', 'book', 'book',
-                );
+		<aside class="main-sidebar sidebar-dark-primary elevation-4 sidebar-dark-info">
+			<a href="<?php echo ADMIN_URL; ?>" class="brand-link logo-switch navbar-info">
+				<span class="brand-text font-weight-light logo-xs"><b>M</b>A</span>
+				<span class="brand-text font-weight-light logo-xl"><b>My</b>AAC</span>
+			</a>
+			<div class="sidebar">
+				<nav class="mt-2">
+					<ul class="nav nav-pills nav-sidebar flex-column nav-legacy nav-child-indent" data-widget="treeview" data-accordion="false">
+						<?php
+						// Name = Display name of
+						// link = Page link
+						// icon = fontawesome icon namewithout "fas fa-"
+						// menu = menu array for sub items.
+						$menus = array(
+							0 => array('name' => 'Dashboard', 'link' => 'dashboard', 'icon' => 'tachometer-alt'),
+							1 => array('name' => 'News', 'link' => 'news', 'icon' => 'newspaper'),
+							2 => array('name' => 'Mailer', 'link' => 'mailer', 'icon' => 'envelope'),
+							3 => array('name' => 'Pages', 'icon' => 'book', 'menu' => array(
+								0 => array('name' => 'All Pages', 'link' => 'pages'),
+								1 => array('name' => 'Add new', 'link' => 'pages&action=new'),
+							),),
+							4 => array('name' => 'Menus', 'link' => 'menus', 'icon' => 'list'),
+							5 => array('name' => 'Plugins', 'link' => 'plugins', 'icon' => 'plug'),
+							6 => array('name' => 'Visitors', 'link' => 'visitors', 'icon' => 'user'),
+							7 => array('name' => 'Editor', 'icon' => 'book', 'menu' => array(
+								0 => array('name' => 'Accounts', 'link' => 'accounts'),
+								1 => array('name' => 'Players', 'link' => 'players'),
+							),),
+							8 => array('name' => 'Items', 'link' => 'items', 'icon' => 'gavel'),
+							9 => array('name' => 'Editor', 'icon' => 'wrench', 'menu' => array(
+								0 => array('name' => 'Accounts', 'link' => 'accounts'),
+								1 => array('name' => 'Players', 'link' => 'players'),
+							),),
+							9 => array('name' => 'Tools', 'link' => '', 'icon' => 'tools', 'menu' => array(
+								0 => array('name' => 'Notepad', 'link' => 'notepad'),
+								1 => array('name' => 'phpinfo', 'link' => 'phpinfo'),
+							),),
+							10 => array('name' => 'Logs', 'link' => '', 'icon' => 'bug', 'menu' => array(
+								0 => array('name' => 'Logs', 'link' => 'logs'),
+								1 => array('name' => 'Reports', 'link' => 'reports'),
+							),
+							),
+						);
 
-				$menus = array(
-					'Dashboard' => 'dashboard',
-					'News' => 'news',
-					'Mailer' => 'mailer',
-					'Pages' => 'pages',
-					'Menus' => 'menus',
-					'Plugins' => 'plugins',
-					'Visitors' => 'visitors',
-					'Editor' => array(
-						'Accounts' => 'accounts',
-						'Players' => 'players',
-					),
-					'Items' => 'items',
-					'Tools' => array(
-						'Notepad' => 'notepad',
-						'phpinfo' => 'phpinfo',
-					),
-					'Logs' => array(
-						'Logs' => 'logs',
-						'Reports' => 'reports',
-					),
-				);
+						foreach ($menus as $category => $menu) {
+							$has_child = isset($menu['menu']);
+							if (!$has_child) {
+								echo '<li class="nav-item">';
+								echo '<a class="nav-link' . ($page == $menu['link'] ? ' active' : '') . '" ';
+								echo 'href="?p=' . $menu['link'] . '"><i class="nav-icon fas fa-' . (isset($menu['icon']) ? $menu['icon'] : 'link') . '"></i><p>' . $menu['name'] . '</p></a></li>';
+							} else if ($has_child) {
+								$used_menu = null;
+								$nav_construct = '';
+								foreach ($menu['menu'] as $category => $sub_menu) {
+									$link_title = $sub_menu['name'];
+									$link_path = $sub_menu['link'];
+									$link_icon = (isset($sub_menu['icon']) ? $sub_menu['icon'] : 'circle');
 
-				$i = 0;
-				foreach ($menus as $_name => $_page) {
-					$has_child = is_array($_page);
-					if (!$has_child) {
-						echo '<li ';
-						if ($page == $_page) echo ' class="active"';
-						echo ">";
-						echo '<a href="?p=' . $_page . '"><i class="fa fa-' . (isset($icons_a[$i]) ? $icons_a[$i] : 'link') . '"></i> <span>' . $_name . '</span></a></li>';
-					}
+									$nav_construct .= '<li class="nav-item">';
+									$nav_construct .= '<a href="?p=' . $link_path . '" class="nav-link';
+									if ($page == $sub_menu['link']) {
+										$nav_construct .= ' active';
+										$used_menu = true;
+									}
+									$nav_construct .= '"><i class="far fa-' . $link_icon . ' nav-icon"></i><p>' . $link_title . '</p></a></li>';
+								}
 
-					if ($has_child) {
-						$used_menu = "";
-						$nav_construct = '';
-						foreach ($_page as $__name => $__page) {
-							$nav_construct = $nav_construct . '<li';
-
-							if ($page == $__page) {
-								$nav_construct = $nav_construct . ' class="active"';
-								$used_menu = true;
+								echo '<li class="nav-item has-treeview' . (($used_menu) ? ' menu-open' : '') . '">
+                                      <a href="#" class="nav-link' . (($used_menu) ? ' active' : '') . '">
+                                      	<i class="nav-icon fas fa-' . (isset($menu['icon']) ? $menu['icon'] : 'link') . '"></i>
+                                      	<p>' . $menu['name'] . '<i class="right fas fa-angle-left"></i></p>
+						              </a>
+						              <ul class="nav nav-treeview">';
+								echo $nav_construct;
+								echo '</ul>
+                                </li>';
 							}
-							$nav_construct = $nav_construct . '><a href="?p=' . $__page . '"><i class="fa fa-circle-o"></i> ' . $__name . '</a></li>';
 						}
 
-						echo '<li class="treeview' . (($used_menu) ? ' menu-open' : '') . '">
-                                      <a href="#"><i class="fa fa-' . (isset($icons_a[$i]) ? $icons_a[$i] : 'link') . '"></i> <span>' . $_name . '</span>
-						              <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-						              <ul class="treeview-menu" style="' . (($used_menu) ? '  display: block' : ' display: none') . '">';
-						echo $nav_construct;
-						echo '</ul>
-                                </li>';
-					}
-					$i++;
-				}
+						$query = $db->query('SELECT `name`, `page`, `flags` FROM `' . TABLE_PREFIX . 'admin_menu` ORDER BY `ordering`');
+						$menu_db = $query->fetchAll();
+						foreach ($menu_db as $item) {
+							if ($item['flags'] == 0 || hasFlag($item['flags'])) {
+								echo '<li class="nav-item">';
+								echo '<a class="nav-link' . ($page == $item['page'] ? ' active' : '') . '" ';
+								echo 'href="?p=' . $item['page'] . '"><i class="nav-icon fas fa-link"></i><p>' . $item['name'] . '</p></a></li>';
+							}
+						}
+						?>
+					</ul>
+				</nav>
+			</div>
+		</aside>
 
-				$query = $db->query('SELECT `name`, `page`, `flags` FROM `' . TABLE_PREFIX . 'admin_menu` ORDER BY `ordering`');
-				$menu_db = $query->fetchAll();
-				foreach ($menu_db as $item) {
-					if ($item['flags'] == 0 || hasFlag($item['flags'])) {
-						echo '<li ';
-						if ($page == $item['page']) echo ' class="active"';
-						echo ">";
-						echo '<a href="?p=' . $item['page'] . '"><i class="fa fa-link"></i> <span>' . $item['name'] . '</span></a></li>';
-					}
-				}
-				?>
-			</ul>
-		</section>
-	</aside>
-
-	<div class="content-wrapper">
-		<section class="content-header">
-			<h1><?php echo(isset($title) ? $title : ''); ?>
-				<small> - Admin Panel</small>
-				<div class="pull-right">
-					<span class="label label-<?php echo(($status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
+		<div class="content-wrapper" style="min-height: 823px;">
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0 text-dark"><?php echo(isset($title) ? $title : ''); ?><small> - Admin Panel</small></h1>
+						</div>
+						<div class="col-sm-6">
+							<div class="float-sm-right">
+								<span class="p-2 right badge badge-<?php echo(($status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
+							</div>
+						</div>
+					</div>
 				</div>
-			</h1>
-		</section>
-		<section class="content">
-			<?php echo $content; ?>
-		</section>
+			</div>
+			<div class="content">
+				<div class="container-fluid">
+					<?php echo $content; ?>
+				</div>
+			</div>
+		</div>
 
+		<aside class="control-sidebar control-sidebar-dark">
+			<div class="p-3">
+				<h4>Account:</h4>
+				<p><h5><a href="?action=logout"><i class="fas fa-sign-out-alt text-danger"></i> Log out</h5></a>
+				<small>This will log you out</small></p>
+			</div>
+			<div class="p-3">
+				<h4>Site:</h4>
+				<p><h5><a href="<?php echo BASE_URL; ?>" target="_blank"><i class="far fa-eye text-blue"></i> Preview</a></h5>
+				<small>This will open a new tab</small></p>
+			</div>
+			<div class="p-3">
+				<h4>Version:</h4>
+				<p><h5><a href="?p=version"><i class="fas fa-code-branch"></i> <?php echo MYAAC_VERSION; ?></a></h5>
+				<small>Check for updates</small></p>
+			</div>
+			<div class="p-3">
+				<h4>Site:</h4>
+				<p><h5><a href="https://github.com/slawkens/myaac" target="_blank"><i class="fab fa-github"></i> Github</a></h5>
+				<small>Goto GitHub Page</small></p>
+
+				<p><h5><a href="http://my-aac.org/" target="_blank"><i class="fas fa-shoe-prints"></i> MyAAC Official</a></h5>
+				<small>Goto MyAAC Official Website</small></p>
+			</div>
+		</aside>
+
+		<footer class="main-footer">
+			<div class="float-right d-none d-sm-inline">
+				<div id="status">
+					<?php if ($status['online']): ?>
+						<p class="success" style="width: 120px;">Server Online</p>
+					<?php else: ?>
+						<p class="error" style="width: 120px;">Server Offline</p>
+					<?php endif; ?>
+				</div>
+			</div><?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?>
+		</footer>
+		<div id="sidebar-overlay"></div>
 	</div>
 
-	<footer class="main-footer">
-
-		<div class="pull-right hidden-xs">
-			<div id="status">
-				<?php if ($status['online']): ?>
-					<p class="success" style="width: 120px; text-align: center;">Server Online</p>
-				<?php else: ?>
-					<p class="error" style="width: 120px; text-align: center;">Server Offline</p>
-				<?php endif; ?>
-			</div>
-		</div>
-		<?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?>
-	</footer>
-
-	<aside class="control-sidebar control-sidebar-dark">
-		<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-			<li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-			<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-		</ul>
-		<div class="tab-content">
-			<div class="tab-pane active" id="control-sidebar-home-tab">
-				<h3 class="control-sidebar-heading">Account</h3>
-				<ul class="control-sidebar-menu">
-					<li>
-						<a href="?action=logout">
-							<i class="menu-icon fa  fa-sign-out bg-red"></i>
-							<div class="menu-info">
-								<h4 class="control-sidebar-subheading">Log out</h4>
-								<p>This will log you out
-									of <?php echo(USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()); ?></p>
-							</div>
-						</a>
-					</li>
-				</ul>
-				<h3 class="control-sidebar-heading">Site</h3>
-				<ul class="control-sidebar-menu">
-					<li>
-						<a href="<?php echo BASE_URL; ?>" target="_blank">
-							<i class="menu-icon fa  fa-eye bg-blue"></i>
-							<div class="menu-info">
-								<h4 class="control-sidebar-subheading">Preview</h4>
-								<p>This will open a new tab</p>
-							</div>
-						</a>
-					</li>
-				</ul>
-			</div>
-			<div class="tab-pane" id="control-sidebar-settings-tab">
-				<form method="post">
-					<h3 class="control-sidebar-heading">Version</h3>
-
-					<div class="form-group">
-						<label class="control-sidebar-subheading">
-							<?php echo MYAAC_VERSION; ?> (<a href="?p=version">Check for updates</a>)<br/>
-						</label>
-						<label class="control-sidebar-subheading">
-							<p><a href="https://github.com/slawkens/myaac" target="_blank">Github</a></p>
-					</div>
-				</form>
-			</div>
-		</div>
-	</aside>
-	<div class="control-sidebar-bg"></div>
-</div>
-
-<?php }
-if (!$logged && !admin()) {
+<?php } else if (!$logged && !admin()) {
 	echo $content;
 }
 ?>
 
-<script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
-<script src="<?php echo BASE_URL; ?>tools/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
 </body>
 </html>

@@ -19,8 +19,10 @@ if (isset($_GET['clear_cache'])) {
 }
 
 if (isset($_GET['maintenance'])) {
-	$_status = (int)$_POST['status'];
-	$message = $_POST['message'];
+	$message = (!empty($_POST['message']) ? $_POST['message'] : null);
+	$_status = (isset($_POST['status']) && $_POST['status'] == 'true');
+	$_status = ($_status ? '0' : '1');
+
 	if (empty($message)) {
 		error('Message cannot be empty.');
 	} else if (strlen($message) > 255) {
@@ -45,29 +47,17 @@ $tmp = '';
 if (fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
 
-$query = $db->query('SELECT count(*) as `how_much` FROM `accounts`;');
-$query = $query->fetch();
-$total_accounts = $query['how_much'];
-
-$query = $db->query('SELECT count(*) as `how_much` FROM `players`;');
-$query = $query->fetch();
-$total_players = $query['how_much'];
-
-$query = $db->query('SELECT count(*) as `how_much` FROM `guilds`;');
-$query = $query->fetch();
-$total_guilds = $query['how_much'];
-
-$query = $db->query('SELECT count(*) as `how_much` FROM `houses`;');
-$query = $query->fetch();
-$total_houses = $query['how_much'];
+$query_count = $db->query('SELECT
+  (SELECT COUNT(*) FROM accounts) as total_accounts, 
+  (SELECT COUNT(*) FROM players) as total_players,
+  (SELECT COUNT(*) FROM guilds) as total_guilds,
+  (SELECT COUNT(*) FROM houses) as total_houses;')->fetch();
 
 $twig->display('admin.statistics.html.twig', array(
-	'total_accounts' => $total_accounts,
-	'total_players' => $total_players,
-	'total_guilds' => $total_guilds,
-	'total_houses' => $total_houses
+	'count' => $query_count,
 ));
 
+echo '<div class="row">';
 $twig->display('admin.dashboard.html.twig', array(
 	'is_closed' => $is_closed,
 	'closed_message' => $closed_message,
@@ -75,16 +65,14 @@ $twig->display('admin.dashboard.html.twig', array(
 	'account_type' => USE_ACCOUNT_NAME ? 'name' : 'number'
 ));
 
-echo '<div class="row">';
-
 $configAdminPanelModules = config('admin_panel_modules');
-if(isset($configAdminPanelModules))
+if (isset($configAdminPanelModules))
 	$configAdminPanelModules = explode(',', $configAdminPanelModules);
 
 $twig_loader->prependPath(__DIR__ . '/modules/templates');
-foreach($configAdminPanelModules as $box) {
+foreach ($configAdminPanelModules as $box) {
 	$file = __DIR__ . '/modules/' . $box . '.php';
-	if(file_exists($file)) {
+	if (file_exists($file)) {
 		include($file);
 	}
 }

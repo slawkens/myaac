@@ -4,7 +4,7 @@
  *
  * @package   MyAAC
  * @author    Lee
- * @copyright 2019 MyAAC
+ * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
@@ -14,25 +14,25 @@ $files = array();
 $server_path_reports = $config['data_path'] . 'reports/';
 
 if (file_exists($server_path_reports)) {
-    foreach (scandir($server_path_reports, SCANDIR_SORT_ASCENDING) as $f) {
-        if ($f[0] === '.') {
-	        continue;
-        }
+	foreach (scandir($server_path_reports, SCANDIR_SORT_ASCENDING) as $f) {
+		if ($f[0] === '.') {
+			continue;
+		}
 
-        if (is_dir($server_path_reports . $f)) {
-            foreach (scandir($server_path_reports . $f, SCANDIR_SORT_ASCENDING) as $f2) {
-                if ($f2[0] === '.') {
-	                continue;
-                }
+		if (is_dir($server_path_reports . $f)) {
+			foreach (scandir($server_path_reports . $f, SCANDIR_SORT_ASCENDING) as $f2) {
+				if ($f2[0] === '.') {
+					continue;
+				}
 
-                $files[] = array($f . '/' . $f2, $server_path_reports);
-            }
+				$files[] = array($f . '/' . $f2, $server_path_reports);
+			}
 
-            continue;
-        }
+			continue;
+		}
 
-        $files[] = array($f, $server_path_reports);
-    }
+		$files[] = array($f, $server_path_reports);
+	}
 }
 
 foreach ($files as &$f) {
@@ -42,16 +42,13 @@ foreach ($files as &$f) {
 
 unset($f);
 
-$twig->display('admin.reports.html.twig', array('files' => $files));
-
-
 $file = isset($_GET['file']) ? $_GET['file'] : NULL;
 if (!empty($file)) {
 	if (!preg_match('/[^A-z0-9\' _\/\-\.]/', $file)) {
 		if (file_exists($server_path_reports . $file)) {
-			$content = nl2br(file_get_contents($server_path_reports . $file));
+			$file_content = nl2br(file_get_contents($server_path_reports . $file));
 
-			$twig->display('admin.logs.view.html.twig', array('file' => $file, 'content' => $content));
+			$twig->display('admin.logs.view.html.twig', array('file' => $file, 'content' => $file_content));
 		} else {
 			echo 'Specified file does not exist.';
 		}
@@ -59,3 +56,5 @@ if (!empty($file)) {
 		echo 'Invalid file name specified.';
 	}
 }
+
+$twig->display('admin.reports.html.twig', array('files' => $files));

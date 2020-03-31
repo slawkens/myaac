@@ -1,8 +1,10 @@
-<div class="box">
-	<div class="box-header">
-		<h3 class="box-title"><b>{{ file }}</b></h3>
+<div class="card card-info card-outline">
+	<div class="card-header">
+		<h5 class="m-0">{{ file }}</h5>
 	</div>
-	<div class="box-body">
-        {{ content|raw }}
-    </div>
+	<div class="card-body pr-0">
+		<div style="max-height: 410px; overflow-y: auto;">
+			{{ content|raw }}
+		</div>
+	</div>
 </div>

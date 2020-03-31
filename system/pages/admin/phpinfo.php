@@ -16,4 +16,4 @@ if (!function_exists('phpinfo')) { ?>
 	<?php return;
 }
 ?>
-<iframe src="<?php echo BASE_URL; ?>admin/tools/phpinfo.php" width="1024" height="550"/>
+<iframe src="<?php echo BASE_URL; ?>admin/tools/phpinfo.php" width="1024" height="550"></iframe>

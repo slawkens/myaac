@@ -11,37 +11,28 @@
 		document_base_url: "{{ constant('BASE_URL') }}"
 	});
 </script>
-
-<div class="row">
-	<div class="col-md-8">
-		<div class="box box-danger">
-			<div class="box-header with-border">
-				<h3 class="box-title">Mailer</h3>
-			</div>
-			<form method="post">
-				<div class="box-body">
-					<div align="center" class="row"><p class="note note-image" style="width: 80%;">Sending mails may
-							take some time if there are many users in db.</p></div>
-					<div class="form-group">
-						<div class="row">
-							<div class="col-xs-12 ">
-								<label for="mail_subject" class="control-label">Subject:</label>
-								<input class="form-control" type="text" id="mail_subject" name="mail_subject"
-									   value="{{ mail_subject }}" size="30" maxlength="30"/>
-							</div>
-						</div>
-
-					</div>
-					<label for="mail_content" class="control-label">Content:</label>
-					<textarea id="mail_content" name="mail_content" style="width: 100%"
-							  class="tinymce">{{ mail_content }}</textarea>
-				</div>
-				<div class="box-footer">
-					<input type="checkbox" name="preview" id="preview" value="1"/><label for="preview">Just send test
-						email to me (preview)</label>{% if preview_done %} - <b>Done.</b>{% endif %}<br/>
-					<button type="submit" name="submit" value="Send" class="btn btn-primary">Send</button>
-				</div>
-			</form>
-		</div>
+<div align="center" class="text-center"><p class="note">Sending mails may take some time if there are many users in db.</p></div>
+<div class="card card-info card-outline">
+	<div class="card-header">
+		<h5 class="m-0">Mailer</h5>
 	</div>
+	<form method="post">
+		<div class="card-body">
+			<div class="form-group row">
+				<label for="mail_subject">Subject:</label>
+				<input class="form-control" type="text" id="mail_subject" name="mail_subject"
+					   value="{{ mail_subject }}" size="30" maxlength="30"/>
+			</div>
+			<div class="form-group row">
+				<label for="mail_content" class="control-label">Content:</label>
+				<textarea id="mail_content" name="mail_content" style="width: 100%" class="tinymce">{{ mail_content }}</textarea>
+			</div>
+			<div class="form-group row">
+				<input type="checkbox" name="preview" id="preview" value="1"/><label for="category">Just send test email to me (preview)</label>{% if preview_done %} - <b>Done.</b>{% endif %}
+			</div>
+		</div>
+		<div class="card-footer">
+			<button type="submit" class="btn btn-info"><i class="fas fa-share"></i> Send</button>
+		</div>
+	</form>
 </div>

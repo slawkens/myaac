@@ -1221,6 +1221,165 @@ function getCustomPage($page, &$success)
 	return $content;
 }
 
+function getBanReason($reasonId)
+{
+	switch($reasonId)
+	{
+		case 0:
+			return "Offensive Name";
+		case 1:
+			return "Invalid Name Format";
+		case 2:
+			return "Unsuitable Name";
+		case 3:
+			return "Name Inciting Rule Violation";
+		case 4:
+			return "Offensive Statement";
+		case 5:
+			return "Spamming";
+		case 6:
+			return "Illegal Advertising";
+		case 7:
+			return "Off-Topic Public Statement";
+		case 8:
+			return "Non-English Public Statement";
+		case 9:
+			return "Inciting Rule Violation";
+		case 10:
+			return "Bug Abuse";
+		case 11:
+			return "Game Weakness Abuse";
+		case 12:
+			return "Using Unofficial Software to Play";
+		case 13:
+			return "Hacking";
+		case 14:
+			return "Multi-Clienting";
+		case 15:
+			return "Account Trading or Sharing";
+		case 16:
+			return "Threatening Gamemaster";
+		case 17:
+			return "Pretending to Have Influence on Rule Enforcement";
+		case 18:
+			return "False Report to Gamemaster";
+		case 19:
+			return "Destructive Behaviour";
+		case 20:
+			return "Excessive Unjustified Player Killing";
+		case 21:
+			return "Invalid Payment";
+		case 22:
+			return "Spoiling Auction";
+	}
+
+	return "Unknown Reason";
+}
+
+function getBanType($typeId)
+{
+	switch($typeId)
+	{
+		case 1:
+			return "IP Banishment";
+		case 2:
+			return "Namelock";
+		case 3:
+			return "Banishment";
+		case 4:
+			return "Notation";
+		case 5:
+			return "Deletion";
+	}
+
+	return "Unknown Type";
+}
+
+function getPlayerNameByAccount($id)
+{
+	global $vowels, $ots, $db;
+	if(is_numeric($id))
+	{
+		$player = new OTS_Player();
+		$player->load($id);
+		if($player->isLoaded())
+			return $player->getName();
+		else
+		{
+			$playerQuery = $db->query('SELECT `id` FROM `players` WHERE `account_id` = ' . $id . ' ORDER BY `lastlogin` DESC LIMIT 1;')->fetch();
+
+			$tmp = "*Error*";
+			/*
+			$acco = new OTS_Account();
+			$acco->load($id);
+			if(!$acco->isLoaded())
+				return "Unknown name";
+
+			foreach($acco->getPlayersList() as $p)
+			{
+				$player= new OTS_Player();
+				$player->find($p);*/
+				$player->load($playerQuery['id']);
+				//echo 'id gracza = ' . $p . '<br/>';
+				if($player->isLoaded())
+					$tmp = $player->getName();
+			//	break;
+			//}
+
+			return $tmp;
+		}
+	}
+
+	return '';
+}
+function echo_success($message)
+{
+	echo '<div class="col-12 success mb-2">' . $message . '</div>';
+}
+
+function echo_error($message)
+{
+	global $error;
+	echo '<div class="col-12 error mb-2">' . $message . '</div>';
+	$error = true;
+}
+
+function verify_number($number, $name, $max_length)
+{
+	if (!Validator::number($number))
+		echo_error($name . ' can contain only numbers.');
+
+	$number_length = strlen($number);
+	if ($number_length <= 0 || $number_length > $max_length)
+		echo_error($name . ' cannot be longer than ' . $max_length . ' digits.');
+}
+
+function Outfits_loadfromXML()
+{
+	global $config;
+	$file_path = $config['data_path'] . 'XML/outfits.xml';
+	if (!file_exists($file_path)) {	return null; }
+
+	$xml = new DOMDocument;
+	$xml->load($file_path);
+
+	$outfits = null;
+	foreach ($xml->getElementsByTagName('outfit') as $outfit) {
+		$outfits[] = Outfit_parseNode($outfit);
+	}
+	return $outfits;
+}
+
+ function Outfit_parseNode($node) {
+	$looktype = (int)$node->getAttribute('looktype');
+	$type = (int)$node->getAttribute('type');
+	$lookname = $node->getAttribute('name');
+	$premium = $node->getAttribute('premium');
+	$unlocked = $node->getAttribute('unlocked');
+	$enabled = $node->getAttribute('enabled');
+	return array('id' => $looktype, 'type' => $type, 'name' => $lookname, 'premium' => $premium, 'unlocked' => $unlocked, 'enabled' => $enabled);
+}
+
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat.php';

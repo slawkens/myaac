@@ -1,39 +1,28 @@
-<div class="box">
-	<div class="box-header">
-		<h3 class="box-title">Logs:</h3>
+<div class="card card-info card-outline">
+	<div class="card-header">
+		<h5 class="m-0">Logs</h5>
 	</div>
-	<div class="box-body">
-		<div class="row">
-			<div class="col-sm-12">
-				<table id="tb_logs">
-					<thead>
-						<tr>
-							<th>Log name</th>
-							<th>Last updated</th>
-						</tr>
-					</thead>
-					<tbody>
-					{% for file in files %}
-						<tr>
-							<td>
-								<a href="{{ constant('ADMIN_URL') }}?p=logs&file={{ file.name }}">{{ file.name }}</a>
-							</td>
-							<td>{{ file.mtime|date('Y-m-d H:i:s') }}</td>
-						</tr>
-					{% endfor %}
-					</tbody>
-					<tfoot>
-						<tr>
-							<th>Log name</th>
-							<th>Last updated</th>
-						</tr>
-					</tfoot>
-				</table>
-			</div>
-		</div>
+	<div class="card-body">
+		<table class="table table-striped table-bordered" id="tb_logs">
+			<thead>
+			<tr>
+				<th>Log name</th>
+				<th>Last updated</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for file in files %}
+				<tr>
+					<td>
+						<a href="{{ constant('ADMIN_URL') }}?p=logs&file={{ file.name }}">{{ file.name }}</a>
+					</td>
+					<td>{{ file.mtime|date('Y-m-d H:i:s') }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
 	</div>
 </div>
-
 <script>
 	$(function () {
 		$('#tb_logs').DataTable()
