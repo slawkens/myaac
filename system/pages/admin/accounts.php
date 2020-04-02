@@ -204,7 +204,7 @@ else if (isset($_REQUEST['search'])) {
 			}
 		}
 	} else if ($id == 0) {
-		$accounts_db = $db->query('SELECT `id`, `name`,`type` FROM `accounts` ORDER BY `id` DESC LIMIT 10;');
+		$accounts_db = $db->query('SELECT `id`, `name`,`type` FROM `accounts` ORDER BY `id` ASC');
 		?>
 		<div class="col-12 col-sm-12 col-lg-10">
 			<div class="card card-info card-outline">
