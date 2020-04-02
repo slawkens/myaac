@@ -221,7 +221,10 @@ $config = array(
 		'frags' => false,
 		'deleted' => false, // should deleted characters from same account be still listed on the list of characters? When enabled it will show that character is "[DELETED]"
 	),
-	'quests' => array(), // quests list (displayed in character view), name => storage
+	'quests' => array(
+		//'Some Quest' => 123,
+		//'Some Quest Two' => 456,
+	), // quests list (displayed in character view), name => storage
 	'signature_enabled' => true,
 	'signature_type' => 'tibian', // signature engine to use: tibian, mango, gesior
 	'signature_cache_time' => 5, // how long to store cached file (in minutes), default 5 minutes
