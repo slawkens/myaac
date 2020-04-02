@@ -47,26 +47,22 @@ else if (isset($_REQUEST['search'])) {
 	if (strlen($search_account) < 3 && !Validator::number($search_account)) {
 		echo_error('Player name is too short.');
 	} else {
-		if (Validator::number($search_account))
-			$id = (int)$search_account;
-		else {
-			$query = $db->query('SELECT `id` FROM `accounts` WHERE `name` = ' . $db->quote($search_account));
-			if ($query->rowCount() == 1) {
-				$query = $query->fetch();
-				$id = (int)$query['id'];
-			} else {
-				$query = $db->query('SELECT `id`, `name` FROM `accounts` WHERE `name` LIKE ' . $db->quote('%' . $search_account . '%'));
-				if ($query->rowCount() > 0 && $query->rowCount() <= 10) {
-					$str_construct = 'Do you mean?<ul class="mb-0">';
-					foreach ($query as $row)
-						$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row['id'] . '">' . $row['name'] . '</a></li>';
-					$str_construct .= '</ul>';
-					echo_error($str_construct);
-				} else if ($query->rowCount() > 10)
-					echo_error('Specified name resulted with too many accounts.');
-				else
-					echo_error('No entries found.');
-			}
+		$query = $db->query('SELECT `id` FROM `accounts` WHERE `name` = ' . $db->quote($search_account));
+		if ($query->rowCount() == 1) {
+			$query = $query->fetch();
+			$id = (int)$query['id'];
+		} else {
+			$query = $db->query('SELECT `id`, `name` FROM `accounts` WHERE `name` LIKE ' . $db->quote('%' . $search_account . '%'));
+			if ($query->rowCount() > 0 && $query->rowCount() <= 10) {
+				$str_construct = 'Do you mean?<ul class="mb-0">';
+				foreach ($query as $row)
+					$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row['id'] . '">' . $row['name'] . '</a></li>';
+				$str_construct .= '</ul>';
+				echo_error($str_construct);
+			} else if ($query->rowCount() > 10)
+				echo_error('Specified name resulted with too many accounts.');
+			else
+				echo_error('No entries found.');
 		}
 	}
 }
@@ -255,18 +251,17 @@ else if (isset($_REQUEST['search'])) {
 						<li class="nav-item">
 							<a class="nav-link" id="accounts-chars-tab" data-toggle="pill" href="#accounts-chars">Characters</a>
 						</li>
-						<?php
-						if (!$config['otserv_version'] != TFS_02) { ?>
+						<?php if ($db->hasTable('bans')) : ?>
 							<li class="nav-item">
 								<a class="nav-link" id="accounts-bans-tab" data-toggle="pill" href="#accounts-bans">Bans</a>
 							</li>
-						<?php }
+						<?php endif;
 
-						if ($db->hasTable('store_history')) { ?>
+						if ($db->hasTable('store_history')) : ?>
 							<li class="nav-item">
 								<a class="nav-link" id="accounts-store-tab" data-toggle="pill" href="#accounts-store">Store History</a>
 							</li>
-						<?php } ?>
+						<?php endif; ?>
 					</ul>
 				</div>
 				<div class="card-body">
@@ -449,8 +444,7 @@ else if (isset($_REQUEST['search'])) {
 								} ?>
 							</div>
 						</div>
-						<?php
-						if (!$config['otserv_version'] != TFS_02) { ?>
+						<?php if ($db->hasTable('bans')) : ?>
 							<div class="tab-pane fade" id="accounts-bans">
 								<?php
 								$bans = $db->query('SELECT * FROM ' . $db->tableName('bans') . ' WHERE ' . $db->fieldName('active') . ' = 1 AND ' . $db->fieldName('id') . ' = ' . $account->getId() . ' ORDER BY ' . $db->fieldName('added') . ' DESC');
@@ -510,7 +504,7 @@ else if (isset($_REQUEST['search'])) {
 									echo 'No Account bans.';
 								} ?>
 							</div>
-						<?php }
+						<?php endif;
 						if ($db->hasTable('store_history')) { ?>
 							<div class="tab-pane fade" id="accounts-store">
 								<?php $store_history = $db->query('SELECT * FROM `store_history` WHERE `account_id` = "' . $account->getId() . '" ORDER BY `time` DESC')->fetchAll(); ?>
@@ -546,12 +540,26 @@ else if (isset($_REQUEST['search'])) {
 				<h5 class="m-0">Search Accounts</h5>
 			</div>
 			<div class="card-body">
-				<form action="<?php echo $admin_base; ?>" method="post">
-					<div class="input-group input-group-sm">
-						<input type="text" class="form-control" name="search" value="<?php echo $search_account; ?>" maxlength="32" size="32">
-						<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
+				<div class="row">
+					<div class="col-6 col-lg-12">
+						<form action="<?php echo $admin_base; ?>" method="post">
+							<label for="name">Account Name:</label>
+							<div class="input-group input-group-sm">
+								<input type="text" class="form-control" name="search" value="<?php echo $search_account; ?>" maxlength="32" size="32">
+								<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
+							</div>
+						</form>
 					</div>
-				</form>
+					<div class="col-6 col-lg-12">
+						<form action="<?php echo $admin_base; ?>" method="post">
+							<label for="name">Account ID:</label>
+							<div class="input-group input-group-sm">
+								<input type="text" class="form-control" name="id" value="" maxlength="32" size="32">
+								<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
