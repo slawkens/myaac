@@ -1,10 +1,16 @@
 <div class="login-page">
 	<div class="login-box">
 		<div class="login-logo"><b>My</b>AAC</div>
+		{% if errors %}
+			<div class="alert alert-danger"><strong>Errors:</strong><br/>
+				{% for error in errors %}
+					<li>{{ error|raw }}</li>
+				{% endfor %}
+			</div>
+		{% endif %}
 		{% if logout %}
-			<div class="toast bg-success fade show">
-				<div class="toast-header"><strong class="mr-auto">Status</strong></div>
-				<div class="toast-body">{{ logout }}</div>
+			<div class="alert alert-success"><strong>Status:</strong><br/>
+				{{ logout }}
 			</div>
 		{% endif %}
 
