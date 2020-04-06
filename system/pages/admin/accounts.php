@@ -31,7 +31,7 @@ if ($config['account_country']) {
 		$countries[$code] = $c;
 }
 $web_acc = array("None", "Admin", "Super Admin", "(Admin + Super Admin)");
-$acc_type = array("Normal", "Tutor", "Senior Tutor", "Gamemaster", "God");
+$acc_type = array("None", "Normal", "Tutor", "Senior Tutor", "Gamemaster", "God");
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -204,7 +204,7 @@ else if (isset($_REQUEST['search'])) {
 			}
 		}
 	} else if ($id == 0) {
-		$accounts_db = $db->query('SELECT `id`, `name`,`type` FROM `accounts` ORDER BY `id` ASC');
+		$accounts_db = $db->query('SELECT `id`, `name`,' . ($hasTypeColumn ? 'type' : 'group_id') . ' FROM `accounts` ORDER BY `id` ASC');
 		?>
 		<div class="col-12 col-sm-12 col-lg-10">
 			<div class="card card-info card-outline">
@@ -222,12 +222,19 @@ else if (isset($_REQUEST['search'])) {
 						</tr>
 						</thead>
 						<tbody>
-						<?php foreach ($accounts_db as $account_db): ?>
+						<?php foreach ($accounts_db as $account_lst): ?>
 							<tr>
-								<th><?php echo $account_db['id']; ?></th>
-								<td><?php echo $account_db['name']; ?></a></td>
-								<td><?php echo $acc_type[$account_db['type'] - 1]; ?></td>
-								<td><a href="?p=accounts&id=<?php echo $account_db['id']; ?>" class="btn btn-success btn-sm" title="Edit">
+								<th><?php echo $account_lst['id']; ?></th>
+								<td><?php echo $account_lst['name']; ?></a></td>
+								<td>
+									<?php if ($hasTypeColumn) {
+										echo $acc_type[$account_lst['type']];
+									} elseif ($hasGroupColumn) {
+										$group = $groups->getGroups();
+										echo $group[$account_lst['group_id']];
+									} ?>
+								</td>
+								<td><a href="?p=accounts&id=<?php echo $account_lst['id']; ?>" class="btn btn-success btn-sm" title="Edit">
 										<i class="fas fa-pencil-alt"></i>
 									</a>
 								</td>
@@ -302,7 +309,7 @@ else if (isset($_REQUEST['search'])) {
 											<label for="group">Account Type:</label>
 											<select name="group" id="group" class="form-control">
 												<?php foreach ($acc_type as $id => $a_type): ?>
-													<option value="<?php echo($id + 1); ?>" <?php echo($acc_group == ($id + 1) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
+													<option value="<?php echo($id); ?>" <?php echo($acc_group == ($id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
 												<?php endforeach; ?>
 											</select>
 										</div>
@@ -418,7 +425,9 @@ else if (isset($_REQUEST['search'])) {
 											</tr>
 											</thead>
 											<tbody>
-											<?php foreach ($account_players as $i => $player):
+											<?php $i= 0;
+											foreach ($account_players as $i => $player):
+												$i++;
 												$player_vocation = $player->getVocation();
 												$player_promotion = $player->getPromotion();
 												if (isset($player_promotion)) {
@@ -447,7 +456,7 @@ else if (isset($_REQUEST['search'])) {
 						<?php if ($db->hasTable('bans')) : ?>
 							<div class="tab-pane fade" id="accounts-bans">
 								<?php
-								$bans = $db->query('SELECT * FROM ' . $db->tableName('bans') . ' WHERE ' . $db->fieldName('active') . ' = 1 AND ' . $db->fieldName('id') . ' = ' . $account->getId() . ' ORDER BY ' . $db->fieldName('added') . ' DESC');
+								$bans = $db->query('SELECT * FROM ' . $db->tableName('bans') . ' WHERE ' . $db->fieldName('active') . ' = 1 AND ' . $db->fieldName('id') . ' = ' . $account->getId() . ' ORDER BY ' . $db->fieldName('added') . ' DESC LIMIT 10');
 								if ($bans->rowCount()) {
 									?>
 									<table class="table table-striped table-condensed">
@@ -464,10 +473,6 @@ else if (isset($_REQUEST['search'])) {
 										<tbody>
 										<?php
 										foreach ($bans as $ban) {
-											if ($i++ > 100) {
-												$next_page = true;
-												break;
-											}
 											?>
 											<tr>
 												<td><?php
@@ -532,8 +537,7 @@ else if (isset($_REQUEST['search'])) {
 				</div>
 			</div>
 		</div>
-	<?php }
-	?>
+	<?php } ?>
 	<div class="col-12 col-sm-12 col-lg-2">
 		<div class="card card-info card-outline">
 			<div class="card-header">
