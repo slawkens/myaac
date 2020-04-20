@@ -117,7 +117,7 @@ else
 	<tr align="center">
 		<td>
 			<table border="0" cellspacing="0" cellpadding="0" >
-				<form action="{{ ' .getLink('account/email') . ' }}" method="post" >
+				<form action="' .getLink('account/email') . '" method="post" >
 					<tr>
 						<td style="border:0px;" >
 							<input type="hidden" name="emailchangecancel" value="1" >
