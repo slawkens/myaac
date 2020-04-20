@@ -326,7 +326,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 
 	$frags = array();
 	$frag_add_content = '';
-	if($config['characters']['frags'])
+	if($config['characters']['frags'] && $db->hasTable('killers'))
 	{
 		//frags list by Xampy
 		$i = 0;
