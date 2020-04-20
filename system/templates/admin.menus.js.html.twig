@@ -18,7 +18,7 @@
 			var cat = $(this).attr("id").replace('add-button-', '');
 			var id = last_id[cat];
 			last_id[cat]++;
-			$('#sortable-' + cat).append('<li class="ui-state-default" id="list-' + cat + '-' + id + '"><label>Name:</label><input type="text" name="menu[' + cat + '][]" value=""/> <label>Link:</label><input type="text" name="menu_link[' + cat + '][]" value=""/><input type="hidden" name="menu_blank[' + cat + '][]" value="0" /> <label><input class="blank-checkbox" type="checkbox"/><span title="Open in New Window">Open in New Window</span></label> <input class="color-picker" type="text" name="menu_color[' + cat + '][]" value="#ffffff" /><a class="remove-button" id="remove-button-' + cat + '-' + id + '"><img src="{{ constant('BASE_URL') }}images/del.png"/></a></li>'); //add input bo
+			$('#sortable-' + cat).append('<li class="ui-state-default" id="list-' + cat + '-' + id + '"><label>Name:</label> <input type="text" name="menu[' + cat + '][]" value=""/> <label>Link:</label> <input type="text" name="menu_link[' + cat + '][]" value=""/><input type="hidden" name="menu_blank[' + cat + '][]" value="0" /> <label><input class="blank-checkbox" type="checkbox"/><span title="Open in New Window">New Window</span></label> <input class="color-picker" type="text" name="menu_color[' + cat + '][]" value="#ffffff" /><a class="remove-button" id="remove-button-' + cat + '-' + id + '"><img src="{{ constant('BASE_URL') }}images/del.png"/></a></li>'); //add input bo
 			$('#remove-button-' + cat + '-' + id).click(function () {
 				$('#list-' + $(this).attr("id").replace('remove-button-', '')).remove();
 			});
