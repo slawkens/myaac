@@ -27,6 +27,10 @@ system/cache/*
 system/logs/*
 !system/logs/index.html
 
+# data
+system/data/*
+!system/data/index.html
+
 # plugins
 plugins/*
 !plugins/.htaccess
