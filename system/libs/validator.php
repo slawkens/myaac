@@ -84,6 +84,12 @@ class Validator
 			self::$lastError = 'Account name is too long (max. 32 chars).';
 			return false;
 		}
+		
+		if(preg_match('/ {2,}/', $name))
+		{
+			self::$lastError = 'Invalid account name format. Use only A-Z and numbers 0-9 and no double spaces.';
+			return false;
+		}
 
 		if(!preg_match("/[A-Z0-9]/i", $name))
 		{
@@ -192,6 +198,12 @@ class Validator
 		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- [ ] '") != $length)
 		{
 			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
+			return false;
+		}
+		
+		if(preg_match('/ {2,}/', $name))
+		{
+			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
 			return false;
 		}
 		if(!preg_match("/[A-z ']/", $name))

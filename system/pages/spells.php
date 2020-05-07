@@ -71,7 +71,7 @@ else {
 }
 
 ?>
-<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.min.css">
 <?php
 $twig->display('spells.html.twig', array(
 	'canEdit' => $canEdit,
@@ -84,12 +84,10 @@ $twig->display('spells.html.twig', array(
 
 <script>
 	$(document).ready( function () {
-
 		$("#tb_instantSpells").DataTable();
 		$("#tb_conjureSpells").DataTable();
 		$("#tb_runeSpells").DataTable();
 	} );
 
 </script>
-
-<script src="<?php echo BASE_URL; ?>tools/js/jquery.dataTables.min.js"></script>
+<script src="<?php echo BASE_URL; ?>tools/js/datatables.min.js"></script>

@@ -14,7 +14,7 @@ $title = "Creatures";
 ?>
 <script type="text/javascript" src="tools/js/tipped.js"></script>
 <link rel="stylesheet" type="text/css" href="tools/css/tipped.css"/>
-<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.min.css">
 
 <script>
 	$(document).ready(function () {
@@ -170,4 +170,4 @@ if (empty($_REQUEST['creature'])) {
 
 </script>
 
-<script src="<?php echo BASE_URL; ?>tools/js/jquery.dataTables.min.js"></script>
+<script src="<?php echo BASE_URL; ?>tools/js/datatables.min.js"></script>
