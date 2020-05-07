@@ -29,6 +29,8 @@ class CreateCharacter
 			$errors['name'] = 'Name is too long. Max. lenght <b>'.$maxLength.'</b> letters.';
 		else if(strlen($name) < $minLength)
 			$errors['name'] = 'Name is too short. Min. lenght <b>'.$minLength.'</b> letters.';
+		elseif(preg_match('/ {2,}/', $name))
+			$errors['name'] = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
 		else {
 			if(!admin() && !Validator::newCharacterName($name)) {
 				$errors['name'] = Validator::getLastError();
