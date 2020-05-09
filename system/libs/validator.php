@@ -84,7 +84,7 @@ class Validator
 			self::$lastError = 'Account name is too long (max. 32 chars).';
 			return false;
 		}
-		
+
 		if(preg_match('/ {2,}/', $name))
 		{
 			self::$lastError = 'Invalid account name format. Use only A-Z and numbers 0-9 and no double spaces.';
@@ -185,13 +185,13 @@ class Validator
 		$length = strlen($name);
 		if($length < 3)
 		{
-			self::$lastError = 'Character name is too short. Min. lenght <b>3</b> characters.';
+			self::$lastError = 'Character name is too short. Min. length <b>3</b> characters.';
 			return false;
 		}
 
 		if($length > 25)
 		{
-			self::$lastError = 'Character name is too long. Max. lenght <b>25</b> characters.';
+			self::$lastError = 'Character name is too long. Max. length <b>25</b> characters.';
 			return false;
 		}
 
@@ -200,12 +200,13 @@ class Validator
 			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
 			return false;
 		}
-		
+
 		if(preg_match('/ {2,}/', $name))
 		{
 			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
 			return false;
 		}
+
 		if(!preg_match("/[A-z ']/", $name))
 		{
 			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
@@ -228,7 +229,7 @@ class Validator
 
 		$name_lower = strtolower($name);
 
-		$first_words_blocked = array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ', "'", '-');
+		$first_words_blocked = array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ');
 		foreach($first_words_blocked as $word)
 		{
 			if($word == substr($name_lower, 0, strlen($word))) {
@@ -249,6 +250,12 @@ class Validator
 
 		if(substr($name_lower, -2, 1) == " ") {
 			self::$lastError = 'Your name contains illegal space.';
+			return false;
+		}
+
+		if(preg_match('/ {2,}/', $name))
+		{
+			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
 			return false;
 		}
 
@@ -280,14 +287,6 @@ class Validator
 		{
 			if(isset($name_lower[$i]) && isset($name_lower[$i + 1]) && $name_lower[$i] == $name_lower[$i + 1] && isset($name_lower[$i + 2]) && $name_lower[$i] == $name_lower[$i + 2]) {
 				self::$lastError = 'Your name is invalid.';
-				return false;
-			}
-		}
-
-		for($i = 0; $i < $name_length; $i++)
-		{
-			if(isset($name_lower[$i - 1]) && $name_lower[$i - 1] == ' ' && isset($name_lower[$i + 1]) && $name_lower[$i + 1] == ' ') {
-				self::$lastError = 'Your name contains too many spaces.';
 				return false;
 			}
 		}
@@ -339,13 +338,7 @@ class Validator
 			return false;
 		}
 
-		if($name_length < 3 || $name_length  > 28) {
-			self::$lastError = 'Your name cannot be shorter than 3 characters and longer than 28 characters.';
-			return false;
-		}
-
-
-		if(!preg_match("/[A-z ']{3,28}/", $name)) {
+		if(!preg_match("/[A-z ']/", $name)) {
 			self::$lastError = 'Your name containst illegal characters.';
 			return false;
 		}
