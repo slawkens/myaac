@@ -21,19 +21,15 @@ else
 		if($points < $config['account_change_character_name_points'])
 			$errors[] = 'You need ' . $config['account_change_character_name_points'] . ' premium points to change name. You have <b>'.$points.'<b> premium points.';
 
+		$minLength = config('character_name_min_length');
+		$maxLength = config('character_name_max_length');
+
 		if(empty($errors) && empty($name))
 			$errors[] = 'Please enter a new name for your character!';
-		else if(strlen($name) > 25)
-			$errors[] = 'Name is too long. Max. lenght <b>25</b> letters.';
-		else if(strlen($name) < 3)
-			$errors[] = 'Name is too short. Min. lenght <b>3</b> letters.';
-		else {
-			$exist = new OTS_Player();
-			$exist->find($name);
-			if($exist->isLoaded()) {
-				$errors[] = 'Character with this name already exist.';
-			}
-		}
+		else if(strlen($name) > $maxLength)
+			$errors['name'] = 'Name is too long. Max. length <b>'.$maxLength.'</b> letters.';
+		else if(strlen($name) < $minLength)
+			$errors['name'] = 'Name is too short. Min. length <b>'.$minLength.'</b> letters.';
 
 		if(empty($errors))
 		{
