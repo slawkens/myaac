@@ -91,6 +91,7 @@ require_once SYSTEM . 'migrations/22.php';
 
 // add myaac_pages pages
 require_once SYSTEM . 'migrations/27.php';
+require_once SYSTEM . 'migrations/30.php';
 
 $locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(str_replace('tools/', '',ADMIN_URL), $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
 $locale['step_finish_desc'] = str_replace('$HOMEPAGE$', generateLink(str_replace('tools/', '', BASE_URL), $locale['step_finish_homepage'], true), $locale['step_finish_desc']);
