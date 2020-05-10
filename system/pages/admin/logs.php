@@ -13,7 +13,7 @@ $title = 'Logs Viewer';
 $files = array();
 $aac_path_logs = BASE . 'system/logs/';
 foreach (scandir($aac_path_logs, SCANDIR_SORT_ASCENDING) as $f) {
-	if ($f[0] === '.' || is_dir($aac_path_logs . $f)) {
+	if ($f[0] === '.' || is_dir($aac_path_logs . $f) || $f === 'index.html') {
 		continue;
 	}
 
