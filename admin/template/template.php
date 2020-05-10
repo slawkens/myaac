@@ -200,6 +200,7 @@
 
 <script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.min.js"></script>
+<script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
 </body>
 </html>
