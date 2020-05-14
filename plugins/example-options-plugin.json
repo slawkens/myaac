@@ -1,0 +1,12 @@
+{
+	"enabled": 1,
+	"name": "Example Options Plugin",
+	"description": "This is just an example of a Plugin for MyAAC.",
+	"version": "1.0",
+	"author": "nobody",
+	"contact": "nobody@example.org",
+	"require": {
+		"myaac": "0.8.0"
+	},
+	"options": "plugins/example-options-plugin/options.php"
+ }
