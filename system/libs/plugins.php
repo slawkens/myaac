@@ -56,23 +56,14 @@ class Plugins {
 		}
 
 		$hooks = [];
-		foreach(get_plugins() as $filename) {
-			$string = file_get_contents(PLUGINS . $filename . '.json');
-			$string = self::removeComments($string);
-			$plugin = json_decode($string, true);
-			self::$plugin_json = $plugin;
-			if ($plugin == null) {
-				self::$warnings[] = 'Cannot load ' . $filename . '.json. File might be not a valid json code.';
+		foreach (get_plugins() as $filename) {
+			$plugin_json = self::getPluginJson($filename);
+			if (!$plugin_json) {
 				continue;
 			}
 
-			if(isset($plugin['enabled']) && $plugin['enabled'] === 0) {
-				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
-				continue;
-			}
-
-			if (isset($plugin['hooks'])) {
-				foreach ($plugin['hooks'] as $_name => $info) {
+			if (isset($plugin_json['hooks'])) {
+				foreach ($plugin_json['hooks'] as $_name => $info) {
 					if (defined('HOOK_'. $info['type'])) {
 						$hook = constant('HOOK_'. $info['type']);
 						$hooks[] = ['name' => $_name, 'type' => $hook, 'file' => $info['file']];
@@ -88,6 +79,42 @@ class Plugins {
 		}
 
 		return $hooks;
+	}
+
+	public static function getPluginOptions($pluginName)
+	{
+		$plugin_json = self::getPluginJson($pluginName);
+		if (!$plugin_json) {
+			return false;
+		}
+
+		if (!isset($plugin_json['options']) || !file_exists(BASE . $plugin_json['options'])) {
+			return false;
+		}
+
+		return $plugin_json['options'];
+	}
+
+	public static function getPluginJson($name = null)
+	{
+		if(!isset($name)) {
+			return self::$plugin_json;
+		}
+
+		$string = file_get_contents(PLUGINS . $name . '.json');
+		$string = self::removeComments($string);
+		$plugin_json = json_decode($string, true);
+		if ($plugin_json == null) {
+			self::$warnings[] = 'Cannot load ' . $name . '.json. File might be not a valid json code.';
+			return false;
+		}
+
+		if(isset($plugin_json['enabled']) && $plugin_json['enabled'] === 0) {
+			self::$warnings[] = 'Skipping ' . $name . '... The plugin is disabled.';
+			return false;
+		}
+
+		return $plugin_json;
 	}
 
 	public static function install($file) {
@@ -380,10 +407,6 @@ class Plugins {
 
 	public static function getError() {
 		return self::$error;
-	}
-
-	public static function getPluginJson() {
-		return self::$plugin_json;
 	}
 
 	public static function removeComments($string) {

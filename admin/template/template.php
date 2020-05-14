@@ -46,40 +46,59 @@
 				<nav class="mt-2">
 					<ul class="nav nav-pills nav-sidebar flex-column nav-legacy nav-child-indent" data-widget="treeview" data-accordion="false">
 						<?php
+						$optionsMenu = [];
+						foreach(get_plugins() as $name) {
+							$pluginJson = Plugins::getPluginJson($name);
+							if(!$pluginJson) {
+								continue;
+							}
+
+							if (!isset($pluginJson['options']) || !file_exists(BASE . $pluginJson['options'])) {
+								continue;
+							}
+
+							$optionsMenu[] = ['name' => $pluginJson['name'], 'link' => 'options&plugin=' . $name];
+						}
+
 						// Name = Display name of
 						// link = Page link
 						// icon = fontawesome icon namewithout "fas fa-"
 						// menu = menu array for sub items.
-						$menus = array(
-							0 => array('name' => 'Dashboard', 'link' => 'dashboard', 'icon' => 'tachometer-alt'),
-							1 => array('name' => 'News', 'link' => 'news', 'icon' => 'newspaper'),
-							2 => array('name' => 'Mailer', 'link' => 'mailer', 'icon' => 'envelope'),
-							3 => array('name' => 'Pages', 'icon' => 'book', 'menu' => array(
-								0 => array('name' => 'All Pages', 'link' => 'pages'),
-								1 => array('name' => 'Add new', 'link' => 'pages&action=new'),
-							),),
-							4 => array('name' => 'Menus', 'link' => 'menus', 'icon' => 'list'),
-							5 => array('name' => 'Plugins', 'link' => 'plugins', 'icon' => 'plug'),
-							6 => array('name' => 'Visitors', 'link' => 'visitors', 'icon' => 'user'),
-							7 => array('name' => 'Editor', 'icon' => 'book', 'menu' => array(
-								0 => array('name' => 'Accounts', 'link' => 'accounts'),
-								1 => array('name' => 'Players', 'link' => 'players'),
-							),),
-							8 => array('name' => 'Items', 'link' => 'items', 'icon' => 'gavel'),
-							9 => array('name' => 'Editor', 'icon' => 'wrench', 'menu' => array(
-								0 => array('name' => 'Accounts', 'link' => 'accounts'),
-								1 => array('name' => 'Players', 'link' => 'players'),
-							),),
-							9 => array('name' => 'Tools', 'link' => '', 'icon' => 'tools', 'menu' => array(
-								0 => array('name' => 'Notepad', 'link' => 'notepad'),
-								1 => array('name' => 'phpinfo', 'link' => 'phpinfo'),
-							),),
-							10 => array('name' => 'Logs', 'link' => '', 'icon' => 'bug', 'menu' => array(
-								0 => array('name' => 'Logs', 'link' => 'logs'),
-								1 => array('name' => 'Reports', 'link' => 'reports'),
-							),
-							),
-						);
+						$menus = [
+							['name' => 'Dashboard', 'link' => 'dashboard', 'icon' => 'tachometer-alt'],
+							['name' => 'Config', 'link' => 'config', 'icon' => 'wrench'],
+							['name' => 'News', 'link' => 'news', 'icon' => 'newspaper'],
+							['name' => 'Mailer', 'link' => 'mailer', 'icon' => 'envelope'],
+							['name' => 'Pages', 'icon' => 'book', 'menu' =>
+								[
+									['name' => 'All Pages', 'link' => 'pages'],
+									['name' => 'Add new', 'link' => 'pages&action=new'],
+								],
+							],
+							['name' => 'Menus', 'link' => 'menus', 'icon' => 'list'],
+							['name' => 'Plugins', 'link' => 'plugins', 'icon' => 'plug'],
+							['name' => 'Options', 'icon' => 'book', 'menu' => $optionsMenu],
+							['name' => 'Visitors', 'link' => 'visitors', 'icon' => 'user'],
+							['name' => 'Items', 'link' => 'items', 'icon' => 'gavel'],
+							['name' => 'Editor', 'icon' => 'wrench', 'menu' =>
+								[
+									['name' => 'Accounts', 'link' => 'accounts'],
+									['name' => 'Players', 'link' => 'players'],
+								],
+							],
+							['name' => 'Tools', 'link' => '', 'icon' => 'tools', 'menu' =>
+								[
+									['name' => 'Notepad', 'link' => 'notepad'],
+									['name' => 'phpinfo', 'link' => 'phpinfo'],
+								],
+							],
+							['name' => 'Logs', 'link' => '', 'icon' => 'bug', 'menu' =>
+								[
+									['name' => 'Logs', 'link' => 'logs'],
+									['name' => 'Reports', 'link' => 'reports'],
+								],
+							],
+						];
 
 						foreach ($menus as $category => $menu) {
 							$has_child = isset($menu['menu']);
@@ -105,14 +124,14 @@
 								}
 
 								echo '<li class="nav-item has-treeview' . (($used_menu) ? ' menu-open' : '') . '">
-                                      <a href="#" class="nav-link' . (($used_menu) ? ' active' : '') . '">
-                                      	<i class="nav-icon fas fa-' . (isset($menu['icon']) ? $menu['icon'] : 'link') . '"></i>
-                                      	<p>' . $menu['name'] . '<i class="right fas fa-angle-left"></i></p>
-						              </a>
-						              <ul class="nav nav-treeview">';
+									  <a href="#" class="nav-link' . (($used_menu) ? ' active' : '') . '">
+										<i class="nav-icon fas fa-' . (isset($menu['icon']) ? $menu['icon'] : 'link') . '"></i>
+										<p>' . $menu['name'] . '<i class="right fas fa-angle-left"></i></p>
+									  </a>
+									  <ul class="nav nav-treeview">';
 								echo $nav_construct;
 								echo '</ul>
-                                </li>';
+								</li>';
 							}
 						}
 
