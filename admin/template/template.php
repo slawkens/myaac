@@ -7,14 +7,13 @@
 	?>
 	<title><?php echo $title_full ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/adminlte.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.bs.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $template_path; ?>style.css"/>
 	<!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<script src="<?php echo BASE_URL; ?>tools/js/html5shiv.min.js"></script>
+	<script src="<?php echo BASE_URL; ?>tools/js/respond.min.js"></script>
 	<![endif]-->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
