@@ -1,16 +1,16 @@
 <?php defined('MYAAC') or die('Direct access not allowed!'); ?>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<?php echo template_header(true);
 	$title_full = (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
 	?>
 	<title><?php echo $title_full ?></title>
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/adminlte.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.min.css">
+	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.bs.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $template_path; ?>style.css"/>
 	<!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -197,10 +197,10 @@
 	echo $content;
 }
 ?>
-
+<script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.min.js"></script>
-<script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
+<script src="<?php echo BASE_URL; ?>tools/js/datatables.bs.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
 </body>
 </html>
