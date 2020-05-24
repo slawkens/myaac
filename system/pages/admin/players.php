@@ -414,7 +414,13 @@ else if (isset($_REQUEST['search'])) {
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="town">Town:</label>
 										<select name="town" id="town" class="form-control">
-											<?php foreach ($config['towns'] as $id => $town): ?>
+											<?php
+											$configTowns = config('towns');
+											if (!isset($configTowns[$player->getTownId()])) {
+												$configTowns[$player->getTownId()] = 'Unknown Town';
+											}
+
+											foreach ($configTowns as $id => $town): ?>
 												<option value="<?php echo $id; ?>" <?php echo($player->getTownId() == $id ? 'selected' : ''); ?>><?php echo $town; ?></option>
 											<?php endforeach; ?>
 										</select>
