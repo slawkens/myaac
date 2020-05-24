@@ -60,9 +60,12 @@ if (isset($_REQUEST['template'])) {
 		echo "No menu categories set in template config.php.<br/>This template doesn't support dynamic menus.";
 		return;
 	}
+
+	$title = 'Menus - ' . $template;
 	?>
 	<div align="center" class="text-center">
-		<p class="note">Hint: You can drag menu items.<br/>
+		<p class="note">You are editing: <?= $template ?><br/><br/>
+			Hint: You can drag menu items.<br/>
 			Hint: Add links to external sites using: <b>http://</b> or <b>https://</b> prefix.<br/>
 			Not all templates support blank and colorful links.
 		</p>
