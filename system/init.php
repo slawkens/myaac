@@ -180,7 +180,8 @@ else {
 // load towns from database (TFS 1.3) //
 ////////////////////////////////////////
 
-$towns = array();
+$tmp = '';
+$towns = [];
 if($cache->enabled() && $cache->fetch('towns', $tmp)) {
 	$towns = unserialize($tmp);
 }
@@ -197,16 +198,13 @@ else {
 			$cache->set('towns', serialize($towns), 600);
 		}
 	}
-	else if($cache->enabled()) {
-		$cache->set('towns', serialize(array()), 600);
+	else {
+		$towns = config('towns');
 	}
-}
 
-$configTowns = config('towns');
-if($configTowns !== null && (!isset($configTowns[1]) || $configTowns[1] !== 'Sample town')) {
-	$towns = array_replace(
-		$towns, $configTowns
-	);
+	if($cache->enabled()) {
+		$cache->set('towns', serialize($towns), 600);
+	}
 }
 
 config(['towns', $towns]);
