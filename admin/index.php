@@ -27,6 +27,12 @@ define('PAGE', $page);
 require SYSTEM . 'functions.php';
 require SYSTEM . 'init.php';
 
+if(config('env') === 'dev') {
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
+}
+
 // event system
 require_once SYSTEM . 'hooks.php';
 $hooks = new Hooks();
