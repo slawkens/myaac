@@ -194,9 +194,6 @@ else {
 		}
 
 		unset($query);
-		if($cache->enabled()) {
-			$cache->set('towns', serialize($towns), 600);
-		}
 	}
 	else {
 		$towns = config('towns');
