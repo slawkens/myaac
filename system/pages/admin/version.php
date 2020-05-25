@@ -26,7 +26,7 @@ if ($version_compare == 0) {
 	success('MyAAC latest version is ' . $myaac_version . '. You\'re using the latest version.
 	<br/>View CHANGELOG ' . generateLink(ADMIN_URL . '?p=changelog', 'here'));
 } else if ($version_compare < 0) {
-	echo success('Woah, seems you\'re using newer version as latest released one! MyAAC latest released version is ' . $myaac_version . ', and you\'re using version ' . MYAAC_VERSION . '.
+	success('Woah, seems you\'re using newer version as latest released one! MyAAC latest released version is ' . $myaac_version . ', and you\'re using version ' . MYAAC_VERSION . '.
 	<br/>View CHANGELOG ' . generateLink(ADMIN_URL . '?p=changelog', 'here'));
 } else {
 	warning('You\'re using outdated version.<br/>
