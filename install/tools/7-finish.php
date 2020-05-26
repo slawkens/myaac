@@ -34,10 +34,10 @@ function insert_sample_if_not_exist($p) {
 
 $success = true;
 insert_sample_if_not_exist(array('name' => 'Rook Sample', 'level' => 1, 'vocation_id' => 0, 'health' => 150, 'healthmax' => 150, 'experience' => 0, 'looktype' => 130, 'mana' => 0, 'manamax' => 0, 'soul' => 100, 'cap' => 400));
-insert_sample_if_not_exist(array('name' => 'Sorcerer Sample', 'level' => 8, 'vocation_id' => 1, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 90, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
-insert_sample_if_not_exist(array('name' => 'Druid Sample', 'level' => 8, 'vocation_id' => 2, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 90, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
-insert_sample_if_not_exist(array('name' => 'Paladin Sample', 'level' => 8, 'vocation_id' => 3, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 129, 'mana' => 90, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
-insert_sample_if_not_exist(array('name' => 'Knight Sample', 'level' => 8, 'vocation_id' => 4, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 131, 'mana' => 90, 'manamax' => 35, 'soul' => 100, 'cap' => 470));
+insert_sample_if_not_exist(array('name' => 'Sorcerer Sample', 'level' => 8, 'vocation_id' => 1, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 90, 'manamax' => 90, 'soul' => 100, 'cap' => 470));
+insert_sample_if_not_exist(array('name' => 'Druid Sample', 'level' => 8, 'vocation_id' => 2, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 90, 'manamax' => 90, 'soul' => 100, 'cap' => 470));
+insert_sample_if_not_exist(array('name' => 'Paladin Sample', 'level' => 8, 'vocation_id' => 3, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 129, 'mana' => 90, 'manamax' => 90, 'soul' => 100, 'cap' => 470));
+insert_sample_if_not_exist(array('name' => 'Knight Sample', 'level' => 8, 'vocation_id' => 4, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 131, 'mana' => 90, 'manamax' => 90, 'soul' => 100, 'cap' => 470));
 
 if($success) {
 	success($locale['step_database_imported_players']);
