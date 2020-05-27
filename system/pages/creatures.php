@@ -146,7 +146,7 @@ if (empty($_REQUEST['creature'])) {
 				$name = getItemNameById($item['id']);
 				$tooltip = $name . '<br/>Chance: ' . round($item['chance'] / 1000, 2) . '%<br/>Max count: ' . $item['count'];
 
-				echo getItemImage($item['id']);
+				echo '<img src="' . $config['item_images_url'] . $item['id'] . '.gif" class="item_image" title="' . $tooltip . '" width="32" height="32" border="0" alt=" ' . $name . '" />';
 				$i++;
 			}
 
