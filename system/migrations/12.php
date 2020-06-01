@@ -22,7 +22,8 @@ CREATE TABLE `" . TABLE_PREFIX . "items`
 	`plural` VARCHAR(50) NOT NULL DEFAULT '',
 	`attributes` VARCHAR(500) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
-) ENGINE = MyISAM;");
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+");
 
 // new weapons table
 if(!$db->hasTable(TABLE_PREFIX . 'weapons'))
@@ -34,7 +35,8 @@ CREATE TABLE `" . TABLE_PREFIX . "weapons`
 	`maglevel` INT(11) NOT NULL DEFAULT 0,
 	`vocations` VARCHAR(100) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
-) ENGINE = MyISAM;");
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+");
 
 // modify vocations to support json data
 $db->query("ALTER TABLE `" . TABLE_PREFIX . "spells` MODIFY `vocations` VARCHAR(100) NOT NULL DEFAULT '';");

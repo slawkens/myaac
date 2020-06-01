@@ -12,8 +12,9 @@ CREATE TABLE `myaac_menu`
 	`ordering` INT(11) NOT NULL DEFAULT 0,
 	`enabled` INT(1) NOT NULL DEFAULT 1,
 	PRIMARY KEY (`id`)
-) ENGINE = MyISAM;");
-	
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+");
+
 	$db->query("
 /* MENU_CATEGORY_NEWS kathrine */
 INSERT INTO `myaac_menu` (`template`, `name`, `link`, `category`, `ordering`) VALUES ('kathrine', 'Latest News', 'news', 1, 0);
