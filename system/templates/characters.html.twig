@@ -156,6 +156,8 @@
 		<br/>
 		<table border="0" width="100%">
 			<tr>
+				{{ hook(constant('HOOK_CHARACTERS_BEFORE_SKILLS')) }}
+
 				{% if config.characters.skills %}
 				<!-- SKILLS -->
 				<td width="30%" valign="top">
@@ -176,6 +178,8 @@
 				<!-- SKILLS_END -->
 				{% endif %}
 
+				{{ hook(constant('HOOK_CHARACTERS_AFTER_SKILLS')) }}
+
 				{% if quests_enabled %}
 				<!-- QUESTS -->
 				<td width="40%" valign="top">
@@ -195,6 +199,8 @@
 				</td>
 				<!-- QUESTS_END -->
 				{% endif %}
+
+				{{ hook(constant('HOOK_CHARACTERS_AFTER_QUESTS')) }}
 
 				{% if config.characters.equipment %}
 				<!-- EQUIPMENT -->
@@ -231,6 +237,7 @@
 				</td>
 				<!-- EQUIPMENT_END -->
 				{% endif %}
+				{{ hook(constant('HOOK_CHARACTERS_AFTER_EQUIPMENT')) }}
 			</tr>
 		</table>
 
