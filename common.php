@@ -32,6 +32,7 @@ define('DATABASE_VERSION', 30);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
+define('IS_CLI', in_array(php_sapi_name(), ['cli', 'phpdb']));
 
 // account flags
 define('FLAG_ADMIN', 1);
@@ -95,23 +96,23 @@ for($i = 1; $i < $size; $i++)
 $basedir = str_replace(array('/admin', '/install'), '', $basedir);
 define('BASE_DIR', $basedir);
 
-if(isset($_SERVER['HTTP_HOST'][0])) {
-	$baseHost = $_SERVER['HTTP_HOST'];
-}
-else {
-	if(isset($_SERVER['SERVER_NAME'][0])) {
-		$baseHost = $_SERVER['SERVER_NAME'];
+if(!IS_CLI) {
+	if (isset($_SERVER['HTTP_HOST'][0])) {
+		$baseHost = $_SERVER['HTTP_HOST'];
+	} else {
+		if (isset($_SERVER['SERVER_NAME'][0])) {
+			$baseHost = $_SERVER['SERVER_NAME'];
+		} else {
+			$baseHost = $_SERVER['SERVER_ADDR'];
+		}
 	}
-	else {
-		$baseHost = $_SERVER['SERVER_ADDR'];
-	}
+
+	define('SERVER_URL', 'http' . (isset($_SERVER['HTTPS'][0]) && strtolower($_SERVER['HTTPS']) === 'on' ? 's' : '') . '://' . $baseHost);
+	define('BASE_URL', SERVER_URL . BASE_DIR . '/');
+	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/admin/');
+
+	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
+
+	require SYSTEM . 'exception.php';
 }
-
-define('SERVER_URL', 'http' . (isset($_SERVER['HTTPS'][0]) && strtolower($_SERVER['HTTPS']) === 'on' ? 's' : '') . '://' . $baseHost);
-define('BASE_URL', SERVER_URL . BASE_DIR . '/');
-define('ADMIN_URL', SERVER_URL . BASE_DIR . '/admin/');
-
-//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
-
-require SYSTEM . 'exception.php';
 require SYSTEM . 'autoload.php';
