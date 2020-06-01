@@ -11,7 +11,8 @@ CREATE TABLE `z_polls` (
   `answers` int(11) NOT NULL DEFAULT 0,
   `votes_all` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;');
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+');
 
 if(!$db->hasTable('z_polls_answers'))
 $db->query('
@@ -20,7 +21,8 @@ $db->query('
   `answer_id` int(11) NOT NULL,
   `answer` varchar(255) NOT NULL,
   `votes` int(11) NOT NULL DEFAULT 0
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;');
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+');
 
 if(!$db->hasColumn('accounts', 'vote'))
 	$db->query('ALTER TABLE `accounts` ADD `vote` INT( 11 ) DEFAULT 0 NOT NULL ;');
