@@ -18,7 +18,7 @@ if [ $1 = "prepare" ]; then
 	echo "Preparing to release version $version of the MyAAC Project!"
 
 	# get myaac from git archive
-	git archive --format zip --output tmp/myaac.zip master
+	git archive --format zip --output tmp/myaac.zip 0.8
 
 	# make required directories
 	mkdir -p releases
