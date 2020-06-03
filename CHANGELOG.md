@@ -17,6 +17,7 @@
 * account_login input type from password to text
 
 ### Fixed
+* Guild Invite not working on otservbr-global (#123)
 * news not updating after adding in admin panel
 * wrong mana of character samples (#125)
 * missing rules page on clean install
@@ -24,7 +25,7 @@
 * creatures page: Max count and chance not shown on hovered items
 * exception being thrown when characters.frags enabled on TFS 1.x
 * TFS 0.4 guilds creation (Where guilds.checkdata and motd doesn't have default value)
-* ERR_TOO_MANY_REDIRECTS in browser error on template change
+* ERR_TOO_MANY_REDIRECTS browser error on template change
 * updating template menus on template change
 * Account change info when config.account_country is disabled
 * cancel change email request
