@@ -55,7 +55,12 @@ class InvitesDriver implements IOTS_GuildAction
     // invites player to current guild
     public function addRequest(OTS_Player $player)
     {
-        $this->db->query('INSERT INTO ' . $this->db->tableName('guild_invites') .' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('guild_id') . ') VALUES ('.$this->db->quote($player->getId()).', '.$this->db->quote($this->guild->id).')');
+        $extra_keys = $extra_values = '';
+        if($this->db->hasColumn('guild_invites', 'date')) {
+            $extra_keys = ', `date`';
+            $extra_values = ', '.$this->db->quote(time());
+        }
+        $this->db->query('INSERT INTO `guild_invites` (`player_id`, `guild_id`' . $extra_keys . ') VALUES ('.$this->db->quote($player->getId()).', '.$this->db->quote($this->guild->id). $extra_values . ')');
     }
 
     // un-invites player
