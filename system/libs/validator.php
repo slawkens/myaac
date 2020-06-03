@@ -229,7 +229,7 @@ class Validator
 
 		$name_lower = strtolower($name);
 
-		$first_words_blocked = array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ');
+		$first_words_blocked = array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ', "'", '-');
 		foreach($first_words_blocked as $word)
 		{
 			if($word == substr($name_lower, 0, strlen($word))) {
