@@ -1,19 +1,45 @@
 # Changelog
 
-## [0.8.2 - x.x.2020]
+## [0.8.3-dev - x.x.2020]
+
+## [0.8.2 - 03.06.2020]
 
 ### Added
+* Log query time in database_log (can be used for benchmarking)
+* new PHP constant: IS_CLI
 * $_SERVER['REQUEST_URI'] to database.log
+* outfit to highscores box in tibiacom template
+* system/data to .gitignore
+* error_reporting in admin panel (when in dev mode), so it shows php notices and warnings
+* example quests in config.php
 
 ### Changed
 * account_login input type from password to text
 
 ### Fixed
-* Updating template menus on template change
+* news not updating after adding in admin panel
+* wrong mana of character samples (#125)
+* missing rules page on clean install
+* double space character name creation (@Lee, #121)
+* creatures page: Max count and chance not shown on hovered items
+* exception being thrown when characters.frags enabled on TFS 1.x
+* TFS 0.4 guilds creation (Where guilds.checkdata and motd doesn't have default value)
+* ERR_TOO_MANY_REDIRECTS in browser error on template change
+* updating template menus on template change
 * Account change info when config.account_country is disabled
+* cancel change email request
+* config.character_name_min/max_length being ignored in change_name.php
+* some rare bugs when database is no up-to-date and someone enters admin panel
+* extra line that is added when using a newer version than official release (@Lee)
+* admin links in featured article
+* some PHP Notice when HTTP_HOST is not set (Can happen on some old versions of HTTP protocol)
 * Show character indicator in check_name.js
-* Houses list View button
-* Fix OTS_House houseid parameter
+* Houses list View button was wrong (was from bootstrap)
+* OTS_House __construct - not loading by houseid parameter
+
+### Removed
+* unused myaac_commands table from schema
+* MyISAM engine from migration scripts (#128)
 
 ## [0.8.1 - 10.03.2020]
 
