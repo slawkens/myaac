@@ -36,6 +36,7 @@
 * Show character indicator in check_name.js
 * Houses list View button was wrong (was from bootstrap)
 * OTS_House __construct - not loading by houseid parameter
+* message() function when executed in CLI
 
 ### Removed
 * unused myaac_commands table from schema
