@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<?php echo template_header(true); ?>
-	<title><?php echo (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];?></title>
+	<title><?php echo (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/adminlte.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">

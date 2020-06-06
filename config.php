@@ -52,7 +52,6 @@ $config = array(
 	// head options (html)
 	'meta_description' => 'Tibia is a free massive multiplayer online role playing game (MMORPG).', // description of the site
 	'meta_keywords' => 'free online game, free multiplayer game, ots, open tibia server', // keywords list separated by commas
-	'title_separator' => ' - ',
 
 	// footer
 	'footer' => ''/*'<br/>Your Server &copy; 2016. All rights reserved.'*/,

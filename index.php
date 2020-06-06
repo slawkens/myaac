@@ -357,7 +357,7 @@ if($config['backward_support']) {
 	$topic = $title;
 }
 
-$title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
+$title_full =  (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];
 require $template_path . '/' . $template_index;
 
 echo base64_decode('PCEtLSBQb3dlcmVkIGJ5IE15QUFDIDo6IGh0dHBzOi8vd3d3Lm15LWFhYy5vcmcvIC0tPg==') . PHP_EOL;
