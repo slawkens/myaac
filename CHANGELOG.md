@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.8.3 - x.x.2020]
+
+### Changed
+* Move register DATABASE_VERSION into schema.sql
+    * Caused migrations being fired when user manually imported database
+
+### Fixed
+* Admin menu news editing warning when leaving page without touching the inputs
+
 ## [0.8.2 - 03.06.2020]
 
 ### Added
