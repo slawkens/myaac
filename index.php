@@ -357,6 +357,14 @@ if($config['backward_support']) {
 	$topic = $title;
 }
 
+/**
+ * @var OTS_Account $account_logged
+ */
+if ($logged && admin()) {
+	$content .= $twig->render('admin-bar.html.twig', [
+		'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+	]);
+}
 $title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
 require $template_path . '/' . $template_index;
 

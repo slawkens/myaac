@@ -1,0 +1,102 @@
+<style>
+html { margin-top: 32px !important; }
+* html body { margin-top: 32px !important; }
+
+#ma-admin-bar {
+	direction: ltr;
+	color: #ccc;
+	font-size: 13px;
+	font-weight: 400;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	line-height: 2.46153846;
+	height: 32px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	min-width: 600px;
+	z-index: 99999;
+	background: #23282d;
+}
+
+#ma-admin-bar a.ab-item {
+	color: #eee;
+	font-weight: normal;
+}
+
+#ma-admin-bar ul, #ma-admin-bar ul li {
+	background: 0 0;
+	clear: none;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	text-indent: 0;
+	z-index: 99999;
+}
+
+#ma-admin-bar li {
+	float: left;
+}
+
+#ma-admin-bar .ab-top-secondary>li {
+	float: right;
+	margin-right: 15px;
+}
+
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #343a40;
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	z-index: 1;
+}
+
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+</style>
+
+<div id="ma-admin-bar">
+	<ul>
+		<li>
+			<a href="{{ constant('ADMIN_URL') }}" class="ab-item">
+				<img alt="MA" src="{{ constant('ADMIN_URL') }}images/logo.png" class="brand-image img-circle elevation-3" style="opacity: .8; height: 28px; width: 28px">
+			</a>
+		</li>
+		<li class="dropdown">
+			<a class="ab-item" href="#">New</a>
+			<div class="dropdown-content">
+				<a href="/admin/?p=news&action=new">News</a>
+				<a href="/admin/?p=pages&action=new">Page</a>
+			</div>
+		</li>
+		<li>
+			<a class="ab-item" href="/admin/?p=dashboard&clear_cache">
+				Clear Cache
+			</a>
+		</li>
+	</ul>
+	<ul class="ab-top-secondary">
+		<li class="dropdown">
+			<a class="ab-item" href="#">Hello, {{ username }}</a>
+			<div class="dropdown-content">
+				<a href="{{ getLink('account/manage') }}">Manage Account</a>
+				<a href="/admin/?action=logout">Logout</a>
+			</div>
+		</li>
+	</ul>
+</div>
