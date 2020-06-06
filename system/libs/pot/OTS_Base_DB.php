@@ -91,17 +91,22 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		return $ret;
     }
 
-	public function select($table, $data)
+	public function select($table, $where, $limit = null)
 	{
-		$fields = array_keys($data);
-		$values = array_values($data);
+		$fields = array_keys($where);
+		$values = array_values($where);
 		$query = 'SELECT * FROM ' . $this->tableName($table) . ' WHERE (';
 
 		$count = count($fields);
 		for ($i = 0; $i < $count; $i++)
 			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).' AND ';
+
 		$query = substr($query, 0, -4);
-		$query.=');';
+		$query = substr($query, 0, -4);
+		if (isset($limit))
+			$query .=') LIMIT '.$limit.';';
+		else
+			$query .=');';
 
 		$query = $this->query($query);
 		if($query->rowCount() != 1) return false;
