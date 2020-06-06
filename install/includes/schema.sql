@@ -57,6 +57,8 @@ CREATE TABLE `myaac_config`
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
+INSERT INTO `myaac_config` (`name`, `value`) VALUES ('database_version', 30);
+
 CREATE TABLE `myaac_faq`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
