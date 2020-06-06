@@ -31,6 +31,7 @@ else
 			$errors[] = Validator::getLastError();
 		}
 
+		/** @var OTS_Account $account_logged */
 		$old_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $old_password);
 		if($old_password != $account_logged->getPassword()) {
 			$errors[] = "Current password is incorrect!";
@@ -63,7 +64,8 @@ else
 		if($config['mail_enabled'] && $config['send_mail_when_change_password'])
 		{
 			$mailBody = $twig->render('mail.password_changed.html.twig', array(
-				'new_password' => $org_pass
+				'new_password' => $org_pass,
+				'ip' => get_browser_real_ip(),
 			));
 
 			if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - Changed password", $mailBody))
