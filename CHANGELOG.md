@@ -7,6 +7,7 @@
     * Caused migrations being fired when user manually imported database
 
 ### Fixed
+* XSS in character search
 * Admin menu news editing warning when leaving page without touching the inputs
 
 ## [0.8.2 - 03.06.2020]
