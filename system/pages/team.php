@@ -45,6 +45,7 @@ foreach($groupList as $id => $group)
 	$members = array();
 	foreach($group_members as $member)
 	{
+		/** @var OTS_Player $member */
 		if(!admin() && $member->isHidden())
 			continue;
 
@@ -61,13 +62,13 @@ foreach($groupList as $id => $group)
 			'flag_image' => $config['account_country'] ? getFlagImage($member->getAccount()->getCountry()) : null,
 			'world_name' => ($config['multiworld'] || $config['team_display_world']) ? getWorldName($member->getWorldId()) : null,
 			'last_login' => $config['team_display_lastlogin'] ? $lastLogin : null
-		);	
+		);
 	}
 
 	$groupMember[] = array(
 		'group_name' => $group->getName(),
 		'members' => $members
-	);	
+	);
 }
 
 $twig->display('team.html.twig', array(
