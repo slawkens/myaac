@@ -25,7 +25,7 @@
 							<div class="col-sm-10" id="body-parent">
                                 <textarea class="form-control" id="body" name="body" maxlength="65000" cols="50" rows="5">{{ body|raw }}</textarea>
 							</div>
-						</div>						
+						</div>
 
 						<div class="form-group">
 							<label for="select-type" class="col-sm-2 control-label">Type</label>
@@ -37,7 +37,7 @@
 									<option value="{{ constant('ARTICLE') }}" {% if type is defined and type == constant('ARTICLE') %}selected="yes"{% endif %}{% if action == 'edit' and type != constant('ARTICLE') %} disabled{% endif %}>Article</option>
 								</select>
 							</div>
-						</div>						
+						</div>
 
 						<div id="article-text" class="form-group"{% if type is not defined or type != constant('ARTICLE') %} style="display: none;"{% endif %}>
 							<label for="article_text" class="col-sm-2 control-label">Article short text</label>
@@ -65,8 +65,8 @@
 										<option value="{{ player.getId() }}">{{ player.getName() }}</option>
 									</select>
 								</div>
-							</div>		
-							{% endif %}			
+							</div>
+							{% endif %}
 						{% endif %}
 
 						<div class="form-group">
@@ -79,7 +79,7 @@
 									{% endfor %}
 								</select>
 							</div>
-						</div>								
+						</div>
 
 						{% if action != 'edit' %}
 						<div class="form-group">
@@ -95,19 +95,19 @@
 							</div>
 						</div>
 						{% elseif comments is not null %}
-							<input type="hidden" name="forum_section" id="forum_section" value="{{ comments }}" />					
+							<input type="hidden" name="forum_section" id="forum_section" value="{{ comments }}" />
 						{% endif %}
 
 						<div class="form-group">
 							<label for="category" class="col-sm-2 control-label">Category</label>
-							
+
 							<div class="col-sm-10">
 								{% for id, cat in categories %}
-									<input type="radio" name="category" id="category" value="{{ id }}" {% if (category == 0 and id == 1) or (category == id) %}checked="yes"{% endif %}/> 
+									<input type="radio" name="category" id="category" value="{{ id }}" {% if (category == 0 and id == 1) or (category == id) %}checked="yes"{% endif %}/>
 									<img src="{{ constant('BASE_URL') }}/images/news/icon_{{ cat.icon_id }}_small.gif" />
 								{% endfor %}
-							</div>	
-						</div>										
+							</div>
+						</div>
 					</div>
 
 					<div class="box-footer">
@@ -158,7 +158,7 @@
 			toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | emoticons link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
 			image_advtab: true,
 			setup: function(ed){
-				ed.on('NodeChange', function(e) {
+				ed.on('Change', function(e) {
 					if(ed.getContent() != lastContent) {
 						unsaved = true;
 					}
@@ -170,20 +170,20 @@
 			$(":input").change(function(){ //trigers change in all input fields including text type
 				unsaved = true;
 			});
-					
+
 			$("#news-edit-form").submit(function( event ) {
 				unsaved = false;
 			});
 
 			lastContent = $("#body").val();
 		});
-		
-		function unloadPage(){ 
+
+		function unloadPage(){
 			if(unsaved){
 				return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
 			}
 		}
 
-		window.onbeforeunload = unloadPage; 
-	</script>	
+		window.onbeforeunload = unloadPage;
+	</script>
 {% endif %}
