@@ -25,7 +25,13 @@ if($config['template_allow_change'])
 			}
 
 			setSession('template', $template_name);
-			header('Location:' . getSession('last_uri'));
+
+			$newLocation = $lastUri = getSession('last_uri');
+			if($lastUri === $_SERVER['REQUEST_URI']) { // avoid ERR_TOO_MANY_REDIRECTS error in browsers
+				$newLocation = SERVER_URL;
+			}
+
+			header('Location:' . $newLocation);
 		}
 	}
 	else {

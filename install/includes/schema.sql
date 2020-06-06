@@ -57,6 +57,8 @@ CREATE TABLE `myaac_config`
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
+INSERT INTO `myaac_config` (`name`, `value`) VALUES ('database_version', 30);
+
 CREATE TABLE `myaac_faq`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -207,62 +209,6 @@ CREATE TABLE `myaac_monsters` (
 	`convinceable` tinyint(1) NOT NULL,
 	`race` varchar(255) NOT NULL,
 	`loot` text NOT NULL,
-	PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
-CREATE TABLE `myaac_options_bool`
-(
-	`name` VARCHAR(255) NOT NULL,
-	`key` VARCHAR(255) NOT NULL,
-	`value` INT(1) NOT NULL DEFAULT 0,
-	PRIMARY KEY (`key`),
-	UNIQUE (`key`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
-CREATE TABLE `myaac_options_double`
-(
-	`name` VARCHAR(255) NOT NULL,
-	`key` VARCHAR(255) NOT NULL,
-	`value` DOUBLE NOT NULL DEFAULT 0,
-	PRIMARY KEY (`key`),
-	UNIQUE (`key`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
-CREATE TABLE `myaac_options_int`
-(
-	`name` VARCHAR(255) NOT NULL,
-	`key` VARCHAR(255) NOT NULL,
-	`value` INT(11) NOT NULL DEFAULT 0,
-	PRIMARY KEY (`key`),
-	UNIQUE (`key`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
-CREATE TABLE `myaac_options_text`
-(
-	`name` VARCHAR(255) NOT NULL,
-	`key` VARCHAR(255) NOT NULL,
-	`value` TEXT NOT NULL,
-	PRIMARY KEY (`key`),
-	UNIQUE (`key`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
-CREATE TABLE `myaac_options_varchar`
-(
-	`name` VARCHAR(255) NOT NULL,
-	`key` VARCHAR(255) NOT NULL,
-	`title` VARCHAR(255) NOT NULL DEFAULT '',
-	PRIMARY KEY (`key`),
-	UNIQUE (`key`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
-CREATE TABLE `myaac_videos`
-(
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`title` VARCHAR(100) NOT NULL DEFAULT '',
-	`youtube_id` VARCHAR(20) NOT NULL,
-	`author` VARCHAR(50) NOT NULL DEFAULT '',
-	`ordering` INT(11) NOT NULL DEFAULT 0,
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 

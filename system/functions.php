@@ -14,11 +14,20 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 function message($message, $type, $return)
 {
-    if($return)
-        return '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	if(IS_CLI) {
+		if($return) {
+			return $message;
+		}
 
-    echo '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
-    return true;
+		echo $message;
+		return true;
+	}
+
+	if($return)
+		return '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+
+	echo '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	return true;
 }
 function success($message, $return = false) {
     return message($message, 'success', $return);

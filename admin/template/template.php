@@ -1,20 +1,17 @@
 <?php defined('MYAAC') or die('Direct access not allowed!'); ?>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<?php echo template_header(true);
-	$title_full = (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
-	?>
-	<title><?php echo $title_full ?></title>
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/bootstrap.min.css">
+	<?php echo template_header(true); ?>
+	<title><?php echo (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/adminlte.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.min.css">
+	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.bs.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $template_path; ?>style.css"/>
 	<!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<script src="<?php echo BASE_URL; ?>tools/js/html5shiv.min.js"></script>
+	<script src="<?php echo BASE_URL; ?>tools/js/respond.min.js"></script>
 	<![endif]-->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
@@ -36,63 +33,45 @@
 				</li>
 			</ul>
 		</nav>
-
-		<aside class="main-sidebar sidebar-dark-primary elevation-4 sidebar-dark-info">
-			<a href="<?php echo ADMIN_URL; ?>" class="brand-link logo-switch navbar-info">
-				<span class="brand-text font-weight-light logo-xs"><b>M</b>A</span>
-				<span class="brand-text font-weight-light logo-xl"><b>My</b>AAC</span>
+		<aside class="main-sidebar sidebar-dark-info elevation-4">
+			<a href="<?php echo ADMIN_URL; ?>" class="brand-link navbar-info">
+				<img src="<?php echo ADMIN_URL; ?>images/logo.png" class="brand-image img-circle elevation-3" style="opacity: .8">
+				<span class="brand-text"><b>My</b>AAC</span>
 			</a>
 			<div class="sidebar">
 				<nav class="mt-2">
 					<ul class="nav nav-pills nav-sidebar flex-column nav-legacy nav-child-indent" data-widget="treeview" data-accordion="false">
 						<?php
-						$optionsMenu = [];
-						foreach(get_plugins() as $name) {
-							$pluginJson = Plugins::getPluginJson($name);
-							if(!$pluginJson) {
-								continue;
-							}
-
-							if (!isset($pluginJson['options']) || !file_exists(BASE . $pluginJson['options'])) {
-								continue;
-							}
-
-							$optionsMenu[] = ['name' => $pluginJson['name'], 'link' => 'options&plugin=' . $name];
-						}
-
-						// Name = Display name of
-						// link = Page link
-						// icon = fontawesome icon namewithout "fas fa-"
-						// menu = menu array for sub items.
+						// name = Display name of link
+						// icon = fontawesome icon name without "fas fa-"
+						// link = Page link or use as array for sub items
 						$menus = [
-							['name' => 'Dashboard', 'link' => 'dashboard', 'icon' => 'tachometer-alt'],
-							['name' => 'Config', 'link' => 'config', 'icon' => 'wrench'],
-							['name' => 'News', 'link' => 'news', 'icon' => 'newspaper'],
-							['name' => 'Mailer', 'link' => 'mailer', 'icon' => 'envelope'],
-							['name' => 'Pages', 'icon' => 'book', 'menu' =>
+							['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'link' => 'dashboard'],
+							['name' => 'News', 'icon' => 'newspaper', 'link' => 'news'],
+							['name' => 'Mailer', 'icon' => 'envelope', 'link' => 'mailer'],
+							['name' => 'Pages', 'icon' => 'book', 'link' =>
 								[
 									['name' => 'All Pages', 'link' => 'pages'],
 									['name' => 'Add new', 'link' => 'pages&action=new'],
 								],
 							],
-							['name' => 'Menus', 'link' => 'menus', 'icon' => 'list'],
-							['name' => 'Plugins', 'link' => 'plugins', 'icon' => 'plug'],
-							['name' => 'Options', 'icon' => 'book', 'menu' => $optionsMenu],
-							['name' => 'Visitors', 'link' => 'visitors', 'icon' => 'user'],
-							['name' => 'Items', 'link' => 'items', 'icon' => 'gavel'],
-							['name' => 'Editor', 'icon' => 'wrench', 'menu' =>
+							['name' => 'Menus', 'icon' => 'list', 'link' => 'menus'],
+							['name' => 'Plugins', 'icon' => 'plug', 'link' => 'plugins'],
+							['name' => 'Visitors', 'icon' => 'user', 'link' => 'visitors'],
+							['name' => 'Items', 'icon' => 'gavel', 'link' => 'items'],
+							['name' => 'Editor', 'icon' => 'edit', 'link' =>
 								[
 									['name' => 'Accounts', 'link' => 'accounts'],
 									['name' => 'Players', 'link' => 'players'],
 								],
 							],
-							['name' => 'Tools', 'link' => '', 'icon' => 'tools', 'menu' =>
+							['name' => 'Tools', 'icon' => 'tools', 'link' =>
 								[
 									['name' => 'Notepad', 'link' => 'notepad'],
 									['name' => 'phpinfo', 'link' => 'phpinfo'],
 								],
 							],
-							['name' => 'Logs', 'link' => '', 'icon' => 'bug', 'menu' =>
+							['name' => 'Logs', 'icon' => 'bug', 'link' =>
 								[
 									['name' => 'Logs', 'link' => 'logs'],
 									['name' => 'Reports', 'link' => 'reports'],
@@ -101,47 +80,51 @@
 						];
 
 						foreach ($menus as $category => $menu) {
-							$has_child = isset($menu['menu']);
-							if (!$has_child) {
-								echo '<li class="nav-item">';
-								echo '<a class="nav-link' . ($page == $menu['link'] ? ' active' : '') . '" ';
-								echo 'href="?p=' . $menu['link'] . '"><i class="nav-icon fas fa-' . (isset($menu['icon']) ? $menu['icon'] : 'link') . '"></i><p>' . $menu['name'] . '</p></a></li>';
+							$has_child = is_array($menu['link']);
+							if (!$has_child) { ?>
+								<li class="nav-item">
+									<a class="nav-link<?php echo($page == $menu['link'] ? ' active' : '') ?>" href="?p=<?php echo $menu['link'] ?>">
+										<i class="nav-icon fas fa-<?php echo(isset($menu['icon']) ? $menu['icon'] : 'link') ?>"></i>
+										<p><?php echo $menu['name'] ?></p>
+									</a>
+								</li>
+								<?php
 							} else if ($has_child) {
 								$used_menu = null;
 								$nav_construct = '';
-								foreach ($menu['menu'] as $category => $sub_menu) {
-									$link_title = $sub_menu['name'];
-									$link_path = $sub_menu['link'];
-									$link_icon = (isset($sub_menu['icon']) ? $sub_menu['icon'] : 'circle');
-
-									$nav_construct .= '<li class="nav-item">';
-									$nav_construct .= '<a href="?p=' . $link_path . '" class="nav-link';
+								foreach ($menu['link'] as $category => $sub_menu) {
+									$nav_construct .= '<li class="nav-item"><a href="?p=' . $sub_menu['link'] . '" class="nav-link';
 									if ($page == $sub_menu['link']) {
 										$nav_construct .= ' active';
 										$used_menu = true;
 									}
-									$nav_construct .= '"><i class="far fa-' . $link_icon . ' nav-icon"></i><p>' . $link_title . '</p></a></li>';
+									$nav_construct .= '"><i class="far fa-' . (isset($sub_menu['icon']) ? $sub_menu['icon'] : 'circle') . ' nav-icon"></i><p>' . $sub_menu['name'] . '</p></a></li>';
 								}
-
-								echo '<li class="nav-item has-treeview' . (($used_menu) ? ' menu-open' : '') . '">
-									  <a href="#" class="nav-link' . (($used_menu) ? ' active' : '') . '">
-										<i class="nav-icon fas fa-' . (isset($menu['icon']) ? $menu['icon'] : 'link') . '"></i>
-										<p>' . $menu['name'] . '<i class="right fas fa-angle-left"></i></p>
-									  </a>
-									  <ul class="nav nav-treeview">';
-								echo $nav_construct;
-								echo '</ul>
-								</li>';
+								?>
+								<li class="nav-item has-treeview<?php echo($used_menu ? ' menu-open' : '') ?>">
+									<a href="#" class="nav-link<?php echo($used_menu ? ' active' : '') ?>">
+										<i class="nav-icon fas fa-<?php echo(isset($menu['icon']) ? $menu['icon'] : 'link') ?>"></i>
+										<p><?php echo $menu['name'] ?></p><i class="right fas fa-angle-left"></i>
+									</a>
+									<ul class="nav nav-treeview">
+										<?php echo $nav_construct; ?>
+									</ul>
+								</li>
+								<?php
 							}
 						}
 
 						$query = $db->query('SELECT `name`, `page`, `flags` FROM `' . TABLE_PREFIX . 'admin_menu` ORDER BY `ordering`');
 						$menu_db = $query->fetchAll();
 						foreach ($menu_db as $item) {
-							if ($item['flags'] == 0 || hasFlag($item['flags'])) {
-								echo '<li class="nav-item">';
-								echo '<a class="nav-link' . ($page == $item['page'] ? ' active' : '') . '" ';
-								echo 'href="?p=' . $item['page'] . '"><i class="nav-icon fas fa-link"></i><p>' . $item['name'] . '</p></a></li>';
+							if ($item['flags'] == 0 || hasFlag($item['flags'])) { ?>
+								<li class="nav-item">
+									<a class="nav-link<?php echo($page == $item['page'] ? ' active' : '') ?>" href="?p=<?php echo $item['page'] ?>">
+										<i class="nav-icon fas fa-link"></i>
+										<p><?php echo $item['name'] ?></p>
+									</a>
+								</li>
+								<?php
 							}
 						}
 						?>
@@ -216,10 +199,10 @@
 	echo $content;
 }
 ?>
-
+<script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.min.js"></script>
-<script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
+<script src="<?php echo BASE_URL; ?>tools/js/datatables.bs.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
 </body>
 </html>
