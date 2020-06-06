@@ -94,6 +94,7 @@ $config = array(
 	'account_create_character_create' => true, // allow directly to create character on create account page?
 	'account_mail_verify' => false, // force users to confirm their email addresses when registering account
 	'account_mail_unique' => true, // email addresses cannot be duplicated? (one account = one email)
+	'account_mail_block_plus_sign' => true, // block email with '+' signs like test+box@gmail.com (help protect against spamming accounts)
 	'account_premium_days' => 0, // default premium days on new account
 	'account_premium_points' => 0, // default premium points on new account
 	'account_welcome_mail' => true, // send welcome email when user registers
