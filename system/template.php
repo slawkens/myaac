@@ -10,8 +10,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 // template
-$template_name = $config['template'];
-if($config['template_allow_change'])
+$template_name = $settings['core.template']['value'];
+if($settings['core.template_allow_change']['value'])
 {
 	if(isset($_GET['template']))
 	{

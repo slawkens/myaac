@@ -44,6 +44,32 @@ class Plugins {
 	private static $warnings = array();
 	private static $error = null;
 	private static $plugin_json = array();
+	private static $plugins = [];
+
+	public static function load()
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('plugins', $tmp)) {
+				self::$plugins = unserialize($tmp);
+				return;
+			}
+		}
+
+		foreach (get_plugins() as $filename) {
+			$plugin_json = self::getPluginJson($filename);
+			if (!$plugin_json) {
+				continue;
+			}
+
+			self::$plugins[$filename] = $plugin_json;
+		}
+
+		if ($cache->enabled()) {
+			$cache->set('hooks', serialize(self::$plugins), 600);
+		}
+	}
 
 	public static function getHooks()
 	{
@@ -56,12 +82,7 @@ class Plugins {
 		}
 
 		$hooks = [];
-		foreach (get_plugins() as $filename) {
-			$plugin_json = self::getPluginJson($filename);
-			if (!$plugin_json) {
-				continue;
-			}
-
+		foreach (self::$plugins as $filename => $plugin_json) {
 			if (isset($plugin_json['hooks'])) {
 				foreach ($plugin_json['hooks'] as $_name => $info) {
 					if (defined('HOOK_'. $info['type'])) {
@@ -81,18 +102,18 @@ class Plugins {
 		return $hooks;
 	}
 
-	public static function getPluginOptions($pluginName)
+	public static function getPluginSettings($pluginName)
 	{
 		$plugin_json = self::getPluginJson($pluginName);
 		if (!$plugin_json) {
 			return false;
 		}
 
-		if (!isset($plugin_json['options']) || !file_exists(BASE . $plugin_json['options'])) {
+		if (!isset($plugin_json['settings']) || !file_exists(BASE . $plugin_json['settings'])) {
 			return false;
 		}
 
-		return $plugin_json['options'];
+		return $plugin_json['settings'];
 	}
 
 	public static function getPluginJson($name = null)

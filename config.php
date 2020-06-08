@@ -31,37 +31,7 @@ $config = array(
 	 */
 	'env' => 'prod', // 'prod' for production and 'dev' for development
 
-	'template' => 'kathrine', // template used by website (kathrine, tibiacom)
-	'template_allow_change' => true, // allow users to choose their own template while browsing website?
-
-	'vocations_amount' => 4, // how much basic vocations your server got (without promotion)
-
-	// what client version are you using on this OT?
-	// used for the Downloads page and some templates aswell
-	'client' => 1098, // 954 = client 9.54
-
-	'session_prefix' => 'myaac_', // must be unique for every site on your server
-	'friendly_urls' => false, // mod_rewrite is required for this, it makes links looks more elegant to eye, and also are SEO friendly (example: https://my-aac.org/guilds/Testing instead of https://my-aac.org/?subtopic=guilds&name=Testing). Remember to rename .htaccess.dist to .htaccess
 	'gzip_output' => false, // gzip page content before sending it to the browser, uses less bandwidth but more cpu cycles
-
-	// gesior backward support (templates & pages)
-	// allows using gesior templates and pages with myaac
-	// might bring some performance when disabled
-	'backward_support' => true,
-
-	// head options (html)
-	'meta_description' => 'Tibia is a free massive multiplayer online role playing game (MMORPG).', // description of the site
-	'meta_keywords' => 'free online game, free multiplayer game, ots, open tibia server', // keywords list separated by commas
-
-	// footer
-	'footer' => ''/*'<br/>Your Server &copy; 2016. All rights reserved.'*/,
-
-	'language' => 'en', // default language (currently only 'en' available)
-	'language_allow_change' => false,
-
-	'visitors_counter' => true,
-	'visitors_counter_ttl' => 10, // how long visitor will be marked as online (in minutes)
-	'views_counter' => true,
 
 	// cache system. by default file cache is used
 	'cache_engine' => 'auto', // apc, apcu, eaccelerator, xcache, file, auto, or blank to disable.
@@ -83,10 +53,6 @@ $config = array(
 		//'1' => 'Your World Name',
 		//'2' => 'Your Second World Name'
 	),
-
-	// images
-	'outfit_images_url' => 'http://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
-	'item_images_url' => 'http://item-images.ots.me/1092/', // set to images/items if you host your own items in images folder
 
 	// account
 	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)

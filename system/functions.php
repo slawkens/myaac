@@ -77,27 +77,25 @@ function getFullLink($page, $name, $blank = false) {
 
 function getLink($page, $action = null)
 {
-	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : '?') . $page . ($action ? '/' . $action : '');
+	$settings = Settings::getInstance();
+	return BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . $page . ($action ? '/' . $action : '');
 }
 function internalLayoutLink($page, $action = null) {return getLink($page, $action);}
 
 function getForumThreadLink($thread_id, $page = NULL)
 {
-	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
+	$settings = Settings::getInstance();
+	return BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
 }
 
 function getForumBoardLink($board_id, $page = NULL)
 {
-	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
+	$settings = Settings::getInstance();
+	return BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
 }
 
 function getPlayerLink($name, $generate = true)
 {
-	global $config;
-
 	if(is_numeric($name))
 	{
 		$player = new OTS_Player();
@@ -106,7 +104,8 @@ function getPlayerLink($name, $generate = true)
 			$name = $player->getName();
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'characters/' . urlencode($name);
+	$settings = Settings::getInstance();
+	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'characters/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -114,7 +113,7 @@ function getPlayerLink($name, $generate = true)
 
 function getHouseLink($name, $generate = true)
 {
-	global $db, $config;
+	global $db;
 
 	if(is_numeric($name))
 	{
@@ -124,7 +123,8 @@ function getHouseLink($name, $generate = true)
 			$name = $house->fetchColumn();
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'houses/' . urlencode($name);
+	$settings = Settings::getInstance();
+	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'houses/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -132,7 +132,7 @@ function getHouseLink($name, $generate = true)
 
 function getGuildLink($name, $generate = true)
 {
-	global $db, $config;
+	global $db;
 
 	if(is_numeric($name))
 	{
@@ -142,7 +142,8 @@ function getGuildLink($name, $generate = true)
 			$name = $guild->fetchColumn();
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'guilds/' . urlencode($name);
+	$settings = Settings::getInstance();
+	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'guilds/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -472,12 +473,12 @@ function template_place_holder($type)
  */
 function template_header($is_admin = false)
 {
-	global $title_full, $config;
-	$charset = isset($config['charset']) ? $config['charset'] : 'utf-8';
+	global $title_full;
+	$charset = config('charset') ? config('charset') : 'utf-8';
 
 	$ret = '
 	<meta charset="' . $charset . '">
-	<meta http-equiv="content-language" content="' . $config['language'] . '" />
+	<meta http-equiv="content-language" content="' . config('language') . '" />
 	<meta http-equiv="content-type" content="text/html; charset=' . $charset . '" />';
 	if(!$is_admin)
 		$ret .= '
@@ -485,8 +486,8 @@ function template_header($is_admin = false)
 	<title>' . $title_full . '</title>';
 
 	$ret .= '
-	<meta name="description" content="' . $config['meta_description'] . '" />
-	<meta name="keywords" content="' . $config['meta_keywords'] . ', myaac, wodzaac" />
+	<meta name="description" content="' . config('meta_description') . '" />
+	<meta name="keywords" content="' . config('meta_keywords') . ', myaac, wodzaac" />
 	<meta name="generator" content="MyAAC" />
 	<link rel="stylesheet" type="text/css" href="' . BASE_URL . 'tools/css/messages.css" />
 	<script type="text/javascript" src="' . BASE_URL . 'tools/js/jquery.min.js"></script>
@@ -496,7 +497,7 @@ function template_header($is_admin = false)
 	</noscript>
 ';
 
-	if($config['recaptcha_enabled'])
+	if(config('recaptcha_enabled'))
 		$ret .= "<script src='https://www.google.com/recaptcha/api.js'></script>";
 	return $ret;
 }
@@ -1081,6 +1082,9 @@ function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
 function config($key) {
 	global $config;
 	if (is_array($key)) {
+		if (is_null($key[1])) {
+			unset($config[$key[0]]);
+		}
 		return $config[$key[0]] = $key[1];
 	}
 

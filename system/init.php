@@ -88,9 +88,6 @@ if(isset($config['lua']['servername']))
 if(isset($config['lua']['houserentperiod']))
 	$config['lua']['houseRentPeriod'] = $config['lua']['houserentperiod'];
 
-if($config['item_images_url'][strlen($config['item_images_url']) - 1] !== '/')
-	$config['item_images_url'] .= '/';
-
 // localize data/ directory based on data directory set in config.lua
 foreach(array('dataDirectory', 'data_directory', 'datadir') as $key) {
 	if(!isset($config['lua'][$key][0])) {
@@ -123,6 +120,20 @@ if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hid
 require_once SYSTEM . 'libs/pot/OTS.php';
 $ots = POT::getInstance();
 require_once SYSTEM . 'database.php';
+
+// settings
+require_once LIBS . 'Settings.php';
+$settings = Settings::getInstance();
+$settings->load();
+
+// deprecated config values
+require_once __DIR__ . '/compat_config.php';
+
+$settingsItemImagesURL = $settings['core.item_images_url'];
+if($settingsItemImagesURL['value'][strlen($settingsItemImagesURL['value']) - 1] !== '/') {
+	$settingsItemImagesURL['value'] .= '/';
+	$settings['core.item_images_url'] = $settingsItemImagesURL;
+}
 
 define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 // load vocation names
