@@ -2,6 +2,7 @@
 
 return [
 	['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'link' => 'dashboard'],
+	['name' => 'Settings', 'icon' => 'edit', 'link' => 'settings&plugin=core'],
 	['name' => 'News', 'icon' => 'newspaper', 'link' => 'news'],
 	['name' => 'Mailer', 'icon' => 'envelope', 'link' => 'mailer'],
 	['name' => 'Pages', 'icon' => 'book', 'link' =>
