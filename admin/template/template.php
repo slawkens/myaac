@@ -45,45 +45,13 @@
 						// name = Display name of link
 						// icon = fontawesome icon name without "fas fa-"
 						// link = Page link or use as array for sub items
-						$menus = [
-							['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'link' => 'dashboard'],
-							['name' => 'News', 'icon' => 'newspaper', 'link' => 'news'],
-							['name' => 'Mailer', 'icon' => 'envelope', 'link' => 'mailer'],
-							['name' => 'Pages', 'icon' => 'book', 'link' =>
-								[
-									['name' => 'All Pages', 'link' => 'pages'],
-									['name' => 'Add new', 'link' => 'pages&action=new'],
-								],
-							],
-							['name' => 'Menus', 'icon' => 'list', 'link' => 'menus'],
-							['name' => 'Plugins', 'icon' => 'plug', 'link' => 'plugins'],
-							['name' => 'Visitors', 'icon' => 'user', 'link' => 'visitors'],
-							['name' => 'Items', 'icon' => 'gavel', 'link' => 'items'],
-							['name' => 'Editor', 'icon' => 'edit', 'link' =>
-								[
-									['name' => 'Accounts', 'link' => 'accounts'],
-									['name' => 'Players', 'link' => 'players'],
-								],
-							],
-							['name' => 'Tools', 'icon' => 'tools', 'link' =>
-								[
-									['name' => 'Notepad', 'link' => 'notepad'],
-									['name' => 'phpinfo', 'link' => 'phpinfo'],
-								],
-							],
-							['name' => 'Logs', 'icon' => 'bug', 'link' =>
-								[
-									['name' => 'Logs', 'link' => 'logs'],
-									['name' => 'Reports', 'link' => 'reports'],
-								],
-							],
-						];
+						$menus = require __DIR__ . '/menus.php';
 
 						foreach ($menus as $category => $menu) {
 							$has_child = is_array($menu['link']);
 							if (!$has_child) { ?>
 								<li class="nav-item">
-									<a class="nav-link<?php echo($page == $menu['link'] ? ' active' : '') ?>" href="?p=<?php echo $menu['link'] ?>">
+									<a class="nav-link<?php echo(strpos($menu['link'], $page) !== false ? ' active' : '') ?>" href="?p=<?php echo $menu['link'] ?>">
 										<i class="nav-icon fas fa-<?php echo(isset($menu['icon']) ? $menu['icon'] : 'link') ?>"></i>
 										<p><?php echo $menu['name'] ?></p>
 									</a>
