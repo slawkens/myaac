@@ -37,8 +37,8 @@ plugins/*
 !plugins/example.json
 !plugins/account-create-hint.json
 !plugins/account-create-hint
-!plugins/example-options-plugin.json
-!plugins/example-options-plugin
+!plugins/example-settings-plugin.json
+!plugins/example-settings-plugin
 landing
 
 # others/rest
