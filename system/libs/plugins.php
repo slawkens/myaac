@@ -102,20 +102,6 @@ class Plugins {
 		return $hooks;
 	}
 
-	public static function getPluginSettings($pluginName)
-	{
-		$plugin_json = self::getPluginJson($pluginName);
-		if (!$plugin_json) {
-			return false;
-		}
-
-		if (!isset($plugin_json['settings']) || !file_exists(BASE . $plugin_json['settings'])) {
-			return false;
-		}
-
-		return $plugin_json['settings'];
-	}
-
 	public static function getPluginJson($name = null)
 	{
 		if(!isset($name)) {

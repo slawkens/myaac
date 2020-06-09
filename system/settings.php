@@ -1,6 +1,10 @@
 <?php
 
 return [
+	'section_1' => [
+		'type' => 'section',
+		'title' => 'Template'
+	],
 	'template' => [
 		'name' => 'Template Name',
 		'type' => 'options',
@@ -13,6 +17,10 @@ return [
 		'type' => 'boolean',
 		'desc' => 'Allow changing template of the website by showing a special select in the part of website',
 		'default' => true,
+	],
+	'section_2' => [
+		'type' => 'section',
+		'title' => 'Misc'
 	],
 	'vocations_amount' => [
 		'name' => 'Amount of Vocations',
@@ -47,6 +55,10 @@ used for the Downloads page and some templates aswell',
 allows using gesior templates and pages with myaac<br/>
 might bring some performance when disabled',
 		'default' => true,
+	],
+	'section_3' => [
+		'type' => 'section',
+		'title' => 'Meta Site Settings'
 	],
 	'charset' => [
 		'name' => 'Meta Charset',
@@ -85,6 +97,10 @@ might bring some performance when disabled',
 		'default' => false,
 		'desc' => 'default language (currently only English available)'
 	],*/
+	'section_4' => [
+		'type' => 'section',
+		'title' => 'Visitors Counter & Views Counter'
+	],
 	'visitors_counter' => [
 		'name' => 'Visitors Counter',
 		'type' => 'boolean',
@@ -102,6 +118,10 @@ might bring some performance when disabled',
 		'type' => 'boolean',
 		'desc' => 'Enable Views Counter? It will show how many times the website has been viewed by users',
 		'default' => true,
+	],
+	'section_5' => [
+		'type' => 'section',
+		'title' => 'Images URL'
 	],
 	'outfit_images_url' => [
 		'name' => 'Outfit Images URL',

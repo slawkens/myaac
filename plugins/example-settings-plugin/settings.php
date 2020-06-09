@@ -17,6 +17,10 @@ return [
 		you can use this outfit generator: http://sleqqus.idl.pl/tlg<br/>
 		Format: head,body,legs,feet",
 	],
+	'section_1' => [
+		'type' => 'section',
+		'title' => 'Section Test',
+	],
 	'just_testing_boolean' => [
 		'name' => 'Just Testing Boolean',
 		'type' => 'boolean',

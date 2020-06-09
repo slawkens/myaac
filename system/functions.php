@@ -1100,6 +1100,12 @@ function configLua($key) {
 	return @$config['lua'][$key];
 }
 
+function setting($key)
+{
+	$settings = Settings::getInstance();
+	return $settings[$key];
+}
+
 function clearCache()
 {
 	require_once LIBS . 'news.php';

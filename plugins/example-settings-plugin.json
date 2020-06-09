@@ -7,6 +7,5 @@
 	"contact": "nobody@example.org",
 	"require": {
 		"myaac": "0.9.0"
-	},
-	"settings": "plugins/example-settings-plugin/settings.php"
+	}
  }

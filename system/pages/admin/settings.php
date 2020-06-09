@@ -19,18 +19,22 @@ if (!isset($_GET['plugin']) || empty($_GET['plugin'])) {
 $plugin = $_GET['plugin'];
 
 if($plugin != 'core') {
-	$pluginSettings = Plugins::getPluginSettings($plugin);
-	if (!$pluginSettings) {
-		error('This plugin does not exist or does not have options defined.');
-		return;
-	}
+	$settingsFilePath = PLUGINS . $plugin . '/settings.php';
+}
+else {
+	$settingsFilePath = SYSTEM . 'settings.php';
+}
+
+if (!file_exists($settingsFilePath)) {
+	error('This plugin does not exist or does not have settings defined.');
+	return;
 }
 
 if($plugin === 'core') {
-	$settingsFile = require SYSTEM . 'settings.php';
+	$settingsFile = require $settingsFilePath;
 }
 else {
-	$settingsFile = require BASE . $pluginSettings;
+	$settingsFile = require $settingsFilePath;
 }
 
 if (!is_array($settingsFile)) {
@@ -75,22 +79,32 @@ if($query->rowCount() > 0) {
 				<div class="box-body">
 					<button name="save" type="submit" class="btn btn-primary">Save</button>
 				</div>
-				<table class="table table-bordered table-striped">
-					<thead>
-					<tr>
-						<th style="width: 10%">Name</th>
-						<th style="width: 30%">Value</th>
-						<th>Description</th>
-					</tr>
-					</thead>
-					<tbody>
 					<?php
 
 					$checkbox = function ($key, $type, $value) {
 						echo '<label><input type="radio" id="' . $key . '" name="settings[' . $key . ']" value="' . ($type ? 'true' : 'false') . '" ' . ($value === $type ? 'checked' : '') . '/>' . ($type ? 'Yes' : 'No') . '</label> ';
 					};
 
+					$i = 0;
 					foreach($settingsFile as $key => $setting) {
+						if($setting['type'] === 'section') {
+							if($i++ !== 0) {
+								echo '</tbody></table>';
+							}
+					?>
+					<h2 style="text-align: center"><strong><?= $setting['title']; ?></strong></h2>
+					<table class="table table-bordered table-striped">
+						<thead>
+						<tr>
+							<th style="width: 10%">Name</th>
+							<th style="width: 30%">Value</th>
+							<th>Description</th>
+						</tr>
+						</thead>
+						<tbody>
+						<?php
+						continue;
+						}
 						?>
 						<tr>
 							<td><label for="<?= $key ?>" class="control-label"><?= $setting['name'] ?></label></td>
