@@ -127,7 +127,7 @@ if($query->rowCount() > 0) {
 									$checkbox($key, false, $value);
 								}
 
-								else if (in_array($setting['type'], ['text', 'number'])) {
+								else if (in_array($setting['type'], ['text', 'number', 'email', 'password'])) {
 									echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . (isset($settingsDb[$key]) ? $settingsDb[$key] : (!empty($setting['default']) ? $setting['default'] : '')) . '" id="' . $key . '"/>';
 								}
 
@@ -137,7 +137,7 @@ if($query->rowCount() > 0) {
 
 								if ($setting['type'] === 'options') {
 									if ($setting['options'] === '$templates') {
-										$templates = array();
+										$templates = [];
 										foreach (get_templates() as $value) {
 											$templates[$value] = $value;
 										}
@@ -146,7 +146,7 @@ if($query->rowCount() > 0) {
 									}
 
 									else if($setting['options'] === '$clients') {
-										$clients = array();
+										$clients = [];
 										foreach((array)config('clients') as $client) {
 
 											$client_version = (string)($client / 100);
