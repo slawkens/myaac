@@ -45,7 +45,7 @@ $skill = POT::SKILL__LEVEL;
 if(is_numeric($list))
 {
 	$list = (int) $list;
-	if($list >= POT::SKILL_FIRST && $list <= SKILL__LAST)
+	if($list >= POT::SKILL_FIRST && $list <= POT::SKILL__LAST)
 		$skill = $list;
 }
 else
