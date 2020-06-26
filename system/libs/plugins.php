@@ -450,9 +450,10 @@ class Plugins {
 				];
 
 				// support for color and blank attributes since 0.8.0
-				if(version_compare(MYAAC_VERSION, '0.8.0', '>=')) {
-					$insert_array['blank'] = $blank;
-					$insert_array['color'] = $color;
+				if ($db->hasColumn(TABLE_PREFIX . 'menu', 'blank') &&
+					$db->hasColumn(TABLE_PREFIX . 'menu', 'color')) {
+						$insert_array['blank'] = $blank;
+						$insert_array['color'] = $color;
 				}
 
 				$db->insert(TABLE_PREFIX . 'menu', $insert_array);
