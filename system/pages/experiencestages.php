@@ -59,4 +59,4 @@ foreach($stages->getElementsByTagName('stage') as $stage)
 	];
 }
 
-$twig->display('experience-stages.html.twig', ['stages' => $stagesArray]);
+$twig->display('experience_stages.html.twig', ['stages' => $stagesArray]);
