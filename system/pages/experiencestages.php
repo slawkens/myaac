@@ -22,6 +22,7 @@ if(!isset($config['lua']['experienceStages']) || !getBoolean($config['lua']['exp
 
 	if(isset($stages)) {
 		foreach($stages->getElementsByTagName('config') as $node) {
+			/** @var DOMElement $node */
 			if($node->getAttribute('enabled'))
 				$enabled = true;
 		}
@@ -47,23 +48,15 @@ if(!$stages)
 	return;
 }
 
-echo '<div style="text-align:center"><h3>Experience stages</h3></div>
-<table bgcolor="'.$config['darkborder'].'" border="0" cellpadding="4" cellspacing="1" width="100%"><tbody>
-	<tr bgcolor="'.$config['vdarkborder'].'">
-		<td class="white" colspan="5"><b>Stages table</b></td>
-	</tr>
-	<tr><td>
-		<table border="0" cellpadding="2" cellspacing="1" width="100%"><tbody>
-			<tr bgcolor="'.$config['lightborder'].'"><td><b>Level</b></td><td><b>Stage</b></td></tr>';
-	foreach($stages->getElementsByTagName('stage') as $stage)
-	{
-		$maxlevel = $stage->getAttribute('maxlevel');
-	echo '<tr bgcolor="'.$config['lightborder'].'">
-	<td>'.$stage->getAttribute('minlevel') . '-'. (isset($maxlevel[0]) ? $maxlevel : '*') . '</td><td>x'.$stage->getAttribute('multiplier').'</td>
-</tr>';
+$stagesArray = [];
+foreach($stages->getElementsByTagName('stage') as $stage)
+{
+	/** @var DOMElement $stage */
+	$maxLevel = $stage->getAttribute('maxlevel');
+	$stagesArray[] = [
+		'levels' => $stage->getAttribute('minlevel') . '-'. (isset($maxLevel[0]) ? $maxLevel : '*'),
+		'multiplier' => $stage->getAttribute('multiplier')
+	];
 }
-	echo '
-		</tbody></table>
-	</td></tr>
-</tbody></table>';
-?>
+
+$twig->display('experience-stages.html.twig', ['stages' => $stagesArray]);
