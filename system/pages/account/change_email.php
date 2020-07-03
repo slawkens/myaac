@@ -66,7 +66,7 @@ if($email_new_time < 10) {
 else
 {
 	if($email_new_time < time()) {
-		if($_POST['changeemailsave'] == 1) {
+		if (isset($_POST['changeemailsave']) && $_POST['changeemailsave'] == 1) {
 			$account_logged->setCustomField("email_new", "");
 			$account_logged->setCustomField("email_new_time", 0);
 			$account_logged->setEmail($email_new);
