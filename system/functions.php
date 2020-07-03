@@ -991,6 +991,10 @@ function str_replace_first($search, $replace, $subject) {
 }
 
 function get_browser_real_ip() {
+	if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+		$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CF_CONNECTING_IP'];
+	}
+
 	if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
 		return $_SERVER['REMOTE_ADDR'];
 	else if(isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP']))
