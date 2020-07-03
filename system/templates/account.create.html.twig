@@ -54,6 +54,10 @@
 													<td></td><td><span id="email_error" class="FormFieldError">{% if errors.email is defined %}{{ errors.email }}{% endif %}</span></td>
 												</tr>
 
+												{% if config.mail_enabled and config.account_mail_verify %}
+													<tr><td></td><td><span><strong>Please use real address!<br/>We will send a link to validate your Email.</strong></span></td></tr>
+												{% endif %}
+
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_EMAIL') }}
 
                                                 {% if config.account_country %}
