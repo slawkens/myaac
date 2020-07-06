@@ -179,7 +179,7 @@ if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order']) && 
     $housesSearch = true;
 }
 
-$guild = $db->hasTable('houses', 'guild') ? ' or guildhall' : '';
+$guild = $db->hasColumn('houses', 'guild') ? ' or guildhall' : '';
 $twig->display('houses.html.twig', array(
     'state' => $state,
     'order' => $order,
