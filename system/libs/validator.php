@@ -91,7 +91,7 @@ class Validator
 			return false;
 		}
 
-		if(!preg_match("/[A-Z0-9]/i", $name))
+		if(!preg_match("/^[A-Z0-9]+$/i", $name))
 		{
 			self::$lastError = 'Invalid account name format. Use only A-Z and numbers 0-9.';
 			return false;
