@@ -371,7 +371,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			$_player = new OTS_Player();
 			$fields = array('id', 'name', 'vocation', 'level', 'online', 'deleted', 'hidden');
 			$_player->load($p['id'], $fields, false);
-			if($_player->isLoaded()) {
+			if($_player->isLoaded() && !$_player->isHidden()) {
 				$account_players[] = $_player;
 			}
 		}
