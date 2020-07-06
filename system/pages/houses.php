@@ -143,8 +143,20 @@ if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order']) && 
     if($type == 'guildhalls' && !$db->hasColumn('houses', 'guild'))
         $type = 'all';
 
-    if(!empty($type) && $type != 'all')
-        $whereby .= ' AND `guild` ' . ($type == 'guildhalls' ? '!' : '') . '= 0';
+	if (!empty($type) && $type != 'all')
+	{
+		$guildColumn = '';
+		if ($db->hasColumn('houses', 'guild')) {
+			$guildColumn = 'guild';
+		}
+		else if ($db->hasColumn('houses', 'guildid')) {
+			$guildColumn = 'guildid';
+		}
+
+		if($guildColumn !== '') {
+			$whereby .= ' AND `' . $guildColumn . '` ' . ($type == 'guildhalls' ? '!' : '') . '= 0';
+		}
+	}
 
     $houses_info = $db->query('SELECT * FROM `houses` WHERE ' . $whereby. ' ORDER BY ' . $orderby);
 
