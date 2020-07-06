@@ -432,7 +432,7 @@ else
 	if($db->hasColumn('players', 'deletion'))
 		$deleted = 'deletion';
 
-	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . $config['characters_search_limit'] . ';');
+	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . (int)$config['characters_search_limit'] . ';');
 	if($query->rowCount() > 0)
 	{
 		echo 'Did you mean:<ul>';
