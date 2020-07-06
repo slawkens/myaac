@@ -150,6 +150,9 @@ $config = array(
 		3 => 'Paladin Sample',
 		4 => 'Knight Sample'
 	),
+	
+	// it must show limited number of players after using search in character page
+	'max_search_characters' => 15,
 
 	// town list used when creating character
 	// won't be displayed if there is only one item (rookgaard for example)
