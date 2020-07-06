@@ -437,6 +437,9 @@ else
 	{
 		echo 'Did you mean:<ul>';
 		foreach($query as $player) {
+			if(count($players) > $config['max_search_characters'])
+				break;
+			
 			if(isset($player['promotion'])) {
 				if((int)$player['promotion'] > 0)
 					$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
