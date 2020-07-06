@@ -152,7 +152,7 @@ $config = array(
 	),
 	
 	// it must show limited number of players after using search in character page
-	'max_search_characters' => 15,
+	'characters_search_limit' => 15,
 
 	// town list used when creating character
 	// won't be displayed if there is only one item (rookgaard for example)
