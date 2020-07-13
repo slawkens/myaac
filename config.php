@@ -150,7 +150,7 @@ $config = array(
 		3 => 'Paladin Sample',
 		4 => 'Knight Sample'
 	),
-	
+
 	// it must show limited number of players after using search in character page
 	'characters_search_limit' => 15,
 
