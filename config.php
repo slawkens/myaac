@@ -175,6 +175,7 @@ $config = array(
 	'guild_need_level' => 1, // min. level to form a guild
 	'guild_need_premium' => true, // require premium account to form a guild?
 	'guild_image_size_kb' => 80, // maximum size of the guild logo image in KB (kilobytes)
+	'guild_description_default' => 'New guild. Leader must edit this text :)',
 	'guild_description_chars_limit' => 1000, // limit of guild description
 	'guild_description_lines_limit' => 6, // limit of lines, if description has more lines it will be showed as long text, without 'enters'
 	'guild_motd_chars_limit' => 150, // limit of MOTD (message of the day) that is shown later in the game on the guild channel
