@@ -54,7 +54,7 @@ foreach($stages->getElementsByTagName('stage') as $stage)
 	/** @var DOMElement $stage */
 	$maxLevel = $stage->getAttribute('maxlevel');
 	$stagesArray[] = [
-		'levels' => $stage->getAttribute('minlevel') . '-'. (isset($maxLevel[0]) ? $maxLevel : '*'),
+		'levels' => $stage->getAttribute('minlevel') . (isset($maxLevel[0]) ? '-' . $maxLevel : '+'),
 		'multiplier' => $stage->getAttribute('multiplier')
 	];
 }
