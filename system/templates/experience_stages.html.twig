@@ -1,0 +1,30 @@
+<div style="text-align:center">
+	<h3>Experience stages</h3>
+</div>
+<table style="border: 0; background-color: {{ config.darkborder }}; width: 100%" cellpadding="4" cellspacing="1">
+	<tbody>
+		<tr style="background-color: {{ config.vdarkborder }}">
+			<td class="white" colspan="5"><b>Stages table</b></td>
+		</tr>
+		<tr>
+			<td>
+				<table style="border: 0; width: 100%" cellpadding="2" cellspacing="1"><tbody>
+					<tr style="background-color: {{ config.lightborder }}">
+						<td>
+							<b>Level</b>
+						</td>
+						<td>
+							<b>Stage</b>
+						</td>
+					</tr>
+					{% for stage in stages %}
+						<tr style="background-color: {{ config.lightborder }}">
+							<td>{{ stage.levels }}</td><td>x{{ stage.multiplier}}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
