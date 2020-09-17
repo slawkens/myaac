@@ -102,7 +102,6 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).' AND ';
 
 		$query = substr($query, 0, -4);
-		$query = substr($query, 0, -4);
 		if (isset($limit))
 			$query .=') LIMIT '.$limit.';';
 		else
