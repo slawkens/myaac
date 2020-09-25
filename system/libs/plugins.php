@@ -413,11 +413,6 @@ class Plugins {
 	{
 		global $db;
 
-		// check if menu table exist (it does not on MyAAC 0.7.0 and lower)
-		if (!$db->hasTable(TABLE_PREFIX . 'menu')) {
-			return;
-		}
-
 		// check if menus already exist
 		$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($templateName) . ' LIMIT 1;');
 		if ($query->rowCount() > 0) {
@@ -431,11 +426,14 @@ class Plugins {
 				$blank = 0;
 
 				if (is_array($link)) {
+					if (isset($link['name'])) {
+						$name = $link['name'];
+					}
 					if (isset($link['color'])) {
 						$color = $link['color'];
 					}
 					if (isset($link['blank'])) {
-						$blank = $link['blank'] === true ? 1 : 0;
+						$blank = $link['blank'] ? 1 : 0;
 					}
 
 					$link = $link['link'];
@@ -447,14 +445,9 @@ class Plugins {
 					'link' => $link,
 					'category' => $category,
 					'ordering' => $i++,
+					'blank' => $blank,
+					'color' => $color,
 				];
-
-				// support for color and blank attributes since 0.8.0
-				if ($db->hasColumn(TABLE_PREFIX . 'menu', 'blank') &&
-					$db->hasColumn(TABLE_PREFIX . 'menu', 'color')) {
-						$insert_array['blank'] = $blank;
-						$insert_array['color'] = $color;
-				}
 
 				$db->insert(TABLE_PREFIX . 'menu', $insert_array);
 			}
