@@ -7,15 +7,15 @@ $dirs_required = [
 	'system/cache',
 ];
 $dirs_optional = [
-	'images/guilds' => 'Guild logo upload will not work',
-	'images/gallery' => 'Gallery image upload will not work',
+	'images/guilds' => $locale['step_requirements_warning_images_guilds'],
+	'images/gallery' => $locale['step_requirements_warning_images_gallery'],
 ];
 
 $extensions_required = [
 	'pdo', 'pdo_mysql', 'xml', 'zip'
 ];
 $extensions_optional = [
-	'gd' => 'Player Signatures will not work'
+	'gd' => $locale['step_requirements_warning_player_signatures'],
 ];
 /*
  *

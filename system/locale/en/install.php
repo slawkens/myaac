@@ -38,6 +38,9 @@ $locale['step_requirements_php_version'] = 'PHP Version';
 $locale['step_requirements_write_perms'] = 'Write permissions';
 $locale['step_requirements_failed'] = 'Installation will be disabled until these requirements will be passed.</b><br/>For more informations see <b>README</b> file.';
 $locale['step_requirements_extension'] = '$EXTENSION$ PHP extension';
+$locale['step_requirements_warning_images_guilds'] = 'Guild logo upload will not work';
+$locale['step_requirements_warning_images_gallery'] = 'Gallery image upload will not work';
+$locale['step_requirements_warning_player_signatures'] = 'Player Signatures will not work';
 
 // config
 $locale['step_config'] = 'Configuration';
