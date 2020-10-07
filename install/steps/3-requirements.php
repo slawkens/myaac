@@ -1,6 +1,10 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+// configuration
+$extensions_required = [
+	'pdo', 'pdo_mysql', 'xml', 'zip'
+];
 /*
  *
  * @param string $name
@@ -38,6 +42,11 @@ version_check('safe_mode', !$ini_safe_mode, $ini_safe_mode ? $locale['on'] : $lo
 version_check(str_replace('$EXTENSION$', 'PDO', $locale['step_requirements_extension']) , extension_loaded('pdo'), extension_loaded('pdo') ? $locale['loaded'] : $locale['not_loaded']);
 version_check(str_replace('$EXTENSION$', 'XML', $locale['step_requirements_extension']), extension_loaded('xml'), extension_loaded('xml') ? $locale['loaded'] : $locale['not_loaded']);
 version_check(str_replace('$EXTENSION$', 'ZIP', $locale['step_requirements_extension']), extension_loaded('zip'), extension_loaded('zip') ? $locale['loaded'] : $locale['not_loaded']);
+foreach ($extensions_required as $ext) {
+	$loaded = extension_loaded($ext);
+	version_check(str_replace('$EXTENSION$', strtoupper($ext), $locale['step_requirements_extension']) , $loaded, $loaded ? $locale['loaded'] : $locale['not_loaded']);
+}
+
 
 if($failed)
 {
