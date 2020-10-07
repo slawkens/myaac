@@ -42,9 +42,6 @@ version_check('register_long_arrays', !$ini_register_globals, $ini_register_glob
 $ini_safe_mode = ini_get_bool('safe_mode');
 version_check('safe_mode', !$ini_safe_mode, $ini_safe_mode ? $locale['on'] : $locale['off'], true);
 
-version_check(str_replace('$EXTENSION$', 'PDO', $locale['step_requirements_extension']) , extension_loaded('pdo'), extension_loaded('pdo') ? $locale['loaded'] : $locale['not_loaded']);
-version_check(str_replace('$EXTENSION$', 'XML', $locale['step_requirements_extension']), extension_loaded('xml'), extension_loaded('xml') ? $locale['loaded'] : $locale['not_loaded']);
-version_check(str_replace('$EXTENSION$', 'ZIP', $locale['step_requirements_extension']), extension_loaded('zip'), extension_loaded('zip') ? $locale['loaded'] : $locale['not_loaded']);
 foreach ($extensions_required as $ext) {
 	$loaded = extension_loaded($ext);
 	version_check(str_replace('$EXTENSION$', strtoupper($ext), $locale['step_requirements_extension']) , $loaded, $loaded ? $locale['loaded'] : $locale['not_loaded']);
