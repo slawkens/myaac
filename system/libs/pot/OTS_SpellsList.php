@@ -15,11 +15,11 @@
 
 /**
  * Wrapper for spells list.
- * 
+ *
  * <p>
  * Note: Unlike other lists classes this one doesn't implement ArrayAccess interface because it contains three kinds of spells grouped into pararell arrays.
  * </p>
- * 
+ *
  * @package POT
  * @version 0.1.5
  * @property-read array $runesList List of rune spells.
@@ -44,32 +44,32 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Rune spells.
- * 
+ *
  * @var array
  */
     private $runes = array();
 
 /**
  * Instant spells.
- * 
+ *
  * @var array
  */
     private $instants = array();
 
 /**
  * Conjure spells.
- * 
+ *
  * @var array
  */
     private $conjures = array();
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * <p>
  * Allows object importing from {@link http://www.php.net/manual/en/function.var-export.php var_export()}.
  * </p>
- * 
+ *
  * @param array $properties List of object properties.
  */
     public function __set_state($properties)
@@ -87,7 +87,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Loads spells list.
- * 
+ *
  * @param string $file Spells file name.
  * @throws DOMException On DOM operation error.
  */
@@ -98,7 +98,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 			log_append('error.log', '[OTS_SpellsList.php] Fatal error: Cannot load spells.xml. File does not exist. (' . $file . ').');
 			throw new Exception('Error: Cannot load spells.xml. File not found.');
 		}
-		
+
         // loads monsters mapping file
         $spells = new DOMDocument();
         if(!@$spells->load($file)) {
@@ -127,7 +127,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Returns list of runes.
- * 
+ *
  * @return array List of rune names.
  */
     public function getRunesList()
@@ -137,7 +137,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Checks if rune exists.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param string $name Rune name.
@@ -150,7 +150,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Returns given rune spell.
- * 
+ *
  * @version 0.1.3
  * @param string $name Rune name.
  * @return OTS_Spell Rune spell wrapper.
@@ -168,7 +168,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Returns list of instants.
- * 
+ *
  * @return array List of instant spells names.
  */
     public function getInstantsList()
@@ -178,7 +178,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Checks if instant exists.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param string $name Instant name.
@@ -191,7 +191,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Returns given instant spell.
- * 
+ *
  * @version 0.1.3
  * @param string $name Spell name.
  * @return OTS_Spell Instant spell wrapper.
@@ -209,7 +209,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Returns list of conjure spells.
- * 
+ *
  * @return array List of conjure spells names.
  */
     public function getConjuresList()
@@ -219,7 +219,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Checks if conjure exists.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param string $name Conjure name.
@@ -232,7 +232,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Returns given conjure spell.
- * 
+ *
  * @version 0.1.3
  * @param string $name Spell name.
  * @return OTS_Spell Conjure spell wrapper.
@@ -250,7 +250,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @param string $name Property name.
  * @return mixed Property value.
  * @throws OutOfBoundsException For non-supported properties.
@@ -275,11 +275,11 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Returns string representation of object.
- * 
+ *
  * <p>
  * If any display driver is currently loaded then it uses it's method.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @return string String representation of object.
@@ -299,11 +299,11 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Iterator for all spells.
- * 
+ *
  * <p>
  * Returned object will continousely iterate through all kind of spells.
  * </p>
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return AppendIterator Iterator for all spells.
@@ -319,7 +319,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
 
 /**
  * Number of all loaded spells.
- * 
+ *
  * @version 0.1.5
  * @since 0.1.5
  * @return int Amount of all spells.
