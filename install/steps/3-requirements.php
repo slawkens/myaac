@@ -7,7 +7,6 @@ $dirs_required = [
 	'system/cache',
 ];
 $dirs_optional = [
-	'config.local.php' => 'You will need to manually update your config.local.php',
 	'images/guilds' => 'Guild logo upload will not work',
 	'images/gallery' => 'Gallery image upload will not work',
 ];
