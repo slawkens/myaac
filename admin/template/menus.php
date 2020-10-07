@@ -1,9 +1,14 @@
 <?php
 
+$mailer = [];
+if(config('mail_enabled')) {
+	$mailer = ['name' => 'Mailer', 'icon' => 'envelope', 'link' => 'mailer'];
+}
+
 return [
 	['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'link' => 'dashboard'],
 	['name' => 'News', 'icon' => 'newspaper', 'link' => 'news'],
-	['name' => 'Mailer', 'icon' => 'envelope', 'link' => 'mailer'],
+	$mailer,
 	['name' => 'Pages', 'icon' => 'book', 'link' =>
 		[
 			['name' => 'All Pages', 'link' => 'pages'],

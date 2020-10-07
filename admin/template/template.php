@@ -48,6 +48,10 @@
 						$menus = require __DIR__ . '/menus.php';
 
 						foreach ($menus as $category => $menu) {
+							if (!isset($menu['name'])) {
+								continue;
+							}
+
 							$has_child = is_array($menu['link']);
 							if (!$has_child) { ?>
 								<li class="nav-item">
