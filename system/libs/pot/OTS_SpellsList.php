@@ -95,8 +95,8 @@ class OTS_SpellsList implements IteratorAggregate, Countable
     {
 		// check if spells.xml exist
 		if(!@file_exists($file)) {
-			log_append('error.log', '[OTS_SpellsList.php] Fatal error: Cannot load spells.xml. File does not exist. (' . $file . '). Error: ' . print_r(error_get_last(), true));
-			throw new Exception('Error: Cannot load spells.xml. File not found. More info in system/logs/error.log file.');
+			log_append('error.log', '[OTS_SpellsList.php] Fatal error: Cannot load spells.xml. File does not exist. (' . $file . ').');
+			throw new Exception('Error: Cannot load spells.xml. File not found.');
 		}
 		
         // loads monsters mapping file
