@@ -5,6 +5,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 $extensions_required = [
 	'pdo', 'pdo_mysql', 'xml', 'zip'
 ];
+$extensions_optional = [
+	'gd' => 'Player Signatures will not work'
+];
 /*
  *
  * @param string $name
@@ -47,6 +50,10 @@ foreach ($extensions_required as $ext) {
 	version_check(str_replace('$EXTENSION$', strtoupper($ext), $locale['step_requirements_extension']) , $loaded, $loaded ? $locale['loaded'] : $locale['not_loaded']);
 }
 
+foreach ($extensions_optional as $ext => $errorMsg) {
+	$loaded = extension_loaded($ext);
+	version_check(str_replace('$EXTENSION$', strtoupper($ext), $locale['step_requirements_extension']) , $loaded, $loaded ? $locale['loaded'] : $locale['not_loaded'] . '. ' . $errorMsg, true);
+}
 
 if($failed)
 {
