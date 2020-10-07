@@ -59,6 +59,7 @@ $locale['step_config_usage_desc'] = 'Zezwalaj MyAAC na raportowanie anonimowych 
 $locale['step_database'] = 'Baza Danych';
 $locale['step_database_title'] = 'Baza MySQL';
 $locale['step_database_importing'] = 'Twoja baza to MySQL. Nazwa bazy danych to: "$DATABASE_NAME$". Importowanie schematu...';
+$locale['step_database_config_saved'] = 'Lokalna konfiguracja została zapisana do pliku: config.local.php';
 $locale['step_database_error_path'] = 'Proszę podać ścieżkę do serwera.';
 $locale['step_database_error_config'] = 'Nie można znaleźć pliku config.lua. Czy ścieżka do katalogu serwera jest poprawna? Wróć się i sprawdź ponownie.';
 $locale['step_database_error_database_empty'] = 'Nie można wykryć typu bazy danych z pliku config.lua. Prawdopodobnie Twój OTS nie jest wspierany przez ten AAC.';
