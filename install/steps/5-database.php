@@ -21,8 +21,6 @@ if(!$error) {
 	// user can disable when he wants
 	$content .= '$config[\'env\'] = \'prod\'; // dev or prod';
 	$content .= PHP_EOL;
-	$content .= '$config[\'mail_enabled\'] = true;';
-	$content .= PHP_EOL;
 	foreach($_SESSION as $key => $value)
 	{
 		if(strpos($key, 'var_') !== false)
@@ -65,10 +63,6 @@ if(!$error) {
 			if(!$error) {
 				if(!Validator::email($_SESSION['var_mail_admin'])) {
 					error($locale['step_config_mail_admin_error']);
-					$error = true;
-				}
-				if(!Validator::email($_SESSION['var_mail_address'])) {
-					error($locale['step_config_mail_address_error']);
 					$error = true;
 				}
 

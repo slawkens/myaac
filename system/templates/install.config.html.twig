@@ -1,7 +1,7 @@
 <form action="{{ constant('BASE_URL') }}install/" method="post" autocomplete="off">
 	<input type="hidden" name="step" id="step" value="database" />
 	<table>
-		{% for value in ['server_path', 'mail_admin', 'mail_address'] %}
+		{% for value in ['server_path', 'mail_admin'] %}
 		<tr>
 			<td>
 				<label for="vars_{{ value }}">
