@@ -2,6 +2,16 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 // configuration
+$dirs_required = [
+	'system/logs',
+	'system/cache',
+];
+$dirs_optional = [
+	'config.local.php' => 'You will need to manually update your config.local.php',
+	'images/guilds' => 'Guild logo upload will not work',
+	'images/gallery' => 'Gallery image upload will not work',
+];
+
 $extensions_required = [
 	'pdo', 'pdo_mysql', 'xml', 'zip'
 ];
@@ -30,10 +40,16 @@ $failed = false;
 
 // start validating
 version_check($locale['step_requirements_php_version'], (PHP_VERSION_ID >= 50500), PHP_VERSION);
-foreach(array('images/guilds', 'images/houses', 'images/gallery') as $value)
+
+foreach ($dirs_required as $value)
 {
-	$is_writable = is_writable(BASE . $value);
+	$is_writable = is_writable(BASE . $value) && (MYAAC_OS != 'WINDOWS' || win_is_writable(BASE . $value));
 	version_check($locale['step_requirements_write_perms'] . ': ' . $value, $is_writable);
+}
+
+foreach ($dirs_optional as $dir => $errorMsg) {
+	$is_writable = is_writable(BASE . $dir) && (MYAAC_OS != 'WINDOWS' || win_is_writable(BASE . $dir));
+	version_check($locale['step_requirements_write_perms'] . ': ' . $dir, $is_writable, $is_writable ? '' : $errorMsg, true);
 }
 
 $ini_register_globals = ini_get_bool('register_globals');
