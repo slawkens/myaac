@@ -159,28 +159,9 @@ else {
 }
 unset($tmp, $id, $vocation);
 
-// load towns
-/* TODO: doesnt work
-ini_set('memory_limit', '-1');
-$tmp = '';
-
-if($cache->enabled() && $cache->fetch('towns', $tmp)) {
-	$config['towns'] = unserialize($tmp);
-}
-else {
-	$towns = new OTS_OTBMFile();
-	$towns->loadFile('D:/Projekty/opentibia/wodzislawski/data/world/wodzislawski.otbm');
-
-	$config['towns'] = $towns->getTownsList();
-	if($cache->enabled()) {
-		$cache->set('towns', serialize($config['towns']), 120);
-	}
-}
-*/
-
-////////////////////////////////////////
-// load towns from database (TFS 1.3) //
-////////////////////////////////////////
+//////////////////////////////////////
+// load towns from database or OTBM //
+//////////////////////////////////////
 
 $tmp = '';
 $towns = [];
@@ -198,7 +179,32 @@ else {
 		unset($query);
 	}
 	else {
-		$towns = config('towns');
+		$mapName = configLua('mapName');
+		if (!isset($mapName)) {
+			$mapName = configLua('map');
+			$mapFile = $config['server_path'] . $mapName;
+		}
+
+		if (strpos($mapName, '.otbm') === false) {
+			$mapName .= '.otbm';
+		}
+
+		if (!isset($mapFile)) {
+			$mapFile = config('data_path') . 'world/' . $mapName;
+		}
+
+		if (file_exists($mapFile)) {
+			ini_set('memory_limit', '-1');
+
+			require LIBS . 'TownsReader.php';
+			$townsReader = new TownsReader($mapFile);
+			$townsReader->load();
+
+			$towns = $townsReader->get();
+		}
+		else {
+			$towns = config('towns');
+		}
 	}
 
 	if($cache->enabled()) {
@@ -207,6 +213,6 @@ else {
 }
 
 config(['towns', $towns]);
-//////////////////////////////////////////////
-// END - load towns from database (TFS 1.3) //
-//////////////////////////////////////////////
+////////////////////////////////////////////
+// END - load towns from database or OTBM //
+////////////////////////////////////////////

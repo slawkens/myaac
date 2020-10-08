@@ -165,7 +165,9 @@ $config = array(
 	'character_name_max_length' => 21,
 
 	// list of towns
-	// if you use TFS 1.3 with support for 'towns' table in database, then you can ignore this - it will be configured automatically (generated from your .OTBM map)
+	// if you use TFS 1.3 with support for 'towns' table in database, then you can ignore this - it will be configured automatically (from MySQL database - Table - towns)
+	// otherwise it will try to load from your .OTBM map file
+	// if you don't see towns on website, then you need to fill this out
 	'towns' => array(
 		0 => 'No town',
 		1 => 'Sample town'
