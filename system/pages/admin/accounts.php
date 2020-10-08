@@ -204,7 +204,7 @@ else if (isset($_REQUEST['search'])) {
 			}
 		}
 	} else if ($id == 0) {
-		$accounts_db = $db->query('SELECT `id`, `name`,' . ($hasTypeColumn ? 'type' : 'group_id') . ' FROM `accounts` ORDER BY `id` ASC');
+		$accounts_db = $db->query('SELECT `id`, `name`' . ($hasTypeColumn ? ',type' : ($hasGroupColumn ? ',group_id' : '')) . ' FROM `accounts` ORDER BY `id` ASC');
 		?>
 		<div class="col-12 col-sm-12 col-lg-10">
 			<div class="card card-info card-outline">
@@ -217,7 +217,9 @@ else if (isset($_REQUEST['search'])) {
 						<tr>
 							<th>ID</th>
 							<th>Name</th>
+							<?php if($hasTypeColumn || $hasGroupColumn): ?>
 							<th>Position</th>
+							<?php endif; ?>
 							<th style="width: 40px">Edit</th>
 						</tr>
 						</thead>
@@ -226,6 +228,7 @@ else if (isset($_REQUEST['search'])) {
 							<tr>
 								<th><?php echo $account_lst['id']; ?></th>
 								<td><?php echo $account_lst['name']; ?></a></td>
+								<?php if($hasTypeColumn || $hasGroupColumn): ?>
 								<td>
 									<?php if ($hasTypeColumn) {
 										echo $acc_type[$account_lst['type']];
@@ -234,6 +237,7 @@ else if (isset($_REQUEST['search'])) {
 										echo $group[$account_lst['group_id']];
 									} ?>
 								</td>
+								<?php endif; ?>
 								<td><a href="?p=accounts&id=<?php echo $account_lst['id']; ?>" class="btn btn-success btn-sm" title="Edit">
 										<i class="fas fa-pencil-alt"></i>
 									</a>
