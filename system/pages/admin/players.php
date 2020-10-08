@@ -854,10 +854,9 @@ else if (isset($_REQUEST['search'])) {
 				const look_feet = $('#look_feet').val();
 				const look_type = $('#look_type').val();
 
+				let look_addons = '';
 				<?php if($hasLookAddons): ?>
-				const look_addons = '&addons=' + $('#look_addons').val();
-				<?php else: ?>
-				const look_addons = '';
+				look_addons = '&addons=' + $('#look_addons').val();
 				<?php endif; ?>
 				$("#player_outfit").attr("src", '<?= $config['outfit_images_url']; ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet);
 			}
