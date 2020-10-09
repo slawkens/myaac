@@ -885,11 +885,9 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
             var look_feet = $('#look_feet').val();
             var look_type = $('#look_type').val();
 
+            var look_addons = '';
             <?php if($hasLookAddons): ?>
-                var look_addons = '&addons=' + $('#look_addons').val();
-	        <?php
-	        else: ?>
-	            var look_addons = '';
+                look_addons = '&addons=' + $('#look_addons').val();
 	        <?php endif; ?>
 
             new_outfit = '<?= $config['outfit_images_url']; ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet;
