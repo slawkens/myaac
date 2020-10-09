@@ -12,4 +12,4 @@ $locale['direction']= 'ltr';
 
 $locale['error404'] = 'The requested page was not found.';
 $locale['news'] = 'Latest news';
-?>
+$locale['loaded_in_ms'] = 'in $TIME$ ms';

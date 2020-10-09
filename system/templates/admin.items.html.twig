@@ -1,26 +1,30 @@
-<form method="post" action="{{ constant('ADMIN_URL') }}?p=items" id="items_form">
-	<input type="hidden" name="reload" value="1"/>
-	<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> Reload items and weapons</button>
-</form>
+<p>Clicking the button will reload server data (items, monsters, spells, towns, weapons).</p>
+<p>It may take up to few minutes.</p>
+<button id="reload_button" class="btn btn-info"><i class="fas fa-update"></i>Reload</button>
 
-<div id="loader" class="spinner-border" role="status">
+<div id="spinner" class="spinner-border" role="status">
 	<span class="sr-only">Loading...</span>
 </div>
 
-<small id="notice"> (it may take some time to finish)</small>
+<div style="height: 20px"></div>
+
+<div id="messages"></div>
 
 <style>
-	#loader {
+	#spinner {
 		display: none;
 	}
 </style>
 <script>
 	$(function () {
-		$('#items_form').on('submit', function (e) {
-			$('#loader').show();
+		$('#reload_button').on('click', function (e) {
+			$('#spinner').show();
 
-			var $notice = $('#notice');
-			$notice.html('Reloading...' + $notice.text());
+			$('[id^=success]').remove();
+			$('#messages').append('<div id="success-1"></div>');
+
+			performInstall('{{ constant('ADMIN_URL') }}tools/reload_data.php');
 		});
 	})
 </script>
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/installer.js"></script>

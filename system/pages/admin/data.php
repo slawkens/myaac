@@ -8,36 +8,6 @@
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-$title = 'Load items.xml';
-
-require LIBS . 'items.php';
-require LIBS . 'weapons.php';
+$title = 'Server Data';
 
 $twig->display('admin.items.html.twig');
-
-$reload = isset($_REQUEST['reload']) && (int)$_REQUEST['reload'] === 1;
-if ($reload) {
-	$items_start_time = microtime(true);
-	if (Items::loadFromXML(true)) {
-		success('Successfully loaded items (in ' . round(microtime(true) - $items_start_time, 4) . ' seconds).');
-	}
-	else {
-		error(Items::getError());
-	}
-
-	$weapons_start_time = microtime(true);
-	if (Weapons::loadFromXML(true)) {
-		success('Successfully loaded weapons (in ' . round(microtime(true) - $weapons_start_time, 4) . ' seconds).');
-	}
-	else {
-		error(Weapons::getError());
-	}
-
-	$towns_start_time = microtime(true);
-	if (Towns::save()) {
-		success('Successfully loaded towns (in ' . round(microtime(true) - $towns_start_time, 4) . ' seconds).');
-	}
-	else {
-		error('Error: No towns found.');
-	}
-}
