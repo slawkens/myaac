@@ -86,6 +86,8 @@ $locale['step_database_loaded_weapons'] = 'Weapons has been loaded...';
 $locale['step_database_loaded_monsters'] = 'Monsters has been loaded...';
 $locale['step_database_error_monsters'] = 'There were some problems loading your monsters.xml file. Please check $LOG$ for more info.';
 $locale['step_database_loaded_spells'] = 'Spells has been loaded...';
+$locale['step_database_loaded_towns'] = 'Towns has been loaded...';
+$locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in config.';
 $locale['step_database_created_account'] = 'Created admin account...';
 $locale['step_database_created_news'] = 'Newses has been created...';
 

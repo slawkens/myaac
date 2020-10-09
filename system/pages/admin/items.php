@@ -32,4 +32,12 @@ if ($reload) {
 	else {
 		error(Weapons::getError());
 	}
+
+	$towns_start_time = microtime(true);
+	if (Towns::save()) {
+		success('Successfully loaded towns (in ' . round(microtime(true) - $towns_start_time, 4) . ' seconds).');
+	}
+	else {
+		error('Error: No towns found.');
+	}
 }

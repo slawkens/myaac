@@ -76,6 +76,13 @@ else {
 	error(Spells::getLastError());
 }
 
+if (Towns::save()) {
+	success($locale['step_database_loaded_towns']);
+}
+else {
+	warning($locale['step_database_error_towns']);
+}
+
 // update config.highscores_ids_hidden
 require_once SYSTEM . 'migrations/20.php';
 $database_migration_20 = true;
