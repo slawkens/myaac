@@ -18,7 +18,7 @@ return [
 	['name' => 'Menus', 'icon' => 'list', 'link' => 'menus'],
 	['name' => 'Plugins', 'icon' => 'plug', 'link' => 'plugins'],
 	['name' => 'Visitors', 'icon' => 'user', 'link' => 'visitors'],
-	['name' => 'Items', 'icon' => 'gavel', 'link' => 'items'],
+	['name' => 'Server Data', 'icon' => 'gavel', 'link' => 'data'],
 	['name' => 'Editor', 'icon' => 'edit', 'link' =>
 		[
 			['name' => 'Accounts', 'link' => 'accounts'],
