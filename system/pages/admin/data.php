@@ -10,4 +10,4 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Server Data';
 
-$twig->display('admin.items.html.twig');
+$twig->display('admin.data.html.twig');
