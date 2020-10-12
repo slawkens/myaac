@@ -110,7 +110,7 @@ else
 			));
 		}
 	}
-	else
+	else if(!isset($_POST['emailchangecancel']) || $_POST['emailchangecancel'] != 1)
 	{
 		$custom_buttons = '
 <table style="width:100%;" >
