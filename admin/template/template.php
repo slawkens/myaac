@@ -48,7 +48,7 @@
 						$menus = require __DIR__ . '/menus.php';
 
 						foreach ($menus as $category => $menu) {
-							if (!isset($menu['name'])) {
+							if (isset($menu['disabled']) && $menu['disabled']) {
 								continue;
 							}
 
