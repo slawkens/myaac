@@ -267,6 +267,7 @@ $config = array(
 	'last_kills_limit' => 50, // max. number of deaths shown on the last kills page
 
 	// status, took automatically from config file if empty
+	'status_enabled' => true, // you can disable status checking by settings this to "false"
 	'status_ip' => '',
 	'status_port' => '',
 	'status_timeout' => 2, // how long to wait for the initial response from the server (default: 2 seconds)
