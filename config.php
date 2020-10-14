@@ -264,7 +264,7 @@ $config = array(
 	// status, took automatically from config file if empty
 	'status_ip' => '',
 	'status_port' => '',
-	'status_timeout' => 2, // how long to wait for the initial response from the server (default: 2 seconds)
+	'status_timeout' => 2.0, // how long to wait for the initial response from the server (default: 2 seconds)
 
 	// how often to connect to server and update status (default: every minute)
 	// if your status timeout in config.lua is bigger, that it will be used instead
