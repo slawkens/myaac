@@ -17,6 +17,10 @@ $status['lastCheck'] = 0;
 $status['uptime'] = '0h 0m';
 $status['monsters'] = 0;
 
+if(config('status_enabled') === false) {
+	return;
+}
+
 $status_ip = $config['lua']['ip'];
 if(isset($config['lua']['statusProtocolPort'])) {
 	$config['lua']['loginPort'] = $config['lua']['statusProtocolPort'];
