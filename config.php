@@ -212,6 +212,7 @@ $config = array(
 	'highscores_groups_hidden' => 3, // this group id and higher won't be shown on the highscores
 	'highscores_ids_hidden' => array(0), // this ids of players will be hidden on the highscores (should be ids of samples)
 	'highscores_length' => 100, // how many records per page on highscores
+	'highscores_cache_ttl' => 15, // how often to update highscores from database in minutes (default 15 minutes)
 
 	// characters page
 	'characters' => array( // what things to display on character view page (true/false in each option)
