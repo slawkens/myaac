@@ -211,7 +211,7 @@ $config = array(
 	'highscores_country_box' => false, // doesnt work yet! (not implemented)
 	'highscores_groups_hidden' => 3, // this group id and higher won't be shown on the highscores
 	'highscores_ids_hidden' => array(0), // this ids of players will be hidden on the highscores (should be ids of samples)
-	'highscores_length' => 100, // how many records per page on highscores
+	'highscores_per_page' => 100, // how many records per page on highscores
 	'highscores_cache_ttl' => 15, // how often to update highscores from database in minutes (default 15 minutes)
 
 	// characters page
