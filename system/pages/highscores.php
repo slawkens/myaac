@@ -89,7 +89,7 @@ else
 			break;
 
 		case 'frags':
-			if($config['highscores_frags'] && $config['otserv_version'] == TFS_03)
+			if($config['highscores_frags'])
 				$skill = SKILL_FRAGS;
 			break;
 
@@ -140,14 +140,32 @@ if($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 	else
 		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',value,level,vocation' . $promotion . $outfit . ' FROM accounts,players,player_skills WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id = player_skills.player_id AND player_skills.skillid = '.$skill.' AND accounts.id = players.account_id ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 }
-else if($skill == SKILL_FRAGS && $config['otserv_version'] == TFS_03) // frags
+else if($skill == SKILL_FRAGS) // frags
 {
-	$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . $outfit . ',COUNT(`player_killers`.`player_id`) as value' .
+	if ($db->hasTable('player_killers')) {
+		$highscores = $db->query('SELECT accounts.country, players.id, players.name' . $online . ',level, vocation' . $promotion . $outfit . ', COUNT(`player_killers`.`player_id`) as value' .
 			' FROM `accounts`, `players`, `player_killers` ' .
 			' WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id = player_killers.player_id AND accounts.id = players.account_id' .
 			' GROUP BY `player_id`' .
 			' ORDER BY value DESC' .
 			' LIMIT 101 OFFSET '.$offset)->fetchAll();
+	}
+	else {
+		$db->query("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+
+		$highscores = $db->query('SELECT `a`.country, `p`.id, `p`.name' . $online . ',`p`.level, vocation' . $promotion . $outfit . ', COUNT(`pd`.`killed_by`) as value
+			FROM `players` p
+			LEFT JOIN `accounts` a ON `a`.`id` = `p`.`account_id`
+			LEFT JOIN `player_deaths` pd ON `pd`.`killed_by` = `p`.`name`
+			WHERE `p`.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ')
+			AND `p`.' . $deleted . ' = 0
+			AND `p`.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.'
+			AND `pd`.`unjustified` = 1
+			GROUP BY `killed_by`
+			ORDER BY value DESC
+			LIMIT 101 OFFSET '.$offset)->fetchAll();
+	}
+
 }
 else if($skill == SKILL_BALANCE) // balance
 {
