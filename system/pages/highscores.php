@@ -11,7 +11,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Highscores';
 
-if($config['account_country'] && $config['highscores_country_box'])
+$configHighscoresCountryBox = config('highscores_country_box');
+if(config('account_country') && $configHighscoresCountryBox)
 	require SYSTEM . 'countries.conf.php';
 
 $list = isset($_GET['list']) ? $_GET['list'] : '';
@@ -19,16 +20,21 @@ $_page = isset($_GET['page']) ? $_GET['page'] : 0;
 $vocation = isset($_GET['vocation']) ? $_GET['vocation'] : NULL;
 
 $add_sql = '';
-if($config['highscores_vocation_box'] && isset($vocation))
+
+$configHighscoresVocationBox = config('highscores_vocation_box');
+$configVocations = config('vocations');
+$configVocationsAmount = config('vocations_amount');
+
+if($configHighscoresVocationBox && isset($vocation))
 {
-	foreach($config['vocations'] as $id => $name) {
+	foreach($configVocations as $id => $name) {
 		if(strtolower($name) == $vocation) {
 			$add_vocs = array($id);
 
-			$i = $id + $config['vocations_amount'];
-			while(isset($config['vocations'][$i])) {
+			$i = $id + $configVocationsAmount;
+			while(isset($configVocations[$i])) {
 				$add_vocs[] = $i;
-				$i += $config['vocations_amount'];
+				$i += $configVocationsAmount;
 			}
 
 			$add_sql = 'AND `vocation` IN (' . implode(', ', $add_vocs) . ')';
@@ -89,12 +95,12 @@ else
 			break;
 
 		case 'frags':
-			if($config['highscores_frags'])
+			if(config('highscores_frags'))
 				$skill = SKILL_FRAGS;
 			break;
 
 		case 'balance':
-			if($config['highscores_balance'])
+			if(config('highscores_balance'))
 				$skill = SKILL_BALANCE;
 			break;
 	}
@@ -114,7 +120,10 @@ if($db->hasColumn('players', 'deletion'))
 
 $outfit_addons = false;
 $outfit = '';
-if($config['highscores_outfit']) {
+
+$configHighscoresOutfit = config('highscores_outfit');
+
+if($configHighscoresOutfit) {
 	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
 	if($db->hasColumn('players', 'lookaddons')) {
 		$outfit .= ', lookaddons';
@@ -122,7 +131,8 @@ if($config['highscores_outfit']) {
 	}
 }
 
-$offset = $_page * $config['highscores_length'];
+$configHighscoresLength = config('highscores_length');
+$offset = $_page * $configHighscoresLength;
 if($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 	if($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
 		$skill_ids = array(
@@ -135,17 +145,17 @@ if($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 			POT::SKILL_FISH => 'skill_fishing',
 		);
 
-		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . $outfit . ', ' . $skill_ids[$skill] . ' as value FROM accounts,players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND accounts.id = players.account_id ORDER BY ' . $skill_ids[$skill] . ' DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
+		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . $outfit . ', ' . $skill_ids[$skill] . ' as value FROM accounts,players WHERE players.id NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.config('highscores_groups_hidden').' '.$add_sql.' AND accounts.id = players.account_id ORDER BY ' . $skill_ids[$skill] . ' DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 	}
 	else
-		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',value,level,vocation' . $promotion . $outfit . ' FROM accounts,players,player_skills WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id = player_skills.player_id AND player_skills.skillid = '.$skill.' AND accounts.id = players.account_id ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
+		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',value,level,vocation' . $promotion . $outfit . ' FROM accounts,players,player_skills WHERE players.id NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.config('highscores_groups_hidden').' '.$add_sql.' AND players.id = player_skills.player_id AND player_skills.skillid = '.$skill.' AND accounts.id = players.account_id ORDER BY value DESC, count DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 }
 else if($skill == SKILL_FRAGS) // frags
 {
 	if ($db->hasTable('player_killers')) {
 		$highscores = $db->query('SELECT accounts.country, players.id, players.name' . $online . ',level, vocation' . $promotion . $outfit . ', COUNT(`player_killers`.`player_id`) as value' .
 			' FROM `accounts`, `players`, `player_killers` ' .
-			' WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND players.id = player_killers.player_id AND accounts.id = players.account_id' .
+			' WHERE players.id NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.config('highscores_groups_hidden') . ' '.$add_sql.' AND players.id = player_killers.player_id AND accounts.id = players.account_id' .
 			' GROUP BY `player_id`' .
 			' ORDER BY value DESC' .
 			' LIMIT 101 OFFSET '.$offset)->fetchAll();
@@ -157,34 +167,29 @@ else if($skill == SKILL_FRAGS) // frags
 			FROM `players` p
 			LEFT JOIN `accounts` a ON `a`.`id` = `p`.`account_id`
 			LEFT JOIN `player_deaths` pd ON `pd`.`killed_by` = `p`.`name`
-			WHERE `p`.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ')
+			WHERE `p`.id NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ')
 			AND `p`.' . $deleted . ' = 0
-			AND `p`.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.'
+			AND `p`.group_id < ' . config('highscores_groups_hidden') . ' '.$add_sql.'
 			AND `pd`.`unjustified` = 1
 			GROUP BY `killed_by`
 			ORDER BY value DESC
 			LIMIT 101 OFFSET '.$offset)->fetchAll();
 	}
-
 }
 else if($skill == SKILL_BALANCE) // balance
 {
-	$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,balance as value,vocation' . $promotion . $outfit . ' FROM accounts,players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 AND players.group_id < '.$config['highscores_groups_hidden'].' '.$add_sql.' AND accounts.id = players.account_id ORDER BY value DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
+	$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,balance as value,vocation' . $promotion . $outfit . ' FROM accounts,players WHERE players.id NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 AND players.group_id < ' . config('highscores_groups_hidden') . ' '.$add_sql.' AND accounts.id = players.account_id ORDER BY value DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 }
 else
 {
 	if($skill == POT::SKILL__MAGLEVEL) {
-		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',maglevel,level,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND accounts.id = players.account_id ORDER BY maglevel DESC, manaspent DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
+		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',maglevel,level,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.config('highscores_groups_hidden') . ' AND accounts.id = players.account_id ORDER BY maglevel DESC, manaspent DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 	}
 	else { // level
-		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,experience,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', $config['highscores_ids_hidden']) . ') AND players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.$config['highscores_groups_hidden'].' AND accounts.id = players.account_id ORDER BY level DESC, experience DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
+		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,experience,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 '.$add_sql.' AND players.group_id < '.config('highscores_groups_hidden') . ' AND accounts.id = players.account_id ORDER BY level DESC, experience DESC LIMIT 101 OFFSET '.$offset)->fetchAll();
 		$list = 'experience';
 	}
 }
-?>
-
-
-<?php
 
 $online_exist = false;
 if($db->hasColumn('players', 'online'))
@@ -205,6 +210,8 @@ if($db->hasTable('players_online') && count($players) > 0) {
 $show_link_to_next_page = false;
 $i = 0;
 
+$configHighscoresVocation = config('highscores_vocation');
+
 foreach($highscores as &$player)
 {
 	if(isset($is_online)) {
@@ -215,7 +222,7 @@ foreach($highscores as &$player)
 		}
 	}
 
-	if(++$i <= $config['highscores_length'])
+	if(++$i <= $configHighscoresLength)
 	{
 		if($skill == POT::SKILL__MAGIC)
 			$player['value'] = $player['maglevel'];
@@ -224,16 +231,16 @@ foreach($highscores as &$player)
 			$player['experience'] = number_format($player['experience']);
 		}
 
-		if($config['highscores_vocation']) {
+		if($configHighscoresVocation) {
 			if(isset($player['promotion'])) {
 				if((int)$player['promotion'] > 0) {
-					$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
+					$player['vocation'] += ($player['promotion'] * $configVocationsAmount);
 				}
 			}
 
 			$tmp = 'Unknown';
-			if(isset($config['vocations'][$player['vocation']])) {
-				$tmp = $config['vocations'][$player['vocation']];
+			if(isset($configVocations[$player['vocation']])) {
+				$tmp = $configVocations[$player['vocation']];
 			}
 
 			$player['vocation'] = $tmp;
@@ -242,7 +249,7 @@ foreach($highscores as &$player)
 
 		$player['link'] = getPlayerLink($player['name'], false);
 		$player['flag'] = getFlagImage($player['country']);
-		$player['outfit'] = '<img style="position:absolute;margin-top:' . (in_array($player['looktype'], array(75, 266, 302)) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . $config['outfit_images_url'] . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" />';
+		$player['outfit'] = '<img style="position:absolute;margin-top:' . (in_array($player['looktype'], array(75, 266, 302)) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . config('outfit_images_url') . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" />';
 		$player['rank'] = $offset + $i;
 	}
 	else {
@@ -252,8 +259,8 @@ foreach($highscores as &$player)
 }
 
 if(!$i) {
-	$extra = ($config['highscores_outfit'] ? 1 : 0);
-	echo '<tr bgcolor="' . $config['darkborder'] . '"><td colspan="' . ($skill == POT::SKILL__LEVEL ? 5 + $extra : 4 + $extra) . '">No records yet.</td></tr>';
+	$extra = ($configHighscoresOutfit ? 1 : 0);
+	echo '<tr bgcolor="' . config('darkborder') . '"><td colspan="' . ($skill == POT::SKILL__LEVEL ? 5 + $extra : 4 + $extra) . '">No records yet.</td></tr>';
 }
 
 //link to previous page if actual page is not first
@@ -284,9 +291,10 @@ $types = array(
 if(config('highscores_frags')) {
 	$types['frags'] = 'Frags';
 }
-if(isset($config['highscores_balance']) && $config['highscores_balance'])
+if(config('highscores_balance'))
 	$types['balance'] = 'Balance';
 
+/** @var Twig\Environment $twig */
 $twig->display('highscores.html.twig', [
 	'highscores' => $highscores,
 	'list' => $list,
