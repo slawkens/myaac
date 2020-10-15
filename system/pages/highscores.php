@@ -226,7 +226,7 @@ $i = 0;
 
 $configHighscoresVocation = config('highscores_vocation');
 
-foreach($highscores as &$player)
+foreach($highscores as $id => &$player)
 {
 	if(isset($is_online)) {
 		$player['online'] = (isset($is_online[$player['id']]) ? 1 : 0);
@@ -267,6 +267,7 @@ foreach($highscores as &$player)
 		$player['rank'] = $offset + $i;
 	}
 	else {
+		unset($highscores[$id]);
 		$show_link_to_next_page = true;
 		break;
 	}
