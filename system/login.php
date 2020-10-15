@@ -84,6 +84,14 @@ else
 				$t = isset($tmp[$ip]) ? $tmp[$ip] : NULL;
 			}
 
+			if(config('recaptcha_enabled'))
+			{
+				require LIBS . 'GoogleReCAPTCHA.php';
+				if (!GoogleReCAPTCHA::verify('login')) {
+					$errors[] = GoogleReCAPTCHA::getErrorMessage();
+				}
+			}
+
 			$account_logged = new OTS_Account();
 			if(USE_ACCOUNT_NAME)
 				$account_logged->find($login_account);

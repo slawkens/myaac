@@ -68,17 +68,12 @@ if($save)
 			$errors['country'] = 'Country is invalid.';
 	}
 
-	if($config['recaptcha_enabled'])
+	if(config('recaptcha_enabled'))
 	{
-		if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response']))
-		{
-			$verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$config['recaptcha_secret_key'].'&response='.$_POST['g-recaptcha-response']);
-			$responseData = json_decode($verifyResponse);
-			if(!$responseData->success)
-				$errors['verification'] = "Please confirm that you're not a robot.";
+		require LIBS . 'GoogleReCAPTCHA.php';
+		if (!GoogleReCAPTCHA::verify('register')) {
+			$errors['verification'] = GoogleReCAPTCHA::getErrorMessage();
 		}
-		else
-			$errors['verification'] = "Please confirm that you're not a robot.";
 	}
 
 	// password

@@ -496,8 +496,10 @@ function template_header($is_admin = false)
 	</noscript>
 ';
 
-	if($config['recaptcha_enabled'])
-		$ret .= "<script src='https://www.google.com/recaptcha/api.js'></script>";
+	if(config('recaptcha_enabled')) {
+		$ret .= '<script src="https://www.google.com/recaptcha/api.js' . (config('recaptcha_type') === 'v2-checkbox' ? '' : '?render=' . config('recaptcha_site_key')) . '"></script>';
+	}
+
 	return $ret;
 }
 
