@@ -131,8 +131,11 @@ if($configHighscoresOutfit) {
 	}
 }
 
+$configHighscoresPerPage = config('highscores_per_page');
+$limit = $configHighscoresPerPage + 1;
+
 $needReCache = true;
-$cacheKey = 'highscores_' . $skill . '_' . $vocation . '_' . $_page;
+$cacheKey = 'highscores_' . $skill . '_' . $vocation . '_' . $_page . '_' . $configHighscoresPerPage;
 
 $cache = Cache::getInstance();
 if ($cache->enabled()) {
@@ -143,12 +146,8 @@ if ($cache->enabled()) {
 	}
 }
 
-$configHighscoresPerPage = config('highscores_per_page');
 $offset = $_page * $configHighscoresPerPage;
-
 if (!isset($highscores) || empty($highscores)) {
-	$limit = $configHighscoresPerPage + 1;
-
 	if ($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 		if ($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
 			$skill_ids = array(
