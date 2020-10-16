@@ -130,10 +130,12 @@ $config = array(
 	'recaptcha_type' => 'v3', // 'v2-checkbox', 'v2-invisible', 'v3'
 	'recaptcha_site_key' => '', // get your own site and secret keys at https://www.google.com/recaptcha
 	'recaptcha_secret_key' => '',
+	// following option apply only for ReCaptcha v2-checkbox
 	'recaptcha_theme' => 'light', // light, dark
+	// following option apply only for ReCaptcha v3
 	// min score for validation, between 0 - 1.0
 	// https://developers.google.com/recaptcha/docs/v3#interpreting_the_score
-	'recaptcha_v3_min_score' => 1.1,
+	'recaptcha_v3_min_score' => 0.5,
 
 	//
 	'generate_new_reckey' => true,				// let player generate new recovery key, he will receive e-mail with new rec key (not display on page, hacker can't generate rec key)
