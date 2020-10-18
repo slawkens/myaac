@@ -472,33 +472,16 @@ function template_place_holder($type)
  */
 function template_header($is_admin = false)
 {
-	global $title_full, $config;
+	global $title_full, $config, $twig;
 	$charset = isset($config['charset']) ? $config['charset'] : 'utf-8';
 
-	$ret = '
-	<meta charset="' . $charset . '">
-	<meta http-equiv="content-language" content="' . $config['language'] . '" />
-	<meta http-equiv="content-type" content="text/html; charset=' . $charset . '" />';
-	if(!$is_admin)
-		$ret .= '
-	<base href="' . BASE_URL . '" />
-	<title>' . $title_full . '</title>';
-
-	$ret .= '
-	<meta name="description" content="' . $config['meta_description'] . '" />
-	<meta name="keywords" content="' . $config['meta_keywords'] . ', myaac, wodzaac" />
-	<meta name="generator" content="MyAAC" />
-	<link rel="stylesheet" type="text/css" href="' . BASE_URL . 'tools/css/messages.css" />
-	<script type="text/javascript" src="' . BASE_URL . 'tools/js/jquery.min.js"></script>
-	<noscript>
-		<div class="warning" style="text-align: center; font-size: 14px;">Your browser does not support JavaScript or its disabled!<br/>
-			Please turn it on, or be aware that some features on this website will not work correctly.</div>
-	</noscript>
-';
-
-	if($config['recaptcha_enabled'])
-		$ret .= "<script src='https://www.google.com/recaptcha/api.js'></script>";
-	return $ret;
+	return $twig->render('templates.header.html.twig',
+		[
+			'charset' => $charset,
+			'title' => $title_full,
+			'is_admin' => $is_admin
+		]
+	);
 }
 
 /**
@@ -565,10 +548,8 @@ function template_form()
 	foreach($templates as $key => $value)
 		$options .= '<option ' . ($template_name == $value ? 'SELECTED' : '') . '>' . $value . '</option>';
 
-	return 	'<form method="get" action="' . BASE_URL . '">
-				<hidden name="subtopic" value="' . PAGE . '"/>
-				<select name="template" onchange="this.form.submit()">' . $options . '</select>
-			</form>';
+	global $twig;
+	return $twig->render('forms.change_template.html.twig', ['options' => $options]);
 }
 
 function getStyle($i)
