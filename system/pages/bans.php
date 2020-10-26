@@ -12,9 +12,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Bans list';
 
 $configBansPerPage = config('bans_per_page');
-$_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$_page = isset($_GET['page']) ? $_GET['page'] : 1;
 
-if($_page > PHP_INT_MAX) {
+if(!is_numeric($_page) || $_page > PHP_INT_MAX) {
 	$_page = 1;
 }
 
