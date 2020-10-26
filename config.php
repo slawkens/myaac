@@ -199,8 +199,7 @@ $config = array(
 	'team_display_outfit' => true,
 
 	// bans page
-	'bans_limit' => 50,
-	'bans_display_all' => true, // should all bans be displayed? (sorted page by page)
+	'bans_per_page' => 20,
 
 	// highscores page
 	'highscores_vocation_box' => true, // show 'Choose a vocation' box on the highscores (allowing peoples to sort highscores by vocation)?

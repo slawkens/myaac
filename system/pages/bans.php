@@ -11,82 +11,118 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Bans list';
 
-if($config['otserv_version'] == TFS_02)
-{
-	echo 'Bans page doesnt work on TFS 0.2/1.0.';
+$configBansPerPage = config('bans_per_page');
+$_page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+if ($_page > 1) {
+	$offset = ($_page - 1) * $configBansPerPage;
+}
+else {
+	$offset = 0;
+}
+
+/**
+ * @var OTS_DB_MySQL $db
+ */
+$configBans = [];
+$configBans['hasType'] = false;
+$configBans['hasReason'] = false;
+
+$limit = 'LIMIT ' . ($configBansPerPage + 1) . (isset($offset) ? ' OFFSET ' . $offset : '');
+if ($db->hasTable('account_bans')) {
+	echo 'SELECT * FROM `account_bans` ORDER BY `banned_at` DESC ' . $limit;
+	$bansQuery = $db->query('SELECT * FROM `account_bans` ORDER BY `banned_at` DESC ' . $limit);
+}
+else if ($db->hasTable('bans') && $db->hasColumn('bans', 'active')
+	&& $db->hasColumn('bans', 'type') && $db->hasColumn('bans', 'reason')) {
+	$bansQuery = $db->query('SELECT * FROM `bans` WHERE `active` = 1 ORDER BY `added` DESC ' . $limit);
+	$configBans['hasType'] = true;
+	$configBans['hasReason'] = true;
+}
+else {
+	echo 'Bans list is not supported in your distribution.';
 	return;
 }
 
-if(!$config['bans_display_all'])
-	echo 'Last ' . $config['bans_limit'] . ' banishments.<br/><br/>';
-
-if($config['bans_display_all'])
+if(!$bansQuery->rowCount())
 {
-	$_page = isset($_GET['page']) ? $_GET['page'] : 0;
-	$offset = $_page * $config['bans_limit'] + 1;
-}
-
-$bans = $db->query('SELECT * FROM ' . $db->tableName('bans') . ' WHERE ' . $db->fieldName('active') . ' = 1 ORDER BY ' . $db->fieldName('added') . ' DESC LIMIT ' . ($config['bans_limit'] + 1) . (isset($offset) ? ' OFFSET ' . $offset : ''));
-if(!$bans->rowCount())
-{
-?>
-	There are no banishments yet.
-<?php
+	echo 'There are no banishments yet.';
 	return;
 }
-?>
-<table border="0" cellspacing="1" cellpadding="4" width="100%">
-	<tr align="center" bgcolor="<?php echo $config['vdarkborder']; ?>" class="white">
-		<td><span style="color: white"><b>Nick</b></span></td>
-		<td><span style="color: white"><b>Type</b></span></td>
-		<td><span style="color: white"><b>Expires</b></span></td>
-		<td><span style="color: white"><b>Reason</b></span></td>
-		<td><span style="color: white"><b>Comment</b></span></td>
-		<td><span style="color: white"><b>Added by:</b></span></td>
-	</tr>
-<?php
-foreach($bans as $ban)
+
+$nextPage = false;
+$i = 0;
+$bans = $bansQuery->fetchAll();
+foreach ($bans as $id => &$ban)
 {
-	if($i++ > 100)
+	if(++$i > $configBansPerPage)
 	{
-		$next_page = true;
+		unset($bans[$id]);
+		$nextPage = true;
 		break;
 	}
-?>
-	<tr align="center" bgcolor="<?php echo getStyle($i); ?>">
-		<td height="50" width="140"><?php echo getPlayerLink(getPlayerNameByAccount($ban['value'])); ?></td>
-		<td><?php echo getBanType($ban['type']); ?></td>
-		<td>
-<?php
-			if($ban['expires'] == "-1")
-				echo 'Never';
-			else
-				echo date("H:i:s", $ban['expires']) . '<br/>' . date("d M Y", $ban['expires']);
-?>
-		</td>
-		<td><?php echo getBanReason($ban['reason']); ?></td>
-		<td><?php echo $ban['comment']; ?></td>
-		<td>
-<?php
-			if($ban['admin_id'] == "0")
-				echo 'Autoban';
-			else
-				echo getPlayerLink(getPlayerNameByAccount($ban['admin_id']));
 
-			echo '<br/>' . date("d.m.Y", $ban['added']);
-?>
-		</td>
-	</tr>
-<?php
+	$ban['i'] = $i;
+	if ($db->hasColumn('bans', 'value')) {
+		$accountId = $ban['value'];
+	}
+	else {
+		// TFS 1.x
+		$accountId = $ban['account_id'];
+	}
+
+	$ban['player'] = getPlayerLink(getPlayerNameByAccount($accountId));
+
+	if ($configBans['hasType']) {
+		$ban['type'] = getBanType($ban['type']);
+	}
+
+	$expiresColumn = 'expires_at';
+	if ($db->hasColumn('bans', 'expires')) {
+		$expiresColumn = 'expires';
+	}
+
+	if ((int)$ban[$expiresColumn] === -1) {
+		$ban['expires'] = 'Never';
+	}
+	else {
+		$ban['expires'] = date('H:i:s', $ban[$expiresColumn]) . '<br/>' . date('d.M.Y', $ban[$expiresColumn]);
+	}
+
+	if ($configBans['hasReason']) {
+		$ban['reason'] = getBanReason($ban['reason']);
+	}
+	else {
+		$ban['comment'] = $ban['reason'];
+	}
+
+	$addedBy = '';
+	if ($db->hasColumn('bans', 'admin_id')) {
+		if ((int)$ban['admin_id'] === 0) {
+			$addedBy = 'Autoban';
+		}
+		else {
+			$addedBy = getPlayerLink(getPlayerNameByAccount($ban['admin_id']));
+		}
+	}
+	else {
+		$addedBy = getPlayerLink(getPlayerNameByAccount($ban['banned_by']));
+	}
+
+	if ($db->hasColumn('bans', 'added')) {
+		$addedTime = $ban['added'];
+	}
+	else {
+		$addedTime = $ban['banned_at'];
+	}
+
+	$ban['addedTime'] = date('H:i:s', $addedTime) . '<br/>' . date('d.M.Y', $addedTime);
+	$ban['addedBy'] = $addedBy;
 }
-?>
-</table>
-<table border="0" cellpadding="4" cellspacing="1" width="100%">
-<?php
-if($_page > 0)
-	echo '<tr><td width="100%" align="right" valign="bottom"><a href="?subtopic=bans&page=' . ($_page - 1) . '" class="size_xxs">Previous Page</a></td></tr>';
 
-if($next_page)
-	echo '<tr><td width="100%" align="right" valign="bottom"><a href="?subtopic=bans&page=' . ($_page + 1) . '" class="size_xxs">Next Page</a></td></tr>';
-?>
-</table>
+$twig->display('bans.html.twig', [
+	'bans' => $bans,
+	'configBans' => $configBans,
+	'page' => $_page,
+	'nextPage' => $nextPage,
+]);
