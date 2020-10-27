@@ -1,14 +1,26 @@
 # Changelog
 
-## [0.8.3 - x.x.2020]
+## [0.8.3 - 27.10.2020]
+
+### Added
+* pdo_mysql as required extension
+* some notice about Email validation in create account
 
 ### Changed
 * Move register DATABASE_VERSION into schema.sql
     * Caused migrations being fired when user manually imported database
 
 ### Fixed
+* creating very uncommon (bugged) account names
 * XSS in character search
 * Admin menu news editing warning when leaving page without touching the inputs
+* Guild Invite not working on otservbr-global
+* two boxes being show on email_change_cancel
+* when adding poll = template tibiacom broken
+* houses: Unknown column 'guild' in 'where clause (https://github.com/slawkens/myaac/issues/131)
+* account create when account_mail_verify is enabled
+* CloudFlare IP detection
+* network_twitter link in tibiacom template
 
 ## [0.8.2 - 03.06.2020]
 
