@@ -400,7 +400,7 @@
 				<td>{% if player.isOnline() %}<b><span style="color: green">Online</span></b>{% endif %}</td>
 				<td>
 					<table border="0" cellspacing="0" cellpadding="0">
-						<form action="{{ characters_link }}" method=post>
+						<form action="{{ getLink('characters') }}" method=post>
 							<tr>
 								<td>
 									<input type="hidden" name="name" value="{{ player.getName() }}"/>
