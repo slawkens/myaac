@@ -3,6 +3,10 @@ Thumbs.db
 .idea
 tmp
 
+# composer
+composer.lock
+vendor
+
 releases
 config.local.php
 PERSONAL_NOTES
