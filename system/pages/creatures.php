@@ -23,26 +23,6 @@ $title = "Creatures";
 </script>
 
 <?php
-$canEdit = hasFlag(FLAG_CONTENT_MONSTERS) || admin();
-if (isset($_POST['reload_monsters']) && $canEdit) {
-	require LIBS . 'creatures.php';
-	if (Creatures::loadFromXML(true)) {
-		if (Creatures::getMonstersList()->hasErrors())
-			error('There were some problems loading your monsters.xml file. Please check system/logs/error.log for more info.');
-	} else {
-		error(Creatures::getLastError());
-	}
-}
-
-if ($canEdit) {
-	?>
-	<form method="post" action="<?php echo getLink('creatures'); ?>">
-		<input type="hidden" name="reload_monsters" value="yes"/>
-		<input type="submit" value="(admin) Reload monsters"/>
-	</form>
-	<?php
-}
-
 if (empty($_REQUEST['creature'])) {
 	//send query to database
 	$monsters = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1 ORDER BY name asc');
