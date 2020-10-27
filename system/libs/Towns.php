@@ -99,6 +99,10 @@ class Towns
 			$mapFile = config('data_path') . 'world/' . $mapName;
 		}
 
+		if (strpos($mapFile, '.gz') !== false) {
+			$mapFile = str_replace('.gz', '', $mapFile);
+		}
+
 		$towns = [];
 		if (file_exists($mapFile)) {
 			ini_set('memory_limit', '-1');
