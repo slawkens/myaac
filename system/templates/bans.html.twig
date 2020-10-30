@@ -1,0 +1,39 @@
+<table border="0" cellspacing="1" cellpadding="4" width="100%">
+	<tr align="center" bgcolor="{{ config.vdarkborder }}" class="white">
+		<td><span style="color: white"><b>Nick</b></span></td>
+		{% if configBans.hasType %}
+		<td><span style="color: white"><b>Type</b></span></td>
+		{% endif %}
+		<td><span style="color: white"><b>Expires</b></span></td>
+		{% if configBans.hasReason %}
+		<td><span style="color: white"><b>Reason</b></span></td>
+		{% endif %}
+		<td><span style="color: white"><b>Comment</b></span></td>
+		<td><span style="color: white"><b>Added by:</b></span></td>
+	</tr>
+	{% for ban in bans %}
+	<tr align="center" bgcolor="{{ getStyle(ban.i) }}">
+		<td height="50" width="140">{{ ban.player|raw }}</td>
+		{% if configBans.hasType %}
+		<td>{{ ban.type }}</td>
+		{% endif %}
+		<td>{{ ban.expires|raw }}</td>
+		{% if configBans.hasReason %}
+		<td>{{ ban.reason }}</td>
+		{% endif %}
+		<td>{{ ban.comment }}</td>
+		<td>
+			{{ ban.addedBy|raw }}<br/>
+			{{ ban.addedTime|raw }}
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+<table border="0" cellpadding="4" cellspacing="1" width="100%">
+{% if page > 1 %}
+	<tr><td width="100%" align="right" valign="bottom"><a href="{{ getLink('bans') }}/{{ (page - 1) }}" class="size_xxs">Previous Page</a></td></tr>
+{% endif %}
+{% if nextPage %}
+	<tr><td width="100%" align="right" valign="bottom"><a href="{{ getLink('bans') }}/{{ (page + 1) }}" class="size_xxs">Next Page</a></td></tr>
+{% endif %}
+</table>
