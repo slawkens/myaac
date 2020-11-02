@@ -204,13 +204,14 @@ $config = array(
 	// highscores page
 	'highscores_vocation_box' => true, // show 'Choose a vocation' box on the highscores (allowing peoples to sort highscores by vocation)?
 	'highscores_vocation' => true, // show player vocation under his nickname?
-	'highscores_frags' => false, // show 'Frags' tab (best fraggers on the server)? Only 0.3
+	'highscores_frags' => false, // show 'Frags' tab (best fraggers on the server)?
 	'highscores_balance' => false, // show 'Balance' tab (richest players on the server)
 	'highscores_outfit' => true, // show player outfit?
 	'highscores_country_box' => false, // doesnt work yet! (not implemented)
 	'highscores_groups_hidden' => 3, // this group id and higher won't be shown on the highscores
 	'highscores_ids_hidden' => array(0), // this ids of players will be hidden on the highscores (should be ids of samples)
-	'highscores_length' => 100, // how many records per page on highscores
+	'highscores_per_page' => 100, // how many records per page on highscores
+	'highscores_cache_ttl' => 15, // how often to update highscores from database in minutes (default 15 minutes)
 
 	// characters page
 	'characters' => array( // what things to display on character view page (true/false in each option)
