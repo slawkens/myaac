@@ -1,3 +1,5 @@
+SET @myaac_database_version = 30;
+
 CREATE TABLE `myaac_account_actions`
 (
 	`account_id` INT(11) NOT NULL,
@@ -57,7 +59,7 @@ CREATE TABLE `myaac_config`
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `myaac_config` (`name`, `value`) VALUES ('database_version', 30);
+INSERT INTO `myaac_config` (`name`, `value`) VALUES ('database_version', @myaac_database_version);
 
 CREATE TABLE `myaac_faq`
 (
