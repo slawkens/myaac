@@ -11,7 +11,6 @@
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
 defined('MYAAC') or die('Direct access not allowed!');
-require SYSTEM . 'functions_custom.php';
 
 function message($message, $type, $return)
 {
@@ -1378,3 +1377,6 @@ function Outfits_loadfromXML()
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat.php';
+
+// custom functions
+require SYSTEM . 'functions_custom.php';
