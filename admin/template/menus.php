@@ -12,7 +12,6 @@ return [
 	],
 	['name' => 'Menus', 'icon' => 'list', 'link' => 'menus'],
 	['name' => 'Plugins', 'icon' => 'plug', 'link' => 'plugins'],
-	['name' => 'Visitors', 'icon' => 'user', 'link' => 'visitors'],
 	['name' => 'Server Data', 'icon' => 'gavel', 'link' => 'data'],
 	['name' => 'Editor', 'icon' => 'edit', 'link' =>
 		[
@@ -30,6 +29,7 @@ return [
 		[
 			['name' => 'Logs', 'link' => 'logs'],
 			['name' => 'Reports', 'link' => 'reports'],
+			['name' => 'Visitors', 'icon' => 'user', 'link' => 'visitors'],
 		],
 	],
 ];
