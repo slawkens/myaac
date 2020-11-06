@@ -65,7 +65,6 @@ else {
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.min.css">
 <?php
 $twig->display('spells.html.twig', array(
-	'canEdit' => $canEdit,
 	'post_vocation_id' => $vocation_id,
 	'post_vocation' => $vocation,
 	'spells' => $spells,
