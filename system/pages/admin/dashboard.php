@@ -47,33 +47,20 @@ $tmp = '';
 if (fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
 
-$query_count = $db->query('SELECT
-  (SELECT COUNT(*) FROM accounts) as total_accounts, 
-  (SELECT COUNT(*) FROM players) as total_players,
-  (SELECT COUNT(*) FROM guilds) as total_guilds,
-  (SELECT COUNT(*) FROM houses) as total_houses;')->fetch();
-
-$twig->display('admin.statistics.html.twig', array(
-	'count' => $query_count,
-));
-
 echo '<div class="row">';
-$twig->display('admin.dashboard.html.twig', array(
-	'is_closed' => $is_closed,
-	'closed_message' => $closed_message,
-	'status' => $status,
-	'account_type' => USE_ACCOUNT_NAME ? 'name' : 'number'
-));
+$twig->display('admin.dashboard.html.twig', array());
+echo '</div>';
 
 $configAdminPanelModules = config('admin_panel_modules');
-if (isset($configAdminPanelModules))
+if (isset($configAdminPanelModules)) {
+	echo '<div class="row">';
 	$configAdminPanelModules = explode(',', $configAdminPanelModules);
-
-$twig_loader->prependPath(__DIR__ . '/modules/templates');
-foreach ($configAdminPanelModules as $box) {
-	$file = __DIR__ . '/modules/' . $box . '.php';
-	if (file_exists($file)) {
-		include($file);
+	$twig_loader->prependPath(__DIR__ . '/modules/templates');
+	foreach ($configAdminPanelModules as $box) {
+		$file = __DIR__ . '/modules/' . $box . '.php';
+		if (file_exists($file)) {
+			include($file);
+		}
 	}
-}
 echo '</div>';
+}

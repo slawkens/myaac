@@ -273,7 +273,7 @@ $config = array(
 	'status_interval' => 60,
 
 	// admin panel
-	'admin_panel_modules' => 'lastlogin,points,coins',
+	'admin_panel_modules' => 'statistics,web_status,server_status,lastlogin,created,points,coins,balance',    // default - statistics,web_status,server_status,lastlogin,created,points,coins,balance
 
 	// other
 	'anonymous_usage_statistics' => true,
