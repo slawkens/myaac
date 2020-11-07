@@ -7,7 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/adminlte.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">
+	<?php if (isset($use_datatable)) { ?>
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.bs.min.css">
+	<?php } ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $template_path; ?>style.css"/>
 	<!--[if lt IE 9]>
 	<script src="<?php echo BASE_URL; ?>tools/js/html5shiv.min.js"></script>
@@ -173,8 +175,10 @@
 ?>
 <script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
+<?php if (isset($use_datatable))  { ?>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.bs.min.js"></script>
+<?php } ?>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
 </body>
 </html>

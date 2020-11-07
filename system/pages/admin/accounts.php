@@ -11,6 +11,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Account editor';
 $admin_base = BASE_URL . 'admin/?p=accounts';
+$use_datatable = true;
 
 if ($config['account_country'])
 	require SYSTEM . 'countries.conf.php';
