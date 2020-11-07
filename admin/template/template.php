@@ -41,8 +41,15 @@
 				<span class="brand-text"><b>My</b>AAC</span>
 			</a>
 			<div class="sidebar">
-				<nav class="mt-2">
+				<nav class="mt-1">
 					<ul class="nav nav-pills nav-sidebar flex-column nav-legacy nav-child-indent" data-widget="treeview" data-accordion="false">
+						<li class="menu-text-li">
+							<span class="menu-text">
+								<a class="text-info" href="<?php echo BASE_URL; ?>" target="_blank">
+									<?php echo $config['lua']['serverName'] ?>
+								</a>
+							</span>
+						</li>
 						<?php
 						// name = Display name of link
 						// icon = fontawesome icon name without "fas fa-"
