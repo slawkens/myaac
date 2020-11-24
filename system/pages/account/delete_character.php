@@ -22,23 +22,28 @@ if(isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) {
 				$player_account = $player->getAccount();
 				if($account_logged->getId() == $player_account->getId()) {
 					if($password_verify == $account_logged->getPassword()) {
-						if(!$player->isOnline())
-						{
-							//dont show table "delete character" again
-							$show_form = false;
-							//delete player
-							if($db->hasColumn('players', 'deletion'))
-								$player->setCustomField('deletion', 1);
-							else
-								$player->setCustomField('deleted', 1);
-							$account_logged->logAction('Deleted character <b>' . $player->getName() . '</b>.');
-							$twig->display('success.html.twig', array(
-								'title' => 'Character Deleted',
-								'description' => 'The character <b>' . $player_name . '</b> has been deleted.'
-							));
+						if(!$player->isOnline()) {
+							if(!$player->isDeleted()) {
+								//dont show table "delete character" again
+								$show_form = false;
+								//delete player
+								if ($db->hasColumn('players', 'deletion'))
+									$player->setCustomField('deletion', 1);
+								else
+									$player->setCustomField('deleted', 1);
+								$account_logged->logAction('Deleted character <b>' . $player->getName() . '</b>.');
+								$twig->display('success.html.twig', array(
+									'title' => 'Character Deleted',
+									'description' => 'The character <b>' . $player_name . '</b> has been deleted.'
+								));
+							}
+							else {
+								$errors[] = 'This player has been already deleted.';
+							}
 						}
-						else
+						else {
 							$errors[] = 'This character is online.';
+						}
 					}
 					else {
 						$errors[] = 'Wrong password to account.';
