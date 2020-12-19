@@ -37,8 +37,6 @@ function version_check($name, $ok, $info = '', $warning = false)
 
 $failed = false;
 
-echo ($failed) ? '<div class="alert alert-warning"><span>' . $locale['step_requirements_failed'] . '</span></div>' : '';
-
 // start validating
 version_check($locale['step_requirements_php_version'], (PHP_VERSION_ID >= 50500), PHP_VERSION);
 
@@ -72,6 +70,7 @@ foreach ($extensions_optional as $ext => $errorMsg) {
 echo '<div class="text-center m-3">';
 
 if($failed) {
+	echo '<div class="alert alert-warning"><span>' . $locale['step_requirements_failed'] . '</span></div>';
 	echo next_form(true, false);
 }else {
 	echo next_form(true, true);
