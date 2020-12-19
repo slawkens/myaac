@@ -1,48 +1,76 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $locale['direction']; ?>" lang="<?php echo $locale['lang']; ?>" xml:lang="<?php echo $locale['lang']; ?>">
+<!DOCTYPE html>
+<html dir="<?php echo $locale['direction']; ?>" lang="<?php echo $locale['lang']; ?>" xml:lang="<?php echo $locale['lang']; ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $locale['encoding']; ?>" />
 	<title>MyAAC - <?php echo $locale['installation']; ?></title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="template/style.css" />
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>tools/js/jquery.min.js"></script>
 </head>
 <body>
 	<div id="wrapper">
-		<!--div class="buffer"-->
-			<div id="header">
+
+		<div id="body" class="container">
+		
+			<header id="header" class="pt-5 pb-5">
 				<h1>MyAAC <?php echo $locale['installation']; ?></h1>
-			</div>
+			</header>
 
-			<div id="body">
+			<div class="row">
 
-				<div id="sidebar">
-					<h2><?php echo $locale['steps']; ?></h2>
-					<ul>
+				<div id="sidebar" class="col-md-3">
+					<h3><?php echo $locale['steps']; ?></h3>
+					<ul class="list-group mt-4">
 						<?php
 							$i = 0;
-							foreach($steps as $key => $value)
-								echo '<li' . ($step == $value ? ' class="current"' : '') . '>' . ++$i . '. ' . $locale['step_' . $value] . '</li>';
+							foreach($steps as $key => $value){
+
+                                if ($step == $value) {
+                                    $progress = ($i == 6) ? 100 : $i * 16;
+								} 
+								
+								echo '<li' . ($step == $value ? ' class="list-group-item active"' : ' class="list-group-item"') . '>' . ++$i . '. ' . $locale['step_' . $value] . '</li>';
+							}
+								
 						?>
 					</ul>
 				</div>
 
-				<div id="content">
+				<div id="content" class="col-md-9">
+
 					<?php
 						if(isset($locale['step_' . $step . '_title']))
-							echo '<h1>' . $locale['step_' . $step . '_title'] . '</h1>';
+							echo '<h3 class="mb-4">' . $locale['step_' . $step . '_title'] . '</h3>';
 						else
-							echo '<h1>' . $locale['step_' . $step] . '</h1>';
-						echo $content;
+							echo '<h3 class="mb-4">' . $locale['step_' . $step] . '</h3>';
 					?>
+
+					<?php
+					if(!isset($config['installed'])):
+					?>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="progress mb-2">
+								<div class="progress-bar progress-bar-striped progress-bar-animated" style="width: <?php echo $progress; ?>%" role="progressbar" aria-valuenow="<?php echo $progress; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+					</div>
+					<?php endif; ?>
+
+					<?php echo $content; ?>
+
 				</div>
 
-				<div class="break"></div>
 			</div>
-		<!--/div-->
+
+			<hr />
+
+		</div>
+
 	</div>
 
-	<div id="footer">
+	<footer id="footer" class="p-4">
 		<p style="text-align: center;"><?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?></p>
-	</div>
+	</footer>
 </body>
 </html>

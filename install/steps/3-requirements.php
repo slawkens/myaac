@@ -14,16 +14,18 @@ $extensions_required = [
 function version_check($name, $ok, $info = '', $warning = false)
 {
 	global $failed;
-	echo '<p class="' . ($ok ? 'success' : ($warning ? 'warning' : 'error')) . '">' . $name;
+	echo '<div class="alert alert-' . ($ok ? 'success' : ($warning ? 'warning' : 'danger')) . '">' . $name;
 	if(!empty($info))
 		echo ': <b>' . $info . '</b>';
 
-	echo '</p>';
+	echo '</div>';
 	if(!$ok && !$warning)
 		$failed = true;
 }
 
 $failed = false;
+
+echo ($failed) ? '<div class="alert alert-warning"><span>' . $locale['step_requirements_failed'] . '</span></div>' : '';
 
 // start validating
 version_check($locale['step_requirements_php_version'], (PHP_VERSION_ID >= 50500), PHP_VERSION);
@@ -44,12 +46,14 @@ foreach ($extensions_required as $ext) {
 	version_check(str_replace('$EXTENSION$', strtoupper($ext), $locale['step_requirements_extension']) , $loaded, $loaded ? $locale['loaded'] : $locale['not_loaded']);
 }
 
+echo '<div class="text-center m-3">';
 
-if($failed)
-{
-	echo '<br/><b>' . $locale['step_requirements_failed'];
+if($failed) {
 	echo next_form(true, false);
-}
-else
+}else {
 	echo next_form(true, true);
+}
+
+echo '</div>';
+
 ?>
