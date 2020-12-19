@@ -24,9 +24,9 @@ function message($message, $type, $return)
 	}
 
 	if($return)
-		return '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+		return '<div class="alert alert-' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
 
-	echo '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	echo '<div class="alert alert-' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
 	return true;
 }
 function success($message, $return = false) {
@@ -39,7 +39,7 @@ function note($message, $return = false) {
     return message($message, 'note', $return);
 }
 function error($message, $return = false) {
-    return message($message, 'error', $return);
+    return message($message, 'danger error', $return);
 }
 function message1($head, $message, $type, $icon , $return)
 {//return '<div class="' . $type . '">' . $message . '</div>';
