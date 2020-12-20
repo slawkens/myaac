@@ -2,6 +2,9 @@
 // few things we'll need
 require '../common.php';
 
+define('ADMIN_PANEL', true);
+define('MYAAC_ADMIN', true);
+
 if(file_exists(BASE . 'config.local.php')) {
 	require_once BASE . 'config.local.php';
 }
@@ -11,8 +14,6 @@ if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['i
 	header('Location: ' . BASE_URL . 'install/');
 	throw new RuntimeException('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
 }
-
-define('ADMIN_PANEL', true);
 
 $content = '';
 
