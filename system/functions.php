@@ -23,10 +23,12 @@ function message($message, $type, $return)
 		return true;
 	}
 
-	if($return)
-		return '<div class="alert alert-' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	if($return) {
+		// for install and admin pages use bootstrap classes
+		return '<div class="' . ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'alert alert-' : '') . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	}
 
-	echo '<div class="alert alert-' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	echo '<div class="' . ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'alert alert-' : '') . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
 	return true;
 }
 function success($message, $return = false) {
@@ -39,7 +41,7 @@ function note($message, $return = false) {
     return message($message, 'note', $return);
 }
 function error($message, $return = false) {
-    return message($message, 'danger error', $return);
+    return message($message, ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'danger' : 'error'), $return);
 }
 function message1($head, $message, $type, $icon , $return)
 {//return '<div class="' . $type . '">' . $message . '</div>';
