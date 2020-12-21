@@ -14,16 +14,11 @@ $title = 'Bans list';
 $configBansPerPage = config('bans_per_page');
 $_page = isset($_GET['page']) ? $_GET['page'] : 1;
 
-if(!is_numeric($_page) || $_page > PHP_INT_MAX) {
+if(!is_numeric($_page) || $_page < 1 || $_page > PHP_INT_MAX) {
 	$_page = 1;
 }
 
-if ($_page > 1) {
-	$offset = ($_page - 1) * $configBansPerPage;
-}
-else {
-	$offset = 0;
-}
+$offset = ($_page - 1) * $configBansPerPage;
 
 /**
  * @var OTS_DB_MySQL $db
