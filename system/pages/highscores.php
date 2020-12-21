@@ -15,9 +15,13 @@ $configHighscoresCountryBox = config('highscores_country_box');
 if(config('account_country') && $configHighscoresCountryBox)
 	require SYSTEM . 'countries.conf.php';
 
-$list = isset($_GET['list']) ? $_GET['list'] : '';
-$_page = isset($_GET['page']) ? $_GET['page'] : 0;
+$list = isset($_GET['list']) ? $_GET['list'] : 'experience';
+$_page = isset($_GET['page']) ? $_GET['page'] : 1;
 $vocation = isset($_GET['vocation']) ? $_GET['vocation'] : 'all';
+
+if(!is_numeric($_page) || $_page < 1 || $_page > PHP_INT_MAX) {
+	$_page = 1;
+}
 
 $add_sql = '';
 
@@ -146,7 +150,7 @@ if ($cache->enabled()) {
 	}
 }
 
-$offset = $_page * $configHighscoresPerPage;
+$offset = ($_page - 1) * $configHighscoresPerPage;
 if (!isset($highscores) || empty($highscores)) {
 	if ($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 		if ($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
@@ -274,14 +278,9 @@ foreach($highscores as $id => &$player)
 	}
 }
 
-if(!$i) {
-	$extra = ($configHighscoresOutfit ? 1 : 0);
-	echo '<tr bgcolor="' . config('darkborder') . '"><td colspan="' . ($skill == POT::SKILL__LEVEL ? 5 + $extra : 4 + $extra) . '">No records yet.</td></tr>';
-}
-
 //link to previous page if actual page is not first
 $linkPreviousPage = '';
-if($_page > 0) {
+if($_page > 1) {
 	$linkPreviousPage = getLink('highscores') . '/' . $list . ($vocation !== 'all' ? '/' . $vocation : '') . '/' . ($_page - 1);
 }
 
@@ -290,7 +289,6 @@ $linkNextPage = '';
 if($show_link_to_next_page) {
 	$linkNextPage = getLink('highscores') . '/' . $list . ($vocation !== 'all' ? '/' . $vocation : '') . '/' . ($_page + 1);
 }
-
 
 $types = array(
 	'experience' => 'Experience',
@@ -313,6 +311,7 @@ if(config('highscores_balance'))
 /** @var Twig\Environment $twig */
 $twig->display('highscores.html.twig', [
 	'highscores' => $highscores,
+	'totalRows' => $i - 1,
 	'list' => $list,
 	'skill' => $skill,
 	'skillName' => ($skill == SKILL_FRAGS ? 'Frags' : ($skill == SKILL_BALANCE ? 'Balance' : getSkillName($skill))),

@@ -25,39 +25,43 @@
 					{% endif %}
 				</tr>
 
-				{% set row = 0 %}
-				{% for player in highscores %}
-				<tr bgcolor="{{ getStyle(row) }}">
-					{% set row = row + 1 %}
+				{% if totalRows < 1 %}
+				<tr bgcolor="{{ config('darkborder') }}"><td colspan="100%">No records yet.</td></tr>
+				{% else %}
+					{% set row = 0 %}
+					{% for player in highscores %}
+					<tr bgcolor="{{ getStyle(row) }}">
+						{% set row = row + 1 %}
 
-					{% if config.account_country %}
-					<td>{{ player.flag|raw }}</td>
-					{% endif %}
-
-					<td>{{ player.rank }}.</td>
-
-					{% if config.highscores_outfit %}
-					<td>{{ player.outfit|raw }}</td>
-					{% endif %}
-
-					<td>
-						<a href="{{ player.link }}">
-							<span style="color: {% if player.online > 0 %}green{% else %}red{% endif %}">{{ player.name }}</span>
-						</a>
-						{% if config.highscores_vocation %}
-						<br/><small>{{ player.vocation }}</small>
+						{% if config.account_country %}
+						<td>{{ player.flag|raw }}</td>
 						{% endif %}
-					</td>
 
-					<td>
-						<div style="text-align:center">{{ player.value }}</div>
-					</td>
+						<td>{{ player.rank }}.</td>
 
-					{% if skill == constant('POT::SKILL__LEVEL') %}
-						<td><div style="text-align:center">{{ player.experience }}</div></td>
-					{% endif %}
-				</tr>
-				{% endfor %}
+						{% if config.highscores_outfit %}
+						<td>{{ player.outfit|raw }}</td>
+						{% endif %}
+
+						<td>
+							<a href="{{ player.link }}">
+								<span style="color: {% if player.online > 0 %}green{% else %}red{% endif %}">{{ player.name }}</span>
+							</a>
+							{% if config.highscores_vocation %}
+							<br/><small>{{ player.vocation }}</small>
+							{% endif %}
+						</td>
+
+						<td>
+							<div style="text-align:center">{{ player.value }}</div>
+						</td>
+
+						{% if skill == constant('POT::SKILL__LEVEL') %}
+							<td><div style="text-align:center">{{ player.experience }}</div></td>
+						{% endif %}
+					</tr>
+					{% endfor %}
+				{% endif %}
 			</table>
 			<table border="0" cellpadding="4" cellspacing="1" width="100%">
 				{% if linkPreviousPage|length > 0 %}
