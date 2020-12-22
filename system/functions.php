@@ -23,10 +23,12 @@ function message($message, $type, $return)
 		return true;
 	}
 
-	if($return)
-		return '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	if($return) {
+		// for install and admin pages use bootstrap classes
+		return '<div class="' . ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'alert alert-' : '') . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	}
 
-	echo '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	echo '<div class="' . ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'alert alert-' : '') . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
 	return true;
 }
 function success($message, $return = false) {
@@ -39,28 +41,9 @@ function note($message, $return = false) {
     return message($message, 'note', $return);
 }
 function error($message, $return = false) {
-    return message($message, 'error', $return);
+    return message($message, ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'danger' : 'error'), $return);
 }
-function message1($head, $message, $type, $icon , $return)
-{//return '<div class="' . $type . '">' . $message . '</div>';
-    if($return)
-        return '<div class="alert alert-'.$type.' alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-'.$icon.'"></i>  '.$head.':</h4>'.$message.'</div>';
 
-    echo '<div class="alert alert-'.$type.' alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-'.$icon.'"></i> '.$head.':</h4>'.$message.'</div>';
-    return true;
-}
-function success1($message, $return = false) {
-    return message('Info', $message, 'success','success', $return);
-}
-function warning1($message, $return = false) {
-    return message('Warning',$message, 'warning','ban', $return);
-}
-function note1($message, $return = false) {
-    return message('Info',$message, 'info','info', $return);
-}
-function error1($message, $return = false) {
-    return message("Alert", $message, 'danger','check', $return);
-}
 function longToIp($ip)
 {
 	$exp = explode(".", long2ip($ip));

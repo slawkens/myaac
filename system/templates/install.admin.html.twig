@@ -1,32 +1,26 @@
-<style>
-	tr, td {
-		border-bottom: 1px solid #ddd;
-		padding: 15px;
-	}
-</style>
+{% if errors is not empty %}
+<div class="alert alert-danger">
+	{% for error in errors %}
+		<span>{{ error }}</span>
+	{% endfor %}
+</div>
+{% endif %}
+
 <form action="{{ constant('BASE_URL') }}install/" method="post" autocomplete="off">
 	<input type="hidden" name="step" id="step" value="finish" />
-	<table>
-		{% for value in ['email', account, 'password', 'player_name'] %}
-		<tr>
-			<td>
-				<label for="vars_{{ value }}">
-					<span>{{ locale['step_admin_' ~ value] }}</span>
-				</label>
-				<br/>
-				<input type="text" name="vars[{{ value }}]" id="vars_{{ value }}"{% if session['var_' ~ value] is not null %} value="{{ session['var_' ~ value] }}"{% endif %}/>
-			</td>
-			<td>
-				<em>{{ locale['step_admin_' ~ value ~ '_desc']|raw }}</em>
-			</td>
-		</tr>
-		{% endfor %}
-	</table>
+	
+	{% for value in ['email', account, 'password', 'player_name'] %}
+	
+	<div class="form-group mb-2">
+		<label for="vars_{{ value }}">{{ locale['step_admin_' ~ value] }}</label>
+		<input class="form-control" type="text" name="vars[{{ value }}]" id="vars_{{ value }}"{% if session['var_' ~ value] is not null %} value="{{ session['var_' ~ value] }}"{% endif %}/>
+		<small class="form-text text-muted">{{ locale['step_admin_' ~ value ~ '_desc']|raw }}</small>
+	</div>
 
-	{% if errors is defined %}
-		{% for error in errors %}
-			<p class="error">{{ error }}</p>
-		{% endfor %}
-	{% endif %}
+	{% endfor %}
+
+	<div class="text-center m-3">
 	{{ buttons|raw }}
+	</div>
+
 </form>
