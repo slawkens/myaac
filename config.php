@@ -86,8 +86,8 @@ $config = array(
 	),
 
 	// images
-	'outfit_images_url' => 'http://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
-	'item_images_url' => 'http://item-images.ots.me/1092/', // set to images/items if you host your own items in images folder
+	'outfit_images_url' => 'https://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
+	'item_images_url' => 'https://item-images.ots.me/1092/', // set to images/items if you host your own items in images folder
 
 	// account
 	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)
@@ -150,7 +150,7 @@ $config = array(
 		3 => 'Paladin Sample',
 		4 => 'Knight Sample'
 	),
-	
+
 	// it must show limited number of players after using search in character page
 	'characters_search_limit' => 15,
 
