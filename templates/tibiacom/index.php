@@ -12,9 +12,16 @@ if(isset($config['boxes']))
 	<link href="<?php echo $template_path; ?>/basic.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="tools/basic.js"></script>
 	<script type="text/javascript" src="<?php echo $template_path; ?>/ticker.js"></script>
+	
+	<?php if(!empty($config['network_twitter'])): ?>
 	<script id="twitter-wjs" src="<?php echo $template_path; ?>/js/twitter.js"></script>
+	<?php endif; ?>
+
+	<?php if(!empty($config['network_facebook'])): ?>
 	<script id="facebook-jssdk" async src="<?php echo $template_path; ?>/js/facebook.js"></script>
 	<link href="<?php echo $template_path; ?>/css/facebook.css" rel="stylesheet" type="text/css">
+	<?php endif; ?>
+	
 	<script type="text/javascript">
 		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
 		<?php
