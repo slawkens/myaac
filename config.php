@@ -85,9 +85,9 @@ $config = array(
 	),
 
 	// images
-	'outfit_images_url' => 'http://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
+	'outfit_images_url' => 'https://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
 	'outfit_images_wrong_looktypes' => [75, 126, 127, 266, 302], // this looktypes needs to have different margin-top and margin-left because they are wrong positioned
-	'item_images_url' => 'http://item-images.ots.me/1092/', // set to images/items if you host your own items in images folder
+	'item_images_url' => 'https://item-images.ots.me/1092/', // set to images/items if you host your own items in images folder
 	'item_images_extension' => '.gif',
 
 	// account
