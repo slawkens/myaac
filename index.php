@@ -328,11 +328,15 @@ if($load_it)
 				)) . $content;
 		}
 	} else {
-		$file = SYSTEM . 'pages/' . $page . '.php';
+		$file = $template_path . '/pages/' . $page . '.php';
 		if(!@file_exists($file))
 		{
-			$page = '404';
-			$file = SYSTEM . 'pages/404.php';
+			$file = SYSTEM . 'pages/' . $page . '.php';
+			if(!@file_exists($file))
+			{
+				$page = '404';
+				$file = SYSTEM . 'pages/404.php';
+			}
 		}
 	}
 
