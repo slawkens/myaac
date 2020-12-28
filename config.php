@@ -84,11 +84,22 @@ $config = array(
 		//'2' => 'Your Second World Name'
 	),
 
+	// loot
+	'loot_show_percentage' => true, // to true to show tooltip percent
+
+	// links
+	'items_url' => 'https://tibia.fandom.com/wiki/', // set to website which shows details about items.
+
 	// images
 	'outfit_images_url' => 'https://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
 	'outfit_images_wrong_looktypes' => [75, 126, 127, 266, 302], // this looktypes needs to have different margin-top and margin-left because they are wrong positioned
 	'item_images_url' => 'https://item-images.ots.me/1092/', // set to images/items if you host your own items in images folder
 	'item_images_extension' => '.gif',
+
+	// creatures
+	'creature_images_url' => 'images/monsters/', // set to images/monsters if you host your own creatures in images folder
+	'creature_images_extension' => '.gif',
+	'creature_images_preview' => false,  // set to true to allow picture previews for creatures
 
 	// account
 	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)

@@ -102,6 +102,7 @@ else {
 			'/^changelog\/[0-9]+\/?$/' => array('subtopic' => 'changelog', 'page' => '$1'),
 			'/^commands\/add\/?$/' => array('subtopic' => 'commands', 'action' => 'add'),
 			'/^commands\/edit\/?$/' => array('subtopic' => 'commands', 'action' => 'edit'),
+			'/^creatures\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'creatures', 'creature' => '$1'),
 			'/^faq\/add\/?$/' => array('subtopic' => 'faq', 'action' => 'add'),
 			'/^faq\/edit\/?$/' => array('subtopic' => 'faq', 'action' => 'edit'),
 			'/^forum\/add_board\/?$/' => array('subtopic' => 'forum', 'action' => 'add_board'),#

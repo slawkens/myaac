@@ -95,6 +95,16 @@ function getPlayerLink($name, $generate = true)
 	return generateLink($url, $name);
 }
 
+function getMonsterLink($name, $generate = true)
+{
+	global $config;
+
+	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'creatures/' . urlencode($name);
+
+	if(!$generate) return $url;
+	return generateLink($url, $name);
+}
+
 function getHouseLink($name, $generate = true)
 {
 	global $db, $config;
@@ -152,6 +162,23 @@ function getItemImage($id, $count = 1)
 
 	global $config;
 	return '<img src="' . $config['item_images_url'] . $file_name . config('item_images_extension') . '"' . $tooltip . ' width="32" height="32" border="0" alt="' .$id . '" />';
+}
+
+function getItemRarity($chance) {
+	if ($chance >= 21) {
+		return "common";
+	} elseif (between($chance, 8, 21)) {
+		return "uncommon";
+	} elseif (between($chance, 1.1, 8)) {
+		return "semi rare";
+	} elseif (between($chance, 0.4, 1.1)) {
+		return "rare";
+	} elseif (between($chance, 0.8, 0.4)) {
+		return "very rare";
+	} elseif ($chance <= 0.8) {
+		return "extremely rare";
+	}
+	return '';
 }
 
 function getFlagImage($country)
@@ -1309,6 +1336,7 @@ function getPlayerNameByAccount($id)
 
 	return '';
 }
+
 function echo_success($message)
 {
 	echo '<div class="col-12 success mb-2">' . $message . '</div>';
@@ -1355,6 +1383,29 @@ function Outfits_loadfromXML()
 	$unlocked = $node->getAttribute('unlocked');
 	$enabled = $node->getAttribute('enabled');
 	return array('id' => $looktype, 'type' => $type, 'name' => $lookname, 'premium' => $premium, 'unlocked' => $unlocked, 'enabled' => $enabled);
+}
+
+function left($str, $length) {
+	return substr($str, 0, $length);
+}
+
+function right($str, $length) {
+	return substr($str, -$length);
+}
+
+function getCreatureImgPath($creature){
+	$creature_path = config('creature_images_url');
+	$creature_gfx_name = trim(strtolower($creature)) . config('creature_images_extension');
+	if (!file_exists($creature_path . $creature_gfx_name)) {
+		$creature_gfx_name = str_replace(" ", "", $creature_gfx_name);
+		if (file_exists($creature_path . $creature_gfx_name)) {
+			return $creature_path . $creature_gfx_name;
+		} else {
+			return $creature_path . 'nophoto.png';
+		}
+	} else {
+		return $creature_path . $creature_gfx_name;
+	}
 }
 
 // validator functions

@@ -24,13 +24,28 @@ $function = new TwigFunction('getStyle', function ($i) {
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('getCreatureImgPath', function ($i) {
+	return getCreatureImgPath($i);
+});
+$twig->addFunction($function);
+
 $function = new TwigFunction('getLink', function ($s) {
 	return getLink($s);
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('generateLink', function ($s, $n, $b = false) {
+	return generateLink($s, $n, $b);
+});
+$twig->addFunction($function);
+
 $function = new TwigFunction('getPlayerLink', function ($s, $p) {
 	return getPlayerLink($s, $p);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('getMonsterLink', function ($s, $p) {
+	return getMonsterLink($s, $p);
 });
 $twig->addFunction($function);
 
