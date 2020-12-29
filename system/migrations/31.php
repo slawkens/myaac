@@ -1,7 +1,7 @@
 <?php
 
 if(!$db->hasColumn(TABLE_PREFIX . 'monsters', 'elements')) {
-	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `elements` TEXT NOT NULL DEFAULT '' AFTER `immunities`;");
+	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `elements` TEXT AFTER `immunities`;");
 	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `pushable` TINYINT(1) NOT NULL DEFAULT '0' AFTER `convinceable`;");
 	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `canpushitems` TINYINT(1) NOT NULL DEFAULT '0' AFTER `pushable`;");
 	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `canpushcreatures` TINYINT(1) NOT NULL DEFAULT '0' AFTER `canpushitems`;");
@@ -14,5 +14,5 @@ if(!$db->hasColumn(TABLE_PREFIX . 'monsters', 'elements')) {
 	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `rewardboss` TINYINT(1) NOT NULL DEFAULT '0' AFTER `attackable`;");
 	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `defense` INT(11) NOT NULL DEFAULT '0' AFTER `rewardboss`;");
 	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `armor` INT(11) NOT NULL DEFAULT '0' AFTER `defense`;");
-	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `summons` TEXT NOT NULL DEFAULT '' AFTER `loot`;");
+	$db->exec("ALTER TABLE `" . TABLE_PREFIX . "monsters`  ADD `summons` TEXT AFTER `loot`;");
 }
