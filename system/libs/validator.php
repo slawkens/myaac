@@ -139,18 +139,8 @@ class Validator
 			return false;
 		}
 
-		if (strlen($password) < 8 || strlen($password) > 30) {
-			self::$lastError = 'The password must have at least 8 and maximum 30 letters!';
-			return false;
-		}
-
-		if(strspn($password, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890") != strlen($password)) {
-			self::$lastError = 'Password contains illegal letters (a-z, A-Z and 0-9 only!).';
-			return false;
-		}
-
-		if(!ctype_alnum($password)) {
-			self::$lastError = 'Password contains illegal letters (a-z, A-Z and 0-9 only!).';
+		if (strlen($password) < 8 || strlen($password) > 29) {
+			self::$lastError = 'The password must have at least 8 and maximum 29 letters!';
 			return false;
 		}
 
@@ -160,7 +150,7 @@ class Validator
 		}
 
 		if(!preg_match('/[0-9]/', $password)) {
-			self::$lastError = 'The password must contain at least one letter other than A-Z or a-z!';
+			self::$lastError = 'The password must contain at least one number!';
 			return false;
 		}
 
