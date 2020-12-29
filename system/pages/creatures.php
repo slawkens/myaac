@@ -50,7 +50,7 @@ if (empty($_REQUEST['creature'])) {
 			$item['name'] = getItemNameById($item['id']);
 			$item['rarity_chance'] = round($item['chance'] / 1000, 2);
 			$item['rarity'] = getItemRarity($item['chance']);
-			$item['tooltip'] = ucfirst($item['name']) . '<br/>Chance: ' . $item['rarity'] . (config('loot_show_percentage') ? ' ('. $item['rarity_chance'] .'%)' : '') . '<br/>Max count: ' . $item['count'];
+			$item['tooltip'] = ucfirst($item['name']) . '<br/>Chance: ' . $item['rarity'] . (config('creature_loot_percentage') ? ' ('. $item['rarity_chance'] .'%)' : '') . '<br/>Max count: ' . $item['count'];
 			$loot_list[] =  $item;
 		}
 
