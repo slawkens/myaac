@@ -185,7 +185,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		}
 
         // SELECT query on database
-		$this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : '')) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
+		$this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
 		self::$cache[$id] = $this->data;
     }
 
