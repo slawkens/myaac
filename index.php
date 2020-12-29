@@ -56,10 +56,16 @@ if(file_exists(BASE . 'config.local.php')) {
 	require_once BASE . 'config.local.php';
 }
 
+ini_set('log_errors', 1);
 if(config('env') === 'dev') {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
+}
+else {
+	ini_set('display_errors', 0);
+	ini_set('display_startup_errors', 0);
+	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 }
 
 if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE . 'install'))
