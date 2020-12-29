@@ -272,6 +272,12 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			$this->data['premend'] = 0;
 		}
 	}
+	else if($this->db->hasColumn('accounts', 'premium_ends_at')) {
+		$field = 'premium_ends_at';
+		if(!isset($this->data['premium_ends_at'])) {
+			$this->data['premium_ends_at'] = 0;
+		}
+	}
 
         // UPDATE query on database
         $this->db->exec('UPDATE `accounts` SET ' . ($this->db->hasColumn('accounts', 'name') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `blocked` = ' . (int) $this->data['blocked'] . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `country` = ' . $this->db->quote($this->data['country']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $field . '` = ' . (int) $this->data[$field] . ' WHERE `id` = ' . $this->data['id']);
@@ -363,6 +369,10 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			throw new E_OTS_NotLoaded();
 		}
 
+		if(isset($this->data['premium_ends_at'])) {
+			return round(($this->data['premium_ends_at'] - time()) / (24 * 60 * 60), 2);
+		}
+
 		if(isset($this->data['premend'])) {
 			return round(($this->data['premend'] - time()) / (24 * 60 * 60), 2);
 		}
@@ -390,6 +400,10 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
 		global $config;
         if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return true;
+
+	    if(isset($this->data['premium_ends_at'])) {
+		    return $this->data['premium_ends_at'] > time();
+	    }
 
 		if(isset($this->data['premend'])) {
 			return $this->data['premend'] > time();
