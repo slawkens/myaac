@@ -12,7 +12,7 @@ $dirs_optional = [
 ];
 
 $extensions_required = [
-	'pdo', 'pdo_mysql', 'xml', 'zip'
+	'json', 'pdo', 'pdo_mysql', 'xml', 'zip'
 ];
 $extensions_optional = [
 	'gd' => $locale['step_requirements_warning_player_signatures'],
