@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -818,13 +819,16 @@ function getWorldName($id)
  */
 function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 {
-	/** @var PHPMailer $mailer */
 	global $mailer, $config;
+
+	if (!config('mail_enabled')) {
+		log_append('mailer-error.log', '_mail() function has been used, but config.mail_enabled is disabled.');
+	}
+
 	if(!$mailer)
 	{
-		require SYSTEM . 'libs/phpmailer/PHPMailerAutoload.php';
 		$mailer = new PHPMailer();
-		$mailer->setLanguage('en', LIBS . 'phpmailer/language/');
+		//$mailer->setLanguage('en', LIBS . 'phpmailer/language/');
 	}
 	else {
 		$mailer->clearAllRecipients();
