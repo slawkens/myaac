@@ -5,7 +5,7 @@
 	{% set i = 0 %}
 	{% for ticker in tickers %}
 	<tr bgcolor="{{ getStyle(i) }}">
-		<td style="width: 16px;"><img src="{{ template_path }}/images/news/icon_{{ ticker.icon }}_small.gif"/></td>
+		<td style="width: 16px;"><img src="{{ constant('BASE_URL') }}images/news/icon_{{ ticker.icon }}_small.gif"/></td>
 		<td style="width: 80px;">{{ ticker.date|date("j M Y") }}</td>
 		<td>{{ ticker.body|raw }}</td>
 	</tr>

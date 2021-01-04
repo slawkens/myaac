@@ -13,7 +13,7 @@
 				{% for ticker in tickers %}
 				<div id="TickerEntry-{{ i }}" class="Row" onclick='TickerAction("TickerEntry-{{ i }}")'>
 					<div class="{% if (i / 2) matches '/^\\d+$/' %}Odd{% else %}Even{% endif %}">
-					<div class="NewsTickerIcon" style="background-image: url({{ template_path }}/images/news/icon_{{ ticker.icon }}_small.gif);"></div>
+					<div class="NewsTickerIcon" style="background-image: url({{ constant('BASE_URL') }}images/news/icon_{{ ticker.icon }}_small.gif);"></div>
 					<div id="TickerEntry-{{ i }}-Button" class="NewsTickerExtend" style="background-image: url({{ template_path }}/images/general/plus.gif);"></div>
 					<div class="NewsTickerText">
 						<span class="NewsTickerDate">{{ ticker.date|date("j M Y") }} -</span>
