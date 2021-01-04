@@ -353,8 +353,8 @@ else if (isset($_REQUEST['search'])) {
 								</div>
 								<div class="form-group row">
 									<div class="col-12 col-sm-12 col-lg-6">
-										<label for="email">Email:</label>
-										<input type="text" class="form-control" id="email" name="email" autocomplete="off" maxlength="20" value="<?php echo $account->getEMail(); ?>"/>
+										<label for="email">Email:</label><?php echo (config('mail_enabled') ? ' (<a href="' . ADMIN_URL . '?p=mailer&mail_to=' . $account->getEMail() . '">Send Mail</a>)' : ''); ?>
+										<input type="text" class="form-control" id="email" name="email" autocomplete="off" value="<?php echo $account->getEMail(); ?>"/>
 									</div>
 									<?php if ($hasCoinsColumn): ?>
 										<div class="col-12 col-sm-12 col-lg-6">
