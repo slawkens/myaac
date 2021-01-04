@@ -34,7 +34,7 @@
 					<div class="creatureImages">
 						<a href="{{ getMonsterLink(creature.name, false)|raw }}">
 							<div class="creature_img " style="background-image: url({{ creature.img_link }}"></div>
-							<img class=" {{ (creature.rewardboss ? 'creatureBoss' : '') }}" src="{{ getCreatureImgPath(creature.name) }}" border="0"/>
+							<img class=" {{ (creature.rewardboss ? 'creatureBoss' : '') }}" src="{{ creature.img_link }}" border="0"/>
 						</a>
 						<div>{{ creature.name }}</div>
 					</div>

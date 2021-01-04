@@ -13,10 +13,19 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = "Creatures";
 
 if (empty($_REQUEST['creature'])) {
-	$creatures = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1 '.(empty($_REQUEST['boss']) ? '': 'AND `rewardboss` = 1').' ORDER BY name asc');
+	$preview = config('creature_images_preview');
+	$creatures = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1 '.(empty($_REQUEST['boss']) ? '': 'AND `rewardboss` = 1').' ORDER BY name asc')->fetchAll();
+
+	if ($preview) {
+		foreach($creatures as $key => &$creature)
+		{
+			$creature['img_link'] = getCreatureImgPath($creature['name']);
+		}
+	}
+
 	$twig->display('creatures.html.twig', array(
-		'creatures' => $creatures->fetchAll(),
-		'preview' => config('creature_images_preview'),
+		'creatures' => $creatures,
+		'preview' => $preview
 	));
 
 } else {
