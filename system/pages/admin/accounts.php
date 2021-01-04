@@ -343,12 +343,12 @@ else if (isset($_REQUEST['search'])) {
 									<?php if ($hasSecretColumn): ?>
 										<div class="col-12 col-sm-12 col-lg-6">
 											<label for="secret">Secret:</label>
-											<input type="text" class="form-control" id="secret" name="secret" autocomplete="off" size="8" maxlength="11" value="<?php echo $account->getCustomField('secret'); ?>"/>
+											<input type="text" class="form-control" id="secret" name="secret" autocomplete="off" value="<?php echo $account->getCustomField('secret'); ?>"/>
 										</div>
 									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-6">
-										<input type="text" class="form-control" id="key" name="key" autocomplete="off" size="8" maxlength="11" value="<?php echo $account->getCustomField('key'); ?>"/>
 										<label for="key">Recovery Key:</label>
+										<input type="text" class="form-control" id="key" name="key" autocomplete="off" value="<?php echo $account->getCustomField('key'); ?>"/>
 									</div>
 								</div>
 								<div class="form-group row">
@@ -359,7 +359,7 @@ else if (isset($_REQUEST['search'])) {
 									<?php if ($hasCoinsColumn): ?>
 										<div class="col-12 col-sm-12 col-lg-6">
 											<label for="t_coins">Tibia Coins:</label>
-											<input type="text" class="form-control" id="t_coins" name="t_coins" autocomplete="off" maxlength="8" value="<?php echo $account->getCustomField('coins') ?>"/>
+											<input type="text" class="form-control" id="t_coins" name="t_coins" autocomplete="off" maxlength="11" value="<?php echo $account->getCustomField('coins') ?>"/>
 										</div>
 									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-6">
