@@ -347,8 +347,8 @@ else if (isset($_REQUEST['search'])) {
 										</div>
 									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-6">
-										<label for="key">Key:</label>
 										<input type="text" class="form-control" id="key" name="key" autocomplete="off" size="8" maxlength="11" value="<?php echo $account->getCustomField('key'); ?>"/>
+										<label for="key">Recovery Key:</label>
 									</div>
 								</div>
 								<div class="form-group row">
