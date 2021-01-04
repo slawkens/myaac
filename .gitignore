@@ -42,7 +42,7 @@ plugins/*
 !plugins/account-create-hint.json
 !plugins/account-create-hint
 landing
-./login.php
+/login.php
 
 # others/rest
 system/pages/downloads.php
