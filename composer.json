@@ -2,6 +2,7 @@
     "require": {
         "php": ">=5.5",
         "ext-json": "*",
+        "ext-gd": "*",
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
         "ext-xml": "*",
