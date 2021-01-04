@@ -54,6 +54,20 @@ $function = new TwigFunction('getGuildLink', function ($s, $p) {
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('truncate', function ($s, $n) {
+    return truncate($s, $n);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('getChangelogType', function ($n) {
+    return getChangelogType($n);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('getChangelogWhere', function ($n) {
+	return getChangelogWhere($n);
+});
+$twig->addFunction($function);
 $function = new TwigFunction('hook', function ($hook) {
 	global $hooks;
 

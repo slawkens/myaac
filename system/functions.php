@@ -1299,6 +1299,33 @@ function getBanType($typeId)
 	return "Unknown Type";
 }
 
+function getChangelogType($v)
+{
+	switch($v) {
+		case 1:
+			return 'added';
+		case 2:
+			return 'removed';
+		case 3:
+			return 'changed';
+		case 4:
+			return 'fixed';
+	}
+
+	return 'unknown';
+}
+
+function getChangelogWhere($v)
+{
+	switch($v) {
+		case 1:
+			return 'server';
+		case 2:
+			return 'website';
+	}
+
+	return 'unknown';
+}
 function getPlayerNameByAccount($id)
 {
 	global $vowels, $ots, $db;

@@ -1,26 +1,140 @@
 <?php
 /**
- * CHANGELOG viewer
+ * CHANGELOG modifier
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2019 MyAAC
+ * @author    Lee
+ * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-$title = 'MyAAC Changelog';
 
-if (!file_exists(BASE . 'CHANGELOG.md')) {
-	echo 'File CHANGELOG.md doesn\'t exist.';
+if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
+	echo 'Access denied.';
 	return;
 }
 
-require LIBS . 'Parsedown.php';
+$title = 'Changelog';
+$use_datatable = true;
+define('CL_LIMIT', 600); // maximum changelog body length
+?>
 
-$changelog = file_get_contents(BASE . 'CHANGELOG.md');
+<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
+<script src="<?php echo BASE_URL; ?>tools/js/jquery.datetimepicker.js"></script>
+<?php
+$id = isset($_GET['id']) ? $_GET['id'] : 0;
+require_once LIBS . 'changelog.php';
 
-$Parsedown = new Parsedown();
+if(!empty($action))
+{
+	$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+	$body = isset($_REQUEST['body']) ? stripslashes($_REQUEST['body']) : null;
+	$create_date = isset($_REQUEST['createdate']) ? (int)strtotime($_REQUEST['createdate'] ): null;
+	$player_id = isset($_REQUEST['player_id']) ? (int)$_REQUEST['player_id'] : null;
+	$type = isset($_REQUEST['type']) ? (int)$_REQUEST['type'] : null;
+	$where = isset($_REQUEST['where']) ? (int)$_REQUEST['where'] : null;
 
-$changelog = $Parsedown->text($changelog); # prints: <p>Hello <em>Parsedown</em>!</p>
+	$errors = array();
 
-echo '<div>' . $changelog . '</div>';
+	if($action == 'add') {
+
+		if(Changelog::add($body, $type, $where, $player_id, $create_date, $errors)) {
+			$body = '';
+			$type = $where = $player_id = $create_date = 0;
+
+			success("Added successful.");
+		}
+	}
+	else if($action == 'delete') {
+		Changelog::delete($id, $errors);
+		success("Deleted successful.");
+	}
+	else if($action == 'edit')
+	{
+		if(isset($id) && !isset($body)) {
+			$cl = Changelog::get($id);
+			$body = $cl['body'];
+			$type = $cl['type'];
+			$where = $cl['where'];
+			$create_date = $cl['date'];
+			$player_id = $cl['player_id'];
+		}
+		else {
+			if(Changelog::update($id, $body, $type, $where, $player_id, $create_date,$errors)) {
+				$action = $body = '';
+				$type = $where = $player_id = $create_date = 0;
+
+				success("Updated successful.");
+			}
+		}
+	}
+	else if($action == 'hide') {
+		Changelog::toggleHidden($id, $errors, $status);
+		success(($status == 1 ? 'Show' : 'Hide') . " successful.");
+	}
+
+	if(!empty($errors))
+		error(implode(", ", $errors));
+}
+
+$changelogs = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'changelog' . '` ORDER BY `id` DESC')->fetchAll();
+
+$i = 0;
+
+$log_type = [
+	['id' => 1, 'icon' => 'added'],
+	['id' => 2, 'icon' => 'removed'],
+	['id' => 3, 'icon' => 'changed'],
+	['id' => 4, 'icon' => 'fixed'],
+];
+
+$log_where = [
+	['id' => 1, 'icon' => 'server'],
+	['id' => 2, 'icon' => 'website'],
+];
+
+foreach($changelogs as $key => &$log)
+{
+	$log['type'] = getChangelogType($log['type']);
+	$log['where'] = getChangelogWhere($log['where']);
+}
+
+if($action == 'edit' || $action == 'new') {
+	if($action == 'edit') {
+		$player = new OTS_Player();
+		$player->load($player_id);
+	}
+
+	$account_players = $account_logged->getPlayersList();
+	$account_players->orderBy('group_id', POT::ORDER_DESC);
+	$twig->display('admin.changelog.form.html.twig', array(
+		'action' => $action,
+		'cl_link_form' => constant('ADMIN_URL').'?p=changelog&action=' . ($action == 'edit' ? 'edit' : 'add'),
+		'cl_id' => isset($id) ? $id : null,
+		'body' => isset($body) ? htmlentities($body, ENT_COMPAT, 'UTF-8') : '',
+		'create_date' => isset($create_date) ? $create_date : '',
+		'player' => isset($player) && $player->isLoaded() ? $player : null,
+		'player_id' => isset($player_id) ? $player_id : null,
+		'account_players' => $account_players,
+		'type' => isset($type) ? $type : 0,
+		'where' => isset($where) ? $where : 0,
+		'log_type' => $log_type,
+		'log_where' => $log_where,
+	));
+}
+$twig->display('admin.changelog.html.twig', array(
+	'changelogs' => $changelogs,
+));
+
+?>
+<script>
+	$(document).ready(function () {
+		$('#createdate').datetimepicker({format: "M d Y, H:i:s",});
+
+		$('.tb_datatable').DataTable({
+			"order": [[0, "desc"]],
+			"columnDefs": [{targets: [1, 2,4,5],orderable: false}]
+		});
+	});
+</script>
