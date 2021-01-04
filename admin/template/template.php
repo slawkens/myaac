@@ -119,11 +119,11 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0 text-dark"><?php echo(isset($title) ? $title : ''); ?><small> - Admin Panel</small></h1>
+							<h3 class="m-0 text-dark"><?php echo(isset($title) ? $title : ''); ?><small> - Admin Panel</small></h3>
 						</div>
 						<div class="col-sm-6">
-							<div class="float-sm-right">
-								<span class="p-2 right badge badge-<?php echo(($status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
+							<div class="float-sm-right d-none d-sm-inline">
+								<span class="p-2 right badge badge-<?php echo((isset($status['online']) and $status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
 							</div>
 						</div>
 					</div>
@@ -163,15 +163,10 @@
 		</aside>
 
 		<footer class="main-footer">
-			<div class="float-right d-none d-sm-inline">
-				<div id="status">
-					<?php if ($status['online']): ?>
-						<p class="success" style="width: 120px;">Server Online</p>
-					<?php else: ?>
-						<p class="error" style="width: 120px;">Server Offline</p>
-					<?php endif; ?>
-				</div>
-			</div><?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?>
+			<div class="float-sm-right d-none d-sm-inline">
+				<span class="p-2 right badge badge-<?php echo((isset($status['online']) and $status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
+			</div>
+			<?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?>
 		</footer>
 		<div id="sidebar-overlay"></div>
 	</div>
