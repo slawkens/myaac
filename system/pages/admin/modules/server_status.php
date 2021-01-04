@@ -6,7 +6,7 @@ if (isset($status)) {
 	<div class=" col-md-6 col-lg-6">
 		<div class="card card-info card-outline">
 			<div class="card-header border-bottom-0">
-				<span class="font-weight-bold m-0">Server Status</span> <span class="float-right small"><b>Last checked</b>: <?php echo(isset($status['lastCheck']) ? date("H:i:s", $status['lastCheck']) : $error_icon); ?></span>
+				<span class="font-weight-bold m-0">Server Status</span> <span class="float-right small"><b>Last checked</b>: <?php echo(isset($status['lastCheck']) ? date("l, d.m.Y H:i:s", $status['lastCheck']) : $error_icon); ?></span>
 			</div>
 			<div class="card-body p-0 ">
 				<table class="table">
