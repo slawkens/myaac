@@ -1445,6 +1445,14 @@ function between($x, $lim1, $lim2) {
 	return (($x >= $lower) && ($x <= $upper));
 }
 
+function truncate($string, $length)
+{
+	if (strlen($string) > $length) {
+		$string = substr($string, 0, $length) . '...';
+	}
+	return $string;
+}
+
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat.php';
