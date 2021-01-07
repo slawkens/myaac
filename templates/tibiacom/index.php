@@ -13,7 +13,7 @@ if(isset($config['boxes']))
 	<script type="text/javascript" src="tools/basic.js"></script>
 	<script type="text/javascript" src="<?php echo $template_path; ?>/ticker.js"></script>
 	<script id="twitter-wjs" src="<?php echo $template_path; ?>/js/twitter.js"></script>
-	<script id="facebook-jssdk" async src="<?php echo $template_path; ?>/js/facebook.js"></script>
+	<script id="facebook-jssdk" async src="https://connect.facebook.net/en_US/all.js"></script>
 	<link href="<?php echo $template_path; ?>/css/facebook.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript">
 		var menus = '';
