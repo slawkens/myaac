@@ -16,6 +16,7 @@ if(isset($config['boxes']))
 	<script id="facebook-jssdk" async src="<?php echo $template_path; ?>/js/facebook.js"></script>
 	<link href="<?php echo $template_path; ?>/css/facebook.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript">
+		var menus = '';
 		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
 		<?php
 			if(PAGE !== 'news') {
@@ -105,8 +106,8 @@ if(isset($config['boxes']))
 		  }
 		}
 
-		var menu = new Array();
-		menu[0] = new Object();
+		var menu = [];
+		menu[0] = {};
 		var unloadhelper = false;
 
 		// load the menu and set the active submenu item by using the variable 'activeSubmenuItem'
@@ -114,8 +115,9 @@ if(isset($config['boxes']))
 		{
 		  document.getElementById("submenu_"+activeSubmenuItem).style.color = "white";
 		  document.getElementById("ActiveSubmenuItemIcon_"+activeSubmenuItem).style.visibility = "visible";
-		  if(self.name.lastIndexOf("&") == -1) {
-			self.name = "news=1&account=0&community=0&library=0&forum=0<?php if($config['gifts_system']) echo '&shops=0'; ?>&";
+		  menus = localStorage.getItem('menus');
+		  if(menus.lastIndexOf("&") === -1) {
+			  menus = "news=1&account=0&community=0&library=0&forum=0<?php if($config['gifts_system']) echo '&shops=0'; ?>&";
 		  }
 		  FillMenuArray();
 		  InitializeMenu();
@@ -132,13 +134,13 @@ if(isset($config['boxes']))
 		// store the values of the variable 'self.name' in the array menu
 		function FillMenuArray()
 		{
-		  while(self.name.length > 0 ){
-			var mark1 = self.name.indexOf("=");
-			var mark2 = self.name.indexOf("&");
-			var menuItemName = self.name.substr(0, mark1);
-			menu[0][menuItemName] = self.name.substring(mark1 + 1, mark2);
-			self.name = self.name.substr(mark2 + 1, self.name.length);
-		  }
+			while(menus.length > 0 ){
+				var mark1 = menus.indexOf("=");
+				var mark2 = menus.indexOf("&");
+				var menuItemName = menus.substr(0, mark1);
+				menu[0][menuItemName] = menus.substring(mark1 + 1, mark2);
+				menus = menus.substr(mark2 + 1, menus.length);
+			}
 		}
 
 		// hide or show the corresponding submenus
@@ -160,16 +162,17 @@ if(isset($config['boxes']))
 		  }
 		}
 
-		// reconstruct the variable "self.name" out of the array menu
 		function SaveMenuArray()
 		{
-		  var stringSlices = "";
-		  var temp = "";
-		  for(menuItemName in menu[0]) {
-			stringSlices = menuItemName + "=" + menu[0][menuItemName] + "&";
-			temp = temp + stringSlices;
-		  }
-		  self.name = temp;
+			var stringSlices = "";
+			var temp = "";
+
+			for(menuItemName in menu[0]) {
+				stringSlices = menuItemName + "=" + menu[0][menuItemName] + "&";
+				temp = temp + stringSlices;
+			}
+
+			localStorage.setItem('menus', temp);
 		}
 
 		// onClick open or close submenus
