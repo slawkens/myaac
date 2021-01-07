@@ -91,11 +91,11 @@ $config = array(
 	'item_images_extension' => '.gif',
 
 	// creatures
-	'creature_images_url' => 'images/monsters/', // set to images/monsters if you host your own creatures in images folder
-	'creature_images_extension' => '.gif',
-	'creature_images_preview' => false,  // set to true to allow picture previews for creatures
+	'creatures_images_url' => 'images/monsters/', // set to images/monsters if you host your own creatures in images folder
+	'creatures_images_extension' => '.gif',
+	'creatures_images_preview' => false,  // set to true to allow picture previews for creatures
 	'creatures_items_url' => 'https://tibia.fandom.com/wiki/', // set to website which shows details about items.
-	'creature_loot_percentage' => true, // set to true to show the loot tooltip percent
+	'creatures_loot_percentage' => true, // set to true to show the loot tooltip percent
 
 	// account
 	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)

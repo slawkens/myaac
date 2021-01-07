@@ -1425,8 +1425,8 @@ function right($str, $length) {
 }
 
 function getCreatureImgPath($creature){
-	$creature_path = config('creature_images_url');
-	$creature_gfx_name = trim(strtolower($creature)) . config('creature_images_extension');
+	$creature_path = config('creatures_images_url');
+	$creature_gfx_name = trim(strtolower($creature)) . config('creatures_images_extension');
 	if (!file_exists($creature_path . $creature_gfx_name)) {
 		$creature_gfx_name = str_replace(" ", "", $creature_gfx_name);
 		if (file_exists($creature_path . $creature_gfx_name)) {
