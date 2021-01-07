@@ -18,7 +18,7 @@ if(isset($config['boxes']))
 	<?php endif; ?>
 
 	<?php if(!empty($config['network_facebook'])): ?>
-	<script id="facebook-jssdk" async src="<?php echo $template_path; ?>/js/facebook.js"></script>
+	<script id="facebook-jssdk" async src="https://connect.facebook.net/en_US/all.js"></script>
 	<link href="<?php echo $template_path; ?>/css/facebook.css" rel="stylesheet" type="text/css">
 	<?php endif; ?>
 
