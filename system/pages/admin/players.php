@@ -309,7 +309,7 @@ else if (isset($_REQUEST['search'])) {
 					<h5 class="m-0">Players</h5>
 				</div>
 				<div class="card-body">
-					<table class="player_datatable table table-striped table-bordered">
+					<table class="player_datatable table table-striped table-bordered table-responsive d-md-table">
 						<thead>
 						<tr>
 							<th>ID</th>
@@ -700,7 +700,7 @@ else if (isset($_REQUEST['search'])) {
 								</div>
 							</div>
 							<div class="tab-pane fade" id="tabs-posts">
-								<table class="table table-striped table-condensed">
+								<table class="table table-striped table-condensed table-responsive d-md-table">
 									<thead>
 									<tr>
 										<th class="w-25">Topic</th>
@@ -740,7 +740,7 @@ else if (isset($_REQUEST['search'])) {
 										$account_players = $account->getPlayersList();
 										$account_players->orderBy('id');
 										if (isset($account_players)) { ?>
-											<table class="table table-striped table-condensed">
+											<table class="table table-striped table-condensed table-responsive d-md-table">
 												<thead>
 												<tr>
 													<th>#</th>

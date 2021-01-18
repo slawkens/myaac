@@ -213,7 +213,7 @@ else if (isset($_REQUEST['search'])) {
 					<h5 class="m-0">Accounts</h5>
 				</div>
 				<div class="card-body">
-					<table class="acc_datatable table table-striped table-bordered">
+					<table class="acc_datatable table table-striped table-bordered table-responsive d-md-table">
 						<thead>
 						<tr>
 							<th>ID</th>
@@ -419,7 +419,7 @@ else if (isset($_REQUEST['search'])) {
 									$account_players = $account->getPlayersList();
 									$account_players->orderBy('id');
 									if (isset($account_players)) { ?>
-										<table class="table table-striped table-condensed">
+										<table class="table table-striped table-condensed table-responsive d-md-table">
 											<thead>
 											<tr>
 												<th>#</th>
@@ -464,7 +464,7 @@ else if (isset($_REQUEST['search'])) {
 								$bans = $db->query('SELECT * FROM ' . $db->tableName('bans') . ' WHERE ' . $db->fieldName('active') . ' = 1 AND ' . $db->fieldName('id') . ' = ' . $account->getId() . ' ORDER BY ' . $db->fieldName('added') . ' DESC LIMIT 10');
 								if ($bans->rowCount()) {
 									?>
-									<table class="table table-striped table-condensed">
+									<table class="table table-striped table-condensed table-responsive d-md-table">
 										<thead>
 										<tr>
 											<th>Nick</th>
@@ -518,7 +518,7 @@ else if (isset($_REQUEST['search'])) {
 						if ($db->hasTable('store_history')) { ?>
 							<div class="tab-pane fade" id="accounts-store">
 								<?php $store_history = $db->query('SELECT * FROM `store_history` WHERE `account_id` = "' . $account->getId() . '" ORDER BY `time` DESC')->fetchAll(); ?>
-								<table class="table table-striped table-condensed">
+								<table class="table table-striped table-condensed table-responsive d-md-table">
 									<thead>
 									<tr>
 										<th>Description</th>
