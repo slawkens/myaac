@@ -26,8 +26,8 @@
 						<td>{{ log.id }}</td>
 						<td>{{ log.date|date("j.m.Y") }}</td>
 						<td>{{ truncate(log.body|raw,20) }}</td>
-						<td><img src="{{ constant('BASE_URL') }}images/changelog/{{ log.type }}.png" title="{{ log.type|capitalize }}"/> {{ log.type|capitalize }}</td>
-						<td><img src="{{ constant('BASE_URL') }}images/changelog/{{ log.where }}.png" title="{{ log.where|capitalize }}"/> {{ log.where|capitalize }}</td>
+						<td><img src="{{ constant('BASE_URL') }}images/changelog/{{ log.type }}.png" alt="icon" title="{{ log.type|capitalize }}"/> {{ log.type|capitalize }}</td>
+						<td><img src="{{ constant('BASE_URL') }}images/changelog/{{ log.where }}.png" alt="icon" title="{{ log.where|capitalize }}"/> {{ log.where|capitalize }}</td>
 						<td>
 							<div class="btn-group">
 								<a href="{{ constant('ADMIN_URL') }}?p=changelog&action=edit&id={{ log.id }}" class="btn btn-success btn-sm" title="Edit">
