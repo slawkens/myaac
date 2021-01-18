@@ -5,7 +5,7 @@
 				<span class="m-0">Website Status<span class="float-right">
 				<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
 					<input type="checkbox" class="custom-control-input" name="status" id="status" value="true" {% if not is_closed %} checked{% endif %}>
-					<label class="custom-control-label" for="status"> {% if is_closed %}Closed{% else %}Open{% endif %}</label>
+					<label id="status-label" class="custom-control-label" for="status"> {% if is_closed %}Closed{% else %}Open{% endif %}</label>
 				</div></span>
 				</span>
 			</div>
@@ -25,3 +25,15 @@
 		</form>
 	</div>
 </div>
+
+<script>
+	$(function() {
+		$("#status").change(function() {
+			$statusLabel = $("#status-label");
+			$statusLabel.html("Closed");
+			if ($(this).is(':checked')) {
+				$statusLabel.html("Open");
+			}
+		});
+	});
+</script>
