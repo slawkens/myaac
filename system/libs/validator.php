@@ -186,13 +186,13 @@ class Validator
 		$length = strlen($name);
 		if($length < $minLength)
 		{
-			self::$lastError = 'Character name is too short. Min. length <b>3</b> characters.';
+			self::$lastError = "Character name is too short. Min. length <b>$minLength</b> characters.";
 			return false;
 		}
 
 		if($length > $maxLength)
 		{
-			self::$lastError = 'Character name is too long. Max. length <b>25</b> characters.';
+			self::$lastError = "Character name is too long. Max. length <b>$maxLength</b> characters.";
 			return false;
 		}
 
