@@ -35,6 +35,13 @@ class CreateCharacter
 			}
 		}
 
+		$player = new OTS_Player();
+		$player->find($name);
+		if($player->isLoaded()) {
+			$errors['name'] = 'Character with this name already exist.';
+			return false;
+		}
+
 		if(empty($sex) && $sex != "0")
 			$errors['sex'] = 'Please select the sex for your character!';
 

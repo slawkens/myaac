@@ -180,14 +180,17 @@ class Validator
 			return false;
 		}
 
+		$minLength = config('character_name_min_length');
+		$maxLength = config('character_name_max_length');
+
 		$length = strlen($name);
-		if($length < 3)
+		if($length < $minLength)
 		{
 			self::$lastError = 'Character name is too short. Min. length <b>3</b> characters.';
 			return false;
 		}
 
-		if($length > 25)
+		if($length > $maxLength)
 		{
 			self::$lastError = 'Character name is too long. Max. length <b>25</b> characters.';
 			return false;
@@ -201,7 +204,7 @@ class Validator
 
 		if(preg_match('/ {2,}/', $name))
 		{
-			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
+			self::$lastError = 'Invalid character name format. Use only A-Z and no double spaces.';
 			return false;
 		}
 
@@ -287,13 +290,6 @@ class Validator
 				self::$lastError = 'Your name is invalid.';
 				return false;
 			}
-		}
-
-		$player = new OTS_Player();
-		$player->find($name);
-		if($player->isLoaded()) {
-			self::$lastError = 'Character with this name already exist.';
-			return false;
 		}
 
 		//check if was namelocked previously
