@@ -35,13 +35,6 @@ if(isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) {
 		}
 	}
 
-	if($db->hasColumn('houses', 'id')) {
-		$house = $db->query('SELECT `id` FROM `houses` WHERE `owner` = '.$player->getId());
-		if($house->rowCount() > 0) {
-			$errors[] = 'You cannot delete a character when they own a home.';
-		}
-	}
-
 	if(empty($errors) && $password_verify != $account_logged->getPassword()) {
 		$errors[] = 'Wrong password to account.';
 	}
@@ -52,6 +45,13 @@ if(isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) {
 
 	if(empty($errors) && $player->isDeleted()) {
 		$errors[] = 'This player has been already deleted.';
+	}
+
+	if(empty($errors) && $db->hasColumn('houses', 'id')) {
+		$house = $db->query('SELECT `id` FROM `houses` WHERE `owner` = '.$player->getId());
+		if($house->rowCount() > 0) {
+			$errors[] = 'You cannot delete a character when they own a home.';
+		}
 	}
 
 	if(empty($errors)) {
