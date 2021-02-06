@@ -182,10 +182,23 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		if(!$fresh && isset(self::$cache[$id])) {
 			$this->data = self::$cache[$id];
 			return;
-		}
+        }
+        
+        $query = 'SELECT `id`, '
+            . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '')
+            . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, '
+            . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '')
+            . ($this->db->hasColumn('accounts', 'lastday')
+                ? '`lastday`, '
+                : ($this->db->hasColumn('accounts', 'premend')
+                    ? '`premend`,'
+                    : ($this->db->hasColumn('accounts', 'premium_ends_at')
+                        ? '`premium_ends_at`,'
+                        : '')))
+            . '`created`, `discord_id`, `discord_tag` FROM `accounts` WHERE `id` = ' . (int) $id;
 
         // SELECT query on database
-		$this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
+		$this->data = $this->db->query($query)->fetch();
 		self::$cache[$id] = $this->data;
     }
 
@@ -265,22 +278,37 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
             throw new E_OTS_NotLoaded();
         }
 
-	$field = 'lastday';
-	if($this->db->hasColumn('accounts', 'premend')) { // othire
-    		$field = 'premend';
-		if(!isset($this->data['premend'])) {
-			$this->data['premend'] = 0;
-		}
-	}
-	else if($this->db->hasColumn('accounts', 'premium_ends_at')) {
-		$field = 'premium_ends_at';
-		if(!isset($this->data['premium_ends_at'])) {
-			$this->data['premium_ends_at'] = 0;
-		}
-	}
+        $field = 'lastday';
+        if($this->db->hasColumn('accounts', 'premend')) { // othire
+                $field = 'premend';
+            if(!isset($this->data['premend'])) {
+                $this->data['premend'] = 0;
+            }
+        }
+        else if($this->db->hasColumn('accounts', 'premium_ends_at')) {
+            $field = 'premium_ends_at';
+            if(!isset($this->data['premium_ends_at'])) {
+                $this->data['premium_ends_at'] = 0;
+            }
+        }
+
+        $query = 'UPDATE `accounts` SET ' 
+            . ($this->db->hasColumn('accounts', 'name') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '')
+            . '`password` = ' . $this->db->quote($this->data['password'])
+            . ', `email` = ' . $this->db->quote($this->data['email'])
+            . ', `blocked` = ' . (int) $this->data['blocked']
+            . ', `rlname` = ' . $this->db->quote($this->data['rlname'])
+            . ', `location` = ' . $this->db->quote($this->data['location'])
+            . ', `country` = ' . $this->db->quote($this->data['country'])
+            . ', `web_flags` = ' . (int) $this->data['web_flags']
+            . ', ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '')
+            . '`' . $field . '` = ' . (int) $this->data[$field]
+            . ', `discord_id` = ' . ( $this->data['discord_id'] == null ? 'null' : (int)$this->data['discord_id'] )
+            . ', `discord_tag` = ' . ( $this->data['discord_tag'] == null ? 'null' : $this->db->quote($this->data['discord_tag']) )
+            . ' WHERE `id` = ' . $this->data['id'];
 
         // UPDATE query on database
-        $this->db->exec('UPDATE `accounts` SET ' . ($this->db->hasColumn('accounts', 'name') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `blocked` = ' . (int) $this->data['blocked'] . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `country` = ' . $this->db->quote($this->data['country']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $field . '` = ' . (int) $this->data[$field] . ' WHERE `id` = ' . $this->data['id']);
+        $this->db->exec($query);
     }
 
 /**
@@ -422,6 +450,14 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         return $this->data['created'];
     }
 
+    public function getDiscordTag() {
+        return $this->data['discord_tag'];
+    }
+
+    public function getDiscordID() {
+        return $this->data['discord_id'];
+    }
+
 /**
  * Name.
  *
@@ -458,6 +494,14 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function setWebFlags($webflags)
     {
         $this->data['web_flags'] = (int) $webflags;
+    }
+
+    public function setDiscordID($discord_id) {
+        $this->data['discord_id'] = $discord_id;
+    }
+
+    public function setDiscordTag($discord_tag) {
+        $this->data['discord_tag'] = $discord_tag;
     }
 
 /**

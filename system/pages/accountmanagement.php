@@ -108,6 +108,27 @@ $errors = array();
 			}
 		}
 
+		$account_discord = '';
+		$account_discord_id = $account_logged->getDiscordID();
+		if ( isset($account_discord_id) ) {
+			$account_discord = $account_logged->getDiscordTag() . ' (' . $account_discord_id . ') ( <a href="' . getLink('account/discord/unlink') . '"> Delete </a> )';
+		} else {
+			$account_discord = 'None';
+			if ( isset($config['discord_application_id']) && isset($config['discord_application_secret']) ) {
+				$query = http_build_query(
+					array(
+						'client_id' => $config['discord_application_id'],
+						'redirect_uri' => getLink('account/discord/link/'),
+						'response_type' => 'code',
+						'scope' => 'identify'
+					)
+				);
+
+				$authorise_url = 'https://discord.com/api/oauth2/authorize?' . $query;
+				$account_discord = $account_discord . ' ( <a href="' . $authorise_url . '"> Link </a> )';
+			} 
+		}
+
 		$actions = array();
 		foreach($account_logged->getActionsLog(0, 1000) as $action) {
 			$actions[] = array('action' => $action['action'], 'date' => $action['date'], 'ip' => $action['ip'] != 0 ? long2ip($action['ip']) : inet_ntop($action['ipv6']));
@@ -132,6 +153,7 @@ $errors = array();
 			'account_registered' => $account_registered,
 			'account_rlname' => $account_rlname,
 			'account_location' => $account_location,
+			'account_discord' => $account_discord,
 			'actions' => $actions,
 			'players' => $account_players
 		));
@@ -144,7 +166,7 @@ $errors = array();
 			require PAGES . 'account/' . $action . '.php';
 		}
 		else {
-			error('This page does not exists.');
+			error('This page does not exist.');
 		}
 	}
 ?>
