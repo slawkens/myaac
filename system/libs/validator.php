@@ -183,6 +183,13 @@ class Validator
 		$minLength = config('character_name_min_length');
 		$maxLength = config('character_name_max_length');
 
+		// installer doesn't know config.php yet
+		// that's why we need to ignore the nulls
+		if(is_null($minLength) || is_null($maxLength)) {
+			$minLength = 4;
+			$maxLength = 21;
+		}
+
 		$length = strlen($name);
 		if($length < $minLength)
 		{
