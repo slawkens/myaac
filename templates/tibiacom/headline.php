@@ -1,42 +1,23 @@
 <?php
-//require '../../common.php';
+$text = $_GET['t'];
+if(strlen($text) > 100) // max limit
+	$text = '';
 
-//$text = $_GET['text'];
-/*
-$page_file = BASE . 'pages/' . PAGE . '.php';
-if(!@file_exists($page_file))
-{
-	$page_file = BASE . 'pages/custom/' . PAGE . '.php';
-	if(!@file_exists($page_file))
-		die('Page does not exists.');
-}
-*/
-//$file = 'images/header/headline-' . PAGE . '.gif';
-//if(!file_exists($file))
-//{
-	if(strlen($_GET['t']) > 100) // max limit
-		$_GET['t'] = '';
+// set font path
+putenv('GDFONTPATH=' . __DIR__);
 
-	// set font path
-	putenv('GDFONTPATH=' . __DIR__);
+// create image
+$image = imagecreatetruecolor(250, 28);
 
-	// create image
-	$image = imagecreatetruecolor(250, 28);
+// make the background transparent
+imagecolortransparent($image, imagecolorallocate($image, 0, 0, 0));
 
-	// make the background transparent
-	imagecolortransparent($image, imagecolorallocate($image, 0, 0, 0));
+// set text
+$font = getenv('GDFONTPATH') . DIRECTORY_SEPARATOR . 'martel.ttf';
+imagettftext($image, 18, 0, 4, 20, imagecolorallocate($image, 240, 209, 164), $font, utf8_decode($text));
 
-	// set text
-	imagettftext($image, 18, 0, 4, 20, imagecolorallocate($image, 240, 209, 164), 'martel.ttf', utf8_decode($_GET['t']));
+// header mime type
+header('Content-type: image/gif');
 
-	// header mime type
-	header('Content-type: image/gif');
-
-	// save image
-	imagegif($image/*, $file*/);
-//}
-
-// output image
-//header('Content-type: image/gif');
-//readfile($file);
-?>
+// output image to browser
+imagegif($image);
