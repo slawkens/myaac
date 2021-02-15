@@ -365,16 +365,14 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
 	public function getPremDays()
 	{
-		if(!isset($this->data['lastday']) && !isset($this->data['premend'])) {
+		if(!isset($this->data['lastday']) && !isset($this->data['premend']) && !isset($this->data['premium_ends_at'])) {
 			throw new E_OTS_NotLoaded();
 		}
 
-		if(isset($this->data['premium_ends_at'])) {
-			return round(($this->data['premium_ends_at'] - time()) / (24 * 60 * 60), 2);
-		}
-
-		if(isset($this->data['premend'])) {
-			return round(($this->data['premend'] - time()) / (24 * 60 * 60), 2);
+		if(isset($this->data['premium_ends_at']) || isset($this->data['premend'])) {
+			$col = isset($this->data['premium_ends_at']) ? 'premium_ends_at' : 'premend';
+			$ret = ceil(($this->data[$col] - time()) / (24 * 60 * 60));
+			return $ret > 0 ? $ret : 0;
 		}
 
 		if($this->data['premdays'] == 0) {
@@ -382,8 +380,10 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		}
 
 		global $config;
-        if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
-		return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
+		if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
+
+		$ret = ceil($this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday'])));
+		return $ret > 0 ? $ret : 0;
 	}
 
    public function getLastLogin()
