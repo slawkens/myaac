@@ -433,6 +433,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
 		$this->data['premdays'] = (int) $premdays;
 		$this->data['premend'] = time() + ($premdays * 24 * 60 * 60);
+		$this->data['premium_ends_at'] = time() + ($premdays * 24 * 60 * 60);
     }
 
     public function setRLName($name)
