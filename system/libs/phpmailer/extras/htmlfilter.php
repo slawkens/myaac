@@ -348,7 +348,7 @@ function tln_getnxtag($body, $offset)
             }
                 //intentional fall-through
         case '>':
-            $attary{$attname} = '"yes"';
+            $attary[$attname] = '"yes"';
             return array($tagname, $attary, $tagtype, $lt, $pos);
             break;
         default:
