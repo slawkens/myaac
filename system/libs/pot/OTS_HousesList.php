@@ -57,7 +57,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
  * @param array $properties List of object properties.
  * @throws DOMException On DOM operation error.
  */
-    public function __set_state($properties)
+    public static function __set_state($properties)
     {
         $object = new self();
 
