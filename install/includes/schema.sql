@@ -324,7 +324,7 @@ CREATE TABLE `myaac_visitors`
 (
 	`ip` VARCHAR(16) NOT NULL,
 	`lastvisit` INT(11) NOT NULL DEFAULT 0,
-	`page` VARCHAR(100) NOT NULL,
+	`page` VARCHAR(2048) NOT NULL,
 	UNIQUE (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
