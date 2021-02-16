@@ -17,4 +17,4 @@ before_script:
   - composer require php-parallel-lint/php-parallel-lint --no-suggest --no-progress --no-interaction --no-ansi --quiet --optimize-autoloader
 
 script:
-  - php vendor/bin/parallel-lint --no-progress --no-colors --exclude vendor --exclude OTS_DB_PDOQuery.php .
+  - php vendor/bin/parallel-lint --no-progress --no-colors --exclude vendor --exclude "system/libs/pot/OTS_DB_PDOQuery.php" .
