@@ -1,3 +1,5 @@
+SET @myaac_database_version = 32;
+
 CREATE TABLE `myaac_account_actions`
 (
 	`account_id` INT(11) NOT NULL,
@@ -57,7 +59,7 @@ CREATE TABLE `myaac_config`
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `myaac_config` (`name`, `value`) VALUES ('database_version', 30);
+INSERT INTO `myaac_config` (`name`, `value`) VALUES ('database_version', @myaac_database_version);
 
 CREATE TABLE `myaac_faq`
 (
@@ -205,10 +207,24 @@ CREATE TABLE `myaac_monsters` (
 	`use_haste` tinyint(1) NOT NULL,
 	`voices` text NOT NULL,
 	`immunities` varchar(255) NOT NULL,
+	`elements` TEXT NOT NULL,
 	`summonable` tinyint(1) NOT NULL,
 	`convinceable` tinyint(1) NOT NULL,
+	`pushable` TINYINT(1) NOT NULL DEFAULT '0',
+	`canpushitems` TINYINT(1) NOT NULL DEFAULT '0',
+	`canwalkonenergy` TINYINT(1) NOT NULL DEFAULT '0',
+	`canwalkonpoison` TINYINT(1) NOT NULL DEFAULT '0',
+	`canwalkonfire` TINYINT(1) NOT NULL DEFAULT '0',
+	`runonhealth` TINYINT(1) NOT NULL DEFAULT '0',
+	`hostile` TINYINT(1) NOT NULL DEFAULT '0',
+	`attackable` TINYINT(1) NOT NULL DEFAULT '0',
+	`rewardboss` TINYINT(1) NOT NULL DEFAULT '0',
+	`defense` INT(11) NOT NULL DEFAULT '0',
+	`armor` INT(11) NOT NULL DEFAULT '0',
+	`canpushcreatures` TINYINT(1) NOT NULL DEFAULT '0',
 	`race` varchar(255) NOT NULL,
 	`loot` text NOT NULL,
+	`summons` TEXT NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
