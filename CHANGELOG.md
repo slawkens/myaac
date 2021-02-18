@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.8.4 - 18.02.2021]
+
+### Added
+* support for accounts.premium_ends_at (Latest TFS 1.x)
+* more clients to clients.conf.php
+
+### Changed
+* minimum PHP 5.6 is now required
+* password can now contain any characters
+* add SSL on external image requests of items and outfits (@fernandomatos)
+* Use local storage for saving menu items (tibiacom template) - fixes bug with some websites like wykop.pl (browser freeze)
+* increase size of myaac_visitors.page column to 2048 (Thanks to OtLand user kaleuui)
+
+### Fixed
+* compatibility with PHP 8.0 (latest XAMPP)
+* displaying PHP errors on env = "prod"
+* the Guildnick not showing in the guild pages (@leesneaks)
+* you cannot delete character more than twice (Thanks Okke)
+* ignore arrays in config.lua (fixes experienceStages loading)
+* parsing empty strings in config.lua (with comments)
+* headling.php cannot find font
+
 ## [0.8.3 - 27.10.2020]
 
 ### Added
