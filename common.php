@@ -27,7 +27,7 @@ if (version_compare(phpversion(), '5.6', '<')) die('PHP version 5.6 or higher is
 session_start();
 
 define('MYAAC', true);
-define('MYAAC_VERSION', '0.8.4');
+define('MYAAC_VERSION', '0.8.5-dev');
 define('DATABASE_VERSION', 32);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
