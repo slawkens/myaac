@@ -112,7 +112,7 @@ if (isset($_REQUEST['template'])) {
 			<div class="col-md-12">
 				<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> Save</button>
 				<?php
-				echo '<button type="button" class="btn btn-danger float-right" value="Cancel" onclick="window.location = \'' . ADMIN_URL . '?p=menus&template=' . $template . '\';"><i class="fas fa-cancel"></i> Cancel</button>';
+				echo '<button type="button" class="btn btn-danger float-right" value="Cancel" onclick="window.location = \'' . ADMIN_URL . '?p=menus\';"><i class="fas fa-cancel"></i> Cancel</button>';
 				?>
 			</div>
 		</div>

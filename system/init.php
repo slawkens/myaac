@@ -116,6 +116,8 @@ if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hid
 	$config['highscores_ids_hidden'] = array(0);
 }
 
+$config['account_create_character_create'] = config('account_create_character_create') && (!config('mail_enabled') || !config('account_mail_verify'));
+
 // POT
 require_once SYSTEM . 'libs/pot/OTS.php';
 $ots = POT::getInstance();
@@ -151,10 +153,8 @@ else {
 	if(!@file_exists($file))
 		$file = $config['data_path'] . 'vocations.xml';
 
-	$vocations->load($file);
-
-	if(!$vocations)
-		throw new RuntimeException('ERROR: Cannot load <i>vocations.xml</i> file.');
+	if(!$vocations->load($file))
+		throw new RuntimeException('ERROR: Cannot load <i>vocations.xml</i> - the file is malformed. Check the file with xml syntax validator.');
 
 	$config['vocations'] = array();
 	foreach($vocations->getElementsByTagName('vocation') as $vocation) {
@@ -168,54 +168,5 @@ else {
 }
 unset($tmp, $id, $vocation);
 
-// load towns
-/* TODO: doesnt work
-ini_set('memory_limit', '-1');
-$tmp = '';
-
-if($cache->enabled() && $cache->fetch('towns', $tmp)) {
-	$config['towns'] = unserialize($tmp);
-}
-else {
-	$towns = new OTS_OTBMFile();
-	$towns->loadFile('D:/Projekty/opentibia/wodzislawski/data/world/wodzislawski.otbm');
-
-	$config['towns'] = $towns->getTownsList();
-	if($cache->enabled()) {
-		$cache->set('towns', serialize($config['towns']), 120);
-	}
-}
-*/
-
-////////////////////////////////////////
-// load towns from database (TFS 1.3) //
-////////////////////////////////////////
-
-$tmp = '';
-$towns = [];
-if($cache->enabled() && $cache->fetch('towns', $tmp)) {
-	$towns = unserialize($tmp);
-}
-else {
-	if($db->hasTable('towns')) {
-		$query = $db->query('SELECT `id`, `name` FROM `towns`;')->fetchAll(PDO::FETCH_ASSOC);
-
-		foreach($query as $town) {
-			$towns[$town['id']] = $town['name'];
-		}
-
-		unset($query);
-	}
-	else {
-		$towns = config('towns');
-	}
-
-	if($cache->enabled()) {
-		$cache->set('towns', serialize($towns), 600);
-	}
-}
-
-config(['towns', $towns]);
-//////////////////////////////////////////////
-// END - load towns from database (TFS 1.3) //
-//////////////////////////////////////////////
+require LIBS . 'Towns.php';
+Towns::load();

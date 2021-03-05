@@ -35,6 +35,13 @@ class CreateCharacter
 			}
 		}
 
+		$player = new OTS_Player();
+		$player->find($name);
+		if($player->isLoaded()) {
+			$errors['name'] = 'Character with this name already exist.';
+			return false;
+		}
+
 		if(empty($sex) && $sex != "0")
 			$errors['sex'] = 'Please select the sex for your character!';
 
@@ -96,7 +103,7 @@ class CreateCharacter
 
 		if(empty($errors))
 		{
-			$number_of_players_on_account = $account->getPlayersList()->count();
+			$number_of_players_on_account = $account->getPlayersList(false)->count();
 			if($number_of_players_on_account >= config('characters_per_account'))
 				$errors[] = 'You have too many characters on your account <b>('.$number_of_players_on_account.'/'.config('characters_per_account').')</b>!';
 		}

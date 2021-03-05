@@ -31,12 +31,12 @@ class Cache_PHP
 
 		$file = $this->_name($key);
 		rename($tmp, $file);
-		if($ttl !== 0) {
-			touch($file, time() + $ttl);
+
+		if ($ttl === 0) {
+			$ttl = 365 * 24 * 60 * 60; // 365 days
 		}
-		else {
-			touch($file, time() + 24 * 60 * 60);
-		}
+
+		touch($file, time() + $ttl);
 	}
 
 	public function get($key)

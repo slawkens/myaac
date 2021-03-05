@@ -1,0 +1,59 @@
+{% if action %}
+	<div class="card card-info card-outline">
+		<div class="card-header">
+			<h5 class="m-0">{{ (action == 'edit') ? 'Edit' : 'Add' }}</h5>
+		</div>
+		<form role="form" method="post" action="{{ cl_link_form }}" id="cl-edit-form">
+			<div class="card-body">
+				{% if action == 'edit' %}
+					<input type="hidden" name="id" value="{{ cl_id }}"/>
+				{% endif %}
+
+				<div class="form-group row">
+					<label for="body">Content</label>
+					<textarea class="form-control" id="body" name="body" maxlength="600" cols="50" rows="5">{{ body|raw }}</textarea>
+				</div>
+				<div class="form-group row">
+					<div class="col-12 col-sm-12 col-lg-6">
+						<label for="createdate" class="control-label">Date:</label>
+						<input type="text" class="form-control" id="createdate" name="createdate" autocomplete="off"  maxlength="20" value="{{ create_date|date("M d Y, H:i:s") }}"/>
+					</div>
+					<div class="col-sm-6 pl-0">
+						<label for="player_id">Author</label>
+						<select class="form-control" name="player_id" id="player_id">
+							{% for player in account_players %}
+								<option value="{{ player.getId() }}"{% if player_id is defined and player.getId() == player_id %} selected="selected"{% endif %}>{{ player.getName() }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-6 pl-0">
+						<label for="select-where">Where</label>
+						<select class="form-control" name="where" id="select-where">
+							{% for id, cat in log_where %}
+								<option value="{{ cat.id }}"
+										{% if (where == 0 and id == 1) or (where == cat.id) %}selected="selected"{% endif %}>{{ cat.icon|capitalize }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="col-sm-6 pl-0">
+						<label for="select-type">Type</label>
+						<select class="form-control" name="type" id="select-type">
+							{% for id, cat in log_type %}
+								<option value="{{ cat.id }}"
+										{% if (type == 0 and id == 1) or (type == cat.id) %}selected="selected"{% endif %}>{{ cat.icon|capitalize }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer">
+				<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> {{ (action == 'edit') ? 'Update' : 'Add' }}</button>
+				<button type="button" onclick="window.location = '{{ constant('ADMIN_URL') }}?p=changelog';"
+						class="btn btn-danger float-right"><i class="fas fa-cancel"></i> Cancel
+				</button>
+			</div>
+		</form>
+	</div>
+{% endif %}

@@ -95,10 +95,6 @@ if($step == 'database') {
 			$errors[] = $locale['step_config_mail_admin_error'];
 			break;
 		}
-		else if($key == 'mail_address' && !Validator::email($value)) {
-			$errors[] = $locale['step_config_mail_address_error'];
-			break;
-		}
 		else if($key == 'timezone' && !in_array($value, DateTimeZone::listIdentifiers())) {
 			$errors[] = $locale['step_config_timezone_error'];
 			break;

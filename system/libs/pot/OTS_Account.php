@@ -185,7 +185,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		}
 
         // SELECT query on database
-		$this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : '')) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
+		$this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
 		self::$cache[$id] = $this->data;
     }
 
@@ -270,6 +270,12 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     		$field = 'premend';
 		if(!isset($this->data['premend'])) {
 			$this->data['premend'] = 0;
+		}
+	}
+	else if($this->db->hasColumn('accounts', 'premium_ends_at')) {
+		$field = 'premium_ends_at';
+		if(!isset($this->data['premium_ends_at'])) {
+			$this->data['premium_ends_at'] = 0;
 		}
 	}
 
@@ -359,12 +365,14 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
 	public function getPremDays()
 	{
-		if(!isset($this->data['lastday']) && !isset($this->data['premend'])) {
+		if(!isset($this->data['lastday']) && !isset($this->data['premend']) && !isset($this->data['premium_ends_at'])) {
 			throw new E_OTS_NotLoaded();
 		}
 
-		if(isset($this->data['premend'])) {
-			return round(($this->data['premend'] - time()) / (24 * 60 * 60), 2);
+		if(isset($this->data['premium_ends_at']) || isset($this->data['premend'])) {
+			$col = isset($this->data['premium_ends_at']) ? 'premium_ends_at' : 'premend';
+			$ret = ceil(($this->data[$col] - time()) / (24 * 60 * 60));
+			return $ret > 0 ? $ret : 0;
 		}
 
 		if($this->data['premdays'] == 0) {
@@ -372,8 +380,10 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		}
 
 		global $config;
-        if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
-		return $this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday']));
+		if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
+
+		$ret = ceil($this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday'])));
+		return $ret > 0 ? $ret : 0;
 	}
 
    public function getLastLogin()
@@ -390,6 +400,10 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
 		global $config;
         if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return true;
+
+	    if(isset($this->data['premium_ends_at'])) {
+		    return $this->data['premium_ends_at'] > time();
+	    }
 
 		if(isset($this->data['premend'])) {
 			return $this->data['premend'] > time();
@@ -419,6 +433,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
 		$this->data['premdays'] = (int) $premdays;
 		$this->data['premend'] = time() + ($premdays * 24 * 60 * 60);
+		$this->data['premium_ends_at'] = time() + ($premdays * 24 * 60 * 60);
     }
 
     public function setRLName($name)
@@ -712,7 +727,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @return OTS_Players_List List of players from current account.
  * @throws E_OTS_NotLoaded If account is not loaded.
  */
-    public function getPlayersList()
+    public function getPlayersList($withDeleted = true)
     {
         if( !isset($this->data['id']) )
         {
@@ -722,6 +737,15 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         // creates filter
         $filter = new OTS_SQLFilter();
         $filter->compareField('account_id', (int) $this->data['id']);
+
+		if(!$withDeleted) {
+			global $db;
+			if($db->hasColumn('players', 'deletion')) {
+				$filter->compareField('deletion', 0);
+			} else {
+				$filter->compareField('deleted', 0);
+			}
+		}
 
         // creates list object
         $list = new OTS_Players_List();

@@ -54,6 +54,10 @@
 													<td></td><td><span id="email_error" class="FormFieldError">{% if errors.email is defined %}{{ errors.email }}{% endif %}</span></td>
 												</tr>
 
+												{% if config.mail_enabled and config.account_mail_verify %}
+													<tr><td></td><td><span><strong>Please use real address!<br/>We will send a link to validate your Email.</strong></span></td></tr>
+												{% endif %}
+
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_EMAIL') }}
 
                                                 {% if config.account_country %}
@@ -82,7 +86,7 @@
 														<span{% if errors.password is defined %} class="red"{% endif %}>Password:</span>
 													</td>
 													<td>
-														<input type="password" name="password" id="password" value="" size="30" maxlength="50" />
+														<input type="password" name="password" id="password" value="" size="30" maxlength="29" />
 														<img id="password_indicator" src="images/global/general/{% if not save or errors.password is defined %}n{% endif %}ok.gif" style="display: none;" />
 													</td>
 												</tr>
@@ -92,7 +96,7 @@
 														<span{% if errors.password is defined %} class="red"{% endif %}>Repeat password:</span>
 													</td>
 													<td>
-														<input type="password" name="password2" id="password2" value="" size="30" maxlength="50" />
+														<input type="password" name="password2" id="password2" value="" size="30" maxlength="29" />
 														<img id="password2_indicator" src="images/global/general/{% if not save or errors.password is defined %}n{% endif %}ok.gif" style="display: none;" />
 													</td>
 												</tr>

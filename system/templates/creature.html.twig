@@ -1,0 +1,164 @@
+<script type="text/javascript" src="tools/js/tipped.js"></script>
+<link rel="stylesheet" type="text/css" href="tools/css/tipped.css"/>
+<style>
+	.creature_img {
+		background-position: center center;
+		background-repeat: no-repeat;
+		width: 64px;
+		height: 64px;
+		padding: 5px;
+	}
+
+	.creature_name {
+		font-size: 18px;
+		font-weight: bold;
+		width: 100%;
+		text-align: center;
+		float: left;
+		box-sizing: border-box;
+		padding-top: 10px;
+		padding-bottom: 15px;
+	}
+
+	.creature_voice {
+		font-weight: bold;
+		font-size: 8pt;
+		color: #FE6500;
+		text-shadow: rgb(0, 0, 0) 1px 0px 0px, rgb(0, 0, 0) 0.540302px 0.841471px 0px, rgb(0, 0, 0) -0.416147px 0.909297px 0px, rgb(0, 0, 0) -0.989992px 0.14112px 0px, rgb(0, 0, 0) -0.653644px -0.756802px 0px, rgb(0, 0, 0) 0.283662px -0.958924px 0px, rgb(0, 0, 0) 0.96017px -0.279415px 0px;
+	}
+
+	.loot_image {
+		width: 32px;
+		height: 32px;
+		border: 0px;
+	}
+
+	.loot_amount {
+		position: absolute;
+		bottom: 0;
+		right: 2px;
+		color: white;
+		font-size: 8pt;
+		font-weight: bold;
+		text-shadow: 0.1em 0.1em black;
+	}
+
+	.loot_bg {
+		margin: 2px;
+		position: relative;
+		display: inline-block;
+		float: left;
+		background-image: url('{{ constant('BASE_URL') }}images/items/empty.gif');
+		opacity: 0.7;
+	}
+
+	.loot_bg:hover {
+		opacity: 1.0;
+	}
+</style>
+
+<script>
+	$(document).ready(function () {
+		Tipped.create('.loot_image');
+	});
+</script>
+
+<div class="creature_name">{{ creature.name }}</div>
+<table class="CreatureInfo" border="0" cellspacing="0" cellpadding="4" width="100%">
+	<thead>
+	<tr>
+		<th align="center" colspan="4"><b>General information</b></th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td width="10%">
+			<div class="creature_img" style="background-image: url({{ creature.img_link }}"></div>
+		</td>
+		<td align="center" width="30%">
+			<strong>Health:</strong> {{ creature.health }}<br>
+			<strong>Experience:</strong> {{ creature.exp }}<br>
+			<strong>Speed:</strong> {{ creature.speed_lvl }} {{ (creature.use_haste) ? ' (+haste)' : '' }}
+		</td>
+		<td align="center" width="30%">
+			<b>Summonable:</b> {{ (creature.summonable) ? creature.mana ~ ' mana' : 'Impossible' }}<br>
+			<b>Convinceable:</b> {{ (creature.convinceable) ? creature.mana ~ ' mana' : 'Impossible' }}
+		</td>
+		<td width="30%" align="center">
+			<strong>Armor:</strong> {{ creature.armor }}<br>
+			<strong>Defense:</strong> {{ creature.defense }}
+		</td>
+	</tr>
+	</tbody>
+</table><br>
+
+{% if ( creature.voices is not empty or creature.summons is not empty) %}
+	<table class="CreatureVoice" border="0" cellspacing="0" cellpadding="4" width="100%">
+		<thead>
+		<tr>
+			{% if ( creature.summons is not empty) %}
+				<th width="50%"><b>Summons</b></th>
+			{% endif %}
+			{% if ( creature.voices is not empty) %}
+				<th width="50%"><b>Voices</b></th>
+			{% endif %}
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			{% if ( creature.summons is not empty) %}
+				<td>
+					{% for summon in creature.summons %}
+						<span>{{ summon.chance }}% chance to summon a <b>{{ getMonsterLink(summon.name, true)|raw }}</b><br/></span>
+					{% endfor %}
+				</td>
+			{% endif %}
+			{% if ( creature.voices is not empty) %}
+				<td align="center">
+					<span class="creature_voice">
+						{% for voice in creature.voices %}
+							"{{ voice }}"<br/>
+						{% endfor %}
+					</span>
+				</td>
+			{% endif %}
+		</tr>
+		</tbody>
+	</table><br/>
+{% endif %}
+
+{% if (creature.elements|length > 0 or creature.immunities|length > 0 ) %}
+	<table class="CreatureElements" border="0" cellspacing="0" cellpadding="4" width="100%">
+		<tr>
+			<th colspan="{{ creature.elements|length }}">Elements and Immunities</th>
+		</tr>
+		{% if (creature.elements|length > 0) %}
+			<tr>{% for element in creature.elements %}
+					<td align="center"><b> {{ element.name }}</b><br/>{{ element.percent }}%</td>
+				{% endfor %}</tr>
+		{% endif %}
+		{% if (creature.immunities|length > 0 ) %}
+			<tr>
+				<td colspan="{{ creature.elements|length }}"><b>Immunities:</b> {{ creature.immunities|join(' | ') }}</td>
+			</tr>
+		{% endif %}
+	</table><br/>
+{% endif %}
+
+{% if (not creature.loot is empty) %}
+	<table class="CreatureLoot" border="0" cellspacing="0" cellpadding="4" width="100%">
+		<tr><th>Loot</th></tr>
+		<tr>
+			<td>
+				{% for item in creature.loot %}
+					<span class="loot_bg">
+					{% if (item.count > 1) %}
+						<span class="loot_amount">{{ item.count }}</span>
+					{% endif %}
+					<a href="{{ config.creatures_items_url }}{{ item.name|title }}"><img title="{{ item.tooltip }}" src="{{ config.item_images_url }}{{ item.id }}{{ config.item_images_extension }}" class="loot_image"/></a>
+				</span>
+				{% endfor %}
+			</td>
+		</tr>
+	</table>
+{% endif %}

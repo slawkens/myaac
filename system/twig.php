@@ -29,13 +29,28 @@ $function = new TwigFunction('getLink', function ($s) {
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('generateLink', function ($s, $n, $b = false) {
+	return generateLink($s, $n, $b);
+});
+$twig->addFunction($function);
+
 $function = new TwigFunction('getPlayerLink', function ($s, $p) {
 	return getPlayerLink($s, $p);
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('getMonsterLink', function ($s, $p) {
+	return getMonsterLink($s, $p);
+});
+$twig->addFunction($function);
+
 $function = new TwigFunction('getGuildLink', function ($s, $p) {
     return getGuildLink($s, $p);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('truncate', function ($s, $n) {
+	return truncate($s, $n);
 });
 $twig->addFunction($function);
 

@@ -106,7 +106,7 @@ if(isset($todo) && $todo == 'save')
 	$new_guild->setName($guild_name);
 	$new_guild->setOwner($player);
 	$new_guild->save();
-	$new_guild->setCustomField('description', 'New guild. Leader must edit this text :)');
+	$new_guild->setCustomField('description', config('guild_description_default'));
 	//$new_guild->setCustomField('creationdata', time());
 	$ranks = $new_guild->getGuildRanksList();
 	$ranks->orderBy('level', POT::ORDER_DESC);

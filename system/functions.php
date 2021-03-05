@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -23,10 +24,12 @@ function message($message, $type, $return)
 		return true;
 	}
 
-	if($return)
-		return '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	if($return) {
+		// for install and admin pages use bootstrap classes
+		return '<div class="' . ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'alert alert-' : '') . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	}
 
-	echo '<div class="' . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
+	echo '<div class="' . ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'alert alert-' : '') . $type . '" style="margin-bottom:10px;">' . $message . '</div>';
 	return true;
 }
 function success($message, $return = false) {
@@ -39,28 +42,9 @@ function note($message, $return = false) {
     return message($message, 'note', $return);
 }
 function error($message, $return = false) {
-    return message($message, 'error', $return);
+    return message($message, ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'danger' : 'error'), $return);
 }
-function message1($head, $message, $type, $icon , $return)
-{//return '<div class="' . $type . '">' . $message . '</div>';
-    if($return)
-        return '<div class="alert alert-'.$type.' alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-'.$icon.'"></i>  '.$head.':</h4>'.$message.'</div>';
 
-    echo '<div class="alert alert-'.$type.' alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-'.$icon.'"></i> '.$head.':</h4>'.$message.'</div>';
-    return true;
-}
-function success1($message, $return = false) {
-    return message('Info', $message, 'success','success', $return);
-}
-function warning1($message, $return = false) {
-    return message('Warning',$message, 'warning','ban', $return);
-}
-function note1($message, $return = false) {
-    return message('Info',$message, 'info','info', $return);
-}
-function error1($message, $return = false) {
-    return message("Alert", $message, 'danger','check', $return);
-}
 function longToIp($ip)
 {
 	$exp = explode(".", long2ip($ip));
@@ -106,6 +90,15 @@ function getPlayerLink($name, $generate = true)
 
 	$settings = Settings::getInstance();
 	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'characters/' . urlencode($name);
+
+	if(!$generate) return $url;
+	return generateLink($url, $name);
+}
+
+function getMonsterLink($name, $generate = true)
+{
+	$settings = Settings::getInstance();
+	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'creatures/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -169,7 +162,24 @@ function getItemImage($id, $count = 1)
 		$file_name .= '-' . $count;
 
 	global $config;
-	return '<img src="' . $config['item_images_url'] . $file_name . '.gif"' . $tooltip . ' width="32" height="32" border="0" alt="' .$id . '" />';
+	return '<img src="' . $config['item_images_url'] . $file_name . config('item_images_extension') . '"' . $tooltip . ' width="32" height="32" border="0" alt="' .$id . '" />';
+}
+
+function getItemRarity($chance) {
+	if ($chance >= 21) {
+		return "common";
+	} elseif (between($chance, 8, 21)) {
+		return "uncommon";
+	} elseif (between($chance, 1.1, 8)) {
+		return "semi rare";
+	} elseif (between($chance, 0.4, 1.1)) {
+		return "rare";
+	} elseif (between($chance, 0.8, 0.4)) {
+		return "very rare";
+	} elseif ($chance <= 0.8) {
+		return "extremely rare";
+	}
+	return '';
 }
 
 function getFlagImage($country)
@@ -473,33 +483,16 @@ function template_place_holder($type)
  */
 function template_header($is_admin = false)
 {
-	global $title_full;
-	$charset = config('charset') ? config('charset') : 'utf-8';
+	global $title_full, $config, $twig;
+	$charset = isset($config['charset']) ? $config['charset'] : 'utf-8';
 
-	$ret = '
-	<meta charset="' . $charset . '">
-	<meta http-equiv="content-language" content="' . config('language') . '" />
-	<meta http-equiv="content-type" content="text/html; charset=' . $charset . '" />';
-	if(!$is_admin)
-		$ret .= '
-	<base href="' . BASE_URL . '" />
-	<title>' . $title_full . '</title>';
-
-	$ret .= '
-	<meta name="description" content="' . config('meta_description') . '" />
-	<meta name="keywords" content="' . config('meta_keywords') . ', myaac, wodzaac" />
-	<meta name="generator" content="MyAAC" />
-	<link rel="stylesheet" type="text/css" href="' . BASE_URL . 'tools/css/messages.css" />
-	<script type="text/javascript" src="' . BASE_URL . 'tools/js/jquery.min.js"></script>
-	<noscript>
-		<div class="warning" style="text-align: center; font-size: 14px;">Your browser does not support JavaScript or its disabled!<br/>
-			Please turn it on, or be aware that some features on this website will not work correctly.</div>
-	</noscript>
-';
-
-	if(config('recaptcha_enabled'))
-		$ret .= "<script src='https://www.google.com/recaptcha/api.js'></script>";
-	return $ret;
+	return $twig->render('templates.header.html.twig',
+		[
+			'charset' => $charset,
+			'title' => $title_full,
+			'is_admin' => $is_admin
+		]
+	);
 }
 
 /**
@@ -566,10 +559,8 @@ function template_form()
 	foreach($templates as $key => $value)
 		$options .= '<option ' . ($template_name == $value ? 'SELECTED' : '') . '>' . $value . '</option>';
 
-	return 	'<form method="get" action="' . BASE_URL . '">
-				<hidden name="subtopic" value="' . PAGE . '"/>
-				<select name="template" onchange="this.form.submit()">' . $options . '</select>
-			</form>';
+	global $twig;
+	return $twig->render('forms.change_template.html.twig', ['options' => $options]);
 }
 
 function getStyle($i)
@@ -828,13 +819,16 @@ function getWorldName($id)
  */
 function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 {
-	/** @var PHPMailer $mailer */
 	global $mailer, $config;
+
+	if (!config('mail_enabled')) {
+		log_append('mailer-error.log', '_mail() function has been used, but config.mail_enabled is disabled.');
+	}
+
 	if(!$mailer)
 	{
-		require SYSTEM . 'libs/phpmailer/PHPMailerAutoload.php';
 		$mailer = new PHPMailer();
-		$mailer->setLanguage('en', LIBS . 'phpmailer/language/');
+		//$mailer->setLanguage('en', LIBS . 'phpmailer/language/');
 	}
 	else {
 		$mailer->clearAllRecipients();
@@ -932,6 +926,12 @@ function load_config_lua($filename)
 	if(count($lines) > 0) {
 		foreach($lines as $ln => $line)
 		{
+			$line = trim($line);
+			if(@$line[0] === '{' || @$line[0] === '}') {
+				// arrays are not supported yet
+				// just ignore the error
+				continue;
+			}
 			$tmp_exp = explode('=', $line, 2);
 			if(strpos($line, 'dofile') !== false)
 			{
@@ -958,16 +958,17 @@ function load_config_lua($filename)
 						$result[$key] = (string) substr(substr($value, 1), 0, -1);
 					elseif(in_array($value, array('true', 'false')))
 						$result[$key] = ($value === 'true') ? true : false;
-					elseif(@$value[0] === '{' && @$value[strlen($value) - 1] === '}') {
+					elseif(@$value[0] === '{') {
 						// arrays are not supported yet
 						// just ignore the error
+						continue;
 					}
 					else
 					{
 						foreach($result as $tmp_key => $tmp_value) // load values definied by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
 							$value = str_replace($tmp_key, $tmp_value, $value);
 						$ret = @eval("return $value;");
-						if((string) $ret == '') // = parser error
+						if((string) $ret == '' && trim($value) !== '""') // = parser error
 						{
 							throw new RuntimeException('ERROR: Loading config.lua file. Line <b>' . ($ln + 1) . '</b> of LUA config file is not valid [key: <b>' . $key . '</b>]');
 						}
@@ -992,6 +993,10 @@ function str_replace_first($search, $replace, $subject) {
 }
 
 function get_browser_real_ip() {
+	if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+		$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CF_CONNECTING_IP'];
+	}
+
 	if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
 		return $_SERVER['REMOTE_ADDR'];
 	else if(isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP']))
@@ -1314,6 +1319,33 @@ function getBanType($typeId)
 	return "Unknown Type";
 }
 
+function getChangelogType($v)
+{
+	switch($v) {
+		case 1:
+			return 'added';
+		case 2:
+			return 'removed';
+		case 3:
+			return 'changed';
+		case 4:
+			return 'fixed';
+	}
+
+	return 'unknown';
+}
+
+function getChangelogWhere($v)
+{
+	switch($v) {
+		case 1:
+			return 'server';
+		case 2:
+			return 'website';
+	}
+
+	return 'unknown';
+}
 function getPlayerNameByAccount($id)
 {
 	global $vowels, $ots, $db;
@@ -1351,6 +1383,7 @@ function getPlayerNameByAccount($id)
 
 	return '';
 }
+
 function echo_success($message)
 {
 	echo '<div class="col-12 success mb-2">' . $message . '</div>';
@@ -1399,6 +1432,50 @@ function Outfits_loadfromXML()
 	return array('id' => $looktype, 'type' => $type, 'name' => $lookname, 'premium' => $premium, 'unlocked' => $unlocked, 'enabled' => $enabled);
 }
 
+function left($str, $length) {
+	return substr($str, 0, $length);
+}
+
+function right($str, $length) {
+	return substr($str, -$length);
+}
+
+function getCreatureImgPath($creature){
+	$creature_path = config('creatures_images_url');
+	$creature_gfx_name = trim(strtolower($creature)) . config('creatures_images_extension');
+	if (!file_exists($creature_path . $creature_gfx_name)) {
+		$creature_gfx_name = str_replace(" ", "", $creature_gfx_name);
+		if (file_exists($creature_path . $creature_gfx_name)) {
+			return $creature_path . $creature_gfx_name;
+		} else {
+			return $creature_path . 'nophoto.png';
+		}
+	} else {
+		return $creature_path . $creature_gfx_name;
+	}
+}
+
+function between($x, $lim1, $lim2) {
+	if ($lim1 < $lim2) {
+		$lower = $lim1; $upper = $lim2;
+	}
+	else {
+		$lower = $lim2; $upper = $lim1;
+	}
+	return (($x >= $lower) && ($x <= $upper));
+}
+
+function truncate($string, $length)
+{
+	if (strlen($string) > $length) {
+		$string = substr($string, 0, $length) . '...';
+	}
+	return $string;
+}
+
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat.php';
+
+// custom functions
+require SYSTEM . 'functions_custom.php';

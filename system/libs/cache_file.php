@@ -26,12 +26,11 @@ class Cache_File
 		$file = $this->_name($key);
 		file_put_contents($file, $var);
 
-		if($ttl !== 0) {
-			touch($file, time() + $ttl);
+		if ($ttl === 0) {
+			$ttl = 365 * 24 * 60 * 60; // 365 days
 		}
-		else {
-			touch($file, time() + 24 * 60 * 60);
-		}
+
+		touch($file, time() + $ttl);
 	}
 
 	public function get($key)

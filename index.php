@@ -56,10 +56,16 @@ if(file_exists(BASE . 'config.local.php')) {
 	require_once BASE . 'config.local.php';
 }
 
+ini_set('log_errors', 1);
 if(config('env') === 'dev') {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
+}
+else {
+	ini_set('display_errors', 0);
+	ini_set('display_startup_errors', 0);
+	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 }
 
 if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE . 'install'))
@@ -97,10 +103,12 @@ else {
 			'/^account\/character\/comment\/[A-Za-z0-9-_%+\']+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment', 'name' => '$3'),
 			'/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment'),
 			'/^account\/confirm_email\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'confirm_email', 'v' => '$2'),
+			'/^bans\/[0-9]+\/?$/' => array('subtopic' => 'bans', 'page' => '$1'),
 			'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
 			'/^changelog\/[0-9]+\/?$/' => array('subtopic' => 'changelog', 'page' => '$1'),
 			'/^commands\/add\/?$/' => array('subtopic' => 'commands', 'action' => 'add'),
 			'/^commands\/edit\/?$/' => array('subtopic' => 'commands', 'action' => 'edit'),
+			'/^creatures\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'creatures', 'creature' => '$1'),
 			'/^faq\/add\/?$/' => array('subtopic' => 'faq', 'action' => 'add'),
 			'/^faq\/edit\/?$/' => array('subtopic' => 'faq', 'action' => 'edit'),
 			'/^forum\/add_board\/?$/' => array('subtopic' => 'forum', 'action' => 'add_board'),#
@@ -327,11 +335,15 @@ if($load_it)
 				)) . $content;
 		}
 	} else {
-		$file = SYSTEM . 'pages/' . $page . '.php';
+		$file = $template_path . '/pages/' . $page . '.php';
 		if(!@file_exists($file))
 		{
-			$page = '404';
-			$file = SYSTEM . 'pages/404.php';
+			$file = SYSTEM . 'pages/' . $page . '.php';
+			if(!@file_exists($file))
+			{
+				$page = '404';
+				$file = SYSTEM . 'pages/404.php';
+			}
 		}
 	}
 

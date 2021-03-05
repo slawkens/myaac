@@ -11,15 +11,6 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Spells';
 
-$canEdit = hasFlag(FLAG_CONTENT_SPELLS) || admin();
-if(isset($_POST['reload_spells']) && $canEdit)
-{
-	require LIBS . 'spells.php';
-	if(!Spells::loadFromXML(true)) {
-		error(Spells::getLastError());
-	}
-}
-
 if(isset($_REQUEST['vocation_id'])) {
 	$vocation_id = $_REQUEST['vocation_id'];
 	if($vocation_id == 'all') {
@@ -74,7 +65,6 @@ else {
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.min.css">
 <?php
 $twig->display('spells.html.twig', array(
-	'canEdit' => $canEdit,
 	'post_vocation_id' => $vocation_id,
 	'post_vocation' => $vocation,
 	'spells' => $spells,

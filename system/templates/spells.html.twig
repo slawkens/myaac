@@ -32,13 +32,6 @@
 	}
 </style>
 
-{% if canEdit %}
-	<form method="post" action="{{ getLink('spells') }}">
-		<input type="hidden" name="reload_spells" value="yes"/>
-		<input type="submit" value="(admin) Reload spells"/>
-	</form>
-{% endif %}
-
 <form action="{{ getLink('spells') }}" method="post">
 	<table border="0" cellspacing="1" cellpadding="4" width="100%">
 		<tr bgcolor="{{ config.vdarkborder }}">

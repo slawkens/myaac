@@ -7,7 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/adminlte.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">
+	<?php if (isset($use_datatable)) { ?>
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.bs.min.css">
+	<?php } ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $template_path; ?>style.css"/>
 	<!--[if lt IE 9]>
 	<script src="<?php echo BASE_URL; ?>tools/js/html5shiv.min.js"></script>
@@ -39,8 +41,15 @@
 				<span class="brand-text"><b>My</b>AAC</span>
 			</a>
 			<div class="sidebar">
-				<nav class="mt-2">
+				<nav class="mt-1">
 					<ul class="nav nav-pills nav-sidebar flex-column nav-legacy nav-child-indent" data-widget="treeview" data-accordion="false">
+						<li class="menu-text-li">
+							<span class="menu-text">
+								<a class="text-info" href="<?php echo BASE_URL; ?>" target="_blank">
+									<?php echo $config['lua']['serverName'] ?>
+								</a>
+							</span>
+						</li>
 						<?php
 						// name = Display name of link
 						// icon = fontawesome icon name without "fas fa-"
@@ -48,6 +57,10 @@
 						$menus = require __DIR__ . '/menus.php';
 
 						foreach ($menus as $category => $menu) {
+							if (isset($menu['disabled']) && $menu['disabled']) {
+								continue;
+							}
+
 							$has_child = is_array($menu['link']);
 							if (!$has_child) { ?>
 								<li class="nav-item">
@@ -106,11 +119,11 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0 text-dark"><?php echo(isset($title) ? $title : ''); ?><small> - Admin Panel</small></h1>
+							<h3 class="m-0 text-dark"><?php echo(isset($title) ? $title : ''); ?><small> - Admin Panel</small></h3>
 						</div>
 						<div class="col-sm-6">
-							<div class="float-sm-right">
-								<span class="p-2 right badge badge-<?php echo(($status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
+							<div class="float-sm-right d-none d-sm-inline">
+								<span class="p-2 right badge badge-<?php echo((isset($status['online']) and $status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
 							</div>
 						</div>
 					</div>
@@ -150,15 +163,10 @@
 		</aside>
 
 		<footer class="main-footer">
-			<div class="float-right d-none d-sm-inline">
-				<div id="status">
-					<?php if ($status['online']): ?>
-						<p class="success" style="width: 120px;">Server Online</p>
-					<?php else: ?>
-						<p class="error" style="width: 120px;">Server Offline</p>
-					<?php endif; ?>
-				</div>
-			</div><?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?>
+			<div class="float-sm-right d-none d-sm-inline">
+				<span class="p-2 right badge badge-<?php echo((isset($status['online']) and $status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
+			</div>
+			<?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?>
 		</footer>
 		<div id="sidebar-overlay"></div>
 	</div>
@@ -169,8 +177,10 @@
 ?>
 <script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
+<?php if (isset($use_datatable))  { ?>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.bs.min.js"></script>
+<?php } ?>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
 </body>
 </html>

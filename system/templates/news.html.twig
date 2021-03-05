@@ -1,6 +1,6 @@
 <div class="NewsHeadline">
 	<div class="NewsHeadlineBackground" style="background-image:url({{ template_path }}/images/news/newsheadline_background.gif)">
-		<img src="{{ template_path }}/images/news/icon_{{ icon }}.gif" class="NewsHeadlineIcon" />
+		<img src="{{ constant('BASE_URL') }}images/news/icon_{{ icon }}.gif" class="NewsHeadlineIcon" />
 		<div class="NewsHeadlineDate">{{ date|date(config.news_date_format) }} - </div>
 		<div class="NewsHeadlineText">{{ title }}</div>
 		{% if author is not empty %}

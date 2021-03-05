@@ -24,10 +24,10 @@ if (!$myaac_version) {
 $version_compare = version_compare($myaac_version, MYAAC_VERSION);
 if ($version_compare == 0) {
 	success('MyAAC latest version is ' . $myaac_version . '. You\'re using the latest version.
-	<br/>View CHANGELOG ' . generateLink(ADMIN_URL . '?p=changelog', 'here'));
+	<br/>View CHANGELOG ' . generateLink(ADMIN_URL . '?p=clmd', 'here'));
 } else if ($version_compare < 0) {
 	success('Woah, seems you\'re using newer version as latest released one! MyAAC latest released version is ' . $myaac_version . ', and you\'re using version ' . MYAAC_VERSION . '.
-	<br/>View CHANGELOG ' . generateLink(ADMIN_URL . '?p=changelog', 'here'));
+	<br/>View CHANGELOG ' . generateLink(ADMIN_URL . '?p=clmd', 'here'));
 } else {
 	warning('You\'re using outdated version.<br/>
 		Your version: <b>' . MYAAC_VERSION . '</b><br/>

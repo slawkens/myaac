@@ -20,7 +20,7 @@ $locale['not_loaded'] = 'Not loaded';
 $locale['loading_spinner'] = 'Please wait, installing...';
 $locale['importing_spinner'] = 'Please wait, importing data...';
 $locale['please_fill_all'] = 'Please fill all inputs!';
-$locale['already_installed'] = 'MyAAC has been already installed. Please delete <b>install/<b/> directory. If you want to reinstall MyAAC - please delete <strong>config.local.php</strong> file from the main directory and refresh the page.';
+$locale['already_installed'] = 'MyAAC has been already installed. Please delete <b>install/</b> directory. If you want to reinstall MyAAC - please delete <strong>config.local.php</strong> file from the main directory and refresh the page.';
 
 // welcome
 $locale['step_welcome'] = 'Welcome';
@@ -38,6 +38,9 @@ $locale['step_requirements_php_version'] = 'PHP Version';
 $locale['step_requirements_write_perms'] = 'Write permissions';
 $locale['step_requirements_failed'] = 'Installation will be disabled until these requirements will be passed.</b><br/>For more informations see <b>README</b> file.';
 $locale['step_requirements_extension'] = '$EXTENSION$ PHP extension';
+$locale['step_requirements_warning_images_guilds'] = 'Guild logo upload will not work';
+$locale['step_requirements_warning_images_gallery'] = 'Gallery image upload will not work';
+$locale['step_requirements_warning_player_signatures'] = 'Player Signatures will not work';
 
 // config
 $locale['step_config'] = 'Configuration';
@@ -47,9 +50,6 @@ $locale['step_config_server_path_desc'] = 'Path to your TFS main directory, wher
 $locale['step_config_mail_admin'] = 'Admin Email';
 $locale['step_config_mail_admin_desc'] = 'Address where emails from contact form will be delivered, for example admin@gmail.com';
 $locale['step_config_mail_admin_error'] = 'Admin Email is not correct.';
-$locale['step_config_mail_address'] = 'Server Email';
-$locale['step_config_mail_address_desc'] = 'Address which will be used for outgoing emails (from:), for example no-reply@your-server.org';
-$locale['step_config_mail_address_error'] = 'Server Email is not correct.';
 $locale['step_config_timezone'] = 'Timezone';
 $locale['step_config_timezone_desc'] = 'Used for date functions';
 $locale['step_config_timezone_error'] = 'Timezone is not correct.';
@@ -63,6 +63,7 @@ $locale['step_config_usage_desc'] = 'Allow MyAAC to report anonymous usage stati
 $locale['step_database'] = 'Import schema';
 $locale['step_database_title'] = 'Import MySQL schema';
 $locale['step_database_importing'] = 'Your database is MySQL. Database name is: "$DATABASE_NAME$". Importing schema now...';
+$locale['step_database_config_saved'] = 'Local configuration has been saved into file: config.local.php';
 $locale['step_database_error_path'] = 'Please specify server path.';
 $locale['step_database_error_config'] = 'Cannot find config.lua file. Is your server path correct? Go back and check again.';
 $locale['step_database_error_database_empty'] = 'Cannot determine database type from config.lua. Your OTS is unsupported by this AAC.';
@@ -85,6 +86,8 @@ $locale['step_database_loaded_weapons'] = 'Weapons has been loaded...';
 $locale['step_database_loaded_monsters'] = 'Monsters has been loaded...';
 $locale['step_database_error_monsters'] = 'There were some problems loading your monsters.xml file. Please check $LOG$ for more info.';
 $locale['step_database_loaded_spells'] = 'Spells has been loaded...';
+$locale['step_database_loaded_towns'] = 'Towns has been loaded...';
+$locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in config.';
 $locale['step_database_created_account'] = 'Created admin account...';
 $locale['step_database_created_news'] = 'Newses has been created...';
 

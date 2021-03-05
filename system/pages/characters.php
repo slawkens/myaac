@@ -372,7 +372,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			$_player = new OTS_Player();
 			$fields = array('id', 'name', 'vocation', 'level', 'online', 'deleted', 'hidden');
 			$_player->load($p['id'], $fields, false);
-			if($_player->isLoaded()) {
+			if($_player->isLoaded() && !$_player->isHidden()) {
 				$account_players[] = $_player;
 			}
 		}
@@ -413,7 +413,6 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		'player_link' => getPlayerLink($player->getName(), false),
 		'hidden' => $hidden,
 		'bannedUntil' => isset($bannedUntil) ? $bannedUntil : null,
-		'characters_link' => getLink('characters'),
 		'account_players' => isset($account_players) ? $account_players : null,
 		'search_form' => generate_search_form(),
 		'canEdit' => hasFlag(FLAG_CONTENT_PLAYERS) || superAdmin()
@@ -433,7 +432,7 @@ else
 	if($db->hasColumn('players', 'deletion'))
 		$deleted = 'deletion';
 
-	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1;');
+	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . (int)config('characters_search_limit') . ';');
 	if($query->rowCount() > 0)
 	{
 		echo 'Did you mean:<ul>';

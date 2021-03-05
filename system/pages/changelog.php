@@ -16,7 +16,9 @@ $limit = 30;
 $offset = $_page * $limit;
 $next_page = false;
 
-$changelogs = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'changelog' . '` WHERE `hidden` = 0 ORDER BY `id` DESC LIMIT ' . ($limit + 1) . ' OFFSET ' . $offset)->fetchAll();
+$canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
+
+$changelogs = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'changelog` ' . ($canEdit ? '' : 'WHERE `hidden` = 0').' ORDER BY `id` DESC LIMIT ' . ($limit + 1) . ' OFFSET ' . $offset)->fetchAll();
 
 $i = 0;
 foreach($changelogs as $key => &$log)
@@ -39,33 +41,6 @@ $twig->display('changelog.html.twig', array(
 	'changelogs' => $changelogs,
 	'page' => $_page,
 	'next_page' => $next_page,
+	'canEdit' => $canEdit,
 ));
-
-function getChangelogType($v)
-{
-	switch($v) {
-		case 1:
-			return 'added';
-		case 2:
-			return 'removed';
-		case 3:
-			return 'changed';
-		case 4:
-			return 'fixed';
-	}
-
-	return 'unknown';
-}
-
-function getChangelogWhere($v)
-{
-	switch($v) {
-		case 1:
-			return 'server';
-		case 2:
-			return 'website';
-	}
-
-	return 'unknown';
-}
 ?>

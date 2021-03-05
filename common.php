@@ -23,12 +23,12 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-if (version_compare(phpversion(), '5.5', '<')) die('PHP version 5.5 or higher is required.');
+if (version_compare(phpversion(), '7.1', '<')) die('PHP version 7.1 or higher is required.');
 session_start();
 
 define('MYAAC', true);
 define('MYAAC_VERSION', '0.9.0-dev');
-define('DATABASE_VERSION', 31);
+define('DATABASE_VERSION', 33);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -67,6 +67,7 @@ define('PAGES', SYSTEM . 'pages/');
 define('PLUGINS', BASE . 'plugins/');
 define('TEMPLATES', BASE . 'templates/');
 define('TOOLS', BASE . 'tools/');
+define('VENDOR', BASE . 'vendor/');
 
 // menu categories
 define('MENU_CATEGORY_NEWS', 1);
@@ -115,4 +116,10 @@ if(!IS_CLI) {
 
 	require SYSTEM . 'exception.php';
 }
-require SYSTEM . 'autoload.php';
+
+$autoloadFile = VENDOR . 'autoload.php';
+if (!is_file($autoloadFile)) {
+	throw new RuntimeException('The vendor folder is missing. Please download Composer: <a href="https://getcomposer.org/download">https://getcomposer.org/download</a>, install it and execute in the main MyAAC directory this command: <b>composer install</b>. Or download MyAAC from <a href="https://github.com/slawkens/myaac/releases">GitHub releases</a>, which includes Vendor folder.');
+}
+
+require $autoloadFile;
