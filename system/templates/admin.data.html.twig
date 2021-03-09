@@ -1,11 +1,11 @@
-<p>Clicking the button will reload server data (items, monsters, spells, towns, weapons).</p>
+<p>Clicking the button will reload server data (items, monsters, npcs, spells, towns, weapons).</p>
 <p>It may take up to few minutes.</p>
 <button id="reload_button" class="btn btn-info"><i class="fas fa-update"></i>Reload</button>
 
-<div id="spinner" class="spinner-border" role="status">
-	<span class="sr-only">Loading...</span>
-</div>
-
+<button id="spinner" class="btn btn-info" type="button" disabled>
+	<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+	Loading...
+</button>
 <div style="height: 20px"></div>
 
 <div id="messages"></div>
@@ -19,6 +19,7 @@
 	$(function () {
 		$('#reload_button').on('click', function (e) {
 			$('#spinner').show();
+			$('#reload_button').hide();
 
 			$('[id^=success]').remove();
 			$('#messages').append('<div id="success-1"></div>');

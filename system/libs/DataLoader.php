@@ -63,6 +63,16 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
+		require LIBS . 'npc.php';
+		if(NPCs::loadFromXML()) {
+			success(self::$locale['step_database_loaded_npcs'] . self::getLoadedTime());
+		}
+		else {
+			error(self::$locale['step_database_error_npcs']);
+		}
+
+		self::$startTime = microtime(true);
+
 		require LIBS . 'spells.php';
 		if(Spells::loadFromXML()) {
 			success(self::$locale['step_database_loaded_spells'] . self::getLoadedTime());
