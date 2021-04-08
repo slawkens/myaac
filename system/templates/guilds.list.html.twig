@@ -51,7 +51,7 @@
 
                                                                     {% if guild.description is not empty %}
                                                                     <br>
-                                                                    <span>{{ guild.description }}</span>
+                                                                    <span>{{ guild.description|raw }}</span>
                                                                     {% endif %}
                                                                 </td>
 
