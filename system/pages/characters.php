@@ -197,6 +197,7 @@ if($player->isLoaded() && !$player->isDeleted())
 		foreach($quests as &$storage) {
 			$storage = isset($player_storage[$storage]) && $player_storage[$storage] > 0;
 		}
+		unset($storage);
 	}
 
 	if($config['characters']['equipment'])
