@@ -69,7 +69,7 @@ $errors = array();
 		if(!$account_logged->isPremium())
 			$account_status = '<b><span style="color: red">Free Account</span></b>';
 		else
-			$account_status = '<b><span style="color: green">Premium Account, ' . ($freePremium ? 'Gratis Premium Account' : $account_logged->getPremDays() . ' ' .$dayOrDays. ' left') . '</span></b>';
+			$account_status = '<b><span style="color: green">' . ($freePremium ? 'Gratis Premium Account' : 'Premium Account, ' . $account_logged->getPremDays() . ' '.$dayOrDays.' left') . '</span></b>';
 
 		if(empty($recovery_key))
 			$account_registered = '<b><span style="color: red">No</span></b>';
