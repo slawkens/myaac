@@ -62,7 +62,8 @@ if (empty($_REQUEST['creature'])) {
 	echo '</tbody></table>';
 
 } else {
-	$monster_name = stripslashes(trim(ucwords($_REQUEST['creature'])));
+	$monster_name = urldecode(stripslashes(trim(ucwords($_REQUEST['creature']))));
+
 	$monster = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1 AND `name` = ' . $db->quote($monster_name) . ';')->fetch();
 	if (isset($monster['name'])) {
 		$title = $monster['name'] . " - Creatures";
