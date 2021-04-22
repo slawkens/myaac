@@ -43,7 +43,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
 	public static $cache = array();
 
-	const GRATIS_PREMIUM_DAYS = 65535,
+	const GRATIS_PREMIUM_DAYS = 65535;
 /**
  * Creates new account.
  *
