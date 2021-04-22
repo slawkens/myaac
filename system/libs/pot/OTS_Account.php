@@ -42,6 +42,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     private $data = array('email' => '', 'blocked' => false, 'rlname' => '','location' => '', 'country' => '','web_flags' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
 
 	public static $cache = array();
+
+	const GRATIS_PREMIUM_DAYS = 65535;
 /**
  * Creates new account.
  *
@@ -381,6 +383,10 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
 		global $config;
 		if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
+
+		if($this->data['premdays'] == self::GRATIS_PREMIUM_DAYS){
+			return self::GRATIS_PREMIUM_DAYS;
+		}
 
 		$ret = ceil($this->data['premdays'] - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->data['lastday']))) - date("z", $this->data['lastday'])));
 		return $ret > 0 ? $ret : 0;
