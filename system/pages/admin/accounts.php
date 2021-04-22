@@ -182,7 +182,7 @@ if ($id > 0) {
 			}
 
 			$lastDay = 0;
-			if($p_days != 0 && $p_days != PHP_INT_MAX ) {
+			if($p_days != 0 && $p_days != 65535 ) {
 				$lastDay = time();
 			} else if ($lastDay != 0) {
 				$lastDay = 0;
