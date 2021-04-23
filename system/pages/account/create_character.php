@@ -14,6 +14,7 @@ $character_name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST
 $character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
 $character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;
 $character_town = isset($_POST['town']) ? (int)$_POST['town'] : null;
+$character_groupId = isset($_POST['type']) ? (int)$_POST['type'] : null;
 
 $character_created = false;
 $save = isset($_POST['save']) && $_POST['save'] == 1;
@@ -22,7 +23,7 @@ if($save) {
 	require_once LIBS . 'CreateCharacter.php';
 	$createCharacter = new CreateCharacter();
 
-	$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $account_logged, $errors);
+	$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $account_logged, $character_groupId, $errors);
 }
 
 if(count($errors) > 0) {

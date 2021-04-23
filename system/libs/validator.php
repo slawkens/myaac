@@ -288,6 +288,18 @@ class Validator
 			return false;
 		}
 
+		$player->find("CM ".$name);
+		if($player->isLoaded()) {
+			self::$lastError = 'Community manager character with this name already exist.';
+			return false;
+		}
+
+		$player->find("GM ".$name);
+		if($player->isLoaded()) {
+			self::$lastError = 'Gamemaster character with this name already exist.';
+			return false;
+		}
+
 		//check if was namelocked previously
 		if($db->hasTable('player_namelocks') && $db->hasColumn('player_namelocks', 'name')) {
 			$namelock = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));

@@ -23,6 +23,16 @@ function generate_search_form($autofocus = false)
 	));
 }
 
+function retrieve_account_type($accountType)
+{
+       global $config;
+       if ( !array_key_exists($accountType, $config['account_types'])){
+               return "Invalid account type";
+       } else {
+               return $config['account_types'][$accountType];
+       }
+}
+
 function retrieve_former_name($name)
 {
 	global $oldName, $db;
@@ -416,7 +426,8 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		'characters_link' => getLink('characters'),
 		'account_players' => isset($account_players) ? $account_players : null,
 		'search_form' => generate_search_form(),
-		'canEdit' => hasFlag(FLAG_CONTENT_PLAYERS) || superAdmin()
+		'canEdit' => hasFlag(FLAG_CONTENT_PLAYERS) || superAdmin(),
+		'accountType' => retrieve_account_type($account->getType())
 	));
 }
 else

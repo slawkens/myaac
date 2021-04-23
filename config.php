@@ -142,6 +142,15 @@ $config = array(
 		1 => 'Male'
 	),
 
+	// type of privilegies of the entire accounts - it's set in table accounts column type and defined in account.hpp AccountType
+	'account_types' => array(
+		1 => 'Player',
+		2 => 'Tutor',
+		3 => 'Senior Tutor',
+		4 => 'Gamemaster',
+		5 => 'God'
+	),
+
 	// new character config
 	'character_samples' => array( // vocations, format: ID_of_vocation => 'Name of Character to copy'
 		//0 => 'Rook Sample',

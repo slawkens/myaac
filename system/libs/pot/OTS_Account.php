@@ -187,7 +187,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		}
 
         // SELECT query on database
-		$this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
+		$this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created`'. ($this->db->hasColumn('accounts', 'type') ? ', `type`' : '') .' FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
 		self::$cache[$id] = $this->data;
     }
 
@@ -426,6 +426,47 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         }
 
         return $this->data['created'];
+    }
+
+    public function getType()
+    {
+        if( !isset($this->data['type']) )
+        {
+            throw new E_OTS_NotLoaded();
+        }
+
+        return $this->data['type'];
+    }
+
+    public function getAllowedCharactersGroupIds()
+    {
+        $groupsToShow = array();
+        if( !isset($this->data['type']) )
+        {
+            return $groupsToShow;
+        }
+
+		if( $this->data['type'] > 3){  //if is a gm or above access allow him/her to choose what type of player will create
+
+			$groups = new OTS_Groups_List();
+		
+			foreach($groups as $group){
+				$id = $group->getId();
+				$name = $group->getName();	
+				if( $this->data['type'] == 4){
+					if($id == 1 || $id == 4){ //if is gm - allow create gms and normal player only
+						array_push($groupsToShow, array(
+							$id => $name
+						));
+					}					
+				} else { //if cm/god allow create all group ids
+					array_push($groupsToShow, array(
+						$id => $name
+					));
+				}
+			}
+		}
+        return $groupsToShow;
     }
 
 /**

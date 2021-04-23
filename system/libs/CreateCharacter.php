@@ -81,6 +81,7 @@ class CreateCharacter
 	 * @param int $vocation
 	 * @param int $town
 	 * @param OTS_Account $account
+	 * @param int $groupId
 	 * @param array $errors
 	 * @return bool
 	 * @throws E_OTS_NotLoaded
@@ -88,7 +89,7 @@ class CreateCharacter
 	 * @throws Twig_Error_Runtime
 	 * @throws Twig_Error_Syntax
 	 */
-	public function doCreate($name, $sex, $vocation, $town, $account, &$errors)
+	public function doCreate($name, $sex, $vocation, $town, $account, $groupId, &$errors)
 	{
 		if(!$this->check($name, $sex, $vocation, $town, $errors)) {
 			return false;
@@ -179,6 +180,25 @@ class CreateCharacter
 			$player->setLossContainers($char_to_copy->getLossContainers());
 		}
 
+		/* Override settings when is a privileged player */
+		if($account->getType() >= 4 && $groupId != null){
+			$player->setGroupId($groupId); //set group id chosen
+			if ($groupId == 4) {
+				$name = "GM ".$name;
+				$player->setLookType(75);
+			}				
+			if ($groupId == 5){
+				$name = "CM ".$name;
+				$player->setLookType(302);
+			}				
+			if ($groupId == 6){
+				$player->setLookType(266);
+			}
+			$player->setName($name);
+		}			
+		if($account->getType() >=2 && $account->getType() <= 3)
+			$player->setGroupId($account->getType());
+		
 		$player->save();
 		$player->setCustomField('created', time());
 

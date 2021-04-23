@@ -37,8 +37,8 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			{
 				$info = array();
 				$info['id'] = $group['id'];
-				$info['name'] = $group['name'];
-				$info['access'] = $group['name'];
+				$info['name'] = ucwords($group['name']);
+				$info['access'] = $group['access'];
 				$this->groups[$group['id']] = new OTS_Group($info);
 			}
 			
@@ -79,7 +79,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 				{
 					$data[$group->getAttribute('id')] = array(
 						'id' => $group->getAttribute('id'),
-						'name' => $group->getAttribute('name'),
+						'name' => ucwords($group->getAttribute('name')),
 						'access' => $group->getAttribute('access')
 					);
 				}
@@ -105,7 +105,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			{
 				$data[$group->getAttribute('id')] = array(
 					'id' => $group->getAttribute('id'),
-					'name' => $group->getAttribute('name'),
+					'name' => ucwords($group->getAttribute('name')),
 					'access' => $group->getAttribute('access')
 				);
 

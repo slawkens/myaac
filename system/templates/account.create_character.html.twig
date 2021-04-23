@@ -2,6 +2,13 @@ Please choose a name{% if config.character_samples|length > 1 %}, vocation{% end
 {% if config.character_towns|length > 1 %}, town{% endif %}
  and sex for your character. <br/>
 In any case the name must not violate the naming conventions stated in the <a href="?subtopic=rules" target="_blank" >{{ config.lua.serverName }} Rules</a>, or your character might get deleted or name locked.
+<br/>
+{% if account_logged.getType() == 4 %}
+	<b>The "GM" prefix will be automatically added if you choose "Gamemaster" privilege.</b><br/>
+{% elseif account_logged.getType() > 4 %}
+	<b>The "GM" prefix will be automatically added if you choose "Gamemaster" privilege.</b><br/>
+	<b>The "CM" prefix will be automatically added if you choose "Community Manager" privilege.</b><br/>
+{% endif %}
 {% if account_logged.getPlayersList()|length >= config.characters_per_account %}
 <b><span style="color: red"> You have maximum number of characters per account on your account. Delete one before you make new.</span></b>
 {% endif %}
@@ -42,6 +49,11 @@ In any case the name must not violate the naming conventions stated in the <a hr
 													<td>
 														<span>Sex</span>
 													</td>
+													{% if account_logged.getType() >= 4 %}
+													<td>
+														<span>Privilege</span>
+													</td>
+													{% endif %}
 												</tr>
 												<tr class="Odd">
 													<td>
@@ -60,6 +72,19 @@ In any case the name must not violate the naming conventions stated in the <a hr
 														><label for="sex{{ i }}">{{ gender|lower }}</label><br/>
 														{% endfor %}
 													</td>
+													{% if account_logged.getType() >= 4 %}
+														<td>
+															{% set i = 1 %}
+															{% set groups = account_logged.getAllowedCharactersGroupIds() %}
+															{% for group in groups %}
+																{% for id, type in group %}																	
+																	<input type="radio" name="type" id="type{{ i }}" value="{{ id }}"{% if i == 1 %} checked="checked"{% endif %}
+																	><label for="type{{ i }}">{{ type }}</label><br/>
+																{% endfor %}
+																{% set i = i + 1 %}
+															{% endfor %}
+														</td>
+													{% endif %}
 												</tr>
 											</table>
 										</div>

@@ -130,6 +130,15 @@
 				<td>{% if player.getLastLogin() == 0 %}Never logged in.{% else %}{{ player.getLastLogin()|date("M d Y, H:i:s") }} CEST{% endif %}</td>
 			</tr>
 
+			{% set group = player.getGroup() %}
+			{% if group.isLoaded() and group.getId() > 3 %}
+			{% set rows = rows + 1 %}
+			<tr bgcolor="{{ getStyle(rows) }}">
+				<td>Position:</td>
+				<td>{{ group.getName() }}</td>
+			</tr>
+			{% endif %}
+
 			{% if config.characters.creation_date %}
 			{% set rows = rows + 1 %}
 			<tr bgcolor="{{ getStyle(rows) }}">
@@ -335,15 +344,6 @@
 			</tr>
 			{% endif %}
 
-			{% set group = player.getGroup() %}
-			{% if group.isLoaded() and group.getId() != 1 %}
-			{% set rows = rows + 1 %}
-			<tr bgcolor="{{ getStyle(rows) }}">
-				<td>Position:</td>
-				<td>{{ group.getName()|capitalize }}</td>
-			</tr>
-			{% endif %}
-
 			{% set realLocation = account.getLocation() %}
 			{% if realLocation is not empty %}
 			{% set rows = rows + 1 %}
@@ -352,7 +352,15 @@
 				<td>{{ realLocation }}</td>
 			</tr>
 			{% endif %}
-
+			
+			{% if accountType != "Player" %}
+			{% set rows = rows + 1 %}
+			<tr bgcolor="{{ getStyle(rows) }}">
+				<td>Position:</td>
+				<td>{{ accountType }}</td>
+			</tr>
+			{% endif %}
+			
 			{% set rows = rows + 1 %}
 			<tr bgcolor="{{ getStyle(rows) }}">
 				<td width="20%">Created:</td>

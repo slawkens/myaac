@@ -268,7 +268,7 @@ if($save)
 
 			if(config('account_create_character_create')) {
 				// character creation
-				$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
+				$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, 1, $errors);
 				if (!$character_created) {
 					error('There was an error creating your character. Please create your character later in account management page.');
 				}
