@@ -51,8 +51,7 @@ if(empty($errors)) {
 			}
 
 			$twig->display('guilds.change_description.html.twig', array(
-				'guild' => $guild,
-				'rows' => bcsub($config['guild_description_lines_limit'],1)
+				'guild' => $guild
 			));
 		}
 		else {
