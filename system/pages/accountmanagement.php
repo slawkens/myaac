@@ -60,16 +60,17 @@ $errors = array();
 
 	if($action == '')
 	{
-		$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']);
+		$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
+		$dayOrDays = $account_logged->getPremDays() == 1 ? 'day' : 'days';
 		/**
 		 * @var OTS_Account $account_logged
 		 */
-		$recovery_key = $account_logged->getCustomField('key');
 		if(!$account_logged->isPremium())
 			$account_status = '<b><span style="color: red">Free Account</span></b>';
 		else
-			$account_status = '<b><span style="color: green">Premium Account, ' . ($freePremium ? 'Unlimited' : $account_logged->getPremDays() . ' days left') . '</span></b>';
+			$account_status = '<b><span style="color: green">' . ($freePremium ? 'Gratis Premium Account' : 'Premium Account, ' . $account_logged->getPremDays() . ' '.$dayOrDays.' left') . '</span></b>';
 
+		$recovery_key = $account_logged->getCustomField('key');
 		if(empty($recovery_key))
 			$account_registered = '<b><span style="color: red">No</span></b>';
 		else

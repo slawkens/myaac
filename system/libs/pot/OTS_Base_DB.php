@@ -23,6 +23,7 @@
  */
 abstract class OTS_Base_DB extends PDO implements IOTS_DB
 {
+	use OTS_DB_PDOQuery;
 /**
  * Tables prefix.
  *
@@ -74,7 +75,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
         return $this->fieldName($this->prefix . $name);
     }
 
-	public function query($query)
+	private function doQuery(...$args)
 	{
 		$this->queries++;
 
@@ -82,7 +83,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 			$startTime = microtime(true);
 		}
 
-		$ret = parent::query($query);
+		$ret = parent::query(...$args);;
 		if($this->logged) {
 			$totalTime = microtime(true) - $startTime;
 			$this->log .= round($totalTime, 4) . ' ms - ' . $query . PHP_EOL;
@@ -91,17 +92,21 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		return $ret;
     }
 
-	public function select($table, $data)
+	public function select($table, $where, $limit = null)
 	{
-		$fields = array_keys($data);
-		$values = array_values($data);
+		$fields = array_keys($where);
+		$values = array_values($where);
 		$query = 'SELECT * FROM ' . $this->tableName($table) . ' WHERE (';
 
 		$count = count($fields);
 		for ($i = 0; $i < $count; $i++)
 			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).' AND ';
+
 		$query = substr($query, 0, -4);
-		$query.=');';
+		if (isset($limit))
+			$query .=') LIMIT '.$limit.';';
+		else
+			$query .=');';
 
 		$query = $this->query($query);
 		if($query->rowCount() != 1) return false;

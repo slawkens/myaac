@@ -12,6 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Player editor';
 $player_base = BASE_URL . 'admin/?p=players';
 
+$use_datatable = true;
 require_once LIBS . 'forum.php';
 
 $skills = array(
@@ -308,7 +309,7 @@ else if (isset($_REQUEST['search'])) {
 					<h5 class="m-0">Players</h5>
 				</div>
 				<div class="card-body">
-					<table class="player_datatable table table-striped table-bordered">
+					<table class="player_datatable table table-striped table-bordered table-responsive d-md-table">
 						<thead>
 						<tr>
 							<th>ID</th>
@@ -699,7 +700,7 @@ else if (isset($_REQUEST['search'])) {
 								</div>
 							</div>
 							<div class="tab-pane fade" id="tabs-posts">
-								<table class="table table-striped table-condensed">
+								<table class="table table-striped table-condensed table-responsive d-md-table">
 									<thead>
 									<tr>
 										<th class="w-25">Topic</th>
@@ -739,7 +740,7 @@ else if (isset($_REQUEST['search'])) {
 										$account_players = $account->getPlayersList();
 										$account_players->orderBy('id');
 										if (isset($account_players)) { ?>
-											<table class="table table-striped table-condensed">
+											<table class="table table-striped table-condensed table-responsive d-md-table">
 												<thead>
 												<tr>
 													<th>#</th>
@@ -854,10 +855,9 @@ else if (isset($_REQUEST['search'])) {
 				const look_feet = $('#look_feet').val();
 				const look_type = $('#look_type').val();
 
+				let look_addons = '';
 				<?php if($hasLookAddons): ?>
-				const look_addons = '&addons=' + $('#look_addons').val();
-				<?php else: ?>
-				const look_addons = '';
+				look_addons = '&addons=' + $('#look_addons').val();
 				<?php endif; ?>
 				$("#player_outfit").attr("src", '<?= $config['outfit_images_url']; ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet);
 			}

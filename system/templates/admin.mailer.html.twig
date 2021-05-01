@@ -19,20 +19,21 @@
 	<form method="post">
 		<div class="card-body">
 			<div class="form-group row">
+				<label for="mail_to">To: (enter email, or leave empty to all)</label>
+				<input class="form-control" type="text" id="mail_to" name="mail_to" value="{{ mail_to }}"/>
+			</div>
+			<div class="form-group row">
 				<label for="mail_subject">Subject:</label>
-				<input class="form-control" type="text" id="mail_subject" name="mail_subject"
-					   value="{{ mail_subject }}" size="30" maxlength="30"/>
+				<input class="form-control" type="text" id="mail_subject" name="mail_subject" value="{{ mail_subject }}" maxlength="30"/>
 			</div>
 			<div class="form-group row">
 				<label for="mail_content" class="control-label">Content:</label>
 				<textarea id="mail_content" name="mail_content" style="width: 100%" class="tinymce">{{ mail_content }}</textarea>
 			</div>
-			<div class="form-group row">
-				<input type="checkbox" name="preview" id="preview" value="1"/><label for="category">Just send test email to me (preview)</label>{% if preview_done %} - <b>Done.</b>{% endif %}
-			</div>
 		</div>
 		<div class="card-footer">
-			<button type="submit" class="btn btn-info"><i class="fas fa-share"></i> Send</button>
+			<button type="submit" name="submit" class="btn btn-info"><i class="fas fa-share"></i> Send</button>
+			<a href="{{ constant('ADMIN_URL') }}?p=mailer" class="btn btn-danger float-right">Cancel</a>
 		</div>
 	</form>
 </div>

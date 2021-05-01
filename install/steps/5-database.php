@@ -21,8 +21,6 @@ if(!$error) {
 	// user can disable when he wants
 	$content .= '$config[\'env\'] = \'prod\'; // dev or prod';
 	$content .= PHP_EOL;
-	$content .= '$config[\'mail_enabled\'] = true;';
-	$content .= PHP_EOL;
 	foreach($_SESSION as $key => $value)
 	{
 		if(strpos($key, 'var_') !== false)
@@ -67,10 +65,6 @@ if(!$error) {
 					error($locale['step_config_mail_admin_error']);
 					$error = true;
 				}
-				if(!Validator::email($_SESSION['var_mail_address'])) {
-					error($locale['step_config_mail_address_error']);
-					$error = true;
-				}
 
 				$content .= '$config[\'session_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
 				$content .= PHP_EOL;
@@ -82,6 +76,7 @@ if(!$error) {
 				}
 
 				if($saved) {
+					success($locale['step_database_config_saved']);
 					if(!$error) {
 						$_SESSION['saved'] = true;
 					}
@@ -100,8 +95,10 @@ if(!$error) {
 }
 ?>
 
-<form action="<?php echo BASE_URL; ?>install/" method="post">
-	<input type="hidden" name="step" id="step" value="admin" />
-	<?php echo next_buttons(true, $error ? false : true);
-	?>
-</form>
+<div class="text-center m-3">
+	<form action="<?php echo BASE_URL; ?>install/" method="post">
+		<input type="hidden" name="step" id="step" value="admin" />
+		<?php echo next_buttons(true, $error ? false : true);
+		?>
+	</form>
+</div>

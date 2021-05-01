@@ -1,4 +1,6 @@
 <?php
+define('MYAAC_ADMIN', true);
+
 require '../../common.php';
 require SYSTEM . 'functions.php';
 require SYSTEM . 'init.php';

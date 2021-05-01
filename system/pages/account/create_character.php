@@ -15,6 +15,10 @@ $character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
 $character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;
 $character_town = isset($_POST['town']) ? (int)$_POST['town'] : null;
 
+if (!admin() && !empty($character_name)) {
+	$character_name = ucwords(strtolower($character_name));
+}
+
 $character_created = false;
 $save = isset($_POST['save']) && $_POST['save'] == 1;
 $errors = array();

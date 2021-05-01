@@ -19,6 +19,31 @@ if($dev_mode) {
 }
 unset($dev_mode);
 
+$filter = new Twig_SimpleFilter('timeago', function ($datetime) {
+
+	$time = time() - strtotime($datetime);
+
+	$units = array (
+		31536000 => 'year',
+		2592000 => 'month',
+		604800 => 'week',
+		86400 => 'day',
+		3600 => 'hour',
+		60 => 'minute',
+		1 => 'second'
+	);
+
+	foreach ($units as $unit => $val) {
+		if ($time < $unit) continue;
+		$numberOfUnits = floor($time / $unit);
+		return ($val == 'second')? 'a few seconds ago' :
+			(($numberOfUnits>1) ? $numberOfUnits : 'a')
+			.' '.$val.(($numberOfUnits>1) ? 's' : '').' ago';
+	}
+
+});
+$twig->addFilter($filter);
+
 $function = new TwigFunction('getStyle', function ($i) {
 	return getStyle($i);
 });
@@ -29,13 +54,28 @@ $function = new TwigFunction('getLink', function ($s) {
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('generateLink', function ($s, $n, $b = false) {
+	return generateLink($s, $n, $b);
+});
+$twig->addFunction($function);
+
 $function = new TwigFunction('getPlayerLink', function ($s, $p) {
 	return getPlayerLink($s, $p);
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('getMonsterLink', function ($s, $p) {
+	return getMonsterLink($s, $p);
+});
+$twig->addFunction($function);
+
 $function = new TwigFunction('getGuildLink', function ($s, $p) {
     return getGuildLink($s, $p);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('truncate', function ($s, $n) {
+	return truncate($s, $n);
 });
 $twig->addFunction($function);
 

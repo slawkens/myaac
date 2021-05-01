@@ -64,7 +64,7 @@
 
 										{% if config.team_display_outfit %}
 										<td>
-											<img style="position: absolute; margin-top: {% if member.player.looktype in [75, 266, 302] %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
+											<img style="position: absolute; margin-top: {% if member.player.looktype in config.outfit_images_wrong_looktypes %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
 										</td>
 										{% endif %}
 
@@ -142,7 +142,7 @@
 									<tr bgcolor="{{ getStyle(i) }}" style="height: 32px;">
 									{% if config.team_display_outfit %}
 									<td>
-										<img style="position: absolute; margin-top: {% if member.player.looktype in [75, 266, 302] %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
+										<img style="position: absolute; margin-top: {% if member.player.looktype in config.outfit_images_wrong_looktypes %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
 									</td>
 									{% endif %}
 

@@ -77,8 +77,12 @@ if(empty($guild_errors)) {
 								$new_rank->setName('New Rank level '.$rank->getLevel());
 								$new_rank->save();
 							}
+
 							foreach($players_with_rank as $player_in_guild) {
-								$player_in_guild->setRank($new_rank);
+								$player = new OTS_Player();
+								$player->load($player_in_guild['id']);
+								if ($player->isLoaded())
+									$player->setRank($new_rank);
 							}
 						}
 						$rank->delete();
