@@ -33,7 +33,9 @@
 													<td>
 														<table style="float: left; width: 370px;" cellpadding="0" cellspacing="0" >
 															<tr>
-																<td class="LabelV" ><span{% if error is not null %} class="red"{% endif %}>Account {{ account }}:</span></td>
+																<td class="LabelV">
+																	<span{% if error is not null %} class="red"{% endif %}>{{ account_login_by }}:</span>
+																</td>
 																<td><input type="text" name="account_login" size="35" maxlength="30" autofocus /></td>
 															</tr>
 															<tr>

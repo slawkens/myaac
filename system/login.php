@@ -85,10 +85,17 @@ else
 			}
 
 			$account_logged = new OTS_Account();
-			if(USE_ACCOUNT_NAME)
-				$account_logged->find($login_account);
-			else
-				$account_logged->load($login_account, true);
+			if (config('account_login_by_email')) {
+				$account_logged->findByEMail($login_account);
+			}
+
+			if (!config('account_login_by_email') || config('account_login_by_email_fallback')) {
+				if(USE_ACCOUNT_NAME) {
+					$account_logged->find($login_account);
+				} else {
+					$account_logged->load($login_account, true);
+				}
+			}
 
 			$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 			if($account_logged->isLoaded() && encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password) == $account_logged->getPassword()
@@ -121,6 +128,8 @@ else
 			{
 				$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
 
+				$errorMessage = getAccountLoginByLabel() . ' or password is not correct.';
+
 				// temporary solution for blocking failed login attempts
 				if($cache->enabled())
 				{
@@ -132,24 +141,24 @@ else
 						if($t['attempts'] >= 5)
 							$errors[] = 'A wrong password has been entered 5 times in a row. You are unable to log into your account for the next 5 minutes. Please wait.';
 						else
-							$errors[] = 'Account name or password is not correct.';
+							$errors[] = $errorMessage;
 					}
 					else
 					{
 						$t = array('attempts' => 1, 'last' => time());
-						$errors[] = 'Account name or password is not correct.';
+						$errors[] = $errorMessage;
 					}
 
 					$tmp[$ip] = $t;
 					$cache->set('failed_logins', serialize($tmp), 60 * 60); // save for 1 hour
 				}
 				else {
-					$errors[] = 'Account name or password is not correct.';
+					$errors[] = $errorMessage;
 				}
 			}
 		}
 		else {
-			$errors[] = 'Please enter your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' and password.';
+			$errors[] = 'Please enter your ' . getAccountLoginByLabel() . ' and password.';
 
 			$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
 		}
