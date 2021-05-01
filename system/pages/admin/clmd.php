@@ -16,8 +16,6 @@ if (!file_exists(BASE . 'CHANGELOG.md')) {
 	return;
 }
 
-require LIBS . 'Parsedown.php';
-
 $changelog = file_get_contents(BASE . 'CHANGELOG.md');
 
 $Parsedown = new Parsedown();
