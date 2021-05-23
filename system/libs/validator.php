@@ -223,7 +223,7 @@ class Validator
 
 		$npcCheck = config('character_name_npc_check');
 		if ($npcCheck) {
-			require LIBS . 'npc.php';
+			require_once LIBS . 'npc.php';
 			NPCS::load();
 			if(NPCS::$npcs && in_array(strtolower($name), NPCS::$npcs)) {
 				self::$lastError = "Invalid name format. Do not use NPC Names";
@@ -346,7 +346,7 @@ class Validator
 
 		$npcCheck = config('character_name_npc_check');
 		if ($npcCheck) {
-			require LIBS . 'npc.php';
+			require_once LIBS . 'npc.php';
 			NPCS::load();
 			if(NPCS::$npcs && in_array($name_lower, NPCS::$npcs)) {
 				self::$lastError = "Invalid name format. Do not use NPC Names";

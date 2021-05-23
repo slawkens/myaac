@@ -63,7 +63,7 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		require LIBS . 'npc.php';
+		require_once LIBS . 'npc.php';
 		if(NPCs::loadFromXML()) {
 			success(self::$locale['step_database_loaded_npcs'] . self::getLoadedTime());
 		}
