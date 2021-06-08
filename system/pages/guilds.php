@@ -11,16 +11,9 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Guilds';
 
-if($db->hasTable('guild_members'))
-	define('GUILD_MEMBERS_TABLE', 'guild_members');
-else
-	define('GUILD_MEMBERS_TABLE', 'guild_membership');
-
-define('MOTD_EXISTS', $db->hasColumn('guilds', 'motd'));
-
 //show list of guilds
 if(empty($action)) {
-	require PAGES . 'guilds/list_of_guilds.php';
+	require PAGES . 'guilds/list.php';
 }
 else {
 	if(!ctype_alnum(str_replace(array('-', '_'), '', $action))) {

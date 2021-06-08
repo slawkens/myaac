@@ -11,7 +11,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Confirm Email';
 
-$hash = isset($_GET['v']) ? $_GET['v'] : '';
+$hash = isset($_GET['hash']) ? $_GET['hash'] : '';
 if(empty($hash)) {
 	warning('Please enter email hash code.<br/>If you copied the link, please try again with full link.');
 	return;

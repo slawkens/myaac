@@ -16,11 +16,11 @@ if(config('account_country') && $configHighscoresCountryBox)
 	require SYSTEM . 'countries.conf.php';
 
 $list = isset($_GET['list']) ? $_GET['list'] : 'experience';
-$_page = isset($_GET['page']) ? $_GET['page'] : 1;
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
 $vocation = isset($_GET['vocation']) ? $_GET['vocation'] : 'all';
 
-if(!is_numeric($_page) || $_page < 1 || $_page > PHP_INT_MAX) {
-	$_page = 1;
+if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
+	$page = 1;
 }
 
 $add_sql = '';
@@ -139,7 +139,7 @@ $configHighscoresPerPage = config('highscores_per_page');
 $limit = $configHighscoresPerPage + 1;
 
 $needReCache = true;
-$cacheKey = 'highscores_' . $skill . '_' . $vocation . '_' . $_page . '_' . $configHighscoresPerPage;
+$cacheKey = 'highscores_' . $skill . '_' . $vocation . '_' . $page . '_' . $configHighscoresPerPage;
 
 $cache = Cache::getInstance();
 if ($cache->enabled()) {
@@ -150,7 +150,7 @@ if ($cache->enabled()) {
 	}
 }
 
-$offset = ($_page - 1) * $configHighscoresPerPage;
+$offset = ($page - 1) * $configHighscoresPerPage;
 if (!isset($highscores) || empty($highscores)) {
 	if ($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 		if ($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
@@ -280,14 +280,14 @@ foreach($highscores as $id => &$player)
 
 //link to previous page if actual page is not first
 $linkPreviousPage = '';
-if($_page > 1) {
-	$linkPreviousPage = getLink('highscores') . '/' . $list . ($vocation !== 'all' ? '/' . $vocation : '') . '/' . ($_page - 1);
+if($page > 1) {
+	$linkPreviousPage = getLink('highscores') . '/' . $list . ($vocation !== 'all' ? '/' . $vocation : '') . '/' . ($page - 1);
 }
 
 //link to next page if any result will be on next page
 $linkNextPage = '';
 if($show_link_to_next_page) {
-	$linkNextPage = getLink('highscores') . '/' . $list . ($vocation !== 'all' ? '/' . $vocation : '') . '/' . ($_page + 1);
+	$linkNextPage = getLink('highscores') . '/' . $list . ($vocation !== 'all' ? '/' . $vocation : '') . '/' . ($page + 1);
 }
 
 $types = array(

@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 if(Forum::canPost($account_logged))
 {
 	$post_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : false;

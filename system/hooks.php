@@ -120,5 +120,7 @@ class Hooks
 		foreach(Plugins::getHooks() as $hook) {
 			$this->register($hook['name'], $hook['type'], $hook['file']);
 		}
+
+		Plugins::clearWarnings();
 	}
 }

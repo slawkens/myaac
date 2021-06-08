@@ -45,12 +45,102 @@ class Plugins {
 	private static $error = null;
 	private static $plugin_json = array();
 
+	public static function getRoutes()
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('plugins_routes', $tmp)) {
+				return unserialize($tmp);
+			}
+		}
+
+		$routes = [];
+		foreach(get_plugins() as $filename) {
+			$string = file_get_contents(PLUGINS . $filename . '.json');
+			$string = self::removeComments($string);
+			$plugin = json_decode($string, true);
+			self::$plugin_json = $plugin;
+			if ($plugin == null) {
+				self::$warnings[] = 'Cannot load ' . $filename . '.json. File might be not a valid json code.';
+				continue;
+			}
+
+			if(isset($plugin['enabled']) && !getBoolean($plugin['enabled'])) {
+				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
+				continue;
+			}
+
+			$warningPreTitle = 'Plugin: ' . $filename . ' - ';
+
+			if (isset($plugin['routes'])) {
+				foreach ($plugin['routes'] as $_name => $info) {
+					// default method: get
+					$methods = isset($info['method']) ? explode(',', $info['method']) : ['GET'];
+					foreach ($methods as $method) {
+						if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'])) {
+							self::$warnings[] = $warningPreTitle . 'Unallowed method ' . $method . '... Disabling this route...';
+							continue;
+						}
+					}
+
+					if (!isset($info['priority'])) {
+						$info['priority'] = 100; // default priority
+					}
+
+					// replace first occurence of / in pattern if found (will be auto-added later)
+					if(strpos($info['pattern'], '/') === 0) {
+						$info['pattern'] = str_replace_first('/', '', $info['pattern']);
+					}
+
+					foreach ($routes as $id => &$route) {
+						if($route[1] == $info['pattern']) {
+							if($info['priority'] < $route[3]) {
+								self::$warnings[] = $warningPreTitle . "Duplicated route with lower priority: {$info['pattern']}. Disabling this route...";
+								continue 2;
+							}
+							else {
+								self::$warnings[] = $warningPreTitle . "Duplicated route with lower priority: {$route[1]} ({$route[3]}). Disabling this route...";
+								unset($routes[$id]);
+								continue;
+							}
+						}
+					}
+
+					$routes[] = [$methods, $info['pattern'], $info['file'], $info['priority']];
+				}
+			}
+		}
+/*
+		usort($routes, function ($a, $b)
+		{
+			// key 3 is priority
+			if ($a[3] == $b[3]) {
+				return 0;
+			}
+
+			return ($a[3] > $b[3]) ? -1 : 1;
+		});
+*/
+		// cleanup before passing back
+		// priority is not needed anymore
+		foreach ($routes as &$route) {
+			unset($route[3]);
+		}
+
+		if ($cache->enabled()) {
+			$cache->set('plugins_routes', serialize($routes), 600);
+		}
+
+		return $routes;
+	}
+
 	public static function getHooks()
 	{
 		$cache = Cache::getInstance();
 		if ($cache->enabled()) {
 			$tmp = '';
-			if ($cache->fetch('hooks', $tmp)) {
+			if ($cache->fetch('plugins_hooks', $tmp)) {
 				return unserialize($tmp);
 			}
 		}
@@ -84,7 +174,7 @@ class Plugins {
 		}
 
 		if ($cache->enabled()) {
-			$cache->set('hooks', serialize($hooks), 600);
+			$cache->set('plugins_hooks', serialize($hooks), 600);
 		}
 
 		return $hooks;
@@ -376,6 +466,10 @@ class Plugins {
 
 	public static function getWarnings() {
 		return self::$warnings;
+	}
+
+	public static function clearWarnings() {
+		self::$warnings = [];
 	}
 
 	public static function getError() {
