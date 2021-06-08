@@ -43,7 +43,15 @@ echo '<br /><br />Page: '.$links_to_pages.'<br />';
 $last_threads = $db->query("SELECT `players`.`id` as `player_id`, `players`.`name`, `" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`id`, `" . FORUM_TABLE_PREFIX . "forum`.`last_post`, `" . FORUM_TABLE_PREFIX . "forum`.`replies`, `" . FORUM_TABLE_PREFIX . "forum`.`views`, `" . FORUM_TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`section` = ".(int) $section_id." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = `" . FORUM_TABLE_PREFIX . "forum`.`id` ORDER BY `" . FORUM_TABLE_PREFIX . "forum`.`last_post` DESC LIMIT ".$config['forum_threads_per_page']." OFFSET ".($_page * $config['forum_threads_per_page']))->fetchAll();
 if(isset($last_threads[0]))
 {
-	echo '<table width="100%"><tr bgcolor="'.$config['vdarkborder'].'" align="center"><td><span style="color: white; font-size: 10px"><b>Thread</b></span></td><td><span style="color: white; font-size: 10px"><b>Thread Starter</b></span></td><td><span style="color: white; font-size: 10px"><b>Replies</b></span></td><td><span style="color: white; font-size: 10px"><b>Views</b></span></td><td><span style="color: white; font-size: 10px"><b>Last Post</b></span></td></tr>';
+	echo '<table width="100%">
+<tr bgcolor="'.$config['vdarkborder'].'" align="center">
+<td class="white">
+<span style="font-size: 10px"><b>Thread</b></span></td>
+<td><span style="font-size: 10px"><b>Thread Starter</b></span></td>
+<td><span style="font-size: 10px"><b>Replies</b></span></td>
+<td><span style="font-size: 10px"><b>Views</b></span></td>
+<td><span style="font-size: 10px"><b>Last Post</b></span></td>
+</tr>';
 
 	$player = new OTS_Player();
 	foreach($last_threads as $thread)
