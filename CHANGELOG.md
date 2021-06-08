@@ -9,8 +9,10 @@
 
 ### Fixed
 * Fix compatibility with PHP 7.0 and lower
-* Fix guild list description new lines `<br>` being ignored (Thanks @anyeor for reporting)
 * Fix deleting ranks in guilds (#158, by @Misztrz)
+* Fix guild back buttons (change logo & motd)
+* Fix forum table style (boards & thread view)
+* Fix guild list description new lines `<br>` being ignored (Thanks @anyeor for reporting)
 
 
 ## [0.8.4 - 18.02.2021]
