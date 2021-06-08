@@ -221,6 +221,16 @@ class Validator
 			return false;
 		}
 
+		$npcCheck = config('character_name_npc_check');
+		if ($npcCheck) {
+			require_once LIBS . 'npc.php';
+			NPCS::load();
+			if(NPCS::$npcs && in_array(strtolower($name), NPCS::$npcs)) {
+				self::$lastError = "Invalid name format. Do not use NPC Names";
+				return false;
+			}
+		}
+
 		return true;
 	}
 
@@ -330,6 +340,16 @@ class Validator
 		{
 			if(in_array($name_lower, $config['npc'])) {
 				self::$lastError = 'Your name cannot contains NPC name.';
+				return false;
+			}
+		}
+
+		$npcCheck = config('character_name_npc_check');
+		if ($npcCheck) {
+			require_once LIBS . 'npc.php';
+			NPCS::load();
+			if(NPCS::$npcs && in_array($name_lower, NPCS::$npcs)) {
+				self::$lastError = "Invalid name format. Do not use NPC Names";
 				return false;
 			}
 		}
