@@ -602,7 +602,7 @@ class OTS_Player extends OTS_Row_DAO
         }
 
         $account = new OTS_Account();
-        $account->load($this->data['account_id']);
+        $account->load($this->data['account_id'], false, true);
         return $account;
     }
 
