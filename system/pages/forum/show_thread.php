@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $links_to_pages = '';
 $thread_id = (int) $_REQUEST['id'];
 $_page = (int) (isset($_REQUEST['page']) ? $_REQUEST['page'] : 0);

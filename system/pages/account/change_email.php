@@ -10,6 +10,13 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Change E-Mail';
+require __DIR__ . '/base.php';
+
+if(!$logged) {
+	return;
+}
+
 $email_new_time = $account_logged->getCustomField("email_new_time");
 
 if($email_new_time > 10) {

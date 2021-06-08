@@ -11,6 +11,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $guilds_list = new OTS_Guilds_List();
 $guilds_list->orderBy("name");
 

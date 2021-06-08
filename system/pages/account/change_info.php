@@ -10,6 +10,16 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Change Info';
+require __DIR__ . '/base.php';
+
+if(!$logged) {
+	return;
+}
+
+if($config['account_country'])
+	require SYSTEM . 'countries.conf.php';
+
 $show_form = true;
 $new_rlname = isset($_POST['info_rlname']) ? htmlspecialchars(stripslashes($_POST['info_rlname'])) : NULL;
 $new_location = isset($_POST['info_location']) ? htmlspecialchars(stripslashes($_POST['info_location'])) : NULL;

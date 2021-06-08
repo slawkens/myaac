@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 if(!$logged) {
 	$errors[] = "You are not logged in. You can't change nick.";
 	$twig->display('error_box.html.twig', array('errors' => $errors));

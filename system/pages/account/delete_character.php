@@ -10,6 +10,13 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Delete Character';
+require __DIR__ . '/base.php';
+
+if(!$logged) {
+	return;
+}
+
 $player_name = isset($_POST['delete_name']) ? stripslashes($_POST['delete_name']) : null;
 $password_verify = isset($_POST['delete_password']) ? $_POST['delete_password'] : null;
 $password_verify = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $password_verify);

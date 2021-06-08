@@ -1,4 +1,4 @@
-Please enter your account {{ account|lower }} and your password.<br/><a href="?subtopic=createaccount" >Create an account</a> if you do not have one yet.<br/><br/>
+Please enter your account {{ account|lower }} and your password.<br/><a href="{{ getLink('account/create') }}">Create an account</a> if you do not have one yet.<br/><br/>
 <form action="{{ getLink('account/manage') }}" method="post" >
 	{% if redirect is not null %}
 		<input type="hidden" name="redirect" value="{{ redirect }}" />

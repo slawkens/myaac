@@ -1142,12 +1142,21 @@ function clearCache()
 		global $template_name;
 		if ($cache->fetch('template_ini' . $template_name, $tmp))
 			$cache->delete('template_ini' . $template_name);
+
+		if ($cache->fetch('plugins_hooks', $tmp))
+			$cache->delete('plugins_hooks');
+
+		if ($cache->fetch('plugins_routes', $tmp))
+			$cache->delete('plugins_routes');
 	}
 
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
 	deleteDirectory(CACHE . 'twig', ['index.html'], true);
 	deleteDirectory(CACHE . 'plugins', ['index.html'], true);
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html'], true);
+
+	// routes cache
+	unlink(CACHE . 'route.cache');
 
 	return true;
 }

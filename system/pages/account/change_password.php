@@ -10,6 +10,13 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Change Password';
+require __DIR__ . '/base.php';
+
+if(!$logged) {
+	return;
+}
+
 $new_password = isset($_POST['newpassword']) ? $_POST['newpassword'] : NULL;
 $new_password2 = isset($_POST['newpassword2']) ? $_POST['newpassword2'] : NULL;
 $old_password = isset($_POST['oldpassword']) ? $_POST['oldpassword'] : NULL;

@@ -10,6 +10,13 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Register Account';
+require __DIR__ . '/base.php';
+
+if(!$logged) {
+	return;
+}
+
 if(isset($_POST['reg_password']))
 	$reg_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
 
