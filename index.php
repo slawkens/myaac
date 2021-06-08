@@ -38,7 +38,7 @@ else
 $uri = str_replace(array('index.php/', '?'), '', $uri);
 define('URI', $uri);
 
-if(preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
+if(preg_match("/^[A-Za-z0-9-_%'+]+\.png$/i", $uri)) {
 	$tmp = explode('.', $uri);
 	$_REQUEST['name'] = urldecode($tmp[0]);
 
