@@ -8,11 +8,11 @@
 * Update 404 response (#163, by @anyeor)
 
 ### Fixed
-* Fix compatibility with PHP 7.0 and lower
-* Fix deleting ranks in guilds (#158, by @Misztrz)
-* Fix guild back buttons (change logo & motd)
-* Fix forum table style (boards & thread view)
-* Fix guild list description new lines `<br>` being ignored (Thanks @anyeor for reporting)
+* compatibility with PHP 7.0 and lower
+* deleting ranks in guilds (#158, by @Misztrz)
+* guild back buttons (change logo & motd)
+* forum table style (boards & thread view)
+* guild list description new lines `<br>` being ignored (Thanks @anyeor for reporting)
 
 
 ## [0.8.4 - 18.02.2021]
