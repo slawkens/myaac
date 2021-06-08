@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.8.5 - 08.06.2021]
+
+### Changed
+* bcmath module is not required anymore
+* Gratis premium account fixes (#156, by @czbadaro)
+* Update 404 response (#163, by @anyeor)
+
+### Fixed
+* Fix compatibility with PHP 7.0 and lower
+* Fix guild list description new lines `<br>` being ignored (Thanks @anyeor for reporting)
+* Fix deleting ranks in guilds (#158, by @Misztrz)
+
+
 ## [0.8.4 - 18.02.2021]
 
 ### Added
