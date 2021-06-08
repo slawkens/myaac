@@ -17,12 +17,14 @@ if [ $1 = "prepare" ]; then
 
 	echo "Preparing to release version $version of the MyAAC Project!"
 
+	# make required directories
+	mkdir -p releases
+	mkdir -p tmp
+
 	# get myaac from git archive
 	git archive --format zip --output tmp/myaac.zip master
 
-	# make required directories
-	mkdir -p releases
-	mkdir -p tmp && cd tmp
+	cd tmp/
 
 	dir="myaac-$version"
 	if [ -d "$dir" ] ; then
