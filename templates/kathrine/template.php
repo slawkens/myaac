@@ -28,7 +28,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 			}
 			?>
 			var category = '<?php
-					if(isset($_REQUEST['subtopic'])) {
+					if(strpos(URI, 'subtopic=') !== false) {
 						$tmp = array($_REQUEST['subtopic']);
 					}
 					else {
