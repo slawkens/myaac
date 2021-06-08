@@ -102,7 +102,7 @@ else
 				&& (!isset($t) || $t['attempts'] < 5)
 				)
 			{
-				setSession('account', $account_logged->getId());
+				setSession('account', $account_logged->getNumber());
 				setSession('password', encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password));
 				if($remember_me) {
 					setSession('remember_me', true);
