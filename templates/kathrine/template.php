@@ -28,7 +28,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 			}
 			?>
 			var category = '<?php
-					if(strpos(URI, 'subtopic=') !== false) {
+					if(isset($_REQUEST['subtopic'])) {
 						$tmp = array($_REQUEST['subtopic']);
 					}
 					else {
@@ -51,6 +51,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 					echo 'account';
 				elseif(in_array($tmp[0], get_template_pages(MENU_CATEGORY_SHOP)))
 					echo 'shops';
+				else {
+					echo 'news';
+				}
 				?>';
 		</script>
 		<?php echo template_place_holder('head_end'); ?>
