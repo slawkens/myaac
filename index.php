@@ -81,7 +81,7 @@ if(empty($uri) || isset($_REQUEST['template'])) {
 }
 else {
 	$tmp = strtolower($uri);
-	if(!preg_match('/[^A-z0-9_\-]/', $uri) && file_exists(SYSTEM . 'pages/' . $tmp . '.php')) {
+	if(preg_match('/^[A-z0-9_\-]+$/', $uri) && file_exists(SYSTEM . 'pages/' . $tmp . '.php')) {
 		$_REQUEST['p'] = $uri;
 		$found = true;
 	}
@@ -156,16 +156,18 @@ else {
 
 // define page visited, so it can be used within events system
 $page = isset($_REQUEST['subtopic']) ? $_REQUEST['subtopic'] : (isset($_REQUEST['p']) ? $_REQUEST['p'] : '');
-if(empty($page) || !preg_match('/^[A-z0-9\_\-]+$/', $page)) {
-	$tmp = URI;
-	if(!empty($tmp)) {
-		$page = $tmp;
+if(empty($page) || !preg_match('/^[A-z0-9_\-]+$/', $page)) {
+	if(!$found) {
+		$page = '404';
 	}
 	else {
-		if(!$found)
-			$page = '404';
-		else
+		$tmp = URI;
+		if (!empty($tmp)) {
+			$page = $tmp;
+		}
+		else {
 			$page = 'news';
+		}
 	}
 }
 
