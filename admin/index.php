@@ -52,7 +52,7 @@ if(!$logged || !admin()) {
 }
 
 // include our page
-$file = SYSTEM . 'pages/admin/' . $page . '.php';
+$file = ADMIN . 'pages/admin/' . $page . '.php';
 if(!@file_exists($file)) {
 	$page = '404';
 	$file = SYSTEM . 'pages/404.php';
