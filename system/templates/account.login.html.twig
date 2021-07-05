@@ -24,7 +24,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="?s
 						<table style="width:100%;" >
 							<tr>
 								<td class="LabelV" >
-									<span{% if error is not null %} class="red"{% endif %}>Account {{ account }}:</span>
+									<span{% if error is not null %} class="red"{% endif %}>{{ account_login_by }}:</span>
 								</td>
 								<td style="width:100%;" ><input type="text" name="account_login" size="30" maxlength="30" autofocus/></td>
 							</tr>
