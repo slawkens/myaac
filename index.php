@@ -334,7 +334,7 @@ if($load_it)
 		}
 	} else {
 		$file = SYSTEM . 'pages/' . $page . '.php';
-		if(!@file_exists($file))
+		if(!@file_exists($file) || preg_match('/[^A-z0-9_\-]/', $page))
 		{
 			$page = '404';
 			$file = SYSTEM . 'pages/404.php';
