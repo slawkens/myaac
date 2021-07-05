@@ -208,8 +208,8 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		}
 
 		$numberColumn = 'id';
+		$nameOrNumber = '';
 		if (!$searchOnlyById) {
-			$nameOrNumber = '';
 			if (USE_ACCOUNT_NAME) {
 				$nameOrNumber = '`name`,';
 			} else if (USE_ACCOUNT_NUMBER) {
