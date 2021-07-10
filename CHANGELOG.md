@@ -1,9 +1,9 @@
 # Changelog
 
-## [0.8.6-dev - 05.07.2021]
-This update contains security fix.
+## [0.8.6 - 10.07.2021]
+This update contains very important security fix.
 
-Please update your AACs to this version.
+Please update your MyAAC instances to this version.
 
 ## [0.8.5 - 08.06.2021]
 
