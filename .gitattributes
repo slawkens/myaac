@@ -8,3 +8,4 @@ _config.yml export-ignore
 release.sh export-ignore
 
 *.sh text eol=lf
+VERSION text eol=lf
