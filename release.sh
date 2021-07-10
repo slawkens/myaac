@@ -24,7 +24,7 @@ if [ $1 = "prepare" ]; then
 	# get myaac from git archive
 	git archive --format zip --output tmp/myaac.zip master
 
-	cd tmp/
+	cd tmp/ || exit
 
 	dir="myaac-$version"
 	if [ -d "$dir" ] ; then
@@ -43,7 +43,7 @@ if [ $1 = "pack" ]; then
 	# define release version
 	version=`cat VERSION`
 
-	cd tmp
+	cd tmp || exit
 
 	# tar.gz
 	echo "Creating .tar.gz package.."
