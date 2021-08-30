@@ -83,10 +83,10 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 			$startTime = microtime(true);
 		}
 
-		$ret = parent::query(...$args);;
+		$ret = parent::query(...$args);
 		if($this->logged) {
 			$totalTime = microtime(true) - $startTime;
-			$this->log .= round($totalTime, 4) . ' ms - ' . $query . PHP_EOL;
+			$this->log .= round($totalTime, 4) . ' ms - ' . $args[0] . PHP_EOL;
 		}
 
 		return $ret;
