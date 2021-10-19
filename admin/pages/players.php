@@ -650,7 +650,7 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 											<label for="look_feet" class="control-label">Feet: <span
 														id="look_feet_val"></span></label>
 											<input type="range" min="0" max="132"
-												   value="<?php echo $player->getLookBody(); ?>"
+												   value="<?php echo $player->getLookFeet(); ?>"
 												   class="slider form-control" id="look_feet" name="look_feet">
 										</div>
 									</div>
