@@ -1,4 +1,9 @@
+# PLEASE DO NOT USE THIS BRANCH/VERSION
+# It is discontinued and won't receive any updates
+# Switch to master branch instead
+
 # myaac
+
 MyAAC is a free and open-source Automatic Account Creator (AAC) and Content Management System (CMS) written in PHP. It is a fork of the [Gesior](https://github.com/gesior/Gesior2012) project. It supports only MySQL databases.
 
 Official website: https://my-aac.org
