@@ -1,6 +1,7 @@
 # PLEASE DO NOT USE THIS BRANCH/VERSION
-# It is discontinued and won't receive any updates
-# Switch to master branch instead
+## It is discontinued and won't receive any updates
+## Switch to master branch instead
+## It's keept only for archival purposes
 
 # myaac
 
