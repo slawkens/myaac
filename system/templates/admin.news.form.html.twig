@@ -116,14 +116,13 @@
 		</script>
 	{% endif %}
 
-	<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/tinymce/tinymce.min.js"></script>
+	<script type="text/javascript" src="{{ constant('BASE_URL') }}node_modules/tinymce/tinymce.min.js"></script>
 	<script type="text/javascript">
 		var unsaved = false;
 		var lastContent = '';
 
 		tinymce.init({
 			selector: "#body",
-			theme: "modern",
 			plugins: 'preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount spellchecker imagetools contextmenu colorpicker textpattern help code emoticons',
 			toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | emoticons link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
 			image_advtab: true,
