@@ -104,7 +104,7 @@
 
 				$('#select-type').change(function () {
 					var value = $('#select-type').val();
-					if (value == {{ constant('ARTICLE') }}) {
+					if (value === {{ constant('ARTICLE') }}) {
 						$('#article-text').show();
 						$('#article-image').show();
 					} else {
@@ -118,8 +118,8 @@
 
 	<script type="text/javascript" src="{{ constant('BASE_URL') }}node_modules/tinymce/tinymce.min.js"></script>
 	<script type="text/javascript">
-		var unsaved = false;
-		var lastContent = '';
+		let unsaved = false;
+		let lastContent = '';
 
 		tinymce.init({
 			selector: "#body",
@@ -128,7 +128,7 @@
 			image_advtab: true,
 			setup: function (ed) {
 				ed.on('NodeChange', function (e) {
-					if (ed.getContent() != lastContent) {
+					if (ed.getContent() !== lastContent) {
 						unsaved = true;
 					}
 				});
