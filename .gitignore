@@ -9,6 +9,10 @@ vendor
 # npm
 node_modules
 
+# created by release.sh
+releases
+tmp
+
 config.local.php
 
 # all custom templates
