@@ -3,7 +3,6 @@
         "php": ">=7.1",
         "ext-dom": "*",
         "ext-json": "*",
-        "ext-gd": "*",
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
         "ext-xml": "*",
