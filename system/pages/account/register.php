@@ -22,6 +22,7 @@ if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1")
 
 			$account_logged->setCustomField("key", $new_rec_key);
 			$account_logged->logAction('Generated recovery key.');
+			$message = '';
 
 			if($config['mail_enabled'] && $config['send_mail_when_generate_reckey'])
 			{
