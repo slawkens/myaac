@@ -29,7 +29,7 @@ html { margin-top: 32px !important; }
 	clear: none;
 	list-style: none;
 	margin: 0;
-	padding: 0;
+	padding: 0 15px 0 0;
 	position: relative;
 	text-indent: 0;
 	z-index: 99999;
@@ -37,6 +37,10 @@ html { margin-top: 32px !important; }
 
 #ma-admin-bar li {
 	float: left;
+}
+
+#ma-admin-bar li:hover {
+	color: lightskyblue;
 }
 
 #ma-admin-bar .ab-top-secondary>li {
@@ -58,13 +62,13 @@ html { margin-top: 32px !important; }
 }
 
 .dropdown-content a {
-	color: black;
+	color: #eee;
 	padding: 12px 16px;
 	text-decoration: none;
 	display: block;
 }
 
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:hover {color: lightskyblue;}
 
 .dropdown:hover .dropdown-content {display: block;}
 
@@ -72,20 +76,37 @@ html { margin-top: 32px !important; }
 
 <div id="ma-admin-bar">
 	<ul>
-		<li>
+		<li class="dropdown">
 			<a href="{{ constant('ADMIN_URL') }}" class="ab-item">
-				<img alt="MA" src="{{ constant('ADMIN_URL') }}images/logo.png" class="brand-image img-circle elevation-3" style="opacity: .8; height: 28px; width: 28px">
+				<img alt="MyAAC" src="{{ constant('ADMIN_URL') }}images/logo.png" class="brand-image img-circle elevation-3" style="opacity: .8; height: 26px; width: 26px">
+				<span class="brand-text">
+					<b>My</b>AAC
+				</span>
 			</a>
 		</li>
 		<li class="dropdown">
-			<a class="ab-item" href="#">New</a>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
+				<path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"></path>
+			</svg>
+			<a class="ab-item" href="#"><i class="bi bi-house"></i>{{ config.lua.serverName }}</a>
 			<div class="dropdown-content">
-				<a href="/admin/?p=news&action=new">News</a>
-				<a href="/admin/?p=pages&action=new">Page</a>
+				<a href="{{ getLink('') }}">Visit Site</a>
+			</div>
+		</li>
+		<li class="dropdown">
+			<a class="ab-item" href="#"><i class="bi bi-house"></i>New</a>
+			<div class="dropdown-content">
+				<a href="{{ constant('ADMIN_URL') }}?p=news&action=new">News</a>
+				<a href="{{ constant('ADMIN_URL') }}?p=pages&action=new">Page</a>
 			</div>
 		</li>
 		<li>
-			<a class="ab-item" href="/admin/?p=dashboard&clear_cache">
+			<a class="ab-item" href="{{ constant('ADMIN_URL') }}?p=plugins">
+				Plugins
+			</a>
+		</li>
+		<li>
+			<a class="ab-item" href="{{ constant('ADMIN_URL') }}?p=dashboard&clear_cache">
 				Clear Cache
 			</a>
 		</li>
@@ -95,7 +116,7 @@ html { margin-top: 32px !important; }
 			<a class="ab-item" href="#">Hello, {{ username }}</a>
 			<div class="dropdown-content">
 				<a href="{{ getLink('account/manage') }}">Manage Account</a>
-				<a href="/admin/?action=logout">Logout</a>
+				<a href="{{ constant('ADMIN_URL') }}?action=logout">Logout</a>
 			</div>
 		</li>
 	</ul>
