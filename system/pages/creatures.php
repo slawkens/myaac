@@ -54,16 +54,14 @@ if (empty($_REQUEST['creature'])) {
 		$loot = json_decode($creature['loot'], true);
 		usort($loot, 'sort_by_chance');
 
-		$loot_list = [];
-		foreach ($loot as $item) {
+		foreach ($loot as &$item) {
 			$item['name'] = getItemNameById($item['id']);
 			$item['rarity_chance'] = round($item['chance'] / 1000, 2);
 			$item['rarity'] = getItemRarity($item['chance']);
 			$item['tooltip'] = ucfirst($item['name']) . '<br/>Chance: ' . $item['rarity'] . (config('creatures_loot_percentage') ? ' ('. $item['rarity_chance'] .'%)' : '') . '<br/>Max count: ' . $item['count'];
-			$loot_list[] =  $item;
 		}
 
-		$creature['loot'] = isset($loot_list) ? $loot_list : null;
+		$creature['loot'] = isset($loot) ? $loot : null;
 		$creature['voices'] = isset($voices) ? $voices : null;
 		$creature['summons'] = isset($summons) ? $summons : null;
 		$creature['elements'] = isset($elements) ? $elements : null;
