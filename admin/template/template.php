@@ -175,6 +175,16 @@
 	echo $content;
 }
 ?>
+<?php
+/**
+ * @var OTS_Account $account_logged
+ */
+if ($logged && admin()) {
+	$twig->display('admin-bar.html.twig', [
+		'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+	]);
+}
+?>
 <script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
 <?php if (isset($use_datatable))  { ?>

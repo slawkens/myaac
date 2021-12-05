@@ -41,6 +41,7 @@ $locale['step_requirements_extension'] = '$EXTENSION$ PHP extension';
 $locale['step_requirements_warning_images_guilds'] = 'Guild logo upload will not work';
 $locale['step_requirements_warning_images_gallery'] = 'Gallery image upload will not work';
 $locale['step_requirements_warning_player_signatures'] = 'Player Signatures will not work';
+$locale['step_requirements_warning_install_plugins'] = 'It will be not possible to install plugins';
 
 // config
 $locale['step_config'] = 'Configuration';
