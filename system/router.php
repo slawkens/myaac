@@ -41,7 +41,7 @@ if($success) {
 	$page = $uri;
 } else {
 	// old support for pages like /?subtopic=accountmanagement
-	$page = isset($_REQUEST['p']) ? $_REQUEST['p'] : (isset($_REQUEST['subtopic']) ? $_REQUEST['subtopic'] : '');
+	$page = $_REQUEST['p'] ?? ($_REQUEST['subtopic'] ?? '');
 	if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
 		if(config('backward_support')) {
 			require SYSTEM . 'compat_pages.php';
