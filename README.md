@@ -1,4 +1,4 @@
-# MyAAC
+# [MyAAC](https://my-aac.org)
 
 [![Build Status Master](https://img.shields.io/travis/slawkens/myaac/master)](https://travis-ci.org/github/slawkens/myaac)
 [![License: GPL-3.0](https://img.shields.io/github/license/slawkens/myaac)](https://opensource.org/licenses/gpl-license)
@@ -9,9 +9,7 @@
 
 MyAAC is a free and open-source Automatic Account Creator (AAC) written in PHP. It is a fork of the [Gesior](https://github.com/gesior/Gesior2012) project. It supports only MySQL databases.
 
-Official website: https://my-aac.org
-
-### REQUIREMENTS
+### Requirements
 
 	- PHP 5.6 or later
 	- MySQL database
@@ -20,7 +18,7 @@ Official website: https://my-aac.org
 	- ZIP PHP Extension
 	- (optional) mod_rewrite to use friendly_urls
 
-### INSTALLATION AND CONFIGURATION
+### Installation
 
 	Just decompress and untar the source (which you should have done by now,
 	if you're reading this), into your webserver's document root.
@@ -40,15 +38,37 @@ Official website: https://my-aac.org
 
 	Visit http://your_domain/install (http://localhost/install) and follow instructions in the browser.
 
-### KNOWN PROBLEMS
+### Configuration
 
-	- none -
+Check *config.php* to get more informations.
+Use *config.local.php* for your local configuration changes.
 
-### OTHER NOTES
+# Branches
 
-	If you have a great idea or want contribute to the project - visit our website at https://www.my-aac.org
+This repository follows the Git Flow Workflow.
+Cheatsheet: https://danielkummer.github.io/git-flow-cheatsheet/index.html
 
-### LICENSING
+That means, we use:
+- master branch, for current stable release
+- develop branch, for development version (next release)
+- feature branches, for features etc.
 
-	This program and all associated files are released under the GNU Public
-	License, see LICENSE for details.
+### Known Problems
+
+- Some compatibility issues with some exotical distibutions.
+
+### Other Notes
+
+Contributions are more than welcome. Please follow some small guidelines that I will point below.
+That is:
+- Tabs instead of spaces
+- CamelCase is preferred instead of snake_case, but that's up to you!
+- Proper file location in the filesystem
+- Exceed your code the basics that this AAC should have, would you better threat it as a plugin? Go into [myaac-plugins](https://github.com/slawkens/myaac-plugins) repo and make your contribution there.
+
+If you have a great idea or want contribute to the project - visit our website at https://www.my-aac.org
+
+### License
+
+This program and all associated files are released under the GNU Public License.  
+See ([https:)//github.com/slawkens/myaac/blob/master/LICENSE](LICENSE) for details.
