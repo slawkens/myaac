@@ -43,10 +43,10 @@ MyAAC is a free and open-source Automatic Account Creator (AAC) written in PHP. 
 Check *config.php* to get more informations.
 Use *config.local.php* for your local configuration changes.
 
-# Branches
+### Branches
 
 This repository follows the Git Flow Workflow.
-Cheatsheet: https://danielkummer.github.io/git-flow-cheatsheet/index.html
+Cheatsheet: [Git-Flow-Cheetsheet](https://danielkummer.github.io/git-flow-cheatsheet)
 
 That means, we use:
 - master branch, for current stable release
@@ -71,4 +71,4 @@ If you have a great idea or want contribute to the project - visit our website a
 ### License
 
 This program and all associated files are released under the GNU Public License.  
-See ([https:)//github.com/slawkens/myaac/blob/master/LICENSE](LICENSE) for details.
+See [LICENSE](https://github.com/slawkens/myaac/blob/master/LICENSE) for details.
