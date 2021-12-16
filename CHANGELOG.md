@@ -1,14 +1,271 @@
-## [0.7.12 - 17.02.2020]
+# Changelog
+
+## [0.8.6 - 10.07.2021]
+This update contains very important security fix.
+
+Please update your MyAAC instances to this version.
+
+## [0.8.5 - 08.06.2021]
+
+### Changed
+* bcmath module is not required anymore
+* Gratis premium account fixes (#156, by @czbadaro)
+* Update 404 response (#163, by @anyeor)
+
 ### Fixed
-* change guild nick function causing crash on TFS 1.x because of invalid characters being accepted
-* PHP Mailer autoload function on newer PHP
-* gesior signature guild rank loading
-* leaking database password when cannot connect
-* config.last_kills_limit being ignored
-* monster.loot being cutted off cause of too short column (changed to TEXT)
+* compatibility with PHP 7.0 and lower
+* deleting ranks in guilds (#158, by @Misztrz)
+* guild back buttons (change logo & motd)
+* forum table style (boards & thread view)
+* guild list description new lines `<br>` being ignored (Thanks @anyeor for reporting)
+
+
+## [0.8.4 - 18.02.2021]
 
 ### Added
-* nginx-sample.conf
+* support for accounts.premium_ends_at (Latest TFS 1.x)
+* more clients to clients.conf.php
+
+### Changed
+* minimum PHP 5.6 is now required
+* password can now contain any characters
+* add SSL on external image requests of items and outfits (@fernandomatos)
+* Use local storage for saving menu items (tibiacom template) - fixes bug with some websites like wykop.pl (browser freeze)
+* increase size of myaac_visitors.page column to 2048 (Thanks to OtLand user kaleuui)
+
+### Fixed
+* compatibility with PHP 8.0 (latest XAMPP)
+* displaying PHP errors on env = "prod"
+* the Guildnick not showing in the guild pages (@leesneaks)
+* you cannot delete character more than twice (Thanks Okke)
+* ignore arrays in config.lua (fixes experienceStages loading)
+* parsing empty strings in config.lua (with comments)
+* headling.php cannot find font
+
+## [0.8.3 - 27.10.2020]
+
+### Added
+* pdo_mysql as required extension
+* some notice about Email validation in create account
+
+### Changed
+* Move register DATABASE_VERSION into schema.sql
+    * Caused migrations being fired when user manually imported database
+
+### Fixed
+* creating very uncommon (bugged) account names
+* XSS in character search
+* Admin menu news editing warning when leaving page without touching the inputs
+* Guild Invite not working on otservbr-global
+* two boxes being show on email_change_cancel
+* when adding poll = template tibiacom broken
+* houses: Unknown column 'guild' in 'where clause (https://github.com/slawkens/myaac/issues/131)
+* account create when account_mail_verify is enabled
+* CloudFlare IP detection
+* network_twitter link in tibiacom template
+
+## [0.8.2 - 03.06.2020]
+
+### Added
+* Log query time in database_log (can be used for benchmarking)
+* new PHP constant: IS_CLI
+* $_SERVER['REQUEST_URI'] to database.log
+* outfit to highscores box in tibiacom template
+* system/data to .gitignore
+* error_reporting in admin panel (when in dev mode), so it shows php notices and warnings
+* example quests in config.php
+
+### Changed
+* account_login input type from password to text
+
+### Fixed
+* Guild Invite not working on otservbr-global (#123)
+* news not updating after adding in admin panel
+* wrong mana of character samples (#125)
+* missing rules page on clean install
+* double space character name creation (@Lee, #121)
+* creatures page: Max count and chance not shown on hovered items
+* exception being thrown when characters.frags enabled on TFS 1.x
+* TFS 0.4 guilds creation (Where guilds.checkdata and motd doesn't have default value)
+* ERR_TOO_MANY_REDIRECTS browser error on template change
+* updating template menus on template change
+* Account change info when config.account_country is disabled
+* cancel change email request
+* config.character_name_min/max_length being ignored in change_name.php
+* some rare bugs when database is no up-to-date and someone enters admin panel
+* extra line that is added when using a newer version than official release (@Lee)
+* admin links in featured article
+* some PHP Notice when HTTP_HOST is not set (Can happen on some old versions of HTTP protocol)
+* Show character indicator in check_name.js
+* Houses list View button was wrong (was from bootstrap)
+* OTS_House __construct - not loading by houseid parameter
+* message() function when executed in CLI
+
+### Removed
+* unused myaac_commands table from schema
+* MyISAM engine from migration scripts (#128)
+
+## [0.8.1 - 10.03.2020]
+
+### Added
+* Support for Nostalrius OTS
+
+### Changed
+* Move TODO to wiki
+* .tooltip css class to .item_image (bootstrap conflict)
+
+### Fixed
+* Reloading of creatures/monsters throwing an exception
+* Loading custom pages with old Gesior variables [#108](https://github.com/slawkens/myaac/issues/107)
+* Some weird behaviour with installation of plugins
+* CHANGELOG.md loading in Admin Panel
+* spells displaying when level = 0
+* Some PHP warnings and notices
+
+## [0.8.0 - 19.02.2020]
+
+### Added:
+* new Awesome Bootstrap Admin Panel by Lee (@Leesneaks)
+	* using Bootstrap 3
+	* all existing pages were adjusted 
+	* new editor: Accounts
+	* improved editor: Players
+	* new Reports View page
+	* Modules directory, which can be added using Plugins (@Leesneaks, @whiteblXK)
+	* move News Management here (@whiteblXK)
+	* interactive player outfit chooser (@tobi132)
+* added Highscores by balance
+* possibility to define colors and "Open in New Tab" on Template Menus (needs to be supported by Template)
+* support for database persistent and socket connections (performance boost)
+* Team page - display outfits of the players (configurable)
+* added clear_cache.php, send_email.php bin commands (@slawkens, @tobi132)
+* added locale pt_br (@ivenspontes)
+* added load time into items & weapons loading admin page
+* new, beautiful exception handler
+* added travisci to prevent mistype (@gpedro, #89)
+* added showing database name into installation script (@tobi132)
+* compatibility with old z_ gesior table (@tobi132, #46)
+* added nginx-sample.conf, .editorconfig, VERSION
+* database towns table support for TFS 1.3 (@tobi132)
+* added enable_tinymce option to Pages editor
+
+### Fixed:
+* account login redirect with special chars (like '&' and '?')
+* black skull info at serverInfo (@tornadia)
+* set correct limit at lastkills page from config (anyeor from OtLand)
+* myaac_monsters table column loot problem (#79)
+* players column deleted install description (@gpedro, #91)
+* experience table being to wide and buggy on some templates (@tobi132, #90)
+* fix errors with .htaccess files
+* added index.html to prevent indexing the folder by mod_index
+
+### Changed:
+* Environment is now configurable by env setting (Significantly better load times with 'prod')
+* replace spells, monsters tables with JavaScript Sortable Tables - DataTables (@Leesneaks)
+* change default MySQL Storage Engine to InnoDB and Default Character Set to utf8
+* updated OTS_House class to support latest TFS 1.x (new columns)
+* updated monster images to the original ones from tibia.com
+* increased the minimum length (3 -> 4) and decreased the maximum length (25 -> 21) of the New Character Name (by @vankk)
+* use $db->exec instead of $db->query optimisation
+* move items from database to Cache_PHP (Much more faster load time)
+* allow simultaneous loading of config.ini and config.php in templates
+* updated copyright year and SSL link (@EPuncker, #88)
+* move commands, rules and downloads pages into database (@tobi132)
+* better view of guilds (new buttons, table look and feel) (@tobi132)
+* remove stupid alerts on account create
+* remove .dist extension from .htaccess
+
+### New Configurables (config.php)
+* env (Environment)
+* account_create_auto_login (Auto Login after Create Account - Registration)
+* account_create_character_create (Create Character directly on Create Account page) (@tobi132)
+* footer_show_load_time (display load time of the page in the footer)
+* database_socket (Connection via Unix Socket)
+* database_persistent (Database Persistent Connection)
+* database_log (Logging of Database Queries)
+* admin_panel_modules (Modules displayed in Admin Panel Dashboard)
+* status_timeout, status_interval
+* smtp_debug (More info about SMTP errors in error.log)
+* team_display_outfit (Display outfit of the team members on teams page)
+* highscores_balance (Display highscores by balance)
+* character_name_min/max_length (Minimum and maximum length of character name)
+* characters.deleted (display deleted characters on characters page)
+
+### Forum:
+* show image in full screen on click
+* show user avatar (outfit) in posts
+* replaced forum actions links (move, remove, edit, quote) with images
+* redirect directly to the thread on user login (on new reply)
+
+### Installer:
+* AJAX loader for the important stuff
+* create admin account: ask for e-mail + character name
+* load items & weapons
+* check user IP on install to prevent install by random user
+* remember status of the installation
+* remember language on first step (welcome)
+* ask user for timezone
+* auto detected browser language in select language
+
+### Plugins
+* sandbox for plugins, don't install when requirements are not satisfied
+* allow comments inside plugin json file (php style)
+* new require options for plugins: (look into example.json)
+	* require database version, table or column of the MyAAC schema
+	* require php-extension
+	* require semantic-version (like in composer.json)
+* new hooks: LOGIN, LOGIN_ATTEMPT, LOGOUT, HOOK_ACCOUNT_CREATE_*
+
+### Cache
+* php 7.x APCu cache support (faster cache engine)
+* new cache engine: plain PHP (is good with pure php 7.0+ and opcache)
+* cache lastkills.php, $db->hasTable, $db->hasColumn, hooks and template menus
+* stop using global $cache variable, use Singleton pattern instead
+
+### Twig
+* move pages to Twig templates: team, lastkills, serverinfo, houses, guilds.list, guild.view, admin.logs, admin.reports (@whiteblXK, @tobi132)
+* replace "$twig->render()" with "$this->display"
+* move Twig functions to separate file
+* move tibiacom boxes to Twig templates
+* allow Pages to be loaded as Twig template (this allows using Twig variables in Pages) (@tobi132)
+* allow string to be passed to hook twig function
+
+### Functions
+* config($key), configLua($key)
+* clearCache()
+* OTS_Account:
+	* getCountry()
+	* setLastLogin($lastlogin) (@Leesneaks)
+	* setWebFlags(webflags) (@Leesneaks)
+* OTS_Player:
+	* getAccountId()
+	* countBlessings() (@Leesneaks)
+	* checkBlessings($count) (@Leesneaks)
+* is_sub_dir (in system/libs/plugins.php)
+* Twig:
+	* getPlayerLink($name, $generate = true)
+* removed SQLquote and SQLquery from OTS_Base_DB
+* Add optional $params param into log_append (will log arrays) (@tobi132)
+
+### Internal
+* moved clients list to the new file (clients.conf.php)
+* changed tableExist and fieldExist to $db->hasTable(table) + $db->hasColumn(table, column)
+* changed deprecated $ots->createObject() functions with their OTS_ equivalents
+* add global helper config($key) function + twig binding
+	* use config() instead of global $config
+* remove unnecessary parentheses in include/require PHP functions
+* use __DIR__ instead of dirname(__FILE__) - since PHP 5.3.0
+* change intval() function to (int) casting (up to 6x faster)
+* add release.sh script (for GitHub releases)
+* use curl as alternative option for reporting install
+
+### Libraries
+* updated Twig to version v1.35.0
+* updated TinyMCE to version v4.7.4
+
+### Deprecations
+* change deprecated HTML <center> tag to <div style="text-align:center">
+* replace deprecated HTML <font> tag with <span>
 
 ## [0.7.11 - 04.05.2019]
 ### Added:
