@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.7.13 - not-release-yet]
+
+### Fixed
+* Ignore arrays in config.lua (fixes experienceStages loading)
+
 ## [0.7.12 - 18.02.2020]
 ### Fixed
 * change guild nick function causing crash on TFS 1.x because of invalid characters being accepted

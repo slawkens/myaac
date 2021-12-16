@@ -895,6 +895,13 @@ function load_config_lua($filename)
 	if(count($lines) > 0)
 		foreach($lines as $ln => $line)
 		{
+			$line = trim($line);
+			if(@$line[0] === '{' || @$line[0] === '}') {
+				// arrays are not supported yet
+				// just ignore the error
+				continue;
+			}
+
 			$tmp_exp = explode('=', $line, 2);
 			if(strpos($line, 'dofile') !== false)
 			{
@@ -921,9 +928,11 @@ function load_config_lua($filename)
 						$result[$key] = (string) substr(substr($value, 1), 0, -1);
 					elseif(in_array($value, array('true', 'false')))
 						$result[$key] = ($value == 'true') ? true : false;
-					elseif(substr($value, 0 , 1) == '{' && substr($value, -1 , 1) == '}') {
+					//elseif(substr($value, 0 , 1) == '{' && substr($value, -1 , 1) == '}') {
+					elseif(@$value[0] === '{') {
 						// arrays are not supported yet
 						// just ignore the error
+						continue;
 					}
 					else
 					{
