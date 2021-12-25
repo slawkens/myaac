@@ -17,13 +17,13 @@ if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 
 $title = 'Changelog';
 $use_datatable = true;
-define('CL_LIMIT', 600); // maximum changelog body length
+const CL_LIMIT = 600; // maximum changelog body length
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
 <script src="<?php echo BASE_URL; ?>tools/js/jquery.datetimepicker.js"></script>
 <?php
-$id = isset($_GET['id']) ? $_GET['id'] : 0;
+$id = $_GET['id'] ?? 0;
 require_once LIBS . 'changelog.php';
 
 if(!empty($action))
@@ -111,14 +111,13 @@ if($action == 'edit' || $action == 'new') {
 	$twig->display('admin.changelog.form.html.twig', array(
 		'action' => $action,
 		'cl_link_form' => constant('ADMIN_URL').'?p=changelog&action=' . ($action == 'edit' ? 'edit' : 'add'),
-		'cl_id' => isset($id) ? $id : null,
+		'cl_id' => $id ?? null,
 		'body' => isset($body) ? htmlentities($body, ENT_COMPAT, 'UTF-8') : '',
-		'create_date' => isset($create_date) ? $create_date : '',
-		'player' => isset($player) && $player->isLoaded() ? $player : null,
-		'player_id' => isset($player_id) ? $player_id : null,
+		'create_date' => $create_date ?? '',
+		'player_id' => $player_id ?? null,
 		'account_players' => $account_players,
-		'type' => isset($type) ? $type : 0,
-		'where' => isset($where) ? $where : 0,
+		'type' => $type ?? 0,
+		'where' => $where ?? 0,
 		'log_type' => $log_type,
 		'log_where' => $log_where,
 	));

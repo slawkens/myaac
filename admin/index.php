@@ -2,8 +2,8 @@
 // few things we'll need
 require '../common.php';
 
-define('ADMIN_PANEL', true);
-define('MYAAC_ADMIN', true);
+const ADMIN_PANEL = true;
+const MYAAC_ADMIN = true;
 
 if(file_exists(BASE . 'config.local.php')) {
 	require_once BASE . 'config.local.php';
@@ -18,7 +18,7 @@ if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['i
 $content = '';
 
 // validate page
-$page = isset($_GET['p']) ? $_GET['p'] : '';
+$page = $_GET['p'] ?? '';
 if(empty($page) || preg_match("/[^a-zA-Z0-9_\-]/", $page))
 	$page = 'dashboard';
 
@@ -52,6 +52,9 @@ if(!$logged || !admin()) {
 	$page = 'login';
 }
 
+// more pages have action, lets define it here
+$action = $_REQUEST['action'] ?? '';
+
 // include our page
 $file = SYSTEM . 'pages/admin/' . $page . '.php';
 if(!@file_exists($file)) {
@@ -68,4 +71,3 @@ ob_end_clean();
 // template
 $template_path = 'template/';
 require ADMIN . $template_path . 'template.php';
-?>

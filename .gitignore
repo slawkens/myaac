@@ -1,15 +1,19 @@
 Thumbs.db
 .DS_Store
 .idea
-tmp
 
 # composer
 composer.lock
 vendor
 
+# npm
+node_modules
+
+# created by release.sh
 releases
+tmp
+
 config.local.php
-PERSONAL_NOTES
 
 # all custom templates
 templates/*
