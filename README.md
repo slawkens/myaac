@@ -49,22 +49,22 @@ This repository follows the Git Flow Workflow.
 Cheatsheet: [Git-Flow-Cheetsheet](https://danielkummer.github.io/git-flow-cheatsheet)
 
 That means, we use:
-- master branch, for current stable release
-- develop branch, for development version (next release)
-- feature branches, for features etc.
+* master branch, for current stable release
+* develop branch, for development version (next release)
+* feature branches, for features etc.
 
 ### Known Problems
 
 - Some compatibility issues with some exotical distibutions.
 
-### Other Notes
 
-Contributions are more than welcome. Please follow some small guidelines that I will point below.
-That is:
-- Tabs instead of spaces
-- CamelCase is preferred instead of snake_case, but that's up to you!
-- Proper file location in the filesystem
-- Exceed your code the basics that this AAC should have, would you better threat it as a plugin? Go into [myaac-plugins](https://github.com/slawkens/myaac-plugins) repo and make your contribution there.
+### Contributing
+
+Contributions are more than welcome. 
+
+Look: [Contributing](https://github.com/otsoft/myaac/wiki/Contributing) in our wiki.
+
+### Other Notes
 
 If you have a great idea or want contribute to the project - visit our website at https://www.my-aac.org
 
