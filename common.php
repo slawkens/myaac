@@ -24,7 +24,6 @@
  * @link      https://my-aac.org
  */
 if (version_compare(phpversion(), '7.1', '<')) die('PHP version 7.1 or higher is required.');
-session_start();
 
 const MYAAC = true;
 const MYAAC_VERSION = '0.9.0-dev';
@@ -86,6 +85,9 @@ const TFS_02 = 3;
 const TFS_03 = 4;
 const TFS_FIRST = TFS_02;
 const TFS_LAST = TFS_03;
+
+session_save_path(SYSTEM . 'php_sessions');
+session_start();
 
 // basedir
 $basedir = '';
