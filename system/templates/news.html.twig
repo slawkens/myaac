@@ -3,7 +3,7 @@
 		<img src="{{ constant('BASE_URL') }}images/news/icon_{{ icon }}.gif" class="NewsHeadlineIcon" />
 		<div class="NewsHeadlineDate">{{ date|date(config.news_date_format) }} - </div>
 		<div class="NewsHeadlineText">{{ title }}</div>
-		{% if author is not empty %}
+		{% config.news_author and if author is not empty %}
 		<div class="NewsHeadlineAuthor"><b>Author: </b><i>{{ author }}</i></div>
 		{% endif %}
 	</div>

@@ -60,7 +60,7 @@
 									{% for member in group.members|reverse %}
 									{% set i = i + 1 %}
 									<tr bgcolor="{{ getStyle(i) }}" style="height: 32px;">
-										<td>{{ group.group_name }}</td>
+										<td>{{ group.group_name|capitalize }}</td>
 
 										{% if config.team_display_outfit %}
 										<td>
@@ -104,7 +104,7 @@
 					{% elseif config.team_style == 2 %}
 						{% for group in groupmember|reverse %}
 							{% if group.members is not empty %}
-							<div style="text-align:center"><h2>{{ group.group_name }}</h2></div>
+							<div style="text-align:center"><h2>{{ group.group_name|capitalize }}</h2></div>
 
 							<table cellspacing="1" cellpadding="4" border="0" width="100%">
 								<tr bgcolor="{{ config.vdarkborder }}">
