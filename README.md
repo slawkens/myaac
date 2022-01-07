@@ -62,6 +62,8 @@ That means, we use:
 
 Contributions are more than welcome. 
 
+Pull requests should be made to the Dev branch as that is the working branch, master is for release code.  
+
 Look: [Contributing](https://github.com/otsoft/myaac/wiki/Contributing) in our wiki.
 
 ### Other Notes
