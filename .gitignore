@@ -31,10 +31,6 @@ system/cache/*
 !system/cache/signatures/index.html
 !system/cache/plugins/index.html
 
-# php sessions
-system/php_sessions/*
-!system/cache/index.html
-
 # logs
 system/logs/*
 !system/logs/index.html
@@ -42,6 +38,10 @@ system/logs/*
 # data
 system/data/*
 !system/data/index.html
+
+# php sessions
+system/php_sessions/*
+!system/php_sessions/index.html
 
 # plugins
 plugins/*
