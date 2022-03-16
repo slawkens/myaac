@@ -24,68 +24,70 @@
  * @link      https://my-aac.org
  */
 if (version_compare(phpversion(), '7.1', '<')) die('PHP version 7.1 or higher is required.');
-session_start();
 
-define('MYAAC', true);
-define('MYAAC_VERSION', '0.9.0-dev');
-define('DATABASE_VERSION', 32);
-define('TABLE_PREFIX', 'myaac_');
+const MYAAC = true;
+const MYAAC_VERSION = '0.9.0-dev';
+const DATABASE_VERSION = 32;
+const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
 define('IS_CLI', in_array(php_sapi_name(), ['cli', 'phpdb']));
 
 // account flags
-define('FLAG_ADMIN', 1);
-define('FLAG_SUPER_ADMIN', 2);
-define('FLAG_CONTENT_PAGES', 4);
-define('FLAG_CONTENT_MAILER', 8);
-define('FLAG_CONTENT_NEWS', 16);
-define('FLAG_CONTENT_FORUM', 32);
-define('FLAG_CONTENT_COMMANDS', 64);
-define('FLAG_CONTENT_SPELLS', 128);
-define('FLAG_CONTENT_MONSTERS', 256);
-define('FLAG_CONTENT_GALLERY', 512);
-define('FLAG_CONTENT_VIDEOS', 1024);
-define('FLAG_CONTENT_FAQ', 2048);
-define('FLAG_CONTENT_MENUS', 4096);
-define('FLAG_CONTENT_PLAYERS', 8192);
+const FLAG_ADMIN = 1;
+const FLAG_SUPER_ADMIN = 2;
+const FLAG_CONTENT_PAGES = 4;
+const FLAG_CONTENT_MAILER = 8;
+const FLAG_CONTENT_NEWS = 16;
+const FLAG_CONTENT_FORUM = 32;
+const FLAG_CONTENT_COMMANDS = 64;
+const FLAG_CONTENT_SPELLS = 128;
+const FLAG_CONTENT_MONSTERS = 256;
+const FLAG_CONTENT_GALLERY = 512;
+const FLAG_CONTENT_VIDEOS = 1024;
+const FLAG_CONTENT_FAQ = 2048;
+const FLAG_CONTENT_MENUS = 4096;
+const FLAG_CONTENT_PLAYERS = 8192;
 
 // news
-define('NEWS', 1);
-define('TICKER', 2);
-define('ARTICLE', 3);
+const NEWS = 1;
+const TICKER = 2;
+const ARTICLE = 3;
 
 // directories
-define('BASE', __DIR__ . '/');
-define('ADMIN', BASE . 'admin/');
-define('SYSTEM', BASE . 'system/');
-define('CACHE', SYSTEM . 'cache/');
-define('LOCALE', SYSTEM . 'locale/');
-define('LIBS', SYSTEM . 'libs/');
-define('LOGS', SYSTEM . 'logs/');
-define('PAGES', SYSTEM . 'pages/');
-define('PLUGINS', BASE . 'plugins/');
-define('TEMPLATES', BASE . 'templates/');
-define('TOOLS', BASE . 'tools/');
-define('VENDOR', BASE . 'vendor/');
+const BASE = __DIR__ . '/';
+const ADMIN = BASE . 'admin/';
+const SYSTEM = BASE . 'system/';
+const CACHE = SYSTEM . 'cache/';
+const LOCALE = SYSTEM . 'locale/';
+const LIBS = SYSTEM . 'libs/';
+const LOGS = SYSTEM . 'logs/';
+const PAGES = SYSTEM . 'pages/';
+const PLUGINS = BASE . 'plugins/';
+const TEMPLATES = BASE . 'templates/';
+const TOOLS = BASE . 'tools/';
+const VENDOR = BASE . 'vendor/';
 
 // menu categories
-define('MENU_CATEGORY_NEWS', 1);
-define('MENU_CATEGORY_ACCOUNT', 2);
-define('MENU_CATEGORY_COMMUNITY', 3);
-define('MENU_CATEGORY_FORUM', 4);
-define('MENU_CATEGORY_LIBRARY', 5);
-define('MENU_CATEGORY_SHOP', 6);
+const MENU_CATEGORY_NEWS = 1;
+const MENU_CATEGORY_ACCOUNT = 2;
+const MENU_CATEGORY_COMMUNITY = 3;
+const MENU_CATEGORY_FORUM = 4;
+const MENU_CATEGORY_LIBRARY = 5;
+const MENU_CATEGORY_SHOP = 6;
 
 // otserv versions
-define('OTSERV', 1);
-define('OTSERV_06', 2);
-define('OTSERV_FIRST', OTSERV);
-define('OTSERV_LAST', OTSERV_06);
-define('TFS_02', 3);
-define('TFS_03', 4);
-define('TFS_FIRST', TFS_02);
-define('TFS_LAST', TFS_03);
+const OTSERV = 1;
+const OTSERV_06 = 2;
+const OTSERV_FIRST = OTSERV;
+const OTSERV_LAST = OTSERV_06;
+const TFS_02 = 3;
+const TFS_03 = 4;
+const TFS_FIRST = TFS_02;
+const TFS_LAST = TFS_03;
+
+session_save_path(SYSTEM . 'php_sessions');
+session_start();
 
 // basedir
 $basedir = '';

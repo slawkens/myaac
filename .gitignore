@@ -39,6 +39,10 @@ system/logs/*
 system/data/*
 !system/data/index.html
 
+# php sessions
+system/php_sessions/*
+!system/php_sessions/index.html
+
 # plugins
 plugins/*
 !plugins/.htaccess

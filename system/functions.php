@@ -462,7 +462,7 @@ function tickers()
  */
 function template_place_holder($type)
 {
-	global $template_place_holders;
+	global $twig, $template_place_holders;
 	$ret = '';
 
 	if(array_key_exists($type, $template_place_holders) && is_array($template_place_holders[$type]))
@@ -470,6 +470,9 @@ function template_place_holder($type)
 
 	if($type === 'head_start') {
 		$ret .= template_header();
+	}
+	elseif ($type === 'body_start') {
+		$ret .= $twig->render('browsehappy.html.twig');
 	}
 	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
