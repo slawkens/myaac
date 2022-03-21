@@ -152,7 +152,7 @@ class CreateCharacter
 		$player->setSoul($char_to_copy->getSoul());
 
 		for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++)
-			$player->setSkill($skill, 10);
+			$player->setSkill($skill, $char_to_copy->getSkill($skill));
 
 		$player->setLookBody($char_to_copy->getLookBody());
 		$player->setLookFeet($char_to_copy->getLookFeet());
@@ -194,7 +194,7 @@ class CreateCharacter
 			for($i=0; $i<7; $i++) {
 				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $i);
 				if($skillExists->rowCount() <= 0) {
-					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$i.', 10, 0)');
+					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$i.', '.$player->getSkill($i).', 0)');
 				}
 			}
 		}
