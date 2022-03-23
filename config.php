@@ -283,9 +283,9 @@ $config = array(
 	
 	// character name blocked
 	'character_name_blocked' => array(
-		'prefix' => array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ', "'", '-'),
-		'names' => array('admin', 'administrator', 'gm', 'cm', 'god', 'tutor'),
-		'words' => array('admin', 'administrator', 'gamemaster', 'game master', 'game-master', "game'master", '--', "''","' ", " '", '- ', ' -', "-'", "'-", 'fuck', 'sux', 'suck', 'noob', 'tutor'),
+		'prefix' => array(),
+		'names' => array(),
+		'words' => array(),
 	),
 	
 );
