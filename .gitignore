@@ -33,7 +33,7 @@ system/cache/*
 
 # php sessions
 system/php_sessions/*
-!system/cache/index.html
+!system/php_sessions//index.html
 
 # logs
 system/logs/*
