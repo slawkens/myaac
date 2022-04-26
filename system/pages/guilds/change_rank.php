@@ -86,7 +86,7 @@ if($guild_vice)
 			else
 			{
 				$player_in_guild = false;
-				if($guild->getName() === $player_to_change->getRank()->getGuild()->getName() || $guild_leader)
+				if($guild->getName() === $player_to_change->getRank()->getGuild()->getName())
 				{
 					$player_in_guild = true;
 					$player_has_lower_rank = false;
