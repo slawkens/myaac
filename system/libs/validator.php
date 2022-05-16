@@ -323,16 +323,6 @@ class Validator
 			}
 		}
 
-		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- '") != $name_length) {
-			self::$lastError = 'This name contains invalid letters, words or format. Please use only a-Z, - , \' and space.';
-			return false;
-		}
-
-		if(!preg_match("/[A-z ']/", $name)) {
-			self::$lastError = 'Your name containst illegal characters.';
-			return false;
-		}
-
 		return true;
 	}
 
