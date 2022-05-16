@@ -238,7 +238,7 @@ switch ($action) {
 			$sessionKey .= "\n".floor(time() / 30);
 		}
 
-		log_append('slaw.log', $sessionKey);
+		//log_append('slaw.log', $sessionKey);
 
 		$session = [
 			'sessionkey' => $sessionKey,
