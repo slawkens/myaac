@@ -733,7 +733,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @return OTS_Players_List List of players from current account.
  * @throws E_OTS_NotLoaded If account is not loaded.
  */
-    public function getPlayersList()
+    public function getPlayersList($withDeleted = true)
     {
         if( !isset($this->data['id']) )
         {
@@ -743,6 +743,15 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         // creates filter
         $filter = new OTS_SQLFilter();
         $filter->compareField('account_id', (int) $this->data['id']);
+
+		if(!$withDeleted) {
+			global $db;
+			if($db->hasColumn('players', 'deletion')) {
+				$filter->compareField('deletion', 0);
+			} else {
+				$filter->compareField('deleted', 0);
+			}
+		}
 
         // creates list object
         $list = new OTS_Players_List();
