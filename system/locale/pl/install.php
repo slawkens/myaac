@@ -41,6 +41,7 @@ $locale['step_requirements_extension'] = 'Rozszerzenie PHP - $EXTENSION$';
 $locale['step_requirements_warning_images_guilds'] = 'Nie będzie możliwości uploadu obrazków gildii';
 $locale['step_requirements_warning_images_gallery'] = 'Nie będzie możliwości uploadu obrazków do galerii';
 $locale['step_requirements_warning_player_signatures'] = 'Sygnatury graczy nie będą działać';
+$locale['step_requirements_warning_install_plugins'] = 'Nie będzie można instalować rozszerzeń';
 
 // config
 $locale['step_config'] = 'Konfiguracja';

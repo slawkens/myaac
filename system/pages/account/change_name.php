@@ -52,6 +52,29 @@ else
 						$old_name = $player->getName();
 						$player->setName($name);
 						$player->save();
+
+						if ($db->hasTable('player_deaths') &&
+							$db->hasColumn('player_deaths', 'mostdamage_is_player') &&
+							$db->hasColumn('player_deaths', 'killed_by')) {
+
+							$namesToChange = $db->query('SELECT `player_id`, `time`, `is_player`, `killed_by`, `mostdamage_is_player`, `mostdamage_by` FROM `player_deaths` WHERE (`is_player` = 1 AND `killed_by` = ' . $db->quote($old_name) . ') OR (`mostdamage_is_player` = 1 AND `mostdamage_by` = ' . $db->quote($old_name) . ');');
+
+							if ($namesToChange->rowCount() > 0) {
+								foreach ($namesToChange->fetchAll(PDO::FETCH_ASSOC) as $row) {
+									$changeKey = '';
+									if ($row['is_player'] == '1' && $row['killed_by'] == $old_name) {
+										$changeKey = 'killed_by';
+									} else if ($row['mostdamage_is_player'] == '1' && $row['mostdamage_by'] == $old_name) {
+										$changeKey = 'mostdamage_by';
+									}
+
+									if (!empty($changeKey)) {
+										$db->update('player_deaths', [$changeKey => $name], ['player_id' => $row['player_id'], 'time' => $row['time']]);
+									}
+								}
+							}
+						}
+
 						$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
 						$account_logged->logAction('Changed name from <b>' . $old_name . '</b> to <b>' . $player->getName() . '</b>.');
 						$twig->display('success.html.twig', array(

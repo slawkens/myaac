@@ -1,0 +1,14 @@
+# automatically exported using this script:
+# git log --all --format='%cN <%cE>' | sort -u > contributors
+# in no particular order
+# cleaned for readability
+
+Evil Puncker <EPuncker@users.noreply.github.com>
+Fernando Matos <fernando@pixele.com.br>
+Lee <42119604+Leesneaks@users.noreply.github.com>
+caio <caio.zucoli@gmail.com>
+slawkens <slawkens@gmail.com>
+tobi132 <52947952+tobi132@users.noreply.github.com>
+vankk <nwtr.otland@hotmail.com>
+whiteblXK <krzys16001@gmail.com>
+xitobuh <jonas.hockert92@gmail.com>
