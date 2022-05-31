@@ -101,6 +101,37 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         return $name;
     }
 
+	/**
+	 * @param $email
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function createWithEmail($email = null)
+	{
+		// if name is not passed then it will be generated randomly
+		if( !isset($email) )
+		{
+			throw new Exception(__CLASS__ . ':' . __METHOD__ . ' createWithEmail called without e-mail.');
+		}
+
+		// repeats until name is unique
+		do
+		{
+			$name = uniqid();
+
+			$query = $this->db->query('SELECT `id` FROM `accounts` WHERE `name` = ' . $this->db->quote($name));
+		} while($query->rowCount() >= 1);
+
+		// saves blank account info
+		$this->db->exec('INSERT INTO `accounts` (`name`, `password`, `email`, `created`) VALUES (' . $this->db->quote($name) . ', ' . '\'\', ' . $this->db->quote($email) . ', ' . time() . ')');
+
+		// reads created account's ID
+		$this->data['id'] = $this->db->lastInsertId();
+		$this->data['name'] = $name;
+
+		// return name of newly created account
+		return $name;
+	}
 /**
  * Creates new account.
  *
