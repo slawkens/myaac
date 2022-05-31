@@ -14,15 +14,15 @@ require '../common.php';
 require SYSTEM . 'functions.php';
 require SYSTEM . 'init.php';
 
-if(USE_ACCOUNT_NAME) {
+if (config('account_login_by_email') || USE_ACCOUNT_NAME) {
 	return;
 }
 
 $hasNumberColumn = $db->hasColumn('accounts', 'number');
 do {
-	$length = 10;
-	$min = (int)(1 . str_repeat(0, $length - 1));
-	$max = (int)str_repeat(9, $length);
+	$length = ACCOUNT_NUMBER_LENGTH;
+	$min = 10 ** ($length - 1);
+	$max = 10 ** $length - 1;
 
 	try {
 		$number = random_int($min, $max);

@@ -218,7 +218,7 @@ if($save)
 		if (!config('account_login_by_email')) {
 			$tmp_account = (USE_ACCOUNT_NAME ? $account_name : $account_id);
 		}
-		
+
 		if($config['mail_enabled'] && $config['account_mail_verify'])
 		{
 			$hash = md5(generateRandomString(16, true, true) . $email);

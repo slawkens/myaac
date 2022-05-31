@@ -86,6 +86,9 @@ const TFS_03 = 4;
 const TFS_FIRST = TFS_02;
 const TFS_LAST = TFS_03;
 
+// other definitions
+const ACCOUNT_NUMBER_LENGTH = 10;
+
 session_save_path(SYSTEM . 'php_sessions');
 session_start();
 
