@@ -53,7 +53,6 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		include(SYSTEM . 'libs/pot/InvitesDriver.php');
 		new InvitesDriver($guild);
 		$invited_list = $guild->listInvites();
-		var_dump($invited_list);
 		if(count($invited_list) > 0) {
 			foreach($invited_list as $invited) {
 				if($invited->getName() == $player->getName()) {
