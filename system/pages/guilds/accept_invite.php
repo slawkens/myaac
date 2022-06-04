@@ -40,7 +40,7 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		if(!$player->isLoaded()) {
 			$errors[] = 'Player with name <b>'.$name.'</b> doesn\'t exist.';
 		}else if ($player->getAccountID() != $account_logged->getId()) {
-			//$errors[] = 'Character with name <b> ' . $name. ' </b> is not in your account.';
+			$errors[] = 'Character with name <b> ' . $name. ' </b> is not in your account.';
 		}else if ($player->getRank()->isLoaded()){
 			$errors[] = 'Character with name <b>'.$name.'</b> is already in guild. You must leave guild before you join other guild.';
 		}
