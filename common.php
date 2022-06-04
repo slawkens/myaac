@@ -27,7 +27,7 @@ if (version_compare(phpversion(), '5.6', '<')) die('PHP version 5.6 or higher is
 
 define('MYAAC', true);
 define('MYAAC_VERSION', '0.8.6');
-define('DATABASE_VERSION', 32);
+define('DATABASE_VERSION', 33);
 define('TABLE_PREFIX', 'myaac_');
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
