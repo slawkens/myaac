@@ -48,8 +48,11 @@ elseif(!isset($status_ip[0])) // try localhost if no ip specified
 
 // port check
 $status_port = $config['lua']['statusPort'];
-if(isset($config['status_port'][0])) {
+if(isset($config['status_port'][0])) { // Tfs 0.4
 	$status_port = $config['status_port'];
+}
+elseif(!isset($status_port[0]) && $config['lua']['loginProtocolPort']) { // Tfs 1x+
+	$status_port = $config['lua']['loginProtocolPort'];
 }
 elseif(!isset($status_port[0])) // try 7171 if no ip specified
 {
