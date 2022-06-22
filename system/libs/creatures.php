@@ -18,7 +18,22 @@ class Creatures {
 	private static $monstersList;
 	private static $lastError = '';
 
-	public static function loadFromXML($show = false) {
+	public static function reload($show = false) {
+		self::clearDatabase($show);
+
+		if(@file_exists(config('data_path') . 'monster/monsters.xml')) {
+			if(!self::loadFromXML($show)) {
+				return false;
+			}
+		}
+		else {
+			self::loadFromLua($show);
+			return true;
+		}
+	}
+
+	public static function clearDatabase($show = false)
+	{
 		global $db;
 
 		try { $db->exec('DELETE FROM `' . TABLE_PREFIX . 'monsters`;'); } catch(PDOException $error) {}
@@ -27,6 +42,11 @@ class Creatures {
 			echo '<h2>Reload monsters.</h2>';
 			echo "<h2>All records deleted from table '" . TABLE_PREFIX . "monsters' in database.</h2>";
 		}
+	}
+
+	public static function loadFromXML($show = false)
+	{
+		global $db;
 
 		try {
 			self::$monstersList = new OTS_MonstersList(config('data_path') . 'monster/');
@@ -165,6 +185,39 @@ class Creatures {
 		}
 
 		return true;
+	}
+
+	public static function loadFromLua($show = false)
+	{
+		global $db;
+
+		$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(config('server_path') . 'data/monster'));
+		$files = [];
+
+		foreach ($rii as $file) {
+			if ($file->isDir()){
+				continue;
+			}
+
+			$files[] = $file->getPathname();
+		}
+
+		$luaMonstersLoader = file_get_contents(__DIR__ . '/Lua/MonstersLoader.lua');
+
+		foreach ($files as $file) {
+			$monsterFileContent = file_get_contents($file);
+			$monsterFileContent = str_replace('dofile("data/monster/', 'dofile("' . config('data_path') . 'monster/', $monsterFileContent);
+
+
+			$lua = new Lua();
+			try {
+				$lua->eval($luaMonstersLoader . $monsterFileContent);
+				$lua->call('getMonster');
+			}
+			catch (\LuaException $exception) {
+				error('Error in ' . $file . ' :: ' . $exception->getMessage());
+			}
+		}
 	}
 
 	public static function getMonstersList() {

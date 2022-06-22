@@ -22,7 +22,7 @@
  * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
-define('MYAAC_ADMIN', true);
+const MYAAC_ADMIN = true;
 
 require '../../common.php';
 require SYSTEM . 'functions.php';
@@ -42,5 +42,18 @@ require LIBS . 'DataLoader.php';
 require LOCALE . 'en/main.php';
 require LOCALE . 'en/install.php';
 
-DataLoader::setLocale($locale);
-DataLoader::load();
+//DataLoader::setLocale($locale);
+//DataLoader::load();
+
+require LIBS . 'creatures.php';
+if(Creatures::reload()) {
+	success($locale['step_database_loaded_monsters']);
+
+	/*if(Creatures::getMonstersList()->hasErrors()) {
+		self::$locale['step_database_error_monsters'] = str_replace('$LOG$', 'system/logs/error.log', self::$locale['step_database_error_monsters']);
+		warning(self::$locale['step_database_error_monsters']);
+	}*/
+}
+else {
+	error(Creatures::getLastError());
+}
