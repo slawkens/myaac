@@ -151,6 +151,8 @@ $config = array(
 		4 => 'Knight Sample'
 	),
 
+	'use_character_sample_skills' => false,
+
 	// it must show limited number of players after using search in character page
 	'characters_search_limit' => 15,
 
