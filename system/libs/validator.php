@@ -218,8 +218,12 @@ class Validator
 		global $db, $config;
 
 		$name_lower = strtolower($name);
+		$custom_first_words_blocked = [];
+		if (isset($config['character_name_blocked']['prefix']) && $config['character_name_blocked']['prefix']) {
+			$custom_first_words_blocked = $config['character_name_blocked']['prefix'];
+		}
 
-		$first_words_blocked = array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ', "'", '-');
+		$first_words_blocked = array_merge($custom_first_words_blocked, array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ', "'", '-'));
 		foreach($first_words_blocked as $word)
 		{
 			if($word == substr($name_lower, 0, strlen($word))) {
@@ -254,7 +258,11 @@ class Validator
 			return false;
 		}
 
-		$names_blocked = array('admin', 'administrator', 'gm', 'cm', 'god', 'tutor');
+		$custom_names_blocked = [];
+		if (isset($config['character_name_blocked']['names']) && $config['character_name_blocked']['names']) {
+			$custom_names_blocked = $config['character_name_blocked']['names'];
+		}
+		$names_blocked = array_merge($custom_names_blocked, array('admin', 'administrator', 'gm', 'cm', 'god', 'tutor'));
 		foreach($names_blocked as $word)
 		{
 			if($word == $name_lower) {
@@ -263,7 +271,11 @@ class Validator
 			}
 		}
 
-		$words_blocked = array('admin', 'administrator', 'gamemaster', 'game master', 'game-master', "game'master", '--', "''","' ", " '", '- ', ' -', "-'", "'-", 'fuck', 'sux', 'suck', 'noob', 'tutor');
+		$custom_words_blocked = [];
+		if (isset($config['character_name_blocked']['words']) && $config['character_name_blocked']['words']) {
+			$custom_words_blocked = $config['character_name_blocked']['words'];
+		}
+		$words_blocked = array_merge($custom_words_blocked, array('admin', 'administrator', 'gamemaster', 'game master', 'game-master', "game'master", '--', "''","' ", " '", '- ', ' -', "-'", "'-", 'fuck', 'sux', 'suck', 'noob', 'tutor'));
 		foreach($words_blocked as $word)
 		{
 			if(!(strpos($name_lower, $word) === false)) {
