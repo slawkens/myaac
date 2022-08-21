@@ -40,6 +40,7 @@ if(!$logged)
 	$twig->display('account.login.html.twig', array(
 		'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
 		'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
+		'account_login_by' => getAccountLoginByLabel(),
 		'error' => isset($errors[0]) ? $errors[0] : null
 	));
 
@@ -126,7 +127,7 @@ $errors = array();
 			'email_request' => $email_request,
 			'email_new_time' => $email_new_time,
 			'email_new' => isset($email_new) ? $email_new : '',
-			'account' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId(),
+			'account' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getNumber(),
 			'account_email' => $account_email,
 			'account_created' => $account_created,
 			'account_status' => $account_status,
