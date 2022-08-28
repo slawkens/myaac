@@ -125,14 +125,10 @@ $config = array(
 	'smtp_secure' => '', // What kind of encryption to use on the SMTP connection. Options: '', 'ssl' (GMail) or 'tls' (Microsoft Outlook)
 	'smtp_debug' => false, // set true to debug (you will see more info in error.log)
 
-	// reCAPTCHA (prevent spam bots)
+	// reCAPTCHA v3 (prevent spam bots)
 	'recaptcha_enabled' => false, // enable recaptcha verification code
-	'recaptcha_type' => 'v3', // 'v2-checkbox', 'v2-invisible', 'v3'
 	'recaptcha_site_key' => '', // get your own site and secret keys at https://www.google.com/recaptcha
 	'recaptcha_secret_key' => '',
-	// following option apply only for ReCaptcha v2-checkbox
-	'recaptcha_theme' => 'light', // light, dark
-	// following option apply only for ReCaptcha v3
 	// min score for validation, between 0 - 1.0
 	// https://developers.google.com/recaptcha/docs/v3#interpreting_the_score
 	'recaptcha_v3_min_score' => 0.5,

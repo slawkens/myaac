@@ -40,20 +40,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="?s
 									<label for="remember_me"> Remember me</label></td>
 							</tr>
 							{% if config.recaptcha_enabled %}
-								{% if config.recaptcha_type == 'v3' %}
 								<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
-								{% elseif config.recaptcha_type == 'v2-invisible' %}
-									<div class="g-recaptcha" data-sitekey="{{ config.recaptcha_site_key }}" data-bind="login-submit"></div>
-								{% elseif config.recaptcha_type == 'v2-checkbox' %}
-								<tr>
-									<td class="LabelV" style="width: 150px">
-										<span{% if error is not null %} class="red"{% endif %}>Verification:</span>
-									</td>
-									<td>
-										<div class="g-recaptcha" data-sitekey="{{ config.recaptcha_site_key }}" data-theme="{{ config.recaptcha_theme }}"></div>
-									</td>
-								</tr>
-								{% endif %}
 							{% endif %}
 							{% if error is not null %}
 								<tr><td></td><td><span class="FormFieldError">{{ error }}</span></td></tr>
@@ -90,7 +77,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="?s
 			</td>
 		</tr>
 	</table>
-{% if config.recaptcha_enabled and config.recaptcha_type == 'v3' %}
+{% if config.recaptcha_enabled %}
 	{% set action = 'login' %}
-	{{ include('google_recaptcha_v3.html.twig') }}
+	{{ include('google_recaptcha.html.twig') }}
 {% endif %}
