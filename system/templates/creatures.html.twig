@@ -1,0 +1,97 @@
+{% if creatures is not empty %}
+
+	{% if preview %}
+		<style>
+			.creatureImages {
+				width: 100px;
+				height: 100px;
+				margin: 0px;
+				float: left;
+			}
+
+			.creatureBoss {
+				box-sizing: border-box;
+				border-radius: 10px;
+				border: 1px rgba(179, 179, 179, 0.50) solid;
+				background-color: rgba(235, 235, 235, 0.50);
+			}
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$("#ciSearch").on("keyup", function () {
+					var value = $(this).val().toLowerCase();
+					$("#creatureiTable div").filter(function () {
+						$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+					});
+				});
+			});
+		</script>
+		<div style="float: right;"><input id="ciSearch" type="text" placeholder="Search.."></div>
+		<div style="display: table; width: 100%; ">
+			<div style="text-align: center; " id="creatureiTable">
+				{% for creature in creatures %}
+					{% set i = i + 1 %}
+					<div class="creatureImages">
+						<a href="{{ getMonsterLink(creature.name, false)|raw }}">
+							<div class="creature_img " style="background-image: url({{ creature.img_link }}"></div>
+							<img class=" {{ (creature.rewardboss ? 'creatureBoss' : '') }}" src="{{ creature.img_link }}" border="0"/>
+						</a>
+						<div>{{ creature.name }}</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	{% else %}
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$("#cSearch").on("keyup", function () {
+					var value = $(this).val().toLowerCase();
+					$("#creatureTable tr").filter(function () {
+						$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+					});
+				});
+			});
+		</script>
+		{{ generateLink('?creatures', 'All', false)|raw }} - <a href="?subtopic=creatures&boss=view">Bosses</a>
+		<div style="float: right;"><input id="cSearch" type="text" placeholder="Search.."></div>
+		<table width="100%">
+			<thead>
+			<tr>
+				<th>Name</th>
+				<th>Boss</th>
+				<th>Health</th>
+				<th>Experience</th>
+				<th>Summonable Mana</th>
+				<th>Convinceable Mana</th>
+				<th>Race</th>
+			</tr>
+			</thead>
+			<tbody id="creatureTable">
+			{% set i = 0 %}
+			{% for creature in creatures %}
+				{% set i = i + 1 %}
+				<tr>
+					<td>{{ getMonsterLink(creature.name, true)|raw }}</td>
+					<td>{{ (creature.rewardboss) ? 'Yes' : '---' }}</td>
+					<td>{{ creature.health|number_format(0, '.', ',') }}</td>
+					<td>{{ creature.exp|number_format(0, '.', ',') }}</td>
+					<td>{{ (creature.convinceable) ? creature.mana : '---' }} </td>
+					<td>{{ (creature.summonable) ? creature.mana  : '---' }} </td>
+					<td>{{ creature.race|title }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+	<script src="tools/js/jquery.min.js"></script>
+{% else %}
+	<table width="100%">
+		<tr>
+			<th>Creatures</th>
+		</tr>
+		<tr>
+			<td>No Creatures on the server.</td>
+		</tr>
+	</table>
+{% endif %}
+

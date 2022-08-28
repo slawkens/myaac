@@ -147,18 +147,8 @@ class Validator
 			return false;
 		}
 
-		if (strlen($password) < 8 || strlen($password) > 30) {
-			self::$lastError = 'The password must have at least 8 and maximum 30 letters!';
-			return false;
-		}
-
-		if(strspn($password, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890") != strlen($password)) {
-			self::$lastError = 'Password contains illegal letters (a-z, A-Z and 0-9 only!).';
-			return false;
-		}
-
-		if(!ctype_alnum($password)) {
-			self::$lastError = 'Password contains illegal letters (a-z, A-Z and 0-9 only!).';
+		if (strlen($password) < 8 || strlen($password) > 29) {
+			self::$lastError = 'The password must have at least 8 and maximum 29 letters!';
 			return false;
 		}
 
@@ -168,7 +158,7 @@ class Validator
 		}
 
 		if(!preg_match('/[0-9]/', $password)) {
-			self::$lastError = 'The password must contain at least one letter other than A-Z or a-z!';
+			self::$lastError = 'The password must contain at least one number!';
 			return false;
 		}
 
@@ -190,16 +180,26 @@ class Validator
 			return false;
 		}
 
+		$minLength = config('character_name_min_length');
+		$maxLength = config('character_name_max_length');
+
+		// installer doesn't know config.php yet
+		// that's why we need to ignore the nulls
+		if(is_null($minLength) || is_null($maxLength)) {
+			$minLength = 4;
+			$maxLength = 21;
+		}
+
 		$length = strlen($name);
-		if($length < 3)
+		if($length < $minLength)
 		{
-			self::$lastError = 'Character name is too short. Min. length <b>3</b> characters.';
+			self::$lastError = "Character name is too short. Min. length <b>$minLength</b> characters.";
 			return false;
 		}
 
-		if($length > 25)
+		if($length > $maxLength)
 		{
-			self::$lastError = 'Character name is too long. Max. length <b>25</b> characters.';
+			self::$lastError = "Character name is too long. Max. length <b>$maxLength</b> characters.";
 			return false;
 		}
 
@@ -211,7 +211,7 @@ class Validator
 
 		if(preg_match('/ {2,}/', $name))
 		{
-			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
+			self::$lastError = 'Invalid character name format. Use only A-Z and no double spaces.';
 			return false;
 		}
 
@@ -219,6 +219,16 @@ class Validator
 		{
 			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
 			return false;
+		}
+
+		$npcCheck = config('character_name_npc_check');
+		if ($npcCheck) {
+			require_once LIBS . 'npc.php';
+			NPCS::load();
+			if(NPCS::$npcs && in_array(strtolower($name), NPCS::$npcs)) {
+				self::$lastError = "Invalid name format. Do not use NPC Names";
+				return false;
+			}
 		}
 
 		return true;
@@ -299,13 +309,6 @@ class Validator
 			}
 		}
 
-		$player = new OTS_Player();
-		$player->find($name);
-		if($player->isLoaded()) {
-			self::$lastError = 'Character with this name already exist.';
-			return false;
-		}
-
 		//check if was namelocked previously
 		if($db->hasTable('player_namelocks') && $db->hasColumn('player_namelocks', 'name')) {
 			$namelock = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));
@@ -341,14 +344,14 @@ class Validator
 			}
 		}
 
-		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- '") != $name_length) {
-			self::$lastError = 'This name contains invalid letters, words or format. Please use only a-Z, - , \' and space.';
-			return false;
-		}
-
-		if(!preg_match("/[A-z ']/", $name)) {
-			self::$lastError = 'Your name containst illegal characters.';
-			return false;
+		$npcCheck = config('character_name_npc_check');
+		if ($npcCheck) {
+			require_once LIBS . 'npc.php';
+			NPCS::load();
+			if(NPCS::$npcs && in_array($name_lower, NPCS::$npcs)) {
+				self::$lastError = "Invalid name format. Do not use NPC Names";
+				return false;
+			}
 		}
 
 		return true;

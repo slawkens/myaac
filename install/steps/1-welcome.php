@@ -1,7 +1,7 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['saved'])) {
-	echo '<p class="warning">' . $locale['already_installed'] . '</p>';
+	echo '<div class="alert alert-warning"><span>' . $locale['already_installed'] . '</span></div>';
 }
 else {
 	unset($_SESSION['saved']);

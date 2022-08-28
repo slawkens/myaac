@@ -11,4 +11,9 @@ insert_final_newline = true
 
 [*.md]
 trim_trailing_whitespace = false
-indent_style = tab
+
+[{composer.json,package.json}]
+indent_style = space
+
+[package.json]
+indent_size = 2

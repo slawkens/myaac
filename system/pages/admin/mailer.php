@@ -15,55 +15,69 @@ if (!hasFlag(FLAG_CONTENT_MAILER) && !superAdmin()) {
 	return;
 }
 
-if (!$config['mail_enabled']) {
+if (!config('mail_enabled')) {
 	echo 'Mail support disabled.';
 	return;
 }
 
-$mail_content = isset($_POST['mail_content']) ? stripslashes($_POST['mail_content']) : NULL;
-$mail_subject = isset($_POST['mail_subject']) ? stripslashes($_POST['mail_subject']) : NULL;
-$preview = isset($_REQUEST['preview']);
+$mail_to = isset($_REQUEST['mail_to']) ? stripslashes(trim($_REQUEST['mail_to'])) : null;
+$mail_subject = isset($_POST['mail_subject']) ? stripslashes($_POST['mail_subject']) : null;
+$mail_content = isset($_POST['mail_content']) ? stripslashes($_POST['mail_content']) : null;
 
-$preview_done = false;
-if ($preview) {
-	if (!empty($mail_content) && !empty($mail_subject)) {
-		$preview_done = _mail($account_logged->getCustomField('email'), $mail_subject, $mail_content);
+if (isset($_POST['submit'])) {
+	if (empty($mail_subject)) {
+		warning('Please enter subject of the message.');
+	}
 
-		if (!$preview_done)
-			error('Error while sending preview mail. More info can be found in system/logs/mailer-error.log');
+	if (empty($mail_content)) {
+		warning('Please enter content of the message.');
 	}
 }
-
-
-$twig->display('admin.mailer.html.twig', array(
-	'mail_subject' => $mail_subject,
-	'mail_content' => $mail_content,
-	'preview_done' => $preview_done
-));
-
-if (empty($mail_content) || empty($mail_subject) || $preview)
-	return;
-
-$success = 0;
-$failed = 0;
-
-$add = '';
-if ($config['account_mail_verify']) {
-	note('Note: Sending only to users with verified E-Mail.');
-	$add = ' AND ' . $db->fieldName('email_verified') . ' = 1';
-}
-
-$query = $db->query('SELECT ' . $db->fieldName('email') . ' FROM ' . $db->tableName('accounts') . ' WHERE ' . $db->fieldName('email') . ' != ""' . $add);
-foreach ($query as $email) {
-	if (_mail($email['email'], $mail_subject, $mail_content))
-		$success++;
+if (!empty($mail_to)) {
+	if(!Validator::email($mail_to)) {
+		warning('E-Mail is invalid.');
+	}
 	else {
-		$failed++;
-		echo '<br />';
-		error('An error occorred while sending email to <b>' . $email['email'] . '</b>. For Admin: More info can be found in system/logs/mailer-error.log');
+		if (!empty($mail_content) && !empty($mail_subject)) {
+			if (_mail($mail_to, $mail_subject, $mail_content)) {
+				success("Successfully mailed <strong>$mail_to</strong>");
+			}
+			else {
+				error("Error while sending mail to <strong>$mail_to</strong>. More info can be found in system/logs/mailer-error.log");
+			}
+		}
 	}
 }
 
-success('Mailing finished.');
-success("$success emails delivered.");
-warning("$failed emails failed.");
+if (!empty($mail_content) && !empty($mail_subject) && empty($mail_to)) {
+	$success = 0;
+	$failed = 0;
+
+	$add = '';
+	if (config('account_mail_verify')) {
+		note('Note: Sending only to users with verified E-Mail.');
+		$add = ' AND `email_verified` = 1';
+	}
+
+	$query = $db->query('SELECT `email` FROM `accounts` WHERE `email` != ""' . $add);
+	foreach ($query as $email) {
+		if (_mail($email['email'], $mail_subject, $mail_content)) {
+			$success++;
+		}
+		else {
+			$failed++;
+			echo '<br />';
+			error('An error occorred while sending email to <b>' . $email['email'] . '</b>. For Admin: More info can be found in system/logs/mailer-error.log');
+		}
+	}
+
+	success('Mailing finished.');
+	success("$success emails delivered.");
+	warning("$failed emails failed.");
+}
+
+$twig->display('admin.mailer.html.twig', [
+	'mail_to' => $mail_to,
+	'mail_subject' => $mail_subject,
+	'mail_content' => $mail_content
+]);

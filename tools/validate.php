@@ -13,6 +13,7 @@
 require '../common.php';
 require SYSTEM . 'functions.php';
 require SYSTEM . 'init.php';
+require SYSTEM . 'login.php';
 
 $error = '';
 if(isset($_GET['account']))
@@ -54,14 +55,24 @@ else if(isset($_GET['email']))
 }
 else if(isset($_GET['name']))
 {
-	$name = strtolower(stripslashes($_GET['name']));
+	$name = $_GET['name'];
+	if(!admin()) {
+		$name = strtolower(stripslashes($name));
+	}
+
 	if(!Validator::characterName($name))
 		error_(Validator::getLastError());
 
-	if(!Validator::newCharacterName($name))
+	if(!admin() && !Validator::newCharacterName($name))
 		error_(Validator::getLastError());
 
-	success_('Good. Your name will be:<br /><b>' . ucwords($name) . '</b>');
+	require_once LIBS . 'CreateCharacter.php';
+	$createCharacter = new CreateCharacter();
+	if (!$createCharacter->checkName($name, $errors)) {
+		error_($errors['name']);
+	}
+
+	success_('Good. Your name will be:<br /><b>' . (admin() ? $name : ucwords($name)) . '</b>');
 }
 else if(isset($_GET['password']) && isset($_GET['password2'])) {
 	$password = $_GET['password'];

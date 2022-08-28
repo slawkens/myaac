@@ -72,7 +72,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
  *
  * @param array $properties List of object properties.
  */
-    public function __set_state($properties)
+    public static function __set_state($properties)
     {
         $object = new self();
 

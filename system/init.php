@@ -127,6 +127,8 @@ $ots = POT::getInstance();
 require_once SYSTEM . 'database.php';
 
 define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
+define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
+
 // load vocation names
 $tmp = '';
 if($cache->enabled() && $cache->fetch('vocations', $tmp)) {
@@ -142,10 +144,8 @@ else {
 	if(!@file_exists($file))
 		$file = $config['data_path'] . 'vocations.xml';
 
-	$vocations->load($file);
-
-	if(!$vocations)
-		throw new RuntimeException('ERROR: Cannot load <i>vocations.xml</i> file.');
+	if(!$vocations->load($file))
+		throw new RuntimeException('ERROR: Cannot load <i>vocations.xml</i> - the file is malformed. Check the file with xml syntax validator.');
 
 	$config['vocations'] = array();
 	foreach($vocations->getElementsByTagName('vocation') as $vocation) {

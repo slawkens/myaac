@@ -29,11 +29,13 @@ if(isset($_GET['archive']))
 	// display big news by id
 	if(isset($_GET['id']))
 	{
+		$id = (int)$_GET['id'];
+
 		$field_name = 'date';
-		if($_REQUEST['id'] < 100000)
+		if($id < 100000)
 			$field_name = 'id';
 
-		$news = $db->query('SELECT * FROM `'.TABLE_PREFIX . 'news` WHERE `hidden` != 1 AND `' . $field_name . '` = ' . (int)$_REQUEST['id']  . '');
+		$news = $db->query('SELECT * FROM `'.TABLE_PREFIX . 'news` WHERE `hidden` != 1 AND `' . $field_name . '` = ' . $id  . '');
 		if($news->rowCount() == 1)
 		{
 			$news = $news->fetch();

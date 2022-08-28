@@ -20,7 +20,7 @@ $locale['not_loaded'] = 'Not loaded';
 $locale['loading_spinner'] = 'Please wait, installing...';
 $locale['importing_spinner'] = 'Please wait, importing data...';
 $locale['please_fill_all'] = 'Please fill all inputs!';
-$locale['already_installed'] = 'MyAAC has been already installed. Please delete <b>install/<b/> directory. If you want to reinstall MyAAC - please delete <strong>config.local.php</strong> file from the main directory and refresh the page.';
+$locale['already_installed'] = 'MyAAC has been already installed. Please delete <b>install/</b> directory. If you want to reinstall MyAAC - please delete <strong>config.local.php</strong> file from the main directory and refresh the page.';
 
 // welcome
 $locale['step_welcome'] = 'Welcome';
@@ -41,6 +41,7 @@ $locale['step_requirements_extension'] = '$EXTENSION$ PHP extension';
 $locale['step_requirements_warning_images_guilds'] = 'Guild logo upload will not work';
 $locale['step_requirements_warning_images_gallery'] = 'Gallery image upload will not work';
 $locale['step_requirements_warning_player_signatures'] = 'Player Signatures will not work';
+$locale['step_requirements_warning_install_plugins'] = 'It will be not possible to install plugins';
 
 // config
 $locale['step_config'] = 'Configuration';
@@ -85,6 +86,8 @@ $locale['step_database_loaded_items'] = 'Items has been loaded...';
 $locale['step_database_loaded_weapons'] = 'Weapons has been loaded...';
 $locale['step_database_loaded_monsters'] = 'Monsters has been loaded...';
 $locale['step_database_error_monsters'] = 'There were some problems loading your monsters.xml file. Please check $LOG$ for more info.';
+$locale['step_database_loaded_npcs'] = 'NPCs has been loaded...';
+$locale['step_database_error_npcs'] = 'There were some problems loading your NPCs';
 $locale['step_database_loaded_spells'] = 'Spells has been loaded...';
 $locale['step_database_loaded_towns'] = 'Towns has been loaded...';
 $locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in config.';

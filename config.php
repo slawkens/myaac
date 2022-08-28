@@ -85,12 +85,22 @@ $config = array(
 	),
 
 	// images
-	'outfit_images_url' => 'http://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
-	'item_images_url' => 'http://item-images.ots.me/1092/', // set to images/items if you host your own items in images folder
+	'outfit_images_url' => 'https://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
+	'outfit_images_wrong_looktypes' => [75, 126, 127, 266, 302], // this looktypes needs to have different margin-top and margin-left because they are wrong positioned
+	'item_images_url' => 'https://item-images.ots.me/1092/', // set to images/items if you host your own items in images folder
 	'item_images_extension' => '.gif',
+
+	// creatures
+	'creatures_images_url' => 'images/monsters/', // set to images/monsters if you host your own creatures in images folder
+	'creatures_images_extension' => '.gif',
+	'creatures_images_preview' => false,  // set to true to allow picture previews for creatures
+	'creatures_items_url' => 'https://tibia.fandom.com/wiki/', // set to website which shows details about items.
+	'creatures_loot_percentage' => true, // set to true to show the loot tooltip percent
 
 	// account
 	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)
+	'account_login_by_email' => false, // use email instead of Account Name like in latest Tibia
+	'account_login_by_email_fallback' => false, // allow also additionally login by Account Name/Number (for users that might forget their email)
 	'account_create_auto_login' => false, // auto login after creating account?
 	'account_create_character_create' => true, // allow directly to create character on create account page?
 	'account_mail_verify' => false, // force users to confirm their email addresses when registering account
@@ -161,10 +171,11 @@ $config = array(
 	// won't be displayed if there is only one item (rookgaard for example)
 	'character_towns' => array(1),
 
-	// characters lenght
+	// characters length
 	// This is the minimum and the maximum length that a player can create a character. It is highly recommend the maximum length to be 21.
 	'character_name_min_length' => 4,
 	'character_name_max_length' => 21,
+	'character_name_npc_check' => true,
 
 	// list of towns
 	// if you use TFS 1.3 with support for 'towns' table in database, then you can ignore this - it will be configured automatically (from MySQL database - Table - towns)
@@ -201,19 +212,19 @@ $config = array(
 	'team_display_outfit' => true,
 
 	// bans page
-	'bans_limit' => 50,
-	'bans_display_all' => true, // should all bans be displayed? (sorted page by page)
+	'bans_per_page' => 20,
 
 	// highscores page
 	'highscores_vocation_box' => true, // show 'Choose a vocation' box on the highscores (allowing peoples to sort highscores by vocation)?
 	'highscores_vocation' => true, // show player vocation under his nickname?
-	'highscores_frags' => false, // show 'Frags' tab (best fraggers on the server)? Only 0.3
+	'highscores_frags' => false, // show 'Frags' tab (best fraggers on the server)?
 	'highscores_balance' => false, // show 'Balance' tab (richest players on the server)
 	'highscores_outfit' => true, // show player outfit?
 	'highscores_country_box' => false, // doesnt work yet! (not implemented)
 	'highscores_groups_hidden' => 3, // this group id and higher won't be shown on the highscores
 	'highscores_ids_hidden' => array(0), // this ids of players will be hidden on the highscores (should be ids of samples)
-	'highscores_length' => 100, // how many records per page on highscores
+	'highscores_per_page' => 100, // how many records per page on highscores
+	'highscores_cache_ttl' => 15, // how often to update highscores from database in minutes (default 15 minutes)
 
 	// characters page
 	'characters' => array( // what things to display on character view page (true/false in each option)
@@ -275,7 +286,7 @@ $config = array(
 	'status_interval' => 60,
 
 	// admin panel
-	'admin_panel_modules' => 'lastlogin,points,coins',
+	'admin_panel_modules' => 'statistics,web_status,server_status,lastlogin,created,points,coins,balance',    // default - statistics,web_status,server_status,lastlogin,created,points,coins,balance
 
 	// other
 	'anonymous_usage_statistics' => true,

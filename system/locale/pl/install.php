@@ -41,6 +41,7 @@ $locale['step_requirements_extension'] = 'Rozszerzenie PHP - $EXTENSION$';
 $locale['step_requirements_warning_images_guilds'] = 'Nie będzie możliwości uploadu obrazków gildii';
 $locale['step_requirements_warning_images_gallery'] = 'Nie będzie możliwości uploadu obrazków do galerii';
 $locale['step_requirements_warning_player_signatures'] = 'Sygnatury graczy nie będą działać';
+$locale['step_requirements_warning_install_plugins'] = 'Nie będzie można instalować rozszerzeń';
 
 // config
 $locale['step_config'] = 'Konfiguracja';
@@ -84,6 +85,8 @@ $locale['step_database_loaded_items'] = 'Załadowano przedmioty (items)...';
 $locale['step_database_loaded_weapons'] = 'Załadowano bronie (weapons)...';
 $locale['step_database_loaded_monsters'] = 'Załadowano potworki (monsters)...';
 $locale['step_database_error_monsters'] = 'Wystąpiły problemy podczas ładowania pliku monsters.xml. Zobacz $LOG$ po więcej informacji.';
+$locale['step_database_loaded_npcs'] = 'Załadowano NPCs...';
+$locale['step_database_error_npcs'] = 'Wystąpił problem podczas ładowania NPCs';
 $locale['step_database_loaded_spells'] = 'Załadowano czary (spells)...';
 $locale['step_database_loaded_towns'] = 'Załadowano miasta (towns)...';
 $locale['step_database_error_towns'] = 'Wystąpił problem podczas ładowania miast. Trzeba będzie je skonfigurować manualnie.';

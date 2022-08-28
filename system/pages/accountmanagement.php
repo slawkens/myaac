@@ -40,6 +40,7 @@ if(!$logged)
 	$twig->display('account.login.html.twig', array(
 		'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
 		'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
+		'account_login_by' => getAccountLoginByLabel(),
 		'error' => isset($errors[0]) ? $errors[0] : null
 	));
 
@@ -60,16 +61,17 @@ $errors = array();
 
 	if($action == '')
 	{
-		$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']);
+		$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
+		$dayOrDays = $account_logged->getPremDays() == 1 ? 'day' : 'days';
 		/**
 		 * @var OTS_Account $account_logged
 		 */
-		$recovery_key = $account_logged->getCustomField('key');
 		if(!$account_logged->isPremium())
 			$account_status = '<b><span style="color: red">Free Account</span></b>';
 		else
-			$account_status = '<b><span style="color: green">Premium Account, ' . ($freePremium ? 'Unlimited' : $account_logged->getPremDays() . ' days left') . '</span></b>';
+			$account_status = '<b><span style="color: green">' . ($freePremium ? 'Gratis Premium Account' : 'Premium Account, ' . $account_logged->getPremDays() . ' '.$dayOrDays.' left') . '</span></b>';
 
+		$recovery_key = $account_logged->getCustomField('key');
 		if(empty($recovery_key))
 			$account_registered = '<b><span style="color: red">No</span></b>';
 		else
@@ -125,7 +127,7 @@ $errors = array();
 			'email_request' => $email_request,
 			'email_new_time' => $email_new_time,
 			'email_new' => isset($email_new) ? $email_new : '',
-			'account' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId(),
+			'account' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getNumber(),
 			'account_email' => $account_email,
 			'account_created' => $account_created,
 			'account_status' => $account_status,

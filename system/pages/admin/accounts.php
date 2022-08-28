@@ -11,6 +11,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Account editor';
 $admin_base = BASE_URL . 'admin/?p=accounts';
+$use_datatable = true;
 
 if ($config['account_country'])
 	require SYSTEM . 'countries.conf.php';
@@ -166,7 +167,7 @@ else if (isset($_REQUEST['search'])) {
 				}
 
 				$lastDay = 0;
-				if ($p_days != 0 && $p_days != PHP_INT_MAX) {
+				if($p_days != 0 && $p_days != OTS_Account::GRATIS_PREMIUM_DAYS) {
 					$lastDay = time();
 				} else if ($lastDay != 0) {
 					$lastDay = 0;
@@ -212,7 +213,7 @@ else if (isset($_REQUEST['search'])) {
 					<h5 class="m-0">Accounts</h5>
 				</div>
 				<div class="card-body">
-					<table class="acc_datatable table table-striped table-bordered">
+					<table class="acc_datatable table table-striped table-bordered table-responsive d-md-table">
 						<thead>
 						<tr>
 							<th>ID</th>
@@ -342,23 +343,23 @@ else if (isset($_REQUEST['search'])) {
 									<?php if ($hasSecretColumn): ?>
 										<div class="col-12 col-sm-12 col-lg-6">
 											<label for="secret">Secret:</label>
-											<input type="text" class="form-control" id="secret" name="secret" autocomplete="off" size="8" maxlength="11" value="<?php echo $account->getCustomField('secret'); ?>"/>
+											<input type="text" class="form-control" id="secret" name="secret" autocomplete="off" value="<?php echo $account->getCustomField('secret'); ?>"/>
 										</div>
 									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-6">
-										<label for="key">Key:</label>
-										<input type="text" class="form-control" id="key" name="key" autocomplete="off" size="8" maxlength="11" value="<?php echo $account->getCustomField('key'); ?>"/>
+										<label for="key">Recovery Key:</label>
+										<input type="text" class="form-control" id="key" name="key" autocomplete="off" value="<?php echo $account->getCustomField('key'); ?>"/>
 									</div>
 								</div>
 								<div class="form-group row">
 									<div class="col-12 col-sm-12 col-lg-6">
-										<label for="email">Email:</label>
-										<input type="text" class="form-control" id="email" name="email" autocomplete="off" maxlength="20" value="<?php echo $account->getEMail(); ?>"/>
+										<label for="email">Email:</label><?php echo (config('mail_enabled') ? ' (<a href="' . ADMIN_URL . '?p=mailer&mail_to=' . $account->getEMail() . '">Send Mail</a>)' : ''); ?>
+										<input type="text" class="form-control" id="email" name="email" autocomplete="off" value="<?php echo $account->getEMail(); ?>"/>
 									</div>
 									<?php if ($hasCoinsColumn): ?>
 										<div class="col-12 col-sm-12 col-lg-6">
 											<label for="t_coins">Tibia Coins:</label>
-											<input type="text" class="form-control" id="t_coins" name="t_coins" autocomplete="off" maxlength="8" value="<?php echo $account->getCustomField('coins') ?>"/>
+											<input type="text" class="form-control" id="t_coins" name="t_coins" autocomplete="off" maxlength="11" value="<?php echo $account->getCustomField('coins') ?>"/>
 										</div>
 									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-6">
@@ -418,7 +419,7 @@ else if (isset($_REQUEST['search'])) {
 									$account_players = $account->getPlayersList();
 									$account_players->orderBy('id');
 									if (isset($account_players)) { ?>
-										<table class="table table-striped table-condensed">
+										<table class="table table-striped table-condensed table-responsive d-md-table">
 											<thead>
 											<tr>
 												<th>#</th>
@@ -463,7 +464,7 @@ else if (isset($_REQUEST['search'])) {
 								$bans = $db->query('SELECT * FROM ' . $db->tableName('bans') . ' WHERE ' . $db->fieldName('active') . ' = 1 AND ' . $db->fieldName('id') . ' = ' . $account->getId() . ' ORDER BY ' . $db->fieldName('added') . ' DESC LIMIT 10');
 								if ($bans->rowCount()) {
 									?>
-									<table class="table table-striped table-condensed">
+									<table class="table table-striped table-condensed table-responsive d-md-table">
 										<thead>
 										<tr>
 											<th>Nick</th>
@@ -517,7 +518,7 @@ else if (isset($_REQUEST['search'])) {
 						if ($db->hasTable('store_history')) { ?>
 							<div class="tab-pane fade" id="accounts-store">
 								<?php $store_history = $db->query('SELECT * FROM `store_history` WHERE `account_id` = "' . $account->getId() . '" ORDER BY `time` DESC')->fetchAll(); ?>
-								<table class="table table-striped table-condensed">
+								<table class="table table-striped table-condensed table-responsive d-md-table">
 									<thead>
 									<tr>
 										<th>Description</th>

@@ -12,10 +12,18 @@ if(isset($config['boxes']))
 	<link href="<?php echo $template_path; ?>/basic.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="tools/basic.js"></script>
 	<script type="text/javascript" src="<?php echo $template_path; ?>/ticker.js"></script>
+
+	<?php if(!empty($config['network_twitter'])): ?>
 	<script id="twitter-wjs" src="<?php echo $template_path; ?>/js/twitter.js"></script>
-	<script id="facebook-jssdk" async src="<?php echo $template_path; ?>/js/facebook.js"></script>
+	<?php endif; ?>
+
+	<?php if(!empty($config['network_facebook'])): ?>
+	<script id="facebook-jssdk" async src="https://connect.facebook.net/en_US/all.js"></script>
 	<link href="<?php echo $template_path; ?>/css/facebook.css" rel="stylesheet" type="text/css">
+	<?php endif; ?>
+
 	<script type="text/javascript">
+		var menus = '';
 		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
 		<?php
 			if(PAGE !== 'news') {
@@ -105,8 +113,8 @@ if(isset($config['boxes']))
 		  }
 		}
 
-		var menu = new Array();
-		menu[0] = new Object();
+		var menu = [];
+		menu[0] = {};
 		var unloadhelper = false;
 
 		// load the menu and set the active submenu item by using the variable 'activeSubmenuItem'
@@ -114,8 +122,9 @@ if(isset($config['boxes']))
 		{
 		  document.getElementById("submenu_"+activeSubmenuItem).style.color = "white";
 		  document.getElementById("ActiveSubmenuItemIcon_"+activeSubmenuItem).style.visibility = "visible";
-		  if(self.name.lastIndexOf("&") == -1) {
-			self.name = "news=1&account=0&community=0&library=0&forum=0<?php if($config['gifts_system']) echo '&shops=0'; ?>&";
+		  menus = localStorage.getItem('menus');
+		  if(menus.lastIndexOf("&") === -1) {
+			  menus = "news=1&account=0&community=0&library=0&forum=0<?php if($config['gifts_system']) echo '&shops=0'; ?>&";
 		  }
 		  FillMenuArray();
 		  InitializeMenu();
@@ -132,13 +141,13 @@ if(isset($config['boxes']))
 		// store the values of the variable 'self.name' in the array menu
 		function FillMenuArray()
 		{
-		  while(self.name.length > 0 ){
-			var mark1 = self.name.indexOf("=");
-			var mark2 = self.name.indexOf("&");
-			var menuItemName = self.name.substr(0, mark1);
-			menu[0][menuItemName] = self.name.substring(mark1 + 1, mark2);
-			self.name = self.name.substr(mark2 + 1, self.name.length);
-		  }
+			while(menus.length > 0 ){
+				var mark1 = menus.indexOf("=");
+				var mark2 = menus.indexOf("&");
+				var menuItemName = menus.substr(0, mark1);
+				menu[0][menuItemName] = menus.substring(mark1 + 1, mark2);
+				menus = menus.substr(mark2 + 1, menus.length);
+			}
 		}
 
 		// hide or show the corresponding submenus
@@ -160,16 +169,17 @@ if(isset($config['boxes']))
 		  }
 		}
 
-		// reconstruct the variable "self.name" out of the array menu
 		function SaveMenuArray()
 		{
-		  var stringSlices = "";
-		  var temp = "";
-		  for(menuItemName in menu[0]) {
-			stringSlices = menuItemName + "=" + menu[0][menuItemName] + "&";
-			temp = temp + stringSlices;
-		  }
-		  self.name = temp;
+			var stringSlices = "";
+			var temp = "";
+
+			for(menuItemName in menu[0]) {
+				stringSlices = menuItemName + "=" + menu[0][menuItemName] + "&";
+				temp = temp + stringSlices;
+			}
+
+			localStorage.setItem('menus', temp);
 		}
 
 		// onClick open or close submenus
@@ -369,7 +379,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 	}
 	?>
 		<script type="text/javascript">
-            InitializePage();
+			InitializePage();
         </script>
         </div>
         <div id="ContentColumn">

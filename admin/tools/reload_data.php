@@ -22,6 +22,7 @@
  * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
+define('MYAAC_ADMIN', true);
 
 require '../../common.php';
 require SYSTEM . 'functions.php';

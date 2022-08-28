@@ -29,8 +29,9 @@ function performInstall(url) {
 		}
 	});
 	// On completed
-	ajaxRequest.done(function(data) {
+	ajaxRequest.done(function(/*data*/) {
 		$('#spinner').hide();
+		$('#reload_button').show();
 	});
 	// On failed
 	ajaxRequest.fail(function(error){

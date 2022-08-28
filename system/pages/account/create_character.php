@@ -10,10 +10,14 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$character_name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : null;
+$character_name = isset($_POST['name']) ? stripslashes($_POST['name']) : null;
 $character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
 $character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;
 $character_town = isset($_POST['town']) ? (int)$_POST['town'] : null;
+
+if (!admin() && !empty($character_name)) {
+	$character_name = ucwords(strtolower($character_name));
+}
 
 $character_created = false;
 $save = isset($_POST['save']) && $_POST['save'] == 1;

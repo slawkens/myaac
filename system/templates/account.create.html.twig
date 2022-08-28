@@ -30,15 +30,20 @@
 
 												{{ hook('HOOK_ACCOUNT_CREATE_BEFORE_ACCOUNT') }}
 
+												{% if not config.account_login_by_email %}
 												<tr>
 													<td class="LabelV" style="width: 150px">
 														<span{% if errors.account is defined %} class="red"{% endif %}>Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</span>
+														{% if not constant('USE_ACCOUNT_NAME') %}
+														<div id="SuggestAccountNumber">[<a href="#">suggest number</a>]</div>
+														{% endif %}
 													</td>
 													<td>
 														<input type="text" name="account" id="account_input" size="30" maxlength="{% if constant('USE_ACCOUNT_NAME') %}30{% else %}10{% endif %}" value="{{ account }}" autofocus/>
 														<img id="account_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" style="display: none;" />
 													</td>
 												</tr>
+												{% endif %}
 												<tr><td></td><td><span id="account_error" class="FormFieldError">{% if errors.account is defined %}{{ errors.account }}{% endif %}</span></td></tr>
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_ACCOUNT') }}
 												<tr>
@@ -86,7 +91,7 @@
 														<span{% if errors.password is defined %} class="red"{% endif %}>Password:</span>
 													</td>
 													<td>
-														<input type="password" name="password" id="password" value="" size="30" maxlength="50" />
+														<input type="password" name="password" id="password" value="" size="30" maxlength="29" />
 														<img id="password_indicator" src="images/global/general/{% if not save or errors.password is defined %}n{% endif %}ok.gif" style="display: none;" />
 													</td>
 												</tr>
@@ -96,7 +101,7 @@
 														<span{% if errors.password is defined %} class="red"{% endif %}>Repeat password:</span>
 													</td>
 													<td>
-														<input type="password" name="password2" id="password2" value="" size="30" maxlength="50" />
+														<input type="password" name="password2" id="password2" value="" size="30" maxlength="29" />
 														<img id="password2_indicator" src="images/global/general/{% if not save or errors.password is defined %}n{% endif %}ok.gif" style="display: none;" />
 													</td>
 												</tr>
@@ -328,3 +333,8 @@
 	{% set action = 'register' %}
 	{{ include('google_recaptcha.html.twig') }}
 {% endif %}
+<style>
+	#SuggestAccountNumber {
+		font-size: 7pt;
+	}
+</style>

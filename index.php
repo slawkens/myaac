@@ -38,7 +38,7 @@ else
 $uri = str_replace(array('index.php/', '?'), '', $uri);
 define('URI', $uri);
 
-if(preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
+if(preg_match("/^[A-Za-z0-9-_%'+]+\.png$/i", $uri)) {
 	$tmp = explode('.', $uri);
 	$_REQUEST['name'] = urldecode($tmp[0]);
 
@@ -48,7 +48,7 @@ if(preg_match("/^[A-Za-z0-9-_%\'+]+\.png$/i", $uri)) {
 }
 
 if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz|ttf|woff|ico)$/i", $_SERVER['REQUEST_URI'])) {
-	header('HTTP/1.0 404 Not Found');
+	http_response_code(404);
 	exit;
 }
 
@@ -56,10 +56,16 @@ if(file_exists(BASE . 'config.local.php')) {
 	require_once BASE . 'config.local.php';
 }
 
+ini_set('log_errors', 1);
 if(config('env') === 'dev') {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
+}
+else {
+	ini_set('display_errors', 0);
+	ini_set('display_startup_errors', 0);
+	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 }
 
 if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE . 'install'))
@@ -97,10 +103,12 @@ else {
 			'/^account\/character\/comment\/[A-Za-z0-9-_%+\']+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment', 'name' => '$3'),
 			'/^account\/character\/comment\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'change_comment'),
 			'/^account\/confirm_email\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'accountmanagement', 'action' => 'confirm_email', 'v' => '$2'),
+			'/^bans\/[0-9]+\/?$/' => array('subtopic' => 'bans', 'page' => '$1'),
 			'/^characters\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'characters', 'name' => '$1'),
 			'/^changelog\/[0-9]+\/?$/' => array('subtopic' => 'changelog', 'page' => '$1'),
 			'/^commands\/add\/?$/' => array('subtopic' => 'commands', 'action' => 'add'),
 			'/^commands\/edit\/?$/' => array('subtopic' => 'commands', 'action' => 'edit'),
+			'/^creatures\/[A-Za-z0-9-_%+\']+$/' => array('subtopic' => 'creatures', 'creature' => '$1'),
 			'/^faq\/add\/?$/' => array('subtopic' => 'faq', 'action' => 'add'),
 			'/^faq\/edit\/?$/' => array('subtopic' => 'faq', 'action' => 'edit'),
 			'/^forum\/add_board\/?$/' => array('subtopic' => 'forum', 'action' => 'add_board'),#
@@ -170,6 +178,11 @@ $template_place_holders = array();
 
 require_once SYSTEM . 'init.php';
 
+// verify myaac tables exists in database
+if(!$db->hasTable('myaac_account_actions')) {
+	throw new RuntimeException('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
+}
+
 // event system
 require_once SYSTEM . 'hooks.php';
 $hooks = new Hooks();
@@ -180,11 +193,6 @@ require_once SYSTEM . 'status.php';
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
-
-// verify myaac tables exists in database
-if(!$db->hasTable('myaac_account_actions')) {
-	throw new RuntimeException('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
-}
 
 require SYSTEM . 'migrate.php';
 
@@ -327,11 +335,15 @@ if($load_it)
 				)) . $content;
 		}
 	} else {
-		$file = SYSTEM . 'pages/' . $page . '.php';
+		$file = $template_path . '/pages/' . $page . '.php';
 		if(!@file_exists($file))
 		{
-			$page = '404';
-			$file = SYSTEM . 'pages/404.php';
+			$file = SYSTEM . 'pages/' . $page . '.php';
+			if(!@file_exists($file))
+			{
+				$page = '404';
+				$file = SYSTEM . 'pages/404.php';
+			}
 		}
 	}
 
@@ -357,6 +369,14 @@ if($config['backward_support']) {
 	$topic = $title;
 }
 
+/**
+ * @var OTS_Account $account_logged
+ */
+if ($logged && admin()) {
+	$content .= $twig->render('admin-bar.html.twig', [
+		'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+	]);
+}
 $title_full =  (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];
 require $template_path . '/' . $template_index;
 

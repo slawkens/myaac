@@ -412,7 +412,6 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		'player_link' => getPlayerLink($player->getName(), false),
 		'hidden' => $hidden,
 		'bannedUntil' => isset($bannedUntil) ? $bannedUntil : null,
-		'characters_link' => getLink('characters'),
 		'account_players' => isset($account_players) ? $account_players : null,
 		'search_form' => generate_search_form(),
 		'canEdit' => hasFlag(FLAG_CONTENT_PLAYERS) || superAdmin()

@@ -1,11 +1,19 @@
 Thumbs.db
 .DS_Store
 .idea
+
+# composer
+composer.lock
+vendor
+
+# npm
+node_modules
+
+# created by release.sh
+releases
 tmp
 
-releases
 config.local.php
-PERSONAL_NOTES
 
 # all custom templates
 templates/*
@@ -31,6 +39,10 @@ system/logs/*
 system/data/*
 !system/data/index.html
 
+# php sessions
+system/php_sessions/*
+!system/php_sessions/index.html
+
 # plugins
 plugins/*
 !plugins/.htaccess
@@ -38,6 +50,9 @@ plugins/*
 !plugins/account-create-hint.json
 !plugins/account-create-hint
 landing
+
+# system
+system/functions_custom.php
 
 # others/rest
 system/pages/downloads.php

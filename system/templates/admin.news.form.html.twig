@@ -79,7 +79,7 @@
 					<div class="col-sm-12">
 						{% for id, cat in categories %}
 							<input type="radio" name="category" value="{{ id }}" {% if (category == 0 and id == 1) or (category == id) %}checked="yes"{% endif %}/>
-							<img src="{{ constant('BASE_URL') }}/images/news/icon_{{ cat.icon_id }}_small.gif"/>
+							<img src="{{ constant('BASE_URL') }}images/news/icon_{{ cat.icon_id }}_small.gif"/>
 						{% endfor %}
 					</div>
 				</div>
@@ -104,7 +104,7 @@
 
 				$('#select-type').change(function () {
 					var value = $('#select-type').val();
-					if (value == {{ constant('ARTICLE') }}) {
+					if (value === {{ constant('ARTICLE') }}) {
 						$('#article-text').show();
 						$('#article-image').show();
 					} else {
@@ -118,8 +118,8 @@
 
 	<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/tinymce/tinymce.min.js"></script>
 	<script type="text/javascript">
-		var unsaved = false;
-		var lastContent = '';
+		let unsaved = false;
+		let lastContent = '';
 
 		tinymce.init({
 			selector: "#body",
@@ -129,7 +129,7 @@
 			image_advtab: true,
 			setup: function (ed) {
 				ed.on('NodeChange', function (e) {
-					if (ed.getContent() != lastContent) {
+					if (ed.getContent() !== lastContent) {
 						unsaved = true;
 					}
 				});

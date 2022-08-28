@@ -66,7 +66,7 @@ class Plugins {
 				continue;
 			}
 
-			if(isset($plugin['enabled']) && $plugin['enabled'] === 0) {
+			if(isset($plugin['enabled']) && !getBoolean($plugin['enabled'])) {
 				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
 				continue;
 			}

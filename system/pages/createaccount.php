@@ -34,11 +34,13 @@ $errors = array();
 $save = isset($_POST['save']) && $_POST['save'] == 1;
 if($save)
 {
-	if(USE_ACCOUNT_NAME) {
-		$account_name = $_POST['account'];
-	}
-	else {
-		$account_id = $_POST['account'];
+	if(!config('account_login_by_email')) {
+		if(USE_ACCOUNT_NAME) {
+			$account_name = $_POST['account'];
+		}
+		else {
+			$account_id = $_POST['account'];
+		}
 	}
 
 	$email = $_POST['email'];
@@ -46,12 +48,14 @@ if($save)
 	$password2 = $_POST['password2'];
 
 	// account
-	if(isset($account_id)) {
-		if(!Validator::accountId($account_id))
+	if(!config('account_login_by_email')) {
+		if (isset($account_id)) {
+			if (!Validator::accountId($account_id)) {
+				$errors['account'] = Validator::getLastError();
+			}
+		} else if (!Validator::accountName($account_name))
 			$errors['account'] = Validator::getLastError();
 	}
-	else if(!Validator::accountName($account_name))
-		$errors['account'] = Validator::getLastError();
 
 	// email
 	if(!Validator::email($email))
@@ -88,7 +92,7 @@ if($save)
 	}
 
 	// check if account name is not equal to password
-	if(USE_ACCOUNT_NAME && strtoupper($account_name) == strtoupper($password)) {
+	if(!config('account_login_by_email') && USE_ACCOUNT_NAME && strtoupper($account_name) == strtoupper($password)) {
 		$errors['password'] = 'Password may not be the same as account name.';
 	}
 
@@ -101,16 +105,28 @@ if($save)
 	}
 
 	$account_db = new OTS_Account();
-	if(USE_ACCOUNT_NAME)
-		$account_db->find($account_name);
-	else
-		$account_db->load($account_id);
+	if (config('account_login_by_email')) {
+		$account_db->findByEMail($email);
+	}
+	else {
+		if(USE_ACCOUNT_NAME) {
+			$account_db->find($account_name);
+		}
+		else {
+			$account_db->load($account_id);
+		}
+	}
 
 	if($account_db->isLoaded()) {
-		if(USE_ACCOUNT_NAME)
-			$errors['account'] = 'Account with this name already exist.';
-		else
-			$errors['account'] = 'Account with this id already exist.';
+		if (config('account_login_by_email') && !config('account_mail_unique')) {
+			$errors['account'] = 'Account with this email already exist.';
+		}
+		else if (!config('account_login_by_email')) {
+			if (USE_ACCOUNT_NAME)
+				$errors['account'] = 'Account with this name already exist.';
+			else
+				$errors['account'] = 'Account with this id already exist.';
+		}
 	}
 
 	if(!isset($_POST['accept_rules']) || $_POST['accept_rules'] !== 'true')
@@ -125,11 +141,12 @@ if($save)
 		'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] === 'true' : false,
 	);
 
-	if(USE_ACCOUNT_NAME) {
-		$params['account_name'] = $_POST['account'];
-	}
-	else {
-		$params['account_id'] = $_POST['account'];
+	if (!config('account_login_by_email')) {
+		if (USE_ACCOUNT_NAME) {
+			$params['account_name'] = $_POST['account'];
+		} else {
+			$params['account_id'] = $_POST['account'];
+		}
 	}
 
 	$hooks->trigger(HOOK_ACCOUNT_CREATE_AFTER_SUBMIT, $params);
@@ -146,10 +163,15 @@ if($save)
 	if(empty($errors))
 	{
 		$new_account = new OTS_Account();
-		if(USE_ACCOUNT_NAME)
-			$new_account->create($account_name);
-		else
-			$new_account->create(NULL, $account_id);
+		if (config('account_login_by_email')) {
+			$new_account->createWithEmail($email);
+		}
+		else {
+			if(USE_ACCOUNT_NAME)
+				$new_account->create($account_name);
+			else
+				$new_account->create(NULL, $account_id);
+		}
 
 		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 		if($config_salt_enabled)
@@ -187,7 +209,11 @@ if($save)
 			$new_account->setCustomField('premium_points', $config['account_premium_points']);
 		}
 
-		$tmp_account = (USE_ACCOUNT_NAME ? $account_name : $account_id);
+		$tmp_account = $email;
+		if (!config('account_login_by_email')) {
+			$tmp_account = (USE_ACCOUNT_NAME ? $account_name : $account_id);
+		}
+
 		if($config['mail_enabled'] && $config['account_mail_verify'])
 		{
 			$hash = md5(generateRandomString(16, true, true) . $email);

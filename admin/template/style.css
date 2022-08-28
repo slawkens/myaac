@@ -1,0 +1,10 @@
+.menu-text-li {color: #4b646f; background: #1a2226;}
+.menu-text {
+	display: block;
+	padding: .5rem 1rem;
+	white-space: nowrap;
+}
+
+.sidebar-mini.sidebar-collapse .menu-text {
+	display: none;
+}

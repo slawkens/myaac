@@ -79,6 +79,8 @@ class Creatures {
 
 			//load race
 			$race = $monster->getRace();
+			$armor = $monster->getArmor();
+			$defensev = $monster->getDefense();
 
 			//load monster flags
 			$flags = $monster->getFlags();
@@ -87,6 +89,28 @@ class Creatures {
 			if(!isset($flags['convinceable']))
 				$flags['convinceable'] = '0';
 
+			if(!isset($flags['pushable']))
+				$flags['pushable'] = '0';	
+			if(!isset($flags['canpushitems']))
+				$flags['canpushitems'] = '0';			
+			if(!isset($flags['canpushcreatures']))
+				$flags['canpushcreatures'] = '0';
+			if(!isset($flags['runonhealth']))
+				$flags['runonhealth'] = '0';
+			if(!isset($flags['canwalkonenergy']))
+				$flags['canwalkonenergy'] = '0';
+			if(!isset($flags['canwalkonpoison']))
+				$flags['canwalkonpoison'] = '0';
+			if(!isset($flags['canwalkonfire']))
+				$flags['canwalkonfire'] = '0';
+			if(!isset($flags['hostile']))
+				$flags['hostile'] = '0';
+			if(!isset($flags['attackable']))
+				$flags['attackable'] = '0';
+			if(!isset($flags['rewardboss']))
+				$flags['rewardboss'] = '0';
+		
+			$summons = $monster->getSummons();
 			$loot = $monster->getLoot();
 			foreach($loot as &$item) {
 				if(!Validator::number($item['id'])) {
@@ -105,11 +129,25 @@ class Creatures {
 						'speed_lvl' => $speed_lvl,
 						'use_haste' => $use_haste,
 						'voices' => json_encode($monster->getVoices()),
-						'immunities' => json_encode($monster->getImmunities()),
+						'immunities' => json_encode($monster->getImmunities()),	
+						'elements' => json_encode($monster->getElements()),
 						'summonable' => $flags['summonable'] > 0 ? 1 : 0,
 						'convinceable' => $flags['convinceable'] > 0 ? 1 : 0,
+						'pushable' => $flags['pushable'] > 0 ? 1 : 0,
+						'canpushitems' => $flags['canpushitems'] > 0 ? 1 : 0,
+						'canpushcreatures' => $flags['canpushcreatures'] > 0 ? 1 : 0,
+						'runonhealth' => $flags['runonhealth'] > 0 ? 1 : 0,
+						'canwalkonenergy' => $flags['canwalkonenergy'] > 0 ? 1 : 0,
+						'canwalkonpoison' => $flags['canwalkonpoison'] > 0 ? 1 : 0,
+						'canwalkonfire' => $flags['canwalkonfire'] > 0 ? 1 : 0,
+						'hostile' => $flags['hostile'] > 0 ? 1 : 0,
+						'attackable' => $flags['attackable'] > 0 ? 1 : 0,
+						'rewardboss' => $flags['rewardboss'] > 0 ? 1 : 0,
+						'defense' => $defensev,
+						'armor' => $armor,
 						'race' => $race,
-						'loot' => json_encode($loot)
+						'loot' => json_encode($loot),
+						'summons' => json_encode($summons)
 					));
 
 					if($show) {

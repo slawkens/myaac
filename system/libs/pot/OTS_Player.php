@@ -234,12 +234,6 @@ class OTS_Player extends OTS_Row_DAO
 			$this->data = $this->db->query('SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . ($this->db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $__load['skull_time'] . '` as `skulltime`, `' . $__load['skull_type'] . '` as `skull`' . $__load['guild_info'] . ', `town_id`' . $__load['loss_experience'] . $__load['loss_items'] . ', `balance`' . ($__load['blessings'] ? ', `blessings`' : '') . ($__load['direction'] ? ', `direction`' : '') . ($__load['stamina'] ? ', `stamina`' : '') . ($__load['world_id'] ? ', `world_id`' : '') . ($__load['online'] ? ', `online`' : '') . ', `' . ($__load['deletion'] ? 'deletion' : 'deleted') . '`' . ($__load['promotion'] ? ', `promotion`' : '') . ($__load['marriage'] ? ', `marriage`' : '') . ', `comment`, `created`, `hidden` FROM `players` WHERE `id` = ' . (int)$id)->fetch();
 		}
 
-		if(!isset($this->data['guildnick']))
-			$this->data['guildnick'] = '';
-
-		if(!isset($this->data['rank_id']))
-			$this->data['rank_id'] = 0;
-
         // loads skills
         if( $this->isLoaded() && $load_skills)
         {
@@ -608,7 +602,7 @@ class OTS_Player extends OTS_Row_DAO
         }
 
         $account = new OTS_Account();
-        $account->load($this->data['account_id']);
+        $account->load($this->data['account_id'], false, true);
         return $account;
     }
 
@@ -1917,15 +1911,13 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @deprecated 0.0.4 Use getRank().
  */
-    public function getRankId()
-    {
-        if( !isset($this->data['rank_id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getRankId()
+	{
+		if(!isset($this->data['guildnick']) || !isset($this->data['rank_id']))
+			$this->loadRank();
 
-        return $this->data['rank_id'];
-    }
+		return $this->data['rank_id'];
+	}
 
 /**
  * Assigned guild rank.

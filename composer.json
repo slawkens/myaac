@@ -1,0 +1,14 @@
+{
+    "require": {
+        "php": "^7.2.5 || ^8.0",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-json": "*",
+        "ext-xml": "*",
+        "ext-dom": "*",
+        "phpmailer/phpmailer": "^6.1",
+        "composer/semver": "^3.2",
+        "twig/twig": "^1.0",
+        "erusev/parsedown": "^1.7"
+    }
+}

@@ -15,11 +15,11 @@
 
 /**
  * Wrapper for monsters files DOMDocument.
- * 
+ *
  * <p>
  * Note: as this class extends {@link http://www.php.net/manual/en/ref.dom.php DOMDocument class} and contains exacly file XML tree you can work on it as on normal DOM tree.
  * </p>
- * 
+ *
  * @package POT
  * @version 0.1.3
  * @property-read string $name Monster name.
@@ -44,14 +44,14 @@ class OTS_Monster extends DOMDocument
 	{
 		$this->loaded = parent::loadXML($source, $options);
 	}
-	
+
 	public function loaded()
 	{
 		return $this->loaded;
 	}
 /**
  * Returns monster name.
- * 
+ *
  * @return string Name.
  * @throws DOMException On DOM operation error.
  */
@@ -62,7 +62,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns monster race.
- * 
+ *
  * @return string Race.
  * @throws DOMException On DOM operation error.
  */
@@ -73,7 +73,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns amount of experience for killing this monster.
- * 
+ *
  * @return int Experience points.
  * @throws DOMException On DOM operation error.
  */
@@ -84,7 +84,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns monster speed.
- * 
+ *
  * @return int Speed.
  * @throws DOMException On DOM operation error.
  */
@@ -95,7 +95,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns amount of mana required to summon this monster.
- * 
+ *
  * @return int|bool Mana required (false if not possible).
  * @throws DOMException On DOM operation error.
  */
@@ -114,7 +114,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns monster HP.
- * 
+ *
  * @return int Hit points.
  * @throws DOMException On DOM operation error.
  */
@@ -125,7 +125,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns all monster flags (in format flagname => value).
- * 
+ *
  * @return array Flags.
  * @throws DOMException On DOM operation error.
  */
@@ -146,7 +146,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns specified flag value.
- * 
+ *
  * @param string $flag Flag.
  * @return int|bool Flag value (false if not set).
  * @throws DOMException On DOM operation error.
@@ -169,7 +169,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns voices that monster can sound.
- * 
+ *
  * @return array List of voices.
  * @throws DOMException On DOM operation error.
  */
@@ -214,17 +214,17 @@ class OTS_Monster extends DOMDocument
 		                $chance = 100000;
                     }
                 }
-                
+
                 $count = $item->getAttribute('countmax');
 	            if(empty($count)) {
 	                $count = 1;
                 }
-                
+
                 $id = $item->getAttribute('id');
                 if(empty($id)) {
                     $id = $item->getAttribute('name');
                 }
-                
+
                 $loot[] = array('id' => $id, 'count' => $count, 'chance' => $chance);
             }
         }
@@ -234,11 +234,11 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns all possible loot.
- * 
+ *
  * <p>
  * In order to use this method you have to have global items list loaded.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return array List of item types.
@@ -274,8 +274,94 @@ class OTS_Monster extends DOMDocument
     }
 
 /**
+ * Returns all monster summons.
+ *
+ * @return array elements.
+ * @throws DOMException On DOM operation error.
+ */
+
+	public function getSummons()
+    {
+        $summons = array();
+
+        $element = $this->documentElement->getElementsByTagName('summons')->item(0);
+
+        // checks if it has any Summons
+        if( isset($element) )
+        {
+            // adds all summons
+            foreach( $element->getElementsByTagName('summon') as $item)
+            {
+	            $chance = $item->getAttribute('chance');
+                $id = $item->getAttribute('name');
+                $summons[] = array('name' => $id, 'chance' => $chance);
+            }
+        }
+        return $summons;
+    }
+
+/**
+ * Returns all monster elements.
+ *
+ * @return array elements.
+ * @throws DOMException On DOM operation error.
+ */
+    public function getElements()
+    {
+        $elements = array();
+
+        $element = $this->documentElement->getElementsByTagName('elements')->item(0);
+
+        // checks if it has any elements
+        if( isset($element) )
+        {
+            // read all elements
+            foreach( $element->getElementsByTagName('element') as $elementv)
+            {
+                $elementv = $elementv->attributes->item(0);
+
+                // checks if element is set
+                if($elementv->nodeValue > 0)
+                {
+					 $elements[] = array('name' => ucfirst(str_replace('Percent', '', $elementv->nodeName)), 'percent' => $elementv->nodeValue);
+                }
+            }
+        }
+
+        return $elements;
+    }
+
+/**
+ * Checks if monster has given element.
+ *
+ * @param string $name element to check.
+ * @return bool element state.
+ * @throws DOMException On DOM operation error.
+ */
+    public function hasElement($name)
+    {
+        $element = $this->documentElement->getElementsByTagName('elements')->item(0);
+
+        // if doesn't have any elements obviously doesn't have this one too
+        if( isset($element) )
+        {
+            // read all elements
+            foreach( $element->getElementsByTagName('element') as $element)
+            {
+                // checks if this is what we are searching for
+                if( $element->hasAttribute($name) )
+                {
+                    return $element->getAttribute($name) > 0;
+                }
+            }
+        }
+
+        return false;
+    }
+
+/**
  * Returns all monster immunities.
- * 
+ *
  * @return array Immunities.
  * @throws DOMException On DOM operation error.
  */
@@ -306,7 +392,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Checks if monster has given immunity.
- * 
+ *
  * @param string $name Immunity to check.
  * @return bool Immunity state.
  * @throws DOMException On DOM operation error.
@@ -334,7 +420,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns monster defense rate.
- * 
+ *
  * @return int Defense rate.
  * @throws DOMException On DOM operation error.
  */
@@ -353,7 +439,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns monster armor.
- * 
+ *
  * @return int Armor rate.
  * @throws DOMException On DOM operation error.
  */
@@ -372,7 +458,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns list of special defenses.
- * 
+ *
  * @return array List of defense effects.
  * @throws DOMException On DOM operation error.
  */
@@ -396,7 +482,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns list of monster attacks.
- * 
+ *
  * @return array List of attafck effects.
  * @throws DOMException On DOM operation error.
  */
@@ -420,7 +506,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $name Property name.
@@ -481,11 +567,11 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns string representation of XML.
- * 
+ *
  * <p>
  * If any display driver is currently loaded then it uses it's method. Otherwise just returns monster XML content.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @return string String representation of object.
