@@ -254,8 +254,8 @@ class CreateCharacter
 
 		$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = ".$char_to_copy->getId()."");
 		foreach($loaded_items_to_copy as $save_item) {
-			$blob = addslashes($save_item['attribute']);
-			$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', '{$blob}');");
+			$blob = $db->quote($save_item['attributes']);
+			$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', $blob);");
 		}
 
 		global $twig;
