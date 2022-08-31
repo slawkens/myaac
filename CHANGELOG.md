@@ -24,6 +24,7 @@
 * rules page formatting (#177, @silic0nalph4)
 * account character create if auto_login is enabled
 * undefined variable notice on database_log enabled
+* removed VERSION file
 
 ## [0.8.6 - 10.07.2021]
 This update contains very important security fix.
