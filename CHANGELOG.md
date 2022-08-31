@@ -1,6 +1,7 @@
 # Changelog
 
 ## [0.8.7 - 31.08.2022]
+
 ### Added
 * login.php for client 12.x is now part of official repo
 * browsehappy code
