@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.8.7 - 31.08.2022]
+### Added
+* login.php for client 12.x is now part of official repo
+* browsehappy code
+* config use character sample skill (#201, @gpedro)
+* custom words blocked (#190, @gpedro)
+
+### Changed
+* save php sessions in myaac dir
+* don't count deleted players when creating new character
+
+### Fixed
+* patch vulnerability in change_rank.php (#194, @gesior, @thatmichaelguy)
+* fix guild invite page (#196, @worthdavi)
+* players not showing on highscores page (#195)
+* highscores page bug with high pages
+* $player->getStorage() does not work at all (#169, @gesior)
+* copying sample character when it have items with quotes (#200, @gpedro)
+* IPv6 issue when env is set to dev (#171)
+* admin page changed feet to match body colour (#174, @silic0nalph4)
+* exception being thrown when creating duplicated character name (#191)
+* rules page formatting (#177, @silic0nalph4)
+* account character create if auto_login is enabled
+* undefined variable notice on database_log enabled
+
 ## [0.8.6 - 10.07.2021]
 This update contains very important security fix.
 
