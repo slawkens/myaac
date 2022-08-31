@@ -47,6 +47,9 @@
 																<td><input type="checkbox" id="remember_me" name="remember_me" value="true" />
 																	<label for="remember_me"> Remember me</label></td>
 															</tr>
+															{% if config.recaptcha_enabled %}
+																<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
+															{% endif %}
 														</table>
 														<div style="float: right; font-size: 1px;" >
 															<input type="hidden" name="page" value="overview" >
@@ -144,3 +147,7 @@
 		</tr>
 	</table>
 </div>
+{% if config.recaptcha_enabled %}
+	{% set action = 'login' %}
+	{{ include('google_recaptcha.html.twig') }}
+{% endif %}

@@ -109,19 +109,9 @@
 
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_PASSWORDS') }}
 
-                                                {% if config.recaptcha_enabled %}
-													<tr>
-														<td class="LabelV" style="width: 150px">
-															<span{% if errors.verification[0] is defined %} class="red"{% endif %}>Verification:</span>
-														</td>
-														<td>
-															<div class="g-recaptcha" data-sitekey="{{ config.recaptcha_site_key }}" data-theme="{{ config.recaptcha_theme }}"></div>
-														</td>
-													</tr>
-                                                    {% if errors.verification is defined %}
-														<tr><td></td><td><span class="FormFieldError">{{ errors.verification }}</span></td></tr>
-                                                    {% endif %}
-                                                {% endif %}
+												{% if config.recaptcha_enabled %}
+													<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
+												{% endif %}
 
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_RECAPTCHA') }}
 												</tbody>
@@ -339,6 +329,10 @@
 </form>
 {{ hook('HOOK_ACCOUNT_CREATE_AFTER_FORM') }}
 <script type="text/javascript" src="tools/check_name.js"></script>
+{% if config.recaptcha_enabled %}
+	{% set action = 'register' %}
+	{{ include('google_recaptcha.html.twig') }}
+{% endif %}
 <style>
 	#SuggestAccountNumber {
 		font-size: 7pt;

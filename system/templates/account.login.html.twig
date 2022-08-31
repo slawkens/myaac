@@ -39,6 +39,9 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="?s
 								<td><input type="checkbox" id="remember_me" name="remember_me" value="true" />
 									<label for="remember_me"> Remember me</label></td>
 							</tr>
+							{% if config.recaptcha_enabled %}
+								<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
+							{% endif %}
 							{% if error is not null %}
 								<tr><td></td><td><span class="FormFieldError">{{ error }}</span></td></tr>
 							{% endif %}
@@ -74,3 +77,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="?s
 			</td>
 		</tr>
 	</table>
+{% if config.recaptcha_enabled %}
+	{% set action = 'login' %}
+	{{ include('google_recaptcha.html.twig') }}
+{% endif %}
