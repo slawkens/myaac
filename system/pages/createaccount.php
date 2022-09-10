@@ -183,8 +183,13 @@ if($save)
 				$new_account->setCustomField('premend', time() + $config['account_premium_days'] * 86400);
 			}
 			else { // rest
-				$new_account->setCustomField('premdays', $config['account_premium_days']);
-				$new_account->setCustomField('lastday', time());
+				if ($db->hasColumn('accounts', 'premium_ends_at')) { // TFS 1.4+
+					$new_account->setCustomField('premium_ends_at', time() + $config['account_premium_days'] * (60 * 60 * 24));
+				}
+				else {
+					$new_account->setCustomField('premdays', $config['account_premium_days']);
+					$new_account->setCustomField('lastday', time());
+				}
 			}
 		}
 
