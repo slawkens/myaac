@@ -1486,7 +1486,7 @@ function getAccountLoginByLabel()
 
 // validator functions
 require_once LIBS . 'validator.php';
-require_once SYSTEM . 'compat.php';
+require_once SYSTEM . 'compat/base.php';
 
 // custom functions
 require SYSTEM . 'functions_custom.php';
