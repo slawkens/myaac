@@ -312,8 +312,10 @@ if($load_it)
 	if(SITE_CLOSED && admin())
 		$content .= '<p class="note">Site is under maintenance (closed mode). Only privileged users can see it.</p>';
 
-	if($config['backward_support'])
-		require SYSTEM . 'compat_pages.php';
+	if($config['backward_support']) {
+		require SYSTEM . 'compat/pages.php';
+		require SYSTEM . 'compat/classes.php';
+	}
 
 	$ignore = false;
 
