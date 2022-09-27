@@ -50,7 +50,6 @@ plugins/*
 !plugins/account-create-hint.json
 !plugins/account-create-hint
 landing
-/login.php
 
 # system
 system/functions_custom.php

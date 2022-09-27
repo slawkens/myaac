@@ -66,10 +66,10 @@ else if(isset($_GET['name']))
 	if(!admin() && !Validator::newCharacterName($name))
 		error_(Validator::getLastError());
 
-	$player = new OTS_Player();
-	$player->find($name);
-	if($player->isLoaded()) {
-		error_('Character with this name already exist.');
+	require_once LIBS . 'CreateCharacter.php';
+	$createCharacter = new CreateCharacter();
+	if (!$createCharacter->checkName($name, $errors)) {
+		error_($errors['name']);
 	}
 
 	success_('Good. Your name will be:<br /><b>' . (admin() ? $name : ucwords($name)) . '</b>');

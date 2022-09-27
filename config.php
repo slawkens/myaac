@@ -99,6 +99,8 @@ $config = array(
 
 	// account
 	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)
+	'account_login_by_email' => false, // use email instead of Account Name like in latest Tibia
+	'account_login_by_email_fallback' => false, // allow also additionally login by Account Name/Number (for users that might forget their email)
 	'account_create_auto_login' => false, // auto login after creating account?
 	'account_create_character_create' => true, // allow directly to create character on create account page?
 	'account_mail_verify' => false, // force users to confirm their email addresses when registering account
@@ -133,11 +135,13 @@ $config = array(
 	'smtp_secure' => '', // What kind of encryption to use on the SMTP connection. Options: '', 'ssl' (GMail) or 'tls' (Microsoft Outlook)
 	'smtp_debug' => false, // set true to debug (you will see more info in error.log)
 
-	// reCAPTCHA (prevent spam bots)
+	// Google reCAPTCHA v3 (prevent spam bots)
 	'recaptcha_enabled' => false, // enable recaptcha verification code
 	'recaptcha_site_key' => '', // get your own site and secret keys at https://www.google.com/recaptcha
 	'recaptcha_secret_key' => '',
-	'recaptcha_theme' => 'light', // light, dark
+	// min score for validation, between 0 - 1.0
+	// https://developers.google.com/recaptcha/docs/v3#interpreting_the_score
+	'recaptcha_min_score' => 0.5,
 
 	//
 	'generate_new_reckey' => true,				// let player generate new recovery key, he will receive e-mail with new rec key (not display on page, hacker can't generate rec key)

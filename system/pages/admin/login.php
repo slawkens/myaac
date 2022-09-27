@@ -13,5 +13,6 @@ $title = 'Login';
 $twig->display('admin.login.html.twig', [
 	'logout' => (ACTION == 'logout' ? 'You have  been logged out!'  : ''),
 	'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
-	'errors' => $errors ?? ''
-]);
+	'account_login_by' => getAccountLoginByLabel(),
+	'errors' => isset($errors)? $errors : ''
+));

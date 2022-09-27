@@ -24,7 +24,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="{{
 						<table style="width:100%;" >
 							<tr>
 								<td class="LabelV" >
-									<span{% if error is not null %} class="red"{% endif %}>Account {{ account }}:</span>
+									<span{% if error is not null %} class="red"{% endif %}>{{ account_login_by }}:</span>
 								</td>
 								<td style="width:100%;" ><input type="text" name="account_login" size="30" maxlength="30" autofocus/></td>
 							</tr>
@@ -39,6 +39,9 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="{{
 								<td><input type="checkbox" id="remember_me" name="remember_me" value="true" />
 									<label for="remember_me"> Remember me</label></td>
 							</tr>
+							{% if config.recaptcha_enabled %}
+								<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
+							{% endif %}
 							{% if error is not null %}
 								<tr><td></td><td><span class="FormFieldError">{{ error }}</span></td></tr>
 							{% endif %}
@@ -74,3 +77,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="{{
 			</td>
 		</tr>
 	</table>
+{% if config.recaptcha_enabled %}
+	{% set action = 'login' %}
+	{{ include('google_recaptcha.html.twig') }}
+{% endif %}
