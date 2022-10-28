@@ -62,6 +62,7 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 				}
 			}
 		}
+
 		if(!$is_invited) {
 			$errors[] = 'Character '.$player->getName() .' isn\'t invited to guild <b>'.$guild->getName().'</b>.';
 		}
@@ -121,5 +122,3 @@ else {
 		));
 	}
 }
-
-?>
