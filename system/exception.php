@@ -39,8 +39,7 @@ function exception_handler($exception) {
 	// we just replace some values manually
 	// cause in case Twig throws exception, we can show it too
 	$content = file_get_contents($template_file);
-	$content = str_replace(array('{{ BASE_URL }}', '{{ message }}', '{{ backtrace }}', '{{ powered_by }}'), array(BASE_URL, $message, $backtrace_formatted, base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=')), $content);
-
+	$content = str_replace(array('{{ BASE_URL }}', '{{ exceptionClass }}', '{{ message }}', '{{ backtrace }}', '{{ powered_by }}'), array(BASE_URL, get_class($exception), $message, $backtrace_formatted, base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=')), $content);
 	echo $content;
 }
 
