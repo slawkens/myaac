@@ -47,7 +47,7 @@ if(isset($_REQUEST['name']))
 if(empty($name))
 {
 	$tmp_link = getPlayerLink($name);
-	echo 'Here you can get detailed information about a certain player on ' . $config['lua']['serverName'] . '.<BR>';
+	echo 'Here you can get detailed information about a certain player on ' . $config['lua']['serverName'] . '.<br/>';
 	echo generate_search_form(true);
 	return;
 }
@@ -82,8 +82,9 @@ if($player->isLoaded() && !$player->isDeleted())
 		$outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
 
 	$flag = '';
-	if($config['account_country'])
+	if($config['account_country']) {
 		$flag = getFlagImage($account->getCountry());
+	}
 
 	$player_sex = 'Unknown';
 	if(isset($config['genders'][$player->getSex()]))
@@ -147,9 +148,10 @@ if($player->isLoaded() && !$player->isDeleted())
 	if($config['characters']['skills'])
 	{
 		if($db->hasColumn('players', 'skill_fist')) {// tfs 1.0+
-			$skills_db = $db->query('SELECT `skill_fist`, `skill_club`, `skill_sword`, `skill_axe`, `skill_dist`, `skill_shielding`, `skill_fishing` FROM `players` WHERE `id` = ' . $player->getId())->fetch();
+			$skills_db = $db->query('SELECT `maglevel`, `skill_fist`, `skill_club`, `skill_sword`, `skill_axe`, `skill_dist`, `skill_shielding`, `skill_fishing` FROM `players` WHERE `id` = ' . $player->getId())->fetch();
 
 			$skill_ids = array(
+				POT::SKILL_MAGIC => 'maglevel',
 				POT::SKILL_FIST => 'skill_fist',
 				POT::SKILL_CLUB => 'skill_club',
 				POT::SKILL_SWORD => 'skill_sword',
@@ -175,8 +177,7 @@ if($player->isLoaded() && !$player->isDeleted())
 	}
 
 	$quests_enabled = $config['characters']['quests'] && !empty($config['quests']);
-	if($quests_enabled)
-	{
+	if($quests_enabled) {
 		$quests = $config['quests'];
 		$sql_query_in = '';
 		$i = 0;
@@ -197,10 +198,10 @@ if($player->isLoaded() && !$player->isDeleted())
 		foreach($quests as &$storage) {
 			$storage = isset($player_storage[$storage]) && $player_storage[$storage] > 0;
 		}
+		unset($storage);
 	}
 
-	if($config['characters']['equipment'])
-	{
+	if($config['characters']['equipment']) {
 		global $db;
 		$eq_sql = $db->query('SELECT `pid`, `itemtype` FROM player_items WHERE player_id = '.$player->getId().' AND (`pid` >= 1 and `pid` <= 10)');
 		$equipment = array();
@@ -284,8 +285,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				$deaths[] = array('time' => $death['date'], 'description' => $description . '.');
 			}
 		}
-	}
-	else {
+	} else {
 		$mostdamage = '';
 		if($db->hasColumn('player_deaths', 'mostdamage_by'))
 			$mostdamage = ', `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`';
@@ -294,8 +294,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				FROM `player_deaths`
 				WHERE `player_id` = ' . $player->getId() . ' ORDER BY `time` DESC LIMIT 10;')->fetchAll();
 
-		if(count($deaths_db))
-		{
+		if(count($deaths_db)) {
 			$number_of_rows = 0;
 			foreach($deaths_db as $death)
 			{
@@ -326,14 +325,12 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 
 	$frags = array();
 	$frag_add_content = '';
-	if($config['characters']['frags'] && $db->hasTable('killers'))
-	{
+	if($config['characters']['frags'] && $db->hasTable('killers')) {
 		//frags list by Xampy
 		$i = 0;
 		$frags_limit = 10; // frags limit to show? // default: 10
 		$player_frags = $db->query('SELECT `player_deaths`.*, `players`.`name`, `killers`.`unjustified` FROM `player_deaths` LEFT JOIN `killers` ON `killers`.`death_id` = `player_deaths`.`id` LEFT JOIN `player_killers` ON `player_killers`.`kill_id` = `killers`.`id` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `player_killers`.`player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,'.$frags_limit.';')->fetchAll();
-		if(count($player_frags))
-		{
+		if(count($player_frags)) {
 			$row_count = 0;
 			foreach($player_frags as $frag)
 			{
@@ -416,9 +413,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		'search_form' => generate_search_form(),
 		'canEdit' => hasFlag(FLAG_CONTENT_PLAYERS) || superAdmin()
 	));
-}
-else
-{
+} else {
 	$search_errors[] = 'Character <b>' . $name . '</b> does not exist or has been deleted.';
 	$twig->display('error_box.html.twig', array('errors' => $search_errors));
 	$search_errors = array();
@@ -432,8 +427,7 @@ else
 		$deleted = 'deletion';
 
 	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . (int)config('characters_search_limit') . ';');
-	if($query->rowCount() > 0)
-	{
+	if($query->rowCount() > 0) {
 		echo 'Did you mean:<ul>';
 		foreach($query as $player) {
 			if(isset($player['promotion'])) {

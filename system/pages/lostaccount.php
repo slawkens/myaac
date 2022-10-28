@@ -111,7 +111,7 @@ elseif($action == 'sendcode')
 					else
 					{
 						$account->setCustomField('email_next', (time() + 60));
-						echo '<br /><p class="error">An error occorred while sending email! Try again later or contact with admin. For Admin: More info can be found in system/logs/mailer-error.log</p>';
+						echo '<br /><p class="error">An error occurred while sending email! Try again later or contact with admin. For Admin: More info can be found in system/logs/mailer-error.log</p>';
 					}
 				}
 				else
@@ -330,7 +330,7 @@ elseif($action == 'step3')
 								}
 								else
 								{
-									echo '<br /><p class="error">An error occorred while sending email! You will not receive e-mail with this informations. For Admin: More info can be found in system/logs/mailer-error.log</p>';
+									echo '<br /><p class="error">An error occurred while sending email! You will not receive e-mail with this informations. For Admin: More info can be found in system/logs/mailer-error.log</p>';
 								}
 							}
 							else
@@ -513,7 +513,7 @@ elseif($action == 'setnewpassword')
 					}
 					else
 					{
-						echo '<br /><p class="error">New password work! An error occorred while sending email! You will not receive e-mail with new password. For Admin: More info can be found in system/logs/mailer-error.log';
+						echo '<br /><p class="error">New password work! An error occurred while sending email! You will not receive e-mail with new password. For Admin: More info can be found in system/logs/mailer-error.log';
 					}
 				echo '</TD></TR>
 				</TABLE>
