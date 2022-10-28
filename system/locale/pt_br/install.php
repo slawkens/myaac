@@ -19,7 +19,7 @@ $locale['not_loaded'] = 'Não carregado';
 
 $locale['loading_spinner'] = 'Por favor aguarde, instalando...';
 $locale['importing_spinner'] = 'Por favor, aguarde, importando dados...';
-$locale['please_fill_all'] = 'or favor, preencha todas as entradas!';
+$locale['please_fill_all'] = 'Por favor, preencha todas as entradas!';
 $locale['already_installed'] = 'MyAAC já foi instalado. Por favor, apague o diretório <b> install/ <b/>. Se você quiser reinstalar o MyAAC - exclua o arquivo <strong> config.local.php </strong> do diretório principal e atualize a página.';
 
 // welcome
