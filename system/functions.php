@@ -1042,7 +1042,7 @@ function getTopPlayers($limit = 5) {
 			$deleted = 'deletion';
 
 		$is_tfs10 = $db->hasTable('players_online');
-		$players = $db->query('SELECT `id`, `name`, `level`, `experience`, `looktype`' . ($db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `lookhead`, `lookbody`, `looklegs`, `lookfeet`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . config('highscores_groups_hidden') . ' AND `id` NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
+		$players = $db->query('SELECT `id`, `name`, `level`, `vocation`, `experience`, `looktype`' . ($db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `lookhead`, `lookbody`, `looklegs`, `lookfeet`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . config('highscores_groups_hidden') . ' AND `id` NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
 
 		if($is_tfs10) {
 			foreach($players as &$player) {
