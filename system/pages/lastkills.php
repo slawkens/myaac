@@ -45,7 +45,7 @@ if(tableExist('player_killers')) // tfs 0.3
 							$players_rows .= 'eliminated';
 						elseif($count > 19)
 							$players_rows .= 'annihilated';
-							
+
 						 $players_rows .= 'at level <b>' . $death['level'] . '</b> by ';
 					}
 					else if($i == $count)
@@ -76,15 +76,15 @@ if(tableExist('player_killers')) // tfs 0.3
 			$players_rows .= '.</TD>';
 			if($config['multiworld'])
 				$player_rows .= '<TD>'.$config['worlds'][(int)$death['world_id']].'</TD>';
-			
+
 			$players_rows .= '</TR>';
 		}
 	}
 }
 else {
 	//$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `player_deaths`.`killed_by` as `killed_by`, `player_deaths`.`time` as `time`, `player_deaths`.`is_player` as `is_player`, `player_deaths`.`level` as `level` FROM `player_deaths`, `players` as `d` INNER JOIN `players` as `p` ON player_deaths.player_id = p.id WHERE player_deaths.`is_player`='1' ORDER BY `time` DESC LIMIT " . $config['last_kills_limit'] . ";");
-	
-$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `d`.`killed_by` as `killed_by`, `d`.`time` as `time`, `d`.`level`, `d`.`is_player` FROM `player_deaths` as `d` INNER JOIN `players` as `p` ON d.player_id = p.id ORDER BY `time` DESC LIMIT " . $config['last_kills_limit'] . ";");
+
+	$players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `d`.`killed_by` as `killed_by`, `d`.`time` as `time`, `d`.`level`, `d`.`is_player`, `d`.`mostdamage_by` as `mostdamage_by`, `d`.`mostdamage_is_player` as `mostdamage_is_player` FROM `player_deaths` as `d` INNER JOIN `players` as `p` ON d.player_id = p.id ORDER BY `time` DESC LIMIT " . $config['last_kills_limit'] . ";");
 
 	if(!empty($players_deaths))
 	{
@@ -95,7 +95,15 @@ $players_deaths = $db->query("SELECT `p`.`name` AS `victim`, `d`.`killed_by` as 
 				$players_rows .= getPlayerLink($death['killed_by']);
 			else
 				$players_rows .= $death['killed_by'];
-			
+
+			if (!empty($death['mostdamage_by'])) {
+				$player_rows .= ' and ';
+				if($death['mostdamage_is_player'] == '1')
+					$players_rows .= getPlayerLink($death['mostdamage_by']);
+				else
+					$players_rows .= $death['mostdamage_by'];
+			}
+
 			$players_rows .= '.</TR>';
 		}
 	}
