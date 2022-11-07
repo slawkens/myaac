@@ -13,7 +13,7 @@ fi
 
 if [ $1 = "prepare" ]; then
 	# define release version
-	version=`cat VERSION`
+	version=`php system/get_version_for_release.php`
 
 	echo "Preparing to release version $version of the MyAAC Project!"
 
@@ -24,7 +24,7 @@ if [ $1 = "prepare" ]; then
 	# get myaac from git archive
 	git archive --format zip --output tmp/myaac.zip master
 
-	cd tmp/
+	cd tmp/ || exit
 
 	dir="myaac-$version"
 	if [ -d "$dir" ] ; then
@@ -41,9 +41,9 @@ fi
 
 if [ $1 = "pack" ]; then
 	# define release version
-	version=`cat VERSION`
+	version=`php system/get_version_for_release.php`
 
-	cd tmp
+	cd tmp || exit
 
 	# tar.gz
 	echo "Creating .tar.gz package.."

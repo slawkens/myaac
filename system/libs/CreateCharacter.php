@@ -193,8 +193,14 @@ class CreateCharacter
 		$player->setManaSpent($char_to_copy->getManaSpent());
 		$player->setSoul($char_to_copy->getSoul());
 
-		for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++)
-			$player->setSkill($skill, 10);
+		for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++) {
+			$value = 10;
+			if (config('use_character_sample_skills')) {
+				$value = $char_to_copy->getSkill($skill);
+			}
+
+			$player->setSkill($skill, $value);
+		}
 
 		$player->setLookBody($char_to_copy->getLookBody());
 		$player->setLookFeet($char_to_copy->getLookFeet());
@@ -234,16 +240,22 @@ class CreateCharacter
 
 		if($db->hasTable('player_skills')) {
 			for($i=0; $i<7; $i++) {
+				$value = 10;
+				if (config('use_character_sample_skills')) {
+					$value = $char_to_copy->getSkill($i);
+				}
 				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $i);
 				if($skillExists->rowCount() <= 0) {
-					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$i.', 10, 0)');
+					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$i.', ' . $value . ', 0)');
 				}
 			}
 		}
 
 		$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = ".$char_to_copy->getId()."");
-		foreach($loaded_items_to_copy as $save_item)
-			$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', '".$save_item['attributes']."');");
+		foreach($loaded_items_to_copy as $save_item) {
+			$blob = $db->quote($save_item['attributes']);
+			$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', $blob);");
+		}
 
 		global $twig;
 		$twig->display('success.html.twig', array(
