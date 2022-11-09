@@ -92,7 +92,7 @@ if($config['item_images_url'][strlen($config['item_images_url']) - 1] !== '/')
 	$config['item_images_url'] .= '/';
 
 // localize data/ directory based on data directory set in config.lua
-foreach(array('coreDirectory) as $key) {
+foreach(array('coreDirectory', 'dataDirectory') as $key) {
 	if(!isset($config['lua'][$key][0])) {
 		break;
 	}
