@@ -971,17 +971,6 @@ function load_config_lua($filename)
 						// just ignore the error
 						continue;
 					}
-					else
-					{
-						foreach($result as $tmp_key => $tmp_value) // load values definied by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
-							$value = str_replace($tmp_key, $tmp_value, $value);
-						$ret = @eval("return $value;");
-						if((string) $ret == '' && trim($value) !== '""') // = parser error
-						{
-							throw new RuntimeException('ERROR: Loading config.lua file. Line <b>' . ($ln + 1) . '</b> of LUA config file is not valid [key: <b>' . $key . '</b>]');
-						}
-						$result[$key] = $ret;
-					}
 				}
 			}
 		}
