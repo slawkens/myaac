@@ -1,6 +1,6 @@
 <?php
 
-if(PHP_SAPI !== 'cli') {
+if(PHP_SAPI !== 'cli' {
 	echo 'This script can be run only in command line mode.';
 	exit(1);
 }
