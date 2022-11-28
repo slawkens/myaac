@@ -17,7 +17,8 @@ if($config['account_country'])
 $promotion = '';
 if($db->hasColumn('players', 'promotion'))
 	$promotion = '`promotion`,';
-$order = isset($_GET['order']) ? $_GET['order'] : 'name';
+
+$order = $_GET['order'] ?? 'name';
 if(!in_array($order, array('country', 'name', 'level', 'vocation')))
 	$order = $db->fieldName('name');
 else if($order == 'country')

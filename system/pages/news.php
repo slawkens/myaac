@@ -64,7 +64,6 @@ if(isset($_GET['archive']))
 				'icon' => $categories[$news['category']]['icon_id'],
 				'author' => $config['news_author'] ? $author : '',
 				'comments' => $news['comments'] != 0 ? getForumThreadLink($news['comments']) : null,
-				'news_date_format' => $config['news_date_format']
 			));
 		}
 		else
@@ -214,7 +213,6 @@ if(!$news_cached)
 				'icon' => $categories[$news['category']]['icon_id'],
 				'author' => $config['news_author'] ? $author : '',
 				'comments' => $news['comments'] != 0 ? getForumThreadLink($news['comments']) : null,
-				'news_date_format' => $config['news_date_format'],
 				'hidden'=> $news['hidden']
 			));
 		}
