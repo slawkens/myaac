@@ -41,17 +41,22 @@ class GoogleReCAPTCHA
 		}
 
 		$json = json_decode($response);
-		//log_append('recaptcha.log', 'recaptcha_score: ' . $json->score . ', action:' . $json->action);
-		if (!isset($json->action) || $json->action !== $action) {
-			self::$errorType = self::ERROR_INVALID_ACTION;
-			self::$errorMessage = 'Google ReCaptcha returned invalid action.';
-			return false;
-		}
 
-		if (!isset($json->score) || $json->score < config('recaptcha_min_score')) {
-			self::$errorType = self::ERROR_LOW_SCORE;
-			self::$errorMessage = 'Your Google ReCaptcha score was too low.';
-			return false;
+		$recaptchaType = config('recaptcha_type');
+		if ($recaptchaType === 'v3') { // score based
+			//log_append('recaptcha.log', 'recaptcha_score: ' . $json->score . ', action:' . $json->action);
+
+			if (!isset($json->action) || $json->action !== $action) {
+				self::$errorType = self::ERROR_INVALID_ACTION;
+				self::$errorMessage = 'Google ReCaptcha returned invalid action.';
+				return false;
+			}
+
+			if (!isset($json->score) || $json->score < config('recaptcha_v3_min_score')) {
+				self::$errorType = self::ERROR_LOW_SCORE;
+				self::$errorMessage = 'Your Google ReCaptcha score was too low.';
+				return false;
+			}
 		}
 
 		if (!isset($json->success) || !$json->success) {

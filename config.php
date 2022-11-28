@@ -135,13 +135,17 @@ $config = array(
 	'smtp_secure' => '', // What kind of encryption to use on the SMTP connection. Options: '', 'ssl' (GMail) or 'tls' (Microsoft Outlook)
 	'smtp_debug' => false, // set true to debug (you will see more info in error.log)
 
-	// Google reCAPTCHA v3 (prevent spam bots)
+	// Google reCAPTCHA (prevent spam bots)
 	'recaptcha_enabled' => false, // enable recaptcha verification code
+	'recaptcha_type' => 'v3', // 'v2-checkbox', 'v2-invisible', 'v3'
 	'recaptcha_site_key' => '', // get your own site and secret keys at https://www.google.com/recaptcha
 	'recaptcha_secret_key' => '',
+	// following option apply only for ReCaptcha v2-checkbox
+	'recaptcha_v2_theme' => 'light', // light, dark
+	// following option apply only for ReCaptcha v3
 	// min score for validation, between 0 - 1.0
 	// https://developers.google.com/recaptcha/docs/v3#interpreting_the_score
-	'recaptcha_min_score' => 0.5,
+	'recaptcha_v3_min_score' => 0.5,
 
 	//
 	'generate_new_reckey' => true,				// let player generate new recovery key, he will receive e-mail with new rec key (not display on page, hacker can't generate rec key)
@@ -163,6 +167,8 @@ $config = array(
 		3 => 'Paladin Sample',
 		4 => 'Knight Sample'
 	),
+
+	'use_character_sample_skills' => false,
 
 	// it must show limited number of players after using search in character page
 	'characters_search_limit' => 15,
