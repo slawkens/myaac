@@ -92,25 +92,38 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		return $ret;
     }
 
-	public function select($table, $where, $limit = null)
+	public function select($table, $where = [], $limit = null)
 	{
 		$fields = array_keys($where);
 		$values = array_values($where);
-		$query = 'SELECT * FROM ' . $this->tableName($table) . ' WHERE (';
+		$query = 'SELECT * FROM ' . $this->tableName($table);
 
-		$count = count($fields);
-		for ($i = 0; $i < $count; $i++)
-			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).' AND ';
+		if (!empty($where)) {
+			$query .= ' WHERE (';
 
-		$query = substr($query, 0, -4);
+			$count = count($fields);
+			for ($i = 0; $i < $count; $i++) {
+				$query .= $this->fieldName($fields[$i]) . ' = ' . $this->quote($values[$i]) . ' AND ';
+			}
+
+			$query = substr($query, 0, -4);
+			$query .= ')';
+		}
+
 		if (isset($limit))
-			$query .=') LIMIT '.$limit.';';
+			$query .=' LIMIT '.$limit.';';
 		else
-			$query .=');';
+			$query .=';';
 
 		$query = $this->query($query);
-		if($query->rowCount() != 1) return false;
-		return $query->fetch();
+		$rowCount = $query->rowCount();
+		if ($rowCount <= 0) return false;
+		else if ($rowCount == 1) {
+			return $query->fetch();
+		}
+
+		return $query->fetchAll();
+
 	}
 
 	public function insert($table, $data)
