@@ -15,4 +15,4 @@ $twig->display('admin.login.html.twig', [
 	'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
 	'account_login_by' => getAccountLoginByLabel(),
 	'errors' => isset($errors)? $errors : ''
-));
+]);
