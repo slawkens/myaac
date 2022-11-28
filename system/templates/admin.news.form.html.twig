@@ -33,7 +33,7 @@
 							<div class="col-sm-10">
 								<select class="form-control" name="type" id="select-type">
 									<option value="{{ constant('NEWS') }}" {% if type is defined and type == constant('NEWS') %}selected="yes"{% endif %}{% if action == 'edit' and type != constant('NEWS') %} disabled{% endif %}>News</option>
-									<option value="{{ constant('TICKER') }}" {% if type is defined and type == constant('TICKER') %}selected="yes"{% endif %}{% if action == 'edit' and type != constant('TICKER') %} disabled{% endif %}>Ticket</option>
+									<option value="{{ constant('TICKER') }}" {% if type is defined and type == constant('TICKER') %}selected="yes"{% endif %}{% if action == 'edit' and type != constant('TICKER') %} disabled{% endif %}>Ticker</option>
 									<option value="{{ constant('ARTICLE') }}" {% if type is defined and type == constant('ARTICLE') %}selected="yes"{% endif %}{% if action == 'edit' and type != constant('ARTICLE') %} disabled{% endif %}>Article</option>
 								</select>
 							</div>
