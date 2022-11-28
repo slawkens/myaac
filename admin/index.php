@@ -56,7 +56,7 @@ if(!$logged || !admin()) {
 $action = $_REQUEST['action'] ?? '';
 
 // include our page
-$file = SYSTEM . 'pages/admin/' . $page . '.php';
+$file = BASE . 'admin/pages/' . $page . '.php';
 if(!@file_exists($file)) {
 	$page = '404';
 	$file = SYSTEM . 'pages/404.php';
