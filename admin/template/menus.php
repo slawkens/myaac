@@ -4,23 +4,23 @@ $menus = [
 	['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'link' => 'dashboard'],
 	['name' => 'News', 'icon' => 'newspaper',  'link' =>
 		[
-			['name' => 'View', 'link' => 'news', 'order' => 1],
-			['name' => 'Add news', 'link' => 'news&action=new&type=1', 'order' => 2],
-			['name' => 'Add ticker', 'link' => 'news&action=new&type=2', 'order' => 3],
-			['name' => 'Add article', 'link' => 'news&action=new&type=3', 'order' => 4],
+			['name' => 'View', 'link' => 'news', 'order' => 10],
+			['name' => 'Add news', 'link' => 'news&action=new&type=1', 'order' => 20],
+			['name' => 'Add ticker', 'link' => 'news&action=new&type=2', 'order' => 30],
+			['name' => 'Add article', 'link' => 'news&action=new&type=3', 'order' => 40],
 		],
 	],
 	['name' => 'Changelogs', 'icon' => 'newspaper',  'link' =>
 		[
-			['name' => 'View', 'link' => 'changelog', 'order' => 1],
-			['name' => 'Add', 'link' => 'changelog&action=new', 'order' => 2],
+			['name' => 'View', 'link' => 'changelog', 'order' => 10],
+			['name' => 'Add', 'link' => 'changelog&action=new', 'order' => 20],
 		],
 	],
 	['name' => 'Mailer', 'icon' => 'envelope', 'link' => 'mailer', 'disabled' => !config('mail_enabled')],
 	['name' => 'Pages', 'icon' => 'book', 'link' =>
 		[
-			['name' => 'View', 'link' => 'pages', 'order' => 1],
-			['name' => 'Add', 'link' => 'pages&action=new', 'order' => 2],
+			['name' => 'View', 'link' => 'pages', 'order' => 10],
+			['name' => 'Add', 'link' => 'pages&action=new', 'order' => 20],
 		],
 	],
 	['name' => 'Menus', 'icon' => 'list', 'link' => 'menus'],
@@ -28,21 +28,21 @@ $menus = [
 	['name' => 'Server Data', 'icon' => 'gavel', 'link' => 'data'],
 	['name' => 'Editor', 'icon' => 'edit', 'link' =>
 		[
-			['name' => 'Accounts', 'link' => 'accounts', 'order' => 1],
-			['name' => 'Players', 'link' => 'players', 'order' => 2],
+			['name' => 'Accounts', 'link' => 'accounts', 'order' => 10],
+			['name' => 'Players', 'link' => 'players', 'order' => 20],
 		],
 	],
 	['name' => 'Tools', 'icon' => 'tools', 'link' =>
 		[
-			['name' => 'Notepad', 'link' => 'notepad', 'order' => 1],
-			['name' => 'phpinfo', 'link' => 'phpinfo', 'order' => 2],
+			['name' => 'Notepad', 'link' => 'notepad', 'order' => 10],
+			['name' => 'phpinfo', 'link' => 'phpinfo', 'order' => 20],
 		],
 	],
 	['name' => 'Logs', 'icon' => 'bug', 'link' =>
 		[
-			['name' => 'Logs', 'link' => 'logs', 'order' => 1],
-			['name' => 'Reports', 'link' => 'reports', 'order' => 2],
-			['name' => 'Visitors', 'icon' => 'user', 'link' => 'visitors', 'order' => 3],
+			['name' => 'Logs', 'link' => 'logs', 'order' => 10],
+			['name' => 'Reports', 'link' => 'reports', 'order' => 20],
+			['name' => 'Visitors', 'icon' => 'user', 'link' => 'visitors', 'order' => 30],
 		],
 	],
 ];
