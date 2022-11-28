@@ -50,7 +50,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="?s
 										<span{% if error is not null %} class="red"{% endif %}>Verification:</span>
 									</td>
 									<td>
-										<div class="g-recaptcha" data-sitekey="{{ config.recaptcha_site_key }}" data-theme="{{ config.recaptcha_theme }}"></div>
+										<div class="g-recaptcha" data-sitekey="{{ config.recaptcha_site_key }}" data-theme="{{ config.recaptcha_v2_theme }}"></div>
 									</td>
 								</tr>
 								{% endif %}
