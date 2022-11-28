@@ -28,19 +28,13 @@ require_once 'common.php';
 require_once SYSTEM . 'functions.php';
 
 $uri = $_SERVER['REQUEST_URI'];
-
-$tmp = BASE_DIR;
-if(!empty($tmp))
-	$uri = str_replace(BASE_DIR . '/', '', $uri);
-else
-	$uri = str_replace_first('/', '', $uri);
-
-$uri = str_replace_first('index.php', '', $uri);
-if(($pos = strpos($uri, '?') === 0) || $pos == 9) {
-	$uri = str_replace_first('?', '', $uri);
+if(false !== strpos($uri, 'index.php')) {
+	$uri = str_replace_first('/index.php', '', $uri);
 }
 
-define('URI', $uri);
+if(0 === strpos($uri, '/')) {
+	$uri = str_replace_first('/', '', $uri);
+}
 
 if(preg_match("/^[A-Za-z0-9-_%'+]+\.png$/i", $uri)) {
 	$tmp = explode('.', $uri);
@@ -51,7 +45,7 @@ if(preg_match("/^[A-Za-z0-9-_%'+]+\.png$/i", $uri)) {
 	exit();
 }
 
-if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|php|zip|rar|gz|ttf|woff|ico)$/i", $_SERVER['REQUEST_URI'])) {
+if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|zip|rar|gz|ttf|woff|ico)$/i", $_SERVER['REQUEST_URI'])) {
 	http_response_code(404);
 	exit;
 }
@@ -97,6 +91,8 @@ require_once SYSTEM . 'status.php';
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
+
+require_once SYSTEM . 'router.php';
 
 require SYSTEM . 'migrate.php';
 
@@ -146,35 +142,6 @@ if($config['visitors_counter'])
 	$visitors = new Visitors($config['visitors_counter_ttl']);
 }
 
-// page content loading
-if(!isset($content[0]))
-	$content = '';
-$load_it = true;
-
-// check if site has been closed
-$site_closed = false;
-if(fetchDatabaseConfig('site_closed', $site_closed)) {
-	$site_closed = ($site_closed == 1);
-	if($site_closed) {
-		if(!admin())
-		{
-			$title = getDatabaseConfig('site_closed_title');
-			$content .= '<p class="note">' . getDatabaseConfig('site_closed_message') . '</p><br/>';
-			$load_it = false;
-		}
-
-		if(!$logged)
-		{
-			ob_start();
-			require SYSTEM . 'pages/account/manage.php';
-			$content .= ob_get_contents();
-			ob_end_clean();
-			$load_it = false;
-		}
-	}
-}
-define('SITE_CLOSED', $site_closed);
-
 // backward support for gesior
 if($config['backward_support']) {
 	define('INITIALIZED', true);
@@ -211,8 +178,6 @@ if($config['backward_support']) {
 	foreach($status as $key => $value)
 		$config['status']['serverStatus_' . $key] = $value;
 }
-
-require SYSTEM . 'router.php';
 
 /**
  * @var OTS_Account $account_logged

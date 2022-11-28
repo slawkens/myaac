@@ -30,6 +30,10 @@ switch($page)
 		$page = 'news';
 		break;
 
+	case 'newsarchive':
+		$page = 'news/archive';
+		break;
+
 	case 'tibiarules':
 		$page = 'rules';
 		break;

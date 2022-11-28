@@ -52,9 +52,6 @@ if(!$logged || !admin()) {
 	$page = 'login';
 }
 
-// more pages have action, lets define it here
-$action = $_REQUEST['action'] ?? '';
-
 // include our page
 $file = BASE . 'admin/pages/' . $page . '.php';
 if(!@file_exists($file)) {

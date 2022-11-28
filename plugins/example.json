@@ -40,11 +40,9 @@
 			"method": "GET",
 			"priority": "130"
 		},
-		"Second Route": {
-			"pattern": "/YourSecondRoute",
-			"file": "plugins/your-plugin/your-awesome-page-two.php",
-			"method": "GET,POST",
-			"priority": "120"
+		"Redirect Example": {
+			"pattern": "/redirectExample",
+			"file": "account/manage"
 		}
 	}
  }

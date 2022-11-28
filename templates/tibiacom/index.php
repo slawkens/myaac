@@ -388,7 +388,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 			<?php echo tickers(); ?>
 
 
-  <div id="<?php echo PAGE; ?>" class="Box">
+  <div id="News" class="Box">
     <div class="Corner-tl" style="background-image:url(<?php echo $template_path; ?>/images/content/corner-tl.gif);"></div>
     <div class="Corner-tr" style="background-image:url(<?php echo $template_path; ?>/images/content/corner-tr.gif);"></div>
     <div class="Border_1" style="background-image:url(<?php echo $template_path; ?>/images/content/border-1.gif);"></div>

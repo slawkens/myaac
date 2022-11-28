@@ -9,9 +9,11 @@
  */
 
 return [
+	['GET', '', 'news'], // redirect empty URL to news
+	['GET', 'news/archive/{id:[0-9]+}[/]', 'news/archive.php'],
+
 	[['GET', 'POST'], 'account/base[/]', '404.php'], // this is to block account/base.php
 	[['GET', 'POST'], 'account/password[/]', 'account/change_password.php'],
-	[['GET', 'POST'], 'account/register[/]', 'account/register.php'],
 	[['GET', 'POST'], 'account/register/new[/]', 'account/register_new.php'],
 	[['GET', 'POST'], 'account/email[/]', 'account/change_email.php'],
 	[['GET', 'POST'], 'account/info[/]', 'account/change_info.php'],
@@ -22,7 +24,7 @@ return [
 	[['GET', 'POST'], 'account/character/comment[/{name:[A-Za-z0-9-_%+\']+}]', 'account/change_comment.php'],
 	['GET', 'account/confirm_email/{hash:[A-Za-z0-9-_]+}[/]', 'account/confirm_email.php'],
 
-	['GET', 'bans[/{page:\d+}]', 'bans.php'],
+	['GET', 'bans/{page:\d+}[/]', 'bans.php'],
 	[['GET', 'POST'], 'characters[/{name:[A-Za-z0-9-_%+\']+}]', 'characters.php'],
 	['GET', 'changelog[/{page:\d+}]', 'changelog.php'],
 	['GET', 'creatures[/{name:[A-Za-z0-9-_%+\']+}]', 'creatures.php'],
@@ -45,9 +47,7 @@ return [
 	['GET', 'highscores/{list:[A-Za-z0-9-_]+}/{vocation:[A-Za-z0-9-_]+}[/]', 'highscores.php'],
 	['GET', 'highscores/{list:[A-Za-z0-9-_]+}[/]', 'highscores.php'],
 
-	['GET', '', 'news.php'],
-	[['GET', 'POST'], 'news/archive[/]', 'newsarchive.php'],
-	['GET', 'news/archive/{id:[0-9]+}[/]', 'newsarchive.php'],
+	['GET', 'online/{order:[A-Za-z0-9-_]+}[/]', 'online.php'],
 /*
 	'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
 	'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),

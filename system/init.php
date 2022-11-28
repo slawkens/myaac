@@ -34,6 +34,10 @@ $cache = Cache::getInstance();
 // twig
 require_once SYSTEM . 'twig.php';
 
+// action, used by many pages
+$action = $_REQUEST['action'] ?? '';
+define('ACTION', $action);
+
 // trim values we receive
 if(isset($_POST))
 {
