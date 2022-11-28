@@ -1,0 +1,11 @@
+<script>
+	$(document).ready(function() {
+		grecaptcha.ready(function() {
+			grecaptcha.execute('{{ config.recaptcha_site_key }}', {action: '{{ action }}'}).then(function(token) {
+				if (token) {
+					document.getElementById('g-recaptcha-response').value = token;
+				}
+			});
+		});
+	});
+</script>
