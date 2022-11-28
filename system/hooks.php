@@ -49,8 +49,9 @@ define('HOOK_ACCOUNT_CREATE_AFTER_TOWNS', ++$i);
 define('HOOK_ACCOUNT_CREATE_BEFORE_SUBMIT_BUTTON', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_FORM', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_SUBMIT', ++$i);
+define('HOOK_ADMIN_MENU', ++$i);
 define('HOOK_FIRST', HOOK_STARTUP);
-define('HOOK_LAST', HOOK_ACCOUNT_CREATE_AFTER_SUBMIT);
+define('HOOK_LAST', HOOK_ADMIN_MENU);
 
 require_once LIBS . 'plugins.php';
 class Hook

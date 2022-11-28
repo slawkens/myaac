@@ -1,6 +1,6 @@
 <?php
 
-return [
+$menus = [
 	['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'link' => 'dashboard'],
 	['name' => 'News', 'icon' => 'newspaper',  'link' =>
 		[
@@ -46,3 +46,15 @@ return [
 		],
 	],
 ];
+
+$hooks->trigger(HOOK_ADMIN_MENU);
+
+foreach ($menus as $i => $menu) {
+	if (isset($menu['link']) && is_array($menu['link'])) {
+		usort($menus[$i]['link'], function ($a, $b) {
+			return strcmp($a['name'], $b['name']);
+		});
+	}
+}
+
+return $menus;
