@@ -59,8 +59,7 @@ $errors = array();
 		return;
 	}
 
-	if($action == '')
-	{
+	if($action == '') {
 		$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
 		$dayOrDays = $account_logged->getPremDays() == 1 ? 'day' : 'days';
 		/**
@@ -72,10 +71,9 @@ $errors = array();
 			$account_status = '<b><span style="color: green">' . ($freePremium ? 'Gratis Premium Account' : 'Premium Account, ' . $account_logged->getPremDays() . ' '.$dayOrDays.' left') . '</span></b>';
 
 		$recovery_key = $account_logged->getCustomField('key');
-		if(empty($recovery_key))
+		if(empty($recovery_key)) {
 			$account_registered = '<b><span style="color: red">No</span></b>';
-		else
-		{
+		} else {
 			if($config['generate_new_reckey'] && $config['mail_enabled'])
 				$account_registered = '<b><span style="color: green">Yes ( <a href="' . getLink('account/register/new') . '"> Buy new Recovery Key </a> )</span></b>';
 			else

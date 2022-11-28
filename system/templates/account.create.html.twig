@@ -109,7 +109,7 @@
 
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_PASSWORDS') }}
 
-												{% if config.recaptcha_enabled %}
+                                                {% if config.recaptcha_enabled %}
 													{% if config.recaptcha_type == 'v3' %}
 														<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
 													{% elseif config.recaptcha_type == 'v2-invisible' %}
@@ -126,7 +126,7 @@
 														{% if errors.verification is defined %}
 															<tr><td></td><td><span class="FormFieldError">{{ errors.verification }}</span></td></tr>
 														{% endif %}
-													{% endif %}
+                                                	{% endif %}
 												{% endif %}
 
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_RECAPTCHA') }}
@@ -243,7 +243,7 @@
                                                 {% if config.character_towns|length > 1 %}
 												<tr>
 													<td class="LabelV" style="width: 150px">
-														<span{% if errors.town is defined %} class="red"{% endif %}>Select your city:</span>
+														<span{% if errors.town is defined %} class="red"{% endif %}>Select your town:</span>
 													</td>
 													<td>
 														<table width="100%" >

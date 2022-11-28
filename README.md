@@ -1,4 +1,4 @@
-# MyAAC
+# [MyAAC](https://my-aac.org)
 
 [![Build Status Master](https://img.shields.io/travis/slawkens/myaac/master)](https://travis-ci.org/github/slawkens/myaac)
 [![License: GPL-3.0](https://img.shields.io/github/license/slawkens/myaac)](https://opensource.org/licenses/gpl-license)
@@ -11,7 +11,7 @@ MyAAC is a free and open-source Automatic Account Creator (AAC) written in PHP. 
 
 Official website: https://my-aac.org
 
-### REQUIREMENTS
+### Requirements
 
 	- PHP 5.6 or later
 	- MySQL database
@@ -20,7 +20,7 @@ Official website: https://my-aac.org
 	- ZIP PHP Extension
 	- (optional) mod_rewrite to use friendly_urls
 
-### INSTALLATION AND CONFIGURATION
+### Installation
 
 	Just decompress and untar the source (which you should have done by now,
 	if you're reading this), into your webserver's document root.
@@ -40,15 +40,40 @@ Official website: https://my-aac.org
 
 	Visit http://your_domain/install (http://localhost/install) and follow instructions in the browser.
 
-### KNOWN PROBLEMS
+### Configuration
 
-	- none -
+Check *config.php* to get more informations.
+Use *config.local.php* for your local configuration changes.
 
-### OTHER NOTES
+### Branches
+
+This repository follows the Git Flow Workflow.
+Cheatsheet: [Git-Flow-Cheetsheet](https://danielkummer.github.io/git-flow-cheatsheet)
+
+That means, we use:
+* master branch, for current stable release
+* develop branch, for development version (next release)
+* feature branches, for features etc.
+
+### Known Problems
+
+- Some compatibility issues with some exotical distibutions.
+
+### Contributing
+
+Contributions are more than welcome. 
+
+Pull requests should be made to the *develop* branch as that is the working branch, master is for release code.  
+
+Bug fixes to current release should be done to master branch.
+
+Look: [Contributing](https://github.com/otsoft/myaac/wiki/Contributing) in our wiki.
+
+### Other Notes
 
 	If you have a great idea or want contribute to the project - visit our website at https://www.my-aac.org
 
-### LICENSING
+### License
 
-	This program and all associated files are released under the GNU Public
-	License, see LICENSE for details.
+This program and all associated files are released under the GNU Public License.  
+See [LICENSE](https://github.com/slawkens/myaac/blob/master/LICENSE) for details.

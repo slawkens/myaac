@@ -244,6 +244,14 @@ if($save)
 		}
 		else
 		{
+			if(config('account_create_character_create')) {
+				// character creation
+				$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
+				if (!$character_created) {
+					error('There was an error creating your character. Please create your character later in account management page.');
+				}
+			}
+
 			if($config['account_create_auto_login']) {
 				$_POST['account_login'] = USE_ACCOUNT_NAME ? $account_name : $account_id;
 				$_POST['password_login'] = $password2;
@@ -284,14 +292,6 @@ if($save)
 					echo '<br /><small>These informations were send on email address <b>' . $email . '</b>.';
 				else {
 					error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
-				}
-			}
-
-			if(config('account_create_character_create')) {
-				// character creation
-				$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
-				if (!$character_created) {
-					error('There was an error creating your character. Please create your character later in account management page.');
 				}
 			}
 		}
