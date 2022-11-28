@@ -1,4 +1,6 @@
 <?php
 
 require __DIR__ . '/../common.php';
-echo MYAAC_VERSION;
+if(IS_CLI) {
+	echo MYAAC_VERSION;
+}
