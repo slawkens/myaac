@@ -10,18 +10,24 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Tools';
 
-$tool = $_GET['tool'];
-if (!isset($tool)) {
+if (!isset($_GET['tool'])) {
 	echo 'Tool not set.';
 	return;
 }
 
+$tool = $_GET['tool'];
 if (preg_match("/[^A-z0-9_\-]/", $tool)) {
 	echo 'Invalid tool.';
 	return;
 }
 
-$file = BASE . 'admin/pages/tools/' . $tool . '.php';
-if (!@file_exists($file))
+$file = SYSTEM . 'pages/admin/tools/' . $tool . '.php';
+
+if (@file_exists($file)) {
 	require $file;
+	return;
+}
+
+echo 'Tool <strong>' . $tool . '</strong> not found.';
+
 ?>
