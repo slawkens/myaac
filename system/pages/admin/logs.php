@@ -9,6 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Logs Viewer';
+$use_datatable = true;
 
 $files = array();
 $aac_path_logs = BASE . 'system/logs/';

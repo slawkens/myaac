@@ -9,6 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Report Viewer';
+$use_datatable = true;
 
 $files = array();
 $server_path_reports = $config['data_path'] . 'reports/';

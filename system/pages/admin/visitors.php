@@ -9,6 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Visitors';
+$use_datatable = true;
 
 if (!$config['visitors_counter']): ?>
 	Visitors counter is disabled.<br/>
