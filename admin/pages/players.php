@@ -697,7 +697,14 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 											<label for="lastip" class="control-label">Last IP:</label>
 											<input type="text" class="form-control" id="lastip" name="lastip"
 												   autocomplete="off"
-												   maxlength="10" value="<?php echo longToIp($player->getLastIP()); ?>"
+												   maxlength="10" value="<?php
+													if (strlen($player->getLastIP()) > 11) {
+														echo inet_ntop($player->getLastIP());
+													}
+													else {
+														echo longToIp($player->getLastIP());
+													}
+													?>"
 												   readonly/>
 										</div>
 									</div>
