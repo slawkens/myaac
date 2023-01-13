@@ -1426,6 +1426,32 @@ function Outfits_loadfromXML()
 	return array('id' => $looktype, 'type' => $type, 'name' => $lookname, 'premium' => $premium, 'unlocked' => $unlocked, 'enabled' => $enabled);
 }
 
+function Mounts_loadfromXML()
+{
+	global $config;
+	$file_path = $config['data_path'] . 'XML/mounts.xml';
+	if (!file_exists($file_path)) {	return null; }
+
+	$xml = new DOMDocument;
+	$xml->load($file_path);
+
+	$mounts = null;
+	foreach ($xml->getElementsByTagName('mount') as $mount) {
+		$mounts[] = Mount_parseNode($mount);
+	}
+	return $mounts;
+}
+
+ function Mount_parseNode($node) {
+	$id = (int)$node->getAttribute('id');
+	$clientid = (int)$node->getAttribute('clientid');
+	$name = $node->getAttribute('name');
+	$speed = (int)$node->getAttribute('speed');
+	$premium = $node->getAttribute('premium');
+	$type = $node->getAttribute('type');
+	return array('id' => $id, 'clientid' => $clientid, 'name' => $name, 'speed' => $speed, 'premium' => $premium, 'type' => $type);
+}
+
 function left($str, $length) {
 	return substr($str, 0, $length);
 }
