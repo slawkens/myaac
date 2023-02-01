@@ -74,7 +74,7 @@ if($save)
 
 	if(config('recaptcha_enabled'))
 	{
-		require LIBS . 'GoogleReCAPTCHA.php';
+		require_once LIBS . 'GoogleReCAPTCHA.php';
 		if (!GoogleReCAPTCHA::verify('register')) {
 			$errors['verification'] = GoogleReCAPTCHA::getErrorMessage();
 		}

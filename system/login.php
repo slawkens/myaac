@@ -84,9 +84,9 @@ else
 				$t = isset($tmp[$ip]) ? $tmp[$ip] : NULL;
 			}
 
-			if(config('recaptcha_enabled'))
+			if(config('recaptcha_enabled') && !config('account_create_auto_login'))
 			{
-				require LIBS . 'GoogleReCAPTCHA.php';
+				require_once LIBS . 'GoogleReCAPTCHA.php';
 				if (!GoogleReCAPTCHA::verify('login')) {
 					$errors[] = GoogleReCAPTCHA::getErrorMessage();
 				}
