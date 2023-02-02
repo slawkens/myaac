@@ -709,6 +709,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @return Iterator List of ranks.
  */
+	#[\ReturnTypeWillChange]
     public function getIterator()
     {
         return $this->getGuildRanksList();
@@ -723,7 +724,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @return int Count of ranks.
  */
-    public function count()
+    public function count(): int
     {
         return $this->getGuildRanksList()->count();
     }
