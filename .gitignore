@@ -51,5 +51,9 @@ plugins/*
 !plugins/account-create-hint
 landing
 
+# user data
+user/*
+!user/index.html
+
 # others/rest
 system/pages/downloads.php
