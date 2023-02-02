@@ -19,7 +19,7 @@ if(count($guilds_list) > 0)
 {
     foreach ($guilds_list as $guild) {
         $guild_logo = $guild->getCustomField('logo_name');
-        if (empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo))
+        if (empty($guild_logo) || !file_exists(GUILD_IMAGES_DIR . $guild_logo))
             $guild_logo = "default.gif";
 
         $description = $guild->getCustomField('description');

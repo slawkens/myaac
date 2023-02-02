@@ -24,6 +24,10 @@ templates/*
 images/guilds/*
 !images/guilds/default.gif
 
+# editor images
+images/editor/*
+!images/editor/index.html
+
 # cache
 system/cache/*
 !system/cache/index.html
@@ -53,10 +57,6 @@ landing
 
 # system
 system/functions_custom.php
-
-# user data
-user/*
-!user/index.html
 
 # others/rest
 system/pages/downloads.php

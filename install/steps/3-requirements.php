@@ -7,8 +7,8 @@ $dirs_required = [
 	'system/cache',
 ];
 $dirs_optional = [
-	'images/guilds' => $locale['step_requirements_warning_images_guilds'],
-	'images/gallery' => $locale['step_requirements_warning_images_gallery'],
+	GUILD_IMAGES_DIR => $locale['step_requirements_warning_images_guilds'],
+	GALLERY_DIR => $locale['step_requirements_warning_images_gallery'],
 ];
 
 $extensions_required = [
