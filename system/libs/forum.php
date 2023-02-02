@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $configForumTablePrefix = config('forum_table_prefix');
-if(null !== $configForumTablePrefix && !empty(trim($configForumTablePrefix))) {
+if(!empty(trim($configForumTablePrefix))) {
 	if(!in_array($configForumTablePrefix, array('myaac_', 'z_'))) {
 		throw new RuntimeException('Invalid value for forum_table_prefix in config.php. Can be only: "myaac_" or "z_".');
 	}

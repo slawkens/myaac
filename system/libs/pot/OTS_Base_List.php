@@ -36,7 +36,7 @@
  * @property-write int $offset Sets OFFSET clause.
  * @property-write OTS_SQLFilter $filter Sets filter for list SQL query.
  */
-abstract class OTS_Base_List implements IOTS_DAO, Countable
+abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 {
 /**
  * Database connection.
@@ -203,7 +203,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Countable
  *
  * @throws PDOException On PDO operation error.
  */
-    public function rewind(): void
+    public function rewind()
     {
         $this->rows = $this->db->query( $this->getSQL() )->fetchAll();
     }
@@ -211,7 +211,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Countable
 /**
  * Moves to next row.
  */
-    public function next(): void
+    public function next()
     {
         next($this->rows);
     }
@@ -231,7 +231,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Countable
  *
  * @return bool Does next row exist.
  */
-    public function valid(): bool
+    public function valid()
     {
         return key($this->rows) !== null;
     }
@@ -243,7 +243,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Countable
  * @return int Number of rows.
  * @throws PDOException On PDO operation error.
  */
-    public function count(): int
+    public function count()
     {
         return $this->db->query( $this->getSQL(true) )->fetchColumn();
     }
