@@ -54,6 +54,7 @@ landing
 # system
 system/functions_custom.php
 
+# user data
 user/*
 !user/index.html
 
