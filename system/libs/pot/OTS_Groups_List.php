@@ -14,7 +14,7 @@
  * @package POT
  * @version 0.1.3
  */
-class OTS_Groups_List implements IteratorAggregate, Countable
+class OTS_Groups_List implements Countable
 {
 /**
  * Groups.
@@ -41,7 +41,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 				$info['access'] = $group['name'];
 				$this->groups[$group['id']] = new OTS_Group($info);
 			}
-			
+
 			return;
 		}
 
@@ -50,7 +50,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			global $config;
 			$file = $config['data_path'] . 'XML/groups.xml';
 		}
-		
+
 		if(!@file_exists($file)) {
 			error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
 			log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). It doesnt exist.');
@@ -99,7 +99,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 				log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). Error: ' . print_r(error_get_last(), true));
 				return;
 			}
-			
+
 			// loads groups
 			foreach($groups->getElementsByTagName('group') as $group)
 			{
@@ -157,7 +157,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			if($id > $group_id)
 				$group_id = $id;
 		}
-		
+
 		return $group_id;
 	}
 
@@ -210,7 +210,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
  * @since 0.1.5
  * @return int Amount of all groups.
  */
-    public function count()
+    public function count(): int
     {
         return count($this->groups);
     }

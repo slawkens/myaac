@@ -25,7 +25,7 @@
  * @property-read int $id Row ID.
  * @property-read OTS_Players_List $playersList List of members with this rank.
  */
-class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
+class OTS_GuildRank extends OTS_Row_DAO implements Countable
 {
 /**
  * Rank data.
@@ -410,7 +410,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @return int Count of players.
  */
-    public function count()
+    public function count(): int
     {
         return $this->getPlayersList()->count();
     }

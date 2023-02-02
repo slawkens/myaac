@@ -31,7 +31,7 @@
  * @property-read int $access Access level.
  * @tutorial POT/Accounts.pkg
  */
-class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
+class OTS_Account extends OTS_Row_DAO implements Countable
 {
 /**
  * Account data.
@@ -1033,7 +1033,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @return int Count of players.
  */
-    public function count()
+    public function count(): int
     {
         return $this->getPlayersList()->count();
     }

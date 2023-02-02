@@ -30,7 +30,7 @@
  * @property-write IOTS_GuildAction $requestsDriver Membership requests handler.
  * @tutorial POT/Guilds.pkg
  */
-class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
+class OTS_Guild extends OTS_Row_DAO implements Countable
 {
 /**
  * Guild data.
@@ -723,7 +723,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @return int Count of ranks.
  */
-    public function count()
+    public function count(): int
     {
         return $this->getGuildRanksList()->count();
     }
