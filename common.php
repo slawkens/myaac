@@ -67,7 +67,6 @@ const PLUGINS = BASE . 'plugins/';
 const TEMPLATES = BASE . 'templates/';
 const TOOLS = BASE . 'tools/';
 const VENDOR = BASE . 'vendor/';
-const USER = BASE . 'user/';
 
 // menu categories
 const MENU_CATEGORY_NEWS = 1;

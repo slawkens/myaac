@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 	return;
 }
 
-$imageFolder = USER . 'image_uploads/';
+$imageFolder = BASE . 'images/editor';
 
 reset ($_FILES);
 $temp = current($_FILES);
@@ -43,7 +43,7 @@ if (is_uploaded_file($temp['tmp_name'])) {
 
 	move_uploaded_file($temp['tmp_name'], $fileToWrite);
 
-	$returnPathToImage = BASE_URL . 'user/image_uploads/' . $randomName;
+	$returnPathToImage = BASE_URL . 'images/editor/' . $randomName;
 	echo json_encode(['location' => $returnPathToImage]);
 } else {
 	// Notify editor that the upload failed
