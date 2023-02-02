@@ -1,0 +1,48 @@
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript">
+	let unsaved = false;
+	let lastContent = '';
+
+	function tinymceInit() {
+		tinymce.init({
+			selector: "#editor",
+			theme: "silver",
+			plugins: 'preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help code emoticons',
+			toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | emoticons link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
+			image_advtab: true,
+			images_upload_url: '{{ constant('BASE_URL') }}admin/tools/upload_image.php',
+			images_upload_credentials: true,
+			// not really sure - do we need those 3 options below?
+			//relative_urls: false,
+			//remove_script_host: false,
+			//document_base_url: "{{ constant('BASE_URL') }}"
+			setup: function (ed) {
+				ed.on('NodeChange', function (e) {
+					if (ed.getContent() !== lastContent) {
+						unsaved = true;
+					}
+				});
+			}
+		});
+	}
+
+	$(document).ready(function () {
+		$(":input").change(function () { //triggers change in all input fields including text type
+			unsaved = true;
+		});
+
+		$("#form").submit(function (event) {
+			unsaved = false;
+		});
+
+		lastContent = $("#editor").val();
+	});
+
+	function unloadPage() {
+		if (unsaved) {
+			return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
+		}
+	}
+
+	window.onbeforeunload = unloadPage;
+</script>

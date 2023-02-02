@@ -67,6 +67,7 @@ const PLUGINS = BASE . 'plugins/';
 const TEMPLATES = BASE . 'templates/';
 const TOOLS = BASE . 'tools/';
 const VENDOR = BASE . 'vendor/';
+const USER = BASE . 'user/';
 
 // menu categories
 const MENU_CATEGORY_NEWS = 1;
@@ -99,7 +100,7 @@ $size = count($tmp) - 1;
 for($i = 1; $i < $size; $i++)
 	$basedir .= '/' . $tmp[$i];
 
-$basedir = str_replace(array('/admin', '/install'), '', $basedir);
+$basedir = str_replace(['/admin', '/install', '/tools'], '', $basedir);
 define('BASE_DIR', $basedir);
 
 if(!IS_CLI) {

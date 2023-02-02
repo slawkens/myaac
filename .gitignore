@@ -54,5 +54,8 @@ landing
 # system
 system/functions_custom.php
 
+user/*
+!user/index.html
+
 # others/rest
 system/pages/downloads.php
