@@ -9,6 +9,11 @@ $loader->register();
 // register the base directories for the namespace prefix
 $loader->addNamespace('Composer\Semver', LIBS . 'semver');
 $loader->addNamespace('Twig', LIBS . 'Twig');
+$loader->addNamespace('Symfony\Polyfill\Mbstring', LIBS . 'polyfill-mbstring');
+
+// load polyfill-mbstring bootstrap
+require LIBS . 'polyfill-mbstring/bootstrap.php';
+
 /**
  * An example of a general-purpose implementation that includes the optional
  * functionality of allowing multiple base directories for a single namespace
