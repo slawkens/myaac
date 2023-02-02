@@ -70,7 +70,7 @@ const VENDOR = BASE . 'vendor/';
 
 // other dirs
 const SESSIONS_DIR = SYSTEM . 'php_sessions';
-const GUILD_IMAGES_DIR = 'user_images/';
+const GUILD_IMAGES_DIR = 'images/guilds/';
 const EDITOR_IMAGES_DIR = 'images/editor/';
 const GALLERY_DIR = 'images/gallery/';
 
