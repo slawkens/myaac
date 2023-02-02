@@ -7,7 +7,7 @@
 
 /**
  * Code in this file bases on oryginal OTServ items loading C++ code (itemloader.h, items.cpp, items.h).
- * 
+ *
  * @package POT
  * @version 0.1.3
  * @author Wrzasq <wrzasq@gmail.com>
@@ -17,7 +17,7 @@
 
 /**
  * Items list loader.
- * 
+ *
  * @package POT
  * @version 0.1.3
  * @property-read int $otbVersion OTB file version.
@@ -88,35 +88,35 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Temple positions.
- * 
+ *
  * @var array
  */
     private $items = array();
 
 /**
  * OTB version.
- * 
+ *
  * @var int
  */
     private $otbVersion;
 
 /**
  * Client version.
- * 
+ *
  * @var int
  */
     private $clientVersion;
 
 /**
  * Build version.
- * 
+ *
  * @var int
  */
     private $buildVersion;
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * <p>
  * Allows object unserialisation.
  * </p>
@@ -129,11 +129,11 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Loads items.xml and items.otb files.
- * 
+ *
  * <p>
  * This method loads both items.xml and items.otb files. Both of them has to be in given directory.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @param string $path Path to data/items directory.
  * @throws E_OTS_FileLoaderError When error occurs during file operation.
@@ -191,7 +191,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Parses loaded file.
- * 
+ *
  * @version 0.1.0
  * @throws E_OTS_FileLoaderError If file has invalid format.
  */
@@ -378,7 +378,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Returns OTB file version.
- * 
+ *
  * @return int OTB format version.
  */
     public function getOTBVersion()
@@ -388,7 +388,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Returns client version.
- * 
+ *
  * @return int Client version.
  */
     public function getClientVersion()
@@ -398,7 +398,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Returns build version.
- * 
+ *
  * @return int Build version.
  */
     public function getBuildVersion()
@@ -408,7 +408,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Checks if given item type exists on list.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param string $name Name.
@@ -430,7 +430,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Returns given item type.
- * 
+ *
  * @version 0.1.3
  * @param int $id Item type (server) ID.
  * @return OTS_ItemType Returns item type of given ID.
@@ -448,7 +448,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Checks if given type ID exists on list.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param int $id ID.
@@ -461,11 +461,11 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Finds item type by it's name.
- * 
+ *
  * <p>
  * Note: If there are more then one items with same name this function will return first found server ID. It doesn't also mean that it will be the lowest ID - item types are ordered in order that they were loaded from items.xml file.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @param string $name Item type name.
  * @return int Returns item type (server) ID.
@@ -497,10 +497,10 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Returns amount of items loaded.
- * 
+ *
  * @return int Count of types.
  */
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
@@ -550,7 +550,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Returns iterator handle for loops.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return ArrayIterator Items list iterator.
@@ -562,7 +562,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Checks if given element exists.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string|int $offset Array key.
@@ -582,7 +582,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Returns item from given position.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @param string|int $offset Array key.
@@ -602,7 +602,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * This method is implemented for ArrayAccess interface. In fact you can't write/append to items list. Any call to this method will cause {@link E_OTS_ReadOnly E_OTS_ReadOnly} raise.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string|int $offset Array key.
@@ -616,7 +616,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * This method is implemented for ArrayAccess interface. In fact you can't write/append to items list. Any call to this method will cause {@link E_OTS_ReadOnly E_OTS_ReadOnly} raise.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string|int $offset Array key.
@@ -629,7 +629,7 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $name Property name.
@@ -652,11 +652,11 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 
 /**
  * Returns string representation of object.
- * 
+ *
  * <p>
  * If any display driver is currently loaded then it uses it's method.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @return string String representation of object.

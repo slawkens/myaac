@@ -7,7 +7,7 @@
 
 /**
  * Code in this file bases on oryginal OTServ OTBM format loading C++ code (iomapotbm.h, iomapotbm.cpp).
- * 
+ *
  * @package POT
  * @version 0.1.3
  * @author Wrzasq <wrzasq@gmail.com>
@@ -20,11 +20,11 @@
 
 /**
  * OTBM format reader.
- * 
+ *
  * <p>
  * POT OTBM file parser is less strict then oryginal OTServ one. For instance it will read waypoints from version 1 OTBM file even that there were no waypoints in that format.
  * </p>
- * 
+ *
  * @package POT
  * @version 0.1.6
  * @property-read OTS_HousesList $housesList Houses list loaded from associated houses file.
@@ -95,56 +95,56 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
     const OTBM_ATTR_HOUSEDOORID = 14;
 /**
  * Amount.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
     const OTBM_ATTR_COUNT = 15;
 /**
  * Time interval.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
     const OTBM_ATTR_DURATION = 16;
 /**
  * Metamorphic stage.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
     const OTBM_ATTR_DECAYING_STATE = 17;
 /**
  * Date of being written.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
     const OTBM_ATTR_WRITTENDATE = 18;
 /**
  * Sign author.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
     const OTBM_ATTR_WRITTENBY = 19;
 /**
  * Sleeping player ID.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
     const OTBM_ATTR_SLEEPERGUID = 20;
 /**
  * Time of sleep started.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
     const OTBM_ATTR_SLEEPSTART = 21;
 /**
  * Number of charges.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
@@ -208,14 +208,14 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
     const OTBM_NODE_HOUSETILE = 14;
 /**
  * Waypoints list.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
     const OTBM_NODE_WAYPOINTS = 15;
 /**
  * Waypoint.
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  */
@@ -223,56 +223,56 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Map width.
- * 
+ *
  * @var int
  */
     private $width;
 
 /**
  * Map height.
- * 
+ *
  * @var int
  */
     private $height;
 
 /**
  * Map description.
- * 
+ *
  * @var string
  */
     private $description = '';
 
 /**
  * List of towns.
- * 
+ *
  * @var array
  */
     private $towns = array();
 
 /**
  * Temple positions.
- * 
+ *
  * @var array
  */
     private $temples = array();
 
 /**
  * Directory path.
- * 
+ *
  * @var string
  */
     private $directory;
 
 /**
  * External houses file.
- * 
+ *
  * @var OTS_HousesList
  */
     private $housesList;
 
 /**
  * List of map tracks.
- * 
+ *
  * @var array
  * @version 0.1.6
  * @since 0.1.6
@@ -281,11 +281,11 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * <p>
  * Allows object unserialisation.
  * </p>
- * 
+ *
  * @throws E_OTS_FileLoaderError When error occurs during file operation.
  */
     public function __wakeup()
@@ -296,7 +296,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Loads OTBM file content.
- * 
+ *
  * @version 0.1.0
  * @param string $file Filename.
  * @throws E_OTS_FileLoaderError When error occurs during file operation.
@@ -316,7 +316,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Parses loaded file.
- * 
+ *
  * @version 0.1.0
  * @throws E_OTS_FileLoaderError When error occurs during file operation.
  * @throws E_OTS_OutOfBuffer When there is read attemp after end of stream.
@@ -476,7 +476,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Loads map's houses list.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return OTS_HousesList Houses from external file.
@@ -488,7 +488,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns map width.
- * 
+ *
  * @return int Map width.
  */
     public function getWidth()
@@ -498,7 +498,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns map height.
- * 
+ *
  * @return int Map height.
  */
     public function getHeight()
@@ -508,7 +508,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns map description.
- * 
+ *
  * @return string Map description.
  */
     public function getDescription()
@@ -518,11 +518,11 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns map waypoints list.
- * 
+ *
  * <p>
  * Each item of returned array is sub-array with list of waypoints.
  * </p>
- * 
+ *
  * @version 0.1.6
  * @since 0.1.6
  * @return array List of tracks.
@@ -534,7 +534,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Checks if given town ID exists on list.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param int $id ID.
@@ -547,7 +547,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns town's ID.
- * 
+ *
  * @version 0.1.3
  * @param string $name Town.
  * @return int ID.
@@ -567,7 +567,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Checks if given town name exists on list.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param string $name Town.
@@ -580,7 +580,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns name of given town's ID.
- * 
+ *
  * @version 0.1.3
  * @param int $id Town ID.
  * @return string Name.
@@ -607,7 +607,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns town's temple position.
- * 
+ *
  * @param int $id Town id.
  * @return OTS_MapCoords|bool Point on map (false if not found).
  */
@@ -625,12 +625,12 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns amount of towns loaded.
- * 
+ *
  * @version 0.0.8
  * @since 0.0.8
  * @return int Count of towns.
  */
-    public function count()
+    public function count(): int
     {
         return count($this->towns);
     }
@@ -690,7 +690,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns iterator handle for loops.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return ArrayIterator Towns list iterator.
@@ -702,7 +702,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Checks if given element exists.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string|int $offset Array key.
@@ -724,7 +724,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns item from given position.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string|int $offset Array key.
@@ -754,7 +754,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * This method is implemented for ArrayAccess interface. In fact you can't write/append to towns list. Any call to this method will cause {@link E_OTS_ReadOnly E_OTS_ReadOnly} raise.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string|int $offset Array key.
@@ -768,7 +768,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * This method is implemented for ArrayAccess interface. In fact you can't write/append to towns list. Any call to this method will cause {@link E_OTS_ReadOnly E_OTS_ReadOnly} raise.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string|int $offset Array key.
@@ -781,7 +781,7 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $name Property name.
@@ -814,11 +814,11 @@ class OTS_OTBMFile extends OTS_FileLoader implements IteratorAggregate, Countabl
 
 /**
  * Returns string representation of object.
- * 
+ *
  * <p>
  * If any display driver is currently loaded then it uses it's method.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @return string String representation of object.
