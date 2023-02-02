@@ -20,7 +20,7 @@ use Twig\Compiler;
  */
 class SandboxNode extends Node
 {
-    public function __construct(\Twig_NodeInterface $body, $lineno, $tag = null)
+    public function __construct(Node $body, int $lineno, string $tag = null)
     {
         parent::__construct(['body' => $body], [], $lineno, $tag);
     }
@@ -34,10 +34,17 @@ class SandboxNode extends Node
             ->write("\$this->sandbox->enableSandbox();\n")
             ->outdent()
             ->write("}\n")
+            ->write("try {\n")
+            ->indent()
             ->subcompile($this->getNode('body'))
+            ->outdent()
+            ->write("} finally {\n")
+            ->indent()
             ->write("if (!\$alreadySandboxed) {\n")
             ->indent()
             ->write("\$this->sandbox->disableSandbox();\n")
+            ->outdent()
+            ->write("}\n")
             ->outdent()
             ->write("}\n")
         ;

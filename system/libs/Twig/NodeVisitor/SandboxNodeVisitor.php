@@ -12,6 +12,7 @@
 namespace Twig\NodeVisitor;
 
 use Twig\Environment;
+use Twig\Node\CheckSecurityCallNode;
 use Twig\Node\CheckSecurityNode;
 use Twig\Node\CheckToStringNode;
 use Twig\Node\Expression\Binary\ConcatBinary;
@@ -26,16 +27,14 @@ use Twig\Node\PrintNode;
 use Twig\Node\SetNode;
 
 /**
- * @final
- *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class SandboxNodeVisitor extends AbstractNodeVisitor
+final class SandboxNodeVisitor extends AbstractNodeVisitor
 {
-    protected $inAModule = false;
-    protected $tags;
-    protected $filters;
-    protected $functions;
+    private $inAModule = false;
+    private $tags;
+    private $filters;
+    private $functions;
 
     private $needsToStringWrap = false;
 
@@ -102,7 +101,8 @@ class SandboxNodeVisitor extends AbstractNodeVisitor
         if ($node instanceof ModuleNode) {
             $this->inAModule = false;
 
-            $node->getNode('constructor_end')->setNode('_security_check', new Node([new CheckSecurityNode($this->filters, $this->tags, $this->functions), $node->getNode('display_start')]));
+            $node->setNode('constructor_end', new Node([new CheckSecurityCallNode(), $node->getNode('constructor_end')]));
+            $node->setNode('class_end', new Node([new CheckSecurityNode($this->filters, $this->tags, $this->functions), $node->getNode('class_end')]));
         } elseif ($this->inAModule) {
             if ($node instanceof PrintNode || $node instanceof SetNode) {
                 $this->needsToStringWrap = false;
@@ -112,7 +112,7 @@ class SandboxNodeVisitor extends AbstractNodeVisitor
         return $node;
     }
 
-    private function wrapNode(Node $node, $name)
+    private function wrapNode(Node $node, string $name)
     {
         $expr = $node->getNode($name);
         if ($expr instanceof NameExpression || $expr instanceof GetAttrExpression) {
@@ -120,7 +120,7 @@ class SandboxNodeVisitor extends AbstractNodeVisitor
         }
     }
 
-    private function wrapArrayNode(Node $node, $name)
+    private function wrapArrayNode(Node $node, string $name)
     {
         $args = $node->getNode($name);
         foreach ($args as $name => $_) {
