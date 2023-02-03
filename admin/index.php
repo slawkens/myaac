@@ -47,6 +47,10 @@ require ADMIN . 'includes/functions.php';
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
 
+if (ACTION == 'logout') {
+	require SYSTEM . 'logout.php';
+}
+
 // if we're not logged in - show login box
 if(!$logged || !admin()) {
 	$page = 'login';
