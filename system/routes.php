@@ -12,7 +12,11 @@ return [
 	['GET', '', '__redirect__/news'], // redirect empty URL to news
 	['GET', 'news/archive/{id:[0-9]+}[/]', 'news/archive.php'],
 
+	// block access to some files
 	['*', 'account/base[/]', '404.php'], // this is to block account/base.php
+	['*', 'forum/base[/]', '404.php'],
+	['*', 'guilds/base[/]', '404.php'],
+
 	[['GET', 'POST'], 'account/password[/]', 'account/change_password.php'],
 	[['GET', 'POST'], 'account/register/new[/]', 'account/register_new.php'],
 	[['GET', 'POST'], 'account/email[/]', 'account/change_email.php'],
