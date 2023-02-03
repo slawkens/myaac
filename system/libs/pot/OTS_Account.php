@@ -1091,6 +1091,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @return Iterator List of players.
  */
+	#[\ReturnTypeWillChange]
     public function getIterator()
     {
         return $this->getPlayersList();
@@ -1105,7 +1106,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @return int Count of players.
  */
-    public function count()
+    public function count(): int
     {
         return $this->getPlayersList()->count();
     }

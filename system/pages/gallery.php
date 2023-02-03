@@ -145,8 +145,8 @@ class Gallery
 
 			$pathinfo = pathinfo($image);
 			$extension = strtolower($pathinfo['extension']);
-			$thumb_filename = 'images/gallery/' . $pathinfo['filename'] . '_thumb.' . $extension;
-			$filename = 'images/gallery/' . $pathinfo['filename'] . '.' . $extension;
+			$thumb_filename = GALLERY_DIR . $pathinfo['filename'] . '_thumb.' . $extension;
+			$filename = GALLERY_DIR . $pathinfo['filename'] . '.' . $extension;
 			if($db->insert(TABLE_PREFIX . 'gallery', array(
 				'comment' => $comment,
 				'image' => $filename, 'author' => $author,
@@ -172,7 +172,7 @@ class Gallery
 
 		$pathinfo = pathinfo($image);
 		$extension = strtolower($pathinfo['extension']);
-		$filename = 'images/gallery/' . $pathinfo['filename'] . '.' . $extension;
+		$filename = GALLERY_DIR . $pathinfo['filename'] . '.' . $extension;
 
 		if($db->update(TABLE_PREFIX . 'gallery', array(
 			'comment' => $comment,
@@ -291,7 +291,7 @@ class Gallery
 	{
 		$pathinfo = pathinfo($file);
 		$extension = strtolower($pathinfo['extension']);
-		$thumb_filename = 'images/gallery/' . $pathinfo['filename'] . '_thumb.' . $extension;
+		$thumb_filename = GALLERY_DIR . $pathinfo['filename'] . '_thumb.' . $extension;
 
 		if(!self::resize($file, 170, 110, $thumb_filename, $errors))
 			return false;

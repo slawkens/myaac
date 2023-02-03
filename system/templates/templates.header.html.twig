@@ -17,5 +17,5 @@
 	</div>
 </noscript>
 {% if config.recaptcha_enabled %}
-<script src="https://www.google.com/recaptcha/api.js{% if config('recaptcha_type') == 'v2-checkbox' %}?render={{ config.recaptcha_site_key }}{% endif %}"></script>
+<script src="https://www.google.com/recaptcha/api.js{% if config('recaptcha_type') == 'v3' %}?render={{ config.recaptcha_site_key }}{% endif %}"></script>
 {% endif %}

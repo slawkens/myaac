@@ -9,6 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Pages';
+$use_datatable = true;
 
 if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 	echo 'Access denied.';

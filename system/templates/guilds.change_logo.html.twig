@@ -1,5 +1,5 @@
 <div style="text-align:center"><h2>Change guild logo</h2></div>
-Here you can change logo of your guild.<br/>Actuall logo: <img src="images/guilds/{{ guild_logo }}" height="64" width="64"><br/><br/>
+Here you can change logo of your guild.<br/>Actuall logo: <img src="{{ constant('GUILD_IMAGES_DIR') }}{{ guild_logo }}" height="64" width="64"><br/><br/>
 <form enctype="multipart/form-data" action="?subtopic=guilds&guild={{ guild.getName() }}&action=change_logo" method="post" id="upload_form">
 	<input type="hidden" name="todo" value="save" />
 	<input type="hidden" name="MAX_FILE_SIZE" value="{{ max_image_size_b }}" />

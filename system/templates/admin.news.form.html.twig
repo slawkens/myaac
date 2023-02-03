@@ -3,7 +3,7 @@
 		<div class="card-header">
 			<h5 class="m-0">{% if action == 'edit' %}Edit{% else %}Add{% endif %} news</h5>
 		</div>
-		<form role="form" method="post" action="{{ news_link_form }}" id="news-edit-form">
+		<form id="form" role="form" method="post" action="{{ news_link_form }}">
 			<div class="card-body " id="page-edit-table">
 				{% if action == 'edit' %}
 					<input type="hidden" name="id" value="{{ news_id }}"/>
@@ -14,9 +14,9 @@
 					<input type="text" id="title" name="title" class="form-control" autocomplete="off" style="cursor: auto;" value="{{ title }}">
 				</div>
 
-				<div class="form-group row">
-					<label for="body">Content</label>
-					<textarea class="form-control" id="body" name="body" maxlength="65000" cols="50" rows="5">{{ body|raw }}</textarea>
+				<label for="editor">Content</label>
+				<div class="form-group">
+					<textarea class="form-control" id="editor" name="body" maxlength="65000" cols="50" rows="5">{{ body|raw }}</textarea>
 				</div>
 
 				<div class="form-group row">
@@ -116,44 +116,8 @@
 		</script>
 	{% endif %}
 
-	<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/tinymce/tinymce.min.js"></script>
+	{{ include('tinymce.html.twig') }}
 	<script type="text/javascript">
-		let unsaved = false;
-		let lastContent = '';
-
-		tinymce.init({
-			selector: "#body",
-			theme: "modern",
-			plugins: 'preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount spellchecker imagetools contextmenu colorpicker textpattern help code emoticons',
-			toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | emoticons link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
-			image_advtab: true,
-			setup: function (ed) {
-				ed.on('NodeChange', function (e) {
-					if (ed.getContent() !== lastContent) {
-						unsaved = true;
-					}
-				});
-			}
-		});
-
-		$(document).ready(function () {
-			$(":input").change(function () { //triggers change in all input fields including text type
-				unsaved = true;
-			});
-
-			$("#news-edit-form").submit(function (event) {
-				unsaved = false;
-			});
-
-			lastContent = $("#body").val();
-		});
-
-		function unloadPage() {
-			if (unsaved) {
-				return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
-			}
-		}
-
-		window.onbeforeunload = unloadPage;
+		tinymceInit();
 	</script>
 {% endif %}

@@ -8,7 +8,7 @@
         "ext-dom": "*",
         "phpmailer/phpmailer": "^6.1",
         "composer/semver": "^3.2",
-        "twig/twig": "^1.0",
+        "twig/twig": "^2.0",
         "erusev/parsedown": "^1.7",
         "nikic/fast-route": "^1.3"
     }

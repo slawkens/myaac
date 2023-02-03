@@ -163,7 +163,7 @@ class OTS_MonstersList implements Iterator, Countable, ArrayAccess
  *
  * @return int Count of monsters.
  */
-    public function count()
+    public function count(): int
     {
         return count($this->monsters);
     }

@@ -68,6 +68,12 @@ const TEMPLATES = BASE . 'templates/';
 const TOOLS = BASE . 'tools/';
 const VENDOR = BASE . 'vendor/';
 
+// other dirs
+const SESSIONS_DIR = SYSTEM . 'php_sessions';
+const GUILD_IMAGES_DIR = 'images/guilds/';
+const EDITOR_IMAGES_DIR = 'images/editor/';
+const GALLERY_DIR = 'images/gallery/';
+
 // menu categories
 const MENU_CATEGORY_NEWS = 1;
 const MENU_CATEGORY_ACCOUNT = 2;
@@ -87,9 +93,9 @@ const TFS_FIRST = TFS_02;
 const TFS_LAST = TFS_03;
 
 // other definitions
-const ACCOUNT_NUMBER_LENGTH = 10;
+const ACCOUNT_NUMBER_LENGTH = 8;
 
-session_save_path(SYSTEM . 'php_sessions');
+session_save_path(SESSIONS_DIR);
 session_start();
 
 // basedir
@@ -99,7 +105,7 @@ $size = count($tmp) - 1;
 for($i = 1; $i < $size; $i++)
 	$basedir .= '/' . $tmp[$i];
 
-$basedir = str_replace(array('/admin', '/install'), '', $basedir);
+$basedir = str_replace(['/admin', '/install', '/tools'], '', $basedir);
 define('BASE_DIR', $basedir);
 
 if(!IS_CLI) {
