@@ -22,23 +22,23 @@ function admin_give_points($points)
 	global $db, $hasPointsColumn;
 
 	if (!$hasPointsColumn) {
-		error('Points not supported.');
+		displayMessage('Points not supported.');
 		return;
 	}
 
 	$statement = $db->prepare('UPDATE `accounts` SET `premium_points` = `premium_points` + :points');
 	if (!$statement) {
-		error('Failed to prepare query statement.');
+		displayMessage('Failed to prepare query statement.');
 		return;
 	}
 
 	if (!$statement->execute([
 		'points' => $points
 	])) {
-		error('Failed to add points.');
+		displayMessage('Failed to add points.');
 		return;
 	}
-	success($points . ' points added to all accounts.');
+	displayMessage($points . ' points added to all accounts.', true);
 }
 
 function admin_give_coins($coins)
@@ -46,24 +46,24 @@ function admin_give_coins($coins)
 	global $db, $hasCoinsColumn;
 
 	if (!$hasCoinsColumn) {
-		error('Coins not supported.');
+		displayMessage('Coins not supported.');
 		return;
 	}
 
 	$statement = $db->prepare('UPDATE `accounts` SET `coins` = `coins` + :coins');
 	if (!$statement) {
-		error('Failed to prepare query statement.');
+		displayMessage('Failed to prepare query statement.');
 		return;
 	}
 
 	if (!$statement->execute([
 		'coins' => $coins
 	])) {
-		error('Failed to add coins.');
+		displayMessage('Failed to add coins.');
 		return;
 	}
 
-	success($coins . ' coins added to all accounts.');
+	displayMessage($coins . ' coins added to all accounts.', true);
 }
 
 function query_add_premium($column, $value_query, $condition_query = '1=1', $params = [])
@@ -72,12 +72,12 @@ function query_add_premium($column, $value_query, $condition_query = '1=1', $par
 
 	$statement = $db->prepare("UPDATE `accounts` SET `{$column}` = $value_query WHERE $condition_query");
 	if (!$statement) {
-		error('Failed to prepare query statement.');
+		displayMessage('Failed to prepare query statement.');
 		return false;
 	}
 
 	if (!$statement->execute($params)) {
-		error('Failed to add premium days.');
+		displayMessage('Failed to add premium days.');
 		return false;
 	}
 
@@ -89,7 +89,7 @@ function admin_give_premdays($days)
 	global $db, $freePremium;
 
 	if ($freePremium) {
-		error('Premium days not supported. Free Premium enabled.');
+		displayMessage('Premium days not supported. Free Premium enabled.');
 		return;
 	}
 
@@ -101,14 +101,14 @@ function admin_give_premdays($days)
 		if (query_add_premium('premend', '`premend` + :value', '`premend` > :now', ['value' => $value, 'now' => $now])) {
 			// set premend
 			if (query_add_premium('premend', ':value', '`premend` <= :now', ['value' => $now + $value, 'now' => $now])) {
-				success($days . ' premium days added to all accounts.');
+				displayMessage($days . ' premium days added to all accounts.', true);
 				return;
 			} else {
-				error('Failed to execute set query.');
+				displayMessage('Failed to execute set query.');
 				return;
 			}
 		} else {
-			error('Failed to execute append query.');
+			displayMessage('Failed to execute append query.');
 			return;
 		}
 
@@ -123,20 +123,20 @@ function admin_give_premdays($days)
 			if (query_add_premium('lastday', '`lastday` + :value', '`lastday` > :now', ['value' => $value, 'now' => $now])) {
 				// set lastday
 				if (query_add_premium('lastday', ':value', '`lastday` <= :now', ['value' => $now + $value, 'now' => $now])) {
-					success($days . ' premium days added to all accounts.');
+					displayMessage($days . ' premium days added to all accounts.', true);
 					return;
 				} else {
-					error('Failed to execute set query.');
+					displayMessage('Failed to execute set query.');
 					return;
 				}
-				success($days . ' premium days added to all accounts.');
+
 				return;
 			} else {
-				error('Failed to execute append query.');
+				displayMessage('Failed to execute append query.');
 				return;
 			}
 		} else {
-			error('Failed to execute set days query.');
+			displayMessage('Failed to execute set days query.');
 			return;
 		}
 
@@ -149,21 +149,21 @@ function admin_give_premdays($days)
 		if (query_add_premium('premium_ends_at', '`premium_ends_at` + :value', '`premium_ends_at` > :now', ['value' => $value, 'now' => $now])) {
 			// set premium_ends_at
 			if (query_add_premium('premium_ends_at', ':value', '`premium_ends_at` <= :now', ['value' => $now + $value, 'now' => $now])) {
-				success($days . ' premium days added to all accounts.');
+				displayMessage($days . ' premium days added to all accounts.', true);
 				return;
 			} else {
-				error('Failed to execute set query.');
+				displayMessage('Failed to execute set query.');
 				return;
 			}
 		} else {
-			error('Failed to execute append query.');
+			displayMessage('Failed to execute append query.');
 			return;
 		}
 
 		return;
 	}
 
-	error('Premium Days not supported.');
+	displayMessage('Premium Days not supported.');
 }
 
 if (isset($_POST['action']) && $_POST['action']) {
@@ -171,12 +171,12 @@ if (isset($_POST['action']) && $_POST['action']) {
 	$action = $_POST['action'];
 
 	if (preg_match("/[^A-z0-9_\-]/", $action)) {
-		error('Invalid action.');
+		displayMessage('Invalid action.');
 	} else {
 		$value = isset($_POST['value']) ? intval($_POST['value']) : 0;
 
 		if (!$value) {
-			error('Please fill all inputs');
+			displayMessage('Please fill all inputs');
 		} else {
 			switch ($action) {
 				case 'give-points':
@@ -189,14 +189,27 @@ if (isset($_POST['action']) && $_POST['action']) {
 					admin_give_premdays($value);
 					break;
 				default:
-					error('Action ' . $action . 'not found.');
+					displayMessage('Action ' . $action . 'not found.');
 			}
 		}
 	}
 }
+else {
+	$twig->display('admin.tools.account.html.twig', array(
+		'hasCoinsColumn' => $hasCoinsColumn,
+		'hasPointsColumn' => $hasPointsColumn,
+		'freePremium' => $freePremium,
+	));
+}
 
-$twig->display('admin.tools.account.html.twig', array(
-	'hasCoinsColumn' => $hasCoinsColumn,
-	'hasPointsColumn' => $hasPointsColumn,
-	'freePremium' => $freePremium,
-));
+function displayMessage($message, $success = false) {
+	global $twig, $hasCoinsColumn, $hasPointsColumn, $freePremium;
+
+	$success ? success($message): error($message);
+
+	$twig->display('admin.tools.account.html.twig', array(
+		'hasCoinsColumn' => $hasCoinsColumn,
+		'hasPointsColumn' => $hasPointsColumn,
+		'freePremium' => $freePremium,
+	));
+}
