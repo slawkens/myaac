@@ -71,13 +71,8 @@ else {
 		success($locale['step_database_adding_field'] . ' accounts.key...');
 }
 
-if(!$db->hasColumn('accounts', 'blocked')) {
-	if(query("ALTER TABLE `accounts` ADD `blocked` TINYINT(1) NOT NULL DEFAULT FALSE COMMENT 'internal usage' AFTER `key`;"))
-		success($locale['step_database_adding_field'] . ' accounts.blocked...');
-}
-
 if(!$db->hasColumn('accounts', 'created')) {
-	if(query("ALTER TABLE `accounts` ADD `created` INT(11) NOT NULL DEFAULT 0 AFTER `" . ($db->hasColumn('accounts', 'group_id') ? 'group_id' : 'blocked') . "`;"))
+	if(query("ALTER TABLE `accounts` ADD `created` INT(11) NOT NULL DEFAULT 0 AFTER `" . ($db->hasColumn('accounts', 'group_id') ? 'group_id' : 'email') . "`;"))
 		success($locale['step_database_adding_field'] . ' accounts.created...');
 }
 
