@@ -47,10 +47,6 @@ $tmp = '';
 if (fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
 
-echo '<div class="row">';
-$twig->display('admin.dashboard.html.twig', array());
-echo '</div>';
-
 $configAdminPanelModules = config('admin_panel_modules');
 if (isset($configAdminPanelModules)) {
 	echo '<div class="row">';
