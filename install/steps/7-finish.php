@@ -83,7 +83,7 @@ else {
 		if($db->hasColumn('accounts', 'group_id'))
 			$account_used->setCustomField('group_id', $groups->getHighestId());
 		if($db->hasColumn('accounts', 'type'))
-			$account_used->setCustomField('type', 5);
+			$account_used->setCustomField('type', 6);
 
 		if(!$player_db->isLoaded())
 			$player->setAccountId($account_used->getId());
