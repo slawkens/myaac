@@ -33,6 +33,11 @@ if ($config['account_country']) {
 }
 $web_acc = array("None", "Admin", "Super Admin", "(Admin + Super Admin)");
 $acc_type = array("None", "Normal", "Tutor", "Senior Tutor", "Gamemaster", "God");
+
+$groups = new OTS_Groups_List();
+if ($groups->getHighestId() == 6) {
+	$acc_type = array("None", "Normal", "Tutor", "Senior Tutor", "Gamemaster", "Community Manager", "God");
+}
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -70,7 +75,6 @@ else if (isset($_REQUEST['search'])) {
 ?>
 <div class="row">
 	<?php
-	$groups = new OTS_Groups_List();
 	if ($id > 0) {
 		$account = new OTS_Account();
 		$account->load($id);
