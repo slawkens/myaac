@@ -9,8 +9,6 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 
-	# you can put here your myaac root folder
-	# path relative to web root
     #RewriteBase /myaac/
 
 	RewriteCond %{REQUEST_FILENAME} !-f
