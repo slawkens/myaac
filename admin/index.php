@@ -19,7 +19,7 @@ $content = '';
 
 // validate page
 $page = $_GET['p'] ?? '';
-if(empty($page) || preg_match("/[^a-zA-Z0-9_\-]/", $page))
+if(empty($page) || preg_match("/[^a-zA-Z0-9_\-\/.]/", $page))
 	$page = 'dashboard';
 
 $page = strtolower($page);
@@ -55,8 +55,13 @@ if(!$logged || !admin()) {
 // include our page
 $file = BASE . 'admin/pages/' . $page . '.php';
 if(!@file_exists($file)) {
-	$page = '404';
-	$file = SYSTEM . 'pages/404.php';
+	if (strpos($page, 'plugins/') !== false) {
+		$file = BASE . $page;
+	}
+	else {
+		$page = '404';
+		$file = SYSTEM . 'pages/404.php';
+	}
 }
 
 ob_start();
