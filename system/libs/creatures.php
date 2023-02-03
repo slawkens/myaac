@@ -38,6 +38,20 @@ class Creatures {
 
 		$items = array();
 		Items::load();
+		if (empty(Items::$items)) {
+			if(Items::loadFromXML()) {
+				success('Successfully loaded items.');
+			}
+		}
+
+		// once again
+		Items::load();
+
+		if (empty(Items::$items)) {
+			error('Fatal error. Please report to www.github.com/slawkens/myaac');
+			return false;
+		}
+
 		foreach((array)Items::$items as $id => $item) {
 			$items[$item['name']] = $id;
 		}
