@@ -1531,6 +1531,12 @@ function camelCaseToUnderscore($input)
 	return ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $input)), '_');
 }
 
+function removeIfFirstSlash(&$text) {
+	if(strpos($text, '/') === 0) {
+		$text = str_replace_first('/', '', $text);
+	}
+};
+
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat/base.php';

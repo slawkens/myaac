@@ -41,8 +41,8 @@
 			"priority": "130"
 		},
 		"Redirect Example": {
-			"pattern": "/redirectExample",
-			"file": "account/manage"
+			"redirect_from": "/redirectExample",
+			"redirect_to": "account/manage"
 		}
 	}
  }

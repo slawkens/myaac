@@ -65,31 +65,37 @@ if($logged && $account_logged && $account_logged->isLoaded()) {
 $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) {
 	$routes = require SYSTEM . 'routes.php';
 
-	$duplicates = [];
+	$isAlreadyDefined = [];
 
 	$routesTmp = [];
 	foreach(getDatabasePages() as $page) {
-		$duplicates[$page] = true;
-		$routesTmp[] = [['GET', 'POST'], $page, 'database/' . $page, true];
+		$isAlreadyDefined[$page] = true;
+		$routesTmp[] = ['*', $page, '__database__/' . $page, true];
 	}
 
 	Plugins::clearWarnings();
 	foreach (Plugins::getRoutes() as $route) {
-		if(!isset($duplicates[$route[1]])) {
-			$duplicates[$route[1]] = true;
+		if(!isset($isAlreadyDefined[$route[1]])) {
+			$isAlreadyDefined[$route[1]] = true;
 			$routesTmp[] = [$route[0], $route[1], $route[2]];
 		}
 	}
 
 	foreach ($routes as $route) {
-		if(!isset($duplicates[$route[1]])) {
-			$routesTmp[] = [$route[0], $route[1], 'system/pages/' . $route[2]];
+		if(!isset($isAlreadyDefined[$route[1]])) {
+			if (strpos($route[2], '__redirect__') === false && strpos($route[2], '__database__') === false) {
+				$routesTmp[] = [$route[0], $route[1], 'system/pages/' . $route[2]];
+			}
+			else {
+				$routesTmp[] = [$route[0], $route[1], $route[2]];
+			}
 		}
 	}
 
+	//var_dump($routesTmp);
 	foreach ($routesTmp as $route) {
-		if (strpos($route[2], '.php') === false && !isset($route[3])) {
-			$route[2] = str_replace('system/pages/', '', 'redirect/' . $route[2]);
+		if ($route[0] === '*') {
+			$route[0] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'];
 		}
 
 		$r->addRoute($route[0], $route[1], $route[2]);
@@ -170,9 +176,8 @@ else {
 			$_REQUEST = array_merge($_REQUEST, $vars);
 			$_GET = array_merge($_GET, $vars);
 
-			if (strpos($path, 'database/') !== false) {
-				//var_dump($path);
-				$pageName = str_replace('database/', '', $path);
+			if (strpos($path, '__database__/') !== false) {
+				$pageName = str_replace('__database__/', '', $path);
 
 				$success = false;
 				$tmp_content = getCustomPage($pageName, $success);
@@ -188,8 +193,8 @@ else {
 					$page = $pageName;
 					$file = false;
 				}
-			} else if (strpos($path, 'redirect/') !== false) {
-				$path = str_replace('redirect/', '', $path);
+			} else if (strpos($path, '__redirect__/') !== false) {
+				$path = str_replace('__redirect__/', '', $path);
 				header('Location: ' . BASE_URL . $path);
 				exit;
 			} else {

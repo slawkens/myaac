@@ -9,10 +9,10 @@
  */
 
 return [
-	['GET', '', 'news'], // redirect empty URL to news
+	['GET', '', '__redirect__/news'], // redirect empty URL to news
 	['GET', 'news/archive/{id:[0-9]+}[/]', 'news/archive.php'],
 
-	[['GET', 'POST'], 'account/base[/]', '404.php'], // this is to block account/base.php
+	['*', 'account/base[/]', '404.php'], // this is to block account/base.php
 	[['GET', 'POST'], 'account/password[/]', 'account/change_password.php'],
 	[['GET', 'POST'], 'account/register/new[/]', 'account/register_new.php'],
 	[['GET', 'POST'], 'account/email[/]', 'account/change_email.php'],

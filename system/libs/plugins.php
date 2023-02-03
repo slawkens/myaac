@@ -76,22 +76,38 @@ class Plugins {
 			if (isset($plugin['routes'])) {
 				foreach ($plugin['routes'] as $_name => $info) {
 					// default method: get
-					$methods = isset($info['method']) ? explode(',', $info['method']) : ['GET'];
-					foreach ($methods as $method) {
-						if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'])) {
-							self::$warnings[] = $warningPreTitle . 'Unallowed method ' . $method . '... Disabling this route...';
-							continue;
+					$method = $info['method'] ?? ['GET'];
+					if ($method !== '*') {
+						$methods = is_string($method) ? explode(',', $info['method']) : $method;
+						foreach ($methods as $method) {
+							if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'])) {
+								self::$warnings[] = $warningPreTitle . 'Not allowed method ' . $method . '... Disabling this route...';
+							}
 						}
+					}
+					else {
+						$methods = '*'; // all available methods
 					}
 
 					if (!isset($info['priority'])) {
 						$info['priority'] = 100; // default priority
 					}
 
-					// replace first occurence of / in pattern if found (will be auto-added later)
-					if(strpos($info['pattern'], '/') === 0) {
-						$info['pattern'] = str_replace_first('/', '', $info['pattern']);
+					if (isset($info['redirect_from'])) {
+						removeIfFirstSlash($info['redirect_from']);
+
+						$info['pattern'] = $info['redirect_from'];
+						if (!isset($info['redirect_to'])) {
+							self::$warnings[] = $warningPreTitle . 'redirect set without "redirect_to".';
+						}
+						else {
+							removeIfFirstSlash($info['redirect_to']);
+							$info['file'] = '__redirect__/' . $info['redirect_to'];
+						}
 					}
+
+					// replace first occurence of / in pattern if found (will be auto-added later)
+					removeIfFirstSlash($info['pattern']);
 
 					foreach ($routes as $id => &$route) {
 						if($route[1] == $info['pattern']) {
@@ -102,7 +118,6 @@ class Plugins {
 							else {
 								self::$warnings[] = $warningPreTitle . "Duplicated route with lower priority: {$route[1]} ({$route[3]}). Disabling this route...";
 								unset($routes[$id]);
-								continue;
 							}
 						}
 					}
