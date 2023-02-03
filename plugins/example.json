@@ -7,25 +7,20 @@
 	"contact": "nobody@example.org",
 	"require": {
 		"myaac": "0.4.3",
-		"myaac_": ">=0.7,<1.0", // support for defining versions like in composer (since 0.8)
+		"myaac_": ">=0.7,<1.0",
 		"php": "5.2.0",
-		"php_": ">5.4,<7.0", // support for defining versions like in composer (since 0.8)
+		"php_": ">5.4,<7.0",
 		"database": "21",
-		"php-ext": "curl", // php extension needs to be installed (since 0.8)
-		"ext-curl": ">5.0", // php extension with version specifiec (since 0.8)
-		"table": "accounts", // table need to exist in database (since 0.8)
-		"column": "players.online" // column need to exist in database (since 0.8)
+		"php-ext": "curl",
+		"ext-curl": ">5.0",
+		"table": "accounts",
+		"column": "players.online"
 	},
 	"install": "plugins/example/install.php",
 	"uninstall": [
 		"plugins/example.json",
 		"plugins/example-directory",
 		"templates/other-directory"
-		/***
-		 this is example of multi line comment
-		 	1. list example
-		 	2. something
-		 ****/
 	],
 	"hooks": {
 		"Example Hook": {
