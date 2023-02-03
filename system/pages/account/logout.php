@@ -18,7 +18,7 @@ if(!$logged) {
 }
 
 if(isset($account_logged) && $account_logged->isLoaded()) {
-	if($hooks->trigger(HOOK_LOGOUT, array('account' => $account_logged, 'password' => getSession('password')))) {
+	if($hooks->trigger(HOOK_LOGOUT, ['account_id' => $account_logged->getId()])) {
 		unsetSession('account');
 		unsetSession('password');
 		unsetSession('remember_me');
