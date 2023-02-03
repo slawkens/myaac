@@ -21,7 +21,7 @@ if (preg_match("/[^A-z0-9_\-]/", $tool)) {
 	return;
 }
 
-$file = SYSTEM . 'pages/admin/tools/' . $tool . '.php';
+$file = ADMIN . 'tools/' . $tool . '.php';
 
 if (@file_exists($file)) {
 	require $file;

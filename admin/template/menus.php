@@ -34,8 +34,8 @@ $menus = [
 	],
 	['name' => 'Tools', 'icon' => 'tools', 'order' => 100, 'link' =>
 		[
-			['name' => 'Mass Account Actions', 'link' => 'tools&tool=account', 'order' => 10],
-			['name' => 'Mass Teleport Actions', 'link' => 'tools&tool=teleport', 'order' => 20],
+			['name' => 'Mass Account Actions', 'link' => 'mass_account', 'icon' => 'globe', 'order' => 10],
+			['name' => 'Mass Teleport Actions', 'link' => 'mass_teleport', 'icon' => 'globe', 'order' => 20],
 			['name' => 'Notepad', 'link' => 'notepad', 'icon' => 'marker', 'order' => 30],
 			['name' => 'phpinfo', 'link' => 'phpinfo', 'icon' => 'server', 'order' => 40],
 		],
