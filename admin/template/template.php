@@ -159,6 +159,9 @@
 
 				<p><h5><a href="http://my-aac.org/" target="_blank"><i class="fas fa-shoe-prints"></i> MyAAC Official</a></h5>
 				<small>Goto MyAAC Official Website</small></p>
+
+				<p><h5><a href="?p=open_source"><i class="fas fa-wrench"></i> Open Source</a></h5>
+				<small>View Open Source Software MyAAC is using</small></p>
 			</div>
 		</aside>
 
