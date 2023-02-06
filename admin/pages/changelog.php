@@ -37,7 +37,7 @@ if(!empty($action))
 
 	$errors = array();
 
-	if($action == 'add') {
+	if($action == 'new') {
 
 		if(Changelog::add($body, $type, $where, $player_id, $create_date, $errors)) {
 			$body = '';
@@ -110,7 +110,7 @@ if($action == 'edit' || $action == 'new') {
 	$account_players->orderBy('group_id', POT::ORDER_DESC);
 	$twig->display('admin.changelog.form.html.twig', array(
 		'action' => $action,
-		'cl_link_form' => constant('ADMIN_URL').'?p=changelog&action=' . ($action == 'edit' ? 'edit' : 'add'),
+		'cl_link_form' => constant('ADMIN_URL').'?p=changelog&action=' . ($action == 'edit' ? 'edit' : 'new'),
 		'cl_id' => $id ?? null,
 		'body' => isset($body) ? escapeHtml($body) : '',
 		'create_date' => $create_date ?? '',
