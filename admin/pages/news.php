@@ -116,20 +116,20 @@ if($action == 'edit' || $action == 'new') {
 		'action' => $action,
 		'news_link' => getLink(PAGE),
 		'news_link_form' => '?p=news&action=' . ($action == 'edit' ? 'edit' : 'new'),
-		'news_id' => isset($id) ? $id : null,
-		'title' => isset($p_title) ? $p_title : '',
+		'news_id' => $id ?? null,
+		'title' => $p_title ?? '',
 		'body' => isset($body) ? escapeHtml($body) : '',
-		'type' => isset($type) ? $type : null,
+		'type' => $type ?? null,
 		'player' => isset($player) && $player->isLoaded() ? $player : null,
-		'player_id' => isset($player_id) ? $player_id : null,
+		'player_id' => $player_id ?? null,
 		'account_players' => $account_players,
-		'category' => isset($category) ? $category : 0,
+		'category' => $category ?? 0,
 		'categories' => $categories,
 		'forum_boards' => getForumBoards(),
-		'forum_section' => isset($forum_section) ? $forum_section : null,
-		'comments' => isset($comments) ? $comments : null,
-		'article_text' => isset($article_text) ? $article_text : null,
-		'article_image' => isset($article_image) ? $article_image : null
+		'forum_section' => $forum_section ?? null,
+		'comments' => $comments ?? null,
+		'article_text' => $article_text ?? null,
+		'article_image' => $article_image ?? null
 	));
 }
 

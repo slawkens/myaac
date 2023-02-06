@@ -63,10 +63,10 @@ if($show_form) {
 	}
 
 	$twig->display('account.change_info.html.twig', array(
-		'countries' => isset($countries) ? $countries : [],
+		'countries' => $countries ?? [],
 		'account_rlname' => $account_rlname,
 		'account_location' => $account_location,
-		'account_country' => isset($account_country) ? $account_country : ''
+		'account_country' => $account_country ?? ''
 	));
 }
 ?>

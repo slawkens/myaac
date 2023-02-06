@@ -56,7 +56,7 @@ if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
 				$tmp = array();
 
 			$ip = $_SERVER['REMOTE_ADDR'];
-			$t = isset($tmp[$ip]) ? $tmp[$ip] : NULL;
+			$t = $tmp[$ip] ?? null;
 		}
 
 		if(config('recaptcha_enabled') && !config('account_create_auto_login'))

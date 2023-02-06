@@ -17,9 +17,9 @@ if(!$logged) {
 	return;
 }
 
-$new_password = isset($_POST['newpassword']) ? $_POST['newpassword'] : NULL;
-$new_password2 = isset($_POST['newpassword2']) ? $_POST['newpassword2'] : NULL;
-$old_password = isset($_POST['oldpassword']) ? $_POST['oldpassword'] : NULL;
+$new_password = $_POST['newpassword'] ?? NULL;
+$new_password2 = $_POST['newpassword2'] ?? NULL;
+$old_password = $_POST['oldpassword'] ?? NULL;
 if(empty($new_password) && empty($new_password2) && empty($old_password)) {
 	$twig->display('account.change_password.html.twig');
 }

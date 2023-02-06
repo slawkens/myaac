@@ -16,10 +16,10 @@ if(!$logged)
 		$twig->display('error_box.html.twig', array('errors' => $errors));
 
 	$twig->display('account.login.html.twig', array(
-		'redirect' => isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : null,
+		'redirect' => $_REQUEST['redirect'] ?? null,
 		'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
 		'account_login_by' => getAccountLoginByLabel(),
-		'error' => isset($errors[0]) ? $errors[0] : null
+		'error' => $errors[0] ?? null
 	));
 
 	return;
