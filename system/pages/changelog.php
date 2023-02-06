@@ -10,8 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Changelog';
 
-$_page = $_GET['page'] ?? 0;
-$id = $_GET['id'] ?? 0;
+$_page = (int)$_GET['page'] ?? 0;
 $limit = 30;
 $offset = $_page * $limit;
 $next_page = false;

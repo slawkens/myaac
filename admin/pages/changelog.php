@@ -28,7 +28,7 @@ require_once LIBS . 'changelog.php';
 
 if(!empty($action))
 {
-	$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+	$id = $_REQUEST['id'] ?? null;
 	$body = isset($_REQUEST['body']) ? stripslashes($_REQUEST['body']) : null;
 	$create_date = isset($_REQUEST['createdate']) ? (int)strtotime($_REQUEST['createdate'] ): null;
 	$player_id = isset($_REQUEST['player_id']) ? (int)$_REQUEST['player_id'] : null;
