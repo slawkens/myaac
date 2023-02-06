@@ -116,6 +116,14 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 			$route[0] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'];
 		}
 
+		$aliases = [
+			[':int', ':string', ':alphanum'],
+			[':\d+', ':[A-Za-z0-9-_%+\']+}', ':[A-Za-z0-9]+'],
+		];
+
+		// apply aliases
+		$route[1] = str_replace($aliases[0], $aliases[1], $route[1]);
+
 		$r->addRoute($route[0], $route[1], $route[2]);
 	}
 

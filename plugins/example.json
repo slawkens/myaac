@@ -30,7 +30,7 @@
 	},
 	"routes": {
 		"First Route": {
-			"pattern": "/YourAwesomePage",
+			"pattern": "/YourAwesomePage/{name:string}/{page:int}",
 			"file": "plugins/your-plugin/your-awesome-page.php",
 			"method": "GET",
 			"priority": "130"

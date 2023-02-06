@@ -10,7 +10,7 @@
 
 return [
 	['GET', '', '__redirect__/news'], // redirect empty URL to news
-	['GET', 'news/archive/{id:[0-9]+}[/]', 'news/archive.php'],
+	['GET', 'news/archive/{id:int}[/]', 'news/archive.php'],
 
 	// block access to some files
 	['*', 'account/base[/]', '404.php'], // this is to block account/base.php
@@ -29,29 +29,27 @@ return [
 	['GET', 'account/confirm_email/{hash:[A-Za-z0-9-_]+}[/]', 'account/confirm_email.php'],
 
 	['GET', 'bans/{page:\d+}[/]', 'bans.php'],
-	[['GET', 'POST'], 'characters[/{name:[A-Za-z0-9-_%+\']+}]', 'characters.php'],
-	['GET', 'changelog[/{page:\d+}]', 'changelog.php'],
-	['GET', 'creatures[/{name:[A-Za-z0-9-_%+\']+}]', 'creatures.php'],
+	[['GET', 'POST'], 'characters[/{name:string]', 'characters.php'],
+	['GET', 'changelog[/{page:int}]', 'changelog.php'],
+	['GET', 'creatures[/{name:string}]', 'creatures.php'],
 
-	['GET', 'faq[/{action:[A-Za-z0-9-_%+\']+}]', 'faq.php'],
+	['GET', 'faq[/{action:string}]', 'faq.php'],
 
-	[['GET', 'POST'], 'forum/{action:[A-Za-z0-9-_]+}[/]', 'forum.php'],
-	['GET', 'forum/board/{id:[0-9]+}[/]', 'forum/show_board.php'],
-	['GET', 'forum/board/{id:[0-9]+}/{page:[0-9]+}[/]', 'forum/show_board.php'],
-	['GET', 'forum/thread/{id:[0-9]+}[/]', 'forum/show_thread.php'],
+	[['GET', 'POST'], 'forum/{action:string}[/]', 'forum.php'],
+	['GET', 'forum/board/{id:int}[/]', 'forum/show_board.php'],
+	['GET', 'forum/board/{id:int}/{page:[0-9]+}[/]', 'forum/show_board.php'],
+	['GET', 'forum/thread/{id:int}[/]', 'forum/show_thread.php'],
 	//['GET', 'forum/thread/{id:[0-9]+}/{page:[0-9]+}[/]', 'forum/show_thread.php'],
 
-	['GET', 'gallery/{image:[0-9]+}[/]', 'gallery.php'],
-	[['GET', 'POST'], 'gallery/{action:[A-Za-z0-9-_]+}[/]', 'gallery.php'],
+	['GET', 'gallery/{image:int}[/]', 'gallery.php'],
+	[['GET', 'POST'], 'gallery/{action:string}[/]', 'gallery.php'],
 
-	[['GET', 'POST'], 'guilds/{guild:[A-Za-z0-9-_%+\']+}[/]', 'guilds/show.php'],
+	[['GET', 'POST'], 'guilds/{guild:string}[/]', 'guilds/show.php'],
 
-	['GET', 'highscores/{list:[A-Za-z0-9-_]+}/{vocation:[A-Za-z0-9-_]+}/{page:[0-9]+}[/]', 'highscores.php'],
-	['GET', 'highscores/{list:[A-Za-z0-9-_]+}/{page:[0-9]+}[/]', 'highscores.php'],
-	['GET', 'highscores/{list:[A-Za-z0-9-_]+}/{vocation:[A-Za-z0-9-_]+}[/]', 'highscores.php'],
-	['GET', 'highscores/{list:[A-Za-z0-9-_]+}[/]', 'highscores.php'],
-
-	['GET', 'online/{order:[A-Za-z0-9-_]+}[/]', 'online.php'],
+	['GET', 'highscores/{list:alphanum}/{vocation:alphanum}/{page:int}[/]', 'highscores.php'],
+	['GET', 'highscores/{list:alphanum}/{page:int}[/]', 'highscores.php'],
+	['GET', 'highscores/{list:alphanum}/{vocation:alphanum}[/]', 'highscores.php'],
+	['GET', 'highscores/{list:alphanum}[/]', 'highscores.php'],
 /*
 	'/^gifts\/history\/?$/' => array('subtopic' => 'gifts', 'action' => 'show_history'),
 	'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
