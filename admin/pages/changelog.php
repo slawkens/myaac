@@ -39,7 +39,7 @@ if(!empty($action))
 
 	if($action == 'new') {
 
-		if(Changelog::add($body, $type, $where, $player_id, $create_date, $errors)) {
+		if(isset($body) && Changelog::add($body, $type, $where, $player_id, $create_date, $errors)) {
 			$body = '';
 			$type = $where = $player_id = $create_date = 0;
 
