@@ -1537,6 +1537,10 @@ function removeIfFirstSlash(&$text) {
 	}
 };
 
+function escapeHtml($html) {
+	return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat/base.php';

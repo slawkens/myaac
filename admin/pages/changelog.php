@@ -112,7 +112,7 @@ if($action == 'edit' || $action == 'new') {
 		'action' => $action,
 		'cl_link_form' => constant('ADMIN_URL').'?p=changelog&action=' . ($action == 'edit' ? 'edit' : 'add'),
 		'cl_id' => $id ?? null,
-		'body' => isset($body) ? htmlentities($body, ENT_COMPAT, 'UTF-8') : '',
+		'body' => isset($body) ? escapeHtml($body) : '',
 		'create_date' => $create_date ?? '',
 		'player_id' => $player_id ?? null,
 		'account_players' => $account_players,
