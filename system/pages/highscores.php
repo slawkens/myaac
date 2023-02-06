@@ -15,9 +15,9 @@ $configHighscoresCountryBox = config('highscores_country_box');
 if(config('account_country') && $configHighscoresCountryBox)
 	require SYSTEM . 'countries.conf.php';
 
-$list = isset($_GET['list']) ? $_GET['list'] : 'experience';
-$page = isset($_GET['page']) ? $_GET['page'] : 1;
-$vocation = isset($_GET['vocation']) ? $_GET['vocation'] : 'all';
+$list = $_GET['list'] ?? 'experience';
+$page = $_GET['page'] ?? 1;
+$vocation = $_GET['vocation'] ?? 'all';
 
 if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 	$page = 1;
@@ -47,8 +47,8 @@ if($configHighscoresVocationBox && $vocation !== 'all')
 	}
 }
 
-define('SKILL_FRAGS', -1);
-define('SKILL_BALANCE', -2);
+const SKILL_FRAGS = -1;
+const SKILL_BALANCE = -2;
 
 $skill = POT::SKILL__LEVEL;
 if(is_numeric($list))
