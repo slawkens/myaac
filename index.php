@@ -36,8 +36,14 @@ if(0 === strpos($uri, '/')) {
 	$uri = str_replace_first('/', '', $uri);
 }
 
-if(preg_match("/^[A-Za-z0-9-_%'+]+\.png$/i", $uri)) {
-	$tmp = explode('.', $uri);
+if(preg_match("/^[A-Za-z0-9-_%'+\/]+\.png$/i", $uri)) {
+	if (!empty(BASE_DIR)) {
+		$tmp = explode('.', str_replace_first(str_replace_first('/', '', BASE_DIR) . '/', '', $uri));
+	}
+	else {
+		$tmp = explode('.', $uri);
+	}
+
 	$_REQUEST['name'] = urldecode($tmp[0]);
 
 	chdir(TOOLS . 'signature');
