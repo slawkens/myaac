@@ -31,13 +31,8 @@ if ($config['account_country']) {
 	foreach ($config['countries'] as $code => $c)
 		$countries[$code] = $c;
 }
-$web_acc = array("None", "Admin", "Super Admin", "(Admin + Super Admin)");
-$acc_type = array("None", "Normal", "Tutor", "Senior Tutor", "Gamemaster", "God");
-
-$groups = new OTS_Groups_List();
-if ($groups->getHighestId() == 6) {
-	$acc_type = array("None", "Normal", "Tutor", "Senior Tutor", "Gamemaster", "Community Manager", "God");
-}
+$web_acc = ACCOUNT_WEB_FLAGS;
+$acc_type = config('account_types');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >

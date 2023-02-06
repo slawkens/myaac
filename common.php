@@ -34,8 +34,10 @@ define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS
 define('IS_CLI', in_array(php_sapi_name(), ['cli', 'phpdb']));
 
 // account flags
+const FLAG_NONE = 0;
 const FLAG_ADMIN = 1;
 const FLAG_SUPER_ADMIN = 2;
+const FLAG_SUPER_BOTH = 3;
 const FLAG_CONTENT_PAGES = 4;
 const FLAG_CONTENT_MAILER = 8;
 const FLAG_CONTENT_NEWS = 16;
@@ -48,6 +50,14 @@ const FLAG_CONTENT_VIDEOS = 1024;
 const FLAG_CONTENT_FAQ = 2048;
 const FLAG_CONTENT_MENUS = 4096;
 const FLAG_CONTENT_PLAYERS = 8192;
+
+// account access types
+const ACCOUNT_WEB_FLAGS = [
+	FLAG_NONE => 'None',
+	FLAG_ADMIN =>'Admin',
+	FLAG_SUPER_ADMIN => 'Super Admin',
+	FLAG_SUPER_BOTH =>'(Admin + Super Admin)',
+];
 
 // news
 const NEWS = 1;

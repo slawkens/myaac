@@ -160,6 +160,18 @@ $config = array(
 	'send_mail_when_change_password' => true,	// send e-mail with new password when change password to account
 	'send_mail_when_generate_reckey' => true,	// send e-mail with rec key (key is displayed on page anyway when generate)
 
+	// you may need to adjust this for older tfs versions
+	// by removing Community Manager
+	'account_types' => [
+		'None',
+		'Normal',
+		'Tutor',
+		'Senior Tutor',
+		'Gamemaster',
+		'Community Manager',
+		'God',
+	],
+
 	// genders (aka sex)
 	'genders' => array(
 		0 => 'Female',
