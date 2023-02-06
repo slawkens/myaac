@@ -117,7 +117,7 @@ if($action == 'edit' || $action == 'new') {
 		'news_link_form' => '?p=news&action=' . ($action == 'edit' ? 'edit' : 'add'),
 		'news_id' => isset($id) ? $id : null,
 		'title' => isset($p_title) ? $p_title : '',
-		'body' => isset($body) ? htmlentities($body, ENT_COMPAT, 'UTF-8') : '',
+		'body' => isset($body) ? escapeHtml($body) : '',
 		'type' => isset($type) ? $type : null,
 		'player' => isset($player) && $player->isLoaded() ? $player : null,
 		'player_id' => isset($player_id) ? $player_id : null,
