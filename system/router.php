@@ -36,11 +36,29 @@ if(fetchDatabaseConfig('site_closed', $site_closed)) {
 }
 define('SITE_CLOSED', $site_closed);
 
+// Strip query string (?foo=bar) and decode URI
+/** @var string $uri */
+if (false !== $pos = strpos($uri, '?')) {
+	if ($pos !== 1) {
+		$uri = substr($uri, 0, $pos);
+	}
+	else {
+		$uri = str_replace_first('?', '', $uri);
+	}
+}
+
+$uri = rawurldecode($uri);
+if (BASE_DIR !== '') {
+	$tmp = str_replace_first('/', '', BASE_DIR);
+	$uri = str_replace_first($tmp . '/', '', $uri);
+}
+
+define('URI', $uri);
+
 /** @var boolean $load_it */
 if(!$load_it) {
 	// ignore warnings in some functions/plugins
 	// page is not loaded anyways
-	define('ACTION', '');
 	define('PAGE', '');
 
 	return;
@@ -115,25 +133,6 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 
 // Fetch method and URI
 $httpMethod = $_SERVER['REQUEST_METHOD'];
-
-// Strip query string (?foo=bar) and decode URI
-/** @var string $uri */
-if (false !== $pos = strpos($uri, '?')) {
-	if ($pos !== 1) {
-		$uri = substr($uri, 0, $pos);
-	}
-	else {
-		$uri = str_replace_first('?', '', $uri);
-	}
-}
-
-$uri = rawurldecode($uri);
-if (BASE_DIR !== '') {
-	$tmp = str_replace_first('/', '', BASE_DIR);
-	$uri = str_replace_first($tmp . '/', '', $uri);
-}
-
-define('URI', $uri);
 
 $found = true;
 
