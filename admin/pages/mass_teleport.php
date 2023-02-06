@@ -90,8 +90,8 @@ if (isset($_POST['action']) && $_POST['action'])    {
 				admin_teleport_town($town_id);
 				break;
 			case 'set-position':
-				if ((!$posx || !$posy || !$posz) && !$to_temple) {
-					displayMessage('Please fill all inputs');
+				if (!$to_temple &&  ($posx < 0 || $posx > 65535 || $posy < 0 || $posy > 65535|| $posz < 0 || $posz > 16)) {
+					displayMessage('Invalid Position');
 					return;
 				}
 
