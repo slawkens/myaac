@@ -335,11 +335,15 @@ if($load_it)
 				)) . $content;
 		}
 	} else {
-		$file = SYSTEM . 'pages/' . $page . '.php';
+		$file = TEMPLATES . $template_name . '/pages/' . $page . '.php';
 		if(!@file_exists($file) || preg_match('/[^A-z0-9_\-]/', $page))
 		{
-			$page = '404';
-			$file = SYSTEM . 'pages/404.php';
+			$file = SYSTEM . 'pages/' . $page . '.php';
+			if(!@file_exists($file) || preg_match('/[^A-z0-9_\-]/', $page))
+			{
+				$page = '404';
+				$file = SYSTEM . 'pages/404.php';
+			}
 		}
 	}
 
