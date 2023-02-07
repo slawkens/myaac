@@ -105,8 +105,10 @@ const TFS_LAST = TFS_03;
 // other definitions
 const ACCOUNT_NUMBER_LENGTH = 8;
 
-session_save_path(SESSIONS_DIR);
-session_start();
+if (!IS_CLI) {
+	session_save_path(SESSIONS_DIR);
+	session_start();
+}
 
 // basedir
 $basedir = '';
