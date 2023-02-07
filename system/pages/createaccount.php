@@ -165,7 +165,6 @@ if($save)
 
 		$new_account->setPassword(encrypt($password));
 		$new_account->setEMail($email);
-		$new_account->unblock();
 		$new_account->save();
 
 		if($config_salt_enabled)

@@ -66,7 +66,6 @@ else {
 			$new_account->setPassword(encrypt($password));
 			$new_account->setEMail($email);
 
-			$new_account->unblock();
 			$new_account->save();
 
 			$new_account->setCustomField('created', time());
