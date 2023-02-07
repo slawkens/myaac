@@ -70,7 +70,9 @@ if(!@file_exists($file)) {
 }
 
 ob_start();
-include($file);
+if($hooks->trigger(HOOK_ADMIN_BEFORE_PAGE)) {
+	require $file;
+}
 
 $content .= ob_get_contents();
 ob_end_clean();

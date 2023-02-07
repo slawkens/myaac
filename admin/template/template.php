@@ -2,6 +2,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+	<?php $hooks->trigger(HOOK_ADMIN_HEAD_START); ?>
 	<?php echo template_header(true); ?>
 	<title><?php echo (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,8 +17,10 @@
 	<script src="<?php echo BASE_URL; ?>tools/js/respond.min.js"></script>
 	<![endif]-->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<?php $hooks->trigger(HOOK_ADMIN_HEAD_END); ?>
 </head>
 <body class="sidebar-mini ">
+<?php $hooks->trigger(HOOK_ADMIN_BODY_START); ?>
 <?php if ($logged && admin()) { ?>
 	<div class="wrapper">
 		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -195,5 +198,6 @@ if ($logged && admin()) {
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.bs.min.js"></script>
 <?php } ?>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
+<?php $hooks->trigger(HOOK_ADMIN_BODY_END); ?>
 </body>
 </html>

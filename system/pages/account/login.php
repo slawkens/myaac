@@ -31,10 +31,6 @@ if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
 			$t = $tmp[$ip] ?? null;
 		}
 
-		if (!$hooks->trigger(HOOK_ACCOUNT_LOGIN_POST)) {
-			return;
-		}
-
 		$account_logged = new OTS_Account();
 		if (config('account_login_by_email')) {
 			$account_logged->findByEMail($login_account);
@@ -112,4 +108,6 @@ if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
 
 		$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
 	}
+
+	$hooks->trigger(HOOK_ACCOUNT_LOGIN_POST);
 }
