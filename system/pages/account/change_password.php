@@ -10,9 +10,16 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$new_password = isset($_POST['newpassword']) ? $_POST['newpassword'] : NULL;
-$new_password2 = isset($_POST['newpassword2']) ? $_POST['newpassword2'] : NULL;
-$old_password = isset($_POST['oldpassword']) ? $_POST['oldpassword'] : NULL;
+$title = 'Change Password';
+require __DIR__ . '/base.php';
+
+if(!$logged) {
+	return;
+}
+
+$new_password = $_POST['newpassword'] ?? NULL;
+$new_password2 = $_POST['newpassword2'] ?? NULL;
+$old_password = $_POST['oldpassword'] ?? NULL;
 if(empty($new_password) && empty($new_password2) && empty($old_password)) {
 	$twig->display('account.change_password.html.twig');
 }
@@ -32,7 +39,7 @@ else
 		}
 
 		/** @var OTS_Account $account_logged */
-		$old_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $old_password);
+		$old_password = encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $old_password);
 		if($old_password != $account_logged->getPassword()) {
 			$errors[] = "Current password is incorrect!";
 		}
@@ -48,7 +55,7 @@ else
 	{
 		$org_pass = $new_password;
 
-		if($config_salt_enabled)
+		if(USE_ACCOUNT_SALT)
 		{
 			$salt = generateRandomString(10, false, true, true);
 			$new_password = $salt . $new_password;

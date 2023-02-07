@@ -10,12 +10,21 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Register Account';
+require __DIR__ . '/base.php';
+
+if(!$logged) {
+	return;
+}
+
 if(isset($_POST['reg_password']))
-	$reg_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
+	$reg_password = encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
 
 $reckey = $account_logged->getCustomField('key');
-if((!$config['generate_new_reckey'] || !$config['mail_enabled']) || empty($reckey))
-	echo 'You cant get new rec key';
+if((!$config['generate_new_reckey'] || !$config['mail_enabled']) || empty($reckey)) {
+	$errors[] = 'You cant get new recovery key.';
+	$twig->display('error_box.html.twig', array('errors' => $errors));
+}
 else
 {
 	$points = $account_logged->getCustomField('premium_points');
@@ -67,5 +76,3 @@ else
 		));
 	}
 }
-
-?>

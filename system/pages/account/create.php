@@ -173,8 +173,7 @@ if($save)
 				$new_account->create(NULL, $account_id);
 		}
 
-		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
-		if($config_salt_enabled)
+		if(USE_ACCOUNT_SALT)
 		{
 			$salt = generateRandomString(10, false, true, true);
 			$password = $salt . $password;
@@ -185,7 +184,7 @@ if($save)
 		$new_account->unblock();
 		$new_account->save();
 
-		if($config_salt_enabled)
+		if(USE_ACCOUNT_SALT)
 			$new_account->setCustomField('salt', $salt);
 
 		$new_account->setCustomField('created', time());
@@ -200,8 +199,13 @@ if($save)
 				$new_account->setCustomField('premend', time() + $config['account_premium_days'] * 86400);
 			}
 			else { // rest
-				$new_account->setCustomField('premdays', $config['account_premium_days']);
-				$new_account->setCustomField('lastday', time());
+				if ($db->hasColumn('accounts', 'premium_ends_at')) { // TFS 1.4+
+					$new_account->setCustomField('premium_ends_at', time() + $config['account_premium_days'] * (60 * 60 * 24));
+				}
+				else {
+					$new_account->setCustomField('premdays', $config['account_premium_days']);
+					$new_account->setCustomField('lastday', time());
+				}
 			}
 		}
 

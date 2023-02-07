@@ -10,6 +10,19 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
+if(!$logged)
+{
+	$extra_url = '';
+	if(isset($_GET['thread_id'])) {
+		$extra_url = '&action=new_post&thread_id=' . $_GET['thread_id'];
+	}
+
+	header('Location: ' . BASE_URL . '?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum' . $extra_url));
+	return;
+}
+
 if(Forum::canPost($account_logged))
 {
 	$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();

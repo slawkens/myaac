@@ -3,22 +3,18 @@
 		<div class="card-header">
 			<h5 class="m-0">{% if action == 'edit' %}Edit{% else %}Add{% endif %} page</h5>
 		</div>
-		<form id="form" class="form-horizontal" method="post" action="?p=pages&action={% if action == 'edit' %}edit{% else %}add{% endif %}">
+		<form id="form" class="form-horizontal" method="post" action="?p=pages&action={% if action == 'edit' %}edit{% else %}new{% endif %}">
 			{% if action == 'edit' %}
 				<input type="hidden" name="id" value="{{ id }}"/>
 			{% endif %}
 			<div class="card-body">
 				<div class="form-group row">
 					<label for="title">Page Title</label>
-					<input type="text" id="title" name="title" class="form-control" autocomplete="off"
-						   maxlength="29"
-						   style="cursor: auto;" value="{{ title }}">
+					<input type="text" id="title" name="title" class="form-control" autocomplete="off" maxlength="29" style="cursor: auto;" value="{{ title }}" required>
 				</div>
 				<div class="form-group row">
 					<label for="name">Link/name</label>
-					<input type="text" id="name" name="name" class="form-control" autocomplete="off"
-						   maxlength="29"
-						   style="cursor: auto;" value="{{ name }}">
+					<input type="text" id="name" name="name" class="form-control" autocomplete="off" maxlength="29" style="cursor: auto;" value="{{ name }}" required>
 				</div>
 				<div class="form-group row">
 					<label for="access">Access</label>

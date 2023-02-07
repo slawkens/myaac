@@ -53,6 +53,8 @@ plugins/*
 !plugins/example.json
 !plugins/account-create-hint.json
 !plugins/account-create-hint
+!plugins/email-confirmed-reward.json
+!plugins/email-confirmed-reward
 landing
 
 # system

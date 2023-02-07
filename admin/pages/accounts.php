@@ -31,8 +31,8 @@ if ($config['account_country']) {
 	foreach ($config['countries'] as $code => $c)
 		$countries[$code] = $c;
 }
-$web_acc = array("None", "Admin", "Super Admin", "(Admin + Super Admin)");
-$acc_type = array("None", "Normal", "Tutor", "Senior Tutor", "Gamemaster", "God");
+$web_acc = ACCOUNT_WEB_FLAGS;
+$acc_type = config('account_types');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -70,7 +70,6 @@ else if (isset($_REQUEST['search'])) {
 ?>
 <div class="row">
 	<?php
-	$groups = new OTS_Groups_List();
 	if ($id > 0) {
 		$account = new OTS_Account();
 		$account->load($id);
@@ -186,8 +185,7 @@ else if (isset($_REQUEST['search'])) {
 				$account->setCustomField('web_lastlogin', $web_lastlogin);
 
 				if (isset($password)) {
-					$config_salt_enabled = $db->hasColumn('accounts', 'salt');
-					if ($config_salt_enabled) {
+					if (USE_ACCOUNT_SALT) {
 						$salt = generateRandomString(10, false, true, true);
 						$password = $salt . $password;
 						$account->setCustomField('salt', $salt);
@@ -196,7 +194,7 @@ else if (isset($_REQUEST['search'])) {
 					$password = encrypt($password);
 					$account->setPassword($password);
 
-					if ($config_salt_enabled)
+					if (USE_ACCOUNT_SALT)
 						$account->setCustomField('salt', $salt);
 				}
 

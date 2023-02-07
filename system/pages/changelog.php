@@ -10,8 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Changelog';
 
-$_page = isset($_GET['page']) ? $_GET['page'] : 0;
-$id = isset($_GET['id']) ? $_GET['id'] : 0;
+$_page = (int)$_GET['page'] ?? 0;
 $limit = 30;
 $offset = $_page * $limit;
 $next_page = false;
@@ -43,4 +42,3 @@ $twig->display('changelog.html.twig', array(
 	'next_page' => $next_page,
 	'canEdit' => $canEdit,
 ));
-?>

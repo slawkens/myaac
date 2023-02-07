@@ -23,7 +23,7 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-if (version_compare(phpversion(), '7.1', '<')) die('PHP version 7.1 or higher is required.');
+if (version_compare(phpversion(), '7.2.5', '<')) die('PHP version 7.2.5 or higher is required.');
 
 const MYAAC = true;
 const MYAAC_VERSION = '0.9.0-dev';
@@ -34,8 +34,10 @@ define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS
 define('IS_CLI', in_array(php_sapi_name(), ['cli', 'phpdb']));
 
 // account flags
+const FLAG_NONE = 0;
 const FLAG_ADMIN = 1;
 const FLAG_SUPER_ADMIN = 2;
+const FLAG_SUPER_BOTH = 3;
 const FLAG_CONTENT_PAGES = 4;
 const FLAG_CONTENT_MAILER = 8;
 const FLAG_CONTENT_NEWS = 16;
@@ -49,14 +51,27 @@ const FLAG_CONTENT_FAQ = 2048;
 const FLAG_CONTENT_MENUS = 4096;
 const FLAG_CONTENT_PLAYERS = 8192;
 
+// account access types
+const ACCOUNT_WEB_FLAGS = [
+	FLAG_NONE => 'None',
+	FLAG_ADMIN =>'Admin',
+	FLAG_SUPER_ADMIN => 'Super Admin',
+	FLAG_SUPER_BOTH =>'(Admin + Super Admin)',
+];
+
 // news
 const NEWS = 1;
 const TICKER = 2;
 const ARTICLE = 3;
 
+// here you can change location of admin panel
+// you need also to rename folder "admin"
+// this may improve security
+const ADMIN_PANEL_FOLDER = 'admin';
+
 // directories
 const BASE = __DIR__ . '/';
-const ADMIN = BASE . 'admin/';
+const ADMIN = BASE . ADMIN_PANEL_FOLDER . '/';
 const SYSTEM = BASE . 'system/';
 const CACHE = SYSTEM . 'cache/';
 const LOCALE = SYSTEM . 'locale/';
@@ -95,8 +110,10 @@ const TFS_LAST = TFS_03;
 // other definitions
 const ACCOUNT_NUMBER_LENGTH = 8;
 
-session_save_path(SESSIONS_DIR);
-session_start();
+if (!IS_CLI) {
+	session_save_path(SESSIONS_DIR);
+	session_start();
+}
 
 // basedir
 $basedir = '';
@@ -105,7 +122,7 @@ $size = count($tmp) - 1;
 for($i = 1; $i < $size; $i++)
 	$basedir .= '/' . $tmp[$i];
 
-$basedir = str_replace(['/admin', '/install', '/tools'], '', $basedir);
+$basedir = str_replace(['/' . ADMIN_PANEL_FOLDER, '/install', '/tools'], '', $basedir);
 define('BASE_DIR', $basedir);
 
 if(!IS_CLI) {

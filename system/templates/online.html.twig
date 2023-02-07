@@ -85,14 +85,14 @@
 <table border="0" cellspacing="1" cellpadding="4" width="100%">
 	<tr bgcolor="{{ config.vdarkborder }}">
 		{% if config.account_country %}
-		<td width="11px"><a href="?subtopic=online&order=country" class="white">#</A></td>
+		<td width="11px"><a href="{{ getLink('online?order=country') }}" class="white">#</A></td>
 		{% endif %}
 		{% if config.online_outfit %}
 		<td class="white"><b>Outfit</b></td>
 		{% endif %}
-		<td width="60%"><a href="?subtopic=online&order=name" class="white">Name</A></td>
-		<td width="20%"><a href="?subtopic=online&order=level" class="white">Level</A></td>
-		<td width="20%"><a href="?subtopic=online&order=vocation" class="white">Vocation</td>
+		<td width="60%"><a href="{{ getLink('online?order=name') }}" class="white">Name</A></td>
+		<td width="20%"><a href="{{ getLink('online?order=level') }}" class="white">Level</A></td>
+		<td width="20%"><a href="{{ getLink('online?order=vocation') }}" class="white">Vocation</td>
 	</tr>
 	{% set i = 0 %}
 	{% for player in players %}

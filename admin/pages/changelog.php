@@ -17,18 +17,18 @@ if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 
 $title = 'Changelog';
 $use_datatable = true;
-define('CL_LIMIT', 600); // maximum changelog body length
+const CL_LIMIT = 600; // maximum changelog body length
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
 <script src="<?php echo BASE_URL; ?>tools/js/jquery.datetimepicker.js"></script>
 <?php
-$id = isset($_GET['id']) ? $_GET['id'] : 0;
+$id = $_GET['id'] ?? 0;
 require_once LIBS . 'changelog.php';
 
 if(!empty($action))
 {
-	$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+	$id = $_REQUEST['id'] ?? null;
 	$body = isset($_REQUEST['body']) ? stripslashes($_REQUEST['body']) : null;
 	$create_date = isset($_REQUEST['createdate']) ? (int)strtotime($_REQUEST['createdate'] ): null;
 	$player_id = isset($_REQUEST['player_id']) ? (int)$_REQUEST['player_id'] : null;
@@ -37,9 +37,9 @@ if(!empty($action))
 
 	$errors = array();
 
-	if($action == 'add') {
+	if($action == 'new') {
 
-		if(Changelog::add($body, $type, $where, $player_id, $create_date, $errors)) {
+		if(isset($body) && Changelog::add($body, $type, $where, $player_id, $create_date, $errors)) {
 			$body = '';
 			$type = $where = $player_id = $create_date = 0;
 
@@ -110,15 +110,14 @@ if($action == 'edit' || $action == 'new') {
 	$account_players->orderBy('group_id', POT::ORDER_DESC);
 	$twig->display('admin.changelog.form.html.twig', array(
 		'action' => $action,
-		'cl_link_form' => constant('ADMIN_URL').'?p=changelog&action=' . ($action == 'edit' ? 'edit' : 'add'),
-		'cl_id' => isset($id) ? $id : null,
-		'body' => isset($body) ? htmlentities($body, ENT_COMPAT, 'UTF-8') : '',
-		'create_date' => isset($create_date) ? $create_date : '',
-		'player' => isset($player) && $player->isLoaded() ? $player : null,
-		'player_id' => isset($player_id) ? $player_id : null,
+		'cl_link_form' => constant('ADMIN_URL').'?p=changelog&action=' . ($action == 'edit' ? 'edit' : 'new'),
+		'cl_id' => $id ?? null,
+		'body' => isset($body) ? escapeHtml($body) : '',
+		'create_date' => $create_date ?? '',
+		'player_id' => $player_id ?? null,
 		'account_players' => $account_players,
-		'type' => isset($type) ? $type : 0,
-		'where' => isset($where) ? $where : 0,
+		'type' => $type ?? 0,
+		'where' => $where ?? 0,
 		'log_type' => $log_type,
 		'log_where' => $log_where,
 	));

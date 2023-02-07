@@ -127,8 +127,7 @@ switch ($action) {
 			$account->find($inputAccountName);
 		}
 
-		$config_salt_enabled = fieldExist('salt', 'accounts');
-		$current_password = encrypt(($config_salt_enabled ? $account->getCustomField('salt') : '') . $request->password);
+		$current_password = encrypt((USE_ACCOUNT_SALT ? $account->getCustomField('salt') : '') . $request->password);
 
 		if (!$account->isLoaded() || $account->getPassword() != $current_password) {
 			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');

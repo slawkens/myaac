@@ -8,12 +8,12 @@ class News
 			$errors[] = 'Please fill all inputs.';
 			return false;
 		}
-		if(strlen($title) > TITLE_LIMIT) {
-			$errors[] = 'News title cannot be longer than ' . TITLE_LIMIT . ' characters.';
+		if(strlen($title) > NEWS_TITLE_LIMIT) {
+			$errors[] = 'News title cannot be longer than ' . NEWS_TITLE_LIMIT . ' characters.';
 			return false;
 		}
-		if(strlen($body) > BODY_LIMIT) {
-			$errors[] = 'News content cannot be longer than ' . BODY_LIMIT . ' characters.';
+		if(strlen($body) > NEWS_BODY_LIMIT) {
+			$errors[] = 'News content cannot be longer than ' . NEWS_BODY_LIMIT . ' characters.';
 			return false;
 		}
 		if(strlen($article_text) > ARTICLE_TEXT_LIMIT) {

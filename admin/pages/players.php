@@ -634,9 +634,9 @@ else if (isset($_REQUEST['search'])) {
 											<label for="look_addons" class="control-label">Addons:</label>
 											<select name="look_addons" id="look_addons" class="form-control custom-select">
 												<?php
-												$addon_type = array(0, 1, 2, 3);
+												$addon_type = array("None", "First", "Second", "Both");
 												foreach ($addon_type as $id => $s_name) {
-													echo '<option value=' . $s_name . ($id == $player->getLookAddons() ? ' selected' : '') . '>' . $s_name . '</option>';
+													echo '<option value=' . $id . ($id == $player->getLookAddons() ? ' selected' : '') . '>' . $s_name . '</option>';
 												}
 												?>
 											</select>

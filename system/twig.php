@@ -14,6 +14,8 @@ $twig = new Twig_Environment($twig_loader, array(
 	'debug' => $dev_mode
 ));
 
+$twig_loader->addPath(PLUGINS);
+
 if($dev_mode) {
 	$twig->addExtension(new Twig_DebugExtension());
 }

@@ -50,8 +50,9 @@ define('HOOK_ACCOUNT_CREATE_BEFORE_SUBMIT_BUTTON', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_FORM', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_SUBMIT', ++$i);
 define('HOOK_ADMIN_MENU', ++$i);
+define('HOOK_EMAIL_CONFIRMED', ++$i);
 define('HOOK_FIRST', HOOK_STARTUP);
-define('HOOK_LAST', HOOK_ADMIN_MENU);
+define('HOOK_LAST', HOOK_EMAIL_CONFIRMED);
 
 require_once LIBS . 'plugins.php';
 class Hook
@@ -119,5 +120,7 @@ class Hooks
 		foreach(Plugins::getHooks() as $hook) {
 			$this->register($hook['name'], $hook['type'], $hook['file']);
 		}
+
+		Plugins::clearWarnings();
 	}
 }

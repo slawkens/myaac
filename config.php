@@ -73,7 +73,7 @@ $config = array(
 	'database_user' => '',
 	'database_password' => '',
 	'database_name' => '',
-	'database_log' => false, // should database queries be logged and and saved into system/logs/database.log?
+	'database_log' => false, // should database queries be logged and saved into system/logs/database.log?
 	'database_socket' => '', // set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)
 	'database_persistent' => false, // use database permanent connection (like server), may speed up your site
 
@@ -103,7 +103,14 @@ $config = array(
 	'account_login_by_email_fallback' => false, // allow also additionally login by Account Name/Number (for users that might forget their email)
 	'account_create_auto_login' => false, // auto login after creating account?
 	'account_create_character_create' => true, // allow directly to create character on create account page?
-	'account_mail_verify' => false, // force users to confirm their email addresses when registering account
+	'account_mail_verify' => false, // force users to confirm their email addresses when registering
+	'account_mail_confirmed_reward' => [ // reward users for confirming their E-Mails
+		// account_mail_verify needs to be enabled too
+		'premium_days' => 0,
+		'premium_points' => 0,
+		'coins' => 0,
+		'message' => 'You received %d %s for confirming your E-Mail address.' // example: You received 20 premium points for confirming your E-Mail address.
+	],
 	'account_mail_unique' => true, // email addresses cannot be duplicated? (one account = one email)
 	'account_mail_block_plus_sign' => true, // block email with '+' signs like test+box@gmail.com (help protect against spamming accounts)
 	'account_premium_days' => 0, // default premium days on new account
@@ -152,6 +159,18 @@ $config = array(
 	'generate_new_reckey_price' => 20,			// price for new recovery key
 	'send_mail_when_change_password' => true,	// send e-mail with new password when change password to account
 	'send_mail_when_generate_reckey' => true,	// send e-mail with rec key (key is displayed on page anyway when generate)
+
+	// you may need to adjust this for older tfs versions
+	// by removing Community Manager
+	'account_types' => [
+		'None',
+		'Normal',
+		'Tutor',
+		'Senior Tutor',
+		'Gamemaster',
+		'Community Manager',
+		'God',
+	],
 
 	// genders (aka sex)
 	'genders' => array(

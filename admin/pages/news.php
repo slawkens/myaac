@@ -23,8 +23,8 @@ if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 header('X-XSS-Protection:0');
 
 // some constants, used mainly by database (cannot by modified without schema changes)
-define('TITLE_LIMIT', 100);
-define('BODY_LIMIT', 65535); // maximum news body length
+define('NEWS_TITLE_LIMIT', 100);
+define('NEWS_BODY_LIMIT', 65535); // maximum news body length
 define('ARTICLE_TEXT_LIMIT', 300);
 define('ARTICLE_IMAGE_LIMIT', 100);
 
@@ -43,12 +43,12 @@ if(!empty($action))
 	$forum_section = isset($_REQUEST['forum_section']) ? $_REQUEST['forum_section'] : null;
 	$errors = array();
 
-	if($action == 'add') {
+	if($action == 'new') {
 		if(isset($forum_section) && $forum_section != '-1') {
 			$forum_add = Forum::add_thread($p_title, $body, $forum_section, $player_id, $account_logged->getId(), $errors);
 		}
 
-		if(News::add($p_title, $body, $type, $category, $player_id, isset($forum_add) && $forum_add != 0 ? $forum_add : 0, $article_text, $article_image, $errors)) {
+		if(isset($p_title) && News::add($p_title, $body, $type, $category, $player_id, isset($forum_add) && $forum_add != 0 ? $forum_add : 0, $article_text, $article_image, $errors)) {
 			$p_title = $body = $comments = $article_text = $article_image = '';
 			$type = $category = $player_id = 0;
 
@@ -115,21 +115,21 @@ if($action == 'edit' || $action == 'new') {
 	$twig->display('admin.news.form.html.twig', array(
 		'action' => $action,
 		'news_link' => getLink(PAGE),
-		'news_link_form' => '?p=news&action=' . ($action == 'edit' ? 'edit' : 'add'),
-		'news_id' => isset($id) ? $id : null,
-		'title' => isset($p_title) ? $p_title : '',
-		'body' => isset($body) ? htmlentities($body, ENT_COMPAT, 'UTF-8') : '',
-		'type' => isset($type) ? $type : null,
+		'news_link_form' => '?p=news&action=' . ($action == 'edit' ? 'edit' : 'new'),
+		'news_id' => $id ?? null,
+		'title' => $p_title ?? '',
+		'body' => isset($body) ? escapeHtml($body) : '',
+		'type' => $type ?? null,
 		'player' => isset($player) && $player->isLoaded() ? $player : null,
-		'player_id' => isset($player_id) ? $player_id : null,
+		'player_id' => $player_id ?? null,
 		'account_players' => $account_players,
-		'category' => isset($category) ? $category : 0,
+		'category' => $category ?? 0,
 		'categories' => $categories,
 		'forum_boards' => getForumBoards(),
-		'forum_section' => isset($forum_section) ? $forum_section : null,
-		'comments' => isset($comments) ? $comments : null,
-		'article_text' => isset($article_text) ? $article_text : null,
-		'article_image' => isset($article_image) ? $article_image : null
+		'forum_section' => $forum_section ?? null,
+		'comments' => $comments ?? null,
+		'article_text' => $article_text ?? null,
+		'article_image' => $article_image ?? null
 	));
 }
 

@@ -79,12 +79,12 @@
 										$nav_construct .= ' active';
 										$used_menu = true;
 									}
-									$nav_construct .= '"><i class="far fa-' . (isset($sub_menu['icon']) ? $sub_menu['icon'] : 'circle') . ' nav-icon"></i><p>' . $sub_menu['name'] . '</p></a></li>';
+									$nav_construct .= '"><i class="fas fa-' . ($sub_menu['icon'] ?? 'circle') . ' nav-icon"></i><p>' . $sub_menu['name'] . '</p></a></li>';
 								}
 								?>
 								<li class="nav-item has-treeview<?php echo($used_menu ? ' menu-open' : '') ?>">
 									<a href="#" class="nav-link<?php echo($used_menu ? ' active' : '') ?>">
-										<i class="nav-icon fas fa-<?php echo(isset($menu['icon']) ? $menu['icon'] : 'link') ?>"></i>
+										<i class="nav-icon fas fa-<?php echo($menu['icon'] ?? 'link') ?>"></i>
 										<p><?php echo $menu['name'] ?></p><i class="right fas fa-angle-left"></i>
 									</a>
 									<ul class="nav nav-treeview">
@@ -159,6 +159,9 @@
 
 				<p><h5><a href="http://my-aac.org/" target="_blank"><i class="fas fa-shoe-prints"></i> MyAAC Official</a></h5>
 				<small>Goto MyAAC Official Website</small></p>
+
+				<p><h5><a href="?p=open_source"><i class="fas fa-wrench"></i> Open Source</a></h5>
+				<small>View Open Source Software MyAAC is using</small></p>
 			</div>
 		</aside>
 

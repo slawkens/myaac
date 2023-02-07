@@ -34,6 +34,10 @@ $cache = Cache::getInstance();
 // twig
 require_once SYSTEM . 'twig.php';
 
+// action, used by many pages
+$action = $_REQUEST['action'] ?? '';
+define('ACTION', $action);
+
 // trim values we receive
 if(isset($_POST))
 {
@@ -128,6 +132,7 @@ require_once SYSTEM . 'database.php';
 
 define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
+define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
 
 // load vocation names
 $tmp = '';

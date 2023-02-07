@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 $rank_name = isset($_REQUEST['rank_name']) ? $_REQUEST['rank_name'] : null;
 if(!Validator::guildName($guild_name)) {

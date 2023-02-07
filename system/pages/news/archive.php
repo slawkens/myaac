@@ -9,5 +9,4 @@
  * @link      https://my-aac.org
  */
 $_GET['archive'] = true;
-require 'news.php';
-?>
+require __DIR__ . '/../news.php';

@@ -93,7 +93,7 @@ if (isset($_REQUEST['template'])) {
 								if (isset($menus[$id])) {
 									foreach ($menus[$id] as $i => $menu):
 										?>
-										<li class="ui-state-default" id="list-<?php echo $id ?>-<?php echo $i ?>"><label>Name:</label> <input type="text" name="menu[<?php echo $id ?>][]" value="<?php echo $menu['name'] ?>"/>
+										<li class="ui-state-default" id="list-<?php echo $id ?>-<?php echo $i ?>"><label>Name:</label> <input type="text" name="menu[<?php echo $id ?>][]" value="<?php echo escapeHtml($menu['name']); ?>"/>
 											<label>Link:</label> <input type="text" name="menu_link[<?php echo $id ?>][]" value="<?php echo $menu['link'] ?>"/>
 											<input type="hidden" name="menu_blank[<?php echo $id ?>][]" value="0"/>
 											<label><input class="blank-checkbox" type="checkbox" <?php echo($menu['blank'] == 1 ? 'checked' : '') ?>/><span title="Open in New Window">New Window</span></label>

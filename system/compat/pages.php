@@ -10,12 +10,28 @@
 defined('MYAAC') or die('Direct access not allowed!');
 switch($page)
 {
+	case 'createaccount':
+		$page = 'account/create';
+		break;
+
+	case 'accountmanagement':
+		$page = 'account/manage';
+		break;
+
+	case 'lostaccount':
+		$page = 'account/lost';
+		break;
+
 	case 'whoisonline':
 		$page = 'online';
 		break;
 
 	case 'latestnews':
 		$page = 'news';
+		break;
+
+	case 'newsarchive':
+		$page = 'news/archive';
 		break;
 
 	case 'tibiarules':
@@ -37,4 +53,3 @@ switch($page)
 	default:
 		break;
 }
-?>

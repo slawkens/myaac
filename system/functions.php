@@ -62,20 +62,20 @@ function getFullLink($page, $name, $blank = false) {
 function getLink($page, $action = null)
 {
 	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : '?') . $page . ($action ? '/' . $action : '');
+	return BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . $page . ($action ? '/' . $action : '');
 }
 function internalLayoutLink($page, $action = null) {return getLink($page, $action);}
 
 function getForumThreadLink($thread_id, $page = NULL)
 {
 	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
+	return BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
 }
 
 function getForumBoardLink($board_id, $page = NULL)
 {
 	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
+	return BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
 }
 
 function getPlayerLink($name, $generate = true)
@@ -90,7 +90,7 @@ function getPlayerLink($name, $generate = true)
 			$name = $player->getName();
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'characters/' . urlencode($name);
+	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'characters/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -100,7 +100,7 @@ function getMonsterLink($name, $generate = true)
 {
 	global $config;
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'creatures/' . urlencode($name);
+	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'creatures/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -118,7 +118,7 @@ function getHouseLink($name, $generate = true)
 			$name = $house->fetchColumn();
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'houses/' . urlencode($name);
+	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'houses/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -136,7 +136,7 @@ function getGuildLink($name, $generate = true)
 			$name = $guild->fetchColumn();
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . 'guilds/' . urlencode($name);
+	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'guilds/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -267,6 +267,13 @@ function getForumBoards()
 
 	return array();
 }
+
+// TODO:
+// convert forum threads links from just forum/ID
+// INTO: forum/thread-name-id, like in XenForo
+//function convertForumThreadTitle($title) {
+//	return str_replace(' ', '-', strtolower($title));
+//}
 
 /**
  * Retrieves data from myaac database config.
@@ -1145,12 +1152,24 @@ function clearCache()
 		global $template_name;
 		if ($cache->fetch('template_ini' . $template_name, $tmp))
 			$cache->delete('template_ini' . $template_name);
+
+		if ($cache->fetch('plugins_hooks', $tmp))
+			$cache->delete('plugins_hooks');
+
+		if ($cache->fetch('plugins_routes', $tmp))
+			$cache->delete('plugins_routes');
 	}
 
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
 	deleteDirectory(CACHE . 'twig', ['index.html'], true);
 	deleteDirectory(CACHE . 'plugins', ['index.html'], true);
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html'], true);
+
+	// routes cache
+	$routeCacheFile = CACHE . 'route.cache';
+	if (file_exists($routeCacheFile)) {
+		unlink($routeCacheFile);
+	}
 
 	return true;
 }
@@ -1508,6 +1527,21 @@ function getAccountLoginByLabel()
 	}
 
 	return $ret;
+}
+
+function camelCaseToUnderscore($input)
+{
+	return ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $input)), '_');
+}
+
+function removeIfFirstSlash(&$text) {
+	if(strpos($text, '/') === 0) {
+		$text = str_replace_first('/', '', $text);
+	}
+};
+
+function escapeHtml($html) {
+	return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
 // validator functions
