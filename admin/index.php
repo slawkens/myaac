@@ -1,4 +1,5 @@
 <?php
+
 // few things we'll need
 require '../common.php';
 
@@ -42,7 +43,7 @@ $hooks->load();
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
 require SYSTEM . 'migrate.php';
-require ADMIN . 'includes/functions.php';
+require __DIR__ . '/includes/functions.php';
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
@@ -57,7 +58,7 @@ if(!$logged || !admin()) {
 }
 
 // include our page
-$file = BASE . 'admin/pages/' . $page . '.php';
+$file = __DIR__ . '/pages/' . $page . '.php';
 if(!@file_exists($file)) {
 	if (strpos($page, 'plugins/') !== false) {
 		$file = BASE . $page;
@@ -76,4 +77,4 @@ ob_end_clean();
 
 // template
 $template_path = 'template/';
-require ADMIN . $template_path . 'template.php';
+require __DIR__ . '/' . $template_path . 'template.php';

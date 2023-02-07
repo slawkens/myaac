@@ -64,9 +64,14 @@ const NEWS = 1;
 const TICKER = 2;
 const ARTICLE = 3;
 
+// here you can change location of admin panel
+// you need also to rename folder "admin"
+// this may improve security
+const ADMIN_PANEL_FOLDER = 'admin';
+
 // directories
 const BASE = __DIR__ . '/';
-const ADMIN = BASE . 'admin/';
+const ADMIN = BASE . ADMIN_PANEL_FOLDER . '/';
 const SYSTEM = BASE . 'system/';
 const CACHE = SYSTEM . 'cache/';
 const LOCALE = SYSTEM . 'locale/';
@@ -117,7 +122,7 @@ $size = count($tmp) - 1;
 for($i = 1; $i < $size; $i++)
 	$basedir .= '/' . $tmp[$i];
 
-$basedir = str_replace(['/admin', '/install', '/tools'], '', $basedir);
+$basedir = str_replace(['/' . ADMIN_PANEL_FOLDER, '/install', '/tools'], '', $basedir);
 define('BASE_DIR', $basedir);
 
 if(!IS_CLI) {
