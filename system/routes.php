@@ -39,7 +39,7 @@ return [
 	['GET', 'forum/board/{id:int}[/]', 'forum/show_board.php'],
 	['GET', 'forum/board/{id:int}/{page:[0-9]+}[/]', 'forum/show_board.php'],
 	['GET', 'forum/thread/{id:int}[/]', 'forum/show_thread.php'],
-	//['GET', 'forum/thread/{id:[0-9]+}/{page:[0-9]+}[/]', 'forum/show_thread.php'],
+	['GET', 'forum/thread/{id:int}/{page:int}[/]', 'forum/show_thread.php'],
 
 	['GET', 'gallery/{image:int}[/]', 'gallery.php'],
 	[['GET', 'POST'], 'gallery/{action:string}[/]', 'gallery.php'],
