@@ -16,6 +16,3 @@
 		Please turn it on, or be aware that some features on this website will not work correctly.
 	</div>
 </noscript>
-{% if config.recaptcha_enabled %}
-<script src="https://www.google.com/recaptcha/api.js{% if config('recaptcha_type') == 'v3' %}?render={{ config.recaptcha_site_key }}{% endif %}"></script>
-{% endif %}

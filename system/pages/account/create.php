@@ -72,14 +72,6 @@ if($save)
 			$errors['country'] = 'Country is invalid.';
 	}
 
-	if(config('recaptcha_enabled'))
-	{
-		require_once LIBS . 'GoogleReCAPTCHA.php';
-		if (!GoogleReCAPTCHA::verify('register')) {
-			$errors['verification'] = GoogleReCAPTCHA::getErrorMessage();
-		}
-	}
-
 	// password
 	if(empty($password)) {
 		$errors['password'] = 'Please enter the password for your new account.';
@@ -149,7 +141,9 @@ if($save)
 		}
 	}
 
-	$hooks->trigger(HOOK_ACCOUNT_CREATE_AFTER_SUBMIT, $params);
+	if (!$hooks->trigger(HOOK_ACCOUNT_CREATE_POST, $params)) {
+		return;
+	}
 
 	if(config('account_create_character_create')) {
 		$character_name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : null;
