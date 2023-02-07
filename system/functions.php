@@ -1166,8 +1166,11 @@ function clearCache()
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html'], true);
 
 	// routes cache
-	unlink(CACHE . 'route.cache');
-
+	$routeCacheFile = CACHE . 'route.cache';
+	if (file_exists($routeCacheFile)) {
+		unlink($routeCacheFile);
+	}
+	
 	return true;
 }
 
