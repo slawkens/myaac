@@ -80,13 +80,12 @@ if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
 			}
 		}
 
-		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
-		if($account_logged->isLoaded() && encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password) == $account_logged->getPassword()
+		if($account_logged->isLoaded() && encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $login_password) == $account_logged->getPassword()
 			&& (!isset($t) || $t['attempts'] < 5)
 			)
 		{
 			setSession('account', $account_logged->getNumber());
-			setSession('password', encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password));
+			setSession('password', encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $login_password));
 			if($remember_me) {
 				setSession('remember_me', true);
 			}

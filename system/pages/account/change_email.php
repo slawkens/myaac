@@ -36,7 +36,7 @@ if($email_new_time < 10) {
 			$errors[] = 'Please enter password to your account.';
 		}
 		else {
-			$post_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $post_password);
+			$post_password = encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $post_password);
 			if($post_password != $account_logged->getPassword()) {
 				$errors[] = 'Wrong password to account.';
 			}

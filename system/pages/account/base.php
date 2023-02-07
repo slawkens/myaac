@@ -26,5 +26,4 @@ if(!$logged)
 }
 else {
 	$show_form = true;
-	$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 }

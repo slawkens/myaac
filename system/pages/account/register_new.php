@@ -18,7 +18,7 @@ if(!$logged) {
 }
 
 if(isset($_POST['reg_password']))
-	$reg_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
+	$reg_password = encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
 
 $reckey = $account_logged->getCustomField('key');
 if((!$config['generate_new_reckey'] || !$config['mail_enabled']) || empty($reckey)) {

@@ -17,8 +17,8 @@ if(!$logged) {
 	return;
 }
 
-$_POST['reg_password'] = isset($_POST['reg_password']) ? $_POST['reg_password'] : '';
-$reg_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
+$_POST['reg_password'] = $_POST['reg_password'] ?? '';
+$reg_password = encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
 $old_key = $account_logged->getCustomField("key");
 
 if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1") {

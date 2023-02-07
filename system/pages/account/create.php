@@ -173,8 +173,7 @@ if($save)
 				$new_account->create(NULL, $account_id);
 		}
 
-		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
-		if($config_salt_enabled)
+		if(USE_ACCOUNT_SALT)
 		{
 			$salt = generateRandomString(10, false, true, true);
 			$password = $salt . $password;
@@ -185,7 +184,7 @@ if($save)
 		$new_account->unblock();
 		$new_account->save();
 
-		if($config_salt_enabled)
+		if(USE_ACCOUNT_SALT)
 			$new_account->setCustomField('salt', $salt);
 
 		$new_account->setCustomField('created', time());

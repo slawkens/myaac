@@ -185,8 +185,7 @@ else if (isset($_REQUEST['search'])) {
 				$account->setCustomField('web_lastlogin', $web_lastlogin);
 
 				if (isset($password)) {
-					$config_salt_enabled = $db->hasColumn('accounts', 'salt');
-					if ($config_salt_enabled) {
+					if (USE_ACCOUNT_SALT) {
 						$salt = generateRandomString(10, false, true, true);
 						$password = $salt . $password;
 						$account->setCustomField('salt', $salt);
@@ -195,7 +194,7 @@ else if (isset($_REQUEST['search'])) {
 					$password = encrypt($password);
 					$account->setPassword($password);
 
-					if ($config_salt_enabled)
+					if (USE_ACCOUNT_SALT)
 						$account->setCustomField('salt', $salt);
 				}
 

@@ -132,6 +132,7 @@ require_once SYSTEM . 'database.php';
 
 define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
+define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
 
 // load vocation names
 $tmp = '';

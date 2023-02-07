@@ -15,8 +15,7 @@ else {
 
 		$password = $_SESSION['var_password'];
 
-		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
-		if($config_salt_enabled)
+		if(USE_ACCOUNT_SALT)
 		{
 			$salt = generateRandomString(10, false, true, true);
 			$password = $salt . $password;
@@ -75,7 +74,7 @@ else {
 			$account_used = &$new_account;
 		}
 
-		if($config_salt_enabled)
+		if(USE_ACCOUNT_SALT)
 			$account_used->setCustomField('salt', $salt);
 
 		$account_used->setCustomField('web_flags', FLAG_ADMIN + FLAG_SUPER_ADMIN);

@@ -17,7 +17,6 @@ if(!$config['mail_enabled'])
 	return;
 }
 
-$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 $action_type = isset($_REQUEST['action_type']) ? $_REQUEST['action_type'] : '';
 if($action == '')
 {
@@ -292,7 +291,7 @@ elseif($action == 'step3')
 							$account->setEMail($new_email);
 
 							$tmp_new_pass = $new_pass;
-							if($config_salt_enabled)
+							if(USE_ACCOUNT_SALT)
 							{
 								$salt = generateRandomString(10, false, true, true);
 								$tmp_new_pass = $salt . $new_pass;
@@ -301,7 +300,7 @@ elseif($action == 'step3')
 							$account->setPassword(encrypt($tmp_new_pass));
 							$account->save();
 
-							if($config_salt_enabled)
+							if(USE_ACCOUNT_SALT)
 								$account->setCustomField('salt', $salt);
 
 							echo 'Your account name, new password and new e-mail.<BR>
@@ -481,7 +480,7 @@ elseif($action == 'setnewpassword')
 				if(Validator::password($newpassword))
 				{
 					$tmp_new_pass = $newpassword;
-					if($config_salt_enabled)
+					if(USE_ACCOUNT_SALT)
 					{
 						$salt = generateRandomString(10, false, true, true);
 						$tmp_new_pass  = $salt . $newpassword;
