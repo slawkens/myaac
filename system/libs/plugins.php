@@ -330,27 +330,59 @@ class Plugins {
 						}
 
 						if(in_array($req, array('php-ext', 'php-extension'))) { // require php extension
-							if(!extension_loaded($version)) {
-								self::$error = "This plugin requires php extension: " . $version . " to be installed.";
+							$tmpDisplayError = false;
+							$explode = explode(',', $version);
+
+							foreach ($explode as $item) {
+								if(!extension_loaded($item)) {
+									$errors[] = "This plugin requires php extension: " . $item . " to be installed.";
+									$tmpDisplayError = true;
+								}
+							}
+
+							if ($tmpDisplayError) {
+								self::$error = implode('<br/>', $errors);
 								$continue = false;
 								break;
 							}
 						}
 						else if($req == 'table') {
-							if(!$db->hasTable($version)) {
-								self::$error = "This plugin requires table: " . $version . " to exist in the database.";
+							$tmpDisplayError = false;
+							$explode = explode(',', $version);
+							foreach ($explode as $item) {
+								if(!$db->hasTable($item)) {
+									$errors[] = "This plugin requires table: " . $item . " to exist in the database.";
+									$tmpDisplayError = true;
+								}
+							}
+
+							if ($tmpDisplayError) {
+								self::$error = implode('<br/>', $errors);
 								$continue = false;
 								break;
 							}
 						}
 						else if($req == 'column') {
-							$tmp = explode('.', $version);
-							if(count($tmp) == 2) {
-								if(!$db->hasColumn($tmp[0], $tmp[1])) {
-									self::$error = "This plugin requires database column: " . $tmp[0] . "." . $tmp[1] . " to exist in database.";
-									$continue = false;
-									break;
+							$tmpDisplayError = false;
+							$explode = explode(',', $version);
+							foreach ($explode as $item) {
+								$tmp = explode('.', $item);
+
+								if(count($tmp) == 2) {
+									if(!$db->hasColumn($tmp[0], $tmp[1])) {
+										$errors[] = "This plugin requires database column: " . $tmp[0] . "." . $tmp[1] . " to exist in database.";
+										$tmpDisplayError = true;
+									}
 								}
+								else {
+									self::$warnings[] = "Invalid plugin require column: " . $item;
+								}
+							}
+
+							if ($tmpDisplayError) {
+								self::$error = implode('<br/>', $errors);
+								$continue = false;
+								break;
 							}
 						}
 						else if(strpos($req, 'ext-') !== false) {

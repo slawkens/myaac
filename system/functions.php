@@ -1170,7 +1170,7 @@ function clearCache()
 	if (file_exists($routeCacheFile)) {
 		unlink($routeCacheFile);
 	}
-	
+
 	return true;
 }
 
