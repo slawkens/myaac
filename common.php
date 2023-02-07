@@ -85,8 +85,10 @@ define('TFS_03', 4);
 define('TFS_FIRST', TFS_02);
 define('TFS_LAST', TFS_03);
 
-session_save_path(SYSTEM . 'php_sessions');
-session_start();
+if (!IS_CLI) {
+	session_save_path(SYSTEM . 'php_sessions');
+	session_start();
+}
 
 // basedir
 $basedir = '';
