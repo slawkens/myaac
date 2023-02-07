@@ -64,6 +64,7 @@ define('HOOK_ADMIN_MENU', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_ACCOUNT', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_PASSWORD', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_SIGN_IN', ++$i);
+define('HOOK_CRONJOB', ++$i);
 define('HOOK_EMAIL_CONFIRMED', ++$i);
 const HOOK_FIRST = HOOK_STARTUP;
 const HOOK_LAST = HOOK_EMAIL_CONFIRMED;
