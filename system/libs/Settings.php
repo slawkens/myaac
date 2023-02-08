@@ -52,6 +52,7 @@ class Settings implements ArrayAccess
 		}
 	}
 
+	#[\ReturnTypeWillChange]
 	public function offsetSet($offset, $value)
 	{
 		if (is_null($offset)) {
@@ -91,10 +92,12 @@ class Settings implements ArrayAccess
 		$this->settings[$pluginName][$key] = $value['value'];
 	}
 
+	#[\ReturnTypeWillChange]
 	public function offsetExists($offset) {
 		return isset($this->settings[$offset]);
 	}
 
+	#[\ReturnTypeWillChange]
 	public function offsetUnset($offset) {
 		unset($this->settings[$offset]);
 	}
@@ -107,6 +110,7 @@ class Settings implements ArrayAccess
 	 * @param mixed $offset
 	 * @return array|mixed
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetGet($offset)
 	{
 		// try cache hit
