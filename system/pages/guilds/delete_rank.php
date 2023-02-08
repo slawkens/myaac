@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 $rank_to_delete = isset($_REQUEST['rankid']) ? (int) $_REQUEST['rankid'] : null;
 

@@ -20,6 +20,9 @@
 		$('#password2').blur(function() {
 			checkPassword();
 		});
+		$('#SuggestAccountNumber a').click(function (event) {
+			generateAccountNumber(event);
+		});
 	});
 
 	function updateFlag()
@@ -191,5 +194,19 @@
 		);
 
 		lastSend = timeNow;
+	}
+
+	function generateAccountNumber(event)
+	{
+		event.preventDefault();
+		$.getJSON("tools/generate_account_number.php", { uid: Math.random() },
+			function(data){
+				if(data.hasOwnProperty('success')) {
+					$('#account_input').val(data.success);
+				}
+			}
+		);
+
+		setTimeout(checkAccount, 1000);
 	}
 </script>

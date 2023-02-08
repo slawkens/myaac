@@ -1,13 +1,6 @@
 <?php
+// Increase size of ip in myaac_visitors table
+// according to this answer: https://stackoverflow.com/questions/166132/maximum-length-of-the-textual-representation-of-an-ipv6-address
+// the size of ipv6 can be maximal 45 chars
 
-if(!$db->hasTable(TABLE_PREFIX . 'settings')) {
-	$db->exec("CREATE TABLE `" . TABLE_PREFIX . "settings`
-	(
-		`id` int(11) NOT NULL AUTO_INCREMENT,
-		`plugin_name` VARCHAR(255) NOT NULL DEFAULT '',
-		`key` VARCHAR(255) NOT NULL DEFAULT '',
-		`value` TEXT NOT NULL,
-		PRIMARY KEY (`id`),
-		KEY `key` (`key`)
-	) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;");
-}
+$db->exec('ALTER TABLE `' . TABLE_PREFIX . "visitors` MODIFY `ip` VARCHAR(45) NOT NULL;");

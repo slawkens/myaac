@@ -15,7 +15,7 @@
 
 /**
  * Wrapper for houses list.
- * 
+ *
  * @package POT
  * @version 0.1.3
  * @tutorial POT/data_directory.pkg#towns.houses
@@ -24,14 +24,14 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 {
 /**
  * List of houses elements.
- * 
+ *
  * @var array
  */
     private $houses = array();
 
 /**
  * Loads houses information.
- * 
+ *
  * @version 0.1.3
  * @param string $path Houses file.
  * @throws DOMException On DOM operation error.
@@ -49,11 +49,11 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * <p>
  * Allows object importing from {@link http://www.php.net/manual/en/function.var-export.php var_export()}.
  * </p>
- * 
+ *
  * @param array $properties List of object properties.
  * @throws DOMException On DOM operation error.
  */
@@ -72,7 +72,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * Checks if given house exists on list.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param string $name Name.
@@ -94,7 +94,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * Returns house information.
- * 
+ *
  * @version 0.1.3
  * @param int $id House ID.
  * @return OTS_House House information wrapper.
@@ -112,7 +112,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * Checks if given house ID exists on list.
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @param int $id ID.
@@ -125,7 +125,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * Returns ID of house with given name.
- * 
+ *
  * @version 0.1.3
  * @param string $name House name.
  * @return int House ID.
@@ -147,17 +147,17 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * Returns amount of houses.
- * 
+ *
  * @return int Count of houses.
  */
-    public function count()
+    public function count(): int
     {
         return count($this->houses);
     }
 
 /**
  * Returns iterator handle for loops.
- * 
+ *
  * @return ArrayIterator Houses list iterator.
  */
     public function getIterator()
@@ -167,7 +167,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * Checks if given element exists.
- * 
+ *
  * @param string|int $offset Array key.
  * @return bool True if it's set.
  */
@@ -185,7 +185,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * Returns item from given position.
- * 
+ *
  * @version 0.1.3
  * @param string|int $offset Array key.
  * @return OTS_House|int If key is an integer (type-sensitive!) then returns house instance. If it's a string then return associated ID found by house name.
@@ -204,7 +204,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * This method is implemented for ArrayAccess interface. In fact you can't write/append to houses list. Any call to this method will cause {@link E_OTS_ReadOnly E_OTS_ReadOnly} raise.
- * 
+ *
  * @param string|int $offset Array key.
  * @param mixed $value Field value.
  * @throws E_OTS_ReadOnly Always - this class is read-only.
@@ -216,7 +216,7 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * This method is implemented for ArrayAccess interface. In fact you can't write/append to houses list. Any call to this method will cause {@link E_OTS_ReadOnly E_OTS_ReadOnly} raise.
- * 
+ *
  * @param string|int $offset Array key.
  * @throws E_OTS_ReadOnly Always - this class is read-only.
  */
@@ -227,11 +227,11 @@ class OTS_HousesList implements IteratorAggregate, Countable, ArrayAccess
 
 /**
  * Returns string representation of object.
- * 
+ *
  * <p>
  * If any display driver is currently loaded then it uses it's method.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.3
  * @return string String representation of object.

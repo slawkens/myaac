@@ -1,9 +1,10 @@
 <?php
+
 // few things we'll need
 require '../common.php';
 
-define('ADMIN_PANEL', true);
-define('MYAAC_ADMIN', true);
+const ADMIN_PANEL = true;
+const MYAAC_ADMIN = true;
 
 if(file_exists(BASE . 'config.local.php')) {
 	require_once BASE . 'config.local.php';
@@ -18,8 +19,8 @@ if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['i
 $content = '';
 
 // validate page
-$page = isset($_GET['p']) ? $_GET['p'] : '';
-if(empty($page) || preg_match("/[^a-zA-Z0-9_\-]/", $page))
+$page = $_GET['p'] ?? '';
+if(empty($page) || preg_match("/[^a-zA-Z0-9_\-\/.]/", $page))
 	$page = 'dashboard';
 
 $page = strtolower($page);
@@ -42,10 +43,14 @@ $hooks->load();
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
 require SYSTEM . 'migrate.php';
-require ADMIN . 'includes/functions.php';
+require __DIR__ . '/includes/functions.php';
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
+
+if (ACTION == 'logout') {
+	require SYSTEM . 'logout.php';
+}
 
 // if we're not logged in - show login box
 if(!$logged || !admin()) {
@@ -53,19 +58,25 @@ if(!$logged || !admin()) {
 }
 
 // include our page
-$file = SYSTEM . 'pages/admin/' . $page . '.php';
+$file = __DIR__ . '/pages/' . $page . '.php';
 if(!@file_exists($file)) {
-	$page = '404';
-	$file = SYSTEM . 'pages/404.php';
+	if (strpos($page, 'plugins/') !== false) {
+		$file = BASE . $page;
+	}
+	else {
+		$page = '404';
+		$file = SYSTEM . 'pages/404.php';
+	}
 }
 
 ob_start();
-include($file);
+if($hooks->trigger(HOOK_ADMIN_BEFORE_PAGE)) {
+	require $file;
+}
 
 $content .= ob_get_contents();
 ob_end_clean();
 
 // template
 $template_path = 'template/';
-require ADMIN . $template_path . 'template.php';
-?>
+require __DIR__ . '/' . $template_path . 'template.php';

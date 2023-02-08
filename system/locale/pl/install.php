@@ -41,6 +41,7 @@ $locale['step_requirements_extension'] = 'Rozszerzenie PHP - $EXTENSION$';
 $locale['step_requirements_warning_images_guilds'] = 'Nie będzie możliwości uploadu obrazków gildii';
 $locale['step_requirements_warning_images_gallery'] = 'Nie będzie możliwości uploadu obrazków do galerii';
 $locale['step_requirements_warning_player_signatures'] = 'Sygnatury graczy nie będą działać';
+$locale['step_requirements_warning_install_plugins'] = 'Nie będzie można instalować rozszerzeń';
 
 // config
 $locale['step_config'] = 'Konfiguracja';
@@ -112,7 +113,10 @@ $locale['step_admin_account_id_error_same'] = 'Hasło nie może być takie same 
 $locale['step_admin_password'] = 'Hasło Konta Admina';
 $locale['step_admin_password_desc'] = 'Hasło do Twojego Konta Admina.';
 $locale['step_admin_password_error_empty'] = 'Proszę podać hasło do Twojego nowego konta.';
-$locale['step_admin_password_error_format'] = 'Nieprawidłowy format hasła. Używaj tylko znaków a-Z oraz liczb 0-9. Minimum 8, maksimum 30 znaków.';
+$locale['step_admin_password_error_format'] = 'Nieprawidłowy format hasła. Minimum jeden znak i jedna liczba. Minimum 8, maksimum 30 znaków.';
+$locale['step_admin_password_confirm'] = 'Potwierdź Hasło';
+$locale['step_admin_password_confirm_desc'] = 'Potwierdzenie hasła do Twojego Konta Admina.';
+$locale['step_admin_password_confirm_error_not_same'] = 'Hasła nie są takie same.';
 $locale['step_admin_player_name'] = 'Nazwa postaci';
 $locale['step_admin_player_name_desc'] = 'Nazwa postaci Konta Admina.';
 $locale['step_admin_player_name_error_empty'] = 'Proszę podać nazwę postaci.';

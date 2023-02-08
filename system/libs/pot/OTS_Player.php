@@ -602,7 +602,7 @@ class OTS_Player extends OTS_Row_DAO
         }
 
         $account = new OTS_Account();
-        $account->load($this->data['account_id']);
+        $account->load($this->data['account_id'], false, true);
         return $account;
     }
 
@@ -2489,7 +2489,7 @@ class OTS_Player extends OTS_Row_DAO
 
         $value = $this->db->query('SELECT ' . $this->db->fieldName('value') . ' FROM ' . $this->db->tableName('player_storage') . ' WHERE ' . $this->db->fieldName('key') . ' = ' . (int) $key . ' AND ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'])->fetch();
 
-        if($value !== false)
+        if($value === false)
         {
             return null;
         }

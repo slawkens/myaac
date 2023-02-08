@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 //set rights in guild
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 $name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : null;
@@ -39,13 +41,10 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$player->find($name);
 		if(!$player->isLoaded()) {
 			$errors[] = 'Player with name <b>'.$name.'</b> doesn\'t exist.';
-		}
-		else
-		{
-			$rank_of_player = $player->getRank();
-			if($rank_of_player->isLoaded()) {
-				$errors[] = 'Character with name <b>'.$name.'</b> is already in guild. You must leave guild before you join other guild.';
-			}
+		}else if ($player->getAccountID() != $account_logged->getId()) {
+			$errors[] = 'Character with name <b> ' . $name. ' </b> is not in your account.';
+		}else if ($player->getRank()->isLoaded()){
+			$errors[] = 'Character with name <b>'.$name.'</b> is already in guild. You must leave guild before you join other guild.';
 		}
 	}
 }
@@ -65,7 +64,7 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		}
 
 		if(!$is_invited) {
-			$errors[] = 'Character '.$player->getName.' isn\'t invited to guild <b>'.$guild->getName().'</b>.';
+			$errors[] = 'Character '.$player->getName() .' isn\'t invited to guild <b>'.$guild->getName().'</b>.';
 		}
 	}
 }
@@ -123,5 +122,3 @@ else {
 		));
 	}
 }
-
-?>

@@ -41,6 +41,7 @@ $locale['step_requirements_extension'] = '$EXTENSION$ PHP extension';
 $locale['step_requirements_warning_images_guilds'] = 'Guild logo upload will not work';
 $locale['step_requirements_warning_images_gallery'] = 'Gallery image upload will not work';
 $locale['step_requirements_warning_player_signatures'] = 'Player Signatures will not work';
+$locale['step_requirements_warning_install_plugins'] = 'It will be not possible to install plugins';
 
 // config
 $locale['step_config'] = 'Configuration';
@@ -113,7 +114,10 @@ $locale['step_admin_account_id_error_same'] = 'Password may not be the same as a
 $locale['step_admin_password'] = 'Admin account password';
 $locale['step_admin_password_desc'] = 'Password to your admin account.';
 $locale['step_admin_password_error_empty'] = 'Please enter the password for your new account.';
-$locale['step_admin_password_error_format'] = 'Invalid password format. Use only a-Z and numbers 0-9. Minimum 8, maximum 30 characters.';
+$locale['step_admin_password_error_format'] = 'Invalid password format. Minimum one letter and one number. Minimum 8, maximum 30 characters.';
+$locale['step_admin_password_confirm'] = 'Password confirm';
+$locale['step_admin_password_confirm_desc'] = 'Repeat password to your account.';
+$locale['step_admin_password_confirm_error_not_same'] = 'Passwords are not same.';
 $locale['step_admin_player_name'] = 'Admin player name';
 $locale['step_admin_player_name_desc'] = 'Name of your admin character.';
 $locale['step_admin_player_name_error_empty'] = 'Please enter the name of your character.';

@@ -62,20 +62,20 @@ function getFullLink($page, $name, $blank = false) {
 function getLink($page, $action = null)
 {
 	$settings = Settings::getInstance();
-	return BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . $page . ($action ? '/' . $action : '');
+	return BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : 'index.php/') . $page . ($action ? '/' . $action : '');
 }
 function internalLayoutLink($page, $action = null) {return getLink($page, $action);}
 
 function getForumThreadLink($thread_id, $page = NULL)
 {
 	$settings = Settings::getInstance();
-	return BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
+	return BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : 'index.php/') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
 }
 
 function getForumBoardLink($board_id, $page = NULL)
 {
 	$settings = Settings::getInstance();
-	return BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
+	return BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : 'index.php/') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
 }
 
 function getPlayerLink($name, $generate = true)
@@ -89,7 +89,7 @@ function getPlayerLink($name, $generate = true)
 	}
 
 	$settings = Settings::getInstance();
-	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'characters/' . urlencode($name);
+	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : 'index.php/') . 'characters/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -98,7 +98,7 @@ function getPlayerLink($name, $generate = true)
 function getMonsterLink($name, $generate = true)
 {
 	$settings = Settings::getInstance();
-	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'creatures/' . urlencode($name);
+	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : 'index.php/') . 'creatures/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -117,7 +117,7 @@ function getHouseLink($name, $generate = true)
 	}
 
 	$settings = Settings::getInstance();
-	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'houses/' . urlencode($name);
+	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : 'index.php/') . 'houses/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -136,7 +136,7 @@ function getGuildLink($name, $generate = true)
 	}
 
 	$settings = Settings::getInstance();
-	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : '?') . 'guilds/' . urlencode($name);
+	$url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : 'index.php/') . 'guilds/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -267,6 +267,13 @@ function getForumBoards()
 
 	return array();
 }
+
+// TODO:
+// convert forum threads links from just forum/ID
+// INTO: forum/thread-name-id, like in XenForo
+//function convertForumThreadTitle($title) {
+//	return str_replace(' ', '-', strtolower($title));
+//}
 
 /**
  * Retrieves data from myaac database config.
@@ -462,7 +469,7 @@ function tickers()
  */
 function template_place_holder($type)
 {
-	global $template_place_holders;
+	global $twig, $template_place_holders;
 	$ret = '';
 
 	if(array_key_exists($type, $template_place_holders) && is_array($template_place_holders[$type]))
@@ -470,6 +477,9 @@ function template_place_holder($type)
 
 	if($type === 'head_start') {
 		$ret .= template_header();
+	}
+	elseif ($type === 'body_start') {
+		$ret .= $twig->render('browsehappy.html.twig');
 	}
 	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
@@ -1034,7 +1044,7 @@ function getTopPlayers($limit = 5) {
 			$deleted = 'deletion';
 
 		$is_tfs10 = $db->hasTable('players_online');
-		$players = $db->query('SELECT `id`, `name`, `level`, `experience`, `looktype`' . ($db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `lookhead`, `lookbody`, `looklegs`, `lookfeet`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . config('highscores_groups_hidden') . ' AND `id` NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
+		$players = $db->query('SELECT `id`, `name`, `level`, `vocation`, `experience`, `looktype`' . ($db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `lookhead`, `lookbody`, `looklegs`, `lookfeet`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . config('highscores_groups_hidden') . ' AND `id` NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
 
 		if($is_tfs10) {
 			foreach($players as &$player) {
@@ -1151,12 +1161,24 @@ function clearCache()
 		global $template_name;
 		if ($cache->fetch('template_ini' . $template_name, $tmp))
 			$cache->delete('template_ini' . $template_name);
+
+		if ($cache->fetch('plugins_hooks', $tmp))
+			$cache->delete('plugins_hooks');
+
+		if ($cache->fetch('plugins_routes', $tmp))
+			$cache->delete('plugins_routes');
 	}
 
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
 	deleteDirectory(CACHE . 'twig', ['index.html'], true);
 	deleteDirectory(CACHE . 'plugins', ['index.html'], true);
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html'], true);
+
+	// routes cache
+	$routeCacheFile = CACHE . 'route.cache';
+	if (file_exists($routeCacheFile)) {
+		unlink($routeCacheFile);
+	}
 
 	return true;
 }
@@ -1432,6 +1454,32 @@ function Outfits_loadfromXML()
 	return array('id' => $looktype, 'type' => $type, 'name' => $lookname, 'premium' => $premium, 'unlocked' => $unlocked, 'enabled' => $enabled);
 }
 
+function Mounts_loadfromXML()
+{
+	global $config;
+	$file_path = $config['data_path'] . 'XML/mounts.xml';
+	if (!file_exists($file_path)) {	return null; }
+
+	$xml = new DOMDocument;
+	$xml->load($file_path);
+
+	$mounts = null;
+	foreach ($xml->getElementsByTagName('mount') as $mount) {
+		$mounts[] = Mount_parseNode($mount);
+	}
+	return $mounts;
+}
+
+ function Mount_parseNode($node) {
+	$id = (int)$node->getAttribute('id');
+	$clientid = (int)$node->getAttribute('clientid');
+	$name = $node->getAttribute('name');
+	$speed = (int)$node->getAttribute('speed');
+	$premium = $node->getAttribute('premium');
+	$type = $node->getAttribute('type');
+	return array('id' => $id, 'clientid' => $clientid, 'name' => $name, 'speed' => $speed, 'premium' => $premium, 'type' => $type);
+}
+
 function left($str, $length) {
 	return substr($str, 0, $length);
 }
@@ -1473,9 +1521,41 @@ function truncate($string, $length)
 	return $string;
 }
 
+function getAccountLoginByLabel()
+{
+	$ret = '';
+	if (config('account_login_by_email')) {
+		$ret = 'Email Address';
+		if (config('account_login_by_email_fallback')) {
+			$ret .= ' or ';
+		}
+	}
+
+	if (!config('account_login_by_email') || config('account_login_by_email_fallback')) {
+		$ret .= 'Account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number');
+	}
+
+	return $ret;
+}
+
+function camelCaseToUnderscore($input)
+{
+	return ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $input)), '_');
+}
+
+function removeIfFirstSlash(&$text) {
+	if(strpos($text, '/') === 0) {
+		$text = str_replace_first('/', '', $text);
+	}
+};
+
+function escapeHtml($html) {
+	return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
 // validator functions
 require_once LIBS . 'validator.php';
-require_once SYSTEM . 'compat.php';
+require_once SYSTEM . 'compat/base.php';
 
 // custom functions
 require SYSTEM . 'functions_custom.php';

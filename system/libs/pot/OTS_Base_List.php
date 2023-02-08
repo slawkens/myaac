@@ -190,6 +190,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
  * @version 0.1.3
  * @return OTS_Base_DAO Current row.
  */
+	#[\ReturnTypeWillChange]
     public function current()
     {
         $id = current($this->rows);
@@ -203,7 +204,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
  *
  * @throws PDOException On PDO operation error.
  */
-    public function rewind()
+    public function rewind(): void
     {
         $this->rows = $this->db->query( $this->getSQL() )->fetchAll();
     }
@@ -211,7 +212,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
 /**
  * Moves to next row.
  */
-    public function next()
+    public function next(): void
     {
         next($this->rows);
     }
@@ -221,6 +222,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
  *
  * @return mixed Array key.
  */
+	#[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->rows);
@@ -231,7 +233,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
  *
  * @return bool Does next row exist.
  */
-    public function valid()
+    public function valid(): bool
     {
         return key($this->rows) !== null;
     }
@@ -243,7 +245,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
  * @return int Number of rows.
  * @throws PDOException On PDO operation error.
  */
-    public function count()
+    public function count(): int
     {
         return $this->db->query( $this->getSQL(true) )->fetchColumn();
     }

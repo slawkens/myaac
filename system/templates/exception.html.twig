@@ -8,8 +8,8 @@
 	<meta name="description" content="myaac">
 	<meta name="generator" content="MyAAC">
 
-	<link rel="stylesheet" href="/tools/css/messages.css">
-	<link rel="shortcut icon" href="/images/error.ico">
+	<link rel="stylesheet" href="tools/css/messages.css">
+	<link rel="shortcut icon" href="images/error.ico">
 	<base href="{{ BASE_URL }}" />
 
 	<style>
@@ -57,13 +57,15 @@
 		}
 	</style>
 	<!--[if lt IE 9]>
-	<script src="/tools/js/html5shiv.min.js"></script>
+	<script src="tools/js/html5shiv.min.js"></script>
 	<![endif]-->
 </head>
 <body>
 	<div class="center wide">
 		<h2 class="wide">Whoops something went wrong...</h2>
 		<div class="error wide">
+			Exception class: {{ exceptionClass }}()
+			<br/><br/>
 			{{ message }}
 			<br/><br/><br/>
 			<b>Backtrace:</b><br/><br/>

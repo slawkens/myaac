@@ -1,16 +1,15 @@
 {
     "require": {
-        "php": ">=7.1",
-        "ext-dom": "*",
-        "ext-json": "*",
-        "ext-gd": "*",
+        "php": "^7.2.5 || ^8.0",
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
+        "ext-json": "*",
         "ext-xml": "*",
-        "ext-zip": "*",
+        "ext-dom": "*",
         "phpmailer/phpmailer": "^6.1",
         "composer/semver": "^3.2",
-        "twig/twig": "~1.42.5",
-        "erusev/parsedown": "^1.7"
+        "twig/twig": "^2.0",
+        "erusev/parsedown": "^1.7",
+        "nikic/fast-route": "^1.3"
     }
 }

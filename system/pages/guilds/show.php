@@ -12,6 +12,9 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Guilds';
+
+require __DIR__ . '/base.php';
+
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 if(!Validator::guildName($guild_name))
 	$errors[] = Validator::getLastError();
@@ -77,7 +80,7 @@ if($logged)
 
 //show guild page
 $guild_logo = $guild->getCustomField('logo_name');
-if(empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo))
+if(empty($guild_logo) || !file_exists(GUILD_IMAGES_DIR . $guild_logo))
     $guild_logo = "default.gif";
 
 $description = $guild->getCustomField('description');

@@ -30,15 +30,20 @@
 
 												{{ hook('HOOK_ACCOUNT_CREATE_BEFORE_ACCOUNT') }}
 
+												{% if not config.account_login_by_email %}
 												<tr>
 													<td class="LabelV" style="width: 150px">
 														<span{% if errors.account is defined %} class="red"{% endif %}>Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</span>
+														{% if not constant('USE_ACCOUNT_NAME') %}
+														<div id="SuggestAccountNumber">[<a href="#">suggest number</a>]</div>
+														{% endif %}
 													</td>
 													<td>
 														<input type="text" name="account" id="account_input" size="30" maxlength="{% if constant('USE_ACCOUNT_NAME') %}30{% else %}10{% endif %}" value="{{ account }}" autofocus/>
 														<img id="account_indicator" src="images/global/general/{% if not save or errors.account is defined %}n{% endif %}ok.gif" style="display: none;" />
 													</td>
 												</tr>
+												{% endif %}
 												<tr><td></td><td><span id="account_error" class="FormFieldError">{% if errors.account is defined %}{{ errors.account }}{% endif %}</span></td></tr>
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_ACCOUNT') }}
 												<tr>
@@ -103,22 +108,6 @@
 												<tr><td></td><td><span id="password2_error" class="FormFieldError">{% if errors.password is defined %}{{ errors.password }}{% endif %}</span></td></tr>
 
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_PASSWORDS') }}
-
-                                                {% if config.recaptcha_enabled %}
-													<tr>
-														<td class="LabelV" style="width: 150px">
-															<span{% if errors.verification[0] is defined %} class="red"{% endif %}>Verification:</span>
-														</td>
-														<td>
-															<div class="g-recaptcha" data-sitekey="{{ config.recaptcha_site_key }}" data-theme="{{ config.recaptcha_theme }}"></div>
-														</td>
-													</tr>
-                                                    {% if errors.verification is defined %}
-														<tr><td></td><td><span class="FormFieldError">{{ errors.verification }}</span></td></tr>
-                                                    {% endif %}
-                                                {% endif %}
-
-												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_RECAPTCHA') }}
 												</tbody>
 											</table>
 										</div>
@@ -232,7 +221,7 @@
                                                 {% if config.character_towns|length > 1 %}
 												<tr>
 													<td class="LabelV" style="width: 150px">
-														<span{% if errors.town is defined %} class="red"{% endif %}>Select your city:</span>
+														<span{% if errors.town is defined %} class="red"{% endif %}>Select your town:</span>
 													</td>
 													<td>
 														<table width="100%" >
@@ -333,4 +322,9 @@
 	</table>
 </form>
 {{ hook('HOOK_ACCOUNT_CREATE_AFTER_FORM') }}
-<script type="text/javascript" src="tools/check_name.js"></script>
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/check_name.js"></script>
+<style>
+	#SuggestAccountNumber {
+		font-size: 7pt;
+	}
+</style>

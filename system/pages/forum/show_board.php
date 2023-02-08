@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $links_to_pages = '';
 $section_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
@@ -57,8 +59,7 @@ if(isset($last_threads[0]))
 	foreach($last_threads as $thread)
 	{
 		echo '<tr bgcolor="' . getStyle($number_of_rows++) . '"><td>';
-		if(Forum::isModerator())
-		{
+		if(Forum::isModerator()) {
 			echo '<a href="?subtopic=forum&action=move_thread&id='.$thread['id'].'"\')"><span style="color:darkgreen">[MOVE]</span></a>';
 			echo '<a href="?subtopic=forum&action=remove_post&id='.$thread['id'].'" onclick="return confirm(\'Are you sure you want remove thread > '.$thread['post_topic'].' <?\')"><span style="color: red">[REMOVE]</span></a>  ';
 		}

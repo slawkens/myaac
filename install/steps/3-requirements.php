@@ -7,15 +7,16 @@ $dirs_required = [
 	'system/cache',
 ];
 $dirs_optional = [
-	'images/guilds' => $locale['step_requirements_warning_images_guilds'],
-	'images/gallery' => $locale['step_requirements_warning_images_gallery'],
+	GUILD_IMAGES_DIR => $locale['step_requirements_warning_images_guilds'],
+	GALLERY_DIR => $locale['step_requirements_warning_images_gallery'],
 ];
 
 $extensions_required = [
-	'json', 'pdo', 'pdo_mysql', 'xml', 'zip'
+	'pdo', 'pdo_mysql', 'json', 'xml'
 ];
 $extensions_optional = [
 	'gd' => $locale['step_requirements_warning_player_signatures'],
+	'zip' => $locale['step_requirements_warning_install_plugins'],
 ];
 /*
  *

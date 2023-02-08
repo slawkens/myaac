@@ -101,6 +101,37 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         return $name;
     }
 
+	/**
+	 * @param $email
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function createWithEmail($email = null)
+	{
+		// if name is not passed then it will be generated randomly
+		if( !isset($email) )
+		{
+			throw new Exception(__CLASS__ . ':' . __METHOD__ . ' createWithEmail called without e-mail.');
+		}
+
+		// repeats until name is unique
+		do
+		{
+			$name = uniqid();
+
+			$query = $this->db->query('SELECT `id` FROM `accounts` WHERE `name` = ' . $this->db->quote($name));
+		} while($query->rowCount() >= 1);
+
+		// saves blank account info
+		$this->db->exec('INSERT INTO `accounts` (`name`, `password`, `email`, `created`) VALUES (' . $this->db->quote($name) . ', ' . '\'\', ' . $this->db->quote($email) . ', ' . time() . ')');
+
+		// reads created account's ID
+		$this->data['id'] = $this->db->lastInsertId();
+		$this->data['name'] = $name;
+
+		// return name of newly created account
+		return $name;
+	}
 /**
  * Creates new account.
  *
@@ -138,11 +169,32 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function create($name = NULL, $id = NULL)
     {
-        // saves blank account info
-        $this->db->exec('INSERT INTO `accounts` (' . (isset($id) ? '`id`,' : '') . (isset($name) ? '`name`,' : '') . '`password`, `email`, `created`) VALUES (' . (isset($id) ? $id . ',' : '') . (isset($name) ? $this->db->quote($name) . ',' : '') . ' \'\', \'\',' . time() . ')');
+		if(isset($name)) {
+			$nameOrNumber = 'name';
+			$nameOrNumberValue = $name;
+		}
+		else {
+			if (USE_ACCOUNT_NUMBER) {
+				$nameOrNumber = 'number';
+				$nameOrNumberValue = $id;
+				$id = null;
+			}
+			else {
+				$nameOrNumber = null;
+			}
+		}
 
-		if(isset($name))
+        // saves blank account info
+        $this->db->exec('INSERT INTO `accounts` (' . (isset($id) ? '`id`,' : '') . (isset($nameOrNumber) ? '`' . $nameOrNumber . '`,' : '') . '`password`, `email`, `created`) VALUES (' . (isset($id) ? $id . ',' : '') . (isset($nameOrNumber) ? $this->db->quote($nameOrNumberValue) . ',' : '') . ' \'\', \'\',' . time() . ')');
+
+		if(isset($name)) {
 			$this->data['name'] = $name;
+		}
+		else {
+			if (USE_ACCOUNT_NUMBER) {
+				$this->data['number'] = $name;
+			}
+		}
 
 		$lastInsertId = $this->db->lastInsertId();
 		if($lastInsertId != 0) {
@@ -179,15 +231,26 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @param int $id Account number.
  * @throws PDOException On PDO operation error.
  */
-    public function load($id, $fresh = false)
+    public function load($id, $fresh = false, $searchOnlyById = false)
     {
 		if(!$fresh && isset(self::$cache[$id])) {
 			$this->data = self::$cache[$id];
 			return;
 		}
 
+		$numberColumn = 'id';
+		$nameOrNumber = '';
+		if (!$searchOnlyById) {
+			if (USE_ACCOUNT_NAME) {
+				$nameOrNumber = '`name`,';
+			} else if (USE_ACCOUNT_NUMBER) {
+				$nameOrNumber = '`number`,';
+				$numberColumn = 'number';
+			}
+		}
+
         // SELECT query on database
-		$this->data = $this->db->query('SELECT `id`, ' . ($this->db->hasColumn('accounts', 'name') ? '`name`,' : '') . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
+		$this->data = $this->db->query('SELECT `id`, ' . $nameOrNumber . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `' . $numberColumn . '` = ' . (int) $id)->fetch();
 		self::$cache[$id] = $this->data;
     }
 
@@ -305,6 +368,15 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
         return $this->data['id'];
     }
+
+	public function getNumber()
+	{
+		if (isset($this->data['number'])) {
+			return $this->data['number'];
+		}
+
+		return $this->data['id'];
+	}
 
     public function getRLName()
     {
@@ -1019,6 +1091,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @return Iterator List of players.
  */
+	#[\ReturnTypeWillChange]
     public function getIterator()
     {
         return $this->getPlayersList();
@@ -1033,7 +1106,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @return int Count of players.
  */
-    public function count()
+    public function count(): int
     {
         return $this->getPlayersList()->count();
     }

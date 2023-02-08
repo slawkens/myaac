@@ -70,7 +70,7 @@ if($step == 'database') {
 
 		$key = str_replace('var_', '', $key);
 
-		if(in_array($key, array('account', 'password', 'email', 'player_name'))) {
+		if(in_array($key, array('account', 'password', 'password_confirm', 'email', 'player_name'))) {
 			continue;
 		}
 
@@ -122,6 +122,7 @@ else if($step == 'admin') {
 else if($step == 'finish') {
 	$email = $_SESSION['var_email'];
 	$password = $_SESSION['var_password'];
+	$password_confirm = $_SESSION['var_password_confirm'];
 	$player_name = $_SESSION['var_player_name'];
 
 	// email check
@@ -162,6 +163,9 @@ else if($step == 'finish') {
 	}
 	else if(!Validator::password($password)) {
 		$errors[] = $locale['step_admin_password_error_format'];
+	}
+	else if($password != $password_confirm) {
+		$errors[] = $locale['step_admin_password_confirm_error_not_same'];
 	}
 
 	// player name check

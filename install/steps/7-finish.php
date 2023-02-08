@@ -15,8 +15,7 @@ else {
 
 		$password = $_SESSION['var_password'];
 
-		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
-		if($config_salt_enabled)
+		if(USE_ACCOUNT_SALT)
 		{
 			$salt = generateRandomString(10, false, true, true);
 			$password = $salt . $password;
@@ -75,7 +74,7 @@ else {
 			$account_used = &$new_account;
 		}
 
-		if($config_salt_enabled)
+		if(USE_ACCOUNT_SALT)
 			$account_used->setCustomField('salt', $salt);
 
 		$account_used->setCustomField('web_flags', FLAG_ADMIN + FLAG_SUPER_ADMIN);
@@ -83,7 +82,7 @@ else {
 		if($db->hasColumn('accounts', 'group_id'))
 			$account_used->setCustomField('group_id', $groups->getHighestId());
 		if($db->hasColumn('accounts', 'type'))
-			$account_used->setCustomField('type', 5);
+			$account_used->setCustomField('type', 6);
 
 		if(!$player_db->isLoaded())
 			$player->setAccountId($account_used->getId());

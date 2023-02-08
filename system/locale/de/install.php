@@ -99,7 +99,10 @@ $locale['step_admin_account_id_error_same'] = 'Das Passwort darf nicht mit der K
 $locale['step_admin_password'] = 'Administrator Konto Passwort';
 $locale['step_admin_password_desc'] = 'Passwort für Ihr Administratorkonto.';
 $locale['step_admin_password_error_empty'] = 'Bitte geben Sie das Passwort für Ihr neues Konto ein.';
-$locale['step_admin_password_error_format'] = 'Ungültiges Passwortformat. Verwenden Sie nur a-Z und Ziffern 0-9. Mindestens 8, maximal 30 Zeichen.';
+$locale['step_admin_password_error_format'] = 'Ungültiges Passwortformat. Mindestens eine Buchstabe und eine Ziffer. Mindestens 8, maximal 30 Zeichen.';
+$locale['step_admin_password_confirm'] = 'Password wiederholen';
+$locale['step_admin_password_confirm_desc'] = 'Passwort für dein Konto wiederholen.';
+$locale['step_admin_password_confirm_error_not_same'] = 'Passwörter sind nicht gleich.';
 
 // finish
 $locale['step_finish_admin_panel'] = 'Admin Bereich';

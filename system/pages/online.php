@@ -17,7 +17,8 @@ if($config['account_country'])
 $promotion = '';
 if($db->hasColumn('players', 'promotion'))
 	$promotion = '`promotion`,';
-$order = isset($_GET['order']) ? $_GET['order'] : 'name';
+
+$order = $_GET['order'] ?? 'name';
 if(!in_array($order, array('country', 'name', 'level', 'vocation')))
 	$order = $db->fieldName('name');
 else if($order == 'country')
@@ -47,8 +48,9 @@ if($config['online_outfit']) {
 
 if($config['online_vocations']) {
 	$vocs = array();
-	foreach($config['vocations'] as $id => $name)
+	foreach($config['vocations'] as $id => $name) {
 		$vocs[$id] = 0;
+	}
 }
 
 if($db->hasTable('players_online')) // tfs 1.0
@@ -59,8 +61,7 @@ else
 $players_data = array();
 $players = 0;
 $data = '';
-foreach($playersOnline as $player)
-{
+foreach($playersOnline as $player) {
 	$skull = '';
 	if($config['online_skulls'])
 	{
@@ -89,15 +90,14 @@ foreach($playersOnline as $player)
 		'outfit' => $config['online_outfit'] ? $config['outfit_images_url'] . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] : null
 	);
 
-	if($config['online_vocations'])
+	if($config['online_vocations']) {
 		$vocs[($player['vocation'] > $config['vocations_amount'] ? $player['vocation'] - $config['vocations_amount'] : $player['vocation'])]++;
+	}
 }
 
 $record = '';
-if($players > 0)
-{
-	if($config['online_record'])
-	{
+if($players > 0) {
+	if($config['online_record']) {
 		$timestamp = false;
 		if($db->hasTable('server_record')) {
 			$query =
@@ -105,15 +105,13 @@ if($players > 0)
 					'SELECT `record`, `timestamp` FROM `server_record` WHERE `world_id` = ' . (int)$config['lua']['worldId'] .
 					' ORDER BY `record` DESC LIMIT 1');
 			$timestamp = true;
-		}
-		else if($db->hasTable('server_config')) { // tfs 1.0
+		} else if($db->hasTable('server_config')) { // tfs 1.0
 			$query = $db->query('SELECT `value` as `record` FROM `server_config` WHERE `config` = ' . $db->quote('players_record'));
-		}
-		else
+		} else {
 			$query = NULL;
+		}
 
-		if(isset($query) && $query->rowCount() > 0)
-		{
+		if(isset($query) && $query->rowCount() > 0) {
 			$result = $query->fetch();
 			$record = 'The maximum on this game world was ' . $result['record'] . ' players' . ($timestamp ? ' on ' . date("M d Y, H:i:s", $result['timestamp']) . '.' : '.');
 		}

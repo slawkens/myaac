@@ -10,6 +10,13 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Create Character';
+require __DIR__ . '/base.php';
+
+if(!$logged) {
+	return;
+}
+
 $character_name = isset($_POST['name']) ? stripslashes($_POST['name']) : null;
 $character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
 $character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;

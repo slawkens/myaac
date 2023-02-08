@@ -40,7 +40,6 @@ define('HOOK_ACCOUNT_CREATE_AFTER_ACCOUNT', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_EMAIL', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_COUNTRY', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_PASSWORDS', ++$i);
-define('HOOK_ACCOUNT_CREATE_AFTER_RECAPTCHA', ++$i);
 define('HOOK_ACCOUNT_CREATE_BEFORE_CHARACTER_NAME', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_CHARACTER_NAME', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_SEX', ++$i);
@@ -48,9 +47,26 @@ define('HOOK_ACCOUNT_CREATE_AFTER_VOCATION', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_TOWNS', ++$i);
 define('HOOK_ACCOUNT_CREATE_BEFORE_SUBMIT_BUTTON', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_FORM', ++$i);
-define('HOOK_ACCOUNT_CREATE_AFTER_SUBMIT', ++$i);
-define('HOOK_FIRST', HOOK_STARTUP);
-define('HOOK_LAST', HOOK_ACCOUNT_CREATE_AFTER_SUBMIT);
+define('HOOK_ACCOUNT_CREATE_POST', ++$i);
+define('HOOK_ACCOUNT_LOGIN_BEFORE_PAGE', ++$i);
+define('HOOK_ACCOUNT_LOGIN_BEFORE_ACCOUNT', ++$i);
+define('HOOK_ACCOUNT_LOGIN_AFTER_ACCOUNT', ++$i);
+define('HOOK_ACCOUNT_LOGIN_AFTER_PASSWORD', ++$i);
+define('HOOK_ACCOUNT_LOGIN_AFTER_REMEMBER_ME', ++$i);
+define('HOOK_ACCOUNT_LOGIN_AFTER_PAGE', ++$i);
+define('HOOK_ACCOUNT_LOGIN_POST', ++$i);
+define('HOOK_ADMIN_HEAD_END', ++$i);
+define('HOOK_ADMIN_HEAD_START', ++$i);
+define('HOOK_ADMIN_BODY_START', ++$i);
+define('HOOK_ADMIN_BODY_END', ++$i);
+define('HOOK_ADMIN_BEFORE_PAGE', ++$i);
+define('HOOK_ADMIN_MENU', ++$i);
+define('HOOK_ADMIN_LOGIN_AFTER_ACCOUNT', ++$i);
+define('HOOK_ADMIN_LOGIN_AFTER_PASSWORD', ++$i);
+define('HOOK_ADMIN_LOGIN_AFTER_SIGN_IN', ++$i);
+define('HOOK_EMAIL_CONFIRMED', ++$i);
+const HOOK_FIRST = HOOK_STARTUP;
+const HOOK_LAST = HOOK_EMAIL_CONFIRMED;
 
 require_once LIBS . 'plugins.php';
 class Hook
@@ -73,9 +89,7 @@ class Hook
 		}*/
 
 		global $db, $config, $template_path, $ots, $content, $twig;
-		if(file_exists(BASE . $this->_file)) {
-			$ret = require BASE . $this->_file;
-		}
+		$ret = include BASE . $this->_file;
 
 		return !isset($ret) || $ret == 1 || $ret;
 	}
@@ -120,5 +134,7 @@ class Hooks
 		foreach(Plugins::getHooks() as $hook) {
 			$this->register($hook['name'], $hook['type'], $hook['file']);
 		}
+
+		Plugins::clearWarnings();
 	}
 }
