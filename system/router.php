@@ -55,10 +55,9 @@ if (BASE_DIR !== '') {
 
 define('URI', $uri);
 
-/** @var boolean $load_it */
 if(!$load_it) {
 	// ignore warnings in some functions/plugins
-	// page is not loaded anyways
+	// page is not loaded anyway
 	define('PAGE', '');
 
 	return;
@@ -147,6 +146,10 @@ $found = true;
 // old support for pages like /?subtopic=accountmanagement
 $page = $_REQUEST['p'] ?? ($_REQUEST['subtopic'] ?? '');
 if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
+	if (isset($_REQUEST['p'])) { // some plugins may require this
+		$_REQUEST['subtopic'] = $_REQUEST['p'];
+	}
+
 	if (config('backward_support')) {
 		require SYSTEM . 'compat/pages.php';
 	}
@@ -161,7 +164,6 @@ else {
 	switch ($routeInfo[0]) {
 		case FastRoute\Dispatcher::NOT_FOUND:
 			// ... 404 Not Found
-			//var_dump('not found');
 			/**
 			 * Fallback to load page from templates/ or system/pages/ directory
 			 */
@@ -282,7 +284,8 @@ function getDatabasePages() {
 	return $ret;
 }
 
-function loadPageFromFileSystem($page, &$found) {
+function loadPageFromFileSystem($page, &$found): string
+{
 	$file = SYSTEM . 'pages/' . $page . '.php';
 	if (!is_file($file)) {
 		// feature: convert camelCase to snake_case
