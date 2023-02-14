@@ -37,7 +37,7 @@ if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
 		}
 
 		if (!config('account_login_by_email') || config('account_login_by_email_fallback')) {
-			if(USE_ACCOUNT_NAME) {
+			if(USE_ACCOUNT_NAME || USE_ACCOUNT_NUMBER) {
 				$account_logged->find($login_account);
 			} else {
 				$account_logged->load($login_account, true);

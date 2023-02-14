@@ -27,15 +27,16 @@ if(isset($_GET['account']))
 		error_(Validator::getLastError());
 
 	$_account = new OTS_Account();
-	if(USE_ACCOUNT_NAME)
+	if(USE_ACCOUNT_NAME || USE_ACCOUNT_NUMBER)
 		$_account->find($account);
 	else
 		$_account->load($account);
 
+	$accountNameOrNumber = (USE_ACCOUNT_NAME ? ' name' : 'number');
 	if($_account->isLoaded())
-		error_('Account with this name already exist.');
+		error_("Account with this $accountNameOrNumber already exist.");
 
-	success_('Good account' . (USE_ACCOUNT_NAME ? ' name' : '') . ' ( ' . $account . ' ).');
+	success_("Good account $accountNameOrNumber ($account).");
 }
 else if(isset($_GET['email']))
 {

@@ -231,26 +231,22 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @param int $id Account number.
  * @throws PDOException On PDO operation error.
  */
-    public function load($id, $fresh = false, $searchOnlyById = false)
+    public function load($id, $fresh = false)
     {
 		if(!$fresh && isset(self::$cache[$id])) {
 			$this->data = self::$cache[$id];
 			return;
 		}
 
-		$numberColumn = 'id';
 		$nameOrNumber = '';
-		if (!$searchOnlyById) {
-			if (USE_ACCOUNT_NAME) {
-				$nameOrNumber = '`name`,';
-			} else if (USE_ACCOUNT_NUMBER) {
-				$nameOrNumber = '`number`,';
-				$numberColumn = 'number';
-			}
+		if (USE_ACCOUNT_NAME) {
+			$nameOrNumber = '`name`,';
+		} else if (USE_ACCOUNT_NUMBER) {
+			$nameOrNumber = '`number`,';
 		}
 
         // SELECT query on database
-		$this->data = $this->db->query('SELECT `id`, ' . $nameOrNumber . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `' . $numberColumn . '` = ' . (int) $id)->fetch();
+		$this->data = $this->db->query('SELECT `id`, ' . $nameOrNumber . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
 		self::$cache[$id] = $this->data;
     }
 
@@ -268,8 +264,13 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function find($name)
     {
+		$nameOrNumberColumn = 'name';
+		if (USE_ACCOUNT_NUMBER) {
+			$nameOrNumberColumn = 'number';
+		}
+
         // finds player's ID
-        $id = $this->db->query('SELECT `id` FROM `accounts` WHERE `name` = ' . $this->db->quote($name) )->fetch();
+        $id = $this->db->query('SELECT `id` FROM `accounts` WHERE `' . $nameOrNumberColumn . '` = ' . $this->db->quote($name) )->fetch();
 
         // if anything was found
         if( isset($id['id']) )
