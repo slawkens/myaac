@@ -48,7 +48,7 @@ if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
 			&& (!isset($t) || $t['attempts'] < 5)
 		)
 		{
-			setSession('account', $account_logged->getNumber());
+			setSession('account', $account_logged->getId());
 			setSession('password', encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $login_password));
 			if($remember_me) {
 				setSession('remember_me', true);
