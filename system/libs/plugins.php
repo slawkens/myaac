@@ -207,13 +207,33 @@ class Plugins {
 		return $hooks;
 	}
 
+	public static function getPluginSettings($pluginName)
+	{
+		$plugin_json = self::getPluginJson($pluginName);
+		if (!$plugin_json) {
+			return false;
+		}
+
+		if (!isset($plugin_json['settings']) || !file_exists(BASE . $plugin_json['settings'])) {
+			return false;
+		}
+
+		return $plugin_json['settings'];
+	}
+
 	public static function getPluginJson($name = null)
 	{
 		if(!isset($name)) {
 			return self::$plugin_json;
 		}
 
-		$string = file_get_contents(PLUGINS . $name . '.json');
+		$pathToPlugin = PLUGINS . $name . '.json';
+		if (!file_exists($pathToPlugin)) {
+			self::$warnings[] = "Cannot load " . $name . ".json. File doesn't exist.";
+			return false;
+		}
+
+		$string = file_get_contents($pathToPlugin);
 		$string = self::removeComments($string);
 		$plugin_json = json_decode($string, true);
 		if ($plugin_json == null) {

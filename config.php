@@ -54,41 +54,7 @@ $config = array(
 		//'2' => 'Your Second World Name'
 	),
 
-	// images
-	'outfit_images_url' => 'https://outfit-images.ots.me/outfit.php', // set to animoutfit.php for animated outfit
-	'outfit_images_wrong_looktypes' => [75, 126, 127, 266, 302], // this looktypes needs to have different margin-top and margin-left because they are wrong positioned
-	'item_images_url' => 'https://item-images.ots.me/1092/', // set to images/items if you host your own items in images folder
-	'item_images_extension' => '.gif',
-
-	// creatures
-	'creatures_images_url' => 'images/monsters/', // set to images/monsters if you host your own creatures in images folder
-	'creatures_images_extension' => '.gif',
-	'creatures_images_preview' => false,  // set to true to allow picture previews for creatures
-	'creatures_items_url' => 'https://tibia.fandom.com/wiki/', // set to website which shows details about items.
-	'creatures_loot_percentage' => true, // set to true to show the loot tooltip percent
-
-	// account
-	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)
-	'account_login_by_email' => false, // use email instead of Account Name like in latest Tibia
-	'account_login_by_email_fallback' => false, // allow also additionally login by Account Name/Number (for users that might forget their email)
-	'account_create_auto_login' => false, // auto login after creating account?
-	'account_create_character_create' => true, // allow directly to create character on create account page?
-	'account_mail_verify' => false, // force users to confirm their email addresses when registering
-	'account_mail_confirmed_reward' => [ // reward users for confirming their E-Mails
-		// account_mail_verify needs to be enabled too
-		'premium_days' => 0,
-		'premium_points' => 0,
-		'coins' => 0,
-		'message' => 'You received %d %s for confirming your E-Mail address.' // example: You received 20 premium points for confirming your E-Mail address.
-	],
-	'account_mail_unique' => true, // email addresses cannot be duplicated? (one account = one email)
 	'account_mail_block_plus_sign' => true, // block email with '+' signs like test+box@gmail.com (help protect against spamming accounts)
-	'account_premium_days' => 0, // default premium days on new account
-	'account_premium_points' => 0, // default premium points on new account
-	'account_welcome_mail' => true, // send welcome email when user registers
-	'account_mail_change' => 2, // how many days user need to change email to account - block hackers
-	'account_country' => true, // user will be able to set country of origin when registering account, this information will be viewable in others places aswell
-	'account_country_recognize' => true, // should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io
 	'account_change_character_name' => false, // can user change their character name for premium points?
 	'account_change_character_name_points' => 30, // cost of name change
 	'account_change_character_sex' => false, // can user change their character sex for premium points?
@@ -168,31 +134,6 @@ $config = array(
 		0 => 'No town',
 		1 => 'Sample town'
 	),
-
-	// guilds
-	'guild_management' => true, // enable guild management system on the site?
-	'guild_need_level' => 1, // min. level to form a guild
-	'guild_need_premium' => true, // require premium account to form a guild?
-	'guild_image_size_kb' => 80, // maximum size of the guild logo image in KB (kilobytes)
-	'guild_description_default' => 'New guild. Leader must edit this text :)',
-	'guild_description_chars_limit' => 1000, // limit of guild description
-	'guild_description_lines_limit' => 6, // limit of lines, if description has more lines it will be showed as long text, without 'enters'
-	'guild_motd_chars_limit' => 150, // limit of MOTD (message of the day) that is shown later in the game on the guild channel
-
-	// online page
-	'online_record' => true, // display players record?
-	'online_vocations' => false, // display vocation statistics?
-	'online_vocations_images' => false, // display vocation images?
-	'online_skulls' => false, // display skull images
-	'online_outfit' => true,
-	'online_afk' => false,
-
-	// support list page
-	'team_style' => 2, // 1/2 (1 - normal table, 2 - in boxes, grouped by group id)
-	'team_display_status' => true,
-	'team_display_lastlogin' => true,
-	'team_display_world' => false,
-	'team_display_outfit' => true,
 
 	// bans page
 	'bans_per_page' => 20,

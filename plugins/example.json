@@ -39,5 +39,6 @@
 			"redirect_from": "/redirectExample",
 			"redirect_to": "account/manage"
 		}
-	}
+	},
+	"settings": "plugins/your-plugin-folder/settings.php"
  }

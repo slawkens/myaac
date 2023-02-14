@@ -11,14 +11,20 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Settings';
 
 require_once SYSTEM . 'clients.conf.php';
-if (!isset($_GET['plugin']) || empty($_GET['plugin'])) {
-	error('Please select plugin name from left Panel.');
+if (empty($_GET['plugin'])) {
+	error('Please select plugin from left Panel.');
 	return;
 }
 
 $plugin = $_GET['plugin'];
 
 if($plugin != 'core') {
+	$pluginSettings = Plugins::getPluginSettings($plugin);
+	if (!$pluginSettings) {
+		error('This plugin does not exist or does not have options defined.');
+		return;
+	}
+
 	$settingsFilePath = PLUGINS . $plugin . '/settings.php';
 }
 else {
@@ -58,7 +64,7 @@ if (isset($_POST['save'])) {
 	success('Saved at ' . date('H:i'));
 }
 
-$title = ($plugin == 'core' ? 'MyAAC Settings' : 'Plugin Settings - ' . $plugin);
+$title = ($plugin == 'core' ? 'Settings' : 'Plugin Settings - ' . $plugin);
 
 $query = 'SELECT `key`, `value` FROM `' . TABLE_PREFIX . 'settings` WHERE `plugin_name` = ' . $db->quote($plugin) . ';';
 $query = $db->query($query);
@@ -79,16 +85,43 @@ if($query->rowCount() > 0) {
 				<div class="box-body">
 					<button name="save" type="submit" class="btn btn-primary">Save</button>
 				</div>
-					<?php
+				<br/>
+				<ul class="nav nav-tabs" id="myTab">
+				<?php
+					$i = 0;
+					foreach($settingsFile as $key => $setting) {
+					if ($setting['type'] === 'category') {
+						?>
+							<li class="nav-item">
+								<button class="nav-link<?= ($i === 0 ? ' active' : ''); ?>" id="home-tab-<?= $i++; ?>" data-toggle="tab" data-target="#tab-<?= str_replace(' ', '', $setting['title']); ?>" type="button"><?= $setting['title']; ?></button>
+							</li>
+				<?php
+						}
+					}
+					?>
+				</ul>
+				<div class="tab-content" id="tab-content">
+				<?php
 
 					$checkbox = function ($key, $type, $value) {
 						echo '<label><input type="radio" id="' . $key . '" name="settings[' . $key . ']" value="' . ($type ? 'true' : 'false') . '" ' . ($value === $type ? 'checked' : '') . '/>' . ($type ? 'Yes' : 'No') . '</label> ';
 					};
 
 					$i = 0;
+					$j = 0;
 					foreach($settingsFile as $key => $setting) {
-						if($setting['type'] === 'section') {
-							if($i++ !== 0) {
+						if ($setting['type'] === 'category') {
+							if ($j++ !== 0) {
+								echo '</tbody></table></div>';
+							}
+							?>
+					<div class="tab-pane fade show<?= ($j === 1 ? ' active' : ''); ?>" id="tab-<?= str_replace(' ', '', $setting['title']); ?>">
+					<?php
+							continue;
+						}
+
+						if ($setting['type'] === 'section') {
+							if ($i++ !== 0) {
 								echo '</tbody></table>';
 							}
 					?>
@@ -120,7 +153,7 @@ if($query->rowCount() > 0) {
 										}
 									}
 									else {
-										$value = (isset($setting['default']) ? $setting['default'] : false);
+										$value = ($setting['default'] ?? false);
 									}
 
 									$checkbox($key, true, $value);
@@ -128,11 +161,11 @@ if($query->rowCount() > 0) {
 								}
 
 								else if (in_array($setting['type'], ['text', 'number', 'email', 'password'])) {
-									echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . (isset($settingsDb[$key]) ? $settingsDb[$key] : (!empty($setting['default']) ? $setting['default'] : '')) . '" id="' . $key . '"/>';
+									echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . ($settingsDb[$key] ?? ($setting['default'] ?? '')) . '" id="' . $key . '"/>';
 								}
 
 								else if($setting['type'] === 'textarea') {
-									echo '<textarea class="form-control" name="settings[' . $key . ']" id="' . $key . '">' . (isset($settingsDb[$key]) ? $settingsDb[$key] : (!empty($setting['default']) ? $setting['default'] : '')) . '</textarea>';
+									echo '<textarea class="form-control" name="settings[' . $key . ']" id="' . $key . '">' . ($settingsDb[$key] ?? ($setting['default'] ?? '')) . '</textarea>';
 								}
 
 								if ($setting['type'] === 'options') {
@@ -157,6 +190,15 @@ if($query->rowCount() > 0) {
 										}
 
 										$setting['options'] = $clients;
+									}
+
+									else {
+										if (is_string($setting['options'])) {
+											$setting['options'] = explode(',', $setting['options']);
+											foreach ($setting['options'] as &$option) {
+												$option = trim($option);
+											}
+										}
 									}
 
 									echo '<select class="form-control" name="settings[' . $key . ']" id="' . $key . '">';
@@ -189,6 +231,8 @@ if($query->rowCount() > 0) {
 					?>
 					</tbody>
 				</table>
+					</div>
+				</div>
 				<div class="box-footer">
 					<button name="save" type="submit" class="btn btn-primary">Save</button>
 				</div>
