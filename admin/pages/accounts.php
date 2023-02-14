@@ -62,7 +62,7 @@ else if (isset($_REQUEST['search'])) {
 			if ($query->rowCount() > 0 && $query->rowCount() <= 10) {
 				$str_construct = 'Do you mean?<ul class="mb-0">';
 				foreach ($query as $row)
-					$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row['id'] . '">' . $row['name'] . '</a></li>';
+					$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row['id'] . '">' . $row[$nameOrNumberColumn] . '</a></li>';
 				$str_construct .= '</ul>';
 				echo_error($str_construct);
 			} else if ($query->rowCount() > 10)
