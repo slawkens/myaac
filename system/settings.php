@@ -88,7 +88,7 @@ might bring some performance when disabled',
 		'desc' => 'For example: "' . escapeHtml('<br/>') . 'Your Server &copy; 2020. All rights reserved."',
 		'default' => '',
 	],
-	'language' => [
+	/*'language' => [
 		'name' => 'Language',
 		'type' => 'options',
 		'options' => ['en' => 'English'],

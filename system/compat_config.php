@@ -12,7 +12,7 @@ $deprecatedConfig = [
 	'meta_description',
 	'meta_keywords',
 	'footer',
-	'language',
+	//'language',
 	'visitors_counter',
 	'visitors_counter_ttl',
 	'views_counter',
