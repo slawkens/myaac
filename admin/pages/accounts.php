@@ -58,7 +58,7 @@ else if (isset($_REQUEST['search'])) {
 			$query = $query->fetch();
 			$id = (int)$query['id'];
 		} else {
-			$query = $db->query('SELECT `id`, `name` FROM `accounts` WHERE `name` LIKE ' . $db->quote('%' . $search_account . '%'));
+			$query = $db->query('SELECT `id`, `' . $nameOrNumberColumn . '` FROM `accounts` WHERE `' . $nameOrNumberColumn . '` LIKE ' . $db->quote('%' . $search_account . '%'));
 			if ($query->rowCount() > 0 && $query->rowCount() <= 10) {
 				$str_construct = 'Do you mean?<ul class="mb-0">';
 				foreach ($query as $row)
