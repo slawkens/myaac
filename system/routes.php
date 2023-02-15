@@ -30,7 +30,7 @@ return [
 	['GET', 'account/confirm_email/{hash:[A-Za-z0-9-_]+}[/]', 'account/confirm_email.php'],
 
 	['GET', 'bans/{page:\d+}[/]', 'bans.php'],
-	[['GET', 'POST'], 'characters[/{name:string]', 'characters.php'],
+	[['GET', 'POST'], 'characters[/{name:string}]', 'characters.php'],
 	['GET', 'changelog[/{page:int}]', 'changelog.php'],
 	['GET', 'creatures[/{name:string}]', 'creatures.php'],
 
