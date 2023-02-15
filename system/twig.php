@@ -90,14 +90,14 @@ $function = new TwigFunction('truncate', function ($s, $n) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('hook', function ($hook) {
+$function = new TwigFunction('hook', function ($hook, array $params = []) {
 	global $hooks;
 
 	if(is_string($hook)) {
 		$hook = constant($hook);
 	}
 
-	$hooks->trigger($hook);
+	$hooks->trigger($hook, $params);
 });
 $twig->addFunction($function);
 
