@@ -7,6 +7,7 @@
  * @copyright 2021 MyAAC
  * @link      https://my-aac.org
  */
+defined('MYAAC') or die('Direct access not allowed!');
 
 return [
 	['GET', '', '__redirect__/news'], // redirect empty URL to news

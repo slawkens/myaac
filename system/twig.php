@@ -1,4 +1,13 @@
 <?php
+/**
+ * Twig Loader
+ *
+ * @package   MyAAC
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2021 MyAAC
+ * @link      https://my-aac.org
+ */
+defined('MYAAC') or die('Direct access not allowed!');
 
 use Twig\Environment as Twig_Environment;
 use Twig\Extension\DebugExtension as Twig_DebugExtension;

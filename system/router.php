@@ -4,9 +4,10 @@
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2021 MyAAC
+ * @copyright 2023 MyAAC
  * @link      https://my-aac.org
  */
+defined('MYAAC') or die('Direct access not allowed!');
 
 if(!isset($content[0]))
 	$content = '';

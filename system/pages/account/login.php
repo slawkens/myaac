@@ -1,4 +1,15 @@
 <?php
+/**
+ * Login
+ *
+ * @package   MyAAC
+ * @author    Gesior <jerzyskalski@wp.pl>
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2023 MyAAC
+ * @link      https://my-aac.org
+ */
+defined('MYAAC') or die('Direct access not allowed!');
+$title = 'Login';
 
 // new login with data from form
 if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
