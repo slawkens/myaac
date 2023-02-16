@@ -65,6 +65,7 @@ define('HOOK_ADMIN_MENU', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_ACCOUNT', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_PASSWORD', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_SIGN_IN', ++$i);
+define('HOOK_ADMIN_ACCOUNTS_POST', ++$i);
 define('HOOK_EMAIL_CONFIRMED', ++$i);
 define('HOOK_GUILDS_AFTER_INVITED_CHARACTERS', ++$i);
 
