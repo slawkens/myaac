@@ -43,6 +43,8 @@ else
 		if($old_password != $account_logged->getPassword()) {
 			$errors[] = "Current password is incorrect!";
 		}
+
+		$hooks->trigger(HOOK_ACCOUNT_CHANGE_PASSWORD_POST);
 	}
 	if(!empty($errors)){
 		//show errors
