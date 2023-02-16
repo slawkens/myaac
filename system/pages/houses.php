@@ -165,6 +165,7 @@ if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order']) && 
     foreach($players_info->fetchAll() as $player)
         $players[$player['houseid']] = array('name' => $player['ownername']);
 
+    $hasTilesColumn = $db->hasColumn('houses', 'tiles');
     $houses = array();
     foreach($houses_info->fetchAll() as $house)
     {
@@ -185,7 +186,7 @@ if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order']) && 
                 $houseRent = 'Free';
         }
 
-        $houses[] = array('owner' => $owner, 'name' => $house['name'], 'size' => $house['size'], 'rent' => $house['rent'], 'rentedBy' => $houseRent);
+        $houses[] = array('owner' => $owner, 'name' => $house['name'], 'size' => ($hasTilesColumn ? $house['tiles'] : $house['size']), 'rent' => $house['rent'], 'rentedBy' => $houseRent);
     }
 
     $housesSearch = true;
