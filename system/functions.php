@@ -796,7 +796,7 @@ function get_plugins($disabled = false): array
 	$ret = [];
 
 	$path = PLUGINS;
-	foreach(scandir($path, SCANDIR_SORT_DESCENDING) as $file) {
+	foreach(scandir($path, SCANDIR_SORT_ASCENDING) as $file) {
 		$file_ext = pathinfo($file, PATHINFO_EXTENSION);
 		$file_name = pathinfo($file, PATHINFO_FILENAME);
 		if ($file === '.' || $file === '..' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file)) {

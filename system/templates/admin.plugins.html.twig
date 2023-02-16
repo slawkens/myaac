@@ -38,7 +38,7 @@
 					<td>{{ plugin.file }}.json</td>
 					<td>
 						{% if plugin.uninstall %}
-							<a href="?p=plugins&uninstall={{ plugin.file }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');" title="Uninstall">
+							<a href="?p=plugins&uninstall={{ plugin.file }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to uninstall {{ plugin.name }}?');" title="Uninstall">
 								<i class="fas fa-trash"></i>
 							</a>
 						{% endif %}
