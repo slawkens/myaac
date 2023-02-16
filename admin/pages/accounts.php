@@ -150,7 +150,7 @@ else if (isset($_REQUEST['search'])) {
 			$web_lastlogin = strtotime($_POST['web_lastlogin']);
 			verify_number($web_lastlogin, 'Web Last login', 11);
 
-			if (!$error && $hooks->trigger(HOOK_ADMIN_ACCOUNTS_POST, ['account_id' => $account->getId(), 'account_email' =>  $account->getEMail()])) {
+			if (!$error && $hooks->trigger(HOOK_ADMIN_ACCOUNTS_SAVE_POST, ['account_id' => $account->getId(), 'account_email' =>  $account->getEMail()])) {
 				if (USE_ACCOUNT_NAME) {
 					$account->setName($name);
 				}
