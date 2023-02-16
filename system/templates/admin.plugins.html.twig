@@ -6,6 +6,7 @@
 		<table class="table table-striped table-bordered table-responsive d-md-table" id="tb_plugins">
 			<thead>
 			<tr>
+				<th>Enabled</th>
 				<th>Name</th>
 				<th>Version</th>
 				<th>Author</th>
@@ -16,6 +17,17 @@
 			<tbody>
 			{% for plugin in plugins %}
 				<tr>
+					<td>
+						{% if plugin.enabled %}
+						<a href="?p=plugins&disable={{ plugin.file }}" class="btn btn-success" onclick="return confirm('Are you sure you want to disable plugin {{ plugin.name }}?');" title="Disable">
+							<i class="fas fa-check"></i> Enabled
+						</a>
+						{% else %}
+							<a href="?p=plugins&enable={{ plugin.file }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to enable plugin {{ plugin.name }}?');" title="Enable">
+								<i class="fas fa-ban"></i> Disabled
+							</a>
+						{% endif %}
+					</td>
 					<td><b>{{ plugin.name }}</b><br>
 						<small>{{ plugin.description|raw }}</small>
 					</td>
@@ -29,7 +41,8 @@
 							<a href="?p=plugins&uninstall={{ plugin.file }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');" title="Uninstall">
 								<i class="fas fa-trash"></i>
 							</a>
-						{% endif %}</td>
+						{% endif %}
+					</td>
 				</tr>
 			{% endfor %}
 			</tbody>
@@ -39,6 +52,6 @@
 
 <script>
 	$(function () {
-		$('#tb_plugins').DataTable()
+		$('#tb_plugins').DataTable();
 	})
 </script>

@@ -791,16 +791,21 @@ function get_templates()
  * Generates list of installed plugins
  * @return array $plugins
  */
-function get_plugins()
+function get_plugins($disabled = false): array
 {
-	$ret = array();
+	$ret = [];
 
 	$path = PLUGINS;
-	foreach(scandir($path, 0) as $file) {
+	foreach(scandir($path, SCANDIR_SORT_DESCENDING) as $file) {
 		$file_ext = pathinfo($file, PATHINFO_EXTENSION);
 		$file_name = pathinfo($file, PATHINFO_FILENAME);
-		if ($file === '.' || $file === '..' || $file === 'disabled' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file))
+		if ($file === '.' || $file === '..' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file)) {
 			continue;
+		}
+
+		if (!$disabled && strpos($file, 'disabled.') !== false) {
+			continue;
+		}
 
 		$ret[] = str_replace('.json', '', $file_name);
 	}

@@ -23,13 +23,29 @@ if (isset($_REQUEST['uninstall'])) {
 	} else {
 		error('Error while uninstalling plugin ' . $uninstall . ': ' . Plugins::getError());
 	}
-} else if (isset($_FILES["plugin"]["name"])) {
-	$file = $_FILES["plugin"];
-	$filename = $file["name"];
-	$tmp_name = $file["tmp_name"];
-	$type = $file["type"];
+}
+else if (isset($_REQUEST['enable'])) {
+	$enable = $_REQUEST['enable'];
+	if (Plugins::enable($enable)) {
+		success('Successfully enabled plugin ' . $enable);
+	} else {
+		error('Error while enabling plugin ' . $enable . ': ' . Plugins::getError());
+	}
+}
+else if (isset($_REQUEST['disable'])) {
+	$disable = $_REQUEST['disable'];
+	if (Plugins::disable($disable)) {
+		success('Successfully disabled plugin ' . $disable);
+	} else {
+		error('Error while disabling plugin ' . $disable . ': ' . Plugins::getError());
+	}
+} else if (isset($_FILES['plugin']['name'])) {
+	$file = $_FILES['plugin'];
+	$filename = $file['name'];
+	$tmp_name = $file['tmp_name'];
+	$type = $file['type'];
 
-	$name = explode(".", $filename);
+	$name = explode('.', $filename);
 	$accepted_types = array('application/zip', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed', 'application/octet-stream', 'application/zip-compressed');
 
 	if (isset($file['error'])) {
@@ -90,21 +106,23 @@ if (isset($_REQUEST['uninstall'])) {
 }
 
 $plugins = array();
-foreach (get_plugins() as $plugin) {
+foreach (get_plugins(true) as $plugin) {
 	$string = file_get_contents(BASE . 'plugins/' . $plugin . '.json');
-	$string = Plugins::removeComments($string);
 	$plugin_info = json_decode($string, true);
 
-	if ($plugin_info == false) {
+	if (!$plugin_info) {
 		warning('Cannot load plugin info ' . $plugin . '.json');
 	} else {
+		$disabled = (strpos($plugin, 'disabled.') !== false);
+		$pluginOriginal = ($disabled ? str_replace('disabled.', '', $plugin) : $plugin);
 		$plugins[] = array(
-			'name' => isset($plugin_info['name']) ? $plugin_info['name'] : '',
-			'description' => isset($plugin_info['description']) ? $plugin_info['description'] : '',
-			'version' => isset($plugin_info['version']) ? $plugin_info['version'] : '',
-			'author' => isset($plugin_info['author']) ? $plugin_info['author'] : '',
-			'contact' => isset($plugin_info['contact']) ? $plugin_info['contact'] : '',
-			'file' => $plugin,
+			'name' => $plugin_info['name'] ?? '',
+			'description' => $plugin_info['description'] ?? '',
+			'version' => $plugin_info['version'] ?? '',
+			'author' => $plugin_info['author'] ?? '',
+			'contact' => $plugin_info['contact'] ?? '',
+			'file' => $pluginOriginal,
+			'enabled' => !$disabled,
 			'uninstall' => isset($plugin_info['uninstall'])
 		);
 	}

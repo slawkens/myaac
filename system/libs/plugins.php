@@ -10,7 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-function is_sub_dir($path = NULL, $parent_folder = SITE_PATH) {
+function is_sub_dir($path = NULL, $parent_folder = BASE) {
 
 	//Get directory path minus last folder
 	$dir = dirname($path);
@@ -41,9 +41,9 @@ function is_sub_dir($path = NULL, $parent_folder = SITE_PATH) {
 use Composer\Semver\Semver;
 
 class Plugins {
-	private static $warnings = array();
+	private static $warnings = [];
 	private static $error = null;
-	private static $plugin_json = array();
+	private static $plugin_json = [];
 
 	public static function getRoutes()
 	{
@@ -56,22 +56,8 @@ class Plugins {
 		}
 
 		$routes = [];
-		foreach(get_plugins() as $filename) {
-			$string = file_get_contents(PLUGINS . $filename . '.json');
-			$string = self::removeComments($string);
-			$plugin = json_decode($string, true);
-			self::$plugin_json = $plugin;
-			if ($plugin == null) {
-				self::$warnings[] = 'Cannot load ' . $filename . '.json. File might be not a valid json code.';
-				continue;
-			}
-
-			if(isset($plugin['enabled']) && !getBoolean($plugin['enabled'])) {
-				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
-				continue;
-			}
-
-			$warningPreTitle = 'Plugin: ' . $filename . ' - ';
+		foreach(self::getAllPluginsJson() as $plugin) {
+			$warningPreTitle = 'Plugin: ' . $plugin['name'] . ' - ';
 
 			if (isset($plugin['routes'])) {
 				foreach ($plugin['routes'] as $_name => $info) {
@@ -161,28 +147,14 @@ class Plugins {
 		}
 
 		$hooks = [];
-		foreach(get_plugins() as $filename) {
-			$string = file_get_contents(PLUGINS . $filename . '.json');
-			$string = self::removeComments($string);
-			$plugin = json_decode($string, true);
-			self::$plugin_json = $plugin;
-			if ($plugin == null) {
-				self::$warnings[] = 'Cannot load ' . $filename . '.json. File might be not a valid json code.';
-				continue;
-			}
-
-			if(isset($plugin['enabled']) && !getBoolean($plugin['enabled'])) {
-				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
-				continue;
-			}
-
+		foreach(self::getAllPluginsJson() as $plugin) {
 			if (isset($plugin['hooks'])) {
 				foreach ($plugin['hooks'] as $_name => $info) {
 					if (defined('HOOK_'. $info['type'])) {
 						$hook = constant('HOOK_'. $info['type']);
 						$hooks[] = ['name' => $_name, 'type' => $hook, 'file' => $info['file']];
 					} else {
-						self::$warnings[] = 'Plugin: ' . $filename . '. Unknown event type: ' . $info['type'];
+						self::$warnings[] = 'Plugin: ' . $plugin['name'] . '. Unknown event type: ' . $info['type'];
 					}
 				}
 			}
@@ -193,6 +165,41 @@ class Plugins {
 		}
 
 		return $hooks;
+	}
+
+	public static function getAllPluginsJson($disabled = false)
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('plugins', $tmp)) {
+				return unserialize($tmp);
+			}
+		}
+
+		$plugins = [];
+		foreach (get_plugins($disabled) as $filename) {
+			$string = file_get_contents(PLUGINS . $filename . '.json');
+			$plugin = json_decode($string, true);
+			self::$plugin_json = $plugin;
+			if ($plugin == null) {
+				self::$warnings[] = 'Cannot load ' . $filename . '.json. File might be not a valid json code.';
+				continue;
+			}
+
+			if (isset($plugin['enabled']) && !getBoolean($plugin['enabled'])) {
+				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
+				continue;
+			}
+
+			$plugins[] = $plugin;
+		}
+
+		if ($cache->enabled()) {
+			$cache->set('plugins', serialize($plugins), 600);
+		}
+
+		return $plugins;
 	}
 
 	public static function install($file) {
@@ -235,7 +242,6 @@ class Plugins {
 		}
 
 		$string = file_get_contents($file_name);
-		$string = self::removeComments($string);
 		$plugin_json = json_decode($string, true);
 		self::$plugin_json = $plugin_json;
 		if ($plugin_json == null) {
@@ -435,7 +441,35 @@ class Plugins {
 		return false;
 	}
 
-	public static function uninstall($plugin_name)
+	public static function enable($pluginFileName): bool
+	{
+		return self::enableDisable($pluginFileName, true);
+	}
+
+	public static function disable($pluginFileName): bool
+	{
+		return self::enableDisable($pluginFileName, false);
+	}
+
+	private static function enableDisable($pluginFileName, $enable): bool
+	{
+		$filenameJson = $pluginFileName . '.json';
+		$fileExist = is_file(PLUGINS . ($enable ? 'disabled.' : '') . $filenameJson);
+		if (!$fileExist) {
+			self::$error = 'Cannot ' . ($enable ? 'enable' : 'disable') . ' plugin: ' . $pluginFileName . '. File does not exist.';
+			return false;
+		}
+
+		$result = rename(PLUGINS . ($enable ? 'disabled.' : '') . $filenameJson, PLUGINS . ($enable ? '' : 'disabled.') . $filenameJson);
+		if (!$result) {
+			self::$error = 'Cannot ' . ($enable ? 'enable' : 'disable') . ' plugin: ' . $pluginFileName . '. Permission problem.';
+			return false;
+		}
+
+		return true;
+	}
+
+	public static function uninstall($plugin_name): bool
 	{
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
@@ -443,9 +477,8 @@ class Plugins {
 			return false;
 		}
 		$string = file_get_contents($filename);
-		$string = self::removeComments($string);
 		$plugin_info = json_decode($string, true);
-		if($plugin_info == false) {
+		if(!$plugin_info) {
 			self::$error = 'Cannot load plugin info ' . $plugin_name . '.json';
 			return false;
 		}
@@ -525,22 +558,6 @@ class Plugins {
 
 	public static function getPluginJson() {
 		return self::$plugin_json;
-	}
-
-	public static function removeComments($string) {
-		$string = preg_replace('!/\*.*?\*/!s', '', $string);
-		$string = preg_replace('/\n\s*\n/', "\n", $string);
-		//  Removes multi-line comments and does not create
-		//  a blank line, also treats white spaces/tabs
-		$string = preg_replace('!^[ \t]*/\*.*?\*/[ \t]*[\r\n]!s', '', $string);
-
-		//  Removes single line '//' comments, treats blank characters
-		$string = preg_replace('![ \t]*//.*[ \t]*[\r\n]!', '', $string);
-
-		//  Strip blank lines
-		$string = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $string);
-
-		return $string;
 	}
 
 	/**
