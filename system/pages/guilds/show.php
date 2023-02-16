@@ -148,6 +148,7 @@ if($db->hasColumn('players', 'guildnick'))
 
 $twig->display('guilds.view.html.twig', array(
 	'logo' => $guild_logo,
+	'guild_id' => $guild->getId(),
 	'guild_name' => $guild_name,
 	'description' => $description,
 	'guild_owner' => $guild_owner->isLoaded() ? $guild_owner : null,
