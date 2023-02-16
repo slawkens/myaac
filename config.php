@@ -299,6 +299,10 @@ $config = array(
 	'status_interval' => 60,
 
 	// admin panel
+	'admin_plugins_manage_enable' => 'yes', // you can disable possibility to upload and uninstall plugins, for security
+	// enable support for plain php pages in admin panel, for security
+	// existing pages still will be working, so you need to delete them manually
+	'admin_pages_php_enable' => 'no',
 	'admin_panel_modules' => 'statistics,web_status,server_status,lastlogin,created,points,coins,balance',    // default - statistics,web_status,server_status,lastlogin,created,points,coins,balance
 
 	// other
