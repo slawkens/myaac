@@ -27,7 +27,7 @@ if (version_compare(phpversion(), '7.2.5', '<')) die('PHP version 7.2.5 or highe
 
 const MYAAC = true;
 const MYAAC_VERSION = '0.9.0-dev';
-const DATABASE_VERSION = 33;
+const DATABASE_VERSION = 34;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
