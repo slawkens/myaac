@@ -115,6 +115,18 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 		if ($route[0] === '*') {
 			$route[0] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'];
 		}
+		else {
+			if (is_string($route[0])) {
+				$route[0] = explode(',', $route[0]);
+			}
+
+			$toUpperCase = function(string $value): string {
+				return trim(strtoupper($value));
+			};
+
+			// convert to upper case, fast-route accepts only upper case
+			$route[0] = array_map($toUpperCase, $route[0]);
+		}
 
 		$aliases = [
 			[':int', ':string', ':alphanum'],

@@ -66,7 +66,8 @@ class Plugins {
 					if ($method !== '*') {
 						$methods = is_string($method) ? explode(',', $info['method']) : $method;
 						foreach ($methods as $method) {
-							if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'])) {
+							$method = strtolower($method);
+							if (!in_array($method, ['get', 'post', 'put', 'patch', 'delete', 'head'])) {
 								self::$warnings[] = $warningPreTitle . 'Not allowed method ' . $method . '... Disabling this route...';
 							}
 						}
