@@ -118,7 +118,7 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 
 		$aliases = [
 			[':int', ':string', ':alphanum'],
-			[':\d+', ':[A-Za-z0-9-_%+\']+', ':[A-Za-z0-9]+'],
+			[':\d+', ':[A-Za-z0-9-_%+\' ]+', ':[A-Za-z0-9]+'],
 		];
 
 		// apply aliases
