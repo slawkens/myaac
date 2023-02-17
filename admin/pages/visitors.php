@@ -36,8 +36,8 @@ $tmp = $visitors->getVisitors();
 usort($tmp, 'compare');
 
 foreach ($tmp as &$visitor) {
-	$userAgent = $visitor['user_agent'];
-	if ($userAgent == 'unknown') {
+	$userAgent = $visitor['user_agent'] ?? '';
+	if (!strlen($userAgent) || $userAgent == 'unknown') {
 		$browser = 'Unknown';
 	}
 	else {
