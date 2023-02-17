@@ -125,14 +125,13 @@ function getHouseLink($name, $generate = true)
 
 function getGuildLink($name, $generate = true)
 {
-	global $db, $config;
+	global $config;
 
-	if(is_numeric($name))
-	{
-		$guild = $db->query(
-			'SELECT `name` FROM `guilds` WHERE `id` = ' . (int)$name);
-		if($guild->rowCount() > 0)
-			$name = $guild->fetchColumn();
+	if(is_numeric($name)) {
+		$name = getGuildNameById($name);
+		if ($name === false) {
+			$name = 'Unknown';
+		}
 	}
 
 	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'guilds/' . urlencode($name);
@@ -1546,6 +1545,39 @@ function removeIfFirstSlash(&$text) {
 
 function escapeHtml($html) {
 	return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function getGuildNameById($id)
+{
+	global $db;
+
+	$guild = $db->query('SELECT `name` FROM `guilds` WHERE `id` = ' . (int)$id);
+
+	if($guild->rowCount() > 0) {
+		return $guild->fetchColumn();
+	}
+
+	return false;
+}
+
+function getGuildLogoById($id)
+{
+	global $db;
+
+	$logo = 'default.gif';
+
+	$query = $db->query('SELECT `logo_name` FROM `guilds` WHERE `id` = ' . (int)$id);
+	if ($query->rowCount() == 1) {
+
+		$query = $query->fetch(PDO::FETCH_ASSOC);
+		$guildLogo = $query['logo_name'];
+
+		if (!empty($guildLogo) && file_exists(GUILD_IMAGES_DIR . $guildLogo)) {
+			$logo = $guildLogo;
+		}
+	}
+
+	return BASE_URL . GUILD_IMAGES_DIR . $logo;
 }
 
 // validator functions
