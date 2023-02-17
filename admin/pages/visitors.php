@@ -43,8 +43,11 @@ foreach ($tmp as &$visitor) {
 	else {
 		$dd = new DeviceDetector($userAgent);
 		$dd->parse();
+
 		if ($dd->isBot()) {
-			$browser = '(Bot) ' . $dd->getBot();
+			$bot = $dd->getBot();
+			$message = '(Bot) %s, <a href="%s" target="_blank">%s</a>';
+			$browser = sprintf($message, $bot['category'], $bot['url'], $bot['name']);
 		}
 		else {
 			$osFamily = OperatingSystem::getOsFamily($dd->getOs('name'));

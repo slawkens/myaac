@@ -18,7 +18,7 @@
 					<td>{{ visitor.ip }}</td>
 					<td>{{ visitor.lastvisit|date("H:i:s") }}</td>
 					<td><a href="{{ visitor.page }}">{{ visitor.page|slice(0, 50) }}</a></td>
-					<td>{{ visitor.browser }}</td>
+					<td>{{ visitor.browser|raw }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>
