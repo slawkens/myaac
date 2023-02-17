@@ -156,9 +156,12 @@ if($save)
 
 	if(empty($errors))
 	{
+		$hasBeenCreatedByEMail = false;
+
 		$new_account = new OTS_Account();
 		if (config('account_login_by_email')) {
 			$new_account->createWithEmail($email);
+			$hasBeenCreatedByEMail = true;
 		}
 		else {
 			if(USE_ACCOUNT_NAME)
@@ -250,11 +253,17 @@ if($save)
 				}
 			}
 
-			if($config['account_create_auto_login']) {
-				$_POST['account_login'] = USE_ACCOUNT_NAME ? $account_name : $account_id;
+			if(config('account_create_auto_login')) {
+				if ($hasBeenCreatedByEMail) {
+					$_POST['account_login'] = $email;
+				}
+				else {
+					$_POST['account_login'] = USE_ACCOUNT_NAME ? $account_name : $account_id;
+				}
+
 				$_POST['password_login'] = $password2;
 
-				require SYSTEM . 'login.php';
+				require PAGES . 'account/login.php';
 				header('Location: ' . getLink('account/manage'));
 			}
 
