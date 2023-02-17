@@ -265,7 +265,7 @@
 			</div>
 			<br>
 
-			{{ hook(constant('HOOK_GUILDS_AFTER_INVITED_CHARACTERS'), { 'guild_id': guild_id }) }}
+			{{ hook(constant('HOOK_GUILDS_AFTER_INVITED_CHARACTERS'), { 'guild': guild, 'isLeader': isLeader }) }}
 
 			<div class="TableContainer">
 				<table class="Table3" cellpadding="0" cellspacing="0">
