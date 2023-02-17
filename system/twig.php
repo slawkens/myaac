@@ -70,17 +70,17 @@ $function = new TwigFunction('generateLink', function ($s, $n, $b = false) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getPlayerLink', function ($s, $p) {
+$function = new TwigFunction('getPlayerLink', function ($s, $p = true) {
 	return getPlayerLink($s, $p);
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getMonsterLink', function ($s, $p) {
+$function = new TwigFunction('getMonsterLink', function ($s, $p = true) {
 	return getMonsterLink($s, $p);
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getGuildLink', function ($s, $p) {
+$function = new TwigFunction('getGuildLink', function ($s, $p = true) {
     return getGuildLink($s, $p);
 });
 $twig->addFunction($function);
