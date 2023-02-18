@@ -101,14 +101,15 @@ if(isset($_GET['image']))
 	return;
 }
 
-$images =
-	$db->query('SELECT `id`, `comment`, `image`, `author`, `thumb`' .
+$images = Cache::remember('gallery_' . ($canEdit ? '1' : '0'), 60, function () use ($db, $canEdit) {
+	return $db->query('SELECT `id`, `comment`, `image`, `author`, `thumb`' .
 		($canEdit ? ', `hidden`, `ordering`' : '') .
 		' FROM `' . TABLE_PREFIX . 'gallery`' .
 		(!$canEdit ? ' WHERE `hidden` != 1' : '') .
-		' ORDER BY `ordering`;');
+		' ORDER BY `ordering`;')->fetchAll(PDO::FETCH_ASSOC);
+});
 
-$last = $images->rowCount();
+$last = count($images);
 if(!$last)
 {
 ?>
