@@ -32,7 +32,7 @@ return [
 	['GET', 'bans/{page:\d+}[/]', 'bans.php'],
 	[['GET', 'POST'], 'characters[/{name:string}]', 'characters.php'],
 	['GET', 'changelog[/{page:int}]', 'changelog.php'],
-	['GET', 'creatures[/{name:string}]', 'creatures.php'],
+	[['GET', 'POST'], 'creatures[/{name:string}]', 'creatures.php'],
 
 	['GET', 'faq[/{action:string}]', 'faq.php'],
 
