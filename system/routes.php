@@ -27,9 +27,9 @@ return [
 	[['GET', 'POST'], 'account/character/sex[/]', 'account/change_sex.php'],
 	[['GET', 'POST'], 'account/character/delete[/]', 'account/delete_character.php'],
 	[['GET', 'POST'], 'account/character/comment[/{name:[A-Za-z0-9-_%+\']+}]', 'account/change_comment.php'],
-	['GET', 'account/confirm_email/{hash:[A-Za-z0-9-_]+}[/]', 'account/confirm_email.php'],
+	['GET', 'account/confirm_email/{hash:alphanum}[/]', 'account/confirm_email.php'],
 
-	['GET', 'bans/{page:\d+}[/]', 'bans.php'],
+	['GET', 'bans/{page:int}[/]', 'bans.php'],
 	[['GET', 'POST'], 'characters[/{name:string}]', 'characters.php'],
 	['GET', 'changelog[/{page:int}]', 'changelog.php'],
 	[['GET', 'POST'], 'creatures[/{name:string}]', 'creatures.php'],
