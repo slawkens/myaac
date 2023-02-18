@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.8.8 - 18.02.2023]
+
+### Added
+* mail confirmed reward
+* support for latest group changes in TFS
+* new function: escapeHtml
+
+### Updated
+* TinyMCE to v4.9.1 (latest release in 4.x series)
+* Twig to v2.15.4
+
+### Changed
+* you can now place custom pages in your template directory under pages/ folder
+* HOOK_LOGOUT parameters, now only account_id is passed
+
+### Fixed
+* ipv6 introduced in latest TFS
+* better compatibility with GesiorAAC
+* PHP 8.1 compatibility
+* myaac_ db table detection failure
+* reload creatures error, when items cache has been cleared
+
+### Removed
+* accounts.blocked column, which is not used by AAC
+
 ## [0.8.7 - 31.08.2022]
 
 ### Added
