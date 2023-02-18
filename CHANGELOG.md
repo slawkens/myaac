@@ -17,6 +17,7 @@
 
 ### Fixed
 * ipv6 introduced in latest TFS
+* config.account_premium_days for TFS 1.4+
 * better compatibility with GesiorAAC
 * PHP 8.1 compatibility
 * myaac_ db table detection failure
