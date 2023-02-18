@@ -178,7 +178,6 @@ if($save)
 
 		$new_account->setPassword(encrypt($password));
 		$new_account->setEMail($email);
-		$new_account->unblock();
 		$new_account->save();
 
 		if(USE_ACCOUNT_SALT)
