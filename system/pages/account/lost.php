@@ -40,7 +40,7 @@ elseif($action == 'step1' && $action_type == 'email')
 		{
 			if($account->getCustomField('email_next') < time())
 				echo 'Please enter e-mail to account with this character.<BR>
-				<form action="?subtopic=lostaccount&action=sendcode" method=post>
+				<form action="' . getLink('account/lost') . '?action=sendcode" method=post>
 				<input type=hidden name="character">
 				<table cellspacing=1 cellpadding=4 border=0 width=100%>
 				<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Please enter e-mail to account</B></TD></TR>
@@ -68,7 +68,7 @@ elseif($action == 'step1' && $action_type == 'email')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><div style="text-align:center">
-				<a href="?subtopic=lostaccount" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
+				<a href="' . getLink('account/lost') . '" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'sendcode')
@@ -95,8 +95,8 @@ elseif($action == 'sendcode')
 					<p>Account name: '.$account->getName().'</p>
 					<br />
 					To do so, please click this link:
-					<p><a href="' . BASE_URL . '?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'">'.BASE_URL.'/?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'</a></p>
-					<p>or open page: <i>' . BASE_URL . '?subtopic=lostaccount&action=checkcode</i> and in field "code" write <b>'.$newcode.'</b></p>
+					<p><a href="' . getLink('account/lost') . '?action=checkcode&code='.$newcode.'&character='.urlencode($nick).'">'.BASE_URL.'/?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'</a></p>
+					<p>or open page: <i>' . getLink('account/lost') . '?action=checkcode</i> and in field "code" write <b>'.$newcode.'</b></p>
 					<br/>
 						<p>If you did not request a password change, you may ignore this message and your password will remain unchanged.';
 
@@ -131,7 +131,7 @@ elseif($action == 'sendcode')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><div style="text-align:center">
-				<a href="?subtopic=lostaccount&action=step1&action_type=email&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
+				<a href="' . getLink('account/lost') . '?action=step1&action_type=email&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'step1' && $action_type == 'reckey')
@@ -150,7 +150,7 @@ elseif($action == 'step1' && $action_type == 'reckey')
 			if(!empty($account_key))
 			{
 						echo 'If you enter right recovery key you will see form to set new e-mail and password to account. To this e-mail will be send your new password and account name.<BR>
-						<FORM ACTION="?subtopic=lostaccount&action=step2" METHOD=post>
+						<FORM ACTION="' . getLink('account/lost') . '?action=step2" METHOD=post>
 						<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 						<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Please enter your recovery key</B></TD></TR>
 						<TR><TD BGCOLOR="'.$config['darkborder'].'">
