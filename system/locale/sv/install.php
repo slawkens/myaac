@@ -42,13 +42,12 @@ $locale['step_config'] = 'Konfiguration';
 $locale['step_config_title'] = 'Grundläggande konfiguration';
 $locale['step_config_server_path'] = 'Server mapp';
 $locale['step_config_server_path_desc'] = 'Mappen som innhåller exe filen till The Forgotten Server, där du har din config.lua.';
+
 $locale['step_config_mail_admin'] = 'Admin E-Post';
 $locale['step_config_mail_admin_desc'] = 'Adress där E-Post från kontaktförmolär kommer att leveraras, till exempel admin@gmail.com';
-
 $locale['step_config_mail_admin_error'] = 'Admin E-Post är inte korrekt.';
 $locale['step_config_mail_address'] = 'Server E-Post';
 $locale['step_config_mail_address_desc'] = 'Adress som kommer att användas för utgående email (från:), till exempel no-reply@your-server.org';
-
 $locale['step_config_mail_address_error'] = 'Server E-Post är inte korrekt.';
 $locale['step_config_client'] = 'Klientversion';
 $locale['step_config_client_desc'] = 'Används för nerladdningssidan och teman.';

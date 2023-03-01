@@ -9,6 +9,8 @@
 
 MyAAC is a free and open-source Automatic Account Creator (AAC) written in PHP. It is a fork of the [Gesior](https://github.com/gesior/Gesior2012) project. It supports only MySQL databases.
 
+Official website: https://my-aac.org
+
 ### Requirements
 
 	- PHP 5.6 or later
@@ -57,12 +59,13 @@ That means, we use:
 
 - Some compatibility issues with some exotical distibutions.
 
-
 ### Contributing
 
 Contributions are more than welcome. 
 
-Pull requests should be made to the Dev branch as that is the working branch, master is for release code.  
+Pull requests should be made to the *develop* branch as that is the working branch, master is for release code.  
+
+Bug fixes to current release should be done to master branch.
 
 Look: [Contributing](https://github.com/otsoft/myaac/wiki/Contributing) in our wiki.
 

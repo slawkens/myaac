@@ -1,4 +1,6 @@
 <?php
+define('MYAAC_INSTALL', true);
+
 require_once '../../common.php';
 
 require SYSTEM . 'functions.php';

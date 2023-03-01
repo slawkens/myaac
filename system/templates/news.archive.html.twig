@@ -9,7 +9,7 @@
 	<tr bgcolor="{{ getStyle(i) }}">
 		<td width=4%>
 			<div style="text-align:center">
-				<img src="{{ template_path }}/images/news/icon_{{ news.icon_id }}_small.gif"/>
+				<img src="{{ constant('BASE_URL') }}images/news/icon_{{ news.icon_id }}_small.gif"/>
 			</div>
 		</td>
 		<td>{{ news.date|date('j.n.Y') }}</td>

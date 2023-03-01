@@ -82,6 +82,7 @@ if(!$error) {
 				}
 
 				if($saved) {
+					success($locale['step_database_config_saved']);
 					if(!$error) {
 						$_SESSION['saved'] = true;
 					}

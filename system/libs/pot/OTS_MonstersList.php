@@ -61,8 +61,8 @@ class OTS_MonstersList implements Iterator, Countable, ArrayAccess
 
 		// check if monsters.xml exist
 		if(!@file_exists($this->monstersPath . 'monsters.xml')) {
-			log_append('error.log', '[OTS_MonstersList.php] Fatal error: Cannot load monsters.xml. File does not exist. (' . $this->monstersPath . 'monsters.xml' . '). Error: ' . print_r(error_get_last(), true));
-			throw new Exception('Error: Cannot load monsters.xml. File not found. More info in system/logs/error.log file.');
+			log_append('error.log', '[OTS_MonstersList.php] Fatal error: Cannot load monsters.xml. File does not exist. (' . $this->monstersPath . 'monsters.xml' . ').');
+			throw new Exception('Error: Cannot load monsters.xml. File not found.');
 		}
 		
         // loads monsters mapping file
