@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.8.9 - 16.03.2023]
+
+### Added
+* You can now disable server status checking for testing purposes, useful for local testing when there is no server running
+  * with this, the page won't need 2 seconds to load
+  * set status_enabled to false in config.php
+* new buttons code for tibiacom template, can create button with any text
+* patched some small changes from develop branch
+
+### Changed
+* add .git to denied folders in nginx-sample.conf
+* plugins folder is now accessible from outside
+* add plugins folder to twig search paths
+
+### Fixed
+* fix player save on tfs 1.5 with new ipv6
+* more php 8.x compatibility
+
 ## [0.8.8 - 18.02.2023]
 
 ### Added
