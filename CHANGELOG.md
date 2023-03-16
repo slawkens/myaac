@@ -15,8 +15,9 @@
 * add plugins folder to twig search paths
 
 ### Fixed
-* fix player save on tfs 1.5 with new ipv6
+* player save on tfs 1.5 with new ipv6
 * more php 8.x compatibility
+* rel path for exception message, causing message to be not in red background
 
 ## [0.8.8 - 18.02.2023]
 
