@@ -103,6 +103,6 @@ if(!$error) {
 
 <form action="<?php echo BASE_URL; ?>install/" method="post">
 	<input type="hidden" name="step" id="step" value="admin" />
-	<?php echo next_buttons(true, $error ? false : true);
+	<?php echo next_buttons(true, !$error);
 	?>
 </form>
