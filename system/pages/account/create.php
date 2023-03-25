@@ -26,8 +26,13 @@ if(config('account_create_character_create')) {
 }
 
 $account_type = 'number';
-if(USE_ACCOUNT_NAME) {
-	$account_type = 'name';
+if (config('account_login_by_email')) {
+	$account_type = 'Email Address';
+}
+else {
+	if(USE_ACCOUNT_NAME) {
+		$account_type = 'name';
+	}
 }
 
 $errors = array();
