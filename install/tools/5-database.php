@@ -23,24 +23,6 @@ if(!$error) {
 	}
 }
 
-if(!$db->hasTable('accounts')) {
-	$locale['step_database_error_table'] = str_replace('$TABLE$', 'accounts', $locale['step_database_error_table']);
-	error($locale['step_database_error_table']);
-	return;
-}
-
-if(!$db->hasTable('players')) {
-	$locale['step_database_error_table'] = str_replace('$TABLE$', 'players', $locale['step_database_error_table']);
-	error($locale['step_database_error_table']);
-	return;
-}
-
-if(!$db->hasTable('guilds')) {
-	$locale['step_database_error_table'] = str_replace('$TABLE$', 'guilds', $locale['step_database_error_table']);
-	error($locale['step_database_error_table']);
-	return;
-}
-
 if($db->hasTable(TABLE_PREFIX . 'account_actions')) {
 	$locale['step_database_error_table_exist'] = str_replace('$TABLE$', TABLE_PREFIX . 'account_actions', $locale['step_database_error_table_exist']);
 	warning($locale['step_database_error_table_exist']);
