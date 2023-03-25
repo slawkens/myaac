@@ -70,7 +70,7 @@ if($step == 'database') {
 
 		$key = str_replace('var_', '', $key);
 
-		if(in_array($key, array('account', 'password', 'email', 'player_name'))) {
+		if(in_array($key, array('account', 'account_id', 'password', 'email', 'player_name'))) {
 			continue;
 		}
 
