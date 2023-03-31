@@ -13,4 +13,4 @@ jobs:
       - uses: overtrue/phplint@7.4
         with:
           path: .
-          options: --exclude=*.log
+          options: --exclude="system/libs/polyfill-mbstring/bootstrap80.php"
