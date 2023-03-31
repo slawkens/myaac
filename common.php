@@ -34,7 +34,8 @@ define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS
 define('IS_CLI', in_array(php_sapi_name(), ['cli', 'phpdb']));
 
 // account flags
-const FLAG_NONE = 0;
+// test phplint, should give error as there is no semicolon
+const FLAG_NONE = 0
 const FLAG_ADMIN = 1;
 const FLAG_SUPER_ADMIN = 2;
 const FLAG_SUPER_BOTH = 3;
