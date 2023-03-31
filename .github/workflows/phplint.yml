@@ -1,13 +1,15 @@
 name: PHP Linting
 on:
   pull_request:
-    branches: [master, develop]
+    branches: [develop]
   push:
-    branches: [master]
+    branches: [develop]
 
 jobs:
   phplint:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v1
-        - uses: michaelw90/PHP-Lint@master
+      - uses: overtrue/phplint@8.2
+        with:
+          path: .
+          options: --exclude=*.log
