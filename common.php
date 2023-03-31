@@ -24,7 +24,7 @@
  * @link      https://my-aac.org
  */
 if (version_compare(phpversion(), '5.6', '<')) die('PHP version 5.6 or higher is required.');
-// test github actions
+
 define('MYAAC', true);
 define('MYAAC_VERSION', '0.8.10-dev');
 define('DATABASE_VERSION', 33);
