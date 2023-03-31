@@ -1,4 +1,4 @@
-SET @myaac_database_version = 34;
+SET @myaac_database_version = 35;
 
 CREATE TABLE `myaac_account_actions`
 (
@@ -203,6 +203,7 @@ CREATE TABLE `myaac_monsters` (
 	`mana` int(11) NOT NULL DEFAULT 0,
 	`exp` int(11) NOT NULL,
 	`health` int(11) NOT NULL,
+	`look` VARCHAR(255) NOT NULL DEFAULT '',
 	`speed_lvl` int(11) NOT NULL default 1,
 	`use_haste` tinyint(1) NOT NULL,
 	`voices` text NOT NULL,

@@ -82,6 +82,9 @@ class Creatures {
 			$armor = $monster->getArmor();
 			$defensev = $monster->getDefense();
 
+			//load look
+			$look = $monster->getLook();
+
 			//load monster flags
 			$flags = $monster->getFlags();
 			if(!isset($flags['summonable']))
@@ -147,6 +150,7 @@ class Creatures {
 						'armor' => $armor,
 						'race' => $race,
 						'loot' => json_encode($loot),
+						'look' => json_encode($look),
 						'summons' => json_encode($summons)
 					));
 
