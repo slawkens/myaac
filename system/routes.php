@@ -10,7 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 return [
-	['GET', '', '__redirect__/news'], // redirect empty URL to news
+	['GET', '', '__redirect__/' . (config('friendly_urls') ? '' : 'index.php/') . 'news'], // redirect empty URL to news
 	['GET', 'news/archive/{id:int}[/]', 'news/archive.php'],
 
 	// block access to some files
