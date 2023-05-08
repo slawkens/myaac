@@ -1,4 +1,15 @@
 <?php
+/**
+ * Login
+ *
+ * @package   MyAAC
+ * @author    Gesior <jerzyskalski@wp.pl>
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2023 MyAAC
+ * @link      https://my-aac.org
+ */
+defined('MYAAC') or die('Direct access not allowed!');
+$title = 'Login';
 
 // new login with data from form
 if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
@@ -37,7 +48,7 @@ if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
 		}
 
 		if (!config('account_login_by_email') || config('account_login_by_email_fallback')) {
-			if(USE_ACCOUNT_NAME) {
+			if(USE_ACCOUNT_NAME || USE_ACCOUNT_NUMBER) {
 				$account_logged->find($login_account);
 			} else {
 				$account_logged->load($login_account, true);
@@ -48,7 +59,7 @@ if(!$logged && isset($_POST['account_login'], $_POST['password_login']))
 			&& (!isset($t) || $t['attempts'] < 5)
 		)
 		{
-			setSession('account', $account_logged->getNumber());
+			setSession('account', $account_logged->getId());
 			setSession('password', encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $login_password));
 			if($remember_me) {
 				setSession('remember_me', true);

@@ -23,24 +23,6 @@ if(!$error) {
 	}
 }
 
-if(!$db->hasTable('accounts')) {
-	$locale['step_database_error_table'] = str_replace('$TABLE$', 'accounts', $locale['step_database_error_table']);
-	error($locale['step_database_error_table']);
-	return;
-}
-
-if(!$db->hasTable('players')) {
-	$locale['step_database_error_table'] = str_replace('$TABLE$', 'players', $locale['step_database_error_table']);
-	error($locale['step_database_error_table']);
-	return;
-}
-
-if(!$db->hasTable('guilds')) {
-	$locale['step_database_error_table'] = str_replace('$TABLE$', 'guilds', $locale['step_database_error_table']);
-	error($locale['step_database_error_table']);
-	return;
-}
-
 if($db->hasTable(TABLE_PREFIX . 'account_actions')) {
 	$locale['step_database_error_table_exist'] = str_replace('$TABLE$', TABLE_PREFIX . 'account_actions', $locale['step_database_error_table_exist']);
 	warning($locale['step_database_error_table_exist']);
@@ -73,13 +55,8 @@ else {
 		success($locale['step_database_adding_field'] . ' accounts.key...');
 }
 
-if(!$db->hasColumn('accounts', 'blocked')) {
-	if(query("ALTER TABLE `accounts` ADD `blocked` TINYINT(1) NOT NULL DEFAULT FALSE COMMENT 'internal usage' AFTER `key`;"))
-		success($locale['step_database_adding_field'] . ' accounts.blocked...');
-}
-
 if(!$db->hasColumn('accounts', 'created')) {
-	if(query("ALTER TABLE `accounts` ADD `created` INT(11) NOT NULL DEFAULT 0 AFTER `" . ($db->hasColumn('accounts', 'group_id') ? 'group_id' : 'blocked') . "`;"))
+	if(query("ALTER TABLE `accounts` ADD `created` INT(11) NOT NULL DEFAULT 0 AFTER `" . ($db->hasColumn('accounts', 'group_id') ? 'group_id' : 'key') . "`;"))
 		success($locale['step_database_adding_field'] . ' accounts.created...');
 }
 

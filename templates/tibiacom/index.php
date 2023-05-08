@@ -27,7 +27,7 @@ if(isset($config['boxes']))
 		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
 		<?php
 			if(PAGE !== 'news') {
-				if(strpos(URI, 'subtopic=') !== false) {
+				if(isset($_REQUEST['subtopic'])) {
 					$tmp = $_REQUEST['subtopic'];
 					if($tmp === 'accountmanagement') {
 						$tmp = 'accountmanage';

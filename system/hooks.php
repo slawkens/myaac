@@ -30,6 +30,7 @@ define('HOOK_CHARACTERS_AFTER_CHARACTERS', ++$i);
 define('HOOK_LOGIN', ++$i);
 define('HOOK_LOGIN_ATTEMPT', ++$i);
 define('HOOK_LOGOUT', ++$i);
+define('HOOK_ACCOUNT_CHANGE_PASSWORD_POST', ++$i);
 define('HOOK_ACCOUNT_CREATE_BEFORE_FORM', ++$i);
 define('HOOK_ACCOUNT_CREATE_BEFORE_BOXES', ++$i);
 define('HOOK_ACCOUNT_CREATE_BETWEEN_BOXES_1', ++$i);
@@ -65,9 +66,12 @@ define('HOOK_ADMIN_MENU', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_ACCOUNT', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_PASSWORD', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_SIGN_IN', ++$i);
+define('HOOK_ADMIN_ACCOUNTS_SAVE_POST', ++$i);
 define('HOOK_EMAIL_CONFIRMED', ++$i);
+define('HOOK_GUILDS_AFTER_INVITED_CHARACTERS', ++$i);
+
 const HOOK_FIRST = HOOK_STARTUP;
-const HOOK_LAST = HOOK_EMAIL_CONFIRMED;
+define('HOOK_LAST', $i);
 
 require_once LIBS . 'plugins.php';
 class Hook

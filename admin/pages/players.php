@@ -663,7 +663,14 @@ else if (isset($_REQUEST['search'])) {
 									</div>
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="lastip" class="control-label">Last IP:</label>
-										<input type="text" class="form-control" id="lastip" name="lastip" autocomplete="off" maxlength="10" value="<?php echo longToIp($player->getLastIP()); ?>" readonly/>
+										<input type="text" class="form-control" id="lastip" name="lastip" autocomplete="off" maxlength="10" value="<?php
+										if (strlen($player->getLastIP()) > 11) {
+											echo inet_ntop($player->getLastIP());
+										}
+										else {
+											echo longToIp($player->getLastIP());
+										}
+										?>" readonly/>
 									</div>
 								</div>
 								<?php if ($db->hasColumn('players', 'loss_experience')): ?>

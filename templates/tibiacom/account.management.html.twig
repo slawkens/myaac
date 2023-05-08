@@ -146,10 +146,12 @@
 								<div class="TableContentAndRightShadow" style="background-image:url({{ template_path }}/images/content/table-shadow-rm.gif);">
 									<div class="TableContentContainer">
 										<table class="TableContent" width="100%">
+											{% if not config.account_login_by_email or config.account_login_by_email_fallback %}
 											<tr style="background-color: {{ config.lightborder }};" >
 												<td class="LabelV" >Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</td>
 												<td style="width:90%;" >{{ account }}</td>
 											</tr>
+											{% endif %}
 											<tr style="background-color: {{ config.darkborder }};" >
 												<td class="LabelV" >Email Address:</td>
 												<td style="width:90%;" >{{ account_email ~ email_change}}</td>

@@ -76,18 +76,18 @@ if (!empty($action)) {
 			$enable_tinymce = $_page['enable_tinymce'] == '1';
 			$access = $_page['access'];
 		} else {
-			if(Pages::update($id, $name, $p_title, $body, $player_id, $php, $enable_tinymce, $access)) {
+			if(Pages::update($id, $name, $p_title, $body, $player_id, $php, $enable_tinymce, $access, $errors)) {
 				$action = $name = $p_title = $body = '';
 				$player_id = 1;
 				$access = 0;
 				$php = false;
 				$enable_tinymce = true;
-				success("Updated successful.");
+				success('Updated successful.');
 			}
 		}
 	} else if ($action == 'hide') {
 		Pages::toggleHidden($id, $errors, $status);
-		success(($status == 1 ? 'Show' : 'Hide') . " successful.");
+		success(($status == 1 ? 'Show' : 'Hide') . ' successful.');
 	}
 
 	if (!empty($errors))
@@ -152,6 +152,10 @@ class Pages
 			$errors[] = 'Enable PHP is wrong.';
 			return false;
 		}
+		if ($php == 1 && !getBoolean(config('admin_pages_php_enable'))) {
+			$errors[] = 'PHP pages disabled on this server. To enable go to config.php and change admin_pages_php_enable to "yes".';
+			return false;
+		}
 		if(!isset($enable_tinymce) || ($enable_tinymce != 0 && $enable_tinymce != 1)) {
 			$errors[] = 'Enable TinyMCE is wrong.';
 			return false;
@@ -200,7 +204,7 @@ class Pages
 		return !count($errors);
 	}
 
-	static public function update($id, $name, $title, $body, $player_id, $php, $enable_tinymce, $access)
+	static public function update($id, $name, $title, $body, $player_id, $php, $enable_tinymce, $access, &$errors)
 	{
 		if(!self::verify($name, $title, $body, $player_id, $php, $enable_tinymce, $access, $errors)) {
 			return false;

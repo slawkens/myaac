@@ -1,4 +1,13 @@
 <?php
+/**
+ * Twig Loader
+ *
+ * @package   MyAAC
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2021 MyAAC
+ * @link      https://my-aac.org
+ */
+defined('MYAAC') or die('Direct access not allowed!');
 
 use Twig\Environment as Twig_Environment;
 use Twig\Extension\DebugExtension as Twig_DebugExtension;
@@ -61,17 +70,17 @@ $function = new TwigFunction('generateLink', function ($s, $n, $b = false) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getPlayerLink', function ($s, $p) {
+$function = new TwigFunction('getPlayerLink', function ($s, $p = true) {
 	return getPlayerLink($s, $p);
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getMonsterLink', function ($s, $p) {
+$function = new TwigFunction('getMonsterLink', function ($s, $p = true) {
 	return getMonsterLink($s, $p);
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getGuildLink', function ($s, $p) {
+$function = new TwigFunction('getGuildLink', function ($s, $p = true) {
     return getGuildLink($s, $p);
 });
 $twig->addFunction($function);
@@ -81,14 +90,14 @@ $function = new TwigFunction('truncate', function ($s, $n) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('hook', function ($hook) {
+$function = new TwigFunction('hook', function ($hook, array $params = []) {
 	global $hooks;
 
 	if(is_string($hook)) {
 		$hook = constant($hook);
 	}
 
-	$hooks->trigger($hook);
+	$hooks->trigger($hook, $params);
 });
 $twig->addFunction($function);
 

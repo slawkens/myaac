@@ -1,4 +1,13 @@
 <?php
+/**
+ * Logout from account
+ *
+ * @package   MyAAC
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2019 MyAAC
+ * @link      https://my-aac.org
+ */
+defined('MYAAC') or die('Direct access not allowed!');
 
 if(isset($account_logged) && $account_logged->isLoaded()) {
 	if($hooks->trigger(HOOK_LOGOUT, ['account_id' => $account_logged->getId()])) {

@@ -70,7 +70,7 @@ if($step == 'database') {
 
 		$key = str_replace('var_', '', $key);
 
-		if(in_array($key, array('account', 'password', 'password_confirm', 'email', 'player_name'))) {
+		if(in_array($key, array('account', 'account_id', 'password', 'password_confirm', 'email', 'player_name'))) {
 			continue;
 		}
 
@@ -110,13 +110,11 @@ if($step == 'database') {
 	}
 }
 else if($step == 'admin') {
-	$config_failed = true;
-	if(file_exists(BASE . 'config.local.php') && isset($config['installed']) && $config['installed'] && isset($_SESSION['saved'])) {
-		$config_failed = false;
-	}
-
-	if($config_failed) {
+	if(!file_exists(BASE . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
 		$step = 'database';
+	}
+	else {
+		$_SESSION['saved'] = true;
 	}
 }
 else if($step == 'finish') {

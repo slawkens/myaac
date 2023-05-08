@@ -4,9 +4,10 @@
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2021 MyAAC
+ * @copyright 2023 MyAAC
  * @link      https://my-aac.org
  */
+defined('MYAAC') or die('Direct access not allowed!');
 
 if(!isset($content[0]))
 	$content = '';
@@ -55,10 +56,9 @@ if (BASE_DIR !== '') {
 
 define('URI', $uri);
 
-/** @var boolean $load_it */
 if(!$load_it) {
 	// ignore warnings in some functions/plugins
-	// page is not loaded anyways
+	// page is not loaded anyway
 	define('PAGE', '');
 
 	return;
@@ -115,10 +115,22 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 		if ($route[0] === '*') {
 			$route[0] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'];
 		}
+		else {
+			if (is_string($route[0])) {
+				$route[0] = explode(',', $route[0]);
+			}
+
+			$toUpperCase = function(string $value): string {
+				return trim(strtoupper($value));
+			};
+
+			// convert to upper case, fast-route accepts only upper case
+			$route[0] = array_map($toUpperCase, $route[0]);
+		}
 
 		$aliases = [
 			[':int', ':string', ':alphanum'],
-			[':\d+', ':[A-Za-z0-9-_%+\']+}', ':[A-Za-z0-9]+'],
+			[':\d+', ':[A-Za-z0-9-_%+\' ]+', ':[A-Za-z0-9]+'],
 		];
 
 		// apply aliases
@@ -147,6 +159,10 @@ $found = true;
 // old support for pages like /?subtopic=accountmanagement
 $page = $_REQUEST['p'] ?? ($_REQUEST['subtopic'] ?? '');
 if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
+	if (isset($_REQUEST['p'])) { // some plugins may require this
+		$_REQUEST['subtopic'] = $_REQUEST['p'];
+	}
+
 	if (config('backward_support')) {
 		require SYSTEM . 'compat/pages.php';
 	}
@@ -161,7 +177,6 @@ else {
 	switch ($routeInfo[0]) {
 		case FastRoute\Dispatcher::NOT_FOUND:
 			// ... 404 Not Found
-			//var_dump('not found');
 			/**
 			 * Fallback to load page from templates/ or system/pages/ directory
 			 */
@@ -282,7 +297,8 @@ function getDatabasePages() {
 	return $ret;
 }
 
-function loadPageFromFileSystem($page, &$found) {
+function loadPageFromFileSystem($page, &$found): string
+{
 	$file = SYSTEM . 'pages/' . $page . '.php';
 	if (!is_file($file)) {
 		// feature: convert camelCase to snake_case

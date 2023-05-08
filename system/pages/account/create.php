@@ -26,8 +26,13 @@ if(config('account_create_character_create')) {
 }
 
 $account_type = 'number';
-if(USE_ACCOUNT_NAME) {
-	$account_type = 'name';
+if (config('account_login_by_email')) {
+	$account_type = 'Email Address';
+}
+else {
+	if(USE_ACCOUNT_NAME) {
+		$account_type = 'name';
+	}
 }
 
 $errors = array();
@@ -156,9 +161,12 @@ if($save)
 
 	if(empty($errors))
 	{
+		$hasBeenCreatedByEMail = false;
+
 		$new_account = new OTS_Account();
 		if (config('account_login_by_email')) {
 			$new_account->createWithEmail($email);
+			$hasBeenCreatedByEMail = true;
 		}
 		else {
 			if(USE_ACCOUNT_NAME)
@@ -175,7 +183,6 @@ if($save)
 
 		$new_account->setPassword(encrypt($password));
 		$new_account->setEMail($email);
-		$new_account->unblock();
 		$new_account->save();
 
 		if(USE_ACCOUNT_SALT)
@@ -247,14 +254,21 @@ if($save)
 				$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
 				if (!$character_created) {
 					error('There was an error creating your character. Please create your character later in account management page.');
+					error(implode(' ', $errors));
 				}
 			}
 
-			if($config['account_create_auto_login']) {
-				$_POST['account_login'] = USE_ACCOUNT_NAME ? $account_name : $account_id;
+			if(config('account_create_auto_login')) {
+				if ($hasBeenCreatedByEMail) {
+					$_POST['account_login'] = $email;
+				}
+				else {
+					$_POST['account_login'] = USE_ACCOUNT_NAME ? $account_name : $account_id;
+				}
+
 				$_POST['password_login'] = $password2;
 
-				require SYSTEM . 'login.php';
+				require PAGES . 'account/login.php';
 				header('Location: ' . getLink('account/manage'));
 			}
 

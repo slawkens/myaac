@@ -89,10 +89,12 @@
 		<a name="General+Information"></a>
 		<h2>General Information</h2>
 		<table width="100%">
+			{% if not config.account_login_by_email or config.account_login_by_email_fallback %}
 			<tr style="background-color: {{ config.lightborder }};" >
 				<td style="width: 90px;">Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</td>
 				<td>{{ account }}</td>
 			</tr>
+			{% endif %}
 			<tr style="background-color: {{ config.darkborder }};" >
 				<td style="width: 90px;">Email Address:</td>
 				<td>{{ account_email ~ email_change }}

@@ -7,11 +7,10 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+defined('MYAAC') or die('Direct access not allowed!');
 
 use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
-
-defined('MYAAC') or die('Direct access not allowed!');
 
 function message($message, $type, $return)
 {
@@ -125,14 +124,13 @@ function getHouseLink($name, $generate = true)
 
 function getGuildLink($name, $generate = true)
 {
-	global $db;
+	global $config;
 
-	if(is_numeric($name))
-	{
-		$guild = $db->query(
-			'SELECT `name` FROM `guilds` WHERE `id` = ' . (int)$name);
-		if($guild->rowCount() > 0)
-			$name = $guild->fetchColumn();
+	if(is_numeric($name)) {
+		$name = getGuildNameById($name);
+		if ($name === false) {
+			$name = 'Unknown';
+		}
 	}
 
 	$settings = Settings::getInstance();
@@ -792,16 +790,21 @@ function get_templates()
  * Generates list of installed plugins
  * @return array $plugins
  */
-function get_plugins()
+function get_plugins($disabled = false): array
 {
-	$ret = array();
+	$ret = [];
 
 	$path = PLUGINS;
-	foreach(scandir($path, 0) as $file) {
+	foreach(scandir($path, SCANDIR_SORT_ASCENDING) as $file) {
 		$file_ext = pathinfo($file, PATHINFO_EXTENSION);
 		$file_name = pathinfo($file, PATHINFO_FILENAME);
-		if ($file === '.' || $file === '..' || $file === 'disabled' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file))
+		if ($file === '.' || $file === '..' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file)) {
 			continue;
+		}
+
+		if (!$disabled && strpos($file, 'disabled.') !== false) {
+			continue;
+		}
 
 		$ret[] = str_replace('.json', '', $file_name);
 	}
@@ -1551,6 +1554,39 @@ function removeIfFirstSlash(&$text) {
 
 function escapeHtml($html) {
 	return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function getGuildNameById($id)
+{
+	global $db;
+
+	$guild = $db->query('SELECT `name` FROM `guilds` WHERE `id` = ' . (int)$id);
+
+	if($guild->rowCount() > 0) {
+		return $guild->fetchColumn();
+	}
+
+	return false;
+}
+
+function getGuildLogoById($id)
+{
+	global $db;
+
+	$logo = 'default.gif';
+
+	$query = $db->query('SELECT `logo_name` FROM `guilds` WHERE `id` = ' . (int)$id);
+	if ($query->rowCount() == 1) {
+
+		$query = $query->fetch(PDO::FETCH_ASSOC);
+		$guildLogo = $query['logo_name'];
+
+		if (!empty($guildLogo) && file_exists(GUILD_IMAGES_DIR . $guildLogo)) {
+			$logo = $guildLogo;
+		}
+	}
+
+	return BASE_URL . GUILD_IMAGES_DIR . $logo;
 }
 
 // validator functions

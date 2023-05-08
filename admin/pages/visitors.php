@@ -8,6 +8,11 @@
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
+
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Client\Browser;
+use DeviceDetector\Parser\OperatingSystem;
+
 $title = 'Visitors';
 $use_datatable = true;
 
@@ -29,6 +34,31 @@ function compare($a, $b)
 
 $tmp = $visitors->getVisitors();
 usort($tmp, 'compare');
+
+foreach ($tmp as &$visitor) {
+	$userAgent = $visitor['user_agent'] ?? '';
+	if (!strlen($userAgent) || $userAgent == 'unknown') {
+		$browser = 'Unknown';
+	}
+	else {
+		$dd = new DeviceDetector($userAgent);
+		$dd->parse();
+
+		if ($dd->isBot()) {
+			$bot = $dd->getBot();
+			$message = '(Bot) %s, <a href="%s" target="_blank">%s</a>';
+			$browser = sprintf($message, $bot['category'], $bot['url'], $bot['name']);
+		}
+		else {
+			$osFamily = OperatingSystem::getOsFamily($dd->getOs('name'));
+			$browserFamily = Browser::getBrowserFamily($dd->getClient('name'));
+
+			$browser = $osFamily . ', ' . $browserFamily;
+		}
+	}
+
+	$visitor['browser'] = $browser;
+}
 
 $twig->display('admin.visitors.html.twig', array(
 	'config_visitors_counter_ttl' => $config['visitors_counter_ttl'],

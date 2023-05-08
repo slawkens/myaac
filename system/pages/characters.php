@@ -201,8 +201,7 @@ if($player->isLoaded() && !$player->isDeleted())
 		unset($storage);
 	}
 
-	if($config['characters']['equipment']) {
-		global $db;
+	if($config['characters']['equipment'] && $db->hasTable('player_items') && $db->hasColumn('player_items', 'pid') && $db->hasColumn('player_items', 'sid') && $db->hasColumn('player_items', 'itemtype')) {
 		$eq_sql = $db->query('SELECT `pid`, `itemtype` FROM player_items WHERE player_id = '.$player->getId().' AND (`pid` >= 1 and `pid` <= 10)');
 		$equipment = array();
 		foreach($eq_sql as $eq)
@@ -285,7 +284,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				$deaths[] = array('time' => $death['date'], 'description' => $description . '.');
 			}
 		}
-	} else {
+	} else if ($db->hasColumn('player_deaths', 'time') && $db->hasColumn('player_deaths', 'level') && $db->hasColumn('player_deaths', 'killed_by') && $db->hasColumn('player_deaths', 'is_player')) {
 		$mostdamage = '';
 		if($db->hasColumn('player_deaths', 'mostdamage_by'))
 			$mostdamage = ', `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`';

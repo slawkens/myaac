@@ -86,7 +86,7 @@ $twig->display('account.management.html.twig', array(
 	'email_request' => $email_request,
 	'email_new_time' => $email_new_time,
 	'email_new' => isset($email_new) ? $email_new : '',
-	'account' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId(),
+	'account' => (USE_ACCOUNT_NAME ? $account_logged->getName() : (USE_ACCOUNT_NUMBER ? $account_logged->getNumber() : $account_logged->getId())),
 	'account_email' => $account_email,
 	'account_created' => $account_created,
 	'account_status' => $account_status,

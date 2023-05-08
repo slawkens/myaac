@@ -7,9 +7,10 @@
  * @copyright 2021 MyAAC
  * @link      https://my-aac.org
  */
+defined('MYAAC') or die('Direct access not allowed!');
 
 return [
-	['GET', '', '__redirect__/news'], // redirect empty URL to news
+	['GET', '', '__redirect__/' . (config('friendly_urls') ? '' : 'index.php/') . 'news'], // redirect empty URL to news
 	['GET', 'news/archive/{id:int}[/]', 'news/archive.php'],
 
 	// block access to some files
@@ -26,12 +27,12 @@ return [
 	[['GET', 'POST'], 'account/character/sex[/]', 'account/change_sex.php'],
 	[['GET', 'POST'], 'account/character/delete[/]', 'account/delete_character.php'],
 	[['GET', 'POST'], 'account/character/comment[/{name:[A-Za-z0-9-_%+\']+}]', 'account/change_comment.php'],
-	['GET', 'account/confirm_email/{hash:[A-Za-z0-9-_]+}[/]', 'account/confirm_email.php'],
+	['GET', 'account/confirm_email/{hash:alphanum}[/]', 'account/confirm_email.php'],
 
-	['GET', 'bans/{page:\d+}[/]', 'bans.php'],
-	[['GET', 'POST'], 'characters[/{name:string]', 'characters.php'],
+	['GET', 'bans/{page:int}[/]', 'bans.php'],
+	[['GET', 'POST'], 'characters[/{name:string}]', 'characters.php'],
 	['GET', 'changelog[/{page:int}]', 'changelog.php'],
-	['GET', 'creatures[/{name:string}]', 'creatures.php'],
+	[['GET', 'POST'], 'creatures[/{name:string}]', 'creatures.php'],
 
 	['GET', 'faq[/{action:string}]', 'faq.php'],
 

@@ -8,7 +8,7 @@ if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['save
 else {
 	require SYSTEM . 'init.php';
 	if(!$error) {
-		if(USE_ACCOUNT_NAME)
+		if(USE_ACCOUNT_NAME || USE_ACCOUNT_NUMBER)
 			$account = isset($_SESSION['var_account']) ? $_SESSION['var_account'] : null;
 		else
 			$account_id = isset($_SESSION['var_account_id']) ? $_SESSION['var_account_id'] : null;
@@ -65,7 +65,6 @@ else {
 			$new_account->setPassword(encrypt($password));
 			$new_account->setEMail($email);
 
-			$new_account->unblock();
 			$new_account->save();
 
 			$new_account->setCustomField('created', time());

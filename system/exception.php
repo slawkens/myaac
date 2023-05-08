@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Exception handler
+ *
+ * @package   MyAAC
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2023 MyAAC
+ * @link      https://my-aac.org
+ */
 require LIBS . 'SensitiveException.php';
 
 /**

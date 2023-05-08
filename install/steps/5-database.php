@@ -55,12 +55,30 @@ if(!$error) {
 			error($database_error);
 		}
 		else {
-			$twig->display('install.installer.html.twig', array(
-				'url' => 'tools/5-database.php',
-				'message' => $locale['loading_spinner']
-			));
+			if(!$db->hasTable('accounts')) {
+				$tmp = str_replace('$TABLE$', 'accounts', $locale['step_database_error_table']);
+				error($tmp);
+				$error = true;
+			}
+
+			if(!$db->hasTable('players')) {
+				$tmp = str_replace('$TABLE$', 'players', $locale['step_database_error_table']);
+				error($tmp);
+				$error = true;
+			}
+
+			if(!$db->hasTable('guilds')) {
+				$tmp = str_replace('$TABLE$', 'guilds', $locale['step_database_error_table']);
+				error($tmp);
+				$error = true;
+			}
 
 			if(!$error) {
+				$twig->display('install.installer.html.twig', array(
+					'url' => 'tools/5-database.php',
+					'message' => $locale['loading_spinner']
+				));
+
 				if(!Validator::email($_SESSION['var_mail_admin'])) {
 					error($locale['step_config_mail_admin_error']);
 					$error = true;
@@ -86,7 +104,7 @@ if(!$error) {
 					unset($_SESSION['saved']);
 
 					$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
-					warning($locale['step_database_error_file'] . '<br/>
+					error($locale['step_database_error_file'] . '<br/>
 						<textarea cols="70" rows="10">' . $content . '</textarea>');
 				}
 			}
