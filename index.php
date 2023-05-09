@@ -100,8 +100,6 @@ $twig->addGlobal('status', $status);
 
 require_once SYSTEM . 'router.php';
 
-require SYSTEM . 'migrate.php';
-
 $hooks->trigger(HOOK_STARTUP);
 
 // anonymous usage statistics
