@@ -598,10 +598,6 @@ class Plugins {
 		return self::$error;
 	}
 
-	public static function getPluginJson() {
-		return self::$plugin_json;
-	}
-
 	/**
 	 * Install menus
 	 * Helper function for plugins
