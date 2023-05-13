@@ -29,7 +29,7 @@ require_once SYSTEM . 'functions.php';
 
 $uri = $_SERVER['REQUEST_URI'];
 if(false !== strpos($uri, 'index.php')) {
-	$uri = str_replace_first('/index.php', '', $uri);
+	$uri = str_replace_first('index.php', '', $uri);
 }
 
 if(0 === strpos($uri, '/')) {
