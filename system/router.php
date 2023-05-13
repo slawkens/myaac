@@ -51,7 +51,11 @@ if (false !== $pos = strpos($uri, '?')) {
 $uri = rawurldecode($uri);
 if (BASE_DIR !== '') {
 	$tmp = str_replace_first('/', '', BASE_DIR);
-	$uri = str_replace_first($tmp . '/', '', $uri);
+	$uri = str_replace_first($tmp, '', $uri);
+}
+
+if(0 === strpos($uri, '/')) {
+	$uri = str_replace_first('/', '', $uri);
 }
 
 define('URI', $uri);
