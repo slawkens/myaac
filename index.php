@@ -74,15 +74,24 @@ if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE .
 	throw new RuntimeException('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
 }
 
+$isEmptyGet = false;
+if (!empty($_GET)) {
+	foreach ($_GET as $value) {
+		if (empty($value)) {
+			$isEmptyGet = true;
+		}
+	}
+}
+
 $found = false;
-if(empty($uri) || isset($_REQUEST['template'])) {
-	$_REQUEST['p'] = 'news';
+if(empty($uri) || isset($_REQUEST['template']) || (!$isEmptyGet && !isset($_REQUEST['subtopic']) && !isset($_REQUEST['p']))) {
+	$_REQUEST['p'] = $_REQUEST['subtopic'] = 'news';
 	$found = true;
 }
 else {
 	$tmp = strtolower($uri);
 	if(!preg_match('/[^A-z0-9_\-]/', $uri) && file_exists(SYSTEM . 'pages/' . $tmp . '.php')) {
-		$_REQUEST['p'] = $uri;
+		$_REQUEST['p'] = $_REQUEST['subtopic'] = $uri;
 		$found = true;
 	}
 	else {
