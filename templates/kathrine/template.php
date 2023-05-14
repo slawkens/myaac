@@ -33,7 +33,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 					}
 					else {
 						$tmp = URI;
-						if(empty($tmp) || !$isEmptyGet) {
+						if(empty($tmp)) {
 							$tmp = array('news');
 						}
 						else {
