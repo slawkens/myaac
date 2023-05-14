@@ -15,6 +15,7 @@ Minimum PHP version for this release is 7.2.5.
   * editable changelogs
   * revised Accounts & Players editors
   * option to add/modify menus with plugins
+  * option to enable/disable plugins
   * better, updated TinyMCE editor (v6.x)
     * with option to upload images
   * list of open source libraries used in project
