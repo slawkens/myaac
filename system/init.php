@@ -148,35 +148,5 @@ define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
 define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
 
-// load vocation names
-$tmp = '';
-if($cache->enabled() && $cache->fetch('vocations', $tmp)) {
-	$config['vocations'] = unserialize($tmp);
-}
-else {
-	if(!class_exists('DOMDocument')) {
-		throw new RuntimeException('Please install PHP xml extension. MyAAC will not work without it.');
-	}
-
-	$vocations = new DOMDocument();
-	$file = $config['data_path'] . 'XML/vocations.xml';
-	if(!@file_exists($file))
-		$file = $config['data_path'] . 'vocations.xml';
-
-	if(!$vocations->load($file))
-		throw new RuntimeException('ERROR: Cannot load <i>vocations.xml</i> - the file is malformed. Check the file with xml syntax validator.');
-
-	$config['vocations'] = array();
-	foreach($vocations->getElementsByTagName('vocation') as $vocation) {
-		$id = $vocation->getAttribute('id');
-		$config['vocations'][$id] = $vocation->getAttribute('name');
-	}
-
-	if($cache->enabled()) {
-		$cache->set('vocations', serialize($config['vocations']), 120);
-	}
-}
-unset($tmp, $id, $vocation);
-
 require LIBS . 'Towns.php';
 Towns::load();

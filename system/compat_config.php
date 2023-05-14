@@ -18,8 +18,30 @@ $deprecatedConfig = [
 	'views_counter',
 	'outfit_images_url',
 	'item_images_url',
+	'account_country',
+	'team_display_outfit',
+	'team_display_status',
+	'team_display_world',
+	'team_display_lastlogin',
+	'multiworld',
 ];
 
 foreach ($deprecatedConfig as $value) {
-	$config[$value] = $settings['core.'.$value]['value'];
+	config(
+		[
+			$value,
+			$settings['core.'.$value]['value']
+		]
+	);
+
+	//var_dump($settings['core.'.$value]['value']);
 }
+
+$vocationsParsed = array_map(
+	function(string $value): string {
+		return trim($value);
+	},
+	explode(',', $settings['core.vocations']['value'])
+);
+
+config(['vocations', $vocationsParsed]);

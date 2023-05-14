@@ -244,7 +244,8 @@ class Plugins {
 		return $plugin_json;
 	}
 
-	public static function install($file) {
+	public static function install($file): bool
+	{
 		global $db;
 
 		if(!\class_exists('ZipArchive')) {
