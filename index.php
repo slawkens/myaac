@@ -154,6 +154,12 @@ else {
 	}
 }
 
+// handle ?fbclid=x, etc. (show news page)
+if (!$found && count($_GET) > 0 && !isset($_REQUEST['subtopic']) && !isset($_REQUEST['p'])) {
+	$_REQUEST['p'] = $_REQUEST['subtopic'] = 'news';
+	$found = true;
+}
+
 // define page visited, so it can be used within events system
 $page = isset($_REQUEST['subtopic']) ? $_REQUEST['subtopic'] : (isset($_REQUEST['p']) ? $_REQUEST['p'] : '');
 if(empty($page) || !preg_match('/^[A-z0-9\_\-]+$/', $page)) {
