@@ -374,7 +374,7 @@ class Settings implements ArrayAccess
 	{
 		if (!isset($this->plugins[$pluginName])) {
 			if ($pluginName === 'core') {
-				$file = SYSTEM . 'settings.php';
+				$settingsFilePath = SYSTEM . 'settings.php';
 			} else {
 				$pluginSettings = Plugins::getPluginSettings($pluginName);
 				if (!$pluginSettings) {
@@ -385,11 +385,11 @@ class Settings implements ArrayAccess
 				$settingsFilePath = BASE . $pluginSettings;
 			}
 
-			if (!file_exists($file)) {
+			if (!file_exists($settingsFilePath)) {
 				throw new \RuntimeException('Failed to load settings file for plugin: ' . $pluginName);
 			}
 
-			$tmp = require $file;
+			$tmp = require $settingsFilePath;
 			$this->plugins[$pluginName] = $tmp['settings'];
 		}
 	}
