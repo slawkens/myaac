@@ -35,7 +35,7 @@ if(empty($recovery_key))
 	$account_registered = '<b><span style="color: red">No</span></b>';
 else
 {
-	if($config['generate_new_reckey'] && $config['mail_enabled'])
+	if($config['generate_new_reckey'] && setting('core.mail_enabled'))
 		$account_registered = '<b><span style="color: green">Yes ( <a href="' . getLink('account/register/new') . '"> Buy new Recovery Key </a> )</span></b>';
 	else
 		$account_registered = '<b><span style="color: green">Yes</span></b>';

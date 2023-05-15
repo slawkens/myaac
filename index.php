@@ -104,7 +104,7 @@ $hooks->trigger(HOOK_STARTUP);
 
 // anonymous usage statistics
 // sent only when user agrees
-if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_statistics']) {
+if(setting('core.anonymous_usage_statistics')) {
 	$report_time = 30 * 24 * 60 * 60; // report one time per 30 days
 	$should_report = true;
 
@@ -137,17 +137,16 @@ if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_stat
 	}
 }
 
-if($config['views_counter'])
+if(setting('core.views_counter'))
 	require_once SYSTEM . 'counter.php';
 
-if($config['visitors_counter'])
-{
+if(setting('core.visitors_counter')) {
 	require_once SYSTEM . 'libs/visitors.php';
-	$visitors = new Visitors($config['visitors_counter_ttl']);
+	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
 }
 
 // backward support for gesior
-if($config['backward_support']) {
+if(setting('core.backward_support')) {
 	define('INITIALIZED', true);
 	$SQL = $db;
 	$layout_header = template_header();

@@ -9,7 +9,7 @@
 <form action="{{ constant('BASE_URL') }}install/" method="post" autocomplete="off">
 	<input type="hidden" name="step" id="step" value="database" />
 
-	{% for value in ['server_path', 'mail_admin'] %}
+	{% for value in ['server_path'] %}
 	<div class="form-group mb-2">
 		<label for="vars_{{ value }}">{{ locale['step_config_' ~ value]  }}</label>
 		<input class="form-control" type="text" name="vars[{{ value }}]" id="vars_{{ value }}"{% if session['var_' ~ value] is not null %} value="{{ session['var_' ~ value] }}"{% endif %}/>
@@ -43,7 +43,7 @@
 		<input type="checkbox" name="vars[usage]" id="vars_usage" value="1"{% if session['var_usage'] is null or session['var_usage'] == 1 %} checked{% endif %}/>
 		<small class="form-text text-muted d-block">{{ locale.step_config_usage_desc }}</small>
 	</div>
-	
+
 	<div class="text-center m-3">
 	{{ buttons|raw }}
 	</div>

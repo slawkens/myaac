@@ -6,14 +6,14 @@ Remember you can also check the respective skill bar in your skill window of the
 		<td class="white" colspan="5"><b>Experience Table</b></td>
 	</tr>
 	<tr>
-	{% for i in 0..config.experiencetable_columns-1 %}
+	{% for i in 0..setting('core.experience_table_columns')-1 %}
 		<td>
 			<table border="0" cellpadding="2" cellspacing="1" width="100%">
 				<tr bgcolor="{{ config.lightborder }}">
 					<td><b>Level</b></td>
 					<td><b>Experience</b></td>
 				</tr>
-				{% for level in i * config.experiencetable_rows + 1..i * config.experiencetable_rows + (config.experiencetable_rows + 1) - 1 %}
+				{% for level in i * setting('core.experience_table_rows') + 1..i * setting('core.experience_table_rows') + (setting('core.experience_table_rows') + 1) - 1 %}
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>{{ level }}</td>
 					<td>{{ experience[level] }}</td>

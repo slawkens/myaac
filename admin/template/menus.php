@@ -17,7 +17,7 @@ return [
 			['name' => 'Add', 'link' => 'changelog&action=new', 'icon' => 'plus', 'order' => 20],
 		],
 	],
-	['name' => 'Mailer', 'icon' => 'envelope', 'order' => 40, 'link' => 'mailer', 'disabled' => !config('mail_enabled')],
+	['name' => 'Mailer', 'icon' => 'envelope', 'order' => 40, 'link' => 'mailer', 'disabled' => !setting('core.mail_enabled')],
 	['name' => 'Pages', 'icon' => 'book', 'order' => 50, 'link' =>
 		[
 			['name' => 'View', 'link' => 'pages', 'icon' => 'list', 'order' => 10],

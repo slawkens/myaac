@@ -61,7 +61,7 @@ if (isset($_POST['save'])) {
 
 $title = ($plugin == 'core' ? 'Settings' : 'Plugin Settings - ' . $plugin);
 
-$settings = Settings::parse($plugin, $settingsFile['settings']);
+$settings = Settings::display($plugin, $settingsFile['settings']);
 
 $twig->display('admin.settings.html.twig', [
 	'settings' => $settings,

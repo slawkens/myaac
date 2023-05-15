@@ -106,6 +106,11 @@ $function = new TwigFunction('config', function ($key) {
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('setting', function ($key) {
+	return setting($key);
+});
+$twig->addFunction($function);
+
 $function = new TwigFunction('getCustomPage', function ($name) {
 	$success = false;
 	return getCustomPage($name, $success);

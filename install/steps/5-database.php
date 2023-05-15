@@ -79,11 +79,6 @@ if(!$error) {
 					'message' => $locale['loading_spinner']
 				));
 
-				if(!Validator::email($_SESSION['var_mail_admin'])) {
-					error($locale['step_config_mail_admin_error']);
-					$error = true;
-				}
-
 				$content .= '$config[\'session_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
 				$content .= PHP_EOL;
 				$content .= '$config[\'cache_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';

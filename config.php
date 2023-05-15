@@ -61,23 +61,6 @@ $config = array(
 	'account_change_character_sex_points' => 30, // cost of sex change
 	'characters_per_account' => 10,	// max. number of characters per account
 
-	// mail
-	'mail_enabled' => false, // is aac maker configured to send e-mails?
-	'mail_address' => 'no-reply@your-server.org', // server e-mail address (from:)
-	'mail_admin' => 'your-address@your-server.org', // admin email address, where mails from contact form will be sent
-	'mail_signature' => array( // signature that will be included at the end of every message sent using _mail function
-		'plain' => ""/*"--\nMy Server,\nhttp://www.myserver.com"*/,
-		'html' => ''/*'<br/>My Server,\n<a href="http://www.myserver.com">myserver.com</a>'*/
-	),
-	'smtp_enabled' => false, // send by smtp or mail function (set false if use mail function, set to true if you use GMail or Microsoft Outlook)
-	'smtp_host' => '', // mail host. smtp.gmail.com for GMail / smtp-mail.outlook.com for Microsoft Outlook
-	'smtp_port' => 25, // 25 (default) / 465 (ssl, GMail) / 587 (tls, Microsoft Outlook)
-	'smtp_auth' => true, // need authorization?
-	'smtp_user' => 'admin@example.org', // here your email username
-	'smtp_pass' => '',
-	'smtp_secure' => '', // What kind of encryption to use on the SMTP connection. Options: '', 'ssl' (GMail) or 'tls' (Microsoft Outlook)
-	'smtp_debug' => false, // set true to debug (you will see more info in error.log)
-
 	//
 	'generate_new_reckey' => true,				// let player generate new recovery key, he will receive e-mail with new rec key (not display on page, hacker can't generate rec key)
 	'generate_new_reckey_price' => 20,			// price for new recovery key
@@ -217,13 +200,8 @@ $config = array(
 	'admin_panel_modules' => 'statistics,web_status,server_status,lastlogin,created,points,coins,balance',    // default - statistics,web_status,server_status,lastlogin,created,points,coins,balance
 
 	// other
-	'anonymous_usage_statistics' => true,
 	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam
 	'google_analytics_id' => '', // e.g.: UA-XXXXXXX-X
-	'experiencetable_columns' => 3, // how many columns to display in experience table page. * experiencetable_rows, 5 = 500 (will show up to 500 level)
-	'experiencetable_rows' => 200, // till how many levels in one column
-	'date_timezone' => 'Europe/Berlin', // more info at http://php.net/manual/en/timezones.php
-	'footer_show_load_time' => true, // display load time of the page in the footer
 
 	'npc' => array()
 );

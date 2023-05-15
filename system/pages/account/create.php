@@ -219,7 +219,7 @@ if($save)
 			$tmp_account = (USE_ACCOUNT_NAME ? $account_name : $account_id);
 		}
 
-		if($config['mail_enabled'] && $config['account_mail_verify'])
+		if(setting('core.mail_enabled') && $config['account_mail_verify'])
 		{
 			$hash = md5(generateRandomString(16, true, true) . $email);
 			$new_account->setCustomField('email_hash', $hash);
@@ -294,7 +294,7 @@ if($save)
 				'custom_buttons' => config('account_create_character_create') ? '' : null
 			));
 
-			if($config['mail_enabled'] && $config['account_welcome_mail'])
+			if(setting('core.mail_enabled') && $config['account_welcome_mail'])
 			{
 				$mailBody = $twig->render('account.welcome_mail.html.twig', array(
 					'account' => $tmp_account
@@ -313,7 +313,7 @@ if($save)
 }
 
 $country_recognized = null;
-if($config['account_country_recognize']) {
+if(setting('core.account_country_recognize')) {
 	$country_session = getSession('country');
 	if($country_session !== false) { // get from session
 		$country_recognized = $country_session;

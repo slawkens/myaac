@@ -16,6 +16,17 @@ return [
 		],
 		[
 			'type' => 'section',
+			'title' => 'General'
+		],
+		'date_timezone' => [
+			'name' => 'Date Timezone',
+			'type' => 'options',
+			'options' => '$timezones',
+			'desc' => 'Timezone of the server, more info at http://php.net/manual/en/timezones.php',
+			'default' => 'Europe/Warsaw',
+		],
+		[
+			'type' => 'section',
 			'title' => 'Template'
 		],
 		'template' => [
@@ -63,12 +74,18 @@ return [
 			'desc' => 'Text displayed in the footer.<br/>For example: <i>' . escapeHtml('<br/>') . 'Your Server &copy; 2023. All rights reserved.</i>',
 			'default' => '',
 		],
-		// do we really want this?
+		'footer_load_time' => [
+			'name' => 'Load Time',
+			'type' => 'boolean',
+			'desc' => 'Display load time of the page in the footer',
+			'default' => true,
+		],
+		// do we really want this? I'm leaving it for consideration
 		/*
 		'footer_powered_by' => [
 			'name' => 'Display Powered by MyAAC',
 			'type' => 'boolean',
-			'desc' => 'Do you want to show powered by myaac slogan on the footer?',
+			'desc' => 'Do you want to show <i>Powered by MyAAC</i> slogan in the footer?',
 			'default' => true,
 		],
 		*/
@@ -153,6 +170,108 @@ return [
 	allows using gesior templates and pages with myaac<br/>
 	might bring some performance when disabled',
 			'default' => true,
+		],
+		'anonymous_usage_statistics' => [
+			'name' => 'Anonymous Usage Statistics',
+			'type' => 'boolean',
+			'desc' => 'Allow MyAAC to report anonymous usage statistics to developers? The data is sent only once per 30 days and is fully confidential. It won\'t affect the performance of your website',
+			'default' => true,
+		],
+		[
+			'type' => 'category',
+			'title' => 'Mailing',
+		],
+		[
+			'type' => 'section',
+			'title' => 'Mailing'
+		],
+		'mail_enabled' => [
+			'name' => 'Mailing enabled',
+			'type' => 'boolean',
+			'desc' => 'Is AAC configured to send e-mails?',
+			'default' => false,
+		],
+		'mail_address' => [
+			'name' => 'Mail Address',
+			'type' => 'email',
+			'desc' => 'Server e-mail address (from:)',
+			'default' => 'no-reply@your-server.org',
+		],
+		/*'mail_admin' => [
+			'name' => 'Mail Admin Address',
+			'type' => 'email',
+			'desc' => 'Admin email address, where mails from contact form will be sent',
+			'default' => 'your-address@your-server.org',
+		],*/
+		'mail_signature_plain' => [
+			'name' => 'Mail Signature (Plain)',
+			'type' => 'textarea',
+			'desc' => 'Signature that will be included at the end of every message sent.<br/><b>In Normal Format!</b>',
+			'default' => '--
+Sent by MyAAC,
+https://my-aac.org',
+		],
+		'mail_signature_html' => [
+			'name' => 'Mail Signature (HTML)',
+			'type' => 'textarea',
+			'desc' => 'Signature that will be included at the end of every message sent.<br/><b>In HTML Format!</b>',
+			'default' => escapeHtml('<br/>
+Sent by MyAAC,<br/>
+<a href="https://my-aac.org">my-aac.org</a>'),
+		],
+		[
+			'type' => 'section',
+			'title' => 'SMTP (Mail Server)'
+		],
+		'mail_option' => [
+			'name' => 'Mail Option',
+			'type' => 'options',
+			'options' => [0 => 'Mail (PHP Built-in)', 1 => 'SMTP (Gmail or Microsoft Outlook)'],
+			'desc' => 'Mail sender. Set to SMTP if using Gmail or Microsoft Outlook, or any other provider',
+			'default' => 0,
+		],
+		'smtp_host' => [
+			'name' => 'SMTP Host',
+			'type' => 'text',
+			'desc' => 'SMTP mail host. smtp.gmail.com for GMail / smtp-mail.outlook.com for Microsoft Outlook',
+			'default' => '',
+		],
+		'smtp_port' => [
+			'name' => 'SMTP Host',
+			'type' => 'number',
+			'desc' => '25 (default) / 465 (ssl, GMail) / 587 (tls, Microsoft Outlook)',
+			'default' => 25,
+		],
+		'smtp_auth' => [
+			'name' => 'SMTP Auth',
+			'type' => 'boolean',
+			'desc' => 'Need authorization for Server? In normal situation, almost always Yes.',
+			'default' => true,
+		],
+		'smtp_user' => [
+			'name' => 'SMTP Username',
+			'type' => 'text',
+			'desc' => 'Here your email username to authenticate with SMTP',
+			'default' => 'admin@example.org',
+		],
+		'smtp_pass' => [
+			'name' => 'SMTP Password',
+			'type' => 'password',
+			'desc' => 'Here your email password to authenticate with SMTP',
+			'default' => '',
+		],
+		'smtp_security' => [
+			'name' => 'SMTP Security',
+			'type' => 'options',
+			'options' => ['None', 'SSL', 'TLS'],
+			'desc' => 'What kind of encryption to use on the SMTP connection',
+			'default' => '',
+		],
+		'smtp_debug' => [
+			'name' => 'SMTP Debug',
+			'type' => 'boolean',
+			'desc' => 'Activate to see more logs about mailing errors in error.log',
+			'default' => false,
 		],
 		[
 			'type' => 'category',
@@ -408,24 +527,28 @@ return [
 			'default' => true,
 		],
 		[
+			'type' => 'section',
+			'title' => 'Experience Table Page'
+		],
+		'experience_table_columns' => [
+			'name' => 'Columns',
+			'type' => 'number',
+			'desc' => 'How many columns to display in experience table page. * experiencetable_rows, 5 = 500 (will show up to 500 level)',
+			'default' => 3,
+		],
+		'experience_table_rows' => [
+			'name' => 'Rows',
+			'type' => 'number',
+			'desc' => 'Till how many levels in one column',
+			'default' => 200,
+		],
+		[
 			'type' => 'category',
 			'title' => 'Images',
 		],
 		[
 			'type' => 'section',
-			'title' => 'Item and Outfit Images'
-		],
-		'outfit_images_url' => [
-			'name' => 'Outfit Images URL',
-			'type' => 'text',
-			'desc' => 'Set to animoutfit.php for animated outfit',
-			'default' => 'http://outfit-images.ots.me/outfit.php',
-		],
-		'outfit_images_wrong_looktypes' => [
-			'name' => 'Outfit Images Wrong Looktypes',
-			'type' => 'text',
-			'desc' => 'This looktypes needs to have different margin-top and margin-left because they are wrong positioned',
-			'default' => '75, 126, 127, 266, 302',
+			'title' => 'Item Images'
 		],
 		'item_images_url' => [
 			'name' => 'Item Images URL',
@@ -441,7 +564,23 @@ return [
 		],
 		[
 			'type' => 'section',
-			'title' => 'Monsters Images'
+			'title' => 'Outfit Images'
+		],
+		'outfit_images_url' => [
+			'name' => 'Outfit Images URL',
+			'type' => 'text',
+			'desc' => 'Set to animoutfit.php for animated outfit',
+			'default' => 'http://outfit-images.ots.me/outfit.php',
+		],
+		'outfit_images_wrong_looktypes' => [
+			'name' => 'Outfit Images Wrong Looktypes',
+			'type' => 'text',
+			'desc' => 'This looktypes needs to have different margin-top and margin-left because they are wrong positioned',
+			'default' => '75, 126, 127, 266, 302',
+		],
+		[
+			'type' => 'section',
+			'title' => 'Monster Images'
 		],
 		'monsters_images_url' => [
 			'name' => 'Monsters Images URL',
@@ -456,23 +595,24 @@ return [
 			'default' => '.gif',
 		],
 		'monsters_images_preview' => [
-			'name' => 'Item Images URL',
+			'name' => 'Monsters Images Preview',
 			'type' => 'boolean',
 			'desc' => 'Set to true to allow picture previews for creatures',
 			'default' => false,
 		],
 		'monsters_items_url' => [
-			'name' => 'Creatures Items URL',
+			'name' => 'Monsters Items URL',
 			'type' => 'text',
 			'desc' => 'Set to website which shows details about items',
 			'default' => 'https://tibia.fandom.com/wiki/',
 		],
 		'monsters_loot_percentage' => [
-			'name' => 'Creatures Items URL',
+			'name' => 'Monsters Items URL',
 			'type' => 'boolean',
 			'desc' => 'Set to true to show the loot tooltip percent',
 			'default' => true,
 		],
+		// this is hidden, because no implemented yet
 		'multiworld' => [
 			'hidden' => true,
 			'type' => 'boolean',

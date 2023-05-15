@@ -11,9 +11,10 @@
 class Settings implements ArrayAccess
 {
 	static private $instance;
-	private $plugins = [];
+	private $settingsArray = [];
 	private $settings = [];
 	private $cache = [];
+	private $valuesAsked = [];
 
 	/**
 	 * @return Settings
@@ -52,7 +53,25 @@ class Settings implements ArrayAccess
 		}
 	}
 
-	public static function parse($plugin, $settings): string
+	public function updateInDatabase($pluginName, $key, $value)
+	{
+		global $db;
+		$db->update(TABLE_PREFIX . 'settings', ['value' => $value], ['plugin_name' => $pluginName, 'key' => $key]);
+	}
+
+	public function deleteFromDatabase($pluginName, $key = null)
+	{
+		global $db;
+
+		if (!isset($key)) {
+			$db->delete(TABLE_PREFIX . 'settings', ['plugin_name' => $pluginName], -1);
+		}
+		else {
+			$db->delete(TABLE_PREFIX . 'settings', ['plugin_name' => $pluginName, 'key' => $key]);
+		}
+	}
+
+	public static function display($plugin, $settings): string
 	{
 		global $db;
 
@@ -93,7 +112,7 @@ class Settings implements ArrayAccess
 			$j = 0;
 			foreach($settings as $key => $setting) {
 				if ($setting['type'] === 'category') {
-					if ($j++ !== 0) {
+					if ($j++ !== 0) { // close previous category
 						echo '</tbody></table></div>';
 					}
 				?>
@@ -103,7 +122,7 @@ class Settings implements ArrayAccess
 				}
 
 				if ($setting['type'] === 'section') {
-					if ($i++ !== 0) {
+					if ($i++ !== 0) { // close previous section
 						echo '</tbody></table>';
 					}
 					?>
@@ -190,6 +209,14 @@ class Settings implements ArrayAccess
 
 						$setting['options'] = $clients;
 					}
+					else if ($setting['options'] == '$timezones') {
+						$timezones = [];
+						foreach (DateTimeZone::listIdentifiers() as $value) {
+							$timezones[$value] = $value;
+						}
+
+						$setting['options'] = $timezones;
+					}
 
 					else {
 						if (is_string($setting['options'])) {
@@ -263,47 +290,61 @@ class Settings implements ArrayAccess
 			throw new \RuntimeException("Settings: You cannot set empty offset with value: $value!");
 		}
 
-		$pluginName = $offset;
-		if (strpos($offset, '.')) {
-			$explode = explode('.', $offset, 2);
+		$this->loadPlugin($offset);
 
-			$pluginName = $explode[0];
-			$key = $explode[1];
-		}
-
-		$this->loadPlugin($pluginName);
+		$pluginName = $this->valuesAsked['pluginName'];
+		$key = $this->valuesAsked['key'];
 
 		// remove whole plugin settings
-		if (!isset($key)) {
-			$this->plugins[$pluginName] = [];
-
-			// remove from settings
-			if (isset($this->settings[$pluginName])) {
-				unset($this->settings[$pluginName]);
-			}
-
-			// remove from cache
-			if (isset($this->cache[$pluginName])) {
-				unset($this->cache[$pluginName]);
-			}
-			/*foreach ($this->cache as $_key => $value) {
-				if (strpos($_key, $pluginName) !== false) {
-					unset($this->cache[$_key]);
-				}
-			}*/
+		if (!isset($value)) {
+			$this->offsetUnset($offset);
+			$this->deleteFromDatabase($pluginName, $key);
+			return;
 		}
 
-		$this->settings[$pluginName][$key] = $value['value'];
+		$this->settings[$pluginName][$key] = $value;
+		$this->updateInDatabase($pluginName, $key, $value);
 	}
 
 	#[\ReturnTypeWillChange]
-	public function offsetExists($offset) {
-		return isset($this->settings[$offset]);
+	public function offsetExists($offset): bool
+	{
+		$this->loadPlugin($offset);
+
+		$pluginName = $this->valuesAsked['pluginName'];
+		$key = $this->valuesAsked['key'];
+
+		// remove specified plugin settings (all)
+		if(is_null($key)) {
+			return isset($this->settings[$offset]);
+		}
+
+		return isset($this->settings[$pluginName][$key]);
 	}
 
 	#[\ReturnTypeWillChange]
-	public function offsetUnset($offset) {
-		unset($this->settings[$offset]);
+	public function offsetUnset($offset)
+	{
+		$this->loadPlugin($offset);
+
+		$pluginName = $this->valuesAsked['pluginName'];
+		$key = $this->valuesAsked['key'];
+
+		if (isset($this->cache[$offset])) {
+			unset($this->cache[$offset]);
+		}
+
+		// remove specified plugin settings (all)
+		if(!isset($key)) {
+			unset($this->settingsArray[$pluginName]);
+			unset($this->settings[$pluginName]);
+			$this->deleteFromDatabase($pluginName);
+			return;
+		}
+
+		unset($this->settingsArray[$pluginName][$key]);
+		unset($this->settings[$pluginName][$key]);
+		$this->deleteFromDatabase($pluginName, $key);
 	}
 
 	/**
@@ -322,24 +363,19 @@ class Settings implements ArrayAccess
 			return $this->cache[$offset];
 		}
 
-		$pluginName = $offset;
-		if (strpos($offset, '.')) {
-			$explode = explode('.', $offset, 2);
+		$this->loadPlugin($offset);
 
-			$pluginName = $explode[0];
-			$key = $explode[1];
-		}
-
-		$this->loadPlugin($pluginName);
+		$pluginName = $this->valuesAsked['pluginName'];
+		$key = $this->valuesAsked['key'];
 
 		// return specified plugin settings (all)
 		if(!isset($key)) {
-			return $this->plugins[$pluginName];
+			return $this->settingsArray[$pluginName];
 		}
 
 		$ret = [];
-		if(isset($this->plugins[$pluginName][$key])) {
-			$ret = $this->plugins[$pluginName][$key];
+		if(isset($this->settingsArray[$pluginName][$key])) {
+			$ret = $this->settingsArray[$pluginName][$key];
 		}
 
 		if(isset($this->settings[$pluginName][$key])) {
@@ -348,7 +384,7 @@ class Settings implements ArrayAccess
 			$ret['value'] = $value;
 		}
 		else {
-			$ret['value'] = $this->plugins[$pluginName][$key]['default'];
+			$ret['value'] = $this->settingsArray[$pluginName][$key]['default'];
 		}
 
 		if(isset($ret['type'])) {
@@ -370,15 +406,36 @@ class Settings implements ArrayAccess
 		return $ret;
 	}
 
-	private function loadPlugin($pluginName)
+	private function updateValuesAsked($offset)
 	{
-		if (!isset($this->plugins[$pluginName])) {
+		$pluginName = $offset;
+		if (strpos($offset, '.')) {
+			$explode = explode('.', $offset, 2);
+
+			$pluginName = $explode[0];
+			$key = $explode[1];
+
+			$this->valuesAsked = ['pluginName' => $pluginName, 'key' => $key];
+		}
+		else {
+			$this->valuesAsked = ['pluginName' => $pluginName, 'key' => null];
+		}
+	}
+
+	private function loadPlugin($offset)
+	{
+		$this->updateValuesAsked($offset);
+
+		$pluginName = $this->valuesAsked['pluginName'];
+		$key = $this->valuesAsked['key'];
+
+		if (!isset($this->settingsArray[$pluginName])) {
 			if ($pluginName === 'core') {
 				$settingsFilePath = SYSTEM . 'settings.php';
 			} else {
 				$pluginSettings = Plugins::getPluginSettings($pluginName);
 				if (!$pluginSettings) {
-					error('This plugin does not exist or does not have settings defined.');
+					warning("Setting $pluginName does not exist or does not have settings defined.");
 					return;
 				}
 
@@ -390,7 +447,7 @@ class Settings implements ArrayAccess
 			}
 
 			$tmp = require $settingsFilePath;
-			$this->plugins[$pluginName] = $tmp['settings'];
+			$this->settingsArray[$pluginName] = $tmp['settings'];
 		}
 	}
 }

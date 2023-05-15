@@ -30,7 +30,7 @@ foreach ($deprecatedConfig as $value) {
 	config(
 		[
 			$value,
-			$settings['core.'.$value]['value']
+			setting('core.'.$value)
 		]
 	);
 
@@ -41,7 +41,7 @@ $vocationsParsed = array_map(
 	function(string $value): string {
 		return trim($value);
 	},
-	explode(',', $settings['core.vocations']['value'])
+	explode(',', setting('core.vocations'))
 );
 
 config(['vocations', $vocationsParsed]);

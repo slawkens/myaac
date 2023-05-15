@@ -18,7 +18,6 @@ if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
 
-date_default_timezone_set($config['date_timezone']);
 // take care of trailing slash at the end
 if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
 	$config['server_path'] .= '/';
@@ -120,7 +119,7 @@ if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hid
 	$config['highscores_ids_hidden'] = array(0);
 }
 
-$config['account_create_character_create'] = config('account_create_character_create') && (!config('mail_enabled') || !config('account_mail_verify'));
+$config['account_create_character_create'] = config('account_create_character_create') && (!setting('core.mail_enabled') || !config('account_mail_verify'));
 
 // POT
 require_once SYSTEM . 'libs/pot/OTS.php';
@@ -136,12 +135,13 @@ $settings = Settings::getInstance();
 $settings->load();
 
 // deprecated config values
-require_once __DIR__ . '/compat_config.php';
+require_once SYSTEM . 'compat/config.php';
 
-$settingsItemImagesURL = $settings['core.item_images_url'];
-if($settingsItemImagesURL['value'][strlen($settingsItemImagesURL['value']) - 1] !== '/') {
-	$settingsItemImagesURL['value'] .= '/';
-	$settings['core.item_images_url'] = $settingsItemImagesURL;
+date_default_timezone_set(setting('core.date_timezone'));
+
+$settingsItemImagesURL = setting('core.item_images_url');
+if($settingsItemImagesURL[strlen($settingsItemImagesURL) - 1] !== '/') {
+	setting(['core.item_images_url', $settingsItemImagesURL . '/']);
 }
 
 define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));

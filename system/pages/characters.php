@@ -342,7 +342,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 	// signature
 	$settings = Settings::getInstance();
 	if($config['signature_enabled']) {
-		$signature_url = BASE_URL . ($settings['core.friendly_urls']['value'] ? '' : 'index.php/') . urlencode($player->getName()) . '.png';
+		$signature_url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . urlencode($player->getName()) . '.png';
 	}
 
 	$hidden = $player->isHidden();
