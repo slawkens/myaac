@@ -42,11 +42,13 @@ if (!is_array($settingsFile)) {
 	return;
 }
 
+$settingsKeyName = ($plugin == 'core' ? $plugin : $settingsFile['key']);
+
 if (isset($_POST['save'])) {
-	$db->query('DELETE FROM `' . TABLE_PREFIX . 'settings` WHERE `plugin_name` = ' . $db->quote($plugin) . ';');
+	$db->query('DELETE FROM `' . TABLE_PREFIX . 'settings` WHERE `name` = ' . $db->quote($settingsKeyName) . ';');
 	foreach ($_POST['settings'] as $key => $value) {
 		try {
-			$db->insert(TABLE_PREFIX . 'settings', ['plugin_name' => $plugin, 'key' => $key, 'value' => $value]);
+			$db->insert(TABLE_PREFIX . 'settings', ['name' => $settingsKeyName, 'key' => $key, 'value' => $value]);
 		} catch (PDOException $error) {
 			warning('Error while saving setting (' . $plugin . ' - ' . $key . '): ' . $error->getMessage());
 		}
@@ -62,7 +64,7 @@ if (isset($_POST['save'])) {
 
 $title = ($plugin == 'core' ? 'Settings' : 'Plugin Settings - ' . $plugin);
 
-$settings = Settings::display($plugin, $settingsFile['settings']);
+$settings = Settings::display($settingsKeyName, $settingsFile['settings']);
 
 $twig->display('admin.settings.html.twig', [
 	'settings' => $settings,

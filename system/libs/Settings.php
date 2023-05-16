@@ -44,7 +44,7 @@ class Settings implements ArrayAccess
 
 		if($settings->rowCount() > 0) {
 			foreach ($settings->fetchAll(PDO::FETCH_ASSOC) as $setting) {
-				$this->settings[$setting['plugin_name']][$setting['key']] = $setting['value'];
+				$this->settings[$setting['name']][$setting['key']] = $setting['value'];
 			}
 		}
 
@@ -56,7 +56,7 @@ class Settings implements ArrayAccess
 	public function updateInDatabase($pluginName, $key, $value)
 	{
 		global $db;
-		$db->update(TABLE_PREFIX . 'settings', ['value' => $value], ['plugin_name' => $pluginName, 'key' => $key]);
+		$db->update(TABLE_PREFIX . 'settings', ['value' => $value], ['name' => $pluginName, 'key' => $key]);
 	}
 
 	public function deleteFromDatabase($pluginName, $key = null)
@@ -64,10 +64,10 @@ class Settings implements ArrayAccess
 		global $db;
 
 		if (!isset($key)) {
-			$db->delete(TABLE_PREFIX . 'settings', ['plugin_name' => $pluginName], -1);
+			$db->delete(TABLE_PREFIX . 'settings', ['name' => $pluginName], -1);
 		}
 		else {
-			$db->delete(TABLE_PREFIX . 'settings', ['plugin_name' => $pluginName, 'key' => $key]);
+			$db->delete(TABLE_PREFIX . 'settings', ['name' => $pluginName, 'key' => $key]);
 		}
 	}
 
@@ -75,7 +75,7 @@ class Settings implements ArrayAccess
 	{
 		global $db;
 
-		$query = 'SELECT `key`, `value` FROM `' . TABLE_PREFIX . 'settings` WHERE `plugin_name` = ' . $db->quote($plugin) . ';';
+		$query = 'SELECT `key`, `value` FROM `' . TABLE_PREFIX . 'settings` WHERE `name` = ' . $db->quote($plugin) . ';';
 		$query = $db->query($query);
 
 		$settingsDb = [];
