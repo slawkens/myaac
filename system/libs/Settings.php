@@ -179,7 +179,16 @@ class Settings implements ArrayAccess
 				}
 
 				else if (in_array($setting['type'], ['text', 'number', 'email', 'password'])) {
-					echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . ($settingsDb[$key] ?? ($setting['default'] ?? '')) . '" id="' . $key . '"/>';
+					if ($setting['type'] === 'number') {
+						$min = (isset($setting['min']) ? ' min="' . $setting['min'] . '"' : '');
+						$max = (isset($setting['max']) ? ' max="' . $setting['max'] . '"' : '');
+						$step = (isset($setting['step']) ? ' step="' . $setting['step'] . '"' : '');
+					}
+					else {
+						$min = $max = $step = '';
+					}
+
+					echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . ($settingsDb[$key] ?? ($setting['default'] ?? '')) . '" id="' . $key . '"' . $min . $max . $step . '/>';
 				}
 
 				else if($setting['type'] === 'textarea') {
