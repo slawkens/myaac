@@ -284,6 +284,12 @@ class Plugins {
 			return false;
 		}
 
+		$pluginFilename = str_replace('.json', '', basename($json_file));
+		if (self::existDisabled($pluginFilename)) {
+			success('The plugin already existed, but was disabled. It has been enabled again and will be now reinstalled.');
+			self::enable($pluginFilename);
+		}
+
 		$string = file_get_contents($file_name);
 		$plugin_json = json_decode($string, true);
 		self::$plugin_json = $plugin_json;
@@ -484,13 +490,23 @@ class Plugins {
 		return false;
 	}
 
-	public static function enable($pluginFileName): bool
+	public static function isEnabled($pluginFileName): bool
 	{
+		$filenameJson = $pluginFileName . '.json';
+		return !is_file(PLUGINS . 'disabled.' . $filenameJson) && is_file(PLUGINS . $filenameJson);
+	}
+
+	public static function existDisabled($pluginFileName): bool
+	{
+		$filenameJson = $pluginFileName . '.json';
+		return is_file(PLUGINS . 'disabled.' . $filenameJson);
+	}
+
+	public static function enable($pluginFileName): bool {
 		return self::enableDisable($pluginFileName, true);
 	}
 
-	public static function disable($pluginFileName): bool
-	{
+	public static function disable($pluginFileName): bool {
 		return self::enableDisable($pluginFileName, false);
 	}
 
