@@ -399,7 +399,7 @@ class Settings implements ArrayAccess
 		if(isset($ret['type'])) {
 			switch($ret['type']) {
 				case 'boolean':
-					$ret['value'] = $ret['value'] === 'true';
+					$ret['value'] = getBoolean($ret['value']);
 					break;
 
 				case 'number':
