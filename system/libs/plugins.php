@@ -608,7 +608,8 @@ class Plugins {
 		return false;
 	}
 
-	public static function is_installed($plugin_name, $version) {
+	public static function is_installed($plugin_name, $version): bool
+	{
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
 			return false;
@@ -616,7 +617,7 @@ class Plugins {
 
 		$string = file_get_contents($filename);
 		$plugin_info = json_decode($string, true);
-		if($plugin_info == false) {
+		if(!$plugin_info) {
 			return false;
 		}
 
