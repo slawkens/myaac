@@ -2,7 +2,9 @@
 
 return [
 	['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'order' => 10, 'link' => 'dashboard'],
-	['name' => 'Settings', 'icon' => 'edit', 'order' => 19, 'link' => 'settings&plugin=core'],
+	['name' => 'Settings', 'icon' => 'edit', 'order' => 19, 'link' =>
+		require ADMIN . 'includes/settings_menus.php'
+	],
 	['name' => 'News', 'icon' => 'newspaper', 'order' => 20,  'link' =>
 		[
 			['name' => 'View', 'link' => 'news', 'icon' => 'list', 'order' => 10],

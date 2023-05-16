@@ -168,6 +168,36 @@ class Plugins {
 		return $hooks;
 	}
 
+	public static function getAllPluginsSettings()
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('plugins_settings', $tmp)) {
+				return unserialize($tmp);
+			}
+		}
+
+		$settings = [];
+		foreach (self::getAllPluginsJson() as $plugin) {
+			if (isset($plugin['settings'])) {
+				$settingsFile = require BASE . $plugin['settings'];
+				if (!isset($settingsFile['key'])) {
+					warning("Settings file for plugin - {$plugin['name']} does not contain 'key' field");
+					continue;
+				}
+
+				$settings[$settingsFile['key']] = ['pluginFilename' => $plugin['filename'], 'settingsFilename' => $plugin['settings']];
+			}
+		}
+
+		if ($cache->enabled()) {
+			$cache->set('plugins_settings', serialize($settings), 600); // cache for 10 minutes
+		}
+
+		return $settings;
+	}
+
 	public static function getAllPluginsJson($disabled = false)
 	{
 		$cache = Cache::getInstance();
@@ -180,32 +210,26 @@ class Plugins {
 
 		$plugins = [];
 		foreach (get_plugins($disabled) as $filename) {
-			$string = file_get_contents(PLUGINS . $filename . '.json');
-			$plugin = json_decode($string, true);
-			self::$plugin_json = $plugin;
-			if ($plugin == null) {
-				self::$warnings[] = 'Cannot load ' . $filename . '.json. File might be not a valid json code.';
+			$plugin = self::getPluginJson($filename);
+
+			if (!$plugin) {
 				continue;
 			}
 
-			if (isset($plugin['enabled']) && !getBoolean($plugin['enabled'])) {
-				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
-				continue;
-			}
-
+			$plugin['filename'] = $filename;
 			$plugins[] = $plugin;
 		}
 
 		if ($cache->enabled()) {
-			$cache->set('plugins', serialize($plugins), 600);
+			$cache->set('plugins', serialize($plugins), 600); // cache for 10 minutes
 		}
 
 		return $plugins;
 	}
 
-	public static function getPluginSettings($pluginName)
+	public static function getPluginSettings($filename)
 	{
-		$plugin_json = self::getPluginJson($pluginName);
+		$plugin_json = self::getPluginJson($filename);
 		if (!$plugin_json) {
 			return false;
 		}
@@ -217,27 +241,27 @@ class Plugins {
 		return $plugin_json['settings'];
 	}
 
-	public static function getPluginJson($name = null)
+	public static function getPluginJson($filename = null)
 	{
-		if(!isset($name)) {
+		if(!isset($filename)) {
 			return self::$plugin_json;
 		}
 
-		$pathToPlugin = PLUGINS . $name . '.json';
+		$pathToPlugin = PLUGINS . $filename . '.json';
 		if (!file_exists($pathToPlugin)) {
-			self::$warnings[] = "Cannot load " . $name . ".json. File doesn't exist.";
+			self::$warnings[] = "Cannot load $filename.json. File doesn't exist.";
 			return false;
 		}
 
 		$string = file_get_contents($pathToPlugin);
 		$plugin_json = json_decode($string, true);
 		if ($plugin_json == null) {
-			self::$warnings[] = 'Cannot load ' . $name . '.json. File might be not a valid json code.';
+			self::$warnings[] = "Cannot load $filename.json. File might be not a valid json code.";
 			return false;
 		}
 
-		if(isset($plugin_json['enabled']) && $plugin_json['enabled'] === 0) {
-			self::$warnings[] = 'Skipping ' . $name . '... The plugin is disabled.';
+		if (isset($plugin_json['enabled']) && !getBoolean($plugin_json['enabled'])) {
+			self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
 			return false;
 		}
 
