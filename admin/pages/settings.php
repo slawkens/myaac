@@ -32,12 +32,13 @@ else {
 }
 
 if (!file_exists($settingsFilePath)) {
-	error('This plugin does not exist or does not have settings defined.');
+	error("Plugin $plugin does not exist or does not have settings defined.");
 	return;
 }
 
 $settingsFile = require $settingsFilePath;
 if (!is_array($settingsFile)) {
+	error("Cannot load settings file for plugin $plugin");
 	return;
 }
 
