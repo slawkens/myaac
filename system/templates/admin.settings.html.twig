@@ -11,10 +11,50 @@
 							<button name="save" type="submit" class="btn btn-primary">Save</button>
 						</div>
 						<br/>
-						{{ settings|raw }}
+						{{ settingsParsed|raw }}
 					</div>
 				</div>
 			</div>
 		</form>
 	</div>
 </div>
+<script>
+	function doShowHide(el, show)
+	{
+		if (show) {
+			$(el).show()
+		}
+		else {
+			$(el).hide()
+		}
+	}
+
+{% for key, value in settings %}
+	{% if value.show_if is defined %}
+		$(function () {
+			$('input[name="settings[{{ value.show_if[0] }}]"]').change(function () {
+				performChecks_{{ key }}(this);
+			});
+		});
+
+		function performChecks_{{ key }}(el)
+		{
+			let success = false;
+			let thisVal = $(el).val();
+
+			let operator = '{{ value.show_if[1]|raw }}';
+			if (operator === '>') {
+				success = thisVal > Number('{{ value.show_if[2] }}');
+			}
+			else if (operator === '<') {
+				success = thisVal < Number('{{ value.show_if[2] }}');
+			}
+			else if (operator === '==' || operator === '=') {
+				success = thisVal == '{{ value.show_if[2] }}';
+			}
+
+			doShowHide('#row_{{ key }}', success);
+		}
+	{% endif %}
+{% endfor %}
+</script>

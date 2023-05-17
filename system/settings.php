@@ -116,7 +116,10 @@ return [
 			'name' => 'Visitors Counter TTL',
 			'type' => 'number',
 			'desc' => 'Time To Live for Visitors Counter. In other words - how long user will be marked as online. In Minutes',
-			'default' => 10
+			'default' => 10,
+			'only_if' => [
+				'visitors_counter'=> '=', 'true'
+			]
 		],
 		'views_counter' => [
 			'name' => 'Views Counter',
@@ -190,12 +193,39 @@ return [
 			'type' => 'boolean',
 			'desc' => 'Is AAC configured to send e-mails?',
 			'default' => false,
+			/*'script' => <<<'SCRIPT'
+<script>
+$(function () {
+	$('#mail_enabled_yes, #mail_enabled_no').on('change', function() {
+
+		let elements = ['mail_address', 'mail_signature_plain', 'mail_signature_html', 'mail_option',
+		'smtp_host', 'smtp_port', 'smtp_auth', 'smtp_user', 'smtp_pass', 'smtp_security', 'smtp_debug'];
+		let show = ($(this).val() === 'true');
+		let heading = $("h3:contains('SMTP (Mail Server)'):last");
+
+		elements.forEach(function(el) {
+			if (show) {
+				$('#row_' + el).show(500);
+				heading.show(500);
+			}
+			else {
+				$('#row_' + el).hide(500);
+				heading.hide(500);
+			}
+		});
+	});
+});
+</script>
+SCRIPT,*/
 		],
 		'mail_address' => [
 			'name' => 'Mail Address',
 			'type' => 'email',
 			'desc' => 'Server e-mail address (from:)',
 			'default' => 'no-reply@your-server.org',
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			],
 		],
 		/*'mail_admin' => [
 			'name' => 'Mail Admin Address',
@@ -210,6 +240,9 @@ return [
 			'default' => '--
 Sent by MyAAC,
 https://my-aac.org',
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		'mail_signature_html' => [
 			'name' => 'Mail Signature (HTML)',
@@ -218,10 +251,16 @@ https://my-aac.org',
 			'default' => escapeHtml('<br/>
 Sent by MyAAC,<br/>
 <a href="https://my-aac.org">my-aac.org</a>'),
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
-		[
+		'section_smtp' => [
 			'type' => 'section',
-			'title' => 'SMTP (Mail Server)'
+			'title' => 'SMTP (Mail Server)',
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		'mail_option' => [
 			'name' => 'Mail Option',
@@ -229,36 +268,54 @@ Sent by MyAAC,<br/>
 			'options' => [0 => 'Mail (PHP Built-in)', 1 => 'SMTP (Gmail or Microsoft Outlook)'],
 			'desc' => 'Mail sender. Set to SMTP if using Gmail or Microsoft Outlook, or any other provider',
 			'default' => 0,
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		'smtp_host' => [
 			'name' => 'SMTP Host',
 			'type' => 'text',
 			'desc' => 'SMTP mail host. smtp.gmail.com for GMail / smtp-mail.outlook.com for Microsoft Outlook',
 			'default' => '',
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		'smtp_port' => [
 			'name' => 'SMTP Host',
 			'type' => 'number',
 			'desc' => '25 (default) / 465 (ssl, GMail) / 587 (tls, Microsoft Outlook)',
 			'default' => 25,
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		'smtp_auth' => [
 			'name' => 'SMTP Auth',
 			'type' => 'boolean',
 			'desc' => 'Need authorization for Server? In normal situation, almost always Yes.',
 			'default' => true,
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		'smtp_user' => [
 			'name' => 'SMTP Username',
 			'type' => 'text',
 			'desc' => 'Here your email username to authenticate with SMTP',
 			'default' => 'admin@example.org',
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		'smtp_pass' => [
 			'name' => 'SMTP Password',
 			'type' => 'password',
 			'desc' => 'Here your email password to authenticate with SMTP',
 			'default' => '',
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		'smtp_security' => [
 			'name' => 'SMTP Security',
@@ -266,12 +323,18 @@ Sent by MyAAC,<br/>
 			'options' => ['None', 'SSL', 'TLS'],
 			'desc' => 'What kind of encryption to use on the SMTP connection',
 			'default' => '',
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		'smtp_debug' => [
 			'name' => 'SMTP Debug',
 			'type' => 'boolean',
 			'desc' => 'Activate to see more logs about mailing errors in error.log',
 			'default' => false,
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			]
 		],
 		[
 			'type' => 'category',

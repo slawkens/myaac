@@ -64,8 +64,10 @@ if (isset($_POST['save'])) {
 
 $title = ($plugin == 'core' ? 'Settings' : 'Plugin Settings - ' . $plugin);
 
-$settings = Settings::display($settingsKeyName, $settingsFile['settings']);
+$settingsParsed = Settings::display($settingsKeyName, $settingsFile['settings']);
 
 $twig->display('admin.settings.html.twig', [
-	'settings' => $settings,
+	'settingsParsed' => $settingsParsed['content'],
+	'settings' => $settingsFile['settings'],
+	//'script' => $settingsParsed['script'],
 ]);

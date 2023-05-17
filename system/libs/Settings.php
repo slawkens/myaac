@@ -71,7 +71,7 @@ class Settings implements ArrayAccess
 		}
 	}
 
-	public static function display($plugin, $settings): string
+	public static function display($plugin, $settings): array
 	{
 		global $db;
 
@@ -85,12 +85,17 @@ class Settings implements ArrayAccess
 			}
 		}
 
+		$javascript = '';
 		ob_start();
 		?>
 		<ul class="nav nav-tabs" id="myTab">
 			<?php
 			$i = 0;
 			foreach($settings as $setting) {
+				if (isset($setting['script'])) {
+					$javascript .= $setting['script'] . PHP_EOL;
+				}
+
 				if ($setting['type'] === 'category') {
 					?>
 					<li class="nav-item">
@@ -105,7 +110,7 @@ class Settings implements ArrayAccess
 			<?php
 
 			$checkbox = function ($key, $type, $value) {
-				echo '<label><input type="radio" id="' . $key . '" name="settings[' . $key . ']" value="' . ($type ? 'true' : 'false') . '" ' . ($value === $type ? 'checked' : '') . '/>' . ($type ? 'Yes' : 'No') . '</label> ';
+				echo '<label><input type="radio" id="' . $key . '_' . ($type ? 'yes' : 'no') . '" name="settings[' . $key . ']" value="' . ($type ? 'true' : 'false') . '" ' . ($value === $type ? 'checked' : '') . '/>' . ($type ? 'Yes' : 'No') . '</label> ';
 			};
 
 			$i = 0;
@@ -126,7 +131,7 @@ class Settings implements ArrayAccess
 						echo '</tbody></table>';
 					}
 					?>
-					<h2 style="text-align: center"><strong><?= $setting['title']; ?></strong></h2>
+					<h3 style="text-align: center"><strong><?= $setting['title']; ?></strong></h3>
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
@@ -142,7 +147,7 @@ class Settings implements ArrayAccess
 
 				if (!isset($setting['hidden']) || !$setting['hidden']) {
 				?>
-					<tr>
+					<tr id="row_<?= $key ?>">
 						<td><label for="<?= $key ?>" class="control-label"><?= $setting['name'] ?></label></td>
 						<td>
 							<?php
@@ -289,7 +294,7 @@ class Settings implements ArrayAccess
 		</div>
 		<?php
 
-		return ob_get_clean();
+		return ['content' => ob_get_clean(), 'script' => $javascript];
 	}
 
 	#[\ReturnTypeWillChange]
