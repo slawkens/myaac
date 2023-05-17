@@ -117,7 +117,7 @@ return [
 			'type' => 'number',
 			'desc' => 'Time To Live for Visitors Counter. In other words - how long user will be marked as online. In Minutes',
 			'default' => 10,
-			'only_if' => [
+			'show_if' => [
 				'visitors_counter'=> '=', 'true'
 			]
 		],
@@ -322,7 +322,7 @@ Sent by MyAAC,<br/>
 			'type' => 'options',
 			'options' => ['None', 'SSL', 'TLS'],
 			'desc' => 'What kind of encryption to use on the SMTP connection',
-			'default' => '',
+			'default' => 0,
 			'show_if' => [
 				'mail_enabled', '=', 'true'
 			]
@@ -463,42 +463,63 @@ Sent by MyAAC,<br/>
 			'type' => 'number',
 			'desc' => 'Min. level to form a guild',
 			'default' => 1,
+			'show_if' => [
+				'guild_management', '=', 'true',
+			],
 		],
 		'guild_need_premium' => [
 			'name' => 'Guild Need Premium',
 			'type' => 'boolean',
 			'desc' => 'Require premium account to form a guild?',
 			'default' => true,
+			'show_if' => [
+				'guild_management', '=', 'true',
+			],
 		],
 		'guild_image_size_kb' => [
 			'name' => 'Guild Image Size',
 			'type' => 'number',
 			'desc' => 'Maximum size of the guild logo image in KB (kilobytes)',
 			'default' => 80,
+			'show_if' => [
+				'guild_management', '=', 'true',
+			],
 		],
 		'guild_description_default' => [
 			'name' => 'Default Guild Description',
 			'type' => 'text',
 			'desc' => 'Default description set on new guild',
 			'default' => 'New guild. Leader must edit this text :)',
+			'show_if' => [
+				'guild_management', '=', 'true',
+			],
 		],
 		'guild_description_chars_limit' => [
 			'name' => 'Guild Description Characters Limit',
 			'type' => 'number',
 			'desc' => 'How many characters can be in guild description',
 			'default' => 1000,
+			'show_if' => [
+				'guild_management', '=', 'true',
+			],
 		],
 		'guild_description_lines_limit' => [
 			'name' => 'Guild Description Lines Limit',
 			'type' => 'number',
 			'desc' => "Limit of lines, if description has more lines it will be showed as long text, without 'enters'",
 			'default' => 6,
+			'show_if' => [
+				'guild_management', '=', 'true',
+			],
 		],
 		'guild_motd_chars_limit' => [
 			'name' => 'Guild MOTD Characters Limit',
 			'type' => 'number',
 			'desc' => 'Limit of MOTD (message of the day) that is shown later in the game on the guild channel',
 			'default' => 150,
+			'show_if' => [
+				'guild_management', '=', 'true',
+			],
 		],
 		[
 			'type' => 'category',
