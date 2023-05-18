@@ -31,9 +31,6 @@ if($config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($
 require_once SYSTEM . 'libs/cache.php';
 $cache = Cache::getInstance();
 
-// twig
-require_once SYSTEM . 'twig.php';
-
 // trim values we receive
 if(isset($_POST))
 {
@@ -125,6 +122,9 @@ $config['account_create_character_create'] = config('account_create_character_cr
 require_once SYSTEM . 'libs/pot/OTS.php';
 $ots = POT::getInstance();
 require_once SYSTEM . 'database.php';
+
+// twig
+require_once SYSTEM . 'twig.php';
 
 define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 // load vocation names

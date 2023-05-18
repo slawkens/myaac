@@ -16,6 +16,9 @@ $twig = new Twig_Environment($twig_loader, array(
 
 $twig_loader->addPath(PLUGINS);
 
+$twig->addGlobal('logged', false);
+$twig->addGlobal('account_logged', new OTS_Account());
+
 if($dev_mode) {
 	$twig->addExtension(new Twig_DebugExtension());
 }
