@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.10 - 18.05.2023]
+
+### Changed
+* PHP 7.2.5 is now required, cause of Twig 2.x
+* allow pages to be placed in templates folder, under pages/ subfolder
+
+### Fixed
+* Twig error with global variable on create account
+* links/redirects from facebook, etc. like ?fbclid=x
+* do not allow to continue install when there is no server database imported
+* cannot go forward when config.local.php cannot be saved
+* when server uses another items serializer
+* small bug on install - please fill all input
+
 ## [0.8.9 - 16.03.2023]
 
 ### Added
