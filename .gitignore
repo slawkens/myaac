@@ -9,6 +9,9 @@ vendor
 # npm
 node_modules
 
+# cypress
+cypress.env.json
+
 # created by release.sh
 releases
 tmp
