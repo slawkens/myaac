@@ -49,7 +49,7 @@ jobs:
             find: 'mysqlUser = "forgottenserver"'
             replace: 'mysqlUser = "myaac"'
             regex: false
-            include: 'config.lua'
+            include: 'tfs/config.lua'
 
         - name: Replace mysqlPassword
           uses: jacobtomlinson/gha-find-replace@v2
@@ -57,7 +57,7 @@ jobs:
               find: 'mysqlPassword = ""'
               replace: 'mysqlPassword = "myaac"'
               regex: false
-              include: 'config.lua'
+              include: 'tfs/config.lua'
 
         - name: Replace mysqlDatabase
           uses: jacobtomlinson/gha-find-replace@v2
@@ -65,7 +65,7 @@ jobs:
               find: 'mysqlDatabase = "forgottenserver"'
               replace: 'mysqlDatabase = "myaac-tfs"'
               regex: false
-              include: 'config.lua'
+              include: 'tfs/config.lua'
 
         - run: ls -lha
         - name: Setup PHP
