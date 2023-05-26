@@ -23,17 +23,13 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: [ '7.4', '8.0', '8.1' ]
+    name: MyAAC on PHP ${{ matrix.php-versions }}
     steps:
-        - name: Start MySQL
+        - name: 📌 MySQL Start & init & show db
           run: |
             sudo /etc/init.d/mysql start
-
-        - name: 📌 Initialize database
-          run: |
             mysql -e 'CREATE DATABASE myaac;' -uroot -proot
-
-        - name: Verify DB exists
-          run: mysql -uroot -proot -e "SHOW DATABASES"
+            mysql -e "SHOW DATABASES" -uroot -proot
 
         - name: Checkout MyAAC
           uses: actions/checkout@v3
