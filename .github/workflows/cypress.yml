@@ -61,8 +61,8 @@ jobs:
         - name: Cypress Run
           uses: cypress-io/github-action@v5
           env:
-            URL: localhost
-            SERVER_PATH: otland-forgottenserver
+            CYPRESS_URL: localhost
+            CYPRESS_SERVER_PATH: otland-forgottenserver
 
         - name: Save screenshots
           uses: actions/upload-artifact@v3
