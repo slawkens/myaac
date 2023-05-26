@@ -10,8 +10,8 @@ describe('Create Account Page', () => {
 	it('Create Test Account', () => {
 		cy.screenshot('create-account-page')
 
-		cy.get('#account_input').type('admin')
-		cy.get('#email').type('admin@example.com')
+		cy.get('#account_input').type('tester')
+		cy.get('#email').type('tester@example.com')
 
 		cy.get('#password').type('test1234')
 		cy.get('#password2').type('test1234')
