@@ -65,7 +65,7 @@ jobs:
               include: 'tfs/config.lua'
 
         - run: ls -lha /home/runner/work/myaac/myaac/tfs
-        - run: ls -lha /home/runner/work/myaac/myaac/index.php
+        - run: cat tfs/config.lua
 
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
