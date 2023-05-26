@@ -60,7 +60,7 @@ jobs:
           uses: jacobtomlinson/gha-find-replace@v2
           with:
               find: 'mysqlDatabase = "forgottenserver"'
-              replace: 'mysqlDatabase = "myaac-tfs-latest"'
+              replace: 'mysqlDatabase = "myaac-tfs"'
               regex: false
               include: 'config.lua'
 
