@@ -14,7 +14,9 @@ jobs:
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: myaac-tfs-latest
+          MYSQL_DATABASE: myaac-tfs
+          MYSQL_USER: myaac
+          MYSQL_PASSWORD: myaac
         ports:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -34,6 +36,33 @@ jobs:
             repository: otland/forgottenserver
             ref: 1.4
             path: tfs
+
+        - name: Rename config.lua
+          run: mv tfs/config.lua.dist tfs/config.lua
+
+        - name: Replace mysqlUser
+          uses: jacobtomlinson/gha-find-replace@v2
+          with:
+            find: 'mysqlUser = "forgottenserver"'
+            replace: 'mysqlUser = "myaac"'
+            regex: false
+            include: 'config.lua'
+
+        - name: Replace mysqlPassword
+          uses: jacobtomlinson/gha-find-replace@v2
+          with:
+              find: 'mysqlPassword = ""'
+              replace: 'mysqlPassword = "myaac"'
+              regex: false
+              include: 'config.lua'
+
+        - name: Replace mysqlDatabase
+          uses: jacobtomlinson/gha-find-replace@v2
+          with:
+              find: 'mysqlDatabase = "forgottenserver"'
+              replace: 'mysqlDatabase = "myaac-tfs-latest"'
+              regex: false
+              include: 'config.lua'
 
         - run: ls -lha
         - name: Setup PHP
@@ -65,7 +94,7 @@ jobs:
           uses: cypress-io/github-action@v5
           env:
             CYPRESS_URL: http://localhost:8080
-            CYPRESS_SERVER_PATH: /home/runner/work/myaac/myaac/tfs
+            CYPRESS_SERVER_PATH: tfs
 
         - name: Save screenshots
           uses: actions/upload-artifact@v3
