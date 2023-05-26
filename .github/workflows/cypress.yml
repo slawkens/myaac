@@ -52,11 +52,11 @@ jobs:
             regex: false
             include: 'tfs/config.lua'
 
-        - name: Replace mysqlPassword
+        - name: Replace mysqlPass
           uses: jacobtomlinson/gha-find-replace@v2
           with:
-              find: 'mysqlPassword = ""'
-              replace: 'mysqlPassword = "myaac"'
+              find: 'mysqlPass = ""'
+              replace: 'mysqlPass = "myaac"'
               regex: false
               include: 'tfs/config.lua'
 
