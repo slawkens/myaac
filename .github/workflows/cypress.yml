@@ -25,11 +25,14 @@ jobs:
     steps:
         - name: Checkout MyAAC
           uses: actions/checkout@v3
+          with:
+            ref: develop
 
         - name: Checkout TFS
           uses: actions/checkout@v3
           with:
             repository: otland/forgottenserver
+            ref: 1.4
 
         - run: ls -lha
         - name: Setup PHP
