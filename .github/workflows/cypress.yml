@@ -13,7 +13,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: "myaac-tfs"
+          MYSQL_DATABASE: myaac
           MYSQL_USER: myaac
           MYSQL_PASSWORD: myaac
         ports:
@@ -61,7 +61,7 @@ jobs:
           uses: jacobtomlinson/gha-find-replace@v2
           with:
               find: 'mysqlDatabase = "forgottenserver"'
-              replace: 'mysqlDatabase = "myaac-tfs"'
+              replace: 'mysqlDatabase = "myaac"'
               regex: false
               include: 'tfs/config.lua'
 
