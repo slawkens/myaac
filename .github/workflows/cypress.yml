@@ -65,7 +65,7 @@ jobs:
           uses: cypress-io/github-action@v5
           env:
             CYPRESS_URL: http://localhost:8080
-            CYPRESS_SERVER_PATH: otland-forgottenserver
+            CYPRESS_SERVER_PATH: tfs
 
         - name: Save screenshots
           uses: actions/upload-artifact@v3

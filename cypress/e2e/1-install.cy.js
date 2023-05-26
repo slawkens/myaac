@@ -73,15 +73,4 @@ describe('Install MyAAC', () => {
 
 		cy.screenshot('install-finish')
 	})
-
-	it('Take Screenshot of the Home Page', () => {
-		cy.wait(1000)
-		cy.screenshot('home')
-	})
-
-	it('Take Screenshot of Create Account page', () => {
-		cy.visit(Cypress.env('URL') + '/index.php/account/create')
-		cy.wait(1000)
-		cy.screenshot('create-account-page')
-	})
 })
