@@ -13,7 +13,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: myaac-tfs
+          MYSQL_DATABASE: "myaac-tfs"
           MYSQL_USER: myaac
           MYSQL_PASSWORD: myaac
         ports:
