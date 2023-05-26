@@ -37,9 +37,6 @@ jobs:
             ref: 1.4
             path: tfs
 
-        - run: ls -lha /home/runner/work/myaac/myaac/tfs
-        - run: ls -lha /home/runner/work/myaac/myaac/index.php
-
         - name: Rename config.lua
           run: mv tfs/config.lua.dist tfs/config.lua
 
@@ -67,7 +64,9 @@ jobs:
               regex: false
               include: 'tfs/config.lua'
 
-        - run: ls -lha
+        - run: ls -lha /home/runner/work/myaac/myaac/tfs
+        - run: ls -lha /home/runner/work/myaac/myaac/index.php
+
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
