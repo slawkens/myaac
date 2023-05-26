@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:latest
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
           MYSQL_ROOT_PASSWORD: root
@@ -29,6 +29,8 @@ jobs:
           run: |
             sudo /etc/init.d/mysql start
 
+        - name: Verify unittest_second DB exists
+          run: mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "SHOW DATABASES"
         - name: Checkout MyAAC
           uses: actions/checkout@v3
           with:
@@ -68,7 +70,6 @@ jobs:
               regex: false
               include: 'tfs/config.lua'
 
-        - run: cat tfs/config.lua
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
