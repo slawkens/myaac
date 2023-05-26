@@ -28,10 +28,6 @@ jobs:
           run: |
             mysql -e 'CREATE DATABASE myaac;' -uroot -proot
 
-        - name: Import TFS Schema
-          run: |
-            mysql -uroot -proot myaac < /home/runner/work/myaac/myaac/tfs/schema.sql
-
         - name: Verify DB exists
           run: mysql -uroot -proot -e "SHOW DATABASES"
 
@@ -46,6 +42,10 @@ jobs:
             repository: otland/forgottenserver
             ref: 1.4
             path: tfs
+
+        - name: Import TFS Schema
+          run: |
+              mysql -uroot -proot myaac < tfs/schema.sql
 
         - name: Rename config.lua
           run: mv tfs/config.lua.dist tfs/config.lua
