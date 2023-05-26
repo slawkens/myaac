@@ -37,6 +37,9 @@ jobs:
             ref: 1.4
             path: tfs
 
+        - run: ls -lha /home/runner/work/myaac/myaac/tfs
+        - run: ls -lha /home/runner/work/myaac/myaac/index.php
+
         - name: Rename config.lua
           run: mv tfs/config.lua.dist tfs/config.lua
 
@@ -94,7 +97,7 @@ jobs:
           uses: cypress-io/github-action@v5
           env:
             CYPRESS_URL: http://localhost:8080
-            CYPRESS_SERVER_PATH: tfs
+            CYPRESS_SERVER_PATH: /home/runner/work/myaac/myaac/tfs
 
         - name: Save screenshots
           uses: actions/upload-artifact@v3
