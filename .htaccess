@@ -6,10 +6,14 @@
 	Options -MultiViews
 </IfModule>
 
+<FilesMatch "^(CHANGELOG\.md|README\.md|composer\.json|composer\.lock|package\.json|package-lock\.json|cypress\.env\.json)$">
+	Require all denied
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 
-    #RewriteBase /myaac/
+	#RewriteBase /myaac/
 
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
