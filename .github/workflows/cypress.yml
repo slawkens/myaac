@@ -68,6 +68,7 @@ jobs:
               regex: false
               include: 'tfs/config.lua'
 
+        - run: cat tfs/config.lua
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
