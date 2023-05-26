@@ -65,7 +65,7 @@ jobs:
           uses: cypress-io/github-action@v5
           env:
             CYPRESS_URL: http://localhost:8080
-            CYPRESS_SERVER_PATH: tfs
+            CYPRESS_SERVER_PATH: /home/runner/work/myaac/myaac/tfs
 
         - name: Save screenshots
           uses: actions/upload-artifact@v3
