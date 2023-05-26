@@ -96,6 +96,9 @@
 													</td>
 												</tr>
 												<tr><td></td><td><span id="password_error" class="FormFieldError">{% if errors.password is defined %}{{ errors.password }}{% endif %}</span></td></tr>
+
+												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_PASSWORD') }}
+
 												<tr>
 													<td class="LabelV" style="width: 150px">
 														<span{% if errors.password is defined %} class="red"{% endif %}>Repeat password:</span>
