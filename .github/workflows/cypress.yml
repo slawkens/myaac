@@ -33,6 +33,7 @@ jobs:
           with:
             repository: otland/forgottenserver
             ref: 1.4
+            path: tfs
 
         - run: ls -lha
         - name: Setup PHP
