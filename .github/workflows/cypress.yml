@@ -58,10 +58,13 @@ jobs:
         - name: Install Composer dependencies
           run: composer install --no-progress --prefer-dist --optimize-autoloader
 
+        - name: Run PHP server
+          run: nohup php -S localhost:8080 > php.log 2>&1 &
+
         - name: Cypress Run
           uses: cypress-io/github-action@v5
           env:
-            CYPRESS_URL: localhost
+            CYPRESS_URL: http://localhost:8080
             CYPRESS_SERVER_PATH: otland-forgottenserver
 
         - name: Save screenshots
