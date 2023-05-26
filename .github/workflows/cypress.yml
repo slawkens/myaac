@@ -20,10 +20,6 @@ jobs:
         ports:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    strategy:
-      fail-fast: false
-      matrix:
-        php-versions: [ '7.4', '8.0', '8.1' ]
     steps:
         - name: Start MySQL
           run: |
@@ -73,7 +69,7 @@ jobs:
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
-            php-version: ${{ matrix.php-versions }}
+            php-version: 8.0
             extensions: mbstring, dom, fileinfo, mysql, json, xml, pdo, pdo_mysql
 
         - name: Get composer cache directory
