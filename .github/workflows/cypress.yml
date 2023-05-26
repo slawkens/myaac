@@ -30,7 +30,7 @@ jobs:
 
         - name: Import TFS Schema
           run: |
-            mysql -uroot -proot myaac < tfs/schema.sql
+            mysql -uroot -proot myaac < /home/runner/work/myaac/myaac/tfs/schema.sql
 
         - name: Verify DB exists
           run: mysql -uroot -proot -e "SHOW DATABASES"
