@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:8.0
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
           MYSQL_ROOT_PASSWORD: password
@@ -25,6 +25,10 @@ jobs:
       matrix:
         php-versions: [ '7.4', '8.0', '8.1' ]
     steps:
+        - name: Start MySQL
+          run: |
+            sudo /etc/init.d/mysql start
+
         - name: Checkout MyAAC
           uses: actions/checkout@v3
           with:
