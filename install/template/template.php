@@ -11,7 +11,7 @@
 <body>
 
 	<div id="body" class="container">
-	
+
 		<header id="header" class="pt-5 pb-4 pb-sm-5">
 			<h1>MyAAC <?php echo $locale['installation']; ?></h1>
 		</header>
@@ -28,10 +28,10 @@
 							if ($step == $value) {
 								$progress = ($i == 6) ? 100 : $i * 16;
 							}
-							
-							echo '<li' . ($step == $value ? ' class="list-group-item active"' : ' class="list-group-item"') . '>' . ++$i . '. ' . $locale['step_' . $value] . '</li>';
+
+							echo '<li class="list-group-item' . ($step == $value ? ' active' : '') . '">' . ++$i . '. ' . $locale['step_' . $value] . '</li>';
 						}
-							
+
 					?>
 				</ul>
 			</div>
