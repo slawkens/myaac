@@ -28,8 +28,12 @@ jobs:
           run: |
             mysql -e 'CREATE DATABASE myaac;' -uroot -proot
 
-        - name: Verify unittest_second DB exists
-          run: mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "SHOW DATABASES"
+        - name: Import TFS Schema
+          run: |
+            mysql -uroot -proot myaac < tfs/schema.sql
+
+        - name: Verify DB exists
+          run: mysql -uroot -proot -e "SHOW DATABASES"
 
         - name: Checkout MyAAC
           uses: actions/checkout@v3
