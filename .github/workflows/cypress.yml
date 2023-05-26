@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:latest
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
           MYSQL_ROOT_PASSWORD: password
@@ -67,9 +67,6 @@ jobs:
               replace: 'mysqlDatabase = "myaac-tfs"'
               regex: false
               include: 'tfs/config.lua'
-
-        - run: ls -lha /home/runner/work/myaac/myaac/tfs
-        - run: cat tfs/config.lua
 
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
