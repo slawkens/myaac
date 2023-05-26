@@ -13,7 +13,7 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
-          MYSQL_ROOT_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: myaac-tfs
           MYSQL_USER: myaac
           MYSQL_PASSWORD: myaac
@@ -48,7 +48,7 @@ jobs:
           uses: jacobtomlinson/gha-find-replace@v2
           with:
             find: 'mysqlUser = "forgottenserver"'
-            replace: 'mysqlUser = "myaac"'
+            replace: 'mysqlUser = "root"'
             regex: false
             include: 'tfs/config.lua'
 
@@ -56,7 +56,7 @@ jobs:
           uses: jacobtomlinson/gha-find-replace@v2
           with:
               find: 'mysqlPass = ""'
-              replace: 'mysqlPass = "myaac"'
+              replace: 'mysqlPass = "root"'
               regex: false
               include: 'tfs/config.lua'
 
