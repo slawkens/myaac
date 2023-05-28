@@ -1192,7 +1192,7 @@ function getCustomPageInfo($page)
 
 	return null;
 }
-function getCustomPage($page, &$success)
+function getCustomPage($page, &$success): string
 {
 	global $db, $twig, $title, $ignore, $logged_access;
 
