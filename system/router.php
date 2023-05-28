@@ -285,9 +285,10 @@ if(config('backward_support')) {
 
 unset($page);
 
-function getDatabasePages() {
-	global $db;
-	$pages = $db->query('SELECT `name` FROM ' . TABLE_PREFIX . 'pages');
+function getDatabasePages($withHidden = false): array
+{
+	global $db, $logged_access;
+	$pages = $db->query('SELECT `name` FROM ' . TABLE_PREFIX . 'pages WHERE ' . ($withHidden ? '' : '`hidden` != 1 AND ') . '`access` <= ' . $db->quote($logged_access));
 	$ret = [];
 
 	if ($pages->rowCount() < 1) {
