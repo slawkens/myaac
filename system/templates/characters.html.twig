@@ -11,7 +11,7 @@
 	<td>
         {{ hook(constant('HOOK_CHARACTERS_BEFORE_INFORMATIONS')) }}
 		{% if canEdit %}
-			<a href="admin/?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
+			<a href="{{ constant('ADMIN_URL') }}?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
 				<img src="images/edit.png"/>Edit
 			</a>
 		{% endif %}
@@ -418,7 +418,7 @@
 		{% endif %}
 		{{ hook(constant('HOOK_CHARACTERS_AFTER_CHARACTERS')) }}
 		{% if canEdit %}
-			<a href="admin/?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
+			<a href="{{ constant('ADMIN_URL') }}?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
 				<img src="images/edit.png"/>Edit
 			</a>
 		{% endif %}
