@@ -12,7 +12,7 @@ Minimum PHP version for this release is 7.2.5.
   * new Admin Bar showed on top when admin logged in
   * new page: Server Data, to reload server data
   * new pages: mass account & teleport tools
-  * editable changelogs
+  * changelogs editor
   * revised Accounts & Players editors
   * option to add/modify menus with plugins
   * option to enable/disable plugins
@@ -46,6 +46,7 @@ Minimum PHP version for this release is 7.2.5.
 	* Highscores
 		* frags works for TFS 1.x
 		* cached
+	* creatures
 * moved pages to Twig:
   * experience stages
 * update player_deaths entries on name change
