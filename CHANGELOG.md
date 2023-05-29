@@ -31,6 +31,7 @@ Minimum PHP version for this release is 7.2.5.
   * suggest account number option
 * many new functions, hooks and configurables
 * better Exception Handler (Whoops - https://github.com/filp/whoops)
+* add Cypress testing
 
 ### Changed
 * Composer is now used for external libraries like: Twig, PHPMailer, fast-route etc.
