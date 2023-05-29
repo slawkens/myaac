@@ -141,8 +141,6 @@ if(!IS_CLI) {
 	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/' . ADMIN_PANEL_FOLDER . '/');
 
 	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
-
-	require SYSTEM . 'exception.php';
 }
 
 $autoloadFile = VENDOR . 'autoload.php';

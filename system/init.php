@@ -18,6 +18,10 @@ if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
 
+if(config('env') === 'dev') {
+	require SYSTEM . 'exception.php';
+}
+
 date_default_timezone_set($config['date_timezone']);
 // take care of trailing slash at the end
 if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
