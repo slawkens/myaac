@@ -396,7 +396,8 @@
 							<tr>
 								<td>
 									<input type="hidden" name="name" value="{{ player.getName() }}"/>
-									<input type="image" name="View {{ player.getName() }}" alt="View {{ player.getName() }}" src="{{ template_path }}/images/global/buttons/sbutton_view.gif" border="0" width="120" height="18"/>
+									{% set button_name = "View" %}
+									{{ include('buttons.base.html.twig') }}
 								</td>
 							</tr>
 						</form>
