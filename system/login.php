@@ -10,6 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $logged = false;
 $logged_flags = 0;
+$account_logged = new OTS_Account();
 
 $action = isset($_REQUEST['action']) ? strtolower($_REQUEST['action']) : '';
 if(!defined('ACTION')) {
@@ -20,7 +21,6 @@ if(!defined('ACTION')) {
 $current_session = getSession('account');
 if($current_session !== false)
 {
-	$account_logged = new OTS_Account();
 	$account_logged->load($current_session);
 	if($account_logged->isLoaded() && $account_logged->getPassword() == getSession('password')
 		//&& (!isset($_SESSION['admin']) || admin())
@@ -84,7 +84,6 @@ else
 				$t = isset($tmp[$ip]) ? $tmp[$ip] : NULL;
 			}
 
-			$account_logged = new OTS_Account();
 			if(USE_ACCOUNT_NAME)
 				$account_logged->find($login_account);
 			else
