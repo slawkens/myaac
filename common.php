@@ -26,7 +26,7 @@
 if (version_compare(phpversion(), '7.2.5', '<')) die('PHP version 7.2.5 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '0.9.0-dev';
+const MYAAC_VERSION = '0.9.0-alpha';
 const DATABASE_VERSION = 35;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
