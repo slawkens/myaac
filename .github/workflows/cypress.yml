@@ -96,6 +96,9 @@ jobs:
         - name: Install Composer dependencies
           run: composer install --no-progress --prefer-dist --optimize-autoloader
 
+        - name: Dump Env
+          run: php -r "var_dump(getenv());"
+
         - name: Run PHP server
           run: nohup php -S localhost:8080 > php.log 2>&1 &
 
