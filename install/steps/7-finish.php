@@ -122,7 +122,7 @@ else {
 		));
 
 		if(!isset($_SESSION['installed'])) {
-			if (!array_key_exists('CI', $_ENV)) {
+			if (!array_key_exists('CI', getenv())) {
 				$report_url = 'https://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL);
 				if (function_exists('curl_version'))
 				{
