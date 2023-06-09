@@ -40,4 +40,3 @@ if(!@file_exists($page_file))
 // output image
 //header('Content-type: image/gif');
 //readfile($file);
-?>

@@ -45,4 +45,3 @@ function databaseMigration20(&$content = '') {
 	file_put_contents($config_file, $content, FILE_APPEND);
 	return true;
 }
-?>

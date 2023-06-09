@@ -115,5 +115,3 @@ if(!empty($guild_errors)) {
 
 	echo '<br/><div style="text-align:center"><form action="?subtopic=guilds" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }
-
-?>

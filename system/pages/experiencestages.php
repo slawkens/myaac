@@ -66,4 +66,3 @@ echo '<div style="text-align:center"><h3>Experience stages</h3></div>
 		</tbody></table>
 	</td></tr>
 </tbody></table>';
-?>

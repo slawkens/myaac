@@ -6,4 +6,3 @@
  * @author Sizaro <sizaro@live.se>
  */
 $locale['title'] = 'MyAAC Admin';
-?>

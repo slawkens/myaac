@@ -101,5 +101,3 @@ if(Forum::canPost($account_logged))
 }
 else
 	echo 'Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
-
-?>

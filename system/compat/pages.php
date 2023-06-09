@@ -37,4 +37,4 @@ switch($page)
 	default:
 		break;
 }
-?>
+

@@ -299,5 +299,3 @@ class OTS_MonstersList implements Iterator, Countable, ArrayAccess
 }
 
 /**#@-*/
-
-?>

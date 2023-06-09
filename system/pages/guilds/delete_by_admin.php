@@ -64,5 +64,3 @@ if(!empty($errors)) {
 		'action' => '?subtopic=guilds'
 	));
 }
-
-?>

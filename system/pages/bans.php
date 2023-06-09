@@ -202,4 +202,3 @@ function getPlayerNameByAccount($id)
 
 	return '';
 }
-?>

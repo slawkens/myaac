@@ -3627,5 +3627,3 @@ class OTS_Player extends OTS_Row_DAO
 }
 
 /**#@-*/
-
-?>

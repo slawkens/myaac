@@ -185,4 +185,3 @@ class FAQ
 		return !count($errors);
 	}
 }
-?>
