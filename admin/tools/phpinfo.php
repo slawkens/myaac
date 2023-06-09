@@ -13,4 +13,4 @@ if(!function_exists('phpinfo'))
 	die('phpinfo() disabled on this web server.');
 
 phpinfo();
-?>
+
