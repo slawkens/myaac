@@ -12,7 +12,7 @@
 	$vocation = 'Unknown vocation';
 	if(isset($config['vocations'][$player->getVocation()]))
 		$vocation = $config['vocations'][$player->getVocation()];
-	
+
 	imagettftext($image , $fontsize, 0, 20, 52, $color, $font, 'Level:');
 	imagettftext($image , $fontsize, 0, 70, 52, $color, $font, $player->getLevel() . ' ' . $vocation);
 
@@ -26,4 +26,3 @@
 	imagettftext($image , $fontsize, 0, 100, 95, $color, $font, (($player->getLastLogin() > 0) ? date("j F Y, g:i a", $player->getLastLogin()) : 'Never logged in.'));
 	imagepng($image, SIGNATURES_CACHE . $player->getID() . '.png');
 	imagedestroy($image);
-	

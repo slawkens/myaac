@@ -1,7 +1,7 @@
 <?php
 /**
  * Account confirm mail
- * Keept for compability
+ * Keept for compatibility
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
