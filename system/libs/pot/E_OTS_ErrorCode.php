@@ -32,5 +32,3 @@ class E_OTS_ErrorCode extends Exception
 }
 
 /**#@-*/
-
-?>

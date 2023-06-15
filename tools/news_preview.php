@@ -112,5 +112,3 @@ function error_($desc) {
 	));
 	exit();
 }
-
-?>

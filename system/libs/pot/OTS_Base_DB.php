@@ -265,5 +265,3 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 }
 
 /**#@-*/
-
-?>

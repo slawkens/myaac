@@ -89,5 +89,3 @@ interface IOTS_DataDisplay
 }
 
 /**#@-*/
-
-?>

@@ -1198,5 +1198,3 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 }
 
 /**#@-*/
-
-?>

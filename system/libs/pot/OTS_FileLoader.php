@@ -357,5 +357,3 @@ class OTS_FileLoader
 }
 
 /**#@-*/
-
-?>
