@@ -38,4 +38,3 @@ if(!isset($error) || !$error) {
 		$error = true;
 	}
 }
-?>

@@ -166,4 +166,3 @@ if(isset($_POST['emailchangecancel']) && $_POST['emailchangecancel'] == 1) {
 		'custom_buttons' => $custom_buttons
 	));
 }
-?>

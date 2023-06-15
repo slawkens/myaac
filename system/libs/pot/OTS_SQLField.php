@@ -121,5 +121,3 @@ class OTS_SQLField
 }
 
 /**#@-*/
-
-?>

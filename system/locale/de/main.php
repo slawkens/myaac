@@ -12,4 +12,3 @@ $locale['direction']= 'ltr';
 
 $locale['error404'] = 'Diese Seite konnte nicht gefunden werden.';
 $locale['news'] = 'Neuesten Nachrichten';
-?>

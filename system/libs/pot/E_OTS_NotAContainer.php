@@ -22,5 +22,3 @@ class E_OTS_NotAContainer extends Exception
 }
 
 /**#@-*/
-
-?>

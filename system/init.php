@@ -122,7 +122,7 @@ if(!isset($foundValue)) {
 $config['data_path'] = $foundValue;
 unset($foundValue);
 
-// new config values for compability
+// new config values for compatibility
 if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hidden']) == 0) {
 	$config['highscores_ids_hidden'] = array(0);
 }

@@ -125,5 +125,3 @@ if(!empty($guild_errors)) {
 		'action' => '?subtopic=guilds'
 	));
 }
-
-?>

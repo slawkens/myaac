@@ -671,5 +671,3 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
 }
 
 /**#@-*/
-
-?>

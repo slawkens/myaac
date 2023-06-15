@@ -459,4 +459,3 @@ function logo_monster()
 	global $config;
 	return str_replace(" ", "", trim(strtolower($config['logo_monster'])));
 }
-?>

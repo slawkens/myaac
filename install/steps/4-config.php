@@ -18,4 +18,3 @@ $twig->display('install.config.html.twig', array(
 	'errors' => isset($errors) ? $errors : null,
 	'buttons' => next_buttons()
 ));
-?>
