@@ -547,4 +547,3 @@ elseif($action == 'setnewpassword')
 				' . $twig->render('buttons.submit.html.twig') . '</div>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
-?>

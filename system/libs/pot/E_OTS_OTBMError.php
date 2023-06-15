@@ -32,5 +32,3 @@ class E_OTS_OTBMError extends E_OTS_ErrorCode
 }
 
 /**#@-*/
-
-?>

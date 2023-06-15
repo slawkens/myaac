@@ -37,5 +37,3 @@ interface IOTS_Cipher
 }
 
 /**#@-*/
-
-?>

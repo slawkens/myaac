@@ -196,5 +196,3 @@ class Pages
 		return !count($errors);
 	}
 }
-
-?>

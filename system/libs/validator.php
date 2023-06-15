@@ -432,4 +432,3 @@ class Validator
 		return self::$lastError;
 	}
 }
-?>

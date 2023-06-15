@@ -10,4 +10,3 @@
  */
 $_GET['archive'] = true;
 require 'news.php';
-?>

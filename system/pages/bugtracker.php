@@ -339,4 +339,3 @@ $showed = $post = $reply = false;
     {
         echo '<br><br><a href="?subtopic=bugtracker&control=true">[ADMIN PANEL]</a>';
     }
-?>

@@ -36,4 +36,3 @@ $twig->display('admin.statistics.html.twig', array(
 	'account_type' => (USE_ACCOUNT_NAME ? 'name' : 'number'),
 	'points' => $points
 ));
-?>

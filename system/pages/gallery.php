@@ -311,4 +311,3 @@ class Gallery
 		return !count($errors);
 	}
 }
-?>

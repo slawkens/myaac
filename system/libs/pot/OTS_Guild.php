@@ -837,5 +837,3 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
 }
 
 /**#@-*/
-
-?>

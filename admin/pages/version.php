@@ -47,4 +47,3 @@ function version_revert($version)
 	$release = $version;
 	return $major . '.' . $minor . '.' . $release;
 }*/
-?>

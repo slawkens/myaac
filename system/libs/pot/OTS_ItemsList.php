@@ -676,5 +676,3 @@ class OTS_ItemsList extends OTS_FileLoader implements IteratorAggregate, Countab
 }
 
 /**#@-*/
-
-?>

@@ -282,4 +282,3 @@ class TokenAuth6238 {
 		return $result;
 	}
 }
-?>

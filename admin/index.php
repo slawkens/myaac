@@ -68,4 +68,4 @@ ob_end_clean();
 // template
 $template_path = 'template/';
 require ADMIN . $template_path . 'template.php';
-?>
+
