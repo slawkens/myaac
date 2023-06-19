@@ -757,10 +757,10 @@ function get_browser_languages()
 {
 	$ret = array();
 
-	$acceptLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-	if(!isset($acceptLang[0]))
+	if(empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		return $ret;
 
+	$acceptLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 	$languages = strtolower($acceptLang);
 	// $languages = 'pl,en-us;q=0.7,en;q=0.3 ';
 	// need to remove spaces from strings to avoid error
