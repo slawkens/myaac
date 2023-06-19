@@ -110,4 +110,21 @@ class Cache
 	 * @return bool
 	 */
 	public function enabled() {return false;}
+
+	public static function remember($key, $ttl, $callback)
+	{
+		$cache = self::getInstance();
+		if(!$cache->enabled()) {
+			return $callback();
+		}
+
+		$value = null;
+		if ($cache->fetch($key, $value)) {
+			return unserialize($value);
+		}
+
+		$value = $callback();
+		$cache->set($key, serialize($value),$ttl);
+		return $value;
+	}
 }
