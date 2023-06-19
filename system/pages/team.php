@@ -45,6 +45,7 @@ foreach($groupList as $id => $group)
 	$members = array();
 	foreach($group_members as $member)
 	{
+		/** @var OTS_Player $member */
 		if(!admin() && $member->isHidden())
 			continue;
 

@@ -21,6 +21,9 @@ if(config('status_enabled') === false) {
 	return;
 }
 
+/**
+ * @var array $config
+ */
 $status_ip = $config['lua']['ip'];
 if(isset($config['lua']['statusProtocolPort'])) {
 	$config['lua']['loginPort'] = $config['lua']['statusProtocolPort'];
@@ -54,6 +57,9 @@ elseif(!isset($status_port[0])) // try 7171 if no ip specified
 }
 
 $fetch_from_db = true;
+/**
+ * @var Cache $cache
+ */
 if($cache->enabled())
 {
 	$tmp = '';
@@ -67,6 +73,9 @@ if($cache->enabled())
 if($fetch_from_db)
 {
 	// get info from db
+	/**
+	 * @var OTS_DB_MySQL $db
+	 */
 	$status_query = $db->query('SELECT `name`, `value` FROM `' . TABLE_PREFIX . 'config` WHERE ' . $db->fieldName('name') . ' LIKE "%status%"');
 	if($status_query->rowCount() <= 0) // empty, just insert it
 	{

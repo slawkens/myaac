@@ -116,5 +116,4 @@ defined('MYAAC') or die('Direct access not allowed!');
 				'<li>MySQL is not configured propertly in <i>config.lua</i>.</li>' .
 				'<li>MySQL server is not running.</li>' .
 			'</ul>' . $error->getMessage());
-
 	}

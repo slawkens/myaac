@@ -23,7 +23,7 @@ else
 	}
 	$password_strlen = strlen($new_password);
 	if($new_password != $new_password2) {
-		$errors[] = "The new passwords do not match!";
+		$errors[] = 'The new passwords do not match!';
 	}
 
 	if(empty($errors)) {
@@ -31,6 +31,7 @@ else
 			$errors[] = Validator::getLastError();
 		}
 
+		/** @var OTS_Account $account_logged */
 		$old_password = encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $old_password);
 		if($old_password != $account_logged->getPassword()) {
 			$errors[] = "Current password is incorrect!";
@@ -79,5 +80,3 @@ else
 		setSession('password', $new_password);
 	}
 }
-
-?>
