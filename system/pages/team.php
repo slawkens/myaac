@@ -9,7 +9,7 @@
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-$title = 'Gamemasters List';
+$title = 'Support in game';
 
 if($config['account_country'])
 	require SYSTEM . 'countries.conf.php';
