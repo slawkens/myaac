@@ -10,6 +10,14 @@
 defined('MYAAC') or die('Direct access not allowed!');
 switch($page)
 {
+	case 'adminpanel':
+		header('Location: ' . ADMIN_URL);
+		die;
+
+	case 'archive':
+		$page = 'newsarchive';
+		break;
+
 	case 'whoisonline':
 		$page = 'online';
 		break;
