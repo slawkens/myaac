@@ -346,12 +346,10 @@ if($load_it)
 				)) . $content;
 		}
 	} else {
-		$file = TEMPLATES . $template_name . '/pages/' . $page . '.php';
-		if(!@file_exists($file) || preg_match('/[^A-z0-9_\-]/', $page))
-		{
-			$file = SYSTEM . 'pages/' . $page . '.php';
-			if(!@file_exists($file) || preg_match('/[^A-z0-9_\-]/', $page))
-			{
+		$file = TEMPLATES . "$template_name/pages/$page.php";
+		if(!@file_exists($file) || preg_match('/[^A-z0-9_\-]/', $page)) {
+			$file = SYSTEM . "pages/$page.php";
+			if(!@file_exists($file) || preg_match('/[^A-z0-9_\-]/', $page)) {
 				$page = '404';
 				$file = SYSTEM . 'pages/404.php';
 			}

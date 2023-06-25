@@ -41,7 +41,7 @@ system/cache/*
 
 # php sessions
 system/php_sessions/*
-!system/php_sessions//index.html
+!system/php_sessions/index.html
 
 # logs
 system/logs/*
