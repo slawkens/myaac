@@ -170,7 +170,16 @@
 			{% for player in players %}
 				{% set i = i + 1 %}
 				<tr bgcolor="{{ getStyle(i) }}">
-					<td><a href="{{ getLink('characters/' ~ player.getName()|urlencode) }}">{{ player.getName() }}</a></td><td>{{ player.getLevel() }}</td><td>{{ player.getVocationName() }}</td><td>{{ config.towns[player.getTownId()] }}</td><td>{% if player.getLastLogin() > 0 %}{{ player.getLastLogin|date('d F Y (H:i)') }}{% else %}Never.{% endif %}</td><td>{%  if player.isOnline() %}<span style="color: green">ONLINE</span>{% else %}<span style="color: red">Offline</span>{% endif %}</td><td>{% if player.isHidden() %}Hidden{% else %}Visible{% endif %}</td><td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]</td>
+					<td>
+						<a href="{{ getLink('characters/' ~ player.getName()|urlencode) }}">{{ player.getName() }}</a>
+					</td>
+					<td>{{ player.getLevel() }}</td>
+					<td>{{ player.getVocationName() }}</td>
+					<td>{{ config.towns[player.getTownId()] }}</td>
+					<td>{% if player.getLastLogin() > 0 %}{{ player.getLastLogin|date('d F Y (H:i)') }}{% else %}Never.{% endif %}</td>
+					<td>{% if player.isOnline() %}<span style="color: green">ONLINE</span>{% else %}<span style="color: red">Offline</span>{% endif %}</td>
+					<td>{% if player.isHidden() %}Hidden{% else %}Visible{% endif %}</td>
+					<td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]</td>
 				</tr>
 			{% endfor %}
 		</table>
