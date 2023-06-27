@@ -25,7 +25,7 @@ To change a name of character select player and choose a new name.<br/>
                                 <td class="LabelV" ><span>Character:</span></td>
 								<td style="width:90%;" >
 									<select name="player_id">
-										{% for player in account_logged.getPlayersList() %}
+										{% for player in account_logged.getPlayersList(false) %}
 										<option value="{{ player.getId() }}">{{ player.getName() }}</option>
 										{% endfor %}
 									</select>

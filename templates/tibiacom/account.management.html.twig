@@ -442,7 +442,7 @@
 												{% else %}
 												<td><span style="color: red"><b>Offline</b></span></td>
 												{% endif %}
-												<td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]</td>
+												<td>{% if not player.isDeleted() %}[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]{% endif %}</td>
 											</tr>
 											{% endfor %}
 										</table>
