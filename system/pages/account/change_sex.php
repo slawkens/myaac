@@ -34,6 +34,10 @@ else
 				$player_account = $player->getAccount();
 
 				if($account_logged->getId() == $player_account->getId()) {
+					if ($player->isDeleted()) {
+						$errors[] = 'This character is deleted.';
+					}
+
 					if($player->isOnline()) {
 						$errors[] = 'This character is online.';
 					}
@@ -64,7 +68,7 @@ else
 					}
 				}
 				else {
-					$errors[] = 'Character <b>'.$player_name.'</b> is not on your account.';
+					$errors[] = 'Character is not on your account.';
 				}
 			}
 			else {
@@ -78,7 +82,7 @@ else
 			$twig->display('error_box.html.twig', array('errors' => $errors));
 		}
 		$twig->display('account.change_sex.html.twig', array(
-			'players' => $account_logged->getPlayersList(),
+			'players' => $account_logged->getPlayersList(false),
 			'player_sex' => isset($player) ? $player->getSex() : -1,
 			'points' => $points
 		));

@@ -177,7 +177,7 @@
 					<td>{% if player.getLastLogin() > 0 %}{{ player.getLastLogin|date('d F Y (H:i)') }}{% else %}Never.{% endif %}</td>
 					<td>{% if player.isOnline() %}<span style="color: green">ONLINE</span>{% else %}<span style="color: red">Offline</span>{% endif %}</td>
 					<td>{% if player.isHidden() %}Hidden{% else %}Visible{% endif %}</td>
-					<td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]</td>
+					<td>{% if not player.isDeleted() %}[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]{% endif %}</td>
 				</tr>
 			{% endfor %}
 		</table>

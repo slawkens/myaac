@@ -20,7 +20,7 @@ if(!$logged) {
 $array_of_player_nig = array();
 if(empty($guild_errors))
 {
-	$account_players = $account_logged->getPlayers();
+	$account_players = $account_logged->getPlayersList(false);
 	foreach($account_players as $player)
 	{
 		$player_rank = $player->getRank();
@@ -69,6 +69,10 @@ if($todo == 'save')
 		if($guild->isLoaded()) {
 			$guild_errors[] = 'Guild <b>'.$guild_name.'</b> already exist. Select other name.';
 		}
+	}
+
+	if(empty($guild_errors) && $player->isDeleted()) {
+		$guild_errors[] = "Character <b>$name</b> has been deleted.";
 	}
 
 	if(empty($guild_errors))
@@ -130,5 +134,3 @@ else {
 		'players' => $array_of_player_nig
 	));
 }
-
-?>

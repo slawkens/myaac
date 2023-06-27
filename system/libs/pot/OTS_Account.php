@@ -922,7 +922,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $access = 0;
 
         // finds ranks of all characters
-        foreach($this->getPlayersList() as $player)
+        foreach($this->getPlayersList(false) as $player)
         {
             $rank = $player->getRank();
 
