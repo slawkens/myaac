@@ -57,7 +57,7 @@ if($show_form) {
 		$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
 
-	if(isset($player)) {
+	if(isset($player) && $player->isLoaded()) {
 		$twig->display('account.change_comment.html.twig', array(
 			'player' => $player
 		));
