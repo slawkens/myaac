@@ -40,7 +40,7 @@ Page: {{ links_to_pages|raw }}<br/>
 				<br />Posts: {{ post.author_posts_count }}<br />
 			</span>
 		</td>
-		<td valign="top">{{ post.content|raw }} </td></tr>
+		<td valign="top" style="word-break: break-all">{{ post.content|raw }} </td></tr>
 		<tr bgcolor="{{ getStyle(i) }}">
 			<td>
 				<span style="font-size: 10px">{{ post.date|date('d.m.y H:i:s') }}
