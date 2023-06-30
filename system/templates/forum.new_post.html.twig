@@ -54,7 +54,7 @@
 	</tr>
 	{% set i = 0 %}
 	{% for thread in threads %}
-	<tr bgcolor="{{ getStyle(i) }}"><td>{{ thread.name }}</td><td>{{ thread.post|raw }}</td></tr>
+	<tr bgcolor="{{ getStyle(i) }}"><td>{{ thread.name }}</td><td style="word-break: break-all">{{ thread.post|raw }}</td></tr>
 	{% set i = i + 1 %}
 	{% endfor %}
 </table>
