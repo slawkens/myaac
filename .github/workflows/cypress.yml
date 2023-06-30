@@ -1,9 +1,9 @@
 name: Cypress
 on:
   pull_request:
-    branches: [develop]
+    branches: [0.9]
   push:
-    branches: [develop]
+    branches: [0.9]
 
 jobs:
   cypress:
@@ -34,7 +34,7 @@ jobs:
         - name: Checkout MyAAC
           uses: actions/checkout@v3
           with:
-            ref: develop
+            ref: 0.9
 
         - name: Checkout TFS
           uses: actions/checkout@v3

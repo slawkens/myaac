@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.9.0-alpha - x.x.2023]
+## [0.9.0-alpha - 02.06.2023]
 
 Minimum PHP version for this release is 7.2.5.
 
@@ -36,7 +36,6 @@ Minimum PHP version for this release is 7.2.5.
 ### Changed
 * Composer is now used for external libraries like: Twig, PHPMailer, fast-route etc.
 * mail support is disabled on fresh install, can be manually enabled by user
-* don't show PHP errors on prod
 * disable add php pages in admin panel for security. Option to disable plugins upload
 * visitors counter shows now user browser, and also if its bot
 * changes in required and optional PHP extensions

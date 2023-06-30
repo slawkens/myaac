@@ -45,6 +45,8 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 			$errors[] = 'Character with name <b> ' . $name. ' </b> is not in your account.';
 		}else if ($player->getRank()->isLoaded()){
 			$errors[] = 'Character with name <b>'.$name.'</b> is already in guild. You must leave guild before you join other guild.';
+		} else if ($player->isDeleted()) {
+			$errors[] = "Character with name <b>$name</b> has been deleted.";
 		}
 	}
 }
@@ -72,7 +74,7 @@ else
 {
 	if(empty($errors)) {
 		$acc_invited = false;
-		$account_players = $account_logged->getPlayers();
+		$account_players = $account_logged->getPlayersList(false);
 		include(SYSTEM . 'libs/pot/InvitesDriver.php');
 		new InvitesDriver($guild);
 		$invited_list = $guild->listInvites();

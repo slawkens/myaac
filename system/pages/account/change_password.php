@@ -90,5 +90,3 @@ else
 		setSession('password', $new_password);
 	}
 }
-
-?>

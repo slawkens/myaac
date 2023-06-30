@@ -237,11 +237,13 @@
 				</td>
 				<!-- EQUIPMENT_END -->
 				{% endif %}
+
 				{{ hook(constant('HOOK_CHARACTERS_AFTER_EQUIPMENT')) }}
 			</tr>
 		</table>
 
 		{{ hook(constant('HOOK_CHARACTERS_BEFORE_DEATHS')) }}
+
 		{% if deaths|length > 0 %}
 		<!-- DEATHS -->
 		<br/>
