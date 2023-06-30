@@ -1,9 +1,9 @@
 name: Cypress
 on:
   pull_request:
-    branches: [0.9]
+    branches: [develop]
   push:
-    branches: [0.9]
+    branches: [develop]
 
 jobs:
   cypress:
