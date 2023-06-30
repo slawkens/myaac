@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.8.11 - 30.06.2023]
+
+### Added
+* new function from 0.9 - Cache::remember($key, $ttl, $callback)
+* new characters page hooks
+* line number & file to exception handler, to easier localize exceptions
+
+### Changed
+* rename to .htaccess.dist, causes some problems on default setup
+* removing unneccessary PHP closing tags to prevent potential issues (by @SRNT-GG)
+* display warning if hook file does not exist
+
+### Fixed
+* important: Not allow create char if limit is exceeded (by @anyeor) could have been used to spam database
+* deleted chars: cannot change comment, name, gender, cannot create guild, cannot be invited, cannot accept invite, cannot be passed leadership to
+* forum: quote and edit post buttons not being shown
+* twig exception thrown when player does not exist, on character change comment (thanks @anyeor)
+* BASE_DIR when accessing /tools
+* do not display warning if HTTP_ACCEPT_LANGUAGE is not set
+
 ## [0.8.10 - 18.05.2023]
 
 ### Changed
