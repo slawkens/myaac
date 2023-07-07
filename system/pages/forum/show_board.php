@@ -14,12 +14,14 @@ $links_to_pages = '';
 $section_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
 if($section_id == null || !isset($sections[$section_id])) {
-	echo "Board with this id does't exist.";
+	$errors[] = "Board with this id does't exist.";
+	displayErrorBoxWithBackButton($errors, getLink('forum'));
 	return;
 }
 
 if(!Forum::hasAccess($section_id)) {
-	echo "You don't have access to this board.";
+	$errors[] = "You don't have access to this board.";
+	displayErrorBoxWithBackButton($errors, getLink('forum'));
 	return;
 }
 
@@ -90,5 +92,3 @@ if(isset($last_threads[0]))
 }
 else
 	echo '<h3>No threads in this board.</h3>';
-
-?>

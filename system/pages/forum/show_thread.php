@@ -16,12 +16,14 @@ $_page = (int) (isset($_REQUEST['page']) ? $_REQUEST['page'] : 0);
 $thread_starter = $db->query("SELECT `players`.`name`, `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`section` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." AND `" . FORUM_TABLE_PREFIX . "forum`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`first_post` AND `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` LIMIT 1")->fetch();
 
 if(empty($thread_starter['name'])) {
-	echo 'Thread with this ID does not exits.';
+	$errors[] = 'Thread with this ID does not exists.';
+	displayErrorBoxWithBackButton($errors, getLink('forum'));
 	return;
 }
 
 if(!Forum::hasAccess($thread_starter['section'])) {
-	echo "You don't have access to view this thread.";
+	$errors[] = "You don't have access to view this thread.";
+	displayErrorBoxWithBackButton($errors, getLink('forum'));
 	return;
 }
 
