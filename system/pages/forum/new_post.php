@@ -28,17 +28,20 @@ if(Forum::canPost($account_logged))
 	$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
 	$thread_id = isset($_REQUEST['thread_id']) ? (int) $_REQUEST['thread_id'] : 0;
 	if($thread_id == 0) {
-		echo "Thread with this id doesn't exist.";
+		$errors[] = "Thread with this id doesn't exist.";
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
 		return;
 	}
 
-	$thread = $db->query("SELECT `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`id`, `" . FORUM_TABLE_PREFIX . "forum`.`section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." LIMIT 1")->fetch();
-	echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
+	$thread = $db->query("SELECT `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`id`, `" . FORUM_TABLE_PREFIX . "forum`.`section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".$thread_id." LIMIT 1")->fetch();
+
 	if(isset($thread['id']) && Forum::hasAccess($thread['section']))
 	{
+		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
+
 		$quote = isset($_REQUEST['quote']) ? (int) $_REQUEST['quote'] : NULL;
 		$text = isset($_REQUEST['text']) ? stripslashes(trim($_REQUEST['text'])) : NULL;
-		$char_id = (int) (isset($_REQUEST['char_id']) ? $_REQUEST['char_id'] : 0);
+		$char_id = (int) ($_REQUEST['char_id'] ?? 0);
 		$post_topic = isset($_REQUEST['topic']) ? stripslashes(trim($_REQUEST['topic'])) : '';
 		$smile = (isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0);
 		$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
@@ -86,8 +89,8 @@ if(Forum::canPost($account_logged))
 			if(count($errors) == 0)
 			{
 				$saved = true;
-				Forum::add_post($thread['id'], $thread['section'], $account_logged->getId(), (int) $char_id, $text, $post_topic, $smile, $html, time(), $_SERVER['REMOTE_ADDR']);
-				$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".(int) $thread_id);
+				Forum::add_post($thread['id'], $thread['section'], $account_logged->getId(), (int) $char_id, $text, $post_topic, $smile, $html);
+				$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".$thread_id);
 				$post_page = $db->query("SELECT COUNT(`" . FORUM_TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`post_date` <= ".time()." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id'])->fetch();
 				$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
 				header('Location: ' . getForumThreadLink($thread_id, $_page));
@@ -123,10 +126,14 @@ if(Forum::canPost($account_logged))
 			));
 		}
 	}
-	else
-		echo "Thread with ID " . $thread_id . " doesn't exist.";
+	else {
+		$errors[] = "Thread with ID " . $thread_id . " doesn't exist.";
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
-else
-	echo "Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";
+else {
+	$errors[] = "Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";
+	displayErrorBoxWithBackButton($errors, getLink('forum'));
+}
 
 $twig->display('forum.fullscreen.html.twig');

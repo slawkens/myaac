@@ -16,7 +16,8 @@ if(Forum::canPost($account_logged))
 {
 	$post_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : false;
 	if(!$post_id) {
-		echo 'Please enter post id.';
+		$errors[] = 'Please enter post id.';
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
 		return;
 	}
 
@@ -106,11 +107,17 @@ if(Forum::canPost($account_logged))
 				));
 			}
 		}
-		else
-			echo '<br/>You are not an author of this post.';
+		else {
+			$errors[] = 'You are not an author of this post.';
+			displayErrorBoxWithBackButton($errors, getLink('forum'));
+		}
 	}
-	else
-		echo "<br/>Post with ID " . $post_id . " doesn't exist.";
+	else {
+		$errors[] = "Post with ID $post_id doesn't exist.";
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
-else
-	echo "<br/>Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";
+else {
+	$errors[] = "Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";
+	displayErrorBoxWithBackButton($errors, getLink('forum'));
+}

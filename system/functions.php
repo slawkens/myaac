@@ -1580,6 +1580,14 @@ function getGuildLogoById($id)
 	return BASE_URL . GUILD_IMAGES_DIR . $logo;
 }
 
+function displayErrorBoxWithBackButton($errors, $action = null) {
+	global $twig;
+	$twig->display('error_box.html.twig', ['errors' => $errors]);
+	$twig->display('account.back_button.html.twig', [
+		'action' => $action ?: getLink('')
+	]);
+}
+
 // validator functions
 require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat/base.php';

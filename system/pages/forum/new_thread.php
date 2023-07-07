@@ -95,11 +95,17 @@ if(Forum::canPost($account_logged))
 				));
 			}
 		}
-		else
-			echo 'Board with ID ' . $board_id . ' doesn\'t exist.';
+		else {
+			$errors[] = "Board with ID $section_id doesn't exist.";
+			displayErrorBoxWithBackButton($errors, getLink('forum'));
+		}
 	}
-	else
-		echo 'Please enter section_id.';
+	else {
+		$errors[] = 'Please enter section_id.';
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
-else
-	echo 'Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
+else {
+	$errors[] = 'Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
+	displayErrorBoxWithBackButton($errors, getLink('forum'));
+}
