@@ -31,8 +31,12 @@ if(Forum::isModerator())
 			header('Location: ' . getForumThreadLink($post['first_post'], (int) $_page));
 		}
 	}
-	else
-		echo 'Post with ID ' . $id . ' does not exist.';
+	else {
+		$errors[] = 'Post with ID ' . $id . ' does not exist.';
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
-else
-	echo 'You are not logged in or you are not moderator.';
+else {
+	$errors[] = 'You are not logged in or you are not moderator.';
+displayErrorBoxWithBackButton($errors, getLink('forum'));
+}

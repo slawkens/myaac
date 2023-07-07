@@ -32,20 +32,13 @@ if(Forum::canPost($account_logged))
 			if (isset($_REQUEST['save'])) {
 				$errors = array();
 
-				$lenght = 0;
-				for ($i = 0; $i < strlen($post_topic); $i++) {
-					if (ord($post_topic[$i]) >= 33 && ord($post_topic[$i]) <= 126)
-						$lenght++;
-				}
-				if ($lenght < 1 || strlen($post_topic) > 60)
-					$errors[] = 'Too short or too long topic (short: ' . $lenght . ' long: ' . strlen($post_topic) . ' letters). Minimum 1 letter, maximum 60 letters.';
-				$lenght = 0;
-				for ($i = 0; $i < strlen($text); $i++) {
-					if (ord($text[$i]) >= 33 && ord($text[$i]) <= 126)
-						$lenght++;
-				}
-				if ($lenght < 1 || strlen($text) > 15000)
-					$errors[] = 'Too short or too long post (short: ' . $lenght . ' long: ' . strlen($text) . ' letters). Minimum 1 letter, maximum 15000 letters.';
+				$length = strlen($post_topic);
+				if ($length < 1 || $length > 60)
+					$errors[] = "Too short or too long topic (Length: $length letters). Minimum 1 letter, maximum 60 letters.";
+
+				$length = strlen($text);
+				if ($length < 1 || $length > 15000)
+					$errors[] = "Too short or too long post (Length: $length letters). Minimum 1 letter, maximum 15000 letters.";
 
 				if ($char_id == 0)
 					$errors[] = 'Please select a character.';
@@ -95,11 +88,17 @@ if(Forum::canPost($account_logged))
 				));
 			}
 		}
-		else
-			echo 'Board with ID ' . $board_id . ' doesn\'t exist.';
+		else {
+			$errors[] = "Board with ID $section_id doesn't exist.";
+			displayErrorBoxWithBackButton($errors, getLink('forum'));
+		}
 	}
-	else
-		echo 'Please enter section_id.';
+	else {
+		$errors[] = 'Please enter section_id.';
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
-else
-	echo 'Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
+else {
+	$errors[] = 'Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
+	displayErrorBoxWithBackButton($errors, getLink('forum'));
+}
