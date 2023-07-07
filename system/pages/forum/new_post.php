@@ -41,14 +41,10 @@ if(Forum::canPost($account_logged))
 		}
 		elseif(isset($_REQUEST['save']))
 		{
-			$lenght = 0;
-			for($i = 0; $i < strlen($text); $i++)
-			{
-				if(ord($text[$i]) >= 33 && ord($text[$i]) <= 126)
-					$lenght++;
-			}
-			if($lenght < 1 || strlen($text) > 15000)
-				$errors[] = 'Too short or too long post (short: '.$lenght.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
+			$length = strlen($text);
+			if($length < 1 || strlen($text) > 15000)
+				$errors[] = 'Too short or too long post (Length: $length letters). Minimum 1 letter, maximum 15000 letters.';
+
 			if($char_id == 0)
 				$errors[] = 'Please select a character.';
 
