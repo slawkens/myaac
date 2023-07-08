@@ -86,7 +86,7 @@ if(empty($guild_logo) || !file_exists(GUILD_IMAGES_DIR . $guild_logo))
 $description = $guild->getCustomField('description');
 $description_with_lines = str_replace(array("\r\n", "\n", "\r"), '<br />', $description, $count);
 if($count < $config['guild_description_lines_limit'])
-	$description = wordwrap(nl2br($description), 60, "<br />", true);
+	$description = nl2br($description);
 //$description = $description_with_lines;
 
 $guild_owner = $guild->getOwner();

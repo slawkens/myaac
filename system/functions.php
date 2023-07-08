@@ -747,10 +747,10 @@ function get_browser_languages()
 {
 	$ret = array();
 
-	$acceptLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-	if(!isset($acceptLang[0]))
+	if(empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		return $ret;
 
+	$acceptLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 	$languages = strtolower($acceptLang);
 	// $languages = 'pl,en-us;q=0.7,en;q=0.3 ';
 	// need to remove spaces from strings to avoid error
@@ -1217,7 +1217,7 @@ function getCustomPageInfo($page)
 
 	return null;
 }
-function getCustomPage($page, &$success)
+function getCustomPage($page, &$success): string
 {
 	global $db, $twig, $title, $ignore, $logged_access;
 
@@ -1603,6 +1603,14 @@ function getGuildLogoById($id)
 	}
 
 	return BASE_URL . GUILD_IMAGES_DIR . $logo;
+}
+
+function displayErrorBoxWithBackButton($errors, $action = null) {
+	global $twig;
+	$twig->display('error_box.html.twig', ['errors' => $errors]);
+	$twig->display('account.back_button.html.twig', [
+		'action' => $action ?: getLink('')
+	]);
 }
 
 // validator functions

@@ -7,6 +7,20 @@
  * @copyright 2023 MyAAC
  * @link      https://my-aac.org
  */
+
+if (class_exists(\Whoops\Run::class)) {
+	$whoops = new \Whoops\Run;
+	if(IS_CLI) {
+		$whoops->pushHandler(new \Whoops\Handler\PlainTextHandler);
+	}
+	else {
+		$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+	}
+
+	$whoops->register();
+	return;
+}
+
 require LIBS . 'SensitiveException.php';
 
 /**
@@ -29,6 +43,8 @@ function exception_handler($exception) {
 	}
 
 	$backtrace_formatted = nl2br($exception->getTraceAsString());
+
+	$message = $message . "<br/><br/>File: {$exception->getFile()}<br/>Line: {$exception->getLine()}";
 
 	// display basic error message without template
 	// template is missing, why? probably someone deleted templates dir, or it wasn't downloaded right

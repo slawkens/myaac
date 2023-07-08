@@ -1,0 +1,120 @@
+name: Cypress
+on:
+  pull_request:
+    branches: [develop]
+  push:
+    branches: [develop]
+
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: myaac
+          MYSQL_USER: myaac
+          MYSQL_PASSWORD: myaac
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: [ '7.4', '8.0', '8.1' ]
+    name: MyAAC on PHP ${{ matrix.php-versions }}
+    steps:
+        - name: 📌 MySQL Start & init & show db
+          run: |
+            sudo /etc/init.d/mysql start
+            mysql -e 'CREATE DATABASE myaac;' -uroot -proot
+            mysql -e "SHOW DATABASES" -uroot -proot
+
+        - name: Checkout MyAAC
+          uses: actions/checkout@v3
+          with:
+            ref: 0.9
+
+        - name: Checkout TFS
+          uses: actions/checkout@v3
+          with:
+            repository: otland/forgottenserver
+            ref: 1.4
+            path: tfs
+
+        - name: Import TFS Schema
+          run: |
+              mysql -uroot -proot myaac < tfs/schema.sql
+
+        - name: Rename config.lua
+          run: mv tfs/config.lua.dist tfs/config.lua
+
+        - name: Replace mysqlUser
+          uses: jacobtomlinson/gha-find-replace@v2
+          with:
+            find: 'mysqlUser = "forgottenserver"'
+            replace: 'mysqlUser = "root"'
+            regex: false
+            include: 'tfs/config.lua'
+
+        - name: Replace mysqlPass
+          uses: jacobtomlinson/gha-find-replace@v2
+          with:
+              find: 'mysqlPass = ""'
+              replace: 'mysqlPass = "root"'
+              regex: false
+              include: 'tfs/config.lua'
+
+        - name: Replace mysqlDatabase
+          uses: jacobtomlinson/gha-find-replace@v2
+          with:
+              find: 'mysqlDatabase = "forgottenserver"'
+              replace: 'mysqlDatabase = "myaac"'
+              regex: false
+              include: 'tfs/config.lua'
+
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: ${{ matrix.php-versions }}
+            extensions: mbstring, dom, fileinfo, mysql, json, xml, pdo, pdo_mysql
+
+        - name: Get composer cache directory
+          id: composer-cache
+          run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+        - name: Cache composer dependencies
+          uses: actions/cache@v3
+          with:
+            path: ${{ steps.composer-cache.outputs.dir }}
+            # Use composer.json for key, if composer.lock is not committed.
+            # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+            key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+            restore-keys: ${{ runner.os }}-composer-
+
+        - name: Install Composer dependencies
+          run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+        - name: Run PHP server
+          run: nohup php -S localhost:8080 > php.log 2>&1 &
+
+        - name: Cypress Run
+          uses: cypress-io/github-action@v5
+          env:
+            CYPRESS_URL: http://localhost:8080
+            CYPRESS_SERVER_PATH: /home/runner/work/myaac/myaac/tfs
+
+        - name: Save screenshots
+          uses: actions/upload-artifact@v3
+          if: always()
+          with:
+            name: cypress-screenshots
+            path: cypress/screenshots
+
+        - name: Upload Cypress Videos
+          uses: actions/upload-artifact@v3
+          if: always()
+          with:
+            name: cypress-videos
+            path: cypress/videos

@@ -4,7 +4,8 @@
 			<tbody>
 				<tr>
 					<td>
-						<input width="120" height="18" border="0" type="image" src="{{ template_path }}/images/global/buttons/sbutton_back.gif" alt="Back" name="Back" />
+						{% set button_name = 'Back' %}
+						{{ include('buttons.base.html.twig') }}
 					</td>
 				</tr>
 			</tbody>

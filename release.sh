@@ -22,7 +22,7 @@ if [ $1 = "prepare" ]; then
 	mkdir -p tmp
 
 	# get myaac from git archive
-	git archive --format zip --output tmp/myaac.zip master
+	git archive --format zip --output tmp/myaac.zip develop
 
 	cd tmp/ || exit
 
@@ -34,6 +34,11 @@ if [ $1 = "prepare" ]; then
 
 	unzip -q myaac.zip -d $dir
 	rm myaac.zip
+
+	cd $dir || exit
+
+	# dependencies
+	composer install --no-dev
 
 	echo "Now you can make changes to $dir. When you are ready, type 'release.sh pack'"
 	exit

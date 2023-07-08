@@ -18,6 +18,11 @@ if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
 
+if(config('env') === 'dev') {
+	require SYSTEM . 'exception.php';
+}
+
+date_default_timezone_set($config['date_timezone']);
 // take care of trailing slash at the end
 if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
 	$config['server_path'] .= '/';
@@ -114,7 +119,7 @@ if(!isset($foundValue)) {
 $config['data_path'] = $foundValue;
 unset($foundValue);
 
-// new config values for compability
+// new config values for compatibility
 if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hidden']) == 0) {
 	$config['highscores_ids_hidden'] = array(0);
 }

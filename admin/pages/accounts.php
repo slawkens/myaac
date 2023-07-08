@@ -10,7 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Account editor';
-$admin_base = BASE_URL . 'admin/?p=accounts';
+$admin_base = ADMIN_URL . '?p=accounts';
 $use_datatable = true;
 
 if ($config['account_country'])

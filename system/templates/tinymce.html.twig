@@ -11,12 +11,12 @@
 			toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | emoticons link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
 			resize: 'both',
 			image_advtab: true,
-			images_upload_url: '{{ constant('BASE_URL') }}admin/tools/upload_image.php',
+			images_upload_url: '{{ constant('ADMIN_URL') }}tools/upload_image.php',
 			images_upload_credentials: true,
-			// not really sure - do we need those 3 options below?
-			//relative_urls: false,
-			//remove_script_host: false,
-			//document_base_url: "{{ constant('BASE_URL') }}"
+
+			relative_urls: true,
+			document_base_url: "{{ constant('BASE_URL') }}",
+
 			setup: function (ed) {
 				ed.on('NodeChange', function (e) {
 					if (ed.getContent() !== lastContent) {

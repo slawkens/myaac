@@ -74,4 +74,3 @@ foreach($groupList as $id => $group)
 $twig->display('team.html.twig', array(
 	'groupmember' => $groupMember
 ));
-?>

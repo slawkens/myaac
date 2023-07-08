@@ -10,7 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Player editor';
-$player_base = BASE_URL . 'admin/?p=players';
+$player_base = ADMIN_URL . '?p=players';
 
 $use_datatable = true;
 require_once LIBS . 'forum.php';

@@ -9,6 +9,10 @@ vendor
 # npm
 node_modules
 
+# cypress
+cypress.env.json
+cypress/e2e/2-advanced-examples
+
 # created by release.sh
 releases
 tmp

@@ -26,13 +26,13 @@ $twig = new Twig_Environment($twig_loader, array(
 ));
 
 // load installation status
-$step = isset($_POST['step']) ? $_POST['step'] : 'welcome';
+$step = $_REQUEST['step'] ?? 'welcome';
 
 $install_status = array();
 if(file_exists(CACHE . 'install.txt')) {
 	$install_status = unserialize(file_get_contents(CACHE . 'install.txt'));
 
-	if(!isset($_POST['step'])) {
+	if(!isset($_REQUEST['step'])) {
 		$step = isset($install_status['step']) ? $install_status['step'] : '';
 	}
 }

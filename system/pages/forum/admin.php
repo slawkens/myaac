@@ -14,28 +14,32 @@ $canEdit = Forum::isModerator();
 if($canEdit) {
 	$groups = new OTS_Groups_List();
 
-	if(!empty($action))
-	{
+	if(!empty($action)) {
 		if($action == 'delete_board' || $action == 'edit_board' || $action == 'hide_board' || $action == 'moveup_board' || $action == 'movedown_board')
 			$id = $_REQUEST['id'];
 
-		if(isset($_REQUEST['access']))
+		if(isset($_REQUEST['access'])) {
 			$access = $_REQUEST['access'];
+		}
 
-		if(isset($_REQUEST['guild']))
+		if(isset($_REQUEST['guild'])) {
 			$guild = $_REQUEST['guild'];
+		}
 
-		if(isset($_REQUEST['name']))
+		if(isset($_REQUEST['name'])) {
 			$name = $_REQUEST['name'];
+		}
 
-		if(isset($_REQUEST['description']))
+		if(isset($_REQUEST['description'])) {
 			$description = stripslashes($_REQUEST['description']);
+		}
 
-		$errors = array();
+		$errors = [];
 
 		if($action == 'add_board') {
-			if(Forum::add_board($name, $description, $access, $guild, $errors))
+			if(Forum::add_board($name, $description, $access, $guild, $errors)) {
 				$action = $name = $description = '';
+			}
 		}
 		else if($action == 'delete_board') {
 			Forum::delete_board($id, $errors);

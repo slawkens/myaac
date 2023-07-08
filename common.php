@@ -26,7 +26,7 @@
 if (version_compare(phpversion(), '7.2.5', '<')) die('PHP version 7.2.5 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '0.9.0-dev';
+const MYAAC_VERSION = '0.10.0-dev';
 const DATABASE_VERSION = 36;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
@@ -138,11 +138,9 @@ if(!IS_CLI) {
 
 	define('SERVER_URL', 'http' . (isset($_SERVER['HTTPS'][0]) && strtolower($_SERVER['HTTPS']) === 'on' ? 's' : '') . '://' . $baseHost);
 	define('BASE_URL', SERVER_URL . BASE_DIR . '/');
-	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/admin/');
+	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/' . ADMIN_PANEL_FOLDER . '/');
 
 	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
-
-	require SYSTEM . 'exception.php';
 }
 
 $autoloadFile = VENDOR . 'autoload.php';

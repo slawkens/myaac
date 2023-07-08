@@ -61,6 +61,14 @@ if(isset($_POST['deletecharactersave']) && $_POST['deletecharactersave'] == 1) {
 		}
 	}
 
+	$ownerid = 'ownerid';
+	if($db->hasColumn('guilds', 'owner_id'))
+		$ownerid = 'owner_id';
+	$guild = $db->query('SELECT `name` FROM `guilds` WHERE `' . $ownerid . '` = '.$player->getId());
+	if($guild->rowCount() > 0) {
+		$errors[] = 'You cannot delete a character when they own a guild.';
+	}
+
 	if(empty($errors)) {
 		//dont show table "delete character" again
 		$show_form = false;

@@ -28,15 +28,22 @@ if($player_name != null) {
 		if ($player->isLoaded()) {
 			$player_account = $player->getAccount();
 			if ($account_logged->getId() == $player_account->getId()) {
+				if ($player->isDeleted()) {
+					$errors[] = 'This character is deleted.';
+					$player = null;
+				}
+
 				if (isset($_POST['changecommentsave']) && $_POST['changecommentsave'] == 1) {
-					$player->setCustomField("hidden", $new_hideacc);
-					$player->setCustomField("comment", $new_comment);
-					$account_logged->logAction('Changed comment for character <b>' . $player->getName() . '</b>.');
-					$twig->display('success.html.twig', array(
-						'title' => 'Character Information Changed',
-						'description' => 'The character information has been changed.'
-					));
-					$show_form = false;
+					if(empty($errors)) {
+						$player->setCustomField("hidden", $new_hideacc);
+						$player->setCustomField("comment", $new_comment);
+						$account_logged->logAction('Changed comment for character <b>' . $player->getName() . '</b>.');
+						$twig->display('success.html.twig', array(
+							'title' => 'Character Information Changed',
+							'description' => 'The character information has been changed.'
+						));
+						$show_form = false;
+					}
 				}
 			} else {
 				$errors[] = 'Error. Character <b>' . $player_name . '</b> is not on your account.';
@@ -57,7 +64,7 @@ if($show_form) {
 		$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
 
-	if(isset($player)) {
+	if(isset($player) && $player->isLoaded()) {
 		$twig->display('account.change_comment.html.twig', array(
 			'player' => $player
 		));

@@ -11,10 +11,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Forum';
 
-if(strtolower($config['forum']) != 'site')
-{
-	if($config['forum'] != '')
-	{
+if(strtolower($config['forum']) != 'site') {
+	if($config['forum'] != '') {
 		header('Location: ' . $config['forum']);
 		exit;
 	}
@@ -23,14 +21,14 @@ if(strtolower($config['forum']) != 'site')
 	return;
 }
 
-if(!$logged)
-	echo  'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum') . '">Log in</a> to post on the forum.<br /><br />';
+if(!$logged) {
+	echo 'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum') . '">Log in</a> to post on the forum.<br /><br />';
+}
 
 require_once LIBS . 'forum.php';
 
 $sections = array();
-foreach(getForumBoards() as $section)
-{
+foreach(getForumBoards() as $section) {
 	$sections[$section['id']] = array(
 		'id' => $section['id'],
 		'name' => $section['name'],

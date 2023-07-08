@@ -163,6 +163,7 @@ if(setting('core.backward_support')) {
 	$config['site'] = &$config;
 	$config['server'] = &$config['lua'];
 	$config['site']['shop_system'] = $config['gifts_system'];
+	$config['site']['gallery_page'] = true;
 
 	if(!isset($config['vdarkborder']))
 		$config['vdarkborder'] = '#505050';

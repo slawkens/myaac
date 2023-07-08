@@ -130,5 +130,3 @@ class OTS_MapCoords
 }
 
 /**#@-*/
-
-?>
