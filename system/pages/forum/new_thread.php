@@ -30,8 +30,6 @@ if(Forum::canPost($account_logged))
 			$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
 			$saved = false;
 			if (isset($_REQUEST['save'])) {
-				$errors = array();
-
 				$length = strlen($post_topic);
 				if ($length < 1 || $length > 60)
 					$errors[] = "Too short or too long topic (Length: $length letters). Minimum 1 letter, maximum 60 letters.";
