@@ -35,6 +35,12 @@
 			$('input[name="settings[{{ value.show_if[0] }}]"]').change(function () {
 				performChecks_{{ key }}(this);
 			});
+
+			{% if settings[value.show_if[0]]['type'] == 'boolean' %}
+			performChecks_{{ key }}('input[name="settings[{{ value.show_if[0] }}]"]:checked');
+			{% else %}
+			performChecks_{{ key }}('input[name="settings[{{ value.show_if[0] }}]"]');
+			{% endif %}
 		});
 
 		function performChecks_{{ key }}(el)
