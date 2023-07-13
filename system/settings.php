@@ -629,7 +629,7 @@ Sent by MyAAC,<br/>
 		'experience_table_columns' => [
 			'name' => 'Columns',
 			'type' => 'number',
-			'desc' => 'How many columns to display in experience table page. * experiencetable_rows, 5 = 500 (will show up to 500 level)',
+			'desc' => 'How many columns to display in experience table page, * rows, 5 = 500 (will show up to 500 level)',
 			'default' => 3,
 		],
 		'experience_table_rows' => [
