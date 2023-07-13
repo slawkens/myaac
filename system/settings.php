@@ -588,25 +588,25 @@ Sent by MyAAC,<br/>
 			'options' => ['normal table', 'in boxes, grouped by group id'],
 			'default' => 1,
 		],
-		'team_display_status' => [
+		'team_status' => [
 			'name' => 'Display Online Status',
 			'type' => 'boolean',
 			'desc' => '',
 			'default' => true,
 		],
-		'team_display_lastlogin' => [
+		'team_lastlogin' => [
 			'name' => 'Display Last Login',
 			'type' => 'boolean',
 			'desc' => '',
 			'default' => true,
 		],
-		'team_display_world' => [
+		'team_world' => [
 			'name' => 'Display World',
 			'type' => 'boolean',
 			'desc' => '',
 			'default' => false,
 		],
-		'team_display_outfit' => [
+		'team_outfit' => [
 			'name' => 'Display Outfit',
 			'type' => 'boolean',
 			'desc' => '',
