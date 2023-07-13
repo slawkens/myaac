@@ -53,6 +53,24 @@ class Settings implements ArrayAccess
 		}
 	}
 
+	public function save($pluginName, $settings) {
+		global $db;
+
+		$db->query('DELETE FROM `' . TABLE_PREFIX . 'settings` WHERE `name` = ' . $db->quote($pluginName) . ';');
+		foreach ($settings as $key => $value) {
+			try {
+				$db->insert(TABLE_PREFIX . 'settings', ['name' => $pluginName, 'key' => $key, 'value' => $value]);
+			} catch (PDOException $error) {
+				warning('Error while saving setting (' . $pluginName . ' - ' . $key . '): ' . $error->getMessage());
+			}
+		}
+
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$cache->delete('settings');
+		}
+	}
+
 	public function updateInDatabase($pluginName, $key, $value)
 	{
 		global $db;

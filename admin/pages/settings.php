@@ -45,19 +45,9 @@ if (!is_array($settingsFile)) {
 $settingsKeyName = ($plugin == 'core' ? $plugin : $settingsFile['key']);
 
 if (isset($_POST['save'])) {
-	$db->query('DELETE FROM `' . TABLE_PREFIX . 'settings` WHERE `name` = ' . $db->quote($settingsKeyName) . ';');
-	foreach ($_POST['settings'] as $key => $value) {
-		try {
-			$db->insert(TABLE_PREFIX . 'settings', ['name' => $settingsKeyName, 'key' => $key, 'value' => $value]);
-		} catch (PDOException $error) {
-			warning('Error while saving setting (' . $plugin . ' - ' . $key . '): ' . $error->getMessage());
-		}
-	}
+	$settings = Settings::getInstance();
 
-	$cache = Cache::getInstance();
-	if ($cache->enabled()) {
-		$cache->delete('settings');
-	}
+	$settings->save($settingsKeyName, $_POST['settings']);
 
 	success('Saved at ' . date('H:i'));
 }
