@@ -15,7 +15,6 @@ require __DIR__ . '/base.php';
 if(Forum::canPost($account_logged)) {
 	$players_from_account = $db->query('SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = '.(int) $account_logged->getId())->fetchAll();
 	$section_id = $_REQUEST['section_id'] ?? null;
-
 	if($section_id !== null) {
 		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($section_id) . '">' . $sections[$section_id]['name'] . '</a> >> <b>Post new thread</b><br />';
 
@@ -31,8 +30,6 @@ if(Forum::canPost($account_logged)) {
 			$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
 			$saved = false;
 			if (isset($_REQUEST['save'])) {
-				$errors = array();
-
 				$length = strlen($post_topic);
 				if ($length < 1 || $length > 60) {
 					$errors[] = "Too short or too long topic (Length: $length letters). Minimum 1 letter, maximum 60 letters.";
