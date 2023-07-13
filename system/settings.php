@@ -142,6 +142,11 @@ return [
 			'type' => 'textarea',
 			'desc' => 'Separated by comma ,',
 			'default' => 'None, Sorcerer, Druid, Paladin, Knight, Master Sorcerer, Elder Druid,Royal Paladin, Elite Knight',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
 		],
 		'client' => [
 			'name' => 'Client Version',
@@ -673,6 +678,11 @@ Sent by MyAAC,<br/>
 			'type' => 'text',
 			'desc' => 'This looktypes needs to have different margin-top and margin-left because they are wrong positioned',
 			'default' => '75, 126, 127, 266, 302',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
 		],
 		[
 			'type' => 'section',

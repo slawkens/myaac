@@ -4,6 +4,7 @@ $deprecatedConfig = [
 	'template',
 	'template_allow_change',
 	'vocations_amount',
+	'vocations',
 	'client',
 	'session_prefix',
 	'friendly_urls',
@@ -44,11 +45,3 @@ foreach ($deprecatedConfig as $key => $value) {
 	//var_dump($settings['core.'.$value]['value']);
 }
 
-$vocationsParsed = array_map(
-	function(string $value): string {
-		return trim($value);
-	},
-	explode(',', setting('core.vocations'))
-);
-
-config(['vocations', $vocationsParsed]);

@@ -434,6 +434,10 @@ class Settings implements ArrayAccess
 			}
 		}
 
+		if (isset($ret['callbacks']['get'])) {
+			$ret['value'] = $ret['callbacks']['get']($ret['value']);
+		}
+
 		$this->cache[$offset] = $ret;
 		return $ret;
 	}
