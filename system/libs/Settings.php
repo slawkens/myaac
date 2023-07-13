@@ -131,7 +131,7 @@ class Settings implements ArrayAccess
 						echo '</tbody></table>';
 					}
 					?>
-					<h3 style="text-align: center"><strong><?= $setting['title']; ?></strong></h3>
+					<h3 id="row_<?= $key ?>" style="text-align: center"><strong><?= $setting['title']; ?></strong></h3>
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
