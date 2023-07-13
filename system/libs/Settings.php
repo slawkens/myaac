@@ -12,7 +12,7 @@ class Settings implements ArrayAccess
 {
 	static private $instance;
 	private $settingsArray = [];
-	private $settings = [];
+	private $settingsDatabase = [];
 	private $cache = [];
 	private $valuesAsked = [];
 
@@ -34,7 +34,7 @@ class Settings implements ArrayAccess
 		if ($cache->enabled()) {
 			$tmp = '';
 			if ($cache->fetch('settings', $tmp)) {
-				$this->settings = unserialize($tmp);
+				$this->settingsDatabase = unserialize($tmp);
 				return;
 			}
 		}
@@ -44,12 +44,12 @@ class Settings implements ArrayAccess
 
 		if($settings->rowCount() > 0) {
 			foreach ($settings->fetchAll(PDO::FETCH_ASSOC) as $setting) {
-				$this->settings[$setting['name']][$setting['key']] = $setting['value'];
+				$this->settingsDatabase[$setting['name']][$setting['key']] = $setting['value'];
 			}
 		}
 
 		if ($cache->enabled()) {
-			$cache->set('settings', serialize($this->settings), 600);
+			$cache->set('settings', serialize($this->settingsDatabase), 600);
 		}
 	}
 
@@ -316,7 +316,7 @@ class Settings implements ArrayAccess
 			return;
 		}
 
-		$this->settings[$pluginKeyName][$key] = $value;
+		$this->settingsDatabase[$pluginKeyName][$key] = $value;
 		$this->updateInDatabase($pluginKeyName, $key, $value);
 	}
 
@@ -330,10 +330,10 @@ class Settings implements ArrayAccess
 
 		// remove specified plugin settings (all)
 		if(is_null($key)) {
-			return isset($this->settings[$offset]);
+			return isset($this->settingsDatabase[$offset]);
 		}
 
-		return isset($this->settings[$pluginKeyName][$key]);
+		return isset($this->settingsDatabase[$pluginKeyName][$key]);
 	}
 
 	#[\ReturnTypeWillChange]
@@ -351,13 +351,13 @@ class Settings implements ArrayAccess
 		// remove specified plugin settings (all)
 		if(!isset($key)) {
 			unset($this->settingsArray[$pluginKeyName]);
-			unset($this->settings[$pluginKeyName]);
+			unset($this->settingsDatabase[$pluginKeyName]);
 			$this->deleteFromDatabase($pluginKeyName);
 			return;
 		}
 
 		unset($this->settingsArray[$pluginKeyName][$key]);
-		unset($this->settings[$pluginKeyName][$key]);
+		unset($this->settingsDatabase[$pluginKeyName][$key]);
 		$this->deleteFromDatabase($pluginKeyName, $key);
 	}
 
@@ -392,8 +392,8 @@ class Settings implements ArrayAccess
 			$ret = $this->settingsArray[$pluginKeyName][$key];
 		}
 
-		if(isset($this->settings[$pluginKeyName][$key])) {
-			$value = $this->settings[$pluginKeyName][$key];
+		if(isset($this->settingsDatabase[$pluginKeyName][$key])) {
+			$value = $this->settingsDatabase[$pluginKeyName][$key];
 
 			$ret['value'] = $value;
 		}
