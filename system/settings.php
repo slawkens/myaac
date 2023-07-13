@@ -422,27 +422,39 @@ Sent by MyAAC,<br/>
 			'desc' => 'should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io',
 			'default' => true,
 		],
-		[
+		'account_mail_confirmed_reward' => [
 			'type' => 'section',
-			'title' => 'Reward Users for confirming their E-Mails. Works only with Account Mail Verify enabled'
+			'title' => 'Reward Users for confirming their E-Mails. Works only with Account Mail Verify enabled',
+			'show_if' => [
+				'account_mail_verify', '=', 'true'
+			],
 		],
 		'account_mail_confirmed_reward_premium_days' => [
 			'name' => 'Reward Premium Points',
 			'type' => 'number',
 			'desc' => '0 to disable',
 			'default' => 0,
+			'show_if' => [
+				'account_mail_verify', '=', 'true'
+			],
 		],
 		'account_mail_confirmed_reward_premium_points' => [
 			'name' => 'Reward Premium Points',
 			'type' => 'number',
 			'desc' => '0 to disable',
 			'default' => 0,
+			'show_if' => [
+				'account_mail_verify', '=', 'true'
+			],
 		],
 		'account_mail_confirmed_reward_coins' => [
 			'name' => 'Reward Premium Points',
 			'type' => 'number',
 			'desc' => '0 to disable. Works only with servers that supports coins',
 			'default' => 0,
+			'show_if' => [
+				'account_mail_verify', '=', 'true'
+			],
 		],
 		[
 			'type' => 'category',
