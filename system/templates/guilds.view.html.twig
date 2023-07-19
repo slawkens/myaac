@@ -272,7 +272,7 @@
 			</div>
 			<br/>
 
-			{{ hook('HOOK_GUILDS_AFTER_INVITED_CHARACTERS') }}
+			{{ hook('HOOK_GUILDS_AFTER_INVITED_CHARACTERS', { 'guild': guild, 'isLeader': isLeader }) }}
 
 			<div class="TableContainer">
 				<table class="Table3" cellpadding="0" cellspacing="0">
