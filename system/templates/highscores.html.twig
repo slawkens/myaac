@@ -48,7 +48,7 @@
 					{% endif %}
 				</tr>
 
-				{% if totalRows < 1 %}
+				{% if highscores|length < 1 %}
 				<tr bgcolor="{{ config('darkborder') }}"><td colspan="100%">No records yet.</td></tr>
 				{% else %}
 					{% set row = 0 %}
