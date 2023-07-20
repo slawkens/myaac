@@ -152,8 +152,8 @@ class Pages
 			$errors[] = 'Enable PHP is wrong.';
 			return false;
 		}
-		if ($php == 1 && !getBoolean(config('admin_pages_php_enable'))) {
-			$errors[] = 'PHP pages disabled on this server. To enable go to config.php and change admin_pages_php_enable to "yes".';
+		if ($php == 1 && !getBoolean(setting('core.admin_pages_php_enable'))) {
+			$errors[] = 'PHP pages disabled on this server. To enable go to Settings in Admin Panel and enable <strong>Enable PHP Pages</strong>.';
 			return false;
 		}
 		if(!isset($enable_tinymce) || ($enable_tinymce != 0 && $enable_tinymce != 1)) {

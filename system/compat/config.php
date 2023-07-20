@@ -1,6 +1,8 @@
 <?php
 
 $deprecatedConfig = [
+	'date_timezone',
+	'genders',
 	'template',
 	'template_allow_change',
 	'vocations_amount',
@@ -21,6 +23,8 @@ $deprecatedConfig = [
 	'outfit_images_wrong_looktypes',
 	'item_images_url',
 	'account_country',
+	'highscores_groups_hidden',
+	'highscores_ids_hidden',
 	'online_record',
 	'online_vocations',
 	'online_vocations_images',

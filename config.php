@@ -67,24 +67,6 @@ $config = array(
 	'send_mail_when_change_password' => true,	// send e-mail with new password when change password to account
 	'send_mail_when_generate_reckey' => true,	// send e-mail with rec key (key is displayed on page anyway when generate)
 
-	// you may need to adjust this for older tfs versions
-	// by removing Community Manager
-	'account_types' => [
-		'None',
-		'Normal',
-		'Tutor',
-		'Senior Tutor',
-		'Gamemaster',
-		'Community Manager',
-		'God',
-	],
-
-	// genders (aka sex)
-	'genders' => array(
-		0 => 'Female',
-		1 => 'Male'
-	),
-
 	// new character config
 	'character_samples' => array( // vocations, format: ID_of_vocation => 'Name of Character to copy'
 		//0 => 'Rook Sample',
@@ -117,21 +99,6 @@ $config = array(
 		0 => 'No town',
 		1 => 'Sample town'
 	),
-
-	// bans page
-	'bans_per_page' => 20,
-
-	// highscores page
-	'highscores_vocation_box' => true, // show 'Choose a vocation' box on the highscores (allowing peoples to sort highscores by vocation)?
-	'highscores_vocation' => true, // show player vocation under his nickname?
-	'highscores_frags' => false, // show 'Frags' tab (best fraggers on the server)?
-	'highscores_balance' => false, // show 'Balance' tab (richest players on the server)
-	'highscores_outfit' => true, // show player outfit?
-	'highscores_country_box' => false, // doesnt work yet! (not implemented)
-	'highscores_groups_hidden' => 3, // this group id and higher won't be shown on the highscores
-	'highscores_ids_hidden' => array(0), // this ids of players will be hidden on the highscores (should be ids of samples)
-	'highscores_per_page' => 100, // how many records per page on highscores
-	'highscores_cache_ttl' => 15, // how often to update highscores from database in minutes (default 15 minutes)
 
 	// characters page
 	'characters' => array( // what things to display on character view page (true/false in each option)
@@ -168,13 +135,6 @@ $config = array(
 
 	// last kills
 	'last_kills_limit' => 50, // max. number of deaths shown on the last kills page
-
-	// admin panel
-	'admin_plugins_manage_enable' => 'yes', // you can disable possibility to upload and uninstall plugins, for security
-	// enable support for plain php pages in admin panel, for security
-	// existing pages still will be working, so you need to delete them manually
-	'admin_pages_php_enable' => 'no',
-	'admin_panel_modules' => 'statistics,web_status,server_status,lastlogin,created,points,coins,balance',    // default - statistics,web_status,server_status,lastlogin,created,points,coins,balance
 
 	// other
 	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam

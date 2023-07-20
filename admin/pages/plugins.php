@@ -13,8 +13,8 @@ $use_datatable = true;
 
 require_once LIBS . 'plugins.php';
 
-if (!getBoolean(config('admin_plugins_manage_enable'))) {
-	warning('Plugin installation and management is disabled in config.<br/>If you wish to enable, go to config.php and change <b>admin_plugins_manage_enable</b> to "yes".');
+if (!getBoolean(setting('core.admin_plugins_manage_enable'))) {
+	warning('Plugin installation and management is disabled in Settings.<br/>If you wish to enable, go to Settings and enable <strong>Enable Plugins Manage</strong>.');
 }
 else {
 	$twig->display('admin.plugins.form.html.twig');

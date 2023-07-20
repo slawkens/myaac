@@ -25,6 +25,28 @@ return [
 			'desc' => 'Timezone of the server, more info at http://php.net/manual/en/timezones.php',
 			'default' => 'Europe/Warsaw',
 		],
+		'genders' => [
+			'name' => 'Genders (aka sex)',
+			'type' => 'textarea',
+			'desc' => 'Separated with comma',
+			'default' => 'Female, Male',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
+		],
+		'account_types' => [
+			'name' => 'Account Types',
+			'type' => 'textarea',
+			'desc' => 'Separated with comma, you may need to adjust this for older tfs versions by removing Community Manager',
+			'default' => 'None, Normal, Tutor, Senior Tutor, Gamemaster, Community Manager, God',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
+		],
 		[
 			'type' => 'section',
 			'title' => 'Template'
@@ -607,6 +629,77 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
+			'title' => 'Highscores Page',
+		],
+		'highscores_per_page' => [
+			'name' => 'Highscores per Page',
+			'type' => 'number',
+			'min' => 1,
+			'desc' => 'How many records per page on highscores',
+			'default' => 100,
+		],
+		'highscores_cache_ttl' => [
+			'name' => 'Highscores Cache TTL (in minutes)',
+			'type' => 'number',
+			'min' => 1,
+			'desc' => 'How often to update highscores from database in minutes (default 15 minutes). Too low may cause lags on website.',
+			'default' => 15,
+		],
+		'highscores_vocation_box' => [
+			'name' => 'Display Vocation Box',
+			'type' => 'boolean',
+			'desc' => 'show "Choose a vocation" box on the highscores (allowing peoples to sort highscores by vocation)?',
+			'default' => true,
+		],
+		'highscores_vocation' => [
+			'name' => 'Display Vocation',
+			'type' => 'boolean',
+			'desc' => 'Show player vocation under his nickname?',
+			'default' => true,
+		],
+		'highscores_frags' => [
+			'name' => 'Display Top Frags',
+			'type' => 'boolean',
+			'desc' => 'Show "Frags" tab (best fraggers on the server)?',
+			'default' => false,
+		],
+		'highscores_balance' => [
+			'name' => 'Display Balance',
+			'type' => 'boolean',
+			'desc' => 'Show "Balance" tab (richest players on the server)?',
+			'default' => false,
+		],
+		'highscores_outfit' => [
+			'name' => 'Display Player Outfit',
+			'type' => 'boolean',
+			'desc' => 'Show player outfit?',
+			'default' => true,
+		],
+		'highscores_country_box' => [ // not implemented yet
+			'name' => 'Display Country Box',
+			'type' => 'hidden',
+			'desc' => 'Show player outfit?',
+			'default' => false,
+		],
+		'highscores_groups_hidden' => [
+			'name' => 'Hidden Groups',
+			'type' => 'number',
+			'desc' => "This group id and higher won't be shown on highscores",
+			'default' => 3,
+		],
+		'highscores_ids_hidden' => [
+			'name' => 'Hidden IDs of players',
+			'type' => 'textarea',
+			'desc' => "this ids of players will be hidden on the highscores (should be ids of samples)",
+			'default' => '0',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
+		],
+		[
+			'type' => 'section',
 			'title' => 'Online Page'
 		],
 		'online_record' => [
@@ -685,10 +778,11 @@ Sent by MyAAC,<br/>
 			'title' => 'Bans Page'
 		],
 		'bans_per_page' => [
-			'name' => 'Display Players Record',
-			'type' => 'boolean',
+			'name' => 'Bans per Page',
+			'type' => 'number',
+			'min' => 1,
+			'default' => 20,
 			'desc' => '',
-			'default' => true,
 		],
 		[
 			'type' => 'section',
@@ -841,6 +935,37 @@ Sent by MyAAC,<br/>
 			'show_if' => [
 				'status_enabled', '=', 'true',
 			]
+		],
+		[
+			'type' => 'category',
+			'title' => 'Admin',
+		],
+		[
+			'type' => 'section',
+			'title' => 'Admin Panel'
+		],
+		'admin_plugins_manage_enable' => [
+			'name' => 'Enable Plugins Manage',
+			'type' => 'boolean',
+			'desc' => 'You can disable possibility to upload, enable/disable and uninstall plugins, for security',
+			'default' => true,
+		],
+		'admin_pages_php_enable' => [
+			'name' => 'Enable PHP Pages',
+			'type' => 'boolean',
+			'desc' => 'You can disable support for plain php pages in admin panel, for security.<br/>Existing pages still will be working, so you need to delete them manually',
+			'default' => false,
+		],
+		'admin_panel_modules' => [
+			'name' => 'Modules Enabled',
+			'type' => 'textarea',
+			'desc' => 'What modules will be shown on Admin Panel Dashboard page',
+			'default' => 'statistics,web_status,server_status,lastlogin,created,points,coins,balance',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
 		],
 	],
 ];

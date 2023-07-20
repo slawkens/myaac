@@ -239,14 +239,14 @@ class CreateCharacter
 		}
 
 		if($db->hasTable('player_skills')) {
-			for($i=0; $i<7; $i++) {
+			for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++) {
 				$value = 10;
 				if (config('use_character_sample_skills')) {
-					$value = $char_to_copy->getSkill($i);
+					$value = $char_to_copy->getSkill($skill);
 				}
-				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $i);
+				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $skill);
 				if($skillExists->rowCount() <= 0) {
-					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$i.', ' . $value . ', 0)');
+					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$skill.', ' . $value . ', 0)');
 				}
 			}
 		}

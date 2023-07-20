@@ -21,6 +21,7 @@ if(!$error) {
 	// user can disable when he wants
 	$content .= '$config[\'env\'] = \'prod\'; // dev or prod';
 	$content .= PHP_EOL;
+
 	foreach($_SESSION as $key => $value)
 	{
 		if(strpos($key, 'var_') !== false)
@@ -32,11 +33,7 @@ if(!$error) {
 					$value .= '/';
 			}
 
-			if($key === 'var_usage') {
-				$content .= '$config[\'anonymous_usage_statistics\'] = ' . ((int)$value == 1 ? 'true' : 'false') . ';';
-				$content .= PHP_EOL;
-			}
-			else if(!in_array($key, array('var_account', 'var_account_id', 'var_password', 'var_step', 'var_email', 'var_player_name'), true)) {
+			if(!in_array($key, ['var_usage', 'var_date_timezone', 'var_client', 'var_account', 'var_account_id', 'var_password', 'var_password_confirm', 'var_step', 'var_email', 'var_player_name'], true)) {
 				$content .= '$config[\'' . str_replace('var_', '', $key) . '\'] = \'' . $value . '\';';
 				$content .= PHP_EOL;
 			}
@@ -79,8 +76,6 @@ if(!$error) {
 					'message' => $locale['loading_spinner']
 				));
 
-				$content .= '$config[\'session_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
-				$content .= PHP_EOL;
 				$content .= '$config[\'cache_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
 
 				$saved = true;

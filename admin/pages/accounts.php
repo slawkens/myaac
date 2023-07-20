@@ -37,7 +37,7 @@ if ($config['account_country']) {
 		$countries[$code] = $c;
 }
 $web_acc = ACCOUNT_WEB_FLAGS;
-$acc_type = config('account_types');
+$acc_type = setting('core.account_types');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
