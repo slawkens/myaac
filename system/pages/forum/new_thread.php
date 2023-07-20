@@ -10,7 +10,10 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-require __DIR__ . '/base.php';
+$ret = require __DIR__ . '/base.php';
+if ($ret === false) {
+	return;
+}
 
 if(Forum::canPost($account_logged)) {
 	$players_from_account = $db->query('SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = '.(int) $account_logged->getId())->fetchAll();
@@ -67,8 +70,8 @@ if(Forum::canPost($account_logged)) {
 						$last_post = $query['post_date'];
 					}
 
-					if ($last_post + config('forum_post_interval') - time() > 0 && !Forum::isModerator())
-						$errors[] = 'You can post one time per ' . config('forum_post_interval') . ' seconds. Next post after ' . ($last_post + config('forum_post_interval') - time()) . ' second(s).';
+					if ($last_post + setting('core.forum_post_interval') - time() > 0 && !Forum::isModerator())
+						$errors[] = 'You can post one time per ' . setting('core.forum_post_interval') . ' seconds. Next post after ' . ($last_post + setting('core.forum_post_interval') - time()) . ' second(s).';
 				}
 
 				if (count($errors) == 0) {
@@ -113,6 +116,6 @@ if(Forum::canPost($account_logged)) {
 	}
 }
 else {
-	$errors[] = 'Your account is banned, deleted or you don\'t have any player with level '.$config['forum_level_required'].' on your account. You can\'t post.';
+	$errors[] = 'Your account is banned, deleted or you don\'t have any player with level '.setting('core.forum_level_required').' on your account. You can\'t post.';
 	displayErrorBoxWithBackButton($errors, getLink('forum'));
 }

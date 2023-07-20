@@ -10,7 +10,10 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-require __DIR__ . '/base.php';
+$ret = require __DIR__ . '/base.php';
+if ($ret === false) {
+	return;
+}
 
 if(!$logged) {
 	$extra_url = '';
@@ -81,8 +84,8 @@ if(Forum::canPost($account_logged)) {
 					$query = $query->fetch();
 					$last_post = $query['post_date'];
 				}
-				if($last_post+$config['forum_post_interval']-time() > 0 && !Forum::isModerator())
-					$errors[] = 'You can post one time per '.$config['forum_post_interval'].' seconds. Next post after '.($last_post+$config['forum_post_interval']-time()).' second(s).';
+				if($last_post+setting('core.forum_post_interval')-time() > 0 && !Forum::isModerator())
+					$errors[] = 'You can post one time per ' . setting('core.forum_post_interval') . ' seconds. Next post after '.($last_post + setting('core.forum_post_interval')-time()).' second(s).';
 			}
 
 			if(count($errors) == 0) {
@@ -90,7 +93,7 @@ if(Forum::canPost($account_logged)) {
 				Forum::add_post($thread['id'], $thread['section'], $account_logged->getId(), $char_id, $text, $post_topic, $smile, $html);
 				$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".$thread_id);
 				$post_page = $db->query("SELECT COUNT(`" . FORUM_TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`post_date` <= ".time()." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id'])->fetch();
-				$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
+				$_page = (int) ceil($post_page['posts_count'] / setting('core.forum_threads_per_page')) - 1;
 				header('Location: ' . getForumThreadLink($thread_id, $_page));
 				echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id, $_page) . '">GO BACK TO LAST THREAD</a>';
 			}
@@ -131,7 +134,7 @@ if(Forum::canPost($account_logged)) {
 	}
 }
 else {
-	$errors[] = "Your account is banned, deleted or you don't have any player with level " . config('forum_level_required') . " on your account. You can't post.";
+	$errors[] = "Your account is banned, deleted or you don't have any player with level " . setting('core.forum_level_required') . " on your account. You can't post.";
 	displayErrorBoxWithBackButton($errors, getLink('forum'));
 }
 

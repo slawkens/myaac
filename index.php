@@ -176,8 +176,9 @@ if(setting('core.backward_support')) {
 	$config['site']['serverinfo_page'] = true;
 	$config['site']['screenshot_page'] = true;
 
-	if($config['forum'] != '')
-		$config['forum_link'] = (strtolower($config['forum']) === 'site' ? getLink('forum') : $config['forum']);
+	$forumSetting = setting('core.forum');
+	if($forumSetting != '')
+		$config['forum_link'] = (strtolower($forumSetting) === 'site' ? getLink('forum') : $forumSetting);
 
 	foreach($status as $key => $value)
 		$config['status']['serverStatus_' . $key] = $value;

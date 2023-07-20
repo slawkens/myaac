@@ -169,15 +169,6 @@ $config = array(
 	// support/system
 	'bug_report' => true, // this configurable has no effect, its always enabled
 
-	// forum
-	'forum' => 'site', // link to the server forum, set to "site" if you want to use build in forum system, otherwise leave empty if you aren't going to use any forum
-	'forum_level_required' => 0, // level required to post, 0 to disable
-	'forum_post_interval' => 30, // in seconds
-	'forum_posts_per_page' => 20,
-	'forum_threads_per_page' => 20,
-	// uncomment to force use table for forum
-	//'forum_table_prefix' => 'z_', // what forum mysql table to use, z_ (for gesior old forum) or myaac_ (for myaac)
-
 	// last kills
 	'last_kills_limit' => 50, // max. number of deaths shown on the last kills page
 

@@ -10,7 +10,11 @@
  */
 defined('MYAAC') or exit;
 
-require __DIR__ . '/forum/base.php';
+$ret = require __DIR__ . '/forum/base.php';
+if ($ret === false) {
+	return;
+}
+
 require __DIR__ . '/forum/admin.php';
 
 $errors = [];

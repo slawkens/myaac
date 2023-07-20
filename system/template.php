@@ -111,12 +111,13 @@ $template['link_screenshots'] = getLink('gallery');
 $template['link_movies'] = getLink('videos');
 
 $template['link_gifts_history'] = getLink('gifts', 'history');
-if($config['forum'] != '')
+$forumSetting = setting('core.forum');
+if($forumSetting != '')
 {
-	if(strtolower($config['forum']) == 'site')
+	if(strtolower($forumSetting) == 'site')
 		$template['link_forum'] = "<a href='" . getLink('forum') . "'>";
 	else
-		$template['link_forum'] = "<a href='" . $config['forum'] . "' target='_blank'>";
+		$template['link_forum'] = "<a href='" . $forumSetting . "' target='_blank'>";
 }
 
 $twig->addGlobal('template_path', $template_path);

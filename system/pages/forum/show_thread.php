@@ -10,7 +10,10 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-require __DIR__ . '/base.php';
+$ret = require __DIR__ . '/base.php';
+if ($ret === false) {
+	return;
+}
 
 $links_to_pages = '';
 $thread_id = (int) $_REQUEST['id'];
@@ -30,14 +33,14 @@ if(!Forum::hasAccess($thread_starter['section'])) {
 }
 
 $posts_count = $db->query("SELECT COUNT(`" . FORUM_TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id)->fetch();
-for($i = 0; $i < $posts_count['posts_count'] / $config['forum_threads_per_page']; $i++) {
+for($i = 0; $i < $posts_count['posts_count'] / setting('core.forum_threads_per_page'); $i++) {
 	if($i != $_page)
 		$links_to_pages .= '<a href="' . getForumThreadLink($thread_id, $i) . '">'.($i + 1).'</a> ';
 	else
 		$links_to_pages .= '<b>'.($i + 1).' </b>';
 }
 
-$posts = $db->query("SELECT `players`.`id` as `player_id`, `" . FORUM_TABLE_PREFIX . "forum`.`id`,`" . FORUM_TABLE_PREFIX . "forum`.`first_post`, `" . FORUM_TABLE_PREFIX . "forum`.`section`,`" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`post_date` AS `date`, `" . FORUM_TABLE_PREFIX . "forum`.`post_smile`, `" . FORUM_TABLE_PREFIX . "forum`.`post_html`, `" . FORUM_TABLE_PREFIX . "forum`.`author_aid`, `" . FORUM_TABLE_PREFIX . "forum`.`author_guid`, `" . FORUM_TABLE_PREFIX . "forum`.`last_edit_aid`, `" . FORUM_TABLE_PREFIX . "forum`.`edit_date` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".$thread_id." ORDER BY `" . FORUM_TABLE_PREFIX . "forum`.`post_date` LIMIT ".$config['forum_posts_per_page']." OFFSET ".($_page * $config['forum_posts_per_page']))->fetchAll();
+$posts = $db->query("SELECT `players`.`id` as `player_id`, `" . FORUM_TABLE_PREFIX . "forum`.`id`,`" . FORUM_TABLE_PREFIX . "forum`.`first_post`, `" . FORUM_TABLE_PREFIX . "forum`.`section`,`" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`post_date` AS `date`, `" . FORUM_TABLE_PREFIX . "forum`.`post_smile`, `" . FORUM_TABLE_PREFIX . "forum`.`post_html`, `" . FORUM_TABLE_PREFIX . "forum`.`author_aid`, `" . FORUM_TABLE_PREFIX . "forum`.`author_guid`, `" . FORUM_TABLE_PREFIX . "forum`.`last_edit_aid`, `" . FORUM_TABLE_PREFIX . "forum`.`edit_date` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".$thread_id." ORDER BY `" . FORUM_TABLE_PREFIX . "forum`.`post_date` LIMIT " . setting('core.forum_posts_per_page') . " OFFSET ".($_page * setting('core.forum_posts_per_page')))->fetchAll();
 
 if(isset($posts[0]['player_id'])) {
 	$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `views`=`views`+1 WHERE `id` = ".(int) $thread_id);

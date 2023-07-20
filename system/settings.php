@@ -544,6 +544,69 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
+			'title' => 'Forum'
+		],
+		'forum' => [
+			'name' => 'Forum',
+			'type' => 'text',
+			'desc' => 'Do you want to use built-in forum feature? Enter <strong>"site"</strong> if you want to use built-in forum feature, if you want use custom forum - enter URL here, otherwise leave empty (to disable)',
+			'default' => 'site',
+		],
+		'forum_level_required' => [
+			'name' => 'Forum Level Required',
+			'type' => 'number',
+			'desc' => 'Level required to post on forum. 0 to disable',
+			'min' => 0,
+			'max' => 99999999999,
+			'default' => 0,
+			'show_if' => [
+				'forum', '=', 'site',
+			],
+		],
+		'forum_post_interval' => [
+			'name' => 'Forum Post Interval',
+			'type' => 'number',
+			'desc' => 'How often user can post on forum, in seconds',
+			'min' => 0,
+			'max' => 99999999999,
+			'default' => 30,
+			'show_if' => [
+				'forum', '=', 'site',
+			],
+		],
+		'forum_posts_per_page' => [
+			'name' => 'Forum Posts per Page',
+			'type' => 'number',
+			'desc' => 'How many posts per page',
+			'min' => 0,
+			'max' => 99999999999,
+			'default' => 20,
+			'show_if' => [
+				'forum', '=', 'site',
+			],
+		],
+		'forum_threads_per_page' => [
+			'name' => 'Forum Threads per Page',
+			'type' => 'number',
+			'desc' => 'How many threads per page',
+			'min' => 0,
+			'max' => 99999999999,
+			'default' => 20,
+			'show_if' => [
+				'forum', '=', 'site',
+			],
+		],
+		'forum_table_prefix' => [
+			'name' => 'Forum Table Prefix',
+			'type' => 'text',
+			'desc' => 'What forum mysql table to use, z_ (for gesior old forum) or myaac_ (for myaac)',
+			'default' => 'myaac_',
+			'show_if' => [
+				'forum', '=', 'site',
+			],
+		],
+		[
+			'type' => 'section',
 			'title' => 'Online Page'
 		],
 		'online_record' => [

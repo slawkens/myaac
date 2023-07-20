@@ -32,6 +32,7 @@ $deprecatedConfig = [
 	'team_display_world' => 'team_world',
 	'team_display_lastlogin' => 'team_lastlogin',
 	'multiworld',
+	'forum',
 ];
 
 foreach ($deprecatedConfig as $key => $value) {
