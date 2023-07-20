@@ -311,7 +311,6 @@ if(config('highscores_balance'))
 /** @var Twig\Environment $twig */
 $twig->display('highscores.html.twig', [
 	'highscores' => $highscores,
-	'totalRows' => $i - 1,
 	'list' => $list,
 	'skill' => $skill,
 	'skillName' => ($skill == SKILL_FRAGS ? 'Frags' : ($skill == SKILL_BALANCE ? 'Balance' : getSkillName($skill))),

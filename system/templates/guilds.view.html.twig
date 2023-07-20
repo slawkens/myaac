@@ -1,6 +1,7 @@
 <div class="Border_2">
 	<div class="Border_3">
 		<div class="BoxContent">
+			{{ hook('HOOK_GUILDS_BEFORE_GUILD_HEADER') }}
 			<table border="0" width="100%">
 				<tbody>
 				<tr>
@@ -16,7 +17,9 @@
 				</tr>
 				</tbody>
 			</table>
-			<br>
+			<br/>
+
+			{{ hook('HOOK_GUILDS_AFTER_GUILD_HEADER') }}
 
 			<table width="100%">
 				<tbody>
@@ -83,8 +86,10 @@
 				</tr>
 				</tbody>
 			</table>
+			<br/>
 
-			<br>
+			{{ hook('HOOK_GUILDS_AFTER_GUILD_INFORMATION') }}
+
 			<div class="TableContainer">
 				<div class="TableContainer">
 					<div class="CaptionContainer">
@@ -193,7 +198,9 @@
 					</tbody>
 				</table>
 			</div>
-			<br>
+			<br/>
+
+			{{ hook('HOOK_GUILDS_AFTER_GUILD_MEMBERS') }}
 
 			<div class="TableContainer">
 				<div class="CaptionContainer">
@@ -263,9 +270,9 @@
 					</tbody>
 				</table>
 			</div>
-			<br>
+			<br/>
 
-			{{ hook(constant('HOOK_GUILDS_AFTER_INVITED_CHARACTERS'), { 'guild': guild, 'isLeader': isLeader }) }}
+			{{ hook('HOOK_GUILDS_AFTER_INVITED_CHARACTERS', { 'guild': guild, 'isLeader': isLeader }) }}
 
 			<div class="TableContainer">
 				<table class="Table3" cellpadding="0" cellspacing="0">
