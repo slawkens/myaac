@@ -37,6 +37,10 @@ $deprecatedConfig = [
 	'team_display_lastlogin' => 'team_lastlogin',
 	'multiworld',
 	'forum',
+	'signature_enabled',
+	'signature_type',
+	'signature_cache_time',
+	'signature_browser_cache',
 ];
 
 foreach ($deprecatedConfig as $key => $value) {

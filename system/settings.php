@@ -806,6 +806,46 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
+			'title' => 'Signatures'
+		],
+		'signature_enabled' => [
+			'name' => 'Enable Signatures',
+			'type' => 'boolean',
+			'desc' => 'Signature is a small picture with character info and server to paste on forums etc. It can be viewed on characters page, when enabled.',
+			'default' => true,
+		],
+		'signature_type' => [
+			'name' => 'Signature Type',
+			'type' => 'options',
+			'options' => ['tibian' => 'tibian', 'mango' => 'mango', 'gesior' => 'gesior'],
+			'desc' => 'Signature engine to use',
+			'default' => 'tibian',
+			'show_if' => [
+				'signature_enabled', '=', 'true'
+			],
+		],
+		'signature_cache_time' => [
+			'name' => 'Signature Cache Time',
+			'type' => 'number',
+			'min' => 1,
+			'desc' => 'How long to store cached file (in minutes)',
+			'default' => 5,
+			'show_if' => [
+				'signature_enabled', '=', 'true',
+			],
+		],
+		'signature_browser_cache' => [
+			'name' => 'Signature Browser Cache Time',
+			'type' => 'number',
+			'min' => 1,
+			'desc' => 'How long to cache by browser (in minutes)',
+			'default' => 60,
+			'show_if' => [
+				'signature_enabled', '=', 'true',
+			],
+		],
+		[
+			'type' => 'section',
 			'title' => 'Item Images'
 		],
 		'item_images_url' => [

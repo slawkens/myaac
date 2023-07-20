@@ -47,13 +47,6 @@ $config = array(
 	'database_socket' => '', // set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)
 	'database_persistent' => false, // use database permanent connection (like server), may speed up your site
 
-	// multiworld system (only TFS 0.3)
-	'multiworld' => false, // use multiworld system?
-	'worlds' => array( // list of worlds
-		//'1' => 'Your World Name',
-		//'2' => 'Your Second World Name'
-	),
-
 	'account_mail_block_plus_sign' => true, // block email with '+' signs like test+box@gmail.com (help protect against spamming accounts)
 	'account_change_character_name' => false, // can user change their character name for premium points?
 	'account_change_character_name_points' => 30, // cost of name change
@@ -119,10 +112,6 @@ $config = array(
 		//'Some Quest' => 123,
 		//'Some Quest Two' => 456,
 	), // quests list (displayed in character view), name => storage
-	'signature_enabled' => true,
-	'signature_type' => 'tibian', // signature engine to use: tibian, mango, gesior
-	'signature_cache_time' => 5, // how long to store cached file (in minutes), default 5 minutes
-	'signature_browser_cache' => 60, // how long to cache by browser (in minutes), default 1 hour
 
 	// news page
 	'news_limit' => 5, // limit of news on the latest news page
