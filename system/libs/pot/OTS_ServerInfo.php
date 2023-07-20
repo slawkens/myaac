@@ -57,7 +57,7 @@ class OTS_ServerInfo
     private function send(OTS_Buffer $packet)
     {
         // connects to server
-        $socket = @fsockopen($this->server, $this->port, $error, $message, config('status_timeout'));
+        $socket = @fsockopen($this->server, $this->port, $error, $message, setting('core.status_timeout'));
 
         // if connected then checking statistics
         if($socket)

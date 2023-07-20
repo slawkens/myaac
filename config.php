@@ -166,22 +166,8 @@ $config = array(
 	// gifts/shop system
 	'gifts_system' => false,
 
-	// support/system
-	'bug_report' => true, // this configurable has no effect, its always enabled
-
 	// last kills
 	'last_kills_limit' => 50, // max. number of deaths shown on the last kills page
-
-	// status, took automatically from config file if empty
-	'status_enabled' => true, // you can disable status checking by settings this to "false"
-	'status_ip' => '',
-	'status_port' => '',
-	'status_timeout' => 2.0, // how long to wait for the initial response from the server (default: 2 seconds)
-
-	// how often to connect to server and update status (default: every minute)
-	// if your status timeout in config.lua is bigger, that it will be used instead
-	// when server is offline, it will be checked every time web refreshes, ignoring this variable
-	'status_interval' => 60,
 
 	// admin panel
 	'admin_plugins_manage_enable' => 'yes', // you can disable possibility to upload and uninstall plugins, for security

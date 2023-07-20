@@ -426,7 +426,9 @@ class Settings implements ArrayAccess
 					break;
 
 				case 'number':
-					$ret['value'] = (int)$ret['value'];
+					if (!isset($ret['step']) || (int)$ret['step'] == 1) {
+						$ret['value'] = (int)$ret['value'];
+					}
 					break;
 
 				default:

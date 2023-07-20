@@ -118,7 +118,7 @@ return [
 			'desc' => 'Time To Live for Visitors Counter. In other words - how long user will be marked as online. In Minutes',
 			'default' => 10,
 			'show_if' => [
-				'visitors_counter'=> '=', 'true'
+				'visitors_counter', '=', 'true'
 			]
 		],
 		'views_counter' => [
@@ -786,6 +786,61 @@ Sent by MyAAC,<br/>
 			'hidden' => true,
 			'type' => 'boolean',
 			'default' => false,
+		],
+		[
+			'type' => 'category',
+			'title' => 'Status',
+		],
+		[
+			'type' => 'section',
+			'title' => 'Server Status'
+		],
+		'status_enabled' => [
+			'name' => 'Enable Server Status',
+			'type' => 'boolean',
+			'desc' => 'You can disable status checking here',
+			'default' => true,
+		],
+		'status_ip' => [
+			'name' => 'Status IP',
+			'type' => 'text',
+			'desc' => 'Leave empty to get automatically from config',
+			'default' => '127.0.0.1',
+			'show_if' => [
+				'status_enabled', '=', 'true',
+			]
+		],
+		'status_port' => [
+			'name' => 'Status Port',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'Leave empty to get automatically from config',
+			'default' => 7171,
+			'show_if' => [
+				'status_enabled', '=', 'true',
+			]
+		],
+		'status_timeout' => [
+			'name' => 'Status Timeout',
+			'type' => 'number',
+			'min' => 0,
+			'max' => 10, // more than 10 seconds waiting makes no sense
+			'step' => 0.1,
+			'desc' => 'How long to wait for the initial response from the server',
+			'default' => 2.0,
+			'show_if' => [
+				'status_enabled', '=', 'true',
+			]
+		],
+		'status_interval' => [
+			'name' => 'Status Interval',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'How often to connect to server and update status.<br/>If your status timeout in config.lua is bigger, that it will be used instead. When server is offline, it will be checked every time web refreshes, ignoring this variable',
+			'default' => 60,
+			'show_if' => [
+				'status_enabled', '=', 'true',
+			]
 		],
 	],
 ];
