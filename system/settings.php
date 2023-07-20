@@ -566,6 +566,36 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
+			'title' => 'News Page',
+		],
+		'news_author' => [
+			'name' => 'News Author',
+			'type' => 'boolean',
+			'desc' => 'Show author of the news',
+			'default' => true,
+		],
+		'news_limit' => [
+			'name' => 'News Limit',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'Limit of news on the latest news page (0 to disable)',
+			'default' => 5,
+		],
+		'news_ticker_limit' => [
+			'name' => 'News Ticker Limit',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'Limit of news in tickers (mini news) (0 to disable)',
+			'default' => 5,
+		],
+		'news_date_format' => [
+			'name' => 'News Date Format',
+			'type' => 'text',
+			'desc' => 'Check php manual date() function for more info about this',
+			'default' => 'j.n.Y',
+		],
+		[
+			'type' => 'section',
 			'title' => 'Forum'
 		],
 		'forum' => [

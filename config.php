@@ -113,12 +113,6 @@ $config = array(
 		//'Some Quest Two' => 456,
 	), // quests list (displayed in character view), name => storage
 
-	// news page
-	'news_limit' => 5, // limit of news on the latest news page
-	'news_ticker_limit' => 5, // limit of news in tickers (mini news) (0 to disable)
-	'news_date_format' => 'j.n.Y', // check php manual date() function for more info about this
-	'news_author' => true, // show author of the news
-
 	// gifts/shop system
 	'gifts_system' => false,
 
