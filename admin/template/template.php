@@ -68,7 +68,7 @@
 							if (!$has_child) { ?>
 								<li class="nav-item">
 									<a class="nav-link<?php echo(strpos($menu['link'], $page) !== false ? ' active' : '') ?>" href="?p=<?php echo $menu['link'] ?>">
-										<i class="nav-icon fas fa-<?php echo(isset($menu['icon']) ? $menu['icon'] : 'link') ?>"></i>
+										<i class="nav-icon fas fa-<?php echo($menu['icon'] ?? 'link') ?>"></i>
 										<p><?php echo $menu['name'] ?></p>
 									</a>
 								</li>
@@ -76,9 +76,9 @@
 							} else if ($has_child) {
 								$used_menu = null;
 								$nav_construct = '';
-								foreach ($menu['link'] as $category => $sub_menu) {
+								foreach ($menu['link'] as $sub_category => $sub_menu) {
 									$nav_construct .= '<li class="nav-item"><a href="?p=' . $sub_menu['link'] . '" class="nav-link';
-									if ($page == $sub_menu['link']) {
+									if ($_SERVER['QUERY_STRING'] == 'p=' . $sub_menu['link']) {
 										$nav_construct .= ' active';
 										$used_menu = true;
 									}
