@@ -3,8 +3,12 @@
 /**
  * Possible types:
  * - boolean - true/false
- * - text - string
- * - options - comma separated list of options
+ * - text/number/email/password
+ * - textarea - longer string
+ * - options - array of options
+ *
+ * Additional options
+ *  - for number: min, max, step
  */
 return [
 	'name' => 'MyAAC',
