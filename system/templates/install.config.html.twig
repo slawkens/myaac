@@ -21,7 +21,7 @@
 		<label for="vars_date_timezone">{{ locale.step_config_timezone }}</label>
 		<select class="form-control" name="vars[date_timezone]" id="vars_date_timezone">
 			{% for timezone in timezones %}
-			<option value="{{ timezone }}"{% if (session['var_date_timezone'] is not null and session['var_date_timezone'] == timezone) or (session['var_date_timezone'] is null and timezone == 'Europe/Berlin') %} selected{% endif %}>{{ timezone }}</option>
+			<option value="{{ timezone }}"{% if (session['var_date_timezone'] is not null and session['var_date_timezone'] == timezone) or (session['var_date_timezone'] is null and timezone == 'Europe/Warsaw') %} selected{% endif %}>{{ timezone }}</option>
 			{% endfor %}
 		</select>
 		<small class="form-text text-muted">{{ locale.step_config_timezone_desc }}</small>
