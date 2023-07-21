@@ -45,6 +45,7 @@ $deprecatedConfig = [
 	'signature_type',
 	'signature_cache_time',
 	'signature_browser_cache',
+	'gifts_system',
 ];
 
 foreach ($deprecatedConfig as $key => $value) {

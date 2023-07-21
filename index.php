@@ -56,22 +56,6 @@ if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|zip|rar|g
 	exit;
 }
 
-if(file_exists(BASE . 'config.local.php')) {
-	require_once BASE . 'config.local.php';
-}
-
-ini_set('log_errors', 1);
-if(config('env') === 'dev') {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-}
-else {
-	ini_set('display_errors', 0);
-	ini_set('display_startup_errors', 0);
-	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
-}
-
 if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE . 'install'))
 {
 	header('Location: ' . BASE_URL . 'install/');
@@ -162,7 +146,7 @@ if(setting('core.backward_support')) {
 
 	$config['site'] = &$config;
 	$config['server'] = &$config['lua'];
-	$config['site']['shop_system'] = $config['gifts_system'];
+	$config['site']['shop_system'] = setting('core.gifts_system');
 	$config['site']['gallery_page'] = true;
 
 	if(!isset($config['vdarkborder']))

@@ -9,7 +9,11 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-if(!isset($config['database_user'][0], $config['database_password'][0], $config['database_name'][0]))
+if (!isset($config['database_overwrite'])) {
+	$config['database_overwrite'] = false;
+}
+
+if(!$config['database_overwrite'] && !isset($config['database_user'][0], $config['database_password'][0], $config['database_name'][0]))
 {
 	if(isset($config['lua']['sqlType'])) {// tfs 0.3
 		if(isset($config['lua']['mysqlHost'])) {// tfs 0.2

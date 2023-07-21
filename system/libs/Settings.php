@@ -53,11 +53,22 @@ class Settings implements ArrayAccess
 		}
 	}
 
-	public function save($pluginName, $settings) {
+	public function save($pluginName, $values) {
 		global $db;
 
+		if (!isset($this->settingsFile[$pluginName])) {
+			throw new RuntimeException('Error on save settings: plugin does not exist');
+		}
+
+		$settings = $this->settingsFile[$pluginName];
+		if (isset($settings['callbacks']['beforeSave'])) {
+			if (!$settings['callbacks']['beforeSave']($settings, $values)) {
+				return false;
+			}
+		}
+
 		$db->query('DELETE FROM `' . TABLE_PREFIX . 'settings` WHERE `name` = ' . $db->quote($pluginName) . ';');
-		foreach ($settings as $key => $value) {
+		foreach ($values as $key => $value) {
 			try {
 				$db->insert(TABLE_PREFIX . 'settings', ['name' => $pluginName, 'key' => $key, 'value' => $value]);
 			} catch (PDOException $error) {
@@ -69,6 +80,8 @@ class Settings implements ArrayAccess
 		if ($cache->enabled()) {
 			$cache->delete('settings');
 		}
+
+		return true;
 	}
 
 	public function updateInDatabase($pluginName, $key, $value)
@@ -100,6 +113,18 @@ class Settings implements ArrayAccess
 		if($query->rowCount() > 0) {
 			foreach($query->fetchAll(PDO::FETCH_ASSOC) as $value) {
 				$settingsDb[$value['key']] = $value['value'];
+			}
+		}
+
+		$config = [];
+		require BASE . 'config.local.php';
+
+		foreach ($config as $key => $value) {
+			if (is_bool($value)) {
+				$settingsDb[$key] = $value ? 'true' : 'false';
+			}
+			else {
+				$settingsDb[$key] = (string)$value;
 			}
 		}
 
@@ -261,7 +286,7 @@ class Settings implements ArrayAccess
 
 					echo '<select class="form-control" name="settings[' . $key . ']" id="' . $key . '">';
 					foreach ($setting['options'] as $value => $option) {
-						$compareTo = (isset($settingsDb[$key]) ? $settingsDb[$key] : (isset($setting['default']) ? $setting['default'] : ''));
+						$compareTo = ($settingsDb[$key] ?? ($setting['default'] ?? ''));
 						if($value === 'true') {
 							$selected = $compareTo === true;
 						}
@@ -283,9 +308,18 @@ class Settings implements ArrayAccess
 						<td>
 							<div class="well">
 								<?php
-								echo $setting['desc'];
+								echo ($setting['desc'] ?? '');
 								echo '<br/>';
 								echo '<strong>Default:</strong> ';
+								if (empty($setting['default'])) {
+									if ($setting['type'] === 'boolean') {
+										$setting['default'] = true;
+									}
+									else {
+										$setting['default'] = '';
+									}
+								}
+
 								if ($setting['type'] === 'boolean') {
 									echo ($setting['default'] ? 'Yes' : 'No');
 								}
@@ -293,7 +327,9 @@ class Settings implements ArrayAccess
 									echo $setting['default'];
 								}
 								else if ($setting['type'] === 'options') {
-									echo $setting['options'][$setting['default']];
+									if (!empty($setting['default'])) {
+										echo $setting['options'][$setting['default']];
+									}
 								}
 								?>
 							</div>
@@ -374,7 +410,7 @@ class Settings implements ArrayAccess
 			return;
 		}
 
-		unset($this->settingsFile[$pluginKeyName][$key]);
+		unset($this->settingsFile[$pluginKeyName]['settings'][$key]);
 		unset($this->settingsDatabase[$pluginKeyName][$key]);
 		$this->deleteFromDatabase($pluginKeyName, $key);
 	}
@@ -402,12 +438,12 @@ class Settings implements ArrayAccess
 
 		// return specified plugin settings (all)
 		if(!isset($key)) {
-			return $this->settingsFile[$pluginKeyName];
+			return $this->settingsFile[$pluginKeyName]['settings'];
 		}
 
 		$ret = [];
-		if(isset($this->settingsFile[$pluginKeyName][$key])) {
-			$ret = $this->settingsFile[$pluginKeyName][$key];
+		if(isset($this->settingsFile[$pluginKeyName]['settings'][$key])) {
+			$ret = $this->settingsFile[$pluginKeyName]['settings'][$key];
 		}
 
 		if(isset($this->settingsDatabase[$pluginKeyName][$key])) {
@@ -416,7 +452,7 @@ class Settings implements ArrayAccess
 			$ret['value'] = $value;
 		}
 		else {
-			$ret['value'] = $this->settingsFile[$pluginKeyName][$key]['default'];
+			$ret['value'] = $this->settingsFile[$pluginKeyName]['settings'][$key]['default'];
 		}
 
 		if(isset($ret['type'])) {
@@ -485,8 +521,67 @@ class Settings implements ArrayAccess
 				throw new \RuntimeException('Failed to load settings file for plugin: ' . $pluginKeyName);
 			}
 
-			$tmp = require $settingsFilePath;
-			$this->settingsFile[$pluginKeyName] = $tmp['settings'];
+			$this->settingsFile[$pluginKeyName] = require $settingsFilePath;
 		}
+	}
+
+	public static function saveConfig($config, $filename, &$content = '')
+	{
+		$content = "<?php" . PHP_EOL .
+			"\$config['installed'] = true;" . PHP_EOL;
+
+		foreach ($config as $key => $value) {
+			$content .= "\$config['$key'] = ";
+			$content .= var_export($value, true);
+			$content .= ';' . PHP_EOL;
+		}
+
+		$success = file_put_contents($filename, $content);
+
+		// we saved new config.php, need to revalidate cache (only if opcache is enabled)
+		if (function_exists('opcache_invalidate')) {
+			opcache_invalidate($filename);
+		}
+
+		return $success;
+	}
+
+	public static function testDatabaseConnection($config): bool
+	{
+		$user = null;
+		$password = null;
+		$dns = [];
+
+		if( isset($config['database_name']) ) {
+			$dns[] = 'dbname=' . $config['database_name'];
+		}
+
+		if( isset($config['database_user']) ) {
+			$user = $config['database_user'];
+		}
+
+		if( isset($config['database_password']) ) {
+			$password = $config['database_password'];
+		}
+
+		if( isset($config['database_host']) ) {
+			$dns[] = 'host=' . $config['database_host'];
+		}
+
+		if( isset($config['database_port']) ) {
+			$dns[] = 'port=' . $config['database_port'];
+		}
+
+		try {
+			$connectionTest = new PDO('mysql:' . implode(';', $dns), $user, $password);
+			$connectionTest->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		}
+		catch(PDOException $error) {
+			error('MySQL connection failed. Settings has been reverted.');
+			error($error->getMessage());
+			return false;
+		}
+
+		return true;
 	}
 }

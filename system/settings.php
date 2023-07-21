@@ -18,6 +18,47 @@ return [
 			'type' => 'section',
 			'title' => 'General'
 		],
+		'env' => [
+			'name' => 'App Environment',
+			'type' => 'options',
+			'options' => ['prod' => 'Production', 'dev' => 'Development'],
+			'desc' => 'if you use this script on your live server - set production<br/>
+						* if you want to test and debug the script locally, or develop plugins, set to development<br/>
+						* WARNING: on "development" cache is disabled, so site will be significantly slower !!!<br/>
+						* WARNING2: on "development" all PHP errors/warnings are displayed<br/>
+						* Recommended: "production" cause of speed (page load time is better)',
+			'default' => 'prod',
+			'is_config' => true,
+		],
+		'server_path' => [
+			'name' => 'Server Path',
+			'type' => 'text',
+			'desc' => 'Path to the server directory (same directory where config file is located)',
+			'default' => '',
+			'is_config' => true,
+		],
+		'gzip_output' => [
+			'name' => 'gzip Output',
+			'type' => 'boolean',
+			'desc' => 'gzip page content before sending it to the browser, uses less bandwidth but more cpu cycles',
+			'default' => false,
+			'is_config' => true,
+		],
+		'cache_engine' => [
+			'name' => 'Cache Engine',
+			'type' => 'options',
+			'options' => ['auto' => 'Auto', 'file' => 'Files', 'apc' => 'APC', 'apcu' => 'APCu', 'eaccelerator' => 'eAccelerator', 'disable' => 'Disable'],
+			'desc' => 'Auto is most reasonable. It will detect the best cache engine',
+			'default' => 'auto',
+			'is_config' => true,
+		],
+		'cache_prefix' => [
+			'name' => 'Cache Prefix',
+			'type' => 'text',
+			'desc' => 'Have to be unique if running more MyAAC instances on the same server (except file system cache)',
+			'default' => 'myaac_' . generateRandomString(8, true, false, true),
+			'is_config' => true,
+		],
 		'date_timezone' => [
 			'name' => 'Date Timezone',
 			'type' => 'options',
@@ -46,6 +87,82 @@ return [
 					return array_map('trim', explode(',', $value));
 				},
 			],
+		],
+		[
+			'type' => 'section',
+			'title' => 'Database',
+		],
+		'database_overwrite' => [
+			'name' => 'Database Manual',
+			'type' => 'boolean',
+			'desc' => 'Manual database configuration. Enable if you want to manually enter database details. If set to no - it will get from config.lua',
+			'default' => false,
+			'is_config' => true,
+		],
+		'database_host' => [
+			'name' => 'Database Host',
+			'type' => 'text',
+			'default' => '127.0.0.1',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_port' => [
+			'name' => 'Database Port',
+			'type' => 'number',
+			'default' => 3306,
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_user' => [
+			'name' => 'Database User',
+			'type' => 'text',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_password' => [
+			'name' => 'Database Password',
+			'type' => 'text',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_name' => [
+			'name' => 'Database Name',
+			'type' => 'text',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_socket' => [
+			'name' => 'Database Socket',
+			'desc' => 'Set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)',
+			'type' => 'text',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_log' => [
+			'name' => 'Database Log',
+			'desc' => 'Should database queries be logged and saved into system/logs/database.log?',
+			'type' => 'boolean',
+			'default' => false,
+			'is_config' => true,
+		],
+		'database_persistent' => [
+			'name' => 'Database Persistent Connection',
+			'desc' => 'Use database permanent connection (like server), may speed up your site',
+			'type' => 'boolean',
+			'default' => false,
+			'is_config' => true,
 		],
 		[
 			'type' => 'section',
@@ -816,6 +933,16 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
+			'title' => 'Gifts/shop system'
+		],
+		'gifts_system' => [
+			'name' => 'Enable gifts system',
+			'desc' => 'Plugin needs to be installed',
+			'type' => 'boolean',
+			'default' => false,
+		],
+		[
+			'type' => 'section',
 			'title' => 'Experience Table Page'
 		],
 		'experience_table_columns' => [
@@ -1038,4 +1165,62 @@ Sent by MyAAC,<br/>
 			],
 		],
 	],
+	'callbacks' => [
+		'beforeSave' => function(&$settings, &$values) {
+			global $config;
+
+			$configToSave = [];
+
+			$server_path = '';
+			$database = [];
+			foreach ($settings['settings'] as $key => $value) {
+				if (isset($value['is_config']) && getBoolean($value['is_config'])) {
+					if ($value['type'] === 'boolean') {
+						$values[$key] = ($values[$key] === 'true');
+					}
+					elseif ($value['type'] === 'number') {
+						$values[$key] = (int)$values[$key];
+					}
+					//elseif ($value['type'] === 'options') {
+					//
+					//}
+
+					$configToSave[$key] = $values[$key];
+
+					if ($key == 'server_path') {
+						$server_path = $values[$key];
+					}
+					elseif (strpos($key, 'database_') !== false) {
+						$database[$key] = $values[$key];
+					}
+
+					unset($settings[$key]);
+					unset($values[$key]);
+				}
+			}
+
+			if($server_path[strlen($server_path) - 1] != '/')
+				$server_path .= '/';
+
+			// test config.lua existence
+			// if fail - revert the setting and inform the user
+			if (!file_exists($server_path . 'config.lua')) {
+				error('Server Path is invalid - cannot find config.lua in the directory. Setting have been reverted.');
+				$configToSave['server_path'] = $config['server_path'];
+			}
+
+			// test database connection
+			// if fail - revert the setting and inform the user
+			if ($database['database_overwrite'] && !Settings::testDatabaseConnection($database)) {
+				foreach ($database as $key => $value) {
+					if (!in_array($key, ['database_log', 'database_persistent'])) { // ignore these two
+						$configToSave[$key] = $config[$key];
+					}
+				}
+			}
+
+			return Settings::saveConfig($configToSave, BASE . 'config.local.php');
+		},
+	],
 ];
+

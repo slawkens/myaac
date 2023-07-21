@@ -11,11 +11,11 @@ ini_set('max_execution_time', 300);
 ob_implicit_flush();
 ob_end_flush();
 header('X-Accel-Buffering: no');
-
+/*
 if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['saved'])) {
 	warning($locale['already_installed']);
 	return;
-}
+}*/
 
 require SYSTEM . 'init.php';
 

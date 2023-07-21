@@ -143,6 +143,23 @@ if(!IS_CLI) {
 	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
 }
 
+require SYSTEM . 'config.php';
+if (file_exists(BASE . 'config.local.php')) {
+	require BASE . 'config.local.php';
+}
+
+ini_set('log_errors', 1);
+if(@$config['env'] === 'dev') {
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
+}
+else {
+	ini_set('display_errors', 0);
+	ini_set('display_startup_errors', 0);
+	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+}
+
 $autoloadFile = VENDOR . 'autoload.php';
 if (!is_file($autoloadFile)) {
 	throw new RuntimeException('The vendor folder is missing. Please download Composer: <a href="https://getcomposer.org/download">https://getcomposer.org/download</a>, install it and execute in the main MyAAC directory this command: <b>composer install</b>. Or download MyAAC from <a href="https://github.com/slawkens/myaac/releases">GitHub releases</a>, which includes Vendor folder.');

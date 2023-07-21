@@ -12,9 +12,7 @@ require SYSTEM . 'functions.php';
 require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 require SYSTEM . 'clients.conf.php';
-
-if(file_exists(BASE . 'config.local.php'))
-	require BASE . 'config.local.php';
+require LIBS . 'settings.php';
 
 // ignore undefined index from Twig autoloader
 $config['env'] = 'prod';
