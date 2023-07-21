@@ -76,9 +76,7 @@ if(!$error) {
 				$saved = Settings::saveConfig($configToSave, BASE . 'config.local.php', $content);
 				if($saved) {
 					success($locale['step_database_config_saved']);
-					if(!$error) {
-						$_SESSION['saved'] = true;
-					}
+					$_SESSION['saved'] = true;
 				}
 				else {
 					$_SESSION['config_content'] = $content;
