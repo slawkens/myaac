@@ -68,7 +68,7 @@
 							if (!$has_child) { ?>
 								<li class="nav-item">
 									<a class="nav-link<?php echo(strpos($menu['link'], $page) !== false ? ' active' : '') ?>" href="?p=<?php echo $menu['link'] ?>">
-										<i class="nav-icon fas fa-<?php echo(isset($menu['icon']) ? $menu['icon'] : 'link') ?>"></i>
+										<i class="nav-icon fas fa-<?php echo($menu['icon'] ?? 'link') ?>"></i>
 										<p><?php echo $menu['name'] ?></p>
 									</a>
 								</li>
