@@ -46,6 +46,7 @@ if (isset($_REQUEST['template'])) {
 		if ($cache->enabled()) {
 			$cache->delete('template_menus');
 		}
+
 		success('Saved at ' . date('H:i'));
 	}
 
@@ -56,6 +57,7 @@ if (isset($_REQUEST['template'])) {
 		echo 'Cannot find template config.php file.';
 		return;
 	}
+
 	if (!isset($config['menu_categories'])) {
 		echo "No menu categories set in template config.php.<br/>This template doesn't support dynamic menus.";
 		return;
@@ -75,6 +77,7 @@ if (isset($_REQUEST['template'])) {
 	$menus_db = $db->query('SELECT `name`, `link`, `blank`, `color`, `category`, `ordering` FROM `' . TABLE_PREFIX . 'menu` WHERE `enabled` = 1 AND `template` = ' . $db->quote($template) . ' ORDER BY `ordering` ASC;')->fetchAll();
 	foreach ($menus_db as $menu) {
 		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'blank' => $menu['blank'], 'color' => $menu['color'], 'ordering' => $menu['ordering']);
+		var_dump($menu['color']);
 	}
 	$last_id = array();
 	?>
@@ -91,15 +94,16 @@ if (isset($_REQUEST['template'])) {
 							<ul class="sortable" id="sortable-<?php echo $id ?>">
 								<?php
 								if (isset($menus[$id])) {
-									foreach ($menus[$id] as $i => $menu):
+									$i = 0;
+									foreach ($menus[$id] as $menu):
 										?>
 										<li class="ui-state-default" id="list-<?php echo $id ?>-<?php echo $i ?>"><label>Name:</label> <input type="text" name="menu[<?php echo $id ?>][]" value="<?php echo escapeHtml($menu['name']); ?>"/>
 											<label>Link:</label> <input type="text" name="menu_link[<?php echo $id ?>][]" value="<?php echo $menu['link'] ?>"/>
 											<input type="hidden" name="menu_blank[<?php echo $id ?>][]" value="0"/>
 											<label><input class="blank-checkbox" type="checkbox" <?php echo($menu['blank'] == 1 ? 'checked' : '') ?>/><span title="Open in New Window">New Window</span></label>
-											<input class="color-picker" type="text" name="menu_color[<?php echo $id ?>][]" value="#<?php echo $menu['color'] ?>"/>
+											<input class="color-picker" type="text" name="menu_color[<?php echo $id ?>][]" value="<?php echo (empty($menu['color']) ? ($config['menu_default_color'] ?? '#ffffff') : $menu['color']); ?>"/>
 											<a class="remove-button" id="remove-button-<?php echo $id ?>-<?php echo $i ?>"><i class="fas fa-trash"></a></i></li>
-										<?php $last_id[$id] = $i;
+										<?php $i++; $last_id[$id] = $i;
 									endforeach;
 								} ?>
 							</ul>
@@ -120,7 +124,8 @@ if (isset($_REQUEST['template'])) {
 	<?php
 	$twig->display('admin.menus.js.html.twig', array(
 		'menus' => $menus,
-		'last_id' => $last_id
+		'last_id' => $last_id,
+		'menu_default_color' => $config['menu_default_color'] ?? '#ffffff'
 	));
 	?>
 	<?php
