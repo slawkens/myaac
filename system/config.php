@@ -16,37 +16,9 @@
  * @link      https://my-aac.org
  */
 
+// TODO:
+// this file will be deleted, once all migrated to settings
 $config = array(
-	// directories & files
-	'server_path' => '', // path to the server directory (same directory where config file is located)
-
-	/**
-	 * Environment Setting
-	 *
-	 * if you use this script on your live server - set to 'prod' (production)
-	 * if you want to test and debug the script locally, or develop plugins, set to 'dev' (development)
-	 * WARNING: on 'dev' cache is disabled, so site will be significantly slower !!!
-	 * WARNING2: on 'dev' all PHP errors/warnings are displayed
-	 * Recommended: 'prod' cause of speed (page load time is better)
-	 */
-	'env' => 'prod', // 'prod' for production and 'dev' for development
-
-	'gzip_output' => false, // gzip page content before sending it to the browser, uses less bandwidth but more cpu cycles
-
-	// cache system. by default file cache is used
-	'cache_engine' => 'auto', // apc, apcu, eaccelerator, xcache, file, auto, or blank to disable.
-	'cache_prefix' => 'myaac_', // have to be unique if running more MyAAC instances on the same server (except file system cache)
-
-	// database details (leave blank for auto detect from config.lua)
-	'database_host' => '',
-	'database_port' => '', // leave blank to default 3306
-	'database_user' => '',
-	'database_password' => '',
-	'database_name' => '',
-	'database_log' => false, // should database queries be logged and saved into system/logs/database.log?
-	'database_socket' => '', // set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)
-	'database_persistent' => false, // use database permanent connection (like server), may speed up your site
-
 	'account_mail_block_plus_sign' => true, // block email with '+' signs like test+box@gmail.com (help protect against spamming accounts)
 	'account_change_character_name' => false, // can user change their character name for premium points?
 	'account_change_character_name_points' => 30, // cost of name change
@@ -112,9 +84,6 @@ $config = array(
 		//'Some Quest' => 123,
 		//'Some Quest Two' => 456,
 	), // quests list (displayed in character view), name => storage
-
-	// gifts/shop system
-	'gifts_system' => false,
 
 	// last kills
 	'last_kills_limit' => 50, // max. number of deaths shown on the last kills page
