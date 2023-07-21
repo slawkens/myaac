@@ -46,6 +46,10 @@ $deprecatedConfig = [
 	'signature_cache_time',
 	'signature_browser_cache',
 	'gifts_system',
+	'status_enabled',
+	'status_ip',
+	'status_port',
+	'mail_enabled',
 	'account_mail_verify',
 	'account_create_character_create'
 ];
