@@ -91,7 +91,8 @@ if (isset($_REQUEST['template'])) {
 							<ul class="sortable" id="sortable-<?php echo $id ?>">
 								<?php
 								if (isset($menus[$id])) {
-									foreach ($menus[$id] as $i => $menu):
+									$i = 0;
+									foreach ($menus[$id] as $menu):
 										?>
 										<li class="ui-state-default" id="list-<?php echo $id ?>-<?php echo $i ?>"><label>Name:</label> <input type="text" name="menu[<?php echo $id ?>][]" value="<?php echo escapeHtml($menu['name']); ?>"/>
 											<label>Link:</label> <input type="text" name="menu_link[<?php echo $id ?>][]" value="<?php echo $menu['link'] ?>"/>
@@ -99,7 +100,7 @@ if (isset($_REQUEST['template'])) {
 											<label><input class="blank-checkbox" type="checkbox" <?php echo($menu['blank'] == 1 ? 'checked' : '') ?>/><span title="Open in New Window">New Window</span></label>
 											<input class="color-picker" type="text" name="menu_color[<?php echo $id ?>][]" value="#<?php echo $menu['color'] ?>"/>
 											<a class="remove-button" id="remove-button-<?php echo $id ?>-<?php echo $i ?>"><i class="fas fa-trash"></a></i></li>
-										<?php $last_id[$id] = $i;
+										<?php $i++; $last_id[$id] = $i;
 									endforeach;
 								} ?>
 							</ul>
