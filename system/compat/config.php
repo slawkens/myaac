@@ -46,6 +46,8 @@ $deprecatedConfig = [
 	'signature_cache_time',
 	'signature_browser_cache',
 	'gifts_system',
+	'account_mail_verify',
+	'account_create_character_create'
 ];
 
 foreach ($deprecatedConfig as $key => $value) {
@@ -58,4 +60,3 @@ foreach ($deprecatedConfig as $key => $value) {
 
 	//var_dump($settings['core.'.$value]['value']);
 }
-
