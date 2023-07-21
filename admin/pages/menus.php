@@ -77,7 +77,6 @@ if (isset($_REQUEST['template'])) {
 	$menus_db = $db->query('SELECT `name`, `link`, `blank`, `color`, `category`, `ordering` FROM `' . TABLE_PREFIX . 'menu` WHERE `enabled` = 1 AND `template` = ' . $db->quote($template) . ' ORDER BY `ordering` ASC;')->fetchAll();
 	foreach ($menus_db as $menu) {
 		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'blank' => $menu['blank'], 'color' => $menu['color'], 'ordering' => $menu['ordering']);
-		var_dump($menu['color']);
 	}
 	$last_id = array();
 	?>
