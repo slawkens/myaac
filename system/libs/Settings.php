@@ -11,7 +11,7 @@
 class Settings implements ArrayAccess
 {
 	static private $instance;
-	private $settingsArray = [];
+	private $settingsFile = [];
 	private $settingsDatabase = [];
 	private $cache = [];
 	private $valuesAsked = [];
@@ -368,13 +368,13 @@ class Settings implements ArrayAccess
 
 		// remove specified plugin settings (all)
 		if(!isset($key)) {
-			unset($this->settingsArray[$pluginKeyName]);
+			unset($this->settingsFile[$pluginKeyName]);
 			unset($this->settingsDatabase[$pluginKeyName]);
 			$this->deleteFromDatabase($pluginKeyName);
 			return;
 		}
 
-		unset($this->settingsArray[$pluginKeyName][$key]);
+		unset($this->settingsFile[$pluginKeyName][$key]);
 		unset($this->settingsDatabase[$pluginKeyName][$key]);
 		$this->deleteFromDatabase($pluginKeyName, $key);
 	}
@@ -402,12 +402,12 @@ class Settings implements ArrayAccess
 
 		// return specified plugin settings (all)
 		if(!isset($key)) {
-			return $this->settingsArray[$pluginKeyName];
+			return $this->settingsFile[$pluginKeyName];
 		}
 
 		$ret = [];
-		if(isset($this->settingsArray[$pluginKeyName][$key])) {
-			$ret = $this->settingsArray[$pluginKeyName][$key];
+		if(isset($this->settingsFile[$pluginKeyName][$key])) {
+			$ret = $this->settingsFile[$pluginKeyName][$key];
 		}
 
 		if(isset($this->settingsDatabase[$pluginKeyName][$key])) {
@@ -416,7 +416,7 @@ class Settings implements ArrayAccess
 			$ret['value'] = $value;
 		}
 		else {
-			$ret['value'] = $this->settingsArray[$pluginKeyName][$key]['default'];
+			$ret['value'] = $this->settingsFile[$pluginKeyName][$key]['default'];
 		}
 
 		if(isset($ret['type'])) {
@@ -467,7 +467,7 @@ class Settings implements ArrayAccess
 		$pluginKeyName = $this->valuesAsked['pluginKeyName'];
 		$key = $this->valuesAsked['key'];
 
-		if (!isset($this->settingsArray[$pluginKeyName])) {
+		if (!isset($this->settingsFile[$pluginKeyName])) {
 			if ($pluginKeyName === 'core') {
 				$settingsFilePath = SYSTEM . 'settings.php';
 			} else {
@@ -486,7 +486,7 @@ class Settings implements ArrayAccess
 			}
 
 			$tmp = require $settingsFilePath;
-			$this->settingsArray[$pluginKeyName] = $tmp['settings'];
+			$this->settingsFile[$pluginKeyName] = $tmp['settings'];
 		}
 	}
 }
