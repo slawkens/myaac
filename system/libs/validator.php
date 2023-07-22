@@ -296,7 +296,7 @@ class Validator
 			}
 		}
 
-		//check if was namelocked previously
+		// check if was namelocked previously
 		if($db->hasTable('player_namelocks') && $db->hasColumn('player_namelocks', 'name')) {
 			$namelock = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));
 			if($namelock->rowCount() > 0) {
@@ -305,22 +305,28 @@ class Validator
 			}
 		}
 
-		$monsters = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'monsters` WHERE `name` LIKE ' . $db->quote($name_lower));
-		if($monsters->rowCount() > 0) {
-			self::$lastError = 'Your name cannot contains monster name.';
-			return false;
+		$monstersCheck = setting('core.create_character_name_monsters_check');
+		if ($monstersCheck) {
+			$monsters = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'monsters` WHERE `name` LIKE ' . $db->quote($name_lower));
+			if ($monsters->rowCount() > 0) {
+				self::$lastError = 'Your name cannot contains monster name.';
+				return false;
+			}
 		}
 
-		$spells_name = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'spells` WHERE `name` LIKE ' . $db->quote($name_lower));
-		if($spells_name->rowCount() > 0) {
-			self::$lastError = 'Your name cannot contains spell name.';
-			return false;
-		}
+		$spellsCheck = setting('core.create_character_name_spells_check');
+		if ($spellsCheck) {
+			$spells_name = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'spells` WHERE `name` LIKE ' . $db->quote($name_lower));
+			if ($spells_name->rowCount() > 0) {
+				self::$lastError = 'Your name cannot contains spell name.';
+				return false;
+			}
 
-		$spells_words = $db->query('SELECT `words` FROM `' . TABLE_PREFIX . 'spells` WHERE `words` = ' . $db->quote($name_lower));
-		if($spells_words->rowCount() > 0) {
-			self::$lastError = 'Your name cannot contains spell name.';
-			return false;
+			$spells_words = $db->query('SELECT `words` FROM `' . TABLE_PREFIX . 'spells` WHERE `words` = ' . $db->quote($name_lower));
+			if ($spells_words->rowCount() > 0) {
+				self::$lastError = 'Your name cannot contains spell name.';
+				return false;
+			}
 		}
 
 		$npcCheck = setting('core.create_character_name_npc_check');

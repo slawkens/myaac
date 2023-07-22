@@ -620,10 +620,22 @@ Sent by MyAAC,<br/>
 			'type' => 'section',
 			'title' => 'Create Character',
 		],
-		'create_character_name_npc_check' => [
-			'name' => 'Create Character Name Check NPC Names',
+		'create_character_name_monsters_check' => [
+			'name' => 'Block Monsters Names',
 			'type' => 'boolean',
-			'desc' => 'should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io',
+			'desc' => 'Should monsters names be blocked when creating character?',
+			'default' => true,
+		],
+		'create_character_name_npc_check' => [
+			'name' => 'Block NPC Names',
+			'type' => 'boolean',
+			'desc' => 'Should NPC names be blocked when creating character?',
+			'default' => true,
+		],
+		'create_character_name_spells_check' => [
+			'name' => 'Block Spells Names',
+			'type' => 'boolean',
+			'desc' => 'Should spells names and words be blocked when creating character?',
 			'default' => true,
 		],
 		'create_character_name_min_length' => [
