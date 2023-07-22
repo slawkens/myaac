@@ -180,14 +180,15 @@ class Validator
 			return false;
 		}
 
-		$minLength = setting('core.create_character_name_min_length');
-		$maxLength = setting('core.create_character_name_max_length');
-
 		// installer doesn't know config.php yet
 		// that's why we need to ignore the nulls
-		if(is_null($minLength) || is_null($maxLength)) {
+		if(defined('MYAAC_INSTALL')) {
 			$minLength = 4;
 			$maxLength = 21;
+		}
+		else {
+			$minLength = setting('core.create_character_name_min_length');
+			$maxLength = setting('core.create_character_name_max_length');
 		}
 
 		$length = strlen($name);
@@ -219,16 +220,6 @@ class Validator
 		{
 			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
 			return false;
-		}
-
-		$npcCheck = setting('core.create_character_name_npc_check');
-		if ($npcCheck) {
-			require_once LIBS . 'npc.php';
-			NPCS::load();
-			if(NPCS::$npcs && in_array(strtolower($name), NPCS::$npcs)) {
-				self::$lastError = "Invalid name format. Do not use NPC Names";
-				return false;
-			}
 		}
 
 		return true;
