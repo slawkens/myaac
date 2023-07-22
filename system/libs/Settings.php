@@ -320,7 +320,7 @@ class Settings implements ArrayAccess
 								echo '<br/>';
 								echo '<strong>Default:</strong> ';
 								if (empty($setting['default'])) {
-									if ($setting['type'] === 'boolean') {
+									if ($setting['type'] === 'boolean' && $setting['default'] !== false) {
 										$setting['default'] = true;
 									}
 									else {
