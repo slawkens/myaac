@@ -19,14 +19,14 @@ if(!$logged) {
 
 $player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : NULL;
 $name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : NULL;
-if((!$config['account_change_character_name']))
+if((!setting('core.account_change_character_name')))
 	echo 'Changing character name for premium points is disabled on this server.';
 else
 {
-	$points = $account_logged->getCustomField('premium_points');
+	$points = $account_logged->getCustomField(setting('core.donate_column'));
 	if(isset($_POST['changenamesave']) && $_POST['changenamesave'] == 1) {
-		if($points < $config['account_change_character_name_points'])
-			$errors[] = 'You need ' . $config['account_change_character_name_points'] . ' premium points to change name. You have <b>'.$points.'<b> premium points.';
+		if($points < setting('core.account_change_character_name_price'))
+			$errors[] = 'You need ' . setting('core.account_change_character_name_price') . ' premium points to change name. You have <b>'.$points.'<b> premium points.';
 
 		$minLength = setting('core.create_character_name_min_length');
 		$maxLength = setting('core.create_character_name_max_length');
@@ -86,7 +86,7 @@ else
 							}
 						}
 
-						$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
+						$account_logged->setCustomField(setting('core.donate_column'), $points - setting('core.account_change_character_name_price'));
 						$account_logged->logAction('Changed name from <b>' . $old_name . '</b> to <b>' . $player->getName() . '</b>.');
 						$twig->display('success.html.twig', array(
 							'title' => 'Character Name Changed',

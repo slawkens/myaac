@@ -21,18 +21,18 @@ if(isset($_POST['reg_password']))
 	$reg_password = encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
 
 $reckey = $account_logged->getCustomField('key');
-if((!$config['generate_new_reckey'] || !setting('core.mail_enabled')) || empty($reckey)) {
+if((!setting('core.account_generate_new_reckey') || !setting('core.mail_enabled')) || empty($reckey)) {
 	$errors[] = 'You cant get new recovery key.';
 	$twig->display('error_box.html.twig', array('errors' => $errors));
 }
 else
 {
-	$points = $account_logged->getCustomField('premium_points');
+	$points = $account_logged->getCustomField(setting('core.donate_column'));
 	if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == '1')
 	{
 		if($reg_password == $account_logged->getPassword())
 		{
-			if($points >= $config['generate_new_reckey_price'])
+			if($points >= setting('core.account_generate_new_reckey_price'))
 			{
 				$show_form = false;
 				$new_rec_key = generateRandomString(10, false, true, true);
@@ -43,10 +43,10 @@ else
 
 				if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - new recovery key", $mailBody))
 				{
-					$account_logged->setCustomField("key", $new_rec_key);
-					$account_logged->setCustomField("premium_points", $account_logged->getCustomField("premium_points") - $config['generate_new_reckey_price']);
-					$account_logged->logAction('Generated new recovery key for ' . $config['generate_new_reckey_price'] . ' premium points.');
-					$message = '<br />Your recovery key were send on email address <b>'.$account_logged->getEMail().'</b> for '.$config['generate_new_reckey_price'].' premium points.';
+					$account_logged->setCustomField('key', $new_rec_key);
+					$account_logged->setCustomField(setting('core.donate_column'), $account_logged->getCustomField(setting('core.donate_column')) - setting('core.account_generate_new_reckey_price'));
+					$account_logged->logAction('Generated new recovery key for ' . setting('core.account_generate_new_reckey_price') . ' premium points.');
+					$message = '<br />Your recovery key were send on email address <b>'.$account_logged->getEMail().'</b> for '.setting('core.account_generate_new_reckey_price').' premium points.';
 				}
 				else
 					$message = '<br /><p class="error">An error occurred while sending email ( <b>'.$account_logged->getEMail().'</b> ) with recovery key! Recovery key not changed. Try again later. For Admin: More info can be found in system/logs/mailer-error.log</p>';
@@ -57,7 +57,7 @@ else
 				));
 			}
 			else
-				$errors[] = 'You need '.$config['generate_new_reckey_price'].' premium points to generate new recovery key. You have <b>'.$points.'<b> premium points.';
+				$errors[] = 'You need ' . setting('core.account_generate_new_reckey_price') . ' premium points to generate new recovery key. You have <b>'.$points.'<b> premium points.';
 		}
 		else
 			$errors[] = 'Wrong password to account.';

@@ -20,14 +20,14 @@ if(!$logged) {
 $sex_changed = false;
 $player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : NULL;
 $new_sex = isset($_POST['new_sex']) ? (int)$_POST['new_sex'] : NULL;
-if((!$config['account_change_character_sex']))
+if((!setting('core.account_change_character_sex')))
 	echo 'You cant change your character sex';
 else
 {
-	$points = $account_logged->getCustomField('premium_points');
+	$points = $account_logged->getCustomField(setting('core.donate_column'));
 	if(isset($_POST['changesexsave']) && $_POST['changesexsave'] == 1) {
-		if($points < $config['account_change_character_sex_points'])
-			$errors[] = 'You need ' . $config['account_change_character_sex_points'] . ' premium points to change sex. You have <b>'.$points.'</b> premium points.';
+		if($points < setting('core.account_change_character_sex_price'))
+			$errors[] = 'You need ' . setting('core.account_change_character_sex_price') . ' premium points to change sex. You have <b>'.$points.'</b> premium points.';
 
 		if(empty($errors) && !isset($config['genders'][$new_sex])) {
 			$errors[] = 'This sex is invalid.';
@@ -66,7 +66,7 @@ else
 							$new_sex_str = $config['genders'][$new_sex];
 
 						$player->save();
-						$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
+						$account_logged->setCustomField(setting('core.donate_column'), $points - setting('core.account_change_character_name_price'));
 						$account_logged->logAction('Changed sex on character <b>' . $player->getName() . '</b> from <b>' . $old_sex_str . '</b> to <b>' . $new_sex_str . '</b>.');
 						$twig->display('success.html.twig', array(
 							'title' => 'Character Sex Changed',

@@ -51,7 +51,11 @@ $deprecatedConfig = [
 	'status_port',
 	'mail_enabled',
 	'account_mail_verify',
-	'account_create_character_create'
+	'account_create_character_create',
+	'account_change_character_name',
+	'account_change_character_name_points' => 'account_change_character_name_price',
+	'account_change_character_sex',
+	'account_change_character_sex_points' => 'account_change_character_name_price',
 ];
 
 foreach ($deprecatedConfig as $key => $value) {

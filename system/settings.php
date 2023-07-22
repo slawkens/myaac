@@ -1295,6 +1295,61 @@ Sent by MyAAC,<br/>
 			'type' => 'boolean',
 			'default' => false,
 		],
+		'donate_column' => [
+			'name' => 'Donate Column',
+			'type' => 'options',
+			'desc' => 'What to give to player after donation - what column in accounts table to use.',
+			'options' => ['premium_points' => 'Premium Points', 'coins' => 'Coins'],
+			'default' => 'premium_points',
+		],
+		'account_generate_new_reckey' => [
+			'name' => 'Allow Generate New Key',
+			'desc' => "Allow to generate new key for premium points. The player will receive e-mail with new rec key (not display on page, hacker can't generate rec key)",
+			'type' => 'boolean',
+			'default' => false,
+		],
+		'account_generate_new_reckey_price' => [
+			'name' => 'Generate New Key Price',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'Price for new recovery key',
+			'default' => 20,
+			'show_if' => [
+				'account_generate_new_reckey', '=', 'true',
+			],
+		],
+		'account_change_character_name' => [
+			'name' => 'Allow Change Name',
+			'desc' => 'Can user change their character name for premium points?',
+			'type' => 'boolean',
+			'default' => false,
+		],
+		'account_change_character_name_price' => [
+			'name' => 'Change Name Price',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'Cost of name change',
+			'default' => 30,
+			'show_if' => [
+				'account_change_character_name', '=', 'true',
+			],
+		],
+		'account_change_character_sex' => [
+			'name' => 'Allow Change Sex',
+			'desc' => 'Can user change their character sex for premium points?',
+			'type' => 'boolean',
+			'default' => false,
+		],
+		'account_change_character_sex_price' => [
+			'name' => 'Change Sex Price',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'Cost of change sex',
+			'default' => 30,
+			'show_if' => [
+				'account_change_character_sex', '=', 'true',
+			],
+		],
 	],
 	'callbacks' => [
 		'beforeSave' => function(&$settings, &$values) {

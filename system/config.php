@@ -20,15 +20,7 @@
 // this file will be deleted, once all migrated to settings
 $config = array(
 	'account_mail_block_plus_sign' => true, // block email with '+' signs like test+box@gmail.com (help protect against spamming accounts)
-	'account_change_character_name' => false, // can user change their character name for premium points?
-	'account_change_character_name_points' => 30, // cost of name change
-	'account_change_character_sex' => false, // can user change their character sex for premium points?
-	'account_change_character_sex_points' => 30, // cost of sex change
 	'characters_per_account' => 10,	// max. number of characters per account
-
-	//
-	'generate_new_reckey' => true,				// let player generate new recovery key, he will receive e-mail with new rec key (not display on page, hacker can't generate rec key)
-	'generate_new_reckey_price' => 20,			// price for new recovery key
 
 	// new character config
 	'character_samples' => array( // vocations, format: ID_of_vocation => 'Name of Character to copy'
