@@ -82,9 +82,4 @@ $config = array(
 		//'Some Quest' => 123,
 		//'Some Quest Two' => 456,
 	), // quests list (displayed in character view), name => storage
-
-	// other
-	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam
-
-	'npc' => array()
 );

@@ -533,6 +533,15 @@ Sent by MyAAC,<br/>
 				'mail_enabled', '=', 'true',
 			],
 		],
+		'mail_lost_account_interval' => [
+			'name' => 'Default Account Premium Days',
+			'type' => 'number',
+			'desc' => 'Time in seconds between e-mails to one account from lost account interface, block spam',
+			'default' => 60,
+			'show_if' => [
+				'mail_enabled', '=', 'true',
+			],
+		],
 		[
 			'type' => 'category',
 			'title' => 'Accounts',

@@ -59,7 +59,7 @@ elseif($action == 'step1' && $action_type == 'email')
 				$minutesleft = floor($insec / 60);
 				$secondsleft = $insec - ($minutesleft * 60);
 				$timeleft = $minutesleft.' minutes '.$secondsleft.' seconds';
-				echo 'Account of selected character (<b>'.$nick.'</b>) received e-mail in last '.ceil($config['email_lai_sec_interval'] / 60).' minutes. You must wait '.$timeleft.' before you can use Lost Account Interface again.';
+				echo 'Account of selected character (<b>'.$nick.'</b>) received e-mail in last '.ceil(setting('core.mail_lost_account_interval') / 60).' minutes. You must wait '.$timeleft.' before you can use Lost Account Interface again.';
 			}
 		}
 		else
@@ -104,7 +104,7 @@ elseif($action == 'sendcode')
 					if(_mail($account_mail, $config['lua']['serverName'].' - Recover your account', $mailBody))
 					{
 						$account->setCustomField('email_code', $newcode);
-						$account->setCustomField('email_next', (time() + $config['email_lai_sec_interval']));
+						$account->setCustomField('email_next', (time() + setting('core.mail_lost_account_interval')));
 						echo '<br />Details about steps required to recover your account has been sent to <b>' . $account_mail . '</b>. You should receive this email within 15 minutes. Please check your inbox/spam directory.';
 					}
 					else
@@ -122,7 +122,7 @@ elseif($action == 'sendcode')
 				$minutesleft = floor($insec / 60);
 				$secondsleft = $insec - ($minutesleft * 60);
 				$timeleft = $minutesleft.' minutes '.$secondsleft.' seconds';
-				echo 'Account of selected character (<b>'.$nick.'</b>) received e-mail in last '.ceil($config['email_lai_sec_interval'] / 60).' minutes. You must wait '.$timeleft.' before you can use Lost Account Interface again.';
+				echo 'Account of selected character (<b>'.$nick.'</b>) received e-mail in last '.ceil(setting('core.mail_lost_account_interval') / 60).' minutes. You must wait '.$timeleft.' before you can use Lost Account Interface again.';
 			}
 		}
 		else
