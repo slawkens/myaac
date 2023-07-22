@@ -333,9 +333,13 @@ class Validator
 		if ($npcCheck) {
 			require_once LIBS . 'npc.php';
 			NPCS::load();
-			if(NPCS::$npcs && in_array($name_lower, NPCS::$npcs)) {
-				self::$lastError = "Invalid name format. Do not use NPC Names";
-				return false;
+			if(NPCS::$npcs) {
+				foreach (NPCs::$npcs as $npc) {
+					if(strpos($name_lower, $npc) !== false) {
+						self::$lastError = 'Your name cannot contains NPC name.';
+						return false;
+					}
+				}
 			}
 		}
 
