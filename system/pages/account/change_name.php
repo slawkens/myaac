@@ -28,8 +28,8 @@ else
 		if($points < $config['account_change_character_name_points'])
 			$errors[] = 'You need ' . $config['account_change_character_name_points'] . ' premium points to change name. You have <b>'.$points.'<b> premium points.';
 
-		$minLength = config('character_name_min_length');
-		$maxLength = config('character_name_max_length');
+		$minLength = setting('core.create_character_name_min_length');
+		$maxLength = setting('core.create_character_name_max_length');
 
 		if(empty($errors) && empty($name))
 			$errors[] = 'Please enter a new name for your character!';

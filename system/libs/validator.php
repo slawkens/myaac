@@ -180,8 +180,8 @@ class Validator
 			return false;
 		}
 
-		$minLength = config('character_name_min_length');
-		$maxLength = config('character_name_max_length');
+		$minLength = setting('core.create_character_name_min_length');
+		$maxLength = setting('core.create_character_name_max_length');
 
 		// installer doesn't know config.php yet
 		// that's why we need to ignore the nulls
@@ -221,7 +221,7 @@ class Validator
 			return false;
 		}
 
-		$npcCheck = config('character_name_npc_check');
+		$npcCheck = setting('core.create_character_name_npc_check');
 		if ($npcCheck) {
 			require_once LIBS . 'npc.php';
 			NPCS::load();
@@ -332,7 +332,7 @@ class Validator
 			return false;
 		}
 
-		$npcCheck = config('character_name_npc_check');
+		$npcCheck = setting('core.create_character_name_npc_check');
 		if ($npcCheck) {
 			require_once LIBS . 'npc.php';
 			NPCS::load();

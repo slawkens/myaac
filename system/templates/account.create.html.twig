@@ -140,7 +140,7 @@
 														<span{% if errors.name is defined %} class="red"{% endif %}>Character Name:</span>
 													</td>
 													<td>
-														<input id="character_name" name="name" size="{{ config.character_name_max_length }}" maxlength="{{ config.character_name_max_length }}" value="{{ name }}"/>
+														<input id="character_name" name="name" size="{{ setting('create_character_name_max_length') }}" maxlength="{{ setting('create_character_name_max_length') }}" value="{{ name }}"/>
 														<img id="character_indicator" src="images/global/general/{% if not save or errors.name is defined %}n{% endif %}ok.gif" style="display: none;" />
 														<br>
 													</td>

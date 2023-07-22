@@ -620,8 +620,26 @@ Sent by MyAAC,<br/>
 			'type' => 'section',
 			'title' => 'Create Character',
 		],
+		'create_character_name_npc_check' => [
+			'name' => 'Create Character Name Check NPC Names',
+			'type' => 'boolean',
+			'desc' => 'should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io',
+			'default' => true,
+		],
+		'create_character_name_min_length' => [
+			'name' => 'Name Min Length',
+			'type' => 'number',
+			'desc' => '',
+			'default' => 4,
+		],
+		'create_character_name_max_length' => [
+			'name' => 'Name Max Length',
+			'type' => 'number',
+			'desc' => 'It is highly recommend the maximum length to be 21',
+			'default' => 21,
+		],
 		'create_character_name_blocked_prefix' => [
-			'name' => 'Create Character Blocked Prefix',
+			'name' => 'Create Character Name Blocked Prefix',
 			'type' => 'textarea',
 			'desc' => 'Space after is important!',
 			'default' => 'admin ,administrator ,gm ,cm ,god ,tutor',
@@ -632,7 +650,7 @@ Sent by MyAAC,<br/>
 			],
 		],
 		'create_character_name_blocked_names' => [
-			'name' => 'Create Character Blocked Names',
+			'name' => 'Create Character Name Blocked Names',
 			'type' => 'textarea',
 			'desc' => 'Separated by comma (,)',
 			'default' => 'admin,administrator,gm,cm,god,tutor',
@@ -643,7 +661,7 @@ Sent by MyAAC,<br/>
 			],
 		],
 		'create_character_name_blocked_words' => [
-			'name' => 'Create Character Blocked Words',
+			'name' => 'Create Character Name Blocked Words',
 			'type' => 'textarea',
 			'desc' => 'Separated by comma (,)',
 			'default' => "admin,administrator,gamemaster,game master,game-master,game'master,fuck,sux,suck,noob,tutor",

@@ -48,12 +48,6 @@ $config = array(
 	// won't be displayed if there is only one item (rookgaard for example)
 	'character_towns' => array(1),
 
-	// characters length
-	// This is the minimum and the maximum length that a player can create a character. It is highly recommend the maximum length to be 21.
-	'character_name_min_length' => 4,
-	'character_name_max_length' => 21,
-	'character_name_npc_check' => true,
-
 	// list of towns
 	// if you use TFS 1.3 with support for 'towns' table in database, then you can ignore this - it will be configured automatically (from MySQL database - Table - towns)
 	// otherwise it will try to load from your .OTBM map file

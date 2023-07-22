@@ -18,8 +18,8 @@ class CreateCharacter
 	 */
 	public function checkName($name, &$errors)
 	{
-		$minLength = config('character_name_min_length');
-		$maxLength = config('character_name_max_length');
+		$minLength = setting('core.create_character_name_min_length');
+		$maxLength = setting('core.create_character_name_max_length');
 
 		if(empty($name)) {
 			$errors['name'] = 'Please enter a name for your character!';
