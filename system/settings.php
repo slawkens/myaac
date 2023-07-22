@@ -100,82 +100,6 @@ return [
 		],
 		[
 			'type' => 'section',
-			'title' => 'Database',
-		],
-		'database_overwrite' => [
-			'name' => 'Database Manual',
-			'type' => 'boolean',
-			'desc' => 'Manual database configuration. Enable if you want to manually enter database details. If set to no - it will get from config.lua',
-			'default' => false,
-			'is_config' => true,
-		],
-		'database_host' => [
-			'name' => 'Database Host',
-			'type' => 'text',
-			'default' => '127.0.0.1',
-			'show_if' => [
-				'database_overwrite', '=', 'true'
-			],
-			'is_config' => true,
-		],
-		'database_port' => [
-			'name' => 'Database Port',
-			'type' => 'number',
-			'default' => 3306,
-			'show_if' => [
-				'database_overwrite', '=', 'true'
-			],
-			'is_config' => true,
-		],
-		'database_user' => [
-			'name' => 'Database User',
-			'type' => 'text',
-			'show_if' => [
-				'database_overwrite', '=', 'true'
-			],
-			'is_config' => true,
-		],
-		'database_password' => [
-			'name' => 'Database Password',
-			'type' => 'text',
-			'show_if' => [
-				'database_overwrite', '=', 'true'
-			],
-			'is_config' => true,
-		],
-		'database_name' => [
-			'name' => 'Database Name',
-			'type' => 'text',
-			'show_if' => [
-				'database_overwrite', '=', 'true'
-			],
-			'is_config' => true,
-		],
-		'database_socket' => [
-			'name' => 'Database Socket',
-			'desc' => 'Set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)',
-			'type' => 'text',
-			'show_if' => [
-				'database_overwrite', '=', 'true'
-			],
-			'is_config' => true,
-		],
-		'database_log' => [
-			'name' => 'Database Log',
-			'desc' => 'Should database queries be logged and saved into system/logs/database.log?',
-			'type' => 'boolean',
-			'default' => false,
-			'is_config' => true,
-		],
-		'database_persistent' => [
-			'name' => 'Database Persistent Connection',
-			'desc' => 'Use database permanent connection (like server), may speed up your site',
-			'type' => 'boolean',
-			'default' => false,
-			'is_config' => true,
-		],
-		[
-			'type' => 'section',
 			'title' => 'Template'
 		],
 		'template' => [
@@ -333,6 +257,86 @@ return [
 			'type' => 'boolean',
 			'desc' => 'Allow MyAAC to report anonymous usage statistics to developers? The data is sent only once per 30 days and is fully confidential. It won\'t affect the performance of your website',
 			'default' => true,
+		],
+		[
+			'type' => 'category',
+			'title' => 'Database',
+		],
+		[
+			'type' => 'section',
+			'title' => 'Database',
+		],
+		'database_overwrite' => [
+			'name' => 'Database Manual',
+			'type' => 'boolean',
+			'desc' => 'Manual database configuration. Enable if you want to manually enter database details. If set to no - it will get from config.lua',
+			'default' => false,
+			'is_config' => true,
+		],
+		'database_host' => [
+			'name' => 'Database Host',
+			'type' => 'text',
+			'default' => '127.0.0.1',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_port' => [
+			'name' => 'Database Port',
+			'type' => 'number',
+			'default' => 3306,
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_user' => [
+			'name' => 'Database User',
+			'type' => 'text',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_password' => [
+			'name' => 'Database Password',
+			'type' => 'text',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_name' => [
+			'name' => 'Database Name',
+			'type' => 'text',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_socket' => [
+			'name' => 'Database Socket',
+			'desc' => 'Set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)',
+			'type' => 'text',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
+		'database_log' => [
+			'name' => 'Database Log',
+			'desc' => 'Should database queries be logged and saved into system/logs/database.log?',
+			'type' => 'boolean',
+			'default' => false,
+			'is_config' => true,
+		],
+		'database_persistent' => [
+			'name' => 'Database Persistent Connection',
+			'desc' => 'Use database permanent connection (like server), may speed up your site',
+			'type' => 'boolean',
+			'default' => false,
+			'is_config' => true,
 		],
 		[
 			'type' => 'category',
