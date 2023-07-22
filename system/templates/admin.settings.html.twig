@@ -3,7 +3,7 @@
 		<h5 class="m-0">Settings</h5>
 	</div>
 	<div class="card-body">
-		<form method="post">
+		<form id="settings" method="post">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box">
@@ -65,3 +65,27 @@
 {% endfor %}
 </script>
 {{ script|raw }}
+<!-- jQuery Form Submit No Refresh + Toastify -->
+<link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/toastify.min.css">
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/toastify.min.js"></script>
+<script>
+	$('#settings').submit(function(e) {
+		e.preventDefault();
+
+		$.ajax({
+			type: 'POST',
+			url: '{{ constant('ADMIN_URL') }}tools/settings_save.php?plugin={{ settingsKeyName }}',
+			data : $(this).serialize(),
+			success : function(response) {
+				Toastify({
+					position: 'center',
+					text: response,
+					duration: 3000
+				}).showToast();
+			},
+			error : function(response) {
+				alert(response.responseText);
+			}
+		});
+	});
+</script>

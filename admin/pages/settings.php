@@ -44,14 +44,6 @@ if (!is_array($settingsFile)) {
 
 $settingsKeyName = ($plugin == 'core' ? $plugin : $settingsFile['key']);
 
-if (isset($_POST['save'])) {
-	$settings = Settings::getInstance();
-
-	$settings->save($settingsKeyName, $_POST['settings']);
-
-	success('Saved at ' . date('H:i'));
-}
-
 $title = ($plugin == 'core' ? 'Settings' : 'Plugin Settings - ' . $plugin);
 
 $settingsParsed = Settings::display($settingsKeyName, $settingsFile['settings']);
@@ -60,4 +52,5 @@ $twig->display('admin.settings.html.twig', [
 	'settingsParsed' => $settingsParsed['content'],
 	'settings' => $settingsFile['settings'],
 	'script' => $settingsParsed['script'],
+	'settingsKeyName' => $settingsKeyName,
 ]);
