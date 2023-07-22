@@ -83,9 +83,6 @@ $config = array(
 		//'Some Quest Two' => 456,
 	), // quests list (displayed in character view), name => storage
 
-	// last kills
-	'last_kills_limit' => 50, // max. number of deaths shown on the last kills page
-
 	// other
 	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam
 	'google_analytics_id' => '', // e.g.: UA-XXXXXXX-X

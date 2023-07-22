@@ -968,13 +968,13 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
-			'title' => 'Gifts/shop system'
+			'title' => 'Last Kills Page'
 		],
-		'gifts_system' => [
-			'name' => 'Enable gifts system',
-			'desc' => 'Plugin needs to be installed',
-			'type' => 'boolean',
-			'default' => false,
+		'last_kills_limit' => [
+			'name' => 'Last Kills Limit',
+			'type' => 'number',
+			'desc' => 'Max. number of kills shown on the last kills page',
+			'default' => 50,
 		],
 		[
 			'type' => 'section',
@@ -1198,6 +1198,20 @@ Sent by MyAAC,<br/>
 					return array_map('trim', explode(',', $value));
 				},
 			],
+		],
+		[
+			'type' => 'category',
+			'title' => 'Shop',
+		],
+		[
+			'type' => 'section',
+			'title' => 'Gifts/shop system'
+		],
+		'gifts_system' => [
+			'name' => 'Enable gifts system',
+			'desc' => 'Plugin needs to be installed',
+			'type' => 'boolean',
+			'default' => false,
 		],
 	],
 	'callbacks' => [
