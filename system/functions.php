@@ -529,8 +529,8 @@ function template_footer(): string
 
 function template_ga_code()
 {
-	global $config, $twig;
-	if(!isset($config['google_analytics_id'][0]))
+	global $twig;
+	if(!isset(setting('core.google_analytics_id')[0]))
 		return '';
 
 	return $twig->render('google_analytics.html.twig');
