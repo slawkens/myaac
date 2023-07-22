@@ -31,7 +31,7 @@ if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1")
 			$account_logged->logAction('Generated recovery key.');
 			$message = '';
 
-			if(setting('core.mail_enabled') && $config['send_mail_when_generate_reckey'])
+			if(setting('core.mail_enabled') && setting('core.mail_send_when_generate_reckey'))
 			{
 				$mailBody = $twig->render('mail.account.register.html.twig', array(
 					'recovery_key' => $new_rec_key

@@ -29,8 +29,6 @@ $config = array(
 	//
 	'generate_new_reckey' => true,				// let player generate new recovery key, he will receive e-mail with new rec key (not display on page, hacker can't generate rec key)
 	'generate_new_reckey_price' => 20,			// price for new recovery key
-	'send_mail_when_change_password' => true,	// send e-mail with new password when change password to account
-	'send_mail_when_generate_reckey' => true,	// send e-mail with rec key (key is displayed on page anyway when generate)
 
 	// new character config
 	'character_samples' => array( // vocations, format: ID_of_vocation => 'Name of Character to copy'

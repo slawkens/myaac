@@ -484,6 +484,49 @@ Sent by MyAAC,<br/>
 				'mail_enabled', '=', 'true'
 			]
 		],
+		'mail_other' => [
+			'type' => 'section',
+			'title' => 'Account E-Mails',
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			],
+		],
+		'account_welcome_mail' => [
+			'name' => 'Account Welcome E-Mail',
+			'type' => 'boolean',
+			'desc' => 'Send welcome e-mail when user registers',
+			'default' => true,
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			],
+		],
+		'account_mail_verify' => [
+			'name' => 'Account E-Mail Verify',
+			'type' => 'boolean',
+			'desc' => 'Force users to confirm their e-mail addresses when registering account',
+			'default' => false,
+			'show_if' => [
+				'mail_enabled', '=', 'true'
+			],
+		],
+		'mail_send_when_change_password' => [
+			'name' => 'Change Password E-Mail',
+			'type' => 'boolean',
+			'desc' => 'Send e-mail with new password when change password to account',
+			'default' => true,
+			'show_if' => [
+				'mail_enabled', '=', 'true',
+			],
+		],
+		'mail_send_when_generate_reckey' => [
+			'name' => 'Generate Recovery Key E-Mail',
+			'type' => 'boolean',
+			'desc' => 'Send e-mail with recovery key (key is displayed on page anyway when generate)',
+			'default' => true,
+			'show_if' => [
+				'mail_enabled', '=', 'true',
+			],
+		],
 		[
 			'type' => 'category',
 			'title' => 'Accounts',
@@ -522,12 +565,6 @@ Sent by MyAAC,<br/>
 			'desc' => 'Allow to create character directly on create account page?',
 			'default' => true,
 		],
-		'account_mail_verify' => [
-			'name' => 'Account Mail Verify',
-			'type' => 'boolean',
-			'desc' => 'Force users to confirm their email addresses when registering account',
-			'default' => false,
-		],
 		'account_mail_unique' => [
 			'name' => 'Account Mail Unique',
 			'type' => 'boolean',
@@ -545,12 +582,6 @@ Sent by MyAAC,<br/>
 			'type' => 'number',
 			'desc' => 'Default premium points on new account',
 			'default' => 0,
-		],
-		'account_welcome_mail' => [
-			'name' => 'Account Welcome Mail',
-			'type' => 'boolean',
-			'desc' => 'Send welcome email when user registers',
-			'default' => true,
 		],
 		'account_mail_change' => [
 			'name' => 'Account Mail Change Days',
