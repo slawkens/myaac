@@ -246,14 +246,9 @@ class Validator
 		global $db, $config;
 
 		$name_lower = strtolower($name);
-		$custom_first_words_blocked = [];
-		if (isset($config['character_name_blocked']['prefix']) && $config['character_name_blocked']['prefix']) {
-			$custom_first_words_blocked = $config['character_name_blocked']['prefix'];
-		}
 
-		$first_words_blocked = array_merge($custom_first_words_blocked, array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ', "'", '-'));
-		foreach($first_words_blocked as $word)
-		{
+		$first_words_blocked = array_merge(["'", '-'], setting('core.create_character_name_blocked_prefix'));
+		foreach($first_words_blocked as $word) {
 			if($word == substr($name_lower, 0, strlen($word))) {
 				self::$lastError = 'Your name contains blocked words.';
 				return false;
@@ -275,8 +270,7 @@ class Validator
 			return false;
 		}
 
-		if(preg_match('/ {2,}/', $name))
-		{
+		if(preg_match('/ {2,}/', $name)) {
 			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
 			return false;
 		}
@@ -286,26 +280,16 @@ class Validator
 			return false;
 		}
 
-		$custom_names_blocked = [];
-		if (isset($config['character_name_blocked']['names']) && $config['character_name_blocked']['names']) {
-			$custom_names_blocked = $config['character_name_blocked']['names'];
-		}
-		$names_blocked = array_merge($custom_names_blocked, array('admin', 'administrator', 'gm', 'cm', 'god', 'tutor'));
-		foreach($names_blocked as $word)
-		{
+		$names_blocked = setting('core.create_character_name_blocked_names');
+		foreach($names_blocked as $word) {
 			if($word == $name_lower) {
 				self::$lastError = 'Your name contains blocked words.';
 				return false;
 			}
 		}
 
-		$custom_words_blocked = [];
-		if (isset($config['character_name_blocked']['words']) && $config['character_name_blocked']['words']) {
-			$custom_words_blocked = $config['character_name_blocked']['words'];
-		}
-		$words_blocked = array_merge($custom_words_blocked, array('admin', 'administrator', 'gamemaster', 'game master', 'game-master', "game'master", '--', "''","' ", " '", '- ', ' -', "-'", "'-", 'fuck', 'sux', 'suck', 'noob', 'tutor'));
-		foreach($words_blocked as $word)
-		{
+		$words_blocked = array_merge(['--', "''","' ", " '", '- ', ' -', "-'", "'-"], setting('core.create_character_name_blocked_words'));
+		foreach($words_blocked as $word) {
 			if(!(strpos($name_lower, $word) === false)) {
 				self::$lastError = 'Your name contains illegal words.';
 				return false;
@@ -346,14 +330,6 @@ class Validator
 		if($spells_words->rowCount() > 0) {
 			self::$lastError = 'Your name cannot contains spell name.';
 			return false;
-		}
-
-		if(isset($config['npc']))
-		{
-			if(in_array($name_lower, $config['npc'])) {
-				self::$lastError = 'Your name cannot contains NPC name.';
-				return false;
-			}
 		}
 
 		$npcCheck = config('character_name_npc_check');

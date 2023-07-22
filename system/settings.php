@@ -616,6 +616,43 @@ Sent by MyAAC,<br/>
 			'desc' => 'should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io',
 			'default' => true,
 		],
+		'create_character' => [
+			'type' => 'section',
+			'title' => 'Create Character',
+		],
+		'create_character_name_blocked_prefix' => [
+			'name' => 'Create Character Blocked Prefix',
+			'type' => 'textarea',
+			'desc' => 'Space after is important!',
+			'default' => 'admin ,administrator ,gm ,cm ,god ,tutor',
+			'callbacks' => [
+				'get' => function ($value) {
+					return explode(',', $value);
+				},
+			],
+		],
+		'create_character_name_blocked_names' => [
+			'name' => 'Create Character Blocked Names',
+			'type' => 'textarea',
+			'desc' => 'Separated by comma (,)',
+			'default' => 'admin,administrator,gm,cm,god,tutor',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
+		],
+		'create_character_name_blocked_words' => [
+			'name' => 'Create Character Blocked Words',
+			'type' => 'textarea',
+			'desc' => 'Separated by comma (,)',
+			'default' => "admin,administrator,gamemaster,game master,game-master,game'master,fuck,sux,suck,noob,tutor",
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
+		],
 		'account_mail_confirmed_reward' => [
 			'type' => 'section',
 			'title' => 'Reward Users for confirming their E-Mails. Works only with Account Mail Verify enabled',
