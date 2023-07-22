@@ -12,7 +12,7 @@ $title = 'Login';
 
 require PAGES . 'account/login.php';
 if ($logged) {
-	header('Location: ' . ADMIN_URL);
+	header('Location: ' . (admin() ? ADMIN_URL : BASE_URL));
 	return;
 }
 
