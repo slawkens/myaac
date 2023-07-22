@@ -92,6 +92,12 @@ return [
 				},
 			],
 		],
+		'google_analytics_id' => [
+			'name' => 'Google Analytics ID',
+			'type' => 'text',
+			'desc' => 'UA-XXXXXXX-X',
+			'default' => '',
+		],
 		[
 			'type' => 'section',
 			'title' => 'Database',

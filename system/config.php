@@ -85,7 +85,6 @@ $config = array(
 
 	// other
 	'email_lai_sec_interval' => 60, // time in seconds between e-mails to one account from lost account interface, block spam
-	'google_analytics_id' => '', // e.g.: UA-XXXXXXX-X
 
 	'npc' => array()
 );
