@@ -59,5 +59,5 @@ $settingsParsed = Settings::display($settingsKeyName, $settingsFile['settings'])
 $twig->display('admin.settings.html.twig', [
 	'settingsParsed' => $settingsParsed['content'],
 	'settings' => $settingsFile['settings'],
-	//'script' => $settingsParsed['script'],
+	'script' => $settingsParsed['script'],
 ]);
