@@ -15,6 +15,7 @@ class Settings implements ArrayAccess
 	private $settingsDatabase = [];
 	private $cache = [];
 	private $valuesAsked = [];
+	private $errors = [];
 
 	/**
 	 * @return Settings
@@ -67,12 +68,19 @@ class Settings implements ArrayAccess
 			}
 		}
 
+		$this->errors = [];
 		$db->query('DELETE FROM `' . TABLE_PREFIX . 'settings` WHERE `name` = ' . $db->quote($pluginName) . ';');
 		foreach ($values as $key => $value) {
+			$errorMessage = '';
+			if (isset($settings['settings'][$key]['callbacks']['beforeSave']) && !$settings['settings'][$key]['callbacks']['beforeSave']($key, $value, $errorMessage)) {
+				$this->errors[] = $errorMessage;
+				continue;
+			}
+
 			try {
 				$db->insert(TABLE_PREFIX . 'settings', ['name' => $pluginName, 'key' => $key, 'value' => $value]);
 			} catch (PDOException $error) {
-				warning('Error while saving setting (' . $pluginName . ' - ' . $key . '): ' . $error->getMessage());
+				$this->errors[] = 'Error while saving setting (' . $pluginName . ' - ' . $key . '): ' . $error->getMessage();
 			}
 		}
 
@@ -586,5 +594,9 @@ class Settings implements ArrayAccess
 		}
 
 		return true;
+	}
+
+	public function getErrors() {
+		return $this->errors;
 	}
 }

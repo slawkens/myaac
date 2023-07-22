@@ -1301,6 +1301,16 @@ Sent by MyAAC,<br/>
 			'desc' => 'What to give to player after donation - what column in accounts table to use.',
 			'options' => ['premium_points' => 'Premium Points', 'coins' => 'Coins'],
 			'default' => 'premium_points',
+			'callbacks' => [
+				'beforeSave' => function($key, $value, &$errorMessage) {
+					global $db;
+					if ($value == 'coins' && !$db->hasColumn('accounts', 'coins')) {
+						$errorMessage = "Shop: Donate Column: Cannot set column to coins, because it doesn't exist in database.";
+						return false;
+					}
+					return true;
+				}
+			]
 		],
 		'account_generate_new_reckey' => [
 			'name' => 'Allow Generate New Key',

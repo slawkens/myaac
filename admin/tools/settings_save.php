@@ -25,4 +25,10 @@ $settings = Settings::getInstance();
 
 $settings->save($_REQUEST['plugin'], $_POST['settings']);
 
+$errors = $settings->getErrors();
+if (count($errors) > 0) {
+	http_response_code(500);
+	die(implode('<br/>', $errors));
+}
+
 echo 'Saved at ' . date('H:i');

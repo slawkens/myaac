@@ -80,11 +80,20 @@
 				Toastify({
 					position: 'center',
 					text: response,
-					duration: 3000
+					duration: 3000,
+					escapeMarkup: false,
 				}).showToast();
 			},
 			error : function(response) {
-				alert(response.responseText);
+				Toastify({
+					position: 'center',
+					text: response.responseText,
+					duration: 3000,
+					style: {
+						background: 'red',
+					},
+					escapeMarkup: false,
+				}).showToast();
 			}
 		});
 	});
