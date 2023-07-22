@@ -438,6 +438,9 @@ class Settings implements ArrayAccess
 
 		// return specified plugin settings (all)
 		if(!isset($key)) {
+			if (!isset($this->settingsFile[$pluginKeyName]['settings'])) {
+				throw new RuntimeException('Unknown plugin settings: ' . $pluginKeyName);
+			}
 			return $this->settingsFile[$pluginKeyName]['settings'];
 		}
 
