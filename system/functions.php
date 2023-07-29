@@ -929,8 +929,8 @@ function load_config_lua($filename)
 	$config_file = $filename;
 	if(!@file_exists($config_file))
 	{
-		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $filename . '). Error: ' . print_r(error_get_last(), true));
-		throw new RuntimeException('ERROR: Cannot find ' . $filename . ' file. More info in system/logs/error.log');
+		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $filename . ').');
+		throw new RuntimeException('ERROR: Cannot find ' . $filename . ' file.');
 	}
 
 	$result = array();
