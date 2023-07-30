@@ -40,6 +40,7 @@ $deprecatedConfig = [
 	'team_display_status' => 'team_status',
 	'team_display_world' => 'team_world',
 	'team_display_lastlogin' => 'team_lastlogin',
+	'last_kills_limit',
 	'multiworld',
 	'forum',
 	'signature_enabled',
