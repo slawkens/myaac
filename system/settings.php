@@ -324,6 +324,16 @@ return [
 			],
 			'is_config' => true,
 		],
+		'database_hash' => [
+			'name' => 'Database Hashing Algorithm',
+			'desc' => 'Hashing algorithm: sha1 or md5 are most common',
+			'type' => 'text',
+			'default' => 'sha1',
+			'show_if' => [
+				'database_overwrite', '=', 'true'
+			],
+			'is_config' => true,
+		],
 		'database_log' => [
 			'name' => 'Database Log',
 			'desc' => 'Should database queries be logged and saved into system/logs/database.log?',

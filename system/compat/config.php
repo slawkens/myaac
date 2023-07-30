@@ -15,6 +15,7 @@ $deprecatedConfig = [
 	'meta_description',
 	'meta_keywords',
 	'footer',
+	'database_encryption' => 'database_hash',
 	//'language',
 	'visitors_counter',
 	'visitors_counter_ttl',
