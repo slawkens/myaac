@@ -294,6 +294,7 @@ return [
 		'database_user' => [
 			'name' => 'Database User',
 			'type' => 'text',
+			'default' => '',
 			'show_if' => [
 				'database_overwrite', '=', 'true'
 			],
@@ -302,6 +303,7 @@ return [
 		'database_password' => [
 			'name' => 'Database Password',
 			'type' => 'text',
+			'default' => '',
 			'show_if' => [
 				'database_overwrite', '=', 'true'
 			],
@@ -310,6 +312,7 @@ return [
 		'database_name' => [
 			'name' => 'Database Name',
 			'type' => 'text',
+			'default' => '',
 			'show_if' => [
 				'database_overwrite', '=', 'true'
 			],
@@ -319,6 +322,7 @@ return [
 			'name' => 'Database Socket',
 			'desc' => 'Set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)',
 			'type' => 'text',
+			'default' => '',
 			'show_if' => [
 				'database_overwrite', '=', 'true'
 			],
