@@ -634,24 +634,6 @@ Sent by MyAAC,<br/>
 			'type' => 'section',
 			'title' => 'Create Character',
 		],
-		'create_character_name_monsters_check' => [
-			'name' => 'Block Monsters Names',
-			'type' => 'boolean',
-			'desc' => 'Should monsters names be blocked when creating character?',
-			'default' => true,
-		],
-		'create_character_name_npc_check' => [
-			'name' => 'Block NPC Names',
-			'type' => 'boolean',
-			'desc' => 'Should NPC names be blocked when creating character?',
-			'default' => true,
-		],
-		'create_character_name_spells_check' => [
-			'name' => 'Block Spells Names',
-			'type' => 'boolean',
-			'desc' => 'Should spells names and words be blocked when creating character?',
-			'default' => true,
-		],
 		'create_character_name_min_length' => [
 			'name' => 'Name Min Length',
 			'type' => 'number',
@@ -696,6 +678,24 @@ Sent by MyAAC,<br/>
 					return array_map('trim', explode(',', $value));
 				},
 			],
+		],
+		'create_character_name_monsters_check' => [
+			'name' => 'Block Monsters Names',
+			'type' => 'boolean',
+			'desc' => 'Should monsters names be blocked when creating character?',
+			'default' => true,
+		],
+		'create_character_name_npc_check' => [
+			'name' => 'Block NPC Names',
+			'type' => 'boolean',
+			'desc' => 'Should NPC names be blocked when creating character?',
+			'default' => true,
+		],
+		'create_character_name_spells_check' => [
+			'name' => 'Block Spells Names',
+			'type' => 'boolean',
+			'desc' => 'Should spells names and words be blocked when creating character?',
+			'default' => true,
 		],
 		'account_mail_confirmed_reward' => [
 			'type' => 'section',
