@@ -17,7 +17,7 @@ $status['lastCheck'] = 0;
 $status['uptime'] = '0h 0m';
 $status['monsters'] = 0;
 
-if(config('status_enabled') === false) {
+if(setting('core.status_enabled') === false) {
 	return;
 }
 
@@ -37,9 +37,10 @@ else if(isset($config['lua']['status_port'])) {
 }
 
 // ip check
-if(isset($config['status_ip'][0]))
+$settingIP = setting('core.status_ip');
+if(isset($settingIP[0]))
 {
-	$status_ip = $config['status_ip'];
+	$status_ip = $settingIP;
 }
 elseif(!isset($status_ip[0])) // try localhost if no ip specified
 {
@@ -48,10 +49,11 @@ elseif(!isset($status_ip[0])) // try localhost if no ip specified
 
 // port check
 $status_port = $config['lua']['statusPort'];
-if(isset($config['status_port'][0])) {
-	$status_port = $config['status_port'];
+$settingPort = setting('core.status_port');
+if(isset($settingPort[0])) {
+	$status_port = $settingPort;
 }
-elseif(!isset($status_port[0])) // try 7171 if no ip specified
+elseif(!isset($status_port[0])) // try 7171 if no port specified
 {
 	$status_port = 7171;
 }
@@ -94,9 +96,9 @@ if(isset($config['lua']['statustimeout']))
 
 // get status timeout from server config
 $status_timeout = eval('return ' . $config['lua']['statusTimeout'] . ';') / 1000 + 1;
-$status_interval = @$config['status_interval'];
-if($status_interval && $status_timeout < $config['status_interval']) {
-	$status_timeout = $config['status_interval'];
+$status_interval = setting('core.status_interval');
+if($status_interval && $status_timeout < $status_interval) {
+	$status_timeout = $status_interval;
 }
 
 if($status['lastCheck'] + $status_timeout < time()) {

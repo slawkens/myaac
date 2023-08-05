@@ -284,7 +284,7 @@
 
 		{{ hook(constant('HOOK_CHARACTERS_BEFORE_SIGNATURE')) }}
 
-		{% if config.signature_enabled %}
+		{% if setting('core.signature_enabled') %}
 		<!-- SIGNATURE -->
 		<script type="text/javascript">
 			function showSignLinks()

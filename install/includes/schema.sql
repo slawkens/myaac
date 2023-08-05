@@ -1,4 +1,4 @@
-SET @myaac_database_version = 35;
+SET @myaac_database_version = 36;
 
 CREATE TABLE `myaac_account_actions`
 (
@@ -302,6 +302,16 @@ CREATE TABLE `myaac_gallery`
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 INSERT INTO `myaac_gallery` (`id`, `ordering`, `comment`, `image`, `thumb`, `author`) VALUES (NULL, 1, 'Demon', 'images/gallery/demon.jpg', 'images/gallery/demon_thumb.gif', 'MyAAC');
+
+CREATE TABLE `myaac_settings`
+(
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) NOT NULL DEFAULT '',
+	`key` VARCHAR(255) NOT NULL DEFAULT '',
+	`value` TEXT NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE `myaac_spells`
 (

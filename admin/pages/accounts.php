@@ -37,7 +37,7 @@ if ($config['account_country']) {
 		$countries[$code] = $c;
 }
 $web_acc = ACCOUNT_WEB_FLAGS;
-$acc_type = config('account_types');
+$acc_type = setting('core.account_types');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -361,7 +361,7 @@ else if (isset($_REQUEST['search'])) {
 								</div>
 								<div class="form-group row">
 									<div class="col-12 col-sm-12 col-lg-6">
-										<label for="email">Email:</label><?php echo (config('mail_enabled') ? ' (<a href="' . ADMIN_URL . '?p=mailer&mail_to=' . $account->getEMail() . '">Send Mail</a>)' : ''); ?>
+										<label for="email">Email:</label><?php echo (setting('core.mail_enabled') ? ' (<a href="' . ADMIN_URL . '?p=mailer&mail_to=' . $account->getEMail() . '">Send Mail</a>)' : ''); ?>
 										<input type="text" class="form-control" id="email" name="email" autocomplete="off" value="<?php echo $account->getEMail(); ?>"/>
 									</div>
 									<?php if ($hasCoinsColumn): ?>

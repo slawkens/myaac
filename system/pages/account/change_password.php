@@ -69,7 +69,7 @@ else
 		$account_logged->logAction('Account password changed.');
 
 		$message = '';
-		if($config['mail_enabled'] && $config['send_mail_when_change_password']) {
+		if(setting('core.mail_enabled') && setting('core.mail_send_when_change_password')) {
 			$mailBody = $twig->render('mail.password_changed.html.twig', array(
 				'new_password' => $org_pass,
 				'ip' => get_browser_real_ip(),

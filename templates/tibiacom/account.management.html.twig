@@ -470,7 +470,7 @@
 												</form>
 											</table>
 										</td>
-										{% if config.account_change_character_name %}
+										{% if setting('core.account_change_character_name') %}
 										<td>
 											<table border="0" cellspacing="0" cellpadding="0" >
 												<form action="{{ getLink('account/character/name') }}" method="post" >
@@ -483,7 +483,7 @@
 											</table>
 										</td>
 										{% endif %}
-										{% if config.account_change_character_sex %}
+										{% if setting('core.account_change_character_sex') %}
 										<td>
 											<table border="0" cellspacing="0" cellpadding="0" >
 												<form action="{{ getLink('account/character/sex') }}" method="post" >

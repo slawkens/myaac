@@ -32,55 +32,49 @@ function message($message, $type, $return)
 	return true;
 }
 function success($message, $return = false) {
-    return message($message, 'success', $return);
+	return message($message, 'success', $return);
 }
 function warning($message, $return = false) {
-    return message($message, 'warning', $return);
+	return message($message, 'warning', $return);
 }
 function note($message, $return = false) {
-    return message($message, 'note', $return);
+	return message($message, 'note', $return);
 }
 function error($message, $return = false) {
-    return message($message, ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'danger' : 'error'), $return);
+	return message($message, ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'danger' : 'error'), $return);
 }
 
-function longToIp($ip)
+function longToIp($ip): string
 {
 	$exp = explode(".", long2ip($ip));
 	return $exp[3].".".$exp[2].".".$exp[1].".".$exp[0];
 }
 
-function generateLink($url, $name, $blank = false) {
+function generateLink($url, $name, $blank = false): string {
 	return '<a href="' . $url . '"' . ($blank ? ' target="_blank"' : '') . '>' . $name . '</a>';
 }
 
-function getFullLink($page, $name, $blank = false) {
+function getFullLink($page, $name, $blank = false): string {
 	return generateLink(getLink($page), $name, $blank);
 }
 
-function getLink($page, $action = null)
-{
-	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . $page . ($action ? '/' . $action : '');
+function getLink($page, $action = null): string {
+	return BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . $page . ($action ? '/' . $action : '');
 }
-function internalLayoutLink($page, $action = null) {return getLink($page, $action);}
-
-function getForumThreadLink($thread_id, $page = NULL)
-{
-	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
+function internalLayoutLink($page, $action = null): string {
+	return getLink($page, $action);
 }
 
-function getForumBoardLink($board_id, $page = NULL)
-{
-	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
+function getForumThreadLink($thread_id, $page = NULL): string {
+	return BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
 }
 
-function getPlayerLink($name, $generate = true)
-{
-	global $config;
+function getForumBoardLink($board_id, $page = NULL): string {
+	return BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
+}
 
+function getPlayerLink($name, $generate = true): string
+{
 	if(is_numeric($name))
 	{
 		$player = new OTS_Player();
@@ -89,25 +83,23 @@ function getPlayerLink($name, $generate = true)
 			$name = $player->getName();
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'characters/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'characters/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
 }
 
-function getMonsterLink($name, $generate = true)
+function getMonsterLink($name, $generate = true): string
 {
-	global $config;
-
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'creatures/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'creatures/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
 }
 
-function getHouseLink($name, $generate = true)
+function getHouseLink($name, $generate = true): string
 {
-	global $db, $config;
+	global $db;
 
 	if(is_numeric($name))
 	{
@@ -117,16 +109,14 @@ function getHouseLink($name, $generate = true)
 			$name = $house->fetchColumn();
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'houses/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'houses/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
 }
 
-function getGuildLink($name, $generate = true)
+function getGuildLink($name, $generate = true): string
 {
-	global $config;
-
 	if(is_numeric($name)) {
 		$name = getGuildNameById($name);
 		if ($name === false) {
@@ -134,7 +124,7 @@ function getGuildLink($name, $generate = true)
 		}
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'guilds/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'guilds/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -180,7 +170,7 @@ function getItemRarity($chance) {
 	return '';
 }
 
-function getFlagImage($country)
+function getFlagImage($country): string
 {
 	if(!isset($country[0]))
 		return '';
@@ -202,7 +192,7 @@ function getFlagImage($country)
  * @param mixed $v Variable to check.
  * @return bool Value boolean status.
  */
-function getBoolean($v)
+function getBoolean($v): bool
 {
 	if(is_bool($v)) {
 		return $v;
@@ -225,7 +215,7 @@ function getBoolean($v)
  * @param bool $special Should special characters by used?
  * @return string Generated string.
  */
-function generateRandomString($length, $lowCase = true, $upCase = false, $numeric = false, $special = false)
+function generateRandomString($length, $lowCase = true, $upCase = false, $numeric = false, $special = false): string
 {
 	$characters = '';
 	if($lowCase)
@@ -465,7 +455,7 @@ function tickers()
  * Types: head_start, head_end, body_start, body_end, center_top
  *
  */
-function template_place_holder($type)
+function template_place_holder($type): string
 {
 	global $twig, $template_place_holders;
 	$ret = '';
@@ -489,7 +479,7 @@ function template_place_holder($type)
 /**
  * Returns <head> content to be used by templates.
  */
-function template_header($is_admin = false)
+function template_header($is_admin = false): string
 {
 	global $title_full, $config, $twig;
 	$charset = isset($config['charset']) ? $config['charset'] : 'utf-8';
@@ -506,29 +496,32 @@ function template_header($is_admin = false)
 /**
  * Returns footer content to be used by templates.
  */
-function template_footer()
+function template_footer(): string
 {
-	global $config, $views_counter;
+	global $views_counter;
 	$ret = '';
-	if(admin())
+	if(admin()) {
 		$ret .= generateLink(ADMIN_URL, 'Admin Panel', true);
+	}
 
-	if($config['visitors_counter'])
-	{
+	if(setting('core.visitors_counter')) {
 		global $visitors;
 		$amount = $visitors->getAmountVisitors();
 		$ret .= '<br/>Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
 	}
 
-	if($config['views_counter'])
+	if(setting('core.views_counter')) {
 		$ret .= '<br/>Page has been viewed ' . $views_counter . ' times.';
+	}
 
-	if(config('footer_show_load_time')) {
+	if(setting('core.footer_load_time')) {
 		$ret .= '<br/>Load time: ' . round(microtime(true) - START_TIME, 4) . ' seconds.';
 	}
 
-	if(isset($config['footer'][0]))
-		$ret .= '<br/>' . $config['footer'];
+	$settingFooter = setting('core.footer');
+	if(isset($settingFooter[0])) {
+		$ret .= '<br/>' . $settingFooter;
+	}
 
 	// please respect my work and help spreading the word, thanks!
 	return $ret . '<br/>' . base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
@@ -536,8 +529,8 @@ function template_footer()
 
 function template_ga_code()
 {
-	global $config, $twig;
-	if(!isset($config['google_analytics_id'][0]))
+	global $twig;
+	if(!isset(setting('core.google_analytics_id')[0]))
 		return '';
 
 	return $twig->render('google_analytics.html.twig');
@@ -822,7 +815,7 @@ function getWorldName($id)
 
 /**
  * Mailing users.
- * $config['mail_enabled'] have to be enabled.
+ * Mailing has to be enabled in settings (in Admin Panel).
  *
  * @param string $to Recipient email address.
  * @param string $subject Subject of the message.
@@ -834,8 +827,9 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 {
 	global $mailer, $config;
 
-	if (!config('mail_enabled')) {
-		log_append('mailer-error.log', '_mail() function has been used, but config.mail_enabled is disabled.');
+	if (!setting('core.mail_enabled')) {
+		log_append('mailer-error.log', '_mail() function has been used, but Mail Support is disabled.');
+		return false;
 	}
 
 	if(!$mailer)
@@ -847,47 +841,60 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 		$mailer->clearAllRecipients();
 	}
 
-	$signature_html = '';
-	if(isset($config['mail_signature']['html']))
-		$signature_html = $config['mail_signature']['html'];
-
+	$signature_html = setting('core.mail_signature_html');
 	if($add_html_tags && isset($body[0]))
 		$tmp_body = '<html><head></head><body>' . $body . '<br/><br/>' . $signature_html . '</body></html>';
 	else
 		$tmp_body = $body . '<br/><br/>' . $signature_html;
 
-	if($config['smtp_enabled'])
+	define('MAIL_MAIL', 0);
+	define('MAIL_SMTP', 1);
+
+	$mailOption = setting('core.mail_option');
+	if($mailOption == MAIL_SMTP)
 	{
 		$mailer->isSMTP();
-		$mailer->Host = $config['smtp_host'];
-		$mailer->Port = (int)$config['smtp_port'];
-		$mailer->SMTPAuth = $config['smtp_auth'];
-		$mailer->Username = $config['smtp_user'];
-		$mailer->Password = $config['smtp_pass'];
-		$mailer->SMTPSecure = isset($config['smtp_secure']) ? $config['smtp_secure'] : '';
+		$mailer->Host = setting('core.smtp_host');
+		$mailer->Port = setting('core.smtp_port');
+		$mailer->SMTPAuth = setting('core.smtp_auth');
+		$mailer->Username = setting('core.smtp_user');
+		$mailer->Password = setting('core.smtp_pass');
+
+		define('SMTP_SECURITY_NONE', 0);
+		define('SMTP_SECURITY_SSL', 1);
+		define('SMTP_SECURITY_TLS', 2);
+
+		$security = setting('core.smtp_security');
+
+		$tmp = '';
+		if ($security === SMTP_SECURITY_SSL) {
+			$tmp = 'ssl';
+		}
+		else if ($security == SMTP_SECURITY_TLS) {
+			$tmp = 'tls';
+		}
+
+		$mailer->SMTPSecure = $tmp;
 	}
 	else {
 		$mailer->isMail();
 	}
 
 	$mailer->isHTML(isset($body[0]) > 0);
-	$mailer->From = $config['mail_address'];
-	$mailer->Sender = $config['mail_address'];
+	$mailer->From = setting('core.mail_address');
+	$mailer->Sender = setting('core.mail_address');
 	$mailer->CharSet = 'utf-8';
 	$mailer->FromName = $config['lua']['serverName'];
 	$mailer->Subject = $subject;
 	$mailer->addAddress($to);
 	$mailer->Body = $tmp_body;
 
-	if(config('smtp_debug')) {
+	if(setting('core.smtp_debug')) {
 		$mailer->SMTPDebug = 2;
 		$mailer->Debugoutput = 'echo';
 	}
 
-	$signature_plain = '';
-	if(isset($config['mail_signature']['plain']))
-		$signature_plain = $config['mail_signature']['plain'];
-
+	$signature_plain = setting('core.mail_signature_plain');
 	if(isset($altBody[0])) {
 		$mailer->AltBody = $altBody . $signature_plain;
 	}
@@ -1047,7 +1054,7 @@ function getTopPlayers($limit = 5) {
 			$deleted = 'deletion';
 
 		$is_tfs10 = $db->hasTable('players_online');
-		$players = $db->query('SELECT `id`, `name`, `level`, `vocation`, `experience`, `looktype`' . ($db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `lookhead`, `lookbody`, `looklegs`, `lookfeet`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . config('highscores_groups_hidden') . ' AND `id` NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
+		$players = $db->query('SELECT `id`, `name`, `level`, `vocation`, `experience`, `looktype`' . ($db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `lookhead`, `lookbody`, `looklegs`, `lookfeet`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . setting('core.highscores_groups_hidden') . ' AND `id` NOT IN (' . implode(', ', setting('core.highscores_ids_hidden')) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
 
 		if($is_tfs10) {
 			foreach($players as &$player) {
@@ -1100,6 +1107,9 @@ function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
 function config($key) {
 	global $config;
 	if (is_array($key)) {
+		if (is_null($key[1])) {
+			unset($config[$key[0]]);
+		}
 		return $config[$key[0]] = $key[1];
 	}
 
@@ -1113,6 +1123,21 @@ function configLua($key) {
 	}
 
 	return @$config['lua'][$key];
+}
+
+function setting($key)
+{
+	$settings = Settings::getInstance();
+
+	if (is_array($key)) {
+		if (is_null($key[1])) {
+			unset($settings[$key[0]]);
+		}
+
+		return $settings[$key[0]] = $key[1];
+	}
+
+	return $settings[$key]['value'];
 }
 
 function clearCache()
@@ -1483,8 +1508,8 @@ function right($str, $length) {
 }
 
 function getCreatureImgPath($creature){
-	$creature_path = config('creatures_images_url');
-	$creature_gfx_name = trim(strtolower($creature)) . config('creatures_images_extension');
+	$creature_path = config('monsters_images_url');
+	$creature_gfx_name = trim(strtolower($creature)) . config('monsters_images_extension');
 	if (!file_exists($creature_path . $creature_gfx_name)) {
 		$creature_gfx_name = str_replace(" ", "", $creature_gfx_name);
 		if (file_exists($creature_path . $creature_gfx_name)) {

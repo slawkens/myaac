@@ -25,7 +25,7 @@
 									<b>Group</b>
 								</td>
 
-								{% if config.team_display_outfit %}
+								{% if setting('core.team_outfit') %}
 								<td width="5%" class="white">
 									<b>Outfit</b>
 								</td>
@@ -35,19 +35,19 @@
 									<b>Name</b>
 								</td>
 
-								{% if config.team_display_status %}
+								{% if setting('core.team_status') %}
 								<td class="white">
 									<b>Status</b>
 								</td>
 								{% endif %}
 
-								{% if (config.multiworld or config.team_display_world) %}
+								{% if (setting('core.multiworld') or setting('core.team_world')) %}
 								<td class="white">
 									<b>World</b>
 								</td>
 								{% endif %}
 
-								{% if config.team_display_lastlogin %}
+								{% if setting('core.team_lastlogin') %}
 								<td class="white">
 									<b>Last login</b>
 								</td>
@@ -61,7 +61,7 @@
 									<tr bgcolor="{{ getStyle(i) }}" style="height: 32px;">
 										<td>{{ group.group_name|capitalize }}</td>
 
-										{% if config.team_display_outfit %}
+										{% if setting('core.team_outfit') %}
 										<td>
 											<img style="position: absolute; margin-top: {% if member.player.looktype in config.outfit_images_wrong_looktypes %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
 										</td>
@@ -74,7 +74,7 @@
 											{{ member.link|raw }}
 										</td>
 
-										{% if config.team_display_status %}
+										{% if setting('core.team_status') %}
 										<td>
 											{% if member.status %}
 												<span style="color: green"><b>Online</b></span>
@@ -84,13 +84,13 @@
 										</td>
 										{% endif %}
 
-										{% if (config.multiworld or config.team_display_world) %}
+										{% if (setting('core.multiworld') or setting('core.team_world')) %}
 										<td>
 											<span><b>{{ member.world_name }}</b></span>
 										</td>
 										{% endif %}
 
-										{% if config.team_display_lastlogin %}
+										{% if setting('core.team_lastlogin') %}
 										<td>
 											<span>{{ member.last_login }}</span>
 										</td>
@@ -107,7 +107,7 @@
 
 							<table cellspacing="1" cellpadding="4" border="0" width="100%">
 								<tr bgcolor="{{ config.vdarkborder }}">
-									{% if config.team_display_outfit %}
+									{% if setting('core.team_outfit') %}
 									<td width="5%" class="white">
 										<b>Outfit</b>
 									</td>
@@ -117,19 +117,19 @@
 										<b>Name</b>
 									</td>
 
-									{% if config.team_display_status %}
+									{% if setting('core.team_status') %}
 									<td class="white">
 										<b>Status</b>
 									</td>
 									{% endif %}
 
-									{% if (config.multiworld or config.team_display_world) %}
+									{% if (setting('core.multiworld') or setting('core.team_world')) %}
 									<td class="white">
 										<b>World</b>
 									</td>
 									{% endif %}
 
-									{% if config.team_display_lastlogin %}
+									{% if setting('core.team_lastlogin') %}
 									<td class="white">
 										<b>Last login</b>
 									</td>
@@ -139,7 +139,7 @@
 								{% for member in group.members %}
 								{% set i = i + 1 %}
 									<tr bgcolor="{{ getStyle(i) }}" style="height: 32px;">
-									{% if config.team_display_outfit %}
+									{% if setting('core.team_outfit') %}
 									<td>
 										<img style="position: absolute; margin-top: {% if member.player.looktype in config.outfit_images_wrong_looktypes %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
 									</td>
@@ -152,7 +152,7 @@
 										{{ member.link|raw }}
 									</td>
 
-									{% if config.team_display_status %}
+									{% if setting('core.team_status') %}
 									<td>
 										{% if member.status %}
 											<span style="color: green"><b>Online</b></span>
@@ -162,13 +162,13 @@
 									</td>
 									{% endif %}
 
-									{% if (config.multiworld or config.team_display_world) %}
+									{% if (setting('core.multiworld') or setting('core.team_world')) %}
 									<td>
 										<span><b>{{ member.world_name }}</b></span>
 									</td>
 									{% endif %}
 
-									{% if config.team_display_lastlogin %}
+									{% if setting('core.team_lastlogin') %}
 									<td>
 										<span>{{ member.last_login }}</span>
 									</td>

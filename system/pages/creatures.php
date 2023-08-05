@@ -14,7 +14,7 @@ $title = 'Creatures';
 
 if (empty($_REQUEST['name'])) {
 	// display list of monsters
-	$preview = config('creatures_images_preview');
+	$preview = config('monsters_images_preview');
 	$creatures = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1 '.(empty($_REQUEST['boss']) ? '': 'AND `rewardboss` = 1').' ORDER BY name asc')->fetchAll();
 
 	if ($preview) {
@@ -62,7 +62,7 @@ if (isset($creature['name'])) {
 		$item['name'] = getItemNameById($item['id']);
 		$item['rarity_chance'] = round($item['chance'] / 1000, 2);
 		$item['rarity'] = getItemRarity($item['chance']);
-		$item['tooltip'] = ucfirst($item['name']) . '<br/>Chance: ' . $item['rarity'] . (config('creatures_loot_percentage') ? ' ('. $item['rarity_chance'] .'%)' : '') . '<br/>Max count: ' . $item['count'];
+		$item['tooltip'] = ucfirst($item['name']) . '<br/>Chance: ' . $item['rarity'] . (config('monsters_loot_percentage') ? ' ('. $item['rarity_chance'] .'%)' : '') . '<br/>Max count: ' . $item['count'];
 	}
 
 	$creature['loot'] = isset($loot) ? $loot : null;

@@ -11,16 +11,12 @@ if(!isset($_SESSION['var_server_path'])) {
 }
 
 if(!$error) {
-	$content = "<?php";
-	$content .= PHP_EOL;
-	$content .= '// place for your configuration directives, so you can later easily update myaac';
-	$content .= PHP_EOL;
-	$content .= '$config[\'installed\'] = true;';
-	$content .= PHP_EOL;
-	// by default, set env to prod
-	// user can disable when he wants
-	$content .= '$config[\'env\'] = \'prod\'; // dev or prod';
-	$content .= PHP_EOL;
+	$configToSave = [
+		// by default, set env to prod
+		// user can disable when he wants
+		'env' => 'prod',
+	];
+
 	foreach($_SESSION as $key => $value)
 	{
 		if(strpos($key, 'var_') !== false)
@@ -32,16 +28,13 @@ if(!$error) {
 					$value .= '/';
 			}
 
-			if($key === 'var_usage') {
-				$content .= '$config[\'anonymous_usage_statistics\'] = ' . ((int)$value == 1 ? 'true' : 'false') . ';';
-				$content .= PHP_EOL;
-			}
-			else if(!in_array($key, array('var_account', 'var_account_id', 'var_password', 'var_step', 'var_email', 'var_player_name'), true)) {
-				$content .= '$config[\'' . str_replace('var_', '', $key) . '\'] = \'' . $value . '\';';
-				$content .= PHP_EOL;
+			if(!in_array($key, ['var_usage', 'var_date_timezone', 'var_client', 'var_account', 'var_account_id', 'var_password', 'var_password_confirm', 'var_step', 'var_email', 'var_player_name'], true)) {
+				$configToSave[str_replace('var_', '', $key)] = $value;
 			}
 		}
 	}
+
+	$configToSave['cache_prefix'] = 'myaac_' . generateRandomString(8, true, false, true);
 
 	require BASE . 'install/includes/config.php';
 
@@ -79,31 +72,17 @@ if(!$error) {
 					'message' => $locale['loading_spinner']
 				));
 
-				if(!Validator::email($_SESSION['var_mail_admin'])) {
-					error($locale['step_config_mail_admin_error']);
-					$error = true;
-				}
-
-				$content .= '$config[\'session_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
-				$content .= PHP_EOL;
-				$content .= '$config[\'cache_prefix\'] = \'myaac_' . generateRandomString(8, true, false, true, false) . '_\';';
-
-				$saved = true;
-				if(!$error) {
-					$saved = file_put_contents(BASE . 'config.local.php', $content);
-				}
-
+				$content = '';
+				$saved = Settings::saveConfig($configToSave, BASE . 'config.local.php', $content);
 				if($saved) {
 					success($locale['step_database_config_saved']);
-					if(!$error) {
-						$_SESSION['saved'] = true;
-					}
+					$_SESSION['saved'] = true;
 				}
 				else {
 					$_SESSION['config_content'] = $content;
 					unset($_SESSION['saved']);
 
-					$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
+					$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.php</b>', $locale['step_database_error_file']);
 					error($locale['step_database_error_file'] . '<br/>
 						<textarea cols="70" rows="10">' . $content . '</textarea>');
 				}

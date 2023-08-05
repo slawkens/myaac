@@ -6,10 +6,6 @@ require '../common.php';
 const ADMIN_PANEL = true;
 const MYAAC_ADMIN = true;
 
-if(file_exists(BASE . 'config.local.php')) {
-	require_once BASE . 'config.local.php';
-}
-
 if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed']))
 {
 	header('Location: ' . BASE_URL . 'install/');
@@ -34,12 +30,6 @@ if(!$db->hasTable('myaac_account_actions')) {
 	throw new RuntimeException('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
 }
 
-if(config('env') === 'dev') {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-}
-
 // event system
 require_once SYSTEM . 'hooks.php';
 $hooks = new Hooks();
@@ -47,7 +37,6 @@ $hooks->load();
 
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
-require SYSTEM . 'migrate.php';
 require __DIR__ . '/includes/functions.php';
 
 $twig->addGlobal('config', $config);

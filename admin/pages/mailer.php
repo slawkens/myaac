@@ -15,7 +15,7 @@ if (!hasFlag(FLAG_CONTENT_MAILER) && !superAdmin()) {
 	return;
 }
 
-if (!config('mail_enabled')) {
+if (!setting('core.mail_enabled')) {
 	echo 'Mail support disabled in config.';
 	return;
 }

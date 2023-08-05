@@ -11,9 +11,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Experience Table';
 
 $experience = array();
-$columns = $config['experiencetable_columns'];
+$columns = setting('core.experience_table_columns');
 for($i = 0; $i < $columns; $i++) {
-	for($level = $i * $config['experiencetable_rows'] + 1; $level < $i * $config['experiencetable_rows'] + ($config['experiencetable_rows'] + 1); $level++) {
+	for($level = $i * setting('core.experience_table_rows') + 1; $level < $i * setting('core.experience_table_rows') + (setting('core.experience_table_rows') + 1); $level++) {
 		$experience[$level] = OTS_Toolbox::experienceForLevel($level);
 	}
 }

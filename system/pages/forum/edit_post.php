@@ -10,7 +10,10 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-require __DIR__ . '/base.php';
+$ret = require __DIR__ . '/base.php';
+if ($ret === false) {
+	return;
+}
 
 if(Forum::canPost($account_logged))
 {
@@ -75,7 +78,7 @@ if(Forum::canPost($account_logged))
 						$char_id = $thread['author_guid'];
 					$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $char_id.", `post_text` = ".$db->quote($text).", `post_topic` = ".$db->quote($post_topic).", `post_smile` = ".$smile.", `post_html` = ".$html.", `last_edit_aid` = ".(int) $account_logged->getId().",`edit_date` = ".time()." WHERE `id` = ".(int) $thread['id']);
 					$post_page = $db->query("SELECT COUNT(`" . FORUM_TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`post_date` <= ".$thread['post_date']." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['first_post'])->fetch();
-					$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
+					$_page = (int) ceil($post_page['posts_count'] / setting('core.forum_threads_per_page')) - 1;
 					header('Location: ' . getForumThreadLink($thread['first_post'], $_page));
 					echo '<br />Thank you for editing post.<br /><a href="' . getForumThreadLink($thread['first_post'], $_page) . '">GO BACK TO LAST THREAD</a>';
 				}
@@ -117,6 +120,6 @@ if(Forum::canPost($account_logged))
 	}
 }
 else {
-	$errors[] = "Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";
+	$errors[] = "Your account is banned, deleted or you don't have any player with level " . setting('core.forum_level_required') . " on your account. You can't post.";
 	displayErrorBoxWithBackButton($errors, getLink('forum'));
 }

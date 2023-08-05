@@ -16,7 +16,7 @@ use DeviceDetector\Parser\OperatingSystem;
 $title = 'Visitors';
 $use_datatable = true;
 
-if (!$config['visitors_counter']): ?>
+if (!setting('core.visitors_counter')): ?>
 	Visitors counter is disabled.<br/>
 	You can enable it by editing this configurable in <b>config.local.php</b> file:<br/>
 	<p style="margin-left: 3em;"><b>$config['visitors_counter'] = true;</b></p>
@@ -25,10 +25,9 @@ if (!$config['visitors_counter']): ?>
 endif;
 
 require SYSTEM . 'libs/visitors.php';
-$visitors = new Visitors($config['visitors_counter_ttl']);
+$visitors = new Visitors(setting('core.visitors_counter_ttl'));
 
-function compare($a, $b)
-{
+function compare($a, $b): int {
 	return $a['lastvisit'] > $b['lastvisit'] ? -1 : 1;
 }
 
@@ -61,7 +60,7 @@ foreach ($tmp as &$visitor) {
 }
 
 $twig->display('admin.visitors.html.twig', array(
-	'config_visitors_counter_ttl' => $config['visitors_counter_ttl'],
+	'config_visitors_counter_ttl' => setting('core.visitors_counter_ttl'),
 	'visitors' => $tmp
 ));
 ?>

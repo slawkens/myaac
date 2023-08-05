@@ -116,6 +116,23 @@ else {
 			}
 		}
 
+		$settings = Settings::getInstance();
+		foreach($_SESSION as $key => $value) {
+			if (in_array($key, ['var_usage', 'var_date_timezone', 'var_client'])) {
+				if ($key == 'var_usage') {
+					$key = 'anonymous_usage_statistics';
+					$value = ((int)$value == 1 ? 'true' : 'false');
+				} elseif ($key == 'var_date_timezone') {
+					$key = 'date_timezone';
+				} elseif ($key == 'var_client') {
+					$key = 'client';
+				}
+
+				$settings->updateInDatabase('core', $key, $value);
+			}
+		}
+		success('Settings saved.');
+
 		$twig->display('install.installer.html.twig', array(
 			'url' => 'tools/7-finish.php',
 			'message' => $locale['importing_spinner']
