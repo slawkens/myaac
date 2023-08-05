@@ -117,7 +117,7 @@ class Validator
 			return false;
 		}
 
-		if(config('account_mail_block_plus_sign')) {
+		if(setting('core.account_mail_block_plus_sign')) {
 			$explode = explode('@', $email);
 			if(isset($explode[0]) && (strpos($explode[0],'+') !== false)) {
 				self::$lastError = 'Please do not use plus (+) sign in your e-mail.';

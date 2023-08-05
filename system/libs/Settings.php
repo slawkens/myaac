@@ -248,7 +248,13 @@ class Settings implements ArrayAccess
 				}
 
 				else if($setting['type'] === 'textarea') {
-					echo '<textarea class="form-control" name="settings[' . $key . ']" id="' . $key . '">' . ($settingsDb[$key] ?? ($setting['default'] ?? '')) . '</textarea>';
+					$value = ($settingsDb[$key] ?? ($setting['default'] ?? ''));
+					$valueWithSpaces = array_map('trim', preg_split('/\r\n|\r|\n/', trim($value)));
+					$rows = count($valueWithSpaces);
+					if ($rows < 2) {
+						$rows = 2; // always min 2 rows for textarea
+					}
+					echo '<textarea class="form-control" rows="' . $rows . '" name="settings[' . $key . ']" id="' . $key . '">' . $value . '</textarea>';
 				}
 
 				else if ($setting['type'] === 'options') {
@@ -314,8 +320,7 @@ class Settings implements ArrayAccess
 				?>
 						</td>
 						<td>
-							<div class="well">
-								<?php
+							<div class="well setting-default"><?php
 								echo ($setting['desc'] ?? '');
 								echo '<br/>';
 								echo '<strong>Default:</strong> ';
@@ -331,8 +336,7 @@ class Settings implements ArrayAccess
 										echo $setting['options'][$setting['default']];
 									}
 								}
-								?>
-							</div>
+								?></div>
 						</td>
 					</tr>
 					<?php

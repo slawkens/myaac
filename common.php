@@ -143,7 +143,6 @@ if(!IS_CLI) {
 	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
 }
 
-require SYSTEM . 'config.php';
 if (file_exists(BASE . 'config.local.php')) {
 	require BASE . 'config.local.php';
 }

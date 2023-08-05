@@ -149,7 +149,7 @@ class CreateCharacter
 			$char_to_copy = new OTS_Player();
 			$char_to_copy->find($char_to_copy_name);
 			if(!$char_to_copy->isLoaded())
-				$errors[] = 'Wrong characters configuration. Try again or contact with admin. ADMIN: Edit file config.php and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
+				$errors[] = 'Wrong characters configuration. Try again or contact with admin. ADMIN: Go to Admin Panel -> Settings -> Create Character and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
 		}
 
 		if(!empty($errors)) {
@@ -195,7 +195,7 @@ class CreateCharacter
 
 		for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++) {
 			$value = 10;
-			if (config('use_character_sample_skills')) {
+			if (setting('core.use_character_sample_skills')) {
 				$value = $char_to_copy->getSkill($skill);
 			}
 
@@ -241,7 +241,7 @@ class CreateCharacter
 		if($db->hasTable('player_skills')) {
 			for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++) {
 				$value = 10;
-				if (config('use_character_sample_skills')) {
+				if (setting('core.use_character_sample_skills')) {
 					$value = $char_to_copy->getSkill($skill);
 				}
 				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $skill);

@@ -24,6 +24,12 @@ $deprecatedConfig = [
 	'outfit_images_wrong_looktypes',
 	'item_images_url',
 	'account_country',
+	'towns',
+	'quests',
+	'character_samples',
+	'character_towns',
+	'characters_per_account',
+	'characters_search_limit',
 	'news_author',
 	'news_limit',
 	'news_ticker_limit',
@@ -52,6 +58,8 @@ $deprecatedConfig = [
 	'status_ip',
 	'status_port',
 	'mail_enabled',
+	'account_login_by_email',
+	'account_login_by_email_fallback',
 	'account_mail_verify',
 	'account_create_character_create',
 	'account_change_character_name',
@@ -70,3 +78,26 @@ foreach ($deprecatedConfig as $key => $value) {
 
 	//var_dump($settings['core.'.$value]['value']);
 }
+
+$deprecatedConfigCharacters = [
+	'level',
+	'experience',
+	'magic_level',
+	'balance',
+	'marriage_info' => 'marriage',
+	'outfit',
+	'creation_date',
+	'quests',
+	'skills',
+	'equipment',
+	'frags',
+	'deleted',
+];
+
+$tmp = [];
+foreach ($deprecatedConfigCharacters as $key => $value) {
+	$tmp[(is_string($key) ? $key : $value)] = setting('core.characters_'.$value);
+}
+
+config(['characters', $tmp]);
+unset($tmp);

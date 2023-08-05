@@ -26,11 +26,11 @@ return [
 			'name' => 'App Environment',
 			'type' => 'options',
 			'options' => ['prod' => 'Production', 'dev' => 'Development'],
-			'desc' => 'if you use this script on your live server - set production<br/>
-						* if you want to test and debug the script locally, or develop plugins, set to development<br/>
-						* WARNING: on "development" cache is disabled, so site will be significantly slower !!!<br/>
-						* WARNING2: on "development" all PHP errors/warnings are displayed<br/>
-						* Recommended: "production" cause of speed (page load time is better)',
+			'desc' => 'if you use this script on your live server - set production<br/>' .
+						'* if you want to test and debug the script locally, or develop plugins, set to development<br/>' .
+						'* WARNING: on "development" cache is disabled, so site will be significantly slower !!!<br/>' .
+						'* WARNING2: on "development" all PHP errors/warnings are displayed<br/>' .
+						'* Recommended: "production" cause of speed (page load time is better)',
 			'default' => 'prod',
 			'is_config' => true,
 		],
@@ -41,28 +41,6 @@ return [
 			'default' => '',
 			'is_config' => true,
 		],
-		'gzip_output' => [
-			'name' => 'gzip Output',
-			'type' => 'boolean',
-			'desc' => 'gzip page content before sending it to the browser, uses less bandwidth but more cpu cycles',
-			'default' => false,
-			'is_config' => true,
-		],
-		'cache_engine' => [
-			'name' => 'Cache Engine',
-			'type' => 'options',
-			'options' => ['auto' => 'Auto', 'file' => 'Files', 'apc' => 'APC', 'apcu' => 'APCu', 'eaccelerator' => 'eAccelerator', 'disable' => 'Disable'],
-			'desc' => 'Auto is most reasonable. It will detect the best cache engine',
-			'default' => 'auto',
-			'is_config' => true,
-		],
-		'cache_prefix' => [
-			'name' => 'Cache Prefix',
-			'type' => 'text',
-			'desc' => 'Have to be unique if running more MyAAC instances on the same server (except file system cache)',
-			'default' => 'myaac_' . generateRandomString(8, true, false, true),
-			'is_config' => true,
-		],
 		'date_timezone' => [
 			'name' => 'Date Timezone',
 			'type' => 'options',
@@ -70,27 +48,22 @@ return [
 			'desc' => 'Timezone of the server, more info at http://php.net/manual/en/timezones.php',
 			'default' => 'Europe/Warsaw',
 		],
-		'genders' => [
-			'name' => 'Genders (aka sex)',
-			'type' => 'textarea',
-			'desc' => 'Separated with comma',
-			'default' => 'Female, Male',
-			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
-				},
-			],
+		'friendly_urls' => [
+			'name' => 'Friendly URLs',
+			'type' => 'boolean',
+			'desc' => 'It makes links looks more elegant to eye, and also are SEO friendly<br/><br/>' .
+				'yes: http://example.net/guilds/Testing<br/>' .
+				'no: http://example.net/index.php/guilds/Testing<br/><br/>' .
+				'<strong>apache2:</strong> mod_rewrite is required for this + remember to rename .htaccess.dist to .htaccess<br/>' .
+				'<strong>nginx:</strong> check included nginx-sample.conf',
+			'default' => false,
 		],
-		'account_types' => [
-			'name' => 'Account Types',
-			'type' => 'textarea',
-			'desc' => 'Separated with comma, you may need to adjust this for older tfs versions by removing Community Manager',
-			'default' => 'None, Normal, Tutor, Senior Tutor, Gamemaster, Community Manager, God',
-			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
-				},
-			],
+		'gzip_output' => [
+			'name' => 'gzip Output',
+			'type' => 'boolean',
+			'desc' => 'gzip page content before sending it to the browser, uses less bandwidth but more cpu cycles',
+			'default' => false,
+			'is_config' => true,
 		],
 		'google_analytics_id' => [
 			'name' => 'Google Analytics ID',
@@ -204,6 +177,103 @@ return [
 			'type' => 'section',
 			'title' => 'Misc'
 		],
+		'cache_engine' => [
+			'name' => 'Cache Engine',
+			'type' => 'options',
+			'options' => ['auto' => 'Auto', 'file' => 'Files', 'apc' => 'APC', 'apcu' => 'APCu', 'eaccelerator' => 'eAccelerator', 'disable' => 'Disable'],
+			'desc' => 'Auto is most reasonable. It will detect the best cache engine',
+			'default' => 'auto',
+			'is_config' => true,
+		],
+		'cache_prefix' => [
+			'name' => 'Cache Prefix',
+			'type' => 'text',
+			'desc' => 'Have to be unique if running more MyAAC instances on the same server (except file system cache)',
+			'default' => 'myaac_' . generateRandomString(8, true, false, true),
+			'is_config' => true,
+		],
+		'session_prefix' => [
+			'name' => 'Session Prefix',
+			'type' => 'text',
+			'desc' => 'must be unique for every site on your server',
+			'default' => 'myaac_',
+		],
+		'backward_support' => [
+			'name' => 'Gesior Backward Support',
+			'type' => 'boolean',
+			'desc' => 'gesior backward support (templates & pages)<br/>' .
+						'allows using gesior templates and pages with myaac<br/>' .
+						'might bring some performance when disabled',
+			'default' => true,
+		],
+		'anonymous_usage_statistics' => [
+			'name' => 'Anonymous Usage Statistics',
+			'type' => 'boolean',
+			'desc' => 'Allow MyAAC to report anonymous usage statistics to developers? The data is sent only once per 30 days and is fully confidential. It won\'t affect the performance of your website',
+			'default' => true,
+		],
+		[
+			'type' => 'category',
+			'title' => 'Game',
+		],
+		[
+			'type' => 'section',
+			'title' => 'Game'
+		],
+		'client' => [
+			'name' => 'Client Version',
+			'type' => 'options',
+			'options' => '$clients',
+			'desc' => 'what client version are you using on this OT?<br/>used for the Downloads page and some templates aswell',
+			'default' => 710
+		],
+		'towns' => [
+			'name' => 'Towns',
+			'type' => 'textarea',
+			'desc' => "if you use TFS 1.3 with support for 'towns' table in database, then you can ignore this - it will be configured automatically (from MySQL database - Table - towns)<br/>" .
+				"otherwise it will try to load from your .OTBM map file<br/>" .
+				"if you don't see towns on website, then you need to fill this out",
+			'default' => "0=No Town\n1=Sample Town",
+			'callbacks' => [
+				'get' => function ($value) {
+					$ret = [];
+					$towns = array_map('trim', preg_split('/\r\n|\r|\n/', trim($value)));
+
+					foreach ($towns as $town) {
+						if (empty($town)) {
+							continue;
+						}
+
+						$explode = explode('=', $town);
+						$ret[$explode[0]] = $explode[1];
+					}
+
+					return $ret;
+				},
+			],
+		],
+		'genders' => [
+			'name' => 'Genders (aka sex)',
+			'type' => 'textarea',
+			'desc' => 'Separated with comma',
+			'default' => 'Female, Male',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
+		],
+		'account_types' => [
+			'name' => 'Account Types',
+			'type' => 'textarea',
+			'desc' => 'Separated with comma, you may need to adjust this for older tfs versions by removing Community Manager',
+			'default' => 'None, Normal, Tutor, Senior Tutor, Gamemaster, Community Manager, God',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
+		],
 		'vocations_amount' => [
 			'name' => 'Vocations Amount',
 			'type' => 'number',
@@ -220,43 +290,6 @@ return [
 					return array_map('trim', explode(',', $value));
 				},
 			],
-		],
-		'client' => [
-			'name' => 'Client Version',
-			'type' => 'options',
-			'options' => '$clients',
-			'desc' => 'what client version are you using on this OT?<br/>used for the Downloads page and some templates aswell',
-			'default' => 710
-		],
-		'session_prefix' => [
-			'name' => 'Session Prefix',
-			'type' => 'text',
-			'desc' => 'must be unique for every site on your server',
-			'default' => 'myaac_',
-		],
-		'friendly_urls' => [
-			'name' => 'Friendly URLs',
-			'type' => 'boolean',
-			'desc' => 'It makes links looks more elegant to eye, and also are SEO friendly<br/><br/>
-				yes: http://example.net/guilds/Testing<br/>
-				no: http://example.net/?subtopic=guilds&name=Testing<br/><br/>
-				<strong>apache2:</strong> mod_rewrite is required for this + remember to rename .htaccess.dist to .htaccess<br/>
-				<strong>nginx:</strong> check included nginx-sample.conf',
-			'default' => false,
-		],
-		'backward_support' => [
-			'name' => 'Gesior Backward Support',
-			'type' => 'boolean',
-			'desc' => 'gesior backward support (templates & pages)<br/>
-	allows using gesior templates and pages with myaac<br/>
-	might bring some performance when disabled',
-			'default' => true,
-		],
-		'anonymous_usage_statistics' => [
-			'name' => 'Anonymous Usage Statistics',
-			'type' => 'boolean',
-			'desc' => 'Allow MyAAC to report anonymous usage statistics to developers? The data is sent only once per 30 days and is fully confidential. It won\'t affect the performance of your website',
-			'default' => true,
 		],
 		[
 			'type' => 'category',
@@ -552,7 +585,7 @@ Sent by MyAAC,<br/>
 			],
 		],
 		'mail_lost_account_interval' => [
-			'name' => 'Default Account Premium Days',
+			'name' => 'Mail Lost Interface Interval',
 			'type' => 'number',
 			'desc' => 'Time in seconds between e-mails to one account from lost account interface, block spam',
 			'default' => 60,
@@ -585,6 +618,9 @@ Sent by MyAAC,<br/>
 			'type' => 'boolean',
 			'desc' => "allow also additionally login by Account Name/Number (for users that might forget their email). Works only if Account Login By E-Mail is also enabled",
 			'default' => false,
+			'show_if' => [
+				'account_login_by_email', '=', 'true'
+			],
 		],
 		'account_create_auto_login' => [
 			'name' => 'Account Create Auto Login',
@@ -622,6 +658,12 @@ Sent by MyAAC,<br/>
 			'desc' => 'How many days user need to change email to account - block hackers',
 			'default' => 2,
 		],
+		'account_mail_block_plus_sign' => [
+			'name' => 'Account Mail Block Plus Sign (+)',
+			'type' => 'boolean',
+			'desc' => "Block E-Mails with '+' signs like test+box@gmail.com (help protect against spamming accounts)",
+			'default' => true,
+		],
 		'account_country' => [
 			'name' => 'Account Country',
 			'type' => 'boolean',
@@ -634,9 +676,51 @@ Sent by MyAAC,<br/>
 			'desc' => 'should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io',
 			'default' => true,
 		],
+		'characters_per_account' => [
+			'name' => 'Characters per Account',
+			'type' => 'number',
+			'desc' => 'Max. number of characters per account',
+			'default' => 10,
+		],
 		'create_character' => [
 			'type' => 'section',
 			'title' => 'Create Character',
+		],
+		'character_samples' => [
+			'name' => 'Character Samples',
+			'type' => 'textarea',
+			'desc' => "Character Samples used when creating character.<br/>" .
+						"Format: <strong>ID_of_vocation =Name of Character to copy</strong><br/>" .
+			"For Rook use - <strong>0=Rook Sample</strong>",
+			'default' => "1=Sorcerer Sample\n2=Druid Sample\n3=Paladin Sample\n4=Knight Sample",
+			'callbacks' => [
+				'get' => function ($value) {
+					$ret = [];
+					$vocs = array_map('trim', preg_split('/\r\n|\r|\n/', trim($value)));
+
+					foreach ($vocs as $voc) {
+						if (empty($voc)) {
+							continue;
+						}
+
+						$explode = explode('=', $voc);
+						$ret[$explode[0]] = $explode[1];
+					}
+
+					return $ret;
+				},
+			],
+		],
+		'character_towns' => [
+			'name' => 'Towns List',
+			'type' => 'text',
+			'desc' => "Towns List used when creating character separated by comma (,). Won't be displayed if there is only one item (rookgaard for example)",
+			'default' => '1,2',
+			'callbacks' => [
+				'get' => function ($value) {
+					return array_map('trim', explode(',', $value));
+				},
+			],
 		],
 		'create_character_name_min_length' => [
 			'name' => 'Name Min Length',
@@ -701,6 +785,12 @@ Sent by MyAAC,<br/>
 			'desc' => 'Should spells names and words be blocked when creating character?',
 			'default' => true,
 		],
+		'use_character_sample_skills' => [
+			'name' => 'Use Character Sample Skills',
+			'type' => 'boolean',
+			'desc' => 'No = default skill = 10, yes - use sample skills',
+			'default' => false,
+		],
 		'account_mail_confirmed_reward' => [
 			'type' => 'section',
 			'title' => 'Reward Users for confirming their E-Mails. Works only with Account Mail Verify enabled',
@@ -709,7 +799,7 @@ Sent by MyAAC,<br/>
 			],
 		],
 		'account_mail_confirmed_reward_premium_days' => [
-			'name' => 'Reward Premium Points',
+			'name' => 'Reward Premium Days',
 			'type' => 'number',
 			'desc' => '0 to disable',
 			'default' => 0,
@@ -727,7 +817,7 @@ Sent by MyAAC,<br/>
 			],
 		],
 		'account_mail_confirmed_reward_coins' => [
-			'name' => 'Reward Premium Points',
+			'name' => 'Reward Coins',
 			'type' => 'number',
 			'desc' => '0 to disable. Works only with servers that supports coins',
 			'default' => 0,
@@ -982,6 +1072,114 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
+			'title' => 'Characters Page',
+		],
+		'characters_search_limit' => [
+			'name' => 'Characters Search Limit',
+			'type' => 'number',
+			'desc' => "How many characters (players) to show when using search function",
+			'default' => 15,
+		],
+		'characters_level' => [
+			'name' => 'Display Level',
+			'type' => 'boolean',
+			'desc' => 'Show characters level',
+			'default' => true,
+		],
+		'characters_experience' => [
+			'name' => 'Display Experience',
+			'type' => 'boolean',
+			'desc' => 'Show characters experience points',
+			'default' => false,
+		],
+		'characters_magic_level' => [
+			'name' => 'Display Magic Level',
+			'type' => 'boolean',
+			'desc' => 'Show characters magic level',
+			'default' => false,
+		],
+		'characters_balance' => [
+			'name' => 'Display Balance',
+			'type' => 'boolean',
+			'desc' => 'Show characters bank balance',
+			'default' => false,
+		],
+		'characters_marriage' => [
+			'name' => 'Display Marriage',
+			'type' => 'boolean',
+			'desc' => 'Show characters marriage info. Works only in TFS 0.3',
+			'default' => true,
+		],
+		'characters_outfit' => [
+			'name' => 'Display Outfit',
+			'type' => 'boolean',
+			'desc' => 'Show characters outfit',
+			'default' => true,
+		],
+		'characters_creation_date' => [
+			'name' => 'Display Creation Date',
+			'type' => 'boolean',
+			'desc' => 'Show characters date of creation',
+			'default' => true,
+		],
+		'characters_quests' => [
+			'name' => 'Display Quests',
+			'type' => 'boolean',
+			'desc' => 'Show characters quests. Can be configured below',
+			'default' => true,
+		],
+		'quests' => [
+			'name' => 'Quests List',
+			'type' => 'textarea',
+			'desc' => 'Character Quests List. Format: NameOfQuest=StorageValue',
+			'default' => "Some Quest=123\nSome Quest Two=456",
+			'show_if' => [
+				'characters_quests', '=', 'true'
+			],
+			'callbacks' => [
+				'get' => function ($value) {
+					$ret = [];
+					$quests = array_map('trim', preg_split('/\r\n|\r|\n/', trim($value)));
+
+					foreach ($quests as $quest) {
+						if (empty($quest)) {
+							continue;
+						}
+
+						$explode = explode('=', $quest);
+						$ret[$explode[0]] = $explode[1];
+					}
+
+					return $ret;
+				},
+			],
+		],
+		'characters_skills' => [
+			'name' => 'Display Skills',
+			'type' => 'boolean',
+			'desc' => 'Show characters skills',
+			'default' => true,
+		],
+		'characters_equipment' => [
+			'name' => 'Display Equipment',
+			'type' => 'boolean',
+			'desc' => 'Show characters equipment',
+			'default' => true,
+		],
+		'characters_frags' => [
+			'name' => 'Display Frags',
+			'type' => 'boolean',
+			'desc' => 'Show characters frags',
+			'default' => false,
+		],
+		'characters_deleted' => [
+			'name' => 'Display Deleted',
+			'type' => 'boolean',
+			'desc' => 'Should deleted characters from same account be still listed on the list of characters? When enabled it will show that character is "[DELETED]',
+			'default' => false,
+		],
+		[
+			'type' => 'section',
 			'title' => 'Online Page'
 		],
 		'online_record' => [
@@ -1192,7 +1390,7 @@ Sent by MyAAC,<br/>
 		'monsters_images_preview' => [
 			'name' => 'Monsters Images Preview',
 			'type' => 'boolean',
-			'desc' => 'Set to true to allow picture previews for creatures',
+			'desc' => 'Set to yes to allow picture previews for creatures',
 			'default' => false,
 		],
 		'monsters_items_url' => [
@@ -1204,7 +1402,7 @@ Sent by MyAAC,<br/>
 		'monsters_loot_percentage' => [
 			'name' => 'Monsters Items URL',
 			'type' => 'boolean',
-			'desc' => 'Set to true to show the loot tooltip percent',
+			'desc' => 'Set to yes to show the loot tooltip percent',
 			'default' => true,
 		],
 		// this is hidden, because no implemented yet
