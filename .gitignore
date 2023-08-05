@@ -2,6 +2,9 @@ Thumbs.db
 .DS_Store
 .idea
 
+#
+/.htaccess
+
 # composer
 composer.lock
 vendor
