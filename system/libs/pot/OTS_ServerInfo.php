@@ -123,7 +123,7 @@ class OTS_ServerInfo
         {
             // loads respond XML
             $info = new OTS_InfoRespond();
-            if(!$info->loadXML( utf8_encode($status->getBuffer())))
+            if(!$info->loadXML( $status->getBuffer()))
 				return false;
 
             return $info;
