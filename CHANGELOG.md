@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.8.12 - 07.08.2023]
+I've moved the repository back to my personal account. (Just so you know!)
+
+I will also try to add git commits pointed to each change, lets see if you like it or not - you can comment in discussion, that will be created just after releasing this version :)
+
+### Added
+* forum: better error messages (Suggested by @anyeor) (https://github.com/slawkens/myaac/commit/34725e0257684fe5fa43875cc3a8f587ba04642e)
+* more support for GesiorAAC classes, so some of them will work with MyAAC (https://github.com/slawkens/myaac/commit/a8172a518ff8939c4402349b16c064fcaf855d31)
+* word-break on forum thread & reply (Suggested by @anyeor) (https://github.com/slawkens/myaac/commit/ce4aed0f1719d2aadc749e5238e883e3c10e2686)
+
+### Fixed
+* not working pages/links from database, introduced in 0.8.10 (Thanks to OtLand user - https://otland.net/members/0lo.99657/ for report) (https://github.com/slawkens/myaac/commit/1e874c7027769bd09e772a1cdac75d7e37991256)
+* it was possible to create topic in board that was closed, ommiting the error check (Thanks to @anyeor for report) (https://github.com/slawkens/myaac/commit/0d52978d9fb99869500d35e7676f454ca5eaba14)
+* PHP 8.2 compatibility - removed deprecated functions utf8_encode & utf8_decode (https://github.com/slawkens/myaac/commit/a338fd967cdbcc89e86be4e6b66b2cad2ff23251)
+* guild description not being correctly shown (Reported by @anyeor)  (https://github.com/slawkens/myaac/commit/f2a3ec1185df64ad9084d4ff55790ae4a5b3e5fd, https://github.com/slawkens/myaac/commit/df321154f63d458a4bc7d83bac5e3447b67317a4)
+
+### Removed
+* Some old code for verifying messages length (Reported by @anyeor) (https://github.com/slawkens/myaac/commit/df48363ea4ced4350fd90ffddf57d464ba5afa8b)
+* some info about config failed to load, was never working (https://github.com/slawkens/myaac/commit/7a546e5a41036b0e9e926d337c6f2e3c41c591d2)
+
 ## [0.8.11 - 30.06.2023]
 
 ### Added
