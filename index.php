@@ -167,7 +167,7 @@ else {
 }
 
 // handle ?fbclid=x, etc. (show news page)
-if (!$found && count($_GET) > 0 && !isset($_REQUEST['subtopic']) && !isset($_REQUEST['p'])) {
+if (!$found && count($_GET) > 0 && !isset($_REQUEST['subtopic']) && !isset($_REQUEST['p']) && !in_array($_SERVER['QUERY_STRING'], getDatabasePages())) {
 	$_REQUEST['p'] = $_REQUEST['subtopic'] = 'news';
 	$found = true;
 }
