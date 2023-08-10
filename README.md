@@ -13,11 +13,11 @@ Official website: https://my-aac.org
 
 ### Requirements
 
-	- PHP 5.6 or later
+	- PHP 7.2.5 or later
 	- MySQL database
 	- PDO PHP Extension
 	- XML PHP Extension
-	- ZIP PHP Extension
+	- (optional) ZIP PHP Extension
 	- (optional) mod_rewrite to use friendly_urls
 
 ### Installation
