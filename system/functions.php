@@ -9,6 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAac\Models\Config;
 use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
@@ -272,14 +273,8 @@ function getForumBoards()
  */
 function fetchDatabaseConfig($name, &$value)
 {
-	global $db;
-
-	$query = $db->query('SELECT `value` FROM `' . TABLE_PREFIX . 'config` WHERE `name` = ' . $db->quote($name));
-	if($query->rowCount() <= 0)
-		return false;
-
-	$value = $query->fetchColumn();
-	return true;
+	$config = Config::select('value')->where(compact('name'))->first();
+	return $config?->value;
 }
 
 /**
@@ -303,8 +298,10 @@ function getDatabaseConfig($name)
  */
 function registerDatabaseConfig($name, $value)
 {
-	global $db;
-	$db->insert(TABLE_PREFIX . 'config', array('name' => $name, 'value' => $value));
+	$config = new Config;
+	$config->name = $name;
+	$config->value = $value;
+	$config->save();
 }
 
 /**
@@ -315,8 +312,7 @@ function registerDatabaseConfig($name, $value)
  */
 function updateDatabaseConfig($name, $value)
 {
-	global $db;
-	$db->update(TABLE_PREFIX . 'config', array('value' => $value), array('name' => $name));
+	Config::where(compact('name'))->update(compact('value'));
 }
 
 /**
@@ -343,47 +339,53 @@ function encrypt($str)
 //delete player with name
 function delete_player($name)
 {
-	global $db;
-	$player = new OTS_Player();
-	$player->find($name);
-	if($player->isLoaded()) {
-		try { $db->exec("DELETE FROM player_skills WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM guild_invites WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_items WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_depotitems WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_spells WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_storage WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_viplist WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_deaths WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_deaths WHERE killed_by = '".$player->getId()."';"); } catch(PDOException $error) {}
-		$rank = $player->getRank();
-		if($rank->isLoaded()) {
-			$guild = $rank->getGuild();
-			if($guild->getOwner()->getId() == $player->getId()) {
-				$rank_list = $guild->getGuildRanksList();
-				if(count($rank_list) > 0) {
-					$rank_list->orderBy('level');
-					foreach($rank_list as $rank_in_guild) {
-						$players_with_rank = $rank_in_guild->getPlayersList();
-						$players_with_rank->orderBy('name');
-						$players_with_rank_number = count($players_with_rank);
-						if($players_with_rank_number > 0) {
-							foreach($players_with_rank as $player_in_guild) {
-								$player_in_guild->setRank();
-								$player_in_guild->save();
-							}
-						}
-						$rank_in_guild->delete();
-					}
-					$guild->delete();
-				}
-			}
-		}
-		$player->delete();
-		return true;
+	$player = Player::where(compact('name'))->first();
+	if (!$player) {
+		return false;
 	}
 
 	return false;
+	// global $db;
+	// $player = new OTS_Player();
+	// $player->find($name);
+	// if($player->isLoaded()) {
+	// 	try { $db->exec("DELETE FROM player_skills WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM guild_invites WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_items WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_depotitems WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_spells WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_storage WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_viplist WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_deaths WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_deaths WHERE killed_by = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	$rank = $player->getRank();
+	// 	if($rank->isLoaded()) {
+	// 		$guild = $rank->getGuild();
+	// 		if($guild->getOwner()->getId() == $player->getId()) {
+	// 			$rank_list = $guild->getGuildRanksList();
+	// 			if(count($rank_list) > 0) {
+	// 				$rank_list->orderBy('level');
+	// 				foreach($rank_list as $rank_in_guild) {
+	// 					$players_with_rank = $rank_in_guild->getPlayersList();
+	// 					$players_with_rank->orderBy('name');
+	// 					$players_with_rank_number = count($players_with_rank);
+	// 					if($players_with_rank_number > 0) {
+	// 						foreach($players_with_rank as $player_in_guild) {
+	// 							$player_in_guild->setRank();
+	// 							$player_in_guild->save();
+	// 						}
+	// 					}
+	// 					$rank_in_guild->delete();
+	// 				}
+	// 				$guild->delete();
+	// 			}
+	// 		}
+	// 	}
+	// 	$player->delete();
+	// 	return true;
+	// }
+
+	// return false;
 }
 
 //delete guild with id

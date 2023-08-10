@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 if (!isset($config['database_overwrite'])) {
@@ -91,24 +94,32 @@ if(!isset($config['database_socket'])) {
 	$config['database_socket'] = '';
 }
 
-try {
-	$ots->connect(array(
-			'host' => $config['database_host'],
-			'user' => $config['database_user'],
-			'password' => $config['database_password'],
-			'database' => $config['database_name'],
-			'log' => $config['database_log'],
-			'socket' => @$config['database_socket'],
-			'persistent' => @$config['database_persistent']
-		)
-	);
 
-	$db = POT::getInstance()->getDBHandle();
-}
-catch(PDOException $error) {
+try {
+	$capsule = new Capsule;
+	$capsule->addConnection([
+		'driver' => 'mysql',
+		'host' => $config['database_host'],
+		'username' => $config['database_user'],
+		'password' => $config['database_password'],
+		'database' => $config['database_name'],
+		'unix_socket' => @$config['database_socket'],
+	]);
+
+	$capsule->setAsGlobal();
+	$capsule->bootEloquent();
+
+} catch (Exception $e) {
 	if(isset($cache) && $cache->enabled()) {
 		$cache->delete('config_lua');
 	}
+
+	throw new RuntimeException('ERROR: Cannot connect to MySQL database.<br/>' .
+		'Possible reasons:' .
+		'<ul>' .
+			'<li>MySQL is not configured propertly in <i>config.lua</i>.</li>' .
+			'<li>MySQL server is not running.</li>' .
+		'</ul>' . $error->getMessage());
 
 	if(defined('MYAAC_INSTALL')) {
 		return; // installer will take care of this
