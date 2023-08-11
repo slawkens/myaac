@@ -17,7 +17,7 @@ $next_page = false;
 
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 
-$changelogs = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'changelog` ' . ($canEdit ? '' : 'WHERE `hidden` = 0').' ORDER BY `id` DESC LIMIT ' . ($limit + 1) . ' OFFSET ' . $offset)->fetchAll();
+$changelogs = Changelog::isPublic()->orderByDesc('id')->limit($limit + 1)->offset($offset)->toArray();
 
 $i = 0;
 foreach($changelogs as $key => &$log)

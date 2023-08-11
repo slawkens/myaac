@@ -9,9 +9,9 @@ class Player extends Model {
 
 	public $timestamps = false;
 
-	public function player()
+	public function account()
 	{
-		return $this->belongsTo(Player::class);
+		return $this->belongsTo(Account::class);
 	}
 
 	public function scopeOnline($query) {

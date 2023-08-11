@@ -9,6 +9,6 @@ class Menu extends Model {
 
 	public $timestamps = false;
 
-	protected $guarded = ['id']; // lazy dev
+	protected $fillable = ['template', 'name', 'link', 'blank', 'color', 'category', 'ordering', 'enabled'];
 
 }
