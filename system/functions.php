@@ -12,6 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 use MyAac\Models\Config;
 use MyAac\Models\Guild;
 use MyAac\Models\House;
+use MyAac\Models\Pages;
 use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
@@ -272,8 +273,13 @@ function getForumBoards()
  */
 function fetchDatabaseConfig($name, &$value)
 {
-	$config = Config::select('value')->where(compact('name'))->first();
-	return $config?->value;
+	$config = Config::select('value')->where('name', '=', $name)->first();
+	if (!$config) {
+		return false;
+	}
+
+	$value = $config->value;
+	return true;
 }
 
 /**
@@ -311,7 +317,9 @@ function registerDatabaseConfig($name, $value)
  */
 function updateDatabaseConfig($name, $value)
 {
-	Config::where(compact('name'))->update(compact('value'));
+	Config::where('name', '=', $name)->update([
+		'value' => $value
+	]);
 }
 
 /**
@@ -1217,7 +1225,7 @@ function getCustomPageInfo($name)
 		return null;
 	}
 
-	return (array) $page;
+	return $page->toArray();
 }
 function getCustomPage($name, &$success): string
 {
@@ -1558,18 +1566,16 @@ function getGuildNameById($id)
 
 function getGuildLogoById($id)
 {
-	global $db;
-
 	$logo = 'default.gif';
 
 	$guild = Guild::where('id', intval($id))->select('logo_name')->first();
-	if ($guild {
+	if ($guild) {
 		$guildLogo = $query->logo_name;
 
 		if (!empty($guildLogo) && file_exists(GUILD_IMAGES_DIR . $guildLogo)) {
 			$logo = $guildLogo;
 		}
-	})
+	}
 
 	return BASE_URL . GUILD_IMAGES_DIR . $logo;
 }

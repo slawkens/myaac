@@ -7,6 +7,8 @@ class GuildRank extends Model {
 
 	protected $table = 'guild_ranks';
 
+	public $timestamps = false;
+
 	public function guild()
 	{
 		return $this->belongsTo(Guild::class);

@@ -3,9 +3,9 @@
 namespace MyAac\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class PlayerStorage extends Model {
+class PlayerOnline extends Model {
 
-	protected $table = 'player_storage';
+	protected $table = 'players_online';
 
 	public $timestamps = false;
 

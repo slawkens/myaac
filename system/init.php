@@ -117,11 +117,14 @@ if(!isset($foundValue)) {
 $config['data_path'] = $foundValue;
 unset($foundValue);
 
-$capsule = null;
+
+// POT
+require_once SYSTEM . 'libs/pot/OTS.php';
+$ots = POT::getInstance();
 require_once SYSTEM . 'database.php';
 
 // execute migrations
-require SYSTEM . 'migrate.php';
+// require SYSTEM . 'migrate.php';
 
 // settings
 require_once LIBS . 'Settings.php';

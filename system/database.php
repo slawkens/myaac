@@ -130,7 +130,7 @@ try {
 		'<ul>' .
 			'<li>MySQL is not configured propertly in <i>config.lua</i>.</li>' .
 			'<li>MySQL server is not running.</li>' .
-		'</ul>' . $error->getMessage());
+		'</ul>' . $e->getMessage());
 
 	if(defined('MYAAC_INSTALL')) {
 		return; // installer will take care of this

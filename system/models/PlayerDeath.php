@@ -7,6 +7,8 @@ class PlayerDeath extends Model {
 
 	protected $table = 'player_deaths';
 
+	public $timestamps = false;
+
 	public function player()
 	{
 		return $this->belongsTo(Player::class);

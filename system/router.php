@@ -7,6 +7,9 @@
  * @copyright 2023 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAac\Models\Pages;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 if(!isset($content[0]))
@@ -287,16 +290,13 @@ unset($page);
 
 function getDatabasePages($withHidden = false): array
 {
-	global $db, $logged_access;
-	$pages = $db->query('SELECT `name` FROM ' . TABLE_PREFIX . 'pages WHERE ' . ($withHidden ? '' : '`hidden` != 1 AND ') . '`access` <= ' . $db->quote($logged_access));
-	$ret = [];
+	global $logged_access;
+	$pages = Pages::where('access', '<=', $logged_access)->when(!$withHidden, function ($q) {
+		$q->isPublic();
+	})->get('name');
 
-	if ($pages->rowCount() < 1) {
-		return $ret;
-	}
-
-	foreach($pages->fetchAll() as $page) {
-		$ret [] = $page['name'];
+	foreach($pages as $page) {
+		$ret[] = $page->name;
 	}
 
 	return $ret;

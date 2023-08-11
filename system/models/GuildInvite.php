@@ -7,6 +7,8 @@ class GuildInvites extends Model {
 
 	protected $table = 'guild_invites';
 
+	public $timestamps = false;
+
 	public function player()
 	{
 		return $this->belongsTo(Player::class);

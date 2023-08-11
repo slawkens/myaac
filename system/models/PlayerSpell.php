@@ -7,6 +7,8 @@ class PlayerSpell extends Model {
 
 	protected $table = 'player_spells';
 
+	public $timestamps = false;
+
 	public function player()
 	{
 		return $this->belongsTo(Player::class);

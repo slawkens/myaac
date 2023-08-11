@@ -7,6 +7,8 @@ class GuildMembership extends Model {
 
 	protected $table = 'guild_members';
 
+	public $timestamps = false;
+
 	public function player()
 	{
 		return $this->belongsTo(Player::class);
