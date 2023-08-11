@@ -23,7 +23,7 @@ Official website: https://my-aac.org
 	- MySQL database
 	- PDO PHP Extension
 	- XML PHP Extension
-	- ZIP PHP Extension
+	- (optional) ZIP PHP Extension
 	- (optional) mod_rewrite to use friendly_urls
 
 ### Installation
@@ -78,6 +78,12 @@ Look: [Contributing](https://github.com/otsoft/myaac/wiki/Contributing) in our w
 ### Other Notes
 
 If you have a great idea or want contribute to the project - visit our website at https://www.my-aac.org
+
+## Project supported by JetBrains
+
+Many thanks to Jetbrains for kindly providing a license for me to work on this and other open-source projects.
+
+[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=https://github.com/slawkens)
 
 ### License
 
