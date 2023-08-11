@@ -1,0 +1,19 @@
+<?php
+
+namespace MyAac\Models;
+use Illuminate\Database\Eloquent\Model;
+
+class PlayerDeath extends Model {
+
+	protected $table = 'player_deaths';
+
+	public function player()
+	{
+		return $this->belongsTo(Player::class);
+	}
+
+	public function killer()
+	{
+		return $this->belongsTo(Player::class, 'killed_by');
+	}
+}

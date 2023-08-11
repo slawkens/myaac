@@ -3,9 +3,9 @@
 namespace MyAac\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class Player extends Model {
+class PlayerSkill extends Model {
 
-	protected $table = 'players';
+	protected $table = 'player_skills';
 
 	public function player()
 	{

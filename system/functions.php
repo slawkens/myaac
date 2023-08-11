@@ -10,6 +10,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 use MyAac\Models\Config;
+use MyAac\Models\Guild;
+use MyAac\Models\House;
 use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
@@ -100,15 +102,14 @@ function getMonsterLink($name, $generate = true): string
 
 function getHouseLink($name, $generate = true): string
 {
-	global $db;
-
 	if(is_numeric($name))
 	{
-		$house = $db->query(
-			'SELECT `name` FROM `houses` WHERE `id` = ' . (int)$name);
-		if($house->rowCount() > 0)
-			$name = $house->fetchColumn();
+		$house = House::find(intval($name));
+		if ($house) {
+			$name = $house->name;
+		}
 	}
+
 
 	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'houses/' . urlencode($name);
 
@@ -119,10 +120,8 @@ function getHouseLink($name, $generate = true): string
 function getGuildLink($name, $generate = true): string
 {
 	if(is_numeric($name)) {
-		$name = getGuildNameById($name);
-		if ($name === false) {
-			$name = 'Unknown';
-		}
+		$guild = Guild::find(intval($name));
+		$name = $guild->name ?? 'Unknown';
 	}
 
 	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'guilds/' . urlencode($name);
@@ -339,6 +338,8 @@ function encrypt($str)
 //delete player with name
 function delete_player($name)
 {
+	// DB::beginTransaction();
+	global $capsule;
 	$player = Player::where(compact('name'))->first();
 	if (!$player) {
 		return false;
@@ -1204,49 +1205,44 @@ function clearCache()
 	return true;
 }
 
-function getCustomPageInfo($page)
+function getCustomPageInfo($name)
 {
-	global $db, $logged_access;
-	$query =
-		$db->query(
-			'SELECT `id`, `title`, `body`, `php`, `hidden`' .
-			' FROM `' . TABLE_PREFIX . 'pages`' .
-			' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
-	if($query->rowCount() > 0) // found page
-	{
-		return $query->fetch(PDO::FETCH_ASSOC);
+	global $logged_access;
+	$page = Pages::isPublic()
+		->where('name', 'LIKE', $name)
+		->where('access', '<=', $logged_access)
+		->first();
+
+	if (!$page) {
+		return null;
 	}
 
-	return null;
+	return (array) $page;
 }
-function getCustomPage($page, &$success): string
+function getCustomPage($name, &$success): string
 {
-	global $db, $twig, $title, $ignore, $logged_access;
+	global $twig, $title, $ignore;
 
 	$success = false;
 	$content = '';
-	$query =
-		$db->query(
-			'SELECT `id`, `title`, `body`, `php`, `hidden`' .
-			' FROM `' . TABLE_PREFIX . 'pages`' .
-			' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
-	if($query->rowCount() > 0) // found page
+	$page = getCustomPageInfo($name);
+
+	if($page) // found page
 	{
 		$success = $ignore = true;
-		$query = $query->fetch();
-		$title = $query['title'];
+		$title = $page['title'];
 
-		if($query['php'] == '1') // execute it as php code
+		if($page['php'] == '1') // execute it as php code
 		{
-			$tmp = substr($query['body'], 0, 10);
+			$tmp = substr($page['body'], 0, 10);
 			if(($pos = strpos($tmp, '<?php')) !== false) {
-				$tmp = preg_replace('/<\?php/', '', $query['body'], 1);
+				$tmp = preg_replace('/<\?php/', '', $page['body'], 1);
 			}
 			else if(($pos = strpos($tmp, '<?')) !== false) {
-				$tmp = preg_replace('/<\?/', '', $query['body'], 1);
+				$tmp = preg_replace('/<\?/', '', $page['body'], 1);
 			}
 			else
-				$tmp = $query['body'];
+				$tmp = $page['body'];
 
 			$php_errors = array();
 			function error_handler($errno, $errstr) {
@@ -1274,7 +1270,7 @@ function getCustomPage($page, &$success): string
 			$oldLoader = $twig->getLoader();
 
 			$twig_loader_array = new Twig_ArrayLoader(array(
-				'content.html' => $query['body']
+				'content.html' => $page['body']
 			));
 
 			$twig->setLoader($twig_loader_array);
@@ -1391,36 +1387,12 @@ function getChangelogWhere($v)
 }
 function getPlayerNameByAccount($id)
 {
-	global $vowels, $ots, $db;
+	global $db;
 	if(is_numeric($id))
 	{
-		$player = new OTS_Player();
-		$player->load($id);
-		if($player->isLoaded())
-			return $player->getName();
-		else
-		{
-			$playerQuery = $db->query('SELECT `id` FROM `players` WHERE `account_id` = ' . $id . ' ORDER BY `lastlogin` DESC LIMIT 1;')->fetch();
-
-			$tmp = "*Error*";
-			/*
-			$acco = new OTS_Account();
-			$acco->load($id);
-			if(!$acco->isLoaded())
-				return "Unknown name";
-
-			foreach($acco->getPlayersList() as $p)
-			{
-				$player= new OTS_Player();
-				$player->find($p);*/
-				$player->load($playerQuery['id']);
-				//echo 'id gracza = ' . $p . '<br/>';
-				if($player->isLoaded())
-					$tmp = $player->getName();
-			//	break;
-			//}
-
-			return $tmp;
+		$player = Player::find(intval($id));
+		if ($player) {
+			return $player->name;
 		}
 	}
 
@@ -1576,12 +1548,9 @@ function escapeHtml($html) {
 
 function getGuildNameById($id)
 {
-	global $db;
-
-	$guild = $db->query('SELECT `name` FROM `guilds` WHERE `id` = ' . (int)$id);
-
-	if($guild->rowCount() > 0) {
-		return $guild->fetchColumn();
+	$guild = Guild::where('id', intval($id))->select('name')->first();
+	if ($guild) {
+		return $guild->name;
 	}
 
 	return false;
@@ -1593,16 +1562,14 @@ function getGuildLogoById($id)
 
 	$logo = 'default.gif';
 
-	$query = $db->query('SELECT `logo_name` FROM `guilds` WHERE `id` = ' . (int)$id);
-	if ($query->rowCount() == 1) {
-
-		$query = $query->fetch(PDO::FETCH_ASSOC);
-		$guildLogo = $query['logo_name'];
+	$guild = Guild::where('id', intval($id))->select('logo_name')->first();
+	if ($guild {
+		$guildLogo = $query->logo_name;
 
 		if (!empty($guildLogo) && file_exists(GUILD_IMAGES_DIR . $guildLogo)) {
 			$logo = $guildLogo;
 		}
-	}
+	})
 
 	return BASE_URL . GUILD_IMAGES_DIR . $logo;
 }

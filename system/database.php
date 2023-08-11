@@ -96,6 +96,17 @@ if(!isset($config['database_socket'])) {
 
 
 try {
+	$ots->connect([
+		'host' => $config['database_host'],
+		'user' => $config['database_user'],
+		'password' => $config['database_password'],
+		'database' => $config['database_name'],
+		'log' => $config['database_log'],
+		'socket' => @$config['database_socket'],
+		'persistent' => @$config['database_persistent']
+	]);
+	$db = POT::getInstance()->getDBHandle();
+
 	$capsule = new Capsule;
 	$capsule->addConnection([
 		'driver' => 'mysql',
