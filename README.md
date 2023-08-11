@@ -23,7 +23,7 @@ Official website: https://my-aac.org
 	- MySQL database
 	- PDO PHP Extension
 	- XML PHP Extension
-	- (optional) ZIP PHP Extension
+	- ZIP PHP Extension
 	- (optional) mod_rewrite to use friendly_urls
 
 ### Installation
