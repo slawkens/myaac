@@ -1,15 +1,21 @@
 # [MyAAC](https://my-aac.org)
 
-[![Build Status Master](https://img.shields.io/travis/slawkens/myaac/master)](https://travis-ci.org/github/slawkens/myaac)
-[![License: GPL-3.0](https://img.shields.io/github/license/slawkens/myaac)](https://opensource.org/licenses/gpl-license)
-[![Downloads Count](https://img.shields.io/github/downloads/slawkens/myaac/total)](https://github.com/slawkens/myaac/releases)
-[![PHP Versions](https://img.shields.io/travis/php-v/slawkens/myaac/master)](https://github.com/slawkens/myaac/blob/d8b3b4135827ee17e3c6d41f08a925e718c587ed/.travis.yml#L3)
-[![OpenTibia Discord](https://img.shields.io/discord/288399552581468162)](https://discord.gg/2J39Wus)
-[![Closed Issues](https://img.shields.io/github/issues-closed-raw/slawkens/myaac)](https://github.com/slawkens/myaac/issues?q=is%3Aissue+is%3Aclosed)
-
 MyAAC is a free and open-source Automatic Account Creator (AAC) written in PHP. It is a fork of the [Gesior](https://github.com/gesior/Gesior2012) project. It supports only MySQL databases.
 
 Official website: https://my-aac.org
+
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/slawkens/myaac/cypress.yml)](https://github.com/slawkens/myaac/actions)
+[![License: GPL-3.0](https://img.shields.io/github/license/slawkens/myaac)](https://opensource.org/licenses/gpl-license)
+[![Downloads Count](https://img.shields.io/github/downloads/slawkens/myaac/total)](https://github.com/slawkens/myaac/releases)
+[![OpenTibia Discord](https://img.shields.io/discord/288399552581468162)](https://discord.gg/2J39Wus)
+[![Closed Issues](https://img.shields.io/github/issues-closed-raw/slawkens/myaac)](https://github.com/slawkens/myaac/issues?q=is%3Aissue+is%3Aclosed)
+
+| Version    | Status                                    | Branch  | Requirements   |
+|:-----------|:------------------------------------------|:--------|:---------------|
+| **0.10.x** | **Active development**                    | develop | **PHP >= 8.0** |
+| 0.9.x      | Active support                            | 0.9     | PHP >= 7.2.5   |
+| 0.8.x      | Active support                            | master  | PHP >= 7.2.5   |
+| 0.7.x      | End Of Life                               | 0.7     | PHP >= 5.3.3   |
 
 ### Requirements
 
