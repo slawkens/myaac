@@ -1,4 +1,7 @@
 <?php
+
+use MyAac\Models\PlayerOnline;
+
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';
 require_once SYSTEM . 'init.php';
@@ -43,7 +46,7 @@ $action = $request->type ?? '';
 
 switch ($action) {
 	case 'cacheinfo':
-		$playersonline = $db->query("select count(*) from `players_online`")->fetchAll();
+		$playersonline = PlayerOnline::count();
 		die(json_encode([
 			'playersonline' => (intval($playersonline[0][0])),
 			'twitchstreams' => 0,
