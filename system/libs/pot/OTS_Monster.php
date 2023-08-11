@@ -276,7 +276,7 @@ class OTS_Monster extends DOMDocument
 
 /**
  * Returns look of the monster.
- * 
+ *
  * @return array Look with all the attributes of the look.
  * @throws DOMException On DOM operation error.
  */
@@ -285,6 +285,10 @@ class OTS_Monster extends DOMDocument
         $look = array();
 
         $element = $this->documentElement->getElementsByTagName('look')->item(0);
+
+        if (!$element) {
+            return $look;
+        }
 
         $look['type'] = $element->getAttribute('type');
         $look['typeex'] = $element->getAttribute('typeex');
