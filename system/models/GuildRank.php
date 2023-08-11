@@ -14,9 +14,4 @@ class GuildRank extends Model {
 		return $this->belongsTo(Guild::class);
 	}
 
-	public function player()
-	{
-		return $this->belongsTo(Player::class);
-	}
-
 }

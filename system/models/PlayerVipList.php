@@ -3,7 +3,7 @@
 namespace MyAac\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class PlayerSkill extends Model {
+class PlayerVipList extends Model {
 
 	protected $table = 'player_viplist';
 
@@ -12,5 +12,10 @@ class PlayerSkill extends Model {
 	public function player()
 	{
 		return $this->belongsTo(Player::class);
+	}
+
+	public function vip()
+	{
+		return $this->belongsTo(Player::class, 'vip_id');
 	}
 }

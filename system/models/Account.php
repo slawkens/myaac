@@ -15,4 +15,9 @@ class Account extends Model {
 		return $this->hasMany(Player::class);
 	}
 
+	public function viplist()
+	{
+		return $this->hasMany(AccountVipList::class);
+	}
+
 }

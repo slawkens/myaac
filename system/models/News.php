@@ -15,4 +15,8 @@ class News extends Model {
 		'article_image', 'hidden'
 	];
 
+	public function player()
+	{
+		return $this->belongsTo(Player::class);
+	}
 }
