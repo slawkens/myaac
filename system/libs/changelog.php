@@ -21,7 +21,6 @@ class Changelog
 
 	static public function add($body, $type, $where, $player_id, $cdate, &$errors)
 	{
-		global $db;
 		if(!self::verify($body,$cdate, $errors))
 			return false;
 
@@ -45,7 +44,6 @@ class Changelog
 
 	static public function update($id, $body, $type, $where, $player_id, $date,  &$errors)
 	{
-		global $db;
 		if(!self::verify($body,$date, $errors))
 			return false;
 
@@ -65,7 +63,6 @@ class Changelog
 
 	static public function delete($id, &$errors)
 	{
-		global $db;
 		if(isset($id))
 		{
 			$row = ModelsChangelog::find($id);
@@ -90,7 +87,6 @@ class Changelog
 
 	static public function toggleHidden($id, &$errors, &$status)
 	{
-		global $db;
 		if(isset($id))
 		{
 			$row = ModelsChangelog::find($id);

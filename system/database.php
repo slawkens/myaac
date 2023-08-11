@@ -115,6 +115,7 @@ try {
 
 	$capsule->getConnection()->setPdo($db);
 	$capsule->getConnection()->setReadPdo($db);
+
 	$capsule->setAsGlobal();
 	$capsule->bootEloquent();
 
