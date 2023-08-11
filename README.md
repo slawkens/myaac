@@ -19,7 +19,7 @@ Official website: https://my-aac.org
 
 ### Requirements
 
-	- PHP 7.2.5 or later
+	- PHP 8.0 or later
 	- MySQL database
 	- PDO PHP Extension
 	- XML PHP Extension
