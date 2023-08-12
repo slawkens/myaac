@@ -84,7 +84,7 @@ if (isset($_REQUEST['template'])) {
 			Not all templates support blank and colorful links.
 		</p>
 		<?php if (isset($config['menu_default_color'])) {?>
-		<form method="post" action="?p=menus&reset_colors">
+		<form method="post" action="?p=menus&reset_colors" onsubmit="return confirm('Do you really want to reset colors?');">
 			<input type="hidden" name="template" value="<?php echo $template ?>"/>
 			<button type="submit" class="btn btn-danger">Reset Colors to default</button>
 		</form>
@@ -101,6 +101,7 @@ if (isset($_REQUEST['template'])) {
 	?>
 	<form method="post" id="menus-form" action="?p=menus">
 		<input type="hidden" name="template" value="<?php echo $template ?>"/>
+		<button type="submit" class="btn btn-info">Save</button><br/><br/>
 		<div class="row">
 			<?php foreach ($config['menu_categories'] as $id => $cat): ?>
 				<div class="col-md-12 col-lg-6">
@@ -132,7 +133,7 @@ if (isset($_REQUEST['template'])) {
 		</div>
 		<div class="row pb-2">
 			<div class="col-md-12">
-				<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> Save</button>
+				<button type="submit" class="btn btn-info">Save</button>
 				<?php
 				echo '<button type="button" class="btn btn-danger float-right" value="Cancel" onclick="window.location = \'' . ADMIN_URL . '?p=menus\';"><i class="fas fa-cancel"></i> Cancel</button>';
 				?>
