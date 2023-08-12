@@ -9,6 +9,20 @@ class Player extends Model {
 
 	public $timestamps = false;
 
+	protected $casts = [
+		'worldid' => 'integer',
+		'sex' => 'integer',
+		'level' => 'integer',
+		'vocation' => 'integer',
+		'looktype' => 'integer',
+		'lookhead' => 'integer',
+		'lookbody' => 'integer',
+		'looklegs' => 'integer',
+		'lookfeet' => 'integer',
+		'lookaddons' => 'integer',
+		'isreward' => 'integer',
+	];
+
 	public function scopeNotDeleted($query) {
 		global $db;
 

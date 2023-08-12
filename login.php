@@ -1,5 +1,6 @@
 <?php
 
+use MyAAC\Models\BoostedCreature;
 use MyAAC\Models\PlayerOnline;
 
 require_once 'common.php';
@@ -48,7 +49,7 @@ switch ($action) {
 	case 'cacheinfo':
 		$playersonline = PlayerOnline::count();
 		die(json_encode([
-			'playersonline' => (intval($playersonline[0][0])),
+			'playersonline' => $playersonline,
 			'twitchstreams' => 0,
 			'twitchviewer' => 0,
 			'gamingyoutubestreams' => 0,
@@ -82,13 +83,11 @@ switch ($action) {
 		die(json_encode(['eventlist' => $eventlist, 'lastupdatetimestamp' => time()]));
 
 	case 'boostedcreature':
-		$boostDB = $db->query("select * from " . $db->tableName('boosted_creature'))->fetchAll();
-		foreach ($boostDB as $Tableboost) {
+		$boostedCreature = BoostedCreature::latest();
 		die(json_encode([
 			'boostedcreature' => true,
-			'raceid' => intval($Tableboost['raceid'])
+			'raceid' => $boostedCreature->raceid
 		]));
-		}
 	break;
 
 	case 'login':
