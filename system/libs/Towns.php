@@ -126,6 +126,6 @@ class Towns
 	 */
 	public static function getFromDatabase()
 	{
-		return Town::pluck('name', 'id');
+		return Town::pluck('name', 'id')->toArray();
 	}
 }
