@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Menu;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Menus';
 
@@ -58,6 +61,15 @@ if (isset($_REQUEST['template'])) {
 		return;
 	}
 
+	if (isset($_REQUEST['reset_colors'])) {
+		if (isset($config['menu_default_color'])) {
+			Menu::query()->update(['color' => str_replace('#', '', $config['menu_default_color'])]);
+		}
+		else {
+			warning('There is no default color defined, cannot reset colors.');
+		}
+	}
+
 	if (!isset($config['menu_categories'])) {
 		echo "No menu categories set in template config.php.<br/>This template doesn't support dynamic menus.";
 		return;
@@ -71,6 +83,13 @@ if (isset($_REQUEST['template'])) {
 			Hint: Add links to external sites using: <b>http://</b> or <b>https://</b> prefix.<br/>
 			Not all templates support blank and colorful links.
 		</p>
+		<?php if (isset($config['menu_default_color'])) {?>
+		<form method="post" action="?p=menus&reset_colors">
+			<input type="hidden" name="template" value="<?php echo $template ?>"/>
+			<button type="submit" class="btn btn-danger">Reset Colors to default</button>
+		</form>
+		<br/>
+		<?php } ?>
 	</div>
 	<?php
 	$menus = array();
