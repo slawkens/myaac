@@ -63,7 +63,7 @@ if (isset($_REQUEST['template'])) {
 
 	if (isset($_REQUEST['reset_colors'])) {
 		if (isset($config['menu_default_color'])) {
-			Menu::query()->update(['color' => str_replace('#', '', $config['menu_default_color'])]);
+			Menu::where('template', $template)->update(['color' => str_replace('#', '', $config['menu_default_color'])]);
 		}
 		else {
 			warning('There is no default color defined, cannot reset colors.');
