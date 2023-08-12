@@ -10,6 +10,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Changelog';
 
+use MyAAC\Models\Changelog;
+
 $_page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 $limit = 30;
 $offset = $_page * $limit;
@@ -17,7 +19,7 @@ $next_page = false;
 
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 
-$changelogs = Changelog::isPublic()->orderByDesc('id')->limit($limit + 1)->offset($offset)->toArray();
+$changelogs = Changelog::isPublic()->orderByDesc('id')->limit($limit + 1)->offset($offset)->get()->toArray();
 
 $i = 0;
 foreach($changelogs as $key => &$log)
