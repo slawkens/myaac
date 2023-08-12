@@ -45,6 +45,10 @@ if($success) {
 	success($locale['step_database_imported_players']);
 }
 
+require_once LIBS . 'plugins.php';
+Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
+Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
+
 require LIBS . 'DataLoader.php';
 DataLoader::setLocale($locale);
 DataLoader::load();
