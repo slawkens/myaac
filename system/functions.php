@@ -105,7 +105,7 @@ function getHouseLink($name, $generate = true): string
 {
 	if(is_numeric($name))
 	{
-		$house = House::find(intval($name));
+		$house = House::find(intval($name), ['name']);
 		if ($house) {
 			$name = $house->name;
 		}
@@ -121,7 +121,7 @@ function getHouseLink($name, $generate = true): string
 function getGuildLink($name, $generate = true): string
 {
 	if(is_numeric($name)) {
-		$guild = Guild::find(intval($name));
+		$guild = Guild::find(intval($name), ['name']);
 		$name = $guild->name ?? 'Unknown';
 	}
 
@@ -1400,9 +1400,9 @@ function getPlayerNameByAccountId($id)
 		return '';
 	}
 
-	$account = \MyAAC\Models\Account::find(intval($id));
+	$account = \MyAAC\Models\Account::find(intval($id), ['id']);
 	if ($account) {
-		$player = \MyAAC\Models\Player::where('account_id', $account->id)->orderByDesc('lastlogin')->first();
+		$player = \MyAAC\Models\Player::where('account_id', $account->id)->orderByDesc('lastlogin')->select('name')->first();
 		if (!$player) {
 			return '';
 		}
@@ -1426,7 +1426,7 @@ function getPlayerNameById($id)
 		return '';
 	}
 
-	$player = \MyAAC\Models\Player::find((int)$id);
+	$player = \MyAAC\Models\Player::find((int)$id, ['name']);
 	if ($player) {
 		return $player->name;
 	}
