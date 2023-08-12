@@ -15,11 +15,6 @@
 		return ( 50 / 3 ) * pow( $level, 3 ) - ( 100 * pow( $level, 2 ) ) + ( ( 850 / 3 ) * $level ) - 200;
 	}
 
-	/** Sprite settings **/
-	$spr_path = SIGNATURES_DATA.'Tibia.spr';
-	$dat_path = SIGNATURES_DATA.'Tibia.dat';
-	$otb_path = SIGNATURES_DATA.'items.otb';
-
 	$background = 'default.png';
 	if ( !file_exists( SIGNATURES_BACKGROUNDS.$background ) )
 	{
