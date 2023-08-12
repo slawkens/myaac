@@ -14,6 +14,7 @@ class Player extends Model {
 		'sex' => 'integer',
 		'level' => 'integer',
 		'vocation' => 'integer',
+		'promotion' => 'integer',
 		'looktype' => 'integer',
 		'lookhead' => 'integer',
 		'lookbody' => 'integer',
@@ -23,6 +24,39 @@ class Player extends Model {
 		'isreward' => 'integer',
 	];
 
+	public function scopeOrderBySkill($query, $value)
+	{
+		global $db;
+		$query->when($db->hasColumn('players', 'skill_fist'), function ($query) {
+
+		});
+	}
+
+	public function getVocationNameAttribute()
+	{
+		global $db, $config;
+
+		$vocation = $this->vocation;
+		if (isset($this->promotion)) {
+			$vocation *= $this->promotion;
+		}
+
+		return $config['vocations'][$vocation] ?? 'Unknown';
+	}
+
+	public function getIsDeletedAttribute()
+	{
+		if (isset($this->deleted)) {
+			return $this->deleted !== 0;
+		}
+
+		if (isset($this->deletion)) {
+			return $this->deletion !== 0;
+		}
+
+		return false;
+	}
+
 	public function scopeNotDeleted($query) {
 		global $db;
 
@@ -31,7 +65,7 @@ class Player extends Model {
 			$column = 'deletion';
 		}
 
-		$query->where($column, '!=', 0);
+		$query->where($column, 0);
 	}
 
 	public function scopeWithOnlineStatus($query) {
@@ -73,6 +107,11 @@ class Player extends Model {
 	public function items()
 	{
 		return $this->hasMany(PlayerItem::class);
+	}
+
+	public function kills()
+	{
+		return $this->hasMany(PlayerKillers::class);
 	}
 
 	public function deaths()

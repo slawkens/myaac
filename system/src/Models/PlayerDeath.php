@@ -18,4 +18,8 @@ class PlayerDeath extends Model {
 	{
 		return $this->belongsTo(Player::class, 'killed_by');
 	}
+
+	public function scopeUnjustified($query) {
+		$query->where('unjustified', 1);
+	}
 }
