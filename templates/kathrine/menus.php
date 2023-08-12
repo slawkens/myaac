@@ -24,7 +24,7 @@ return [
 		'Polls' => 'polls',
 		'Bans' => 'bans',
 		'Forum' => 'forum',
-		'Support List' => 'team',
+		'Team' => 'team',
 	],
 	MENU_CATEGORY_LIBRARY => [
 		'Monsters' => 'creatures',
