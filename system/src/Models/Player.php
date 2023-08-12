@@ -9,6 +9,43 @@ class Player extends Model {
 
 	public $timestamps = false;
 
+	public function scopeNotDeleted($query) {
+		global $db;
+
+		$column =  'deleted';
+		if($db->hasColumn('players', 'deletion')) {
+			$column = 'deletion';
+		}
+
+		$query->where($column, '!=', 0);
+	}
+
+	public function scopeWithOnlineStatus($query) {
+		global $db;
+		$query->when($db->hasTable('players_online'), function ($query) {
+			$query->with('onlineTable');
+		});
+	}
+
+	public function getOnlineStatusAttribute()
+	{
+		global $db;
+		if ($db->hasColumn('players', 'online')) {
+			return $this->online;
+		}
+
+		if ($db->hasTable('players_online')) {
+			return $this->onlineTable != null;
+		}
+
+		return false;
+	}
+
+	public function onlineTable()
+	{
+		return $this->belongsTo(PlayerOnline::class);
+	}
+
 	public function account()
 	{
 		return $this->belongsTo(Account::class);

@@ -13,6 +13,7 @@ use MyAAC\Models\Config;
 use MyAAC\Models\Guild;
 use MyAAC\Models\House;
 use MyAAC\Models\Pages;
+use MyAAC\Models\Player;
 use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
@@ -303,10 +304,7 @@ function getDatabaseConfig($name)
  */
 function registerDatabaseConfig($name, $value)
 {
-	$config = new Config;
-	$config->name = $name;
-	$config->value = $value;
-	$config->save();
+	Config::create(compact('name', 'value'));
 }
 
 /**
@@ -1060,26 +1058,38 @@ function getTopPlayers($limit = 5) {
 	}
 
 	if (!isset($players)) {
-		$deleted = 'deleted';
-		if($db->hasColumn('players', 'deletion'))
-			$deleted = 'deletion';
+		$columns = [
+			'id', 'name', 'level', 'vocation', 'experience',
+			'looktype', 'lookhead', 'lookbody', 'looklegs', 'lookfeet'
+		];
 
-		$is_tfs10 = $db->hasTable('players_online');
-		$players = $db->query('SELECT `id`, `name`, `level`, `vocation`, `experience`, `looktype`' . ($db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `lookhead`, `lookbody`, `looklegs`, `lookfeet`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . setting('core.highscores_groups_hidden') . ' AND `id` NOT IN (' . implode(', ', setting('core.highscores_ids_hidden')) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
-
-		if($is_tfs10) {
-			foreach($players as &$player) {
-				$query = $db->query('SELECT `player_id` FROM `players_online` WHERE `player_id` = ' . $player['id']);
-				$player['online'] = ($query->rowCount() > 0 ? 1 : 0);
-			}
-			unset($player);
+		if ($db->hasColumn('players', 'lookaddons')) {
+			$columns[] = 'lookaddons';
 		}
 
-		$i = 0;
-		foreach($players as &$player) {
-			$player['rank'] = ++$i;
+		if ($db->hasColumn('players', 'online')) {
+			$columns[] = 'online';
 		}
-		unset($player);
+
+		$players = Player::query()
+			->select($columns)
+			->withOnlineStatus()
+			->notDeleted()
+			->where('group_id', '<', setting('core.highscores_groups_hidden'))
+			->whereNotIn('id', setting('core.highscores_ids_hidden'))
+			->where('account_id', '!=', 1)
+			->orderByDesc('experience')
+			->limit($limit)
+			->get()
+			->map(function ($e, $i) {
+				$row = $e->toArray();
+				$row['online'] = $e->online_status;
+				$row['rank'] = $i + 1;
+
+				unset($row['online_table']);
+
+				return $row;
+			})->toArray();
 
 		if($cache->enabled()) {
 			$cache->set('top_' . $limit . '_level', serialize($players), 120);
