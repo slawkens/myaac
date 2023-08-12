@@ -1402,7 +1402,7 @@ function getPlayerNameByAccountId($id)
 
 	$account = \MyAAC\Models\Account::find(intval($id));
 	if ($account) {
-		$player = \MyAAC\Models\Player::where('account_id', $account->id)->orderByDesc('group_id')->orderByDesc('level')->first();
+		$player = \MyAAC\Models\Player::where('account_id', $account->id)->orderByDesc('lastlogin')->first();
 		if (!$player) {
 			return '';
 		}
