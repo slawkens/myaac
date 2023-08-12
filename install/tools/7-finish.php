@@ -60,10 +60,12 @@ require_once SYSTEM . 'migrations/27.php';
 require_once SYSTEM . 'migrations/30.php';
 
 use MyAAC\Models\FAQ as ModelsFAQ;
-ModelsFAQ::create([
-	'question' => 'What is this?',
-	'answer' => 'This is website for OTS powered by MyAAC.',
-]);
+if(ModelsFAQ::count() == 0) {
+	ModelsFAQ::create([
+		'question' => 'What is this?',
+		'answer' => 'This is website for OTS powered by MyAAC.',
+	]);
+}
 
 $locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(str_replace('tools/', '',ADMIN_URL), $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
 $locale['step_finish_desc'] = str_replace('$HOMEPAGE$', generateLink(str_replace('tools/', '', BASE_URL), $locale['step_finish_homepage'], true), $locale['step_finish_desc']);
