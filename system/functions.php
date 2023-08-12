@@ -1362,39 +1362,48 @@ function getChangelogWhere($v)
 
 	return 'unknown';
 }
-function getPlayerNameByAccount($id)
+
+function getPlayerNameByAccountId($id)
 {
-	global $vowels, $ots, $db;
-	if(is_numeric($id))
-	{
-		$player = new OTS_Player();
-		$player->load($id);
-		if($player->isLoaded())
-			return $player->getName();
-		else
-		{
-			$playerQuery = $db->query('SELECT `id` FROM `players` WHERE `account_id` = ' . $id . ' ORDER BY `lastlogin` DESC LIMIT 1;')->fetch();
+	global $db;
 
-			$tmp = "*Error*";
-			/*
-			$acco = new OTS_Account();
-			$acco->load($id);
-			if(!$acco->isLoaded())
-				return "Unknown name";
+	if (!is_numeric($id)) {
+		return '';
+	}
 
-			foreach($acco->getPlayersList() as $p)
-			{
-				$player= new OTS_Player();
-				$player->find($p);*/
-				$player->load($playerQuery['id']);
-				//echo 'id gracza = ' . $p . '<br/>';
-				if($player->isLoaded())
-					$tmp = $player->getName();
-			//	break;
-			//}
+	$account = new OTS_Account();
+	$account->load($id);
+	if ($account->isLoaded()) {
+		$query = $db->query('SELECT `name` FROM `players` WHERE `account_id` = ' . $id . ' ORDER BY `lastlogin` DESC LIMIT 1;')->fetch();
 
-			return $tmp;
+		if (!$query || !$query->rowCount()) {
+			return '';
 		}
+
+		return $query->fetch(PDO::FETCH_ASSOC)['name'];
+	}
+
+	return '';
+}
+
+function getPlayerNameByAccount($account) {
+	if (is_numeric($account)) {
+		return getPlayerNameByAccountId($account);
+	}
+
+	return '';
+}
+
+function getPlayerNameById($id)
+{
+	if (!is_numeric($id)) {
+		return '';
+	}
+
+	$player = new OTS_Player();
+	$player->load($id);
+	if ($player->isLoaded()) {
+		return $player->getName();
 	}
 
 	return '';
