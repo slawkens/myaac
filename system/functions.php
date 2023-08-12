@@ -1393,15 +1393,42 @@ function getChangelogWhere($v)
 
 	return 'unknown';
 }
-function getPlayerNameByAccount($id)
+
+function getPlayerNameByAccountId($id)
 {
-	global $db;
-	if(is_numeric($id))
-	{
-		$player = Player::find(intval($id));
-		if ($player) {
-			return $player->name;
+	if (!is_numeric($id)) {
+		return '';
+	}
+
+	$account = \MyAAC\Models\Account::find(intval($id));
+	if ($account) {
+		$player = \MyAAC\Models\Player::where('account_id', $account->id)->orderByDesc('group_id')->orderByDesc('level')->first();
+		if (!$player) {
+			return '';
 		}
+		return $player->name;
+	}
+
+	return '';
+}
+
+function getPlayerNameByAccount($account) {
+	if (is_numeric($account)) {
+		return getPlayerNameByAccountId($account);
+	}
+
+	return '';
+}
+
+function getPlayerNameById($id)
+{
+	if (!is_numeric($id)) {
+		return '';
+	}
+
+	$player = \MyAAC\Models\Player::find((int)$id);
+	if ($player) {
+		return $player->name;
 	}
 
 	return '';
