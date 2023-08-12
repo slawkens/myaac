@@ -37,10 +37,10 @@ else {
 
 $order = 'name';
 $spells = array();
-$spells_db = Spell::where('hidden', '!=', 1)->where('type', '<', 4)->orderBy($order);
+$spells_db = Spell::where('hidden', '!=', 1)->where('type', '<', 4)->orderBy($order)->get();
 
 if((string)$vocation_id != 'all') {
-	foreach($spells_db->fetchAll() as $spell) {
+	foreach($spells_db as $spell) {
 		$spell_vocations = json_decode($spell['vocations'], true);
 		if(in_array($vocation_id, $spell_vocations) || count($spell_vocations) == 0) {
 			$spell['vocations'] = null;
@@ -49,7 +49,7 @@ if((string)$vocation_id != 'all') {
 	}
 }
 else {
-	foreach($spells_db->fetchAll() as $spell) {
+	foreach($spells_db as $spell) {
 		$vocations = json_decode($spell['vocations'], true);
 
 		foreach($vocations as &$tmp_vocation) {
