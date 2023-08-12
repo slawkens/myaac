@@ -9,6 +9,20 @@ class Pages extends Model {
 
 	public $timestamps = false;
 
+	protected $fillable = ['name', 'title', 'body', 'date', 'player_id', 'php', 'enable_tinymce', 'access', 'hidden'];
+
+	protected $casts = [
+		'player_id' => 'integer',
+		'enable_tinymce' => 'integer',
+		'access' => 'integer',
+		'hidden' => 'integer',
+	];
+
+	public function player()
+	{
+		return $this->belongsTo(Player::class);
+	}
+
 	public function scopeIsPublic($query) {
 		$query->where('hidden', '!=', 1);
 	}

@@ -7,26 +7,25 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Account;
+use MyAAC\Models\Guild;
+use MyAAC\Models\House;
+use MyAAC\Models\Player;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Statistics';
 
-$query = $db->query('SELECT count(*) as `how_much` FROM `accounts`;');
-$query = $query->fetch();
-$total_accounts = $query['how_much'];
+$total_accounts = Account::count();
+$total_players = Player::count();
+$total_guilds = Guild::count();
+$total_houses = House::count();
 
-$query = $db->query('SELECT count(*) as `how_much` FROM `players`;');
-$query = $query->fetch();
-$total_players = $query['how_much'];
-
-$query = $db->query('SELECT count(*) as `how_much` FROM `guilds`;');
-$query = $query->fetch();
-$total_guilds = $query['how_much'];
-
-$query = $db->query('SELECT count(*) as `how_much` FROM `houses`;');
-$query = $query->fetch();
-$total_houses = $query['how_much'];
-
-$points = $db->query('SELECT `premium_points`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `premium_points` DESC LIMIT 10;');
+$points = Account::select(['premium_points', (USE_ACCOUNT_NAME ? 'name' : 'id')])
+	->orderByDesc('premium_points')
+	->limit(10)
+	->get()
+	->toArray();
 
 $twig->display('admin.statistics.html.twig', array(
 	'total_accounts' => $total_accounts,

@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Pages as ModelsPages;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Pages';
 $use_datatable = true;
@@ -94,19 +97,15 @@ if (!empty($action)) {
 		error(implode(", ", $errors));
 }
 
-$query =
-	$db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'pages'));
-
-$pages = array();
-foreach ($query as $_page) {
-	$pages[] = array(
-		'link' => getFullLink($_page['name'], $_page['name'], true),
-		'title' => substr($_page['title'], 0, 20),
-		'php' => $_page['php'] == '1',
-		'id' => $_page['id'],
-		'hidden' => $_page['hidden']
-	);
-}
+$pages = ModelsPages::all()->map(function ($e) {
+	return [
+		'link' => getFullLink($e->name, $e->name, true),
+		'title' => substr($e->title, 0, 20),
+		'php' => $e->php == '1',
+		'id' => $e->id,
+		'hidden' => $e->hidden
+	];
+})->toArray();
 
 $twig->display('admin.pages.form.html.twig', array(
 	'action' => $action,
@@ -170,10 +169,10 @@ class Pages
 
 	static public function get($id)
 	{
-		global $db;
-		$query = $db->select(TABLE_PREFIX . 'pages', array('id' => $id));
-		if ($query !== false)
-			return $query;
+		$row = ModelsPages::find($id);
+		if ($row) {
+			return $row->toArray();
+		}
 
 		return false;
 	}
@@ -184,20 +183,16 @@ class Pages
 			return false;
 		}
 
-		global $db;
-		$query = $db->select(TABLE_PREFIX . 'pages', array('name' => $name));
-		if ($query === false)
-			$db->insert(TABLE_PREFIX . 'pages',
-				array(
-					'name' => $name,
-					'title' => $title,
-					'body' => $body,
-					'player_id' => $player_id,
-					'php' => $php ? '1' : '0',
-					'enable_tinymce' => $enable_tinymce ? '1' : '0',
-					'access' => $access
-				)
-			);
+		if (!ModelsPages::where('name', $name)->exists())
+			ModelsPages::create([
+				'name' => $name,
+				'title' => $title,
+				'body' => $body,
+				'player_id' => $player_id,
+				'php' => $php ? '1' : '0',
+				'enable_tinymce' => $enable_tinymce ? '1' : '0',
+				'access' => $access
+			]);
 		else
 			$errors[] = 'Page with this link already exists.';
 
@@ -210,28 +205,25 @@ class Pages
 			return false;
 		}
 
-		global $db;
-		$db->update(TABLE_PREFIX . 'pages',
-			array(
-				'name' => $name,
-				'title' => $title,
-				'body' => $body,
-				'player_id' => $player_id,
-				'php' => $php ? '1' : '0',
-				'enable_tinymce' => $enable_tinymce ? '1' : '0',
-				'access' => $access
-			),
-			array('id' => $id));
-
+		ModelsPages::where('id', $id)->update([
+			'name' => $name,
+			'title' => $title,
+			'body' => $body,
+			'player_id' => $player_id,
+			'php' => $php ? '1' : '0',
+			'enable_tinymce' => $enable_tinymce ? '1' : '0',
+			'access' => $access
+		]);
 		return true;
 	}
 
 	static public function delete($id, &$errors)
 	{
-		global $db;
 		if (isset($id)) {
-			if ($db->select(TABLE_PREFIX . 'pages', array('id' => $id)) !== false)
-				$db->delete(TABLE_PREFIX . 'pages', array('id' => $id));
+			$row = ModelsPages::find($id);
+			if ($row) {
+				$row->delete();
+			}
 			else
 				$errors[] = 'Page with id ' . $id . ' does not exists.';
 		} else
@@ -242,12 +234,12 @@ class Pages
 
 	static public function toggleHidden($id, &$errors, &$status)
 	{
-		global $db;
 		if (isset($id)) {
-			$query = $db->select(TABLE_PREFIX . 'pages', array('id' => $id));
-			if ($query !== false) {
-				$db->update(TABLE_PREFIX . 'pages', array('hidden' => ($query['hidden'] == 1 ? 0 : 1)), array('id' => $id));
-				$status = $query['hidden'];
+			$row = ModelsPages::find($id);
+			if ($row) {
+				$row->hidden = $row->hidden == 1 ? 0 : 1;
+				$row->save();
+				$status = $row->hidden;
 			}
 			else {
 				$errors[] = 'Page with id ' . $id . ' does not exists.';

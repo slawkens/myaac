@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Notepad as ModelsNotepad;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Notepad';
 
@@ -30,23 +33,24 @@ class Notepad
 {
 	static public function get($account_id)
 	{
-		global $db;
-		$query = $db->select(TABLE_PREFIX . 'notepad', array('account_id' => $account_id));
-		if ($query !== false)
-			return $query['content'];
+		$row = ModelsNotepad::where('account_id', $account_id)->first('content');
+		if ($row) {
+			return $row->content;
+		}
 
 		return false;
 	}
 
 	static public function create($account_id, $content = '')
 	{
-		global $db;
-		$db->insert(TABLE_PREFIX . 'notepad', array('account_id' => $account_id, 'content' => $content));
+		ModelsNotepad::create([
+			'account_id' => $account_id,
+			'content' => $content
+		]);
 	}
 
 	static public function update($account_id, $content = '')
 	{
-		global $db;
-		$db->update(TABLE_PREFIX . 'notepad', array('content' => $content), array('account_id' => $account_id));
+		ModelsNotepad::where('account_id', $account_id)->update(['content' => $content]);
 	}
 }

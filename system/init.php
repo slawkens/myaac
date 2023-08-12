@@ -121,6 +121,7 @@ unset($foundValue);
 // POT
 require_once SYSTEM . 'libs/pot/OTS.php';
 $ots = POT::getInstance();
+$eloquentConnection = null;
 require_once SYSTEM . 'database.php';
 
 // execute migrations

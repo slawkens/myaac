@@ -119,6 +119,8 @@ try {
 	$capsule->setAsGlobal();
 	$capsule->bootEloquent();
 
+	$eloquentConnection = $capsule->getConnection();
+
 } catch (Exception $e) {
 	if(isset($cache) && $cache->enabled()) {
 		$cache->delete('config_lua');
