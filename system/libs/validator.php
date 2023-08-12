@@ -8,8 +8,8 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\Monster;
-use MyAac\Models\Spell;
+use MyAAC\Models\Monster;
+use MyAAC\Models\Spell;
 
 defined('MYAAC') or die('Direct access not allowed!');
 

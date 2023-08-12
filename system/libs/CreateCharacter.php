@@ -1,6 +1,6 @@
 <?php
 
-use MyAac\Models\Player;
+use MyAAC\Models\Player;
 
 /**
  * CreateCharacter

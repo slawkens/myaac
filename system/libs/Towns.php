@@ -23,7 +23,7 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\Town;
+use MyAAC\Models\Town;
 
 /**
  * Class Towns

@@ -9,7 +9,7 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\BugTracker;
+use MyAAC\Models\BugTracker;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Bug tracker';

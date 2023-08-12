@@ -9,10 +9,10 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-use MyAac\Models\Config;
-use MyAac\Models\Guild;
-use MyAac\Models\House;
-use MyAac\Models\Pages;
+use MyAAC\Models\Config;
+use MyAAC\Models\Guild;
+use MyAAC\Models\House;
+use MyAAC\Models\Pages;
 use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 

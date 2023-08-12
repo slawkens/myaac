@@ -1,6 +1,6 @@
 <?php
 
-use MyAac\Models\Gallery;
+use MyAAC\Models\Gallery;
 
 if(PAGE !== 'news') {
 	return;

@@ -9,7 +9,7 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\ServerRecord;
+use MyAAC\Models\ServerRecord;
 
 defined('MYAAC') or die('Direct access not allowed!');
 

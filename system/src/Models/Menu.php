@@ -1,6 +1,6 @@
 <?php
 
-namespace MyAac\Models;
+namespace MyAAC\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model {

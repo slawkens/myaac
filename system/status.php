@@ -8,8 +8,8 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\Config;
-use MyAac\Models\PlayerOnline;
+use MyAAC\Models\Config;
+use MyAAC\Models\PlayerOnline;
 
 defined('MYAAC') or die('Direct access not allowed!');
 

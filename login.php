@@ -1,6 +1,6 @@
 <?php
 
-use MyAac\Models\PlayerOnline;
+use MyAAC\Models\PlayerOnline;
 
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';

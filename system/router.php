@@ -8,7 +8,7 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\Pages;
+use MyAAC\Models\Pages;
 
 defined('MYAAC') or die('Direct access not allowed!');
 

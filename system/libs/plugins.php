@@ -39,7 +39,7 @@ function is_sub_dir($path = NULL, $parent_folder = BASE) {
 }
 
 use Composer\Semver\Semver;
-use MyAac\Models\Menu;
+use MyAAC\Models\Menu;
 
 class Plugins {
 	private static $warnings = [];

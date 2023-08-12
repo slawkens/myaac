@@ -9,7 +9,7 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\Account;
+use MyAAC\Models\Account;
 
 // we need some functions
 require '../common.php';

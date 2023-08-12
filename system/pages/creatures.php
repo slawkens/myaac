@@ -10,7 +10,7 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\Monster;
+use MyAAC\Models\Monster;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Creatures';

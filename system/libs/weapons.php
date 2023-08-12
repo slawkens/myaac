@@ -9,7 +9,7 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\Weapon;
+use MyAAC\Models\Weapon;
 
 defined('MYAAC') or die('Direct access not allowed!');
 

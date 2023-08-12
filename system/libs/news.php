@@ -1,6 +1,6 @@
 <?php
 
-use MyAac\Models\News as ModelsNews;
+use MyAAC\Models\News as ModelsNews;
 
 class News
 {

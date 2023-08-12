@@ -9,7 +9,7 @@
  * @link      https://my-aac.org
  */
 
-use MyAac\Models\Spell;
+use MyAAC\Models\Spell;
 
 defined('MYAAC') or die('Direct access not allowed!');
 

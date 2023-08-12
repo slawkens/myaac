@@ -1,6 +1,6 @@
 <?php
 
-use MyAac\Models\Settings as ModelsSettings;
+use MyAAC\Models\Settings as ModelsSettings;
 
 /**
  * CreateCharacter

@@ -1,6 +1,6 @@
 <?php
 
-use MyAac\Models\Changelog as ModelsChangelog;
+use MyAAC\Models\Changelog as ModelsChangelog;
 
 class Changelog
 {
