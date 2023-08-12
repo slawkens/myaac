@@ -1374,7 +1374,7 @@ function getPlayerNameByAccountId($id)
 	$account = new OTS_Account();
 	$account->load($id);
 	if ($account->isLoaded()) {
-		$query = $db->query('SELECT `name` FROM `players` WHERE `account_id` = ' . $id . ' ORDER BY `lastlogin` DESC LIMIT 1;')->fetch();
+		$query = $db->query('SELECT `name` FROM `players` WHERE `account_id` = ' . $id . ' ORDER BY `lastlogin` DESC LIMIT 1;');
 
 		if (!$query || !$query->rowCount()) {
 			return '';
