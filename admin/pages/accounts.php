@@ -272,7 +272,7 @@ else if (isset($_REQUEST['search'])) {
 							</li>
 						<?php endif;
 
-						if ($db->hasTable('store_history')) : ?>
+						if ($db->hasTable('store_history') && $db->hasColumn('store_history', 'time')) : ?>
 							<li class="nav-item">
 								<a class="nav-link" id="accounts-store-tab" data-toggle="pill" href="#accounts-store">Store History</a>
 							</li>
@@ -523,7 +523,7 @@ else if (isset($_REQUEST['search'])) {
 								} ?>
 							</div>
 						<?php endif;
-						if ($db->hasTable('store_history')) { ?>
+						if ($db->hasTable('store_history') && $db->hasColumn('store_history', 'time')) { ?>
 							<div class="tab-pane fade" id="accounts-store">
 								<?php $store_history = $db->query('SELECT * FROM `store_history` WHERE `account_id` = "' . $account->getId() . '" ORDER BY `time` DESC')->fetchAll(); ?>
 								<table class="table table-striped table-condensed table-responsive d-md-table">
