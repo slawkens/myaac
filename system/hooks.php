@@ -91,15 +91,25 @@ class Hook
 
 	public function execute($params)
 	{
-		extract($params);
-		/*if(is_callable($this->_callback))
-		{
-			$tmp = $this->_callback;
-			$ret = $tmp($params);
-		}*/
-
 		global $db, $config, $template_path, $ots, $content, $twig;
-		$ret = include BASE . $this->_file;
+
+		if(is_callable($this->_file))
+		{
+			$params['db'] = $db;
+			$params['config'] = $config;
+			$params['template_path'] = $template_path;
+			$params['ots'] = $ots;
+			$params['content'] = $content;
+			$params['twig'] = $twig;
+
+			$tmp = $this->_file;
+			$ret = $tmp($params);
+		}
+		else {
+			extract($params);
+
+			$ret = include BASE . $this->_file;
+		}
 
 		return !isset($ret) || $ret == 1 || $ret;
 	}

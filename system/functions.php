@@ -493,7 +493,7 @@ function template_place_holder($type): string
 function template_header($is_admin = false): string
 {
 	global $title_full, $config, $twig;
-	$charset = isset($config['charset']) ? $config['charset'] : 'utf-8';
+	$charset = $config['charset'] ?? 'utf-8';
 
 	return $twig->render('templates.header.html.twig',
 		[
