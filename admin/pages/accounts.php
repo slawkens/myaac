@@ -7,6 +7,9 @@
  * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Player;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Account editor';
@@ -424,8 +427,7 @@ else if (isset($_REQUEST['search'])) {
 							<div class="row">
 								<?php
 								if (isset($account) && $account->isLoaded()) {
-									$account_players = $account->getPlayersList();
-									$account_players->orderBy('id');
+									$account_players = Player::where('account_id', $account->getId())->orderBy('id')->get();
 									if (isset($account_players)) { ?>
 										<table class="table table-striped table-condensed table-responsive d-md-table">
 											<thead>
@@ -438,25 +440,13 @@ else if (isset($_REQUEST['search'])) {
 											</tr>
 											</thead>
 											<tbody>
-											<?php $i= 0;
-											foreach ($account_players as $i => $player):
-												$i++;
-												$player_vocation = $player->getVocation();
-												$player_promotion = $player->getPromotion();
-												if (isset($player_promotion)) {
-													if ((int)$player_promotion > 0)
-														$player_vocation += ($player_promotion * $config['vocations_amount']);
-												}
-
-												if (isset($config['vocations'][$player_vocation])) {
-													$vocation_name = $config['vocations'][$player_vocation];
-												} ?>
+											<?php foreach ($account_players as $i => $player): ?>
 												<tr>
-													<th><?php echo $i; ?></th>
-													<td><?php echo $player->getName(); ?></td>
-													<td><?php echo $player->getLevel(); ?></td>
-													<td><?php echo $vocation_name; ?></td>
-													<td><a href="?p=players&id=<?php echo $player->getId() ?>" class=" btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></a></td>
+													<th><?php echo $i + 1; ?></th>
+													<td><?php echo $player->name; ?></td>
+													<td><?php echo $player->level; ?></td>
+													<td><?php echo $player->vocation_name; ?></td>
+													<td><a href="?p=players&id=<?php echo $player->getKey() ?>" class=" btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></a></td>
 												</tr>
 											<?php endforeach ?>
 											</tbody>

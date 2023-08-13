@@ -29,7 +29,7 @@ function admin_teleport_position($x, $y, $z) {
 
 function admin_teleport_town($town_id) {
 	if (!Player::query()->update([
-		'town_id' => $town_id
+		'town_id' => $town_id,
 	])) {
 		displayMessage('Failed to execute query.');
 		return;
