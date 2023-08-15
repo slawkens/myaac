@@ -1446,13 +1446,13 @@ function getPlayerNameById($id)
 
 function echo_success($message)
 {
-	echo '<div class="col-12 success mb-2">' . $message . '</div>';
+	echo '<div class="col-12 alert alert-success mb-2">' . $message . '</div>';
 }
 
 function echo_error($message)
 {
 	global $error;
-	echo '<div class="col-12 error mb-2">' . $message . '</div>';
+	echo '<div class="col-12 alert alert-error mb-2">' . $message . '</div>';
 	$error = true;
 }
 
