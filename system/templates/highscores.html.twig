@@ -5,27 +5,27 @@
 			<div style="text-align:center"><h2>Ranking for {{ skillName }}{% if vocation is not null %} ({{ vocation }}){% endif %} on {{ config.lua.serverName }}</h2></div><br/>
 			<table border="0" cellpadding="4" cellspacing="1" width="100%">
 				<tr>
-                    <td>Filters</td>
-                    <td>
-                        <label for="vocationFilter">Choose a Skill</label>
-                        <select onchange="location = this.value;" aria-label="skillFilter" id="skillFilter">
-                            {% set i = 0 %}
-                            {% for link, name in types %}
-                                <option value="{{ getLink('highscores') }}/{{ link }}{% if vocation is defined %}/{{ vocation }}{% endif %}" class="size_xs">{{ name }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td>
-                        <label for="vocationFilter">Choose a vocation</label>
-                        <select onchange="location = this.value;" aria-label="vocationFilter" id="vocationFilter">
-                            <option value="{{ getLink('highscores') }}/{{ list }}" class="size_xs">[ALL]</option>
-                            {% set i = 0 %}
-                            {% for i in 1..config.vocations_amount %}
-                                <option value="{{ getLink('highscores') }}/{{ list }}/{{ config.vocations[i]|lower }}" class="size_xs">{{ config.vocations[i]}}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
+					<td>Filters</td>
+					<td>
+						<label for="vocationFilter">Choose a Skill</label>
+						<select onchange="location = this.value;" aria-label="skillFilter" id="skillFilter">
+							{% set i = 0 %}
+							{% for link, name in types %}
+								<option value="{{ getLink('highscores') }}/{{ link }}{% if vocation is defined %}/{{ vocation }}{% endif %}" class="size_xs">{{ name }}</option>
+							{% endfor %}
+						</select>
+					</td>
+					<td>
+						<label for="vocationFilter">Choose a vocation</label>
+						<select onchange="location = this.value;" aria-label="vocationFilter" id="vocationFilter">
+							<option value="{{ getLink('highscores') }}/{{ list }}" class="size_xs">[ALL]</option>
+							{% set i = 0 %}
+							{% for i in 1..config.vocations_amount %}
+								<option value="{{ getLink('highscores') }}/{{ list }}/{{ config.vocations[i]|lower }}" class="size_xs">{{ config.vocations[i]}}</option>
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
 			</table>
 			<table border="0" cellpadding="4" cellspacing="1" width="100%">
 				<tr bgcolor="{{ config.vdarkborder }}">
