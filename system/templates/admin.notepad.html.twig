@@ -7,7 +7,7 @@
 			<div class="form-group">
 				<label>This is your personal notepad. Be sure to save it each time you modify something.</label>
 				<textarea class="form-control" name="content" cols="50" rows="15"
-						  onchange="notepad_onchange(this);">{% if content is not null %}{{ content }}{% endif %}</textarea>
+						  onchange="notepad_onchange(this);">{{ content }}</textarea>
 			</div>
 		</div>
 		<div class="card-footer">
