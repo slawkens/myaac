@@ -11,8 +11,6 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Characters';
 
-require_once SYSTEM . 'item.php';
-
 $groups = new OTS_Groups_List();
 function generate_search_form($autofocus = false)
 {
