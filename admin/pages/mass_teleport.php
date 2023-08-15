@@ -20,7 +20,7 @@ function admin_teleport_position($x, $y, $z) {
 	if (!Player::query()->update([
 		'posx' => $x, 'posy' => $y, 'posz' => $z
 	])) {
-		displayMessage('Failed to execute query.');
+		displayMessage('Failed to execute query. Probably already updated.');
 		return;
 	}
 
@@ -31,7 +31,7 @@ function admin_teleport_town($town_id) {
 	if (!Player::query()->update([
 		'town_id' => $town_id,
 	])) {
-		displayMessage('Failed to execute query.');
+		displayMessage('Failed to execute query. Probably already updated.');
 		return;
 	}
 
