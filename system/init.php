@@ -125,7 +125,7 @@ $eloquentConnection = null;
 require_once SYSTEM . 'database.php';
 
 // execute migrations
-// require SYSTEM . 'migrate.php';
+require SYSTEM . 'migrate.php';
 
 // settings
 require_once LIBS . 'Settings.php';
