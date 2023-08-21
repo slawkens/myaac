@@ -35,6 +35,12 @@ images/guilds/*
 images/editor/*
 !images/editor/index.html
 
+# gallery images
+images/gallery/*
+!images/gallery/index.html
+!images/gallery/demon.jpg
+!images/gallery/demon_thumb.gif
+
 # cache
 system/cache/*
 !system/cache/index.html

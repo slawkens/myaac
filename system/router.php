@@ -209,6 +209,7 @@ else {
 
 			$_REQUEST = array_merge($_REQUEST, $vars);
 			$_GET = array_merge($_GET, $vars);
+			extract($vars);
 
 			if (strpos($path, '__database__/') !== false) {
 				$pageName = str_replace('__database__/', '', $path);
