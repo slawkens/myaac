@@ -44,15 +44,16 @@ $function = new TwigFunction('getGuildLink', function ($s, $p) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('hook', function ($hook) {
+$function = new TwigFunction('hook', function ($context, $hook, array $params = []) {
 	global $hooks;
 
 	if(is_string($hook)) {
 		$hook = constant($hook);
 	}
 
-	$hooks->trigger($hook);
-});
+	$params['context'] = $context;
+	$hooks->trigger($hook, $params);
+}, ['needs_context' => true]);
 $twig->addFunction($function);
 
 $function = new TwigFunction('config', function ($key) {
