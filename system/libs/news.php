@@ -1,5 +1,7 @@
 <?php
 
+use MyAAC\Models\News as ModelsNews;
+
 class News
 {
 	static public function verify($title, $body, $article_text, $article_image, &$errors)
@@ -29,38 +31,57 @@ class News
 
 	static public function add($title, $body, $type, $category, $player_id, $comments, $article_text, $article_image, &$errors)
 	{
-		global $db;
 		if(!self::verify($title, $body, $article_text, $article_image, $errors))
 			return false;
 
-		$db->insert(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'date' => time(), 'category' => $category, 'player_id' => isset($player_id) ? $player_id : 0, 'comments' => $comments, 'article_text' => ($type == 3 ? $article_text : ''), 'article_image' => ($type == 3 ? $article_image : '')));
+		ModelsNews::create([
+			'title' => $title,
+			'body' => $body,
+			'type' => $type,
+			'date' => time(),
+			'category' => $category,
+			'player_id' => isset($player_id) ? $player_id : 0,
+			'comments' => $comments,
+			'article_text' => ($type == 3 ? $article_text : ''),
+			'article_image' => ($type == 3 ? $article_image : '')
+		]);
 		self::clearCache();
 		return true;
 	}
 
 	static public function get($id) {
-		global $db;
-		return $db->select(TABLE_PREFIX . 'news', array('id' => $id));
+		return ModelsNews::find($id)->toArray();
 	}
 
 	static public function update($id, $title, $body, $type, $category, $player_id, $comments, $article_text, $article_image, &$errors)
 	{
-		global $db;
 		if(!self::verify($title, $body, $article_text, $article_image, $errors))
 			return false;
 
-		$db->update(TABLE_PREFIX . 'news', array('title' => $title, 'body' => $body, 'type' => $type, 'category' => $category, 'last_modified_by' => isset($player_id) ? $player_id : 0, 'last_modified_date' => time(), 'comments' => $comments, 'article_text' => $article_text, 'article_image' => $article_image), array('id' => $id));
+		ModelsNews::where('id', $id)->update([
+			'title' => $title,
+			'body' => $body,
+			'type' => $type,
+			'category' => $category,
+			'last_modified_by' => isset($player_id) ? $player_id : 0,
+			'last_modified_date' => time(),
+			'comments' => $comments,
+			'article_text' => $article_text,
+			'article_image' => $article_image
+		]);
 		self::clearCache();
 		return true;
 	}
 
 	static public function delete($id, &$errors)
 	{
-		global $db;
 		if(isset($id))
 		{
-			if($db->select(TABLE_PREFIX . 'news', array('id' => $id)) !== false)
-				$db->delete(TABLE_PREFIX . 'news', array('id' => $id));
+			$row = ModelsNews::find($id);
+			if($row)
+				if (!$row->delete()) {
+					$errors[] = 'Fail during delete News.';
+				}
 			else
 				$errors[] = 'News with id ' . $id . ' does not exists.';
 		}
@@ -77,14 +98,16 @@ class News
 
 	static public function toggleHidden($id, &$errors, &$status)
 	{
-		global $db;
 		if(isset($id))
 		{
-			$query = $db->select(TABLE_PREFIX . 'news', array('id' => $id));
-			if($query !== false)
+			$row = ModelsNews::find($id);
+			if($row)
 			{
-				$db->update(TABLE_PREFIX . 'news', array('hidden' => ($query['hidden'] == 1 ? 0 : 1)), array('id' => $id));
-				$status = $query['hidden'];
+				$row->hidden = $row->hidden == 1 ? 0 : 1;
+				if (!$row->save()) {
+					$errors[] = 'Fail during toggle hidden News.';
+				}
+				$status = $row->hidden;
 			}
 			else
 				$errors[] = 'News with id ' . $id . ' does not exists.';

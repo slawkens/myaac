@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Monster;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 require_once LIBS . 'items.php';
@@ -19,9 +22,9 @@ class Creatures {
 	private static $lastError = '';
 
 	public static function loadFromXML($show = false) {
-		global $db;
-
-		try { $db->exec('DELETE FROM `' . TABLE_PREFIX . 'monsters`;'); } catch(PDOException $error) {}
+		try {
+			Monster::query()->delete();
+		} catch(Exception $error) {}
 
 		if($show) {
 			echo '<h2>Reload monsters.</h2>';
@@ -93,9 +96,9 @@ class Creatures {
 				$flags['convinceable'] = '0';
 
 			if(!isset($flags['pushable']))
-				$flags['pushable'] = '0';	
+				$flags['pushable'] = '0';
 			if(!isset($flags['canpushitems']))
-				$flags['canpushitems'] = '0';			
+				$flags['canpushitems'] = '0';
 			if(!isset($flags['canpushcreatures']))
 				$flags['canpushcreatures'] = '0';
 			if(!isset($flags['runonhealth']))
@@ -112,7 +115,7 @@ class Creatures {
 				$flags['attackable'] = '0';
 			if(!isset($flags['rewardboss']))
 				$flags['rewardboss'] = '0';
-		
+
 			$summons = $monster->getSummons();
 			$loot = $monster->getLoot();
 			foreach($loot as &$item) {
@@ -124,7 +127,7 @@ class Creatures {
 			}
 			if(!in_array($name, $names_added)) {
 				try {
-					$db->insert(TABLE_PREFIX . 'monsters', array(
+					Monster::create(array(
 						'name' => $name,
 						'mana' => empty($mana) ? 0 : $mana,
 						'exp' => $monster->getExperience(),
@@ -132,7 +135,7 @@ class Creatures {
 						'speed_lvl' => $speed_lvl,
 						'use_haste' => $use_haste,
 						'voices' => json_encode($monster->getVoices()),
-						'immunities' => json_encode($monster->getImmunities()),	
+						'immunities' => json_encode($monster->getImmunities()),
 						'elements' => json_encode($monster->getElements()),
 						'summonable' => $flags['summonable'] > 0 ? 1 : 0,
 						'convinceable' => $flags['convinceable'] > 0 ? 1 : 0,
@@ -158,7 +161,7 @@ class Creatures {
 						success('Added: ' . $name . '<br/>');
 					}
 				}
-				catch(PDOException $error) {
+				catch(Exception $error) {
 					if($show) {
 						warning('Error while adding monster (' . $name . '): ' . $error->getMessage());
 					}

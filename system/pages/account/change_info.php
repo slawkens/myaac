@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Account;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Change Info';
@@ -20,6 +23,8 @@ if(!$logged) {
 if($config['account_country'])
 	require SYSTEM . 'countries.conf.php';
 
+$account = Account::find($account_logged->getId());
+
 $show_form = true;
 $new_rlname = isset($_POST['info_rlname']) ? htmlspecialchars(stripslashes($_POST['info_rlname'])) : NULL;
 $new_location = isset($_POST['info_location']) ? htmlspecialchars(stripslashes($_POST['info_location'])) : NULL;
@@ -30,9 +35,10 @@ if(isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
 
 	if(empty($errors)) {
 		//save data from form
-		$account_logged->setCustomField("rlname", $new_rlname);
-		$account_logged->setCustomField("location", $new_location);
-		$account_logged->setCustomField("country", $new_country);
+		$account->rlname = $new_rlname;
+		$account->location = $new_location;
+		$account->country = $new_country;
+		$account->save();
 		$account_logged->logAction('Changed Real Name to <b>' . $new_rlname . '</b>, Location to <b>' . $new_location . '</b> and Country to <b>' . $config['countries'][$new_country] . '</b>.');
 		$twig->display('success.html.twig', array(
 			'title' => 'Public Information Changed',
@@ -47,10 +53,10 @@ if(isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
 
 //show form
 if($show_form) {
-	$account_rlname = $account_logged->getCustomField("rlname");
-	$account_location = $account_logged->getCustomField("location");
+	$account_rlname = $account->rlname;
+	$account_location = $account->location;
 	if ($config['account_country']) {
-		$account_country = $account_logged->getCustomField("country");
+		$account_country = $account->country;
 
 		$countries = array();
 		foreach (array('pl', 'se', 'br', 'us', 'gb',) as $country)

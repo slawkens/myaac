@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Visitor;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Visitors
@@ -54,9 +57,7 @@ class Visitors
 			return isset($this->data[$ip]);
 		}
 
-		global $db;
-		$users = $db->query('SELECT COUNT(`ip`) as count FROM `' . TABLE_PREFIX . 'visitors' . '` WHERE ' . $db->fieldName('ip') . ' = ' . $db->quote($ip))->fetch();
-		return ($users['count'] > 0);
+		return Visitor::where('ip', $ip)->exists();
 	}
 
 	private function cleanVisitors()
@@ -73,8 +74,7 @@ class Visitors
 			return;
 		}
 
-		global $db;
-		$db->exec('DELETE FROM ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' WHERE ' . $db->fieldName('lastvisit') . ' < ' . (time() - $this->sessionTime * 60));
+		Visitor::where('lastvisit', '<', (time() - $this->sessionTime * 60))->delete();
 	}
 
 	private function updateVisitor($ip, $page, $userAgent)
@@ -84,8 +84,7 @@ class Visitors
 			return;
 		}
 
-		global $db;
-		$db->update(TABLE_PREFIX . 'visitors', ['lastvisit' => time(), 'page' => $page, 'user_agent' => $userAgent], ['ip' => $ip]);
+		Visitor::where('ip', $ip)->update(['lastvisit' => time(), 'page' => $page, 'user_agent' => $userAgent]);
 	}
 
 	private function addVisitor($ip, $page, $userAgent)
@@ -95,8 +94,7 @@ class Visitors
 			return;
 		}
 
-		global $db;
-		$db->insert(TABLE_PREFIX . 'visitors', ['ip' => $ip, 'lastvisit' => time(), 'page' => $page, 'user_agent' => $userAgent]);
+		Visitor::create(['ip' => $ip, 'lastvisit' => time(), 'page' => $page, 'user_agent' => $userAgent]);
 	}
 
 	public function getVisitors()
@@ -108,8 +106,7 @@ class Visitors
 			return $this->data;
 		}
 
-		global $db;
-		return $db->query('SELECT ' . $db->fieldName('ip') . ', ' . $db->fieldName('lastvisit') . ', ' . $db->fieldName('page') . ', ' . $db->fieldName('user_agent') . ' FROM ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' ORDER BY ' . $db->fieldName('lastvisit') . ' DESC')->fetchAll();
+		return Visitor::orderByDesc('lastvisit')->get()->toArray();
 	}
 
 	public function getAmountVisitors()
@@ -118,9 +115,7 @@ class Visitors
 			return count($this->data);
 		}
 
-		global $db;
-		$users = $db->query('SELECT COUNT(`ip`) as count FROM `' . TABLE_PREFIX . 'visitors`')->fetch();
-		return $users['count'];
+		return Visitor::count();
 	}
 
 	public function show() {

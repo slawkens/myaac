@@ -39,6 +39,7 @@ function is_sub_dir($path = NULL, $parent_folder = BASE) {
 }
 
 use Composer\Semver\Semver;
+use MyAAC\Models\Menu;
 
 class Plugins {
 	private static $warnings = [];
@@ -649,11 +650,9 @@ class Plugins {
 	 */
 	public static function installMenus($templateName, $categories)
 	{
-		global $db;
-
 		// check if menus already exist
-		$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($templateName) . ' LIMIT 1;');
-		if ($query->rowCount() > 0) {
+		$menuInstalled = Menu::where('template', $templateName)->select('id')->first();
+		if ($menuInstalled) {
 			return;
 		}
 
@@ -687,7 +686,7 @@ class Plugins {
 					'color' => $color,
 				];
 
-				$db->insert(TABLE_PREFIX . 'menu', $insert_array);
+				Menu::create($insert_array);
 			}
 		}
 	}

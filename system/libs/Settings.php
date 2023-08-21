@@ -1,4 +1,7 @@
 <?php
+
+use MyAAC\Models\Settings as ModelsSettings;
+
 /**
  * CreateCharacter
  *
@@ -40,13 +43,10 @@ class Settings implements ArrayAccess
 			}
 		}
 
-		global $db;
-		$settings = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'settings`');
-
-		if($settings->rowCount() > 0) {
-			foreach ($settings->fetchAll(PDO::FETCH_ASSOC) as $setting) {
-				$this->settingsDatabase[$setting['name']][$setting['key']] = $setting['value'];
-			}
+		$settings = ModelsSettings::all();
+		foreach ($settings as $setting)
+		{
+			$this->settingsDatabase[$setting->name][$setting->key] = $setting->value;
 		}
 
 		if ($cache->enabled()) {
@@ -55,8 +55,6 @@ class Settings implements ArrayAccess
 	}
 
 	public function save($pluginName, $values) {
-		global $db;
-
 		if (!isset($this->settingsFile[$pluginName])) {
 			throw new RuntimeException('Error on save settings: plugin does not exist');
 		}
@@ -69,7 +67,7 @@ class Settings implements ArrayAccess
 		}
 
 		$this->errors = [];
-		$db->query('DELETE FROM `' . TABLE_PREFIX . 'settings` WHERE `name` = ' . $db->quote($pluginName) . ';');
+		ModelsSettings::where('name', $pluginName)->delete();
 		foreach ($values as $key => $value) {
 			$errorMessage = '';
 			if (isset($settings['settings'][$key]['callbacks']['beforeSave']) && !$settings['settings'][$key]['callbacks']['beforeSave']($key, $value, $errorMessage)) {
@@ -78,7 +76,11 @@ class Settings implements ArrayAccess
 			}
 
 			try {
-				$db->insert(TABLE_PREFIX . 'settings', ['name' => $pluginName, 'key' => $key, 'value' => $value]);
+				ModelsSettings::create([
+					'name' => $pluginName,
+					'key' => $key,
+					'value' => $value
+				]);
 			} catch (PDOException $error) {
 				$this->errors[] = 'Error while saving setting (' . $pluginName . ' - ' . $key . '): ' . $error->getMessage();
 			}
@@ -94,36 +96,22 @@ class Settings implements ArrayAccess
 
 	public function updateInDatabase($pluginName, $key, $value)
 	{
-		global $db;
-		$db->update(TABLE_PREFIX . 'settings', ['value' => $value], ['name' => $pluginName, 'key' => $key]);
+		ModelsSettings::where(['name' => $pluginName, 'key' => $key])->update(['value' => $value]);
 	}
 
 	public function deleteFromDatabase($pluginName, $key = null)
 	{
-		global $db;
-
 		if (!isset($key)) {
-			$db->delete(TABLE_PREFIX . 'settings', ['name' => $pluginName], -1);
+			ModelsSettings::where('name', $pluginName)->delete();
 		}
 		else {
-			$db->delete(TABLE_PREFIX . 'settings', ['name' => $pluginName, 'key' => $key]);
+			ModelsSettings::where('name', $pluginName)->where('key', $key)->delete();
 		}
 	}
 
 	public static function display($plugin, $settings): array
 	{
-		global $db;
-
-		$query = 'SELECT `key`, `value` FROM `' . TABLE_PREFIX . 'settings` WHERE `name` = ' . $db->quote($plugin) . ';';
-		$query = $db->query($query);
-
-		$settingsDb = [];
-		if($query->rowCount() > 0) {
-			foreach($query->fetchAll(PDO::FETCH_ASSOC) as $value) {
-				$settingsDb[$value['key']] = $value['value'];
-			}
-		}
-
+		$settingsDb = ModelsSettings::where('name', $plugin)->pluck('value', 'key')->toArray();
 		$config = [];
 		require BASE . 'config.local.php';
 

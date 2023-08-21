@@ -30,15 +30,15 @@ If you do not want to specify a certain field, just leave it blank.<br/><br/>
 											<table class="TableContent" width="100%">
 												<tr>
 													<td class="LabelV">Name:</td>
-													<td style="width:80%;" >{{ player.getName() }}</td>
+													<td style="width:80%;" >{{ player.name }}</td>
 												</tr>
 												<tr>
 													<td class="LabelV" >Hide Account:</td>
 													<td>
 														<input type="hidden" value="0" name="accountvisible">
-														<input type="checkbox" name="accountvisible" id="accountvisible" value="1" {% if player.isHidden() %}checked="checked"{% endif %}>
+														<input type="checkbox" name="accountvisible" id="accountvisible" value="1" {% if player.hidden %}checked="checked"{% endif %}>
 														<label for="accountvisible"> check to hide your account information</label>
-														{% if player.getCustomField('group_id') > 1 %} (you will be also hidden on the Team page!){% endif %}
+														{% if player.group_id > 1 %} (you will be also hidden on the Team page!){% endif %}
 													</td>
 												</tr>
 											</table>
@@ -62,7 +62,7 @@ If you do not want to specify a certain field, just leave it blank.<br/><br/>
 											<table class="TableContent" width="100%">
 												<tr>
 													<td class="LabelV" ><span>Comment:</span></td>
-													<td style="width:80%;"><textarea name="comment" rows="10" cols="50" wrap="virtual">{{ player.getCustomField('comment')|raw }}</textarea><br>[max. length: 2000 chars, 50 lines (ENTERs)]</td>
+													<td style="width:80%;"><textarea name="comment" rows="10" cols="50" wrap="virtual">{{ player.comment|raw }}</textarea><br>[max. length: 2000 chars, 50 lines (ENTERs)]</td>
 												</tr>
 											</table>
 										</div>
@@ -88,7 +88,7 @@ If you do not want to specify a certain field, just leave it blank.<br/><br/>
 				<table border="0" cellspacing="0" cellpadding="0">
 					<tr>
 						<td style="border:0px;">
-							<input type="hidden" name="name" value="{{ player.getName() }}">
+							<input type="hidden" name="name" value="{{ player.name }}">
 							<input type="hidden" name="changecommentsave" value="1">
 							{{ include('buttons.submit.html.twig') }}
 						</td>

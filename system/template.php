@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Menu;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 // template
@@ -126,7 +129,7 @@ if($twig_loader) {
 }
 
 function get_template_menus() {
-	global $db, $template_name;
+	global $template_name;
 
 	$cache = Cache::getInstance();
 	if ($cache->enabled()) {
@@ -137,11 +140,15 @@ function get_template_menus() {
 	}
 
 	if (!isset($result)) {
-		$query = $db->query('SELECT `name`, `link`, `blank`, `color`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `category`, `ordering` ASC');
-		$result = $query->fetchAll();
+
+		$result = Menu::select(['name', 'link', 'blank', 'color', 'category'])
+			->where('template', $template_name)
+			->orderBy('category')
+			->orderBy('ordering')
+			->get();
 
 		if ($cache->enabled()) {
-			$cache->set('template_menus', serialize($result), 600);
+			$cache->set('template_menus', serialize($result->toArray()), 600);
 		}
 	}
 

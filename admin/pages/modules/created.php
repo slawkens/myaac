@@ -1,8 +1,15 @@
 <?php
+
+use MyAAC\Models\Account;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
-$players = ($db->hasColumn('accounts', 'created') ? $db->query('SELECT `created`, `' . (USE_ACCOUNT_NAME ? 'name' : 'id') . '` as `name` FROM `accounts` ORDER BY `created` DESC LIMIT 10;') : 0);
+$accounts = 0;
+
+if ($db->hasColumn('accounts', 'created')) {
+	$accounts = Account::orderByDesc('created')->limit(10)->get(['created', (USE_ACCOUNT_NAME ? 'name' : 'id')])->toArray();
+}
 
 $twig->display('created.html.twig', array(
-	'players' => $players,
+	'accounts' => $accounts,
 ));

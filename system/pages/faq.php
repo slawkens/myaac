@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\FAQ as ModelsFAQ;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Frequently Asked Questions';
 
@@ -68,21 +71,23 @@ if($canEdit)
 	));
 }
 
-$faqs =
-	$db->query('SELECT `id`, `question`, `answer`' .
-		($canEdit ? ', `hidden`, `ordering`' : '') .
-		' FROM `' . TABLE_PREFIX . 'faq`' .
-		(!$canEdit ? ' WHERE `hidden` != 1' : '') .
-		' ORDER BY `ordering`;');
+$faqs = ModelsFAQ::select('id', 'question', 'answer')->when(!$canEdit, function ($query) {
+	$query->where('hidden', '!=', 1);
+})->orderBy('ordering');
 
-if(!$faqs->rowCount())
+if ($canEdit) {
+	$faqs->addSelect(['hidden', 'ordering']);
+}
+
+$faqs = $faqs->get()->toArray();
+if(!count($faqs))
 {
 	?>
 	There are no questions added yet.
 	<?php
 }
 
-$last = $faqs->rowCount();
+$last = count($faqs);
 $twig->display('faq.html.twig', array(
 	'faqs' => $faqs,
 	'last' => $last,
@@ -93,26 +98,17 @@ class FAQ
 {
 	static public function add($question, $answer, &$errors)
 	{
-		global $db;
 		if(isset($question[0]) && isset($answer[0]))
 		{
-			$query = $db->select(TABLE_PREFIX . 'faq', array('question' => $question));
-
-			if($query === false)
+			$row = ModelsFAQ::where('question', $question)->first();
+			if(!$row)
 			{
-				$query =
-					$db->query(
-						'SELECT ' . $db->fieldName('ordering') .
-						' FROM ' . $db->tableName(TABLE_PREFIX . 'faq') .
-						' ORDER BY ' . $db->fieldName('ordering') . ' DESC LIMIT 1'
-					);
-
-				$ordering = 0;
-				if($query->rowCount() > 0) {
-					$query = $query->fetch();
-					$ordering = $query['ordering'] + 1;
-				}
-				$db->insert(TABLE_PREFIX . 'faq', array('question' => $question, 'answer' => $answer, 'ordering' => $ordering));
+				$ordering = ModelsFAQ::max('ordering') ?? 0;
+				ModelsFAQ::create([
+					'question' => $question,
+					'answer' => $answer,
+					'ordering' => $ordering
+				]);
 			}
 			else
 				$errors[] = 'FAQ with this question already exists.';
@@ -124,22 +120,23 @@ class FAQ
 	}
 
 	static public function get($id) {
-		global $db;
-		return $db->select(TABLE_PREFIX . 'faq', array('id' => $id));
+		return ModelsFAQ::find($id)->toArray();
 	}
 
 	static public function update($id, $question, $answer) {
-		global $db;
-		$db->update(TABLE_PREFIX . 'faq', array('question' => $question, 'answer' => $answer), array('id' => $id));
+		ModelsFAQ::where('id', $id)->update([
+			'question' => $question,
+			'answer' => $answer
+		]);
 	}
 
 	static public function delete($id, &$errors)
 	{
-		global $db;
 		if(isset($id))
 		{
-			if(self::get($id) !== false)
-				$db->delete(TABLE_PREFIX . 'faq', array('id' => $id));
+			$row = ModelsFAQ::find($id);
+			if($row)
+				$row->delete();
 			else
 				$errors[] = 'FAQ with id ' . $id . ' does not exists.';
 		}
@@ -151,14 +148,15 @@ class FAQ
 
 	static public function toggleHidden($id, &$errors)
 	{
-		global $db;
 		if(isset($id))
 		{
-			$query = self::get($id);
-			if($query !== false)
-				$db->update(TABLE_PREFIX . 'faq', array('hidden' => ($query['hidden'] == 1 ? 0 : 1)), array('id' => $id));
-			else
+			$row = ModelsFAQ::find($id);
+			if ($row) {
+				$row->hidden = ($row->hidden == 1 ? 0 : 1);
+				$row->save();
+			} else {
 				$errors[] = 'FAQ with id ' . $id . ' does not exists.';
+			}
 		}
 		else
 			$errors[] = 'id not set';
@@ -169,15 +167,18 @@ class FAQ
 	static public function move($id, $i, &$errors)
 	{
 		global $db;
-		$query = self::get($id);
-		if($query !== false)
+		$row = ModelsFAQ::find($id);
+		if($row)
 		{
-			$ordering = $query['ordering'] + $i;
-			$old_record = $db->select(TABLE_PREFIX . 'faq', array('ordering' => $ordering));
-			if($old_record !== false)
-				$db->update(TABLE_PREFIX . 'faq', array('ordering' => $query['ordering']), array('ordering' => $ordering));
+			$ordering = $row->ordering + $i;
+			$old_record = ModelsFAQ::where('ordering', $ordering)->first();
+			if($old_record) {
+				$old_record->ordering = $row->ordering;
+				$old_record->save();
+			}
 
-			$db->update(TABLE_PREFIX . 'faq', array('ordering' => $ordering), array('id' => $id));
+			$row->ordering = $ordering;
+			$row->save();
 		}
 		else
 			$errors[] = 'FAQ with id ' . $id . ' does not exists.';

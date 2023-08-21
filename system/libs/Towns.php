@@ -23,6 +23,8 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Models\Town;
+
 /**
  * Class Towns
  */
@@ -124,15 +126,6 @@ class Towns
 	 */
 	public static function getFromDatabase()
 	{
-		global $db;
-
-		$query = $db->query('SELECT `id`, `name` FROM `towns`;')->fetchAll(PDO::FETCH_ASSOC);
-
-		$towns = [];
-		foreach($query as $town) {
-			$towns[$town['id']] = $town['name'];
-		}
-
-		return $towns;
+		return Town::pluck('name', 'id')->toArray();
 	}
 }

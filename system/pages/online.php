@@ -8,6 +8,10 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\ServerConfig;
+use MyAAC\Models\ServerRecord;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Who is online?';
 
@@ -98,21 +102,19 @@ foreach($playersOnline as $player) {
 $record = '';
 if($players > 0) {
 	if($config['online_record']) {
+		$result = null;
 		$timestamp = false;
 		if($db->hasTable('server_record')) {
-			$query =
-				$db->query(
-					'SELECT `record`, `timestamp` FROM `server_record` WHERE `world_id` = ' . (int)$config['lua']['worldId'] .
-					' ORDER BY `record` DESC LIMIT 1');
 			$timestamp = true;
+			$result = ServerRecord::where('world_id', $config['lua']['worldId'])->orderByDesc('record')->first()->toArray();
 		} else if($db->hasTable('server_config')) { // tfs 1.0
-			$query = $db->query('SELECT `value` as `record` FROM `server_config` WHERE `config` = ' . $db->quote('players_record'));
-		} else {
-			$query = NULL;
+			$row = ServerConfig::where('config', 'players_record')->first();
+			if ($row) {
+				$result = ['record' => $row->value];
+			}
 		}
 
-		if(isset($query) && $query->rowCount() > 0) {
-			$result = $query->fetch();
+		if($record) {
 			$record = 'The maximum on this game world was ' . $result['record'] . ' players' . ($timestamp ? ' on ' . date("M d Y, H:i:s", $result['timestamp']) . '.' : '.');
 		}
 	}

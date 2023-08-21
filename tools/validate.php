@@ -9,6 +9,8 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Models\Account;
+
 // we need some functions
 require '../common.php';
 require SYSTEM . 'functions.php';
@@ -46,9 +48,7 @@ else if(isset($_GET['email']))
 
 	if($config['account_mail_unique'])
 	{
-		$account = new OTS_Account();
-		$account->findByEMail($email);
-		if($account->isLoaded())
+		if(Account::where('email', '=', $email)->exists())
 			error_('Account with this e-mail already exist.');
 	}
 

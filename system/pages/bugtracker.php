@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\BugTracker;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Bug tracker';
 
@@ -29,10 +32,10 @@ $showed = $post = $reply = false;
     if(admin() and isset($_REQUEST['control']) && $_REQUEST['control'] == "true")
     {
         if(empty($_REQUEST['id']) and empty($_REQUEST['acc']) or !is_numeric($_REQUEST['acc']) or !is_numeric($_REQUEST['id']) )
-            $bug[1] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `type` = 1 order by `uid` desc');
+            $bug[1] = BugTracker::where('type', 1)->orderByDesc('uid')->get()->toArray();
 
         if(!empty($_REQUEST['id']) and is_numeric($_REQUEST['id']) and !empty($_REQUEST['acc']) and is_numeric($_REQUEST['acc']))
-            $bug[2] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].' and `type` = 1')->fetch();
+			$bug[2] = BugTracker::where('type', 1)->where('account', $_REQUEST['acc'])->where('id', $_REQUEST['id'])->get()->toArray();
 
         if(!empty($_REQUEST['id']) and is_numeric($_REQUEST['id']) and !empty($_REQUEST['acc']) and is_numeric($_REQUEST['acc']))
         {
@@ -67,7 +70,7 @@ $showed = $post = $reply = false;
                 echo '<TR BGCOLOR="'.$light.'"><td colspan=2>'.nl2br($bug[2]['text']).'</td></tr>';
                 echo '</TABLE>';
 
-                $answers = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].' and `type` = 2 order by `reply`');
+                $answers = BugTracker::where('account', $_REQUEST['acc'])->where('id', $_REQUEST['id'])->where('type', 2)->orderBy('reply')->get()->toArray();
                 foreach($answers as $answer)
                 {
                     if($answer['who'] == 1)
@@ -88,9 +91,9 @@ $showed = $post = $reply = false;
             {
                 if($bug[2]['status'] != 3)
                 {
-                    $reply = $db->query('SELECT MAX(reply) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].' and `type` = 2')->fetch();
-                    $reply = $reply[0] + 1;
-                    $iswho = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].' and `type` = 2 order by `reply` desc limit 1')->fetch();
+                    $reply = BugTracker::where('account', $_REQUEST['acc'])->where('id', $_REQUEST['id'])->where('type', 2)->max('reply');
+                    $reply = $reply + 1;
+                    $iswho =  BugTracker::where('account', $_REQUEST['acc'])->where('id', $_REQUEST['id'])->where('type', 2)->orderByDesc('reply')->first()->toArray();
 
                     if(isset($_POST['finish']))
                     {
@@ -109,8 +112,17 @@ $showed = $post = $reply = false;
                         else
                         {
                             $type = 2;
-                            $INSERT = $db->query('INSERT INTO `' . TABLE_PREFIX . 'bugtracker` (`account`,`id`,`text`,`reply`,`type`, `who`) VALUES ('.$db->quote($_REQUEST['acc']).','.$db->quote($_REQUEST['id']).','.$db->quote($_POST['text']).','.$db->quote($reply).','.$db->quote($type).','.$db->quote(1).')');
-                            $UPDATE = $db->query('UPDATE `' . TABLE_PREFIX . 'bugtracker` SET `status` = '.$_POST['status'].' where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].'');
+                            $INSERT =  BugTracker::create([
+								'account' => $_REQUEST['aac'],
+								'id' => $_REQUEST['id'],
+								'text' => $_POST['text'],
+								'reply' => $reply,
+								'type' => $type,
+								'who' => 1,
+							]);
+                            $UPDATE = Bugtracker::where('id', $_REQUEST['id'])->where('account', $_REQUEST['acc'])->update([
+								'status' => $_POST['status']
+							]);
                             header('Location: ?subtopic=bugtracker&control=true&id='.$_REQUEST['id'].'&acc='.$_REQUEST['acc'].'');
                         }
                     }
@@ -159,10 +171,10 @@ $showed = $post = $reply = false;
             $id = addslashes(htmlspecialchars(trim($_REQUEST['id'])));
 
         if(empty($_REQUEST['id']))
-            $bug[1] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.$account_logged->getId().' and `type` = 1 order by `id` desc');
+            $bug[1] = BugTracker::where('account', $account_logged->getId())->where('type', 1)->orderBy('id')->get()->toArray();
 
         if(!empty($_REQUEST['id']) and is_numeric($_REQUEST['id']))
-            $bug[2] = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.$account_logged->getId().' and `id` = '.$id.' and `type` = 1')->fetch();
+            $bug[2] = BugTracker::where('account', $account_logged->getId())->where('type', 1)->where('id', $id)->get()->toArray();
         else
             $bug[2] = NULL;
 
@@ -186,7 +198,7 @@ $showed = $post = $reply = false;
                 echo '<TR BGCOLOR="'.$dark.'"><td colspan=2>'.nl2br($bug[2]['text']).'</td></tr>';
                 echo '</TABLE>';
 
-                $answers = $db->query('SELECT * FROM '.$db->tableName('myaac_bugtracker').' where `account` = '.$account_logged->getId().' and `id` = '.$id.' and `type` = 2 order by `reply`');
+                $answers = Bugtracker::where('account', $account_logged->getId())->where('id', $id)->where('type', 2)->orderBy('reply')->get()->toArray();
                 foreach($answers as $answer)
                 {
                     if($answer['who'] == 1)
@@ -207,9 +219,9 @@ $showed = $post = $reply = false;
             {
                 if($bug[2]['status'] != 3)
                 {
-                    $reply = $db->query('SELECT MAX(reply) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `id` = '.$id.' and `type` = 2')->fetch();
-                    $reply = $reply[0] + 1;
-                    $iswho = $db->query('SELECT * FROM `myaac_bugtracker` where `account` = '.$acc.' and `id` = '.$id.' and `type` = 2 order by `reply` desc limit 1')->fetch();
+                    $reply = BugTracker::where('account', $aac)->where('id', $id)->where('type', 2)->max('reply');
+                    $reply = $reply + 1;
+                    $iswho = BugTracker::where('account', $acc)->where('id', $id)->where('type', 2)->orderByDesc('reply')->first()->toArray();
 
                     if(isset($_POST['finish']))
                     {
@@ -228,8 +240,16 @@ $showed = $post = $reply = false;
                         else
                         {
                             $type = 2;
-                            $INSERT = $db->query('INSERT INTO `myaac_bugtracker` (`account`,`id`,`text`,`reply`,`type`) VALUES ('.$db->quote($acc).','.$db->quote($id).','.$db->quote($_POST['text']).','.$db->quote($reply).','.$db->quote($type).')');
-                            $UPDATE = $db->query('UPDATE `myaac_bugtracker` SET `status` = 1 where `account` = '.$acc.' and `id` = '.$id.'');
+                            $INSERT = BugTracker::create([
+								'account' => $acc,
+								'id' => $id,
+								'text' => $_POST['text'],
+								'reply' => $reply,
+								'type' => $type
+							]);
+                            $UPDATE = BugTracker::where('id', $id)->where('account', $acc)->update([
+								'status' => 1
+							]);
                             header('Location: ?subtopic=bugtracker&id='.$id.'');
                         }
                     }
@@ -289,9 +309,9 @@ $showed = $post = $reply = false;
             }
             elseif(isset($_REQUEST['add']) && $_REQUEST['add'] == TRUE)
             {
-                $thread = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `type` = 1 order by `id` desc')->fetch();
-                $id_next = $db->query('SELECT MAX(id) FROM `' . TABLE_PREFIX . 'bugtracker` where `account` = '.$acc.' and `type` = 1')->fetch();
-                $id_next = $id_next[0] + 1;
+                $thread = BugTracker::where('account', $acc)->where('type', 1)->orderByDesc('id')->get()->toArray();
+                $id_next = BugTracker::where('account', $acc)->where('type', 1)->max('id');
+                $id_next = $id_next + 1;
 
                 if(empty($thread))
                     $thread['status'] = 3;
@@ -318,7 +338,16 @@ $showed = $post = $reply = false;
                     {
                         $type = 1;
                         $status = 1;
-                        $INSERT = $db->query('INSERT INTO `' . TABLE_PREFIX . 'bugtracker` (`account`,`id`,`text`,`type`,`subject`, `reply`,`status`,`tag`) VALUES ('.$db->quote($acc).','.$db->quote($id_next).','.$db->quote($_POST['text']).','.$db->quote($type).','.$db->quote($_POST['subject']).', 0,'.$db->quote($status).','.$db->quote($_POST['tags']).')');
+                        $INSERT = BugTracker::create([
+							'account' => $acc,
+							'id' => $id_next,
+							'text' => $_POST['text'],
+							'type' => $type,
+							'subject' => $_POST['subject'],
+							'reply' => 0,
+							'status' => $status,
+							'tag' => $_POST['tags']
+						]);
                         header('Location: ?subtopic=bugtracker&id='.$id_next.'');
                     }
 

@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Gallery as ModelsGallery;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Gallery';
 
@@ -164,22 +167,19 @@ class Gallery
 	}
 
 	static public function get($id) {
-		global $db;
-		return $db->select(TABLE_PREFIX . 'gallery', array('id' => $id));
+		return ModelsGallery::find($id)->toArray();
 	}
 
 	static public function update($id, $comment, $image, $author) {
-		global $db;
-
 		$pathinfo = pathinfo($image);
 		$extension = strtolower($pathinfo['extension']);
 		$filename = GALLERY_DIR . $pathinfo['filename'] . '.' . $extension;
 
-		if($db->update(TABLE_PREFIX . 'gallery', array(
+		if(ModelsGallery::where('id', $id)->update([
 			'comment' => $comment,
-			'image' => $filename, 'author' => $author),
-			array('id' => $id)
-		)) {
+			'image' => $filename,
+			'author' => $author
+		])) {
 			if(self::generateThumb($id, $image, $errors))
 				self::resize($image, 650, 500, $filename, $errors);
 		}
@@ -187,11 +187,13 @@ class Gallery
 
 	static public function delete($id, &$errors)
 	{
-		global $db;
 		if(isset($id))
 		{
-			if(self::get($id) !== false)
-				$db->delete(TABLE_PREFIX . 'gallery', array('id' => $id));
+			$row = ModelsGallery::find($id);
+			if($row)
+				if (!$row->delete()) {
+					$errors[] = 'Fail during delete Gallery';
+				}
 			else
 				$errors[] = 'Image with id ' . $id . ' does not exists.';
 		}
@@ -203,13 +205,15 @@ class Gallery
 
 	static public function toggleHidden($id, &$errors)
 	{
-		global $db;
 		if(isset($id))
 		{
-			$query = self::get($id);
-			if($query !== false)
-				$db->update(TABLE_PREFIX . 'gallery', array('hidden' => ($query['hidden'] == 1 ? 0 : 1)), array('id' => $id));
-			else
+			$row = ModelsGallery::find($id);
+			if($row) {
+				$row->hidden = $row->hidden == 1 ? 0 : 1;
+				if (!$row->save()) {
+					$errors[] = 'Fail during toggle hidden Gallery';
+				}
+			} else
 				$errors[] = 'Image with id ' . $id . ' does not exists.';
 		}
 		else
@@ -226,10 +230,15 @@ class Gallery
 		{
 			$ordering = $query['ordering'] + $i;
 			$old_record = $db->select(TABLE_PREFIX . 'gallery', array('ordering' => $ordering));
-			if($old_record !== false)
-				$db->update(TABLE_PREFIX . 'gallery', array('ordering' => $query['ordering']), array('ordering' => $ordering));
+			if($old_record !== false) {
+				ModelsGallery::where('ordering', $ordering)->update([
+					'ordering' => $query['ordering'],
+				]);
+			}
 
-			$db->update(TABLE_PREFIX . 'gallery', array('ordering' => $ordering), array('id' => $id));
+			ModelsGallery::where('id', $id)->update([
+				'ordering' => $ordering,
+			]);
 		}
 		else
 			$errors[] = 'Image with id ' . $id . ' does not exists.';
@@ -297,13 +306,13 @@ class Gallery
 		if(!self::resize($file, 170, 110, $thumb_filename, $errors))
 			return false;
 
-		global $db;
 		if(isset($id))
 		{
-			$query = self::get($id);
-			if($query !== false)
-				$db->update(TABLE_PREFIX . 'gallery', array('thumb' => $thumb_filename), array('id' => $id));
-			else
+			$row = ModelsGallery::find($id);
+			if($row) {
+				$row->thumb = $thumb_filename;
+				$row->save();
+			} else
 				$errors[] = 'Image with id ' . $id . ' does not exists.';
 		}
 		else

@@ -8,6 +8,11 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Player;
+use MyAAC\Models\PlayerDeath;
+use MyAAC\Models\PlayerKillers;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Highscores';
 
@@ -23,7 +28,7 @@ if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 	$page = 1;
 }
 
-$add_sql = '';
+$query = Player::query();
 
 $settingHighscoresVocationBox = setting('core.highscores_vocation_box');
 $configVocations = config('vocations');
@@ -41,7 +46,7 @@ if($settingHighscoresVocationBox && $vocation !== 'all')
 				$i += $configVocationsAmount;
 			}
 
-			$add_sql = 'AND `vocation` IN (' . implode(', ', $add_vocs) . ')';
+			$query->whereIn('players.vocation', $add_vocs);
 			break;
 		}
 	}
@@ -112,15 +117,7 @@ else
 
 $promotion = '';
 if($db->hasColumn('players', 'promotion'))
-	$promotion = ',promotion';
-
-$online = '';
-if($db->hasColumn('players', 'online'))
-	$online = ',online';
-
-$deleted = 'deleted';
-if($db->hasColumn('players', 'deletion'))
-	$deleted = 'deletion';
+	$promotion = ',players.promotion';
 
 $outfit_addons = false;
 $outfit = '';
@@ -151,6 +148,16 @@ if ($cache->enabled()) {
 }
 
 $offset = ($page - 1) * $configHighscoresPerPage;
+$query->join('accounts', 'accounts.id', '=', 'players.account_id')
+	->withOnlineStatus()
+	->whereNotIn('players.id', setting('core.highscores_ids_hidden'))
+	->notDeleted()
+	->where('players.group_id', '<', setting('core.highscores_groups_hidden'))
+	->limit($limit)
+	->offset($offset)
+	->selectRaw('accounts.country, players.id, players.name, players.account_id, players.level, players.vocation' . $outfit . $promotion)
+	->orderByDesc('value');
+
 if (!isset($highscores) || empty($highscores)) {
 	if ($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 		if ($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
@@ -164,64 +171,49 @@ if (!isset($highscores) || empty($highscores)) {
 				POT::SKILL_FISH => 'skill_fishing',
 			);
 
-			$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,vocation' . $promotion . $outfit . ', ' . $skill_ids[$skill] . ' as value FROM accounts,players WHERE players.id NOT IN (' . implode(', ', setting('core.highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 AND players.group_id < ' . setting('core.highscores_groups_hidden') . ' ' . $add_sql . ' AND accounts.id = players.account_id ORDER BY ' . $skill_ids[$skill] . ' DESC LIMIT ' . $limit . ' OFFSET ' . $offset)->fetchAll();
-		} else
-			$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',value,level,vocation' . $promotion . $outfit . ' FROM accounts,players,player_skills WHERE players.id NOT IN (' . implode(', ', setting('core.highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 AND players.group_id < ' . setting('core.highscores_groups_hidden') . ' ' . $add_sql . ' AND players.id = player_skills.player_id AND player_skills.skillid = ' . $skill . ' AND accounts.id = players.account_id ORDER BY value DESC, count DESC LIMIT ' . $limit . ' OFFSET ' . $offset)->fetchAll();
+			$query->addSelect($skill_ids[$skill] . ' as value');
+		} else {
+			$query
+				->join('player_skills', 'player_skills.player_id', '=', 'players.id')
+				->where('skillid', $skill)
+				->addSelect('player_skills.skillid as value');
+		}
 	} else if ($skill == SKILL_FRAGS) // frags
 	{
 		if ($db->hasTable('player_killers')) {
-			$highscores = $db->query('SELECT accounts.country, players.id, players.name' . $online . ',level, vocation' . $promotion . $outfit . ', COUNT(`player_killers`.`player_id`) as value' .
-				' FROM `accounts`, `players`, `player_killers` ' .
-				' WHERE players.id NOT IN (' . implode(', ', setting('core.highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 AND players.group_id < ' . setting('core.highscores_groups_hidden') . ' ' . $add_sql . ' AND players.id = player_killers.player_id AND accounts.id = players.account_id' .
-				' GROUP BY `player_id`' .
-				' ORDER BY value DESC' .
-				' LIMIT ' . $limit . ' OFFSET ' . $offset)->fetchAll();
+			$query->addSelect(['value' => PlayerKillers::where('player_killers.player_id', 'players.id')->selectRaw('COUNT(*)')]);
 		} else {
-			$db->query("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
-
-			$highscores = $db->query('SELECT `a`.country, `p`.id, `p`.name' . $online . ',`p`.level, vocation' . $promotion . $outfit . ', COUNT(`pd`.`killed_by`) as value
-			FROM `players` p
-			LEFT JOIN `accounts` a ON `a`.`id` = `p`.`account_id`
-			LEFT JOIN `player_deaths` pd ON `pd`.`killed_by` = `p`.`name`
-			WHERE `p`.id NOT IN (' . implode(', ', setting('core.highscores_ids_hidden')) . ')
-			AND `p`.' . $deleted . ' = 0
-			AND `p`.group_id < ' . setting('core.highscores_groups_hidden') . ' ' . $add_sql . '
-			AND `pd`.`unjustified` = 1
-			GROUP BY `killed_by`
-			ORDER BY value DESC
-			LIMIT ' . $limit . ' OFFSET ' . $offset)->fetchAll();
+			$query->addSelect(['value' => PlayerDeath::unjustified()->where('player_deaths.killed_by', 'players.name')->selectRaw('COUNT(*)')]);
 		}
 	} else if ($skill == SKILL_BALANCE) // balance
 	{
-		$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,balance as value,vocation' . $promotion . $outfit . ' FROM accounts,players WHERE players.id NOT IN (' . implode(', ', setting('core.highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 AND players.group_id < ' . setting('core.highscores_groups_hidden') . ' ' . $add_sql . ' AND accounts.id = players.account_id ORDER BY value DESC LIMIT ' . $limit . ' OFFSET ' . $offset)->fetchAll();
+		$query
+			->addSelect('players.balance as value');
 	} else {
 		if ($skill == POT::SKILL__MAGLEVEL) {
-			$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',maglevel,level,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', setting('core.highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 ' . $add_sql . ' AND players.group_id < ' . setting('core.highscores_groups_hidden') . ' AND accounts.id = players.account_id ORDER BY maglevel DESC, manaspent DESC LIMIT ' . $limit . ' OFFSET ' . $offset)->fetchAll();
+			$query
+				->addSelect('players.maglevel as value', 'players.maglevel')
+				->orderBy('manaspent');
 		} else { // level
-			$highscores = $db->query('SELECT accounts.country, players.id,players.name' . $online . ',level,experience,vocation' . $promotion . $outfit . ' FROM accounts, players WHERE players.id NOT IN (' . implode(', ', setting('core.highscores_ids_hidden')) . ') AND players.' . $deleted . ' = 0 ' . $add_sql . ' AND players.group_id < ' . setting('core.highscores_groups_hidden') . ' AND accounts.id = players.account_id ORDER BY level DESC, experience DESC LIMIT ' . $limit . ' OFFSET ' . $offset)->fetchAll();
+			$query
+				->addSelect('players.level as value', 'players.experience')
+				->orderBy('experience');
 			$list = 'experience';
 		}
 	}
 }
 
+$highscores = $query->get()->map(function($row) {
+	$tmp = $row->toArray();
+	$tmp['online'] = $row->online_status;
+	$tmp['vocation'] = $row->vocation_name;
+	unset($tmp['online_table']);
+
+	return $tmp;
+})->toArray();
+
 if ($cache->enabled() && $needReCache) {
 	$cache->set($cacheKey, serialize($highscores), setting('core.highscores_cache_ttl') * 60);
-}
-
-$online_exist = false;
-if($db->hasColumn('players', 'online'))
-	$online_exist = true;
-
-$players = array();
-foreach($highscores as $player) {
-	$players[] = $player['id'];
-}
-
-if($db->hasTable('players_online') && count($players) > 0) {
-	$query = $db->query('SELECT `player_id`, 1 FROM `players_online` WHERE `player_id` IN (' . implode(', ', $players) . ')')->fetchAll();
-	foreach($query as $t) {
-		$is_online[$t['player_id']] = true;
-	}
 }
 
 $show_link_to_next_page = false;
@@ -231,14 +223,6 @@ $settingHighscoresVocation = setting('core.highscores_vocation');
 
 foreach($highscores as $id => &$player)
 {
-	if(isset($is_online)) {
-		$player['online'] = (isset($is_online[$player['id']]) ? 1 : 0);
-	} else {
-		if(!isset($player['online'])) {
-			$player['online'] = 0;
-		}
-	}
-
 	if(++$i <= $configHighscoresPerPage)
 	{
 		if($skill == POT::SKILL__MAGIC)
@@ -248,21 +232,9 @@ foreach($highscores as $id => &$player)
 			$player['experience'] = number_format($player['experience']);
 		}
 
-		if($settingHighscoresVocation) {
-			if(isset($player['promotion'])) {
-				if((int)$player['promotion'] > 0) {
-					$player['vocation'] += ($player['promotion'] * $configVocationsAmount);
-				}
-			}
-
-			$tmp = 'Unknown';
-			if(isset($configVocations[$player['vocation']])) {
-				$tmp = $configVocations[$player['vocation']];
-			}
-
-			$player['vocation'] = $tmp;
+		if(!$settingHighscoresVocation) {
+			unset($player['vocation']);
 		}
-
 
 		$player['link'] = getPlayerLink($player['name'], false);
 		$player['flag'] = getFlagImage($player['country']);

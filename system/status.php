@@ -7,6 +7,10 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Config;
+use MyAAC\Models\PlayerOnline;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $status = array();
@@ -74,20 +78,15 @@ if($cache->enabled())
 
 if($fetch_from_db)
 {
-	// get info from db
-	/**
-	 * @var OTS_DB_MySQL $db
-	 */
-	$status_query = $db->query('SELECT `name`, `value` FROM `' . TABLE_PREFIX . 'config` WHERE ' . $db->fieldName('name') . ' LIKE "%status%"');
-	if($status_query->rowCount() <= 0) // empty, just insert it
-	{
-		foreach($status as $key => $value)
+	$status_query = Config::where('name', 'LIKE', '%status%')->get();
+	if (!$status_query || !$status_query->count()) {
+		foreach($status as $key => $value) {
 			registerDatabaseConfig('status_' . $key, $value);
-	}
-	else
-	{
-		foreach($status_query as $tmp)
-			$status[str_replace('status_', '', $tmp['name'])] = $tmp['value'];
+		}
+	} else {
+		foreach($status_query as $tmp) {
+			$status[str_replace('status_', '', $tmp->name)] = $tmp->value;
+		}
 	}
 }
 
@@ -128,19 +127,13 @@ function updateStatus() {
 		// for status afk thing
 		if($config['online_afk'])
 		{
+			$status['playersTotal'] = 0;
 			// get amount of players that are currently logged in-game, including disconnected clients (exited)
 			if($db->hasTable('players_online')) { // tfs 1.x
-				$query = $db->query('SELECT COUNT(`player_id`) AS `playersTotal` FROM `players_online`;');
+				$status['playersTotal'] = PlayerOnline::count();
 			}
 			else {
-				$query = $db->query('SELECT COUNT(`id`) AS `playersTotal` FROM `players` WHERE `online` > 0');
-			}
-
-			$status['playersTotal'] = 0;
-			if($query->rowCount() > 0)
-			{
-				$query = $query->fetch();
-				$status['playersTotal'] = $query['playersTotal'];
+				$status['playersTotal'] = Player::online()->count();
 			}
 		}
 

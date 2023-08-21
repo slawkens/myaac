@@ -8,6 +8,9 @@
  * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Changelog as ModelsChangelog;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
@@ -78,7 +81,7 @@ if(!empty($action))
 		error(implode(", ", $errors));
 }
 
-$changelogs = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'changelog' . '` ORDER BY `id` DESC')->fetchAll();
+$changelogs = ModelsChangelog::orderBy('id')->get()->toArray();
 
 $i = 0;
 

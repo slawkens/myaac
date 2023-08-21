@@ -1,4 +1,7 @@
 <?php
+
+use MyAAC\Models\Player;
+
 /**
  * CreateCharacter
  *
@@ -52,9 +55,7 @@ class CreateCharacter
 			return false;
 		}
 
-		$player = new OTS_Player();
-		$player->find($name);
-		if($player->isLoaded()) {
+		if(Player::where('name', '=', $name)->exists()) {
 			$errors['name'] = 'Character with this name already exist.';
 			return false;
 		}

@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Spell;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Spells {
@@ -31,9 +34,11 @@ class Spells {
 	}
 
 		public static function loadFromXML($show = false) {
-		global $config, $db;
+		global $config;
 
-		try { $db->exec('DELETE FROM `' . TABLE_PREFIX . 'spells`;'); } catch(PDOException $error) {}
+		try {
+			Spell::query()->delete();
+		} catch(Exception $error) {}
 
 		if($show) {
 			echo '<h2>Reload spells.</h2>';
@@ -63,7 +68,7 @@ class Spells {
 				continue;
 
 			try {
-				$db->insert(TABLE_PREFIX . 'spells', array(
+				Spell::create(array(
 					'name' => $name,
 					'words' => $words,
 					'type' => 2,
@@ -105,7 +110,7 @@ class Spells {
 				continue;
 
 			try {
-				$db->insert(TABLE_PREFIX . 'spells', array(
+				Spell::create(array(
 					'name' => $name,
 					'words' => $words,
 					'type' => 1,
@@ -142,7 +147,7 @@ class Spells {
 			$name = $spell->getName() . ' Rune';
 
 			try {
-				$db->insert(TABLE_PREFIX . 'spells', array(
+				Spell::create(array(
 					'name' => $name,
 					'words' => $spell->getWords(),
 					'type' => 3,

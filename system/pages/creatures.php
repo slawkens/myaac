@@ -9,13 +9,18 @@
  * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Monster;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Creatures';
 
 if (empty($_REQUEST['name'])) {
 	// display list of monsters
 	$preview = config('monsters_images_preview');
-	$creatures = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1 '.(empty($_REQUEST['boss']) ? '': 'AND `rewardboss` = 1').' ORDER BY name asc')->fetchAll();
+	$creatures = Monster::where('hidden', '!=', 1)->when(!empty($_REQUEST['boss']), function ($query) {
+		$query->where('rewardboss', 1);
+	})->get()->toArray();
 
 	if ($preview) {
 		foreach($creatures as $key => &$creature)
@@ -34,9 +39,7 @@ if (empty($_REQUEST['name'])) {
 
 // display monster
 $creature_name = urldecode(stripslashes(ucwords(strtolower($_REQUEST['name']))));
-$prep = $db->prepare('SELECT * FROM `' . TABLE_PREFIX . 'monsters` WHERE `hidden` != 1 AND `name` = ? LIMIT 1;');
-$prep->execute([$creature_name]);
-$creature = $prep->fetch();
+$creature = Monster::where('hidden', '!=', 1)->where('name', $creature_name)->first()->toArray();
 
 if (isset($creature['name'])) {
 	function sort_by_chance($a, $b)

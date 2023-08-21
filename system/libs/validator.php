@@ -7,6 +7,10 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Monster;
+use MyAAC\Models\Spell;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Validator
@@ -307,8 +311,7 @@ class Validator
 
 		$monstersCheck = setting('core.create_character_name_monsters_check');
 		if ($monstersCheck) {
-			$monsters = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'monsters` WHERE `name` LIKE ' . $db->quote($name_lower));
-			if ($monsters->rowCount() > 0) {
+			if (Monster::where('name', 'like', $name_lower)->exists()) {
 				self::$lastError = 'Your name cannot contains monster name.';
 				return false;
 			}
@@ -316,14 +319,12 @@ class Validator
 
 		$spellsCheck = setting('core.create_character_name_spells_check');
 		if ($spellsCheck) {
-			$spells_name = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'spells` WHERE `name` LIKE ' . $db->quote($name_lower));
-			if ($spells_name->rowCount() > 0) {
+			if (Spell::where('name', 'like', $name_lower)->exists()) {
 				self::$lastError = 'Your name cannot contains spell name.';
 				return false;
 			}
 
-			$spells_words = $db->query('SELECT `words` FROM `' . TABLE_PREFIX . 'spells` WHERE `words` = ' . $db->quote($name_lower));
-			if ($spells_words->rowCount() > 0) {
+			if (Spell::where('words', $name_lower)->exists()) {
 				self::$lastError = 'Your name cannot contains spell name.';
 				return false;
 			}
