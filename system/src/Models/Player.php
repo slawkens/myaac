@@ -34,14 +34,12 @@ class Player extends Model {
 
 	public function getVocationNameAttribute()
 	{
-		global $db, $config;
-
 		$vocation = $this->vocation;
 		if (isset($this->promotion)) {
 			$vocation *= $this->promotion;
 		}
 
-		return $config['vocations'][$vocation] ?? 'Unknown';
+		return config('vocations')[$vocation] ?? 'Unknown';
 	}
 
 	public function getIsDeletedAttribute()
