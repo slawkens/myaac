@@ -34,7 +34,7 @@ return [
 	['GET', 'changelog[/{page:int}]', 'changelog.php'],
 	[['GET', 'POST'], 'creatures[/{name:string}]', 'creatures.php'],
 
-	['GET', 'faq[/{action:string}]', 'faq.php'],
+	[['GET', 'POST'], 'faq[/{action:string}]', 'faq.php'],
 
 	[['GET', 'POST'], 'forum/{action:string}[/]', 'forum.php'],
 	['GET', 'forum/board/{id:int}[/]', 'forum/show_board.php'],
