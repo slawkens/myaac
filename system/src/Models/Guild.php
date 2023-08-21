@@ -11,7 +11,13 @@ class Guild extends Model {
 
 	public function owner()
 	{
-		return $this->belongsTo(Player::class, 'ownerid');
+		global $db;
+		$column = 'ownerid';
+		if($db->hasColumn('guilds', 'owner_id')) {
+			$column = 'owner_id';
+		}
+
+		return $this->belongsTo(Player::class, $column);
 	}
 
 	public function members()
