@@ -9,6 +9,5 @@ release.sh export-ignore
 # cypress
 cypress export-ignore
 cypress.config.js export-ignore
-cypress.env.json
 
 *.sh text eol=lf
