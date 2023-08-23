@@ -1602,7 +1602,7 @@ Sent by MyAAC,<br/>
 					if ($key == 'server_path') {
 						$server_path = $values[$key];
 					}
-					elseif (strpos($key, 'database_') !== false) {
+					elseif (str_contains($key, 'database_')) {
 						$database[$key] = $values[$key];
 					}
 

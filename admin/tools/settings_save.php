@@ -6,6 +6,11 @@ require SYSTEM . 'functions.php';
 require SYSTEM . 'init.php';
 require SYSTEM . 'login.php';
 
+// event system
+require_once SYSTEM . 'hooks.php';
+$hooks = new Hooks();
+$hooks->load();
+
 if(!admin()) {
 	http_response_code(500);
 	die('Access denied.');
@@ -23,7 +28,7 @@ if (!isset($_POST['settings'])) {
 
 $settings = Settings::getInstance();
 
-$settings->save($_REQUEST['plugin'], $_POST['settings']);
+$success = $settings->save($_REQUEST['plugin'], $_POST['settings']);
 
 $errors = $settings->getErrors();
 if (count($errors) > 0) {
@@ -31,4 +36,6 @@ if (count($errors) > 0) {
 	die(implode('<br/>', $errors));
 }
 
-echo 'Saved at ' . date('H:i');
+if ($success) {
+	echo 'Saved at ' . date('H:i');
+}

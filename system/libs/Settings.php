@@ -60,6 +60,16 @@ class Settings implements ArrayAccess
 		}
 
 		$settings = $this->settingsFile[$pluginName];
+
+		global $hooks;
+		if (!$hooks->trigger(HOOK_ADMIN_SETTINGS_BEFORE_SAVE, [
+			'name' => $pluginName,
+			'values' => $values,
+			'settings' => $settings,
+		])) {
+			return false;
+		}
+
 		if (isset($settings['callbacks']['beforeSave'])) {
 			if (!$settings['callbacks']['beforeSave']($settings, $values)) {
 				return false;
