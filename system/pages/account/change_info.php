@@ -20,7 +20,7 @@ if(!$logged) {
 	return;
 }
 
-if($config['account_country'])
+if(setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
 $account = Account::find($account_logged->getId());
@@ -55,7 +55,7 @@ if(isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
 if($show_form) {
 	$account_rlname = $account->rlname;
 	$account_location = $account->location;
-	if ($config['account_country']) {
+	if (setting('core.account_country')) {
 		$account_country = $account->country;
 
 		$countries = array();

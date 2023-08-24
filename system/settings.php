@@ -1047,12 +1047,12 @@ Sent by MyAAC,<br/>
 			'desc' => 'Show player outfit?',
 			'default' => true,
 		],
-		'highscores_country_box' => [ // not implemented yet
+		/*'highscores_country_box' => [ // not implemented yet
 			'name' => 'Display Country Box',
 			'type' => 'hidden',
 			'desc' => 'Show player outfit?',
 			'default' => false,
-		],
+		],*/
 		'highscores_groups_hidden' => [
 			'name' => 'Hidden Groups',
 			'type' => 'number',
@@ -1225,9 +1225,9 @@ Sent by MyAAC,<br/>
 		'team_style' => [
 			'name' => 'Style',
 			'type' => 'options',
-			'desc' => '',
-			'options' => ['normal table', 'in boxes, grouped by group id'],
-			'default' => 1,
+			'desc' => 'How to show groups',
+			'options' => [1 => 'normal table', 2 => 'in boxes, grouped by group id'],
+			'default' => 2,
 		],
 		'team_status' => [
 			'name' => 'Display Online Status',

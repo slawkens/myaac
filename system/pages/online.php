@@ -15,7 +15,7 @@ use MyAAC\Models\ServerRecord;
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Who is online?';
 
-if($config['account_country'])
+if (setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
 $promotion = '';
@@ -42,7 +42,7 @@ if($db->hasColumn('players', 'skull_time')) {
 
 $outfit_addons = false;
 $outfit = '';
-if($config['online_outfit']) {
+if (setting('core.online_outfit')) {
 	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
 	if($db->hasColumn('players', 'lookaddons')) {
 		$outfit .= ', lookaddons';
@@ -50,7 +50,7 @@ if($config['online_outfit']) {
 	}
 }
 
-if($config['online_vocations']) {
+if (setting('core.online_vocations')) {
 	$vocs = array();
 	foreach($config['vocations'] as $id => $name) {
 		$vocs[$id] = 0;
@@ -67,7 +67,7 @@ $players = 0;
 $data = '';
 foreach($playersOnline as $player) {
 	$skull = '';
-	if($config['online_skulls'])
+	if (setting('core.online_skulls'))
 	{
 		if($player['skulltime'] > 0)
 		{
@@ -90,18 +90,18 @@ foreach($playersOnline as $player) {
 		'player' => $player,
 		'level' => $player['level'],
 		'vocation' => $config['vocations'][$player['vocation']],
-		'country_image' => $config['account_country'] ? getFlagImage($player['country']) : null,
-		'outfit' => $config['online_outfit'] ? $config['outfit_images_url'] . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] : null
+		'country_image' => setting('core.account_country') ? getFlagImage($player['country']) : null,
+		'outfit' => setting('core.online_outfit') ? setting('core.outfit_images_url') . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] : null
 	);
 
-	if($config['online_vocations']) {
+	if (setting('core.online_vocations')) {
 		$vocs[($player['vocation'] > $config['vocations_amount'] ? $player['vocation'] - $config['vocations_amount'] : $player['vocation'])]++;
 	}
 }
 
 $record = '';
 if($players > 0) {
-	if($config['online_record']) {
+	if( setting('core.online_record')) {
 		$result = null;
 		$timestamp = false;
 		if($db->hasTable('server_record')) {

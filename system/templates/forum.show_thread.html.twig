@@ -24,7 +24,7 @@ Page: {{ links_to_pages|raw }}<br/>
 		{% set i = i + 1 %}
 		<td valign="top">{{ post.player_link|raw }}<br/>
 			{% if post.outfit is defined %}
-			<img style="margin-left:{% if post.player.getLookType() in config.outfit_images_wrong_looktypes %}-0px;margin-top:-0px;width:64px;height:64px;{% else %}-60px;margin-top:-60px;width:128px;height:128px;{% endif %}" src="{{ post.outfit }}" alt="player outfit"/>
+			<img style="margin-left:{% if post.player.getLookType() in setting('core.outfit_images_wrong_looktypes') %}-0px;margin-top:-0px;width:64px;height:64px;{% else %}-60px;margin-top:-60px;width:128px;height:128px;{% endif %}" src="{{ post.outfit }}" alt="player outfit"/>
 			<br />
 			{% endif %}
 			<span style="font-size: 10px">

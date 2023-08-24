@@ -569,7 +569,7 @@ else if (isset($_REQUEST['search'])) {
 								<?php } ?>
 							</div>
 							<div class="tab-pane fade" id="tabs-pos">
-								<?php $outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($hasLookAddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet(); ?>
+								<?php $outfit = setting('core.outfit_images_url') . '?id=' . $player->getLookType() . ($hasLookAddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet(); ?>
 								<div id="imgchar" style="width:64px;height:64px;position:absolute; top:30px; right:30px">
 									<img id="player_outfit" style="margin-left:0;margin-top:0;width:64px;height:64px;" src="<?php echo $outfit; ?>" alt="player outfit"/>
 								</div>
@@ -858,7 +858,7 @@ else if (isset($_REQUEST['search'])) {
 				<?php if($hasLookAddons): ?>
 				look_addons = '&addons=' + $('#look_addons').val();
 				<?php endif; ?>
-				$("#player_outfit").attr("src", '<?= $config['outfit_images_url']; ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet);
+				$("#player_outfit").attr("src", '<?= setting('core.outfit_images_url'); ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet);
 			}
 		</script>
 	<?php } ?>

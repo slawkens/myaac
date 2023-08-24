@@ -77,10 +77,10 @@ if($player->isLoaded() && !$player->isDeleted())
 	$rows = 0;
 
 	if($config['characters']['outfit'])
-		$outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
+		$outfit = setting('core.outfit_images_url') . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
 
 	$flag = '';
-	if($config['account_country']) {
+	if(setting('core.account_country')) {
 		$flag = getFlagImage($account->getCountry());
 	}
 
@@ -423,7 +423,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 	if($db->hasColumn('players', 'deletion'))
 		$deleted = 'deletion';
 
-	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . (int)config('characters_search_limit') . ';');
+	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . (int)setting('core.characters_search_limit') . ';');
 	if($query->rowCount() > 0) {
 		echo 'Did you mean:<ul>';
 		foreach($query as $player) {

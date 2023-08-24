@@ -28,8 +28,8 @@ if(empty($guild_errors))
 		$player_rank = $player->getRank();
 		if(!$player_rank->isLoaded())
 		{
-			if($player->getLevel() >= $config['guild_need_level']) {
-				if(!$config['guild_need_premium'] || $account_logged->isPremium()) {
+			if($player->getLevel() >= setting('core.guild_need_level')) {
+				if(!setting('core.guild_need_premium') || $account_logged->isPremium()) {
 					$array_of_player_nig[] = $player->getName();
 				}
 			}
@@ -39,7 +39,7 @@ if(empty($guild_errors))
 
 if(empty($todo)) {
 	if(count($array_of_player_nig) == 0) {
-		$guild_errors[] = 'On your account all characters are in guilds, have too low level to create new guild' . ($config['guild_need_premium'] ? ' or you don\' have a premium account' : '') . '.';
+		$guild_errors[] = 'On your account all characters are in guilds, have too low level to create new guild' . (setting('core.guild_need_premium') ? ' or you don\' have a premium account' : '') . '.';
 	}
 }
 
@@ -91,10 +91,10 @@ if($todo == 'save')
 	}
 
 	if(empty($guild_errors)) {
-		if($player->getLevel() < $config['guild_need_level']) {
-			$guild_errors[] = 'Character <b>'.$name.'</b> has too low level. To create guild you need character with level <b>'.$config['guild_need_level'].'</b>.';
+		if($player->getLevel() < setting('core.guild_need_level')) {
+			$guild_errors[] = 'Character <b>'.$name.'</b> has too low level. To create guild you need character with level <b>' . setting('core.guild_need_level') . '</b>.';
 		}
-		if($config['guild_need_premium'] && !$account_logged->isPremium()) {
+		if(setting('core.guild_need_premium') && !$account_logged->isPremium()) {
 			$guild_errors[] = 'Character <b>'.$name.'</b> is on FREE account. To create guild you need PREMIUM account.';
 		}
 	}
@@ -112,7 +112,7 @@ if(isset($todo) && $todo == 'save')
 	$new_guild->setName($guild_name);
 	$new_guild->setOwner($player);
 	$new_guild->save();
-	$new_guild->setCustomField('description', config('guild_description_default'));
+	$new_guild->setCustomField('description', setting('core.guild_description_default'));
 	//$new_guild->setCustomField('creationdata', time());
 	$ranks = $new_guild->getGuildRanksList();
 	$ranks->orderBy('level', POT::ORDER_DESC);

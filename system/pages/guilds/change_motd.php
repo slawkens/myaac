@@ -46,7 +46,7 @@ if(empty($errors)) {
 		$saved = false;
 		if($guild_leader) {
 			if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-				$motd = htmlspecialchars(stripslashes(substr($_REQUEST['motd'],0, $config['guild_motd_chars_limit'])));
+				$motd = htmlspecialchars(stripslashes(substr($_REQUEST['motd'],0, setting('core.guild_motd_chars_limit'))));
 				$guild->setCustomField('motd', $motd);
 				$saved = true;
 			}

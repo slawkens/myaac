@@ -106,8 +106,8 @@ WHERE TABLE_SCHEMA = "' . $config['database_name'] . '";');
 		}
 		$ret['templates'] = get_templates();
 
-		$ret['date_timezone'] = $config['date_timezone'];
-		$ret['backward_support'] = $config['backward_support'];
+		$ret['date_timezone'] = setting('core.date_timezone');
+		$ret['backward_support'] = setting('core.backward_support');
 
 		$cache_engine = strtolower($config['cache_engine']);
 		if($cache_engine == 'auto') {

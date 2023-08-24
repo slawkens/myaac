@@ -46,7 +46,7 @@ else if(isset($_GET['email']))
 	if(!Validator::email($email))
 		error_(Validator::getLastError());
 
-	if($config['account_mail_unique'])
+	if(setting('core.account_mail_unique'))
 	{
 		if(Account::where('email', '=', $email)->exists())
 			error_('Account with this e-mail already exist.');

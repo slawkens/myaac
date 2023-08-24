@@ -54,7 +54,7 @@ if(file_exists(BASE . $template_path . '/index.php')) {
 elseif(file_exists(BASE . $template_path . '/template.php')) {
 	$template_index = 'template.php';
 }
-elseif($config['backward_support'] && file_exists(BASE . $template_path . '/layout.php')) {
+elseif(setting('core.backward_support') && file_exists(BASE . $template_path . '/layout.php')) {
 	$template_index = 'layout.php';
 }
 else {
@@ -77,7 +77,7 @@ if ($cache->enabled() && $cache->fetch('template_ini_' . $template_name, $tmp)) 
 else {
 	$file = BASE . $template_path . '/config.ini';
 	$exists = file_exists($file);
-	if ($exists || ($config['backward_support'] && file_exists(BASE . $template_path . '/layout_config.ini'))) {
+	if ($exists || (setting('core.backward_support') && file_exists(BASE . $template_path . '/layout_config.ini'))) {
 		if (!$exists) {
 			$file = BASE . $template_path . '/layout_config.ini';
 		}

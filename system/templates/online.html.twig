@@ -10,7 +10,7 @@
 			{% if not status.online %}
 			Server is offline.<br/>
 			{% else %}
-				{% if config.online_afk %}
+				{% if setting('core.online_afk') %}
 					{% set players_count = players|length %}
 					{% set afk = players_count - status.players %}
 					{% if afk < 0 %}
@@ -28,9 +28,9 @@
 </table>
 <br/>
 	{# vocation statistics #}
-	{% if config.online_vocations %}
+	{% if setting('core.online_vocations') %}
 <br/>
-		{% if config.online_vocations_images %}
+		{% if setting('core.online_vocations_images') %}
 	<table width="200" cellspacing="1" cellpadding="0" border="0" align="center">
 		<tr bgcolor="{{ config.darkborder }}">
 			<td><img src="images/sorcerer.png" /></td>
@@ -70,7 +70,7 @@
 	{% endif %}
 
 	{# show skulls #}
-	{% if config.online_skulls %}
+	{% if setting('core.online_skulls') %}
 <table width="100%" cellspacing="1">
 	<tr>
 		<td style="background: {{ config.darkborder }};" align="center">
@@ -84,10 +84,10 @@
 
 <table border="0" cellspacing="1" cellpadding="4" width="100%">
 	<tr bgcolor="{{ config.vdarkborder }}">
-		{% if config.account_country %}
+		{% if setting('core.account_country') %}
 		<td width="11px"><a href="{{ getLink('online?order=country') }}" class="white">#</A></td>
 		{% endif %}
-		{% if config.online_outfit %}
+		{% if setting('core.online_outfit') %}
 		<td class="white"><b>Outfit</b></td>
 		{% endif %}
 		<td width="60%"><a href="{{ getLink('online?order=name') }}" class="white">Name</A></td>
@@ -98,11 +98,11 @@
 	{% for player in players %}
 		{% set i = i + 1 %}
 		<tr bgcolor="{{ getStyle(i) }}">
-		{% if config.account_country %}
+		{% if setting('core.account_country') %}
 			<td>{{ player.country_image|raw }}</td>
 		{% endif %}
-		{% if config.online_outfit %}
-			<td width="5%"><img style="position:absolute;margin-top:{% if player.player.looktype in config.outfit_images_wrong_looktypes %}-20px;margin-left:-0px;{% else %}-45px;margin-left:-25px;{%  endif %}" src="{{ player.outfit }}" alt="player outfit"/></td>
+		{% if setting('core.online_outfit') %}
+			<td width="5%"><img style="position:absolute;margin-top:{% if player.player.looktype in setting('core.outfit_images_wrong_looktypes') %}-20px;margin-left:-0px;{% else %}-45px;margin-left:-25px;{%  endif %}" src="{{ player.outfit }}" alt="player outfit"/></td>
 		{% endif %}
 			<td>{{ player.name|raw }}{{ player.skull }}</td>
 			<td>{{ player.level }}</td>

@@ -125,7 +125,7 @@ function updateStatus() {
 		$status['playersMax'] = $serverStatus->getMaxPlayers();
 
 		// for status afk thing
-		if($config['online_afk'])
+		if (setting('core.online_afk'))
 		{
 			$status['playersTotal'] = 0;
 			// get amount of players that are currently logged in-game, including disconnected clients (exited)

@@ -155,7 +155,7 @@
 					{% if (item.count > 1) %}
 						<span class="loot_amount">{{ item.count }}</span>
 					{% endif %}
-					<a href="{{ config.monsters_items_url }}{{ item.name|title }}"><img title="{{ item.tooltip }}" src="{{ config.item_images_url }}{{ item.id }}{{ config.item_images_extension }}" class="loot_image"/></a>
+					<a href="{{ setting('core.monsters_items_url') }}{{ item.name|title }}"><img title="{{ item.tooltip }}" src="{{ setting('core.item_images_url') }}{{ item.id }}{{ setting('core.item_images_extension') }}" class="loot_image"/></a>
 				</span>
 				{% endfor %}
 			</td>

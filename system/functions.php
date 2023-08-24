@@ -151,8 +151,7 @@ function getItemImage($id, $count = 1)
 	if($count > 1)
 		$file_name .= '-' . $count;
 
-	global $config;
-	return '<img src="' . $config['item_images_url'] . $file_name . config('item_images_extension') . '"' . $tooltip . ' width="32" height="32" border="0" alt="' .$id . '" />';
+	return '<img src="' . setting('core.item_images_url') . $file_name . setting('core.item_images_extension') . '"' . $tooltip . ' width="32" height="32" border="0" alt="' .$id . '" />';
 }
 
 function getItemRarity($chance) {
@@ -490,8 +489,8 @@ function template_place_holder($type): string
  */
 function template_header($is_admin = false): string
 {
-	global $title_full, $config, $twig;
-	$charset = $config['charset'] ?? 'utf-8';
+	global $title_full, $twig;
+	$charset = setting('core.charset') ?? 'utf-8';
 
 	return $twig->render('templates.header.html.twig',
 		[
@@ -1036,14 +1035,14 @@ function get_browser_real_ip() {
 	return '0';
 }
 function setSession($key, $data) {
-	$_SESSION[config('session_prefix') . $key] = $data;
+	$_SESSION[setting('core.session_prefix') . $key] = $data;
 }
 function getSession($key) {
-	$key = config('session_prefix') . $key;
+	$key = setting('core.session_prefix') . $key;
 	return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
 }
 function unsetSession($key) {
-	unset($_SESSION[config('session_prefix') . $key]);
+	unset($_SESSION[setting('core.session_prefix') . $key]);
 }
 
 function getTopPlayers($limit = 5) {
@@ -1270,7 +1269,7 @@ function getCustomPage($name, &$success): string
 			set_error_handler('error_handler');
 
 			global $config;
-			if($config['backward_support']) {
+			if(setting('core.backward_support')) {
 				global $SQL, $main_content, $subtopic;
 			}
 
@@ -1527,8 +1526,8 @@ function right($str, $length) {
 }
 
 function getCreatureImgPath($creature){
-	$creature_path = config('monsters_images_url');
-	$creature_gfx_name = trim(strtolower($creature)) . config('monsters_images_extension');
+	$creature_path = setting('core.monsters_images_url');
+	$creature_gfx_name = trim(strtolower($creature)) . setting('core.monsters_images_extension');
 	if (!file_exists($creature_path . $creature_gfx_name)) {
 		$creature_gfx_name = str_replace(" ", "", $creature_gfx_name);
 		if (file_exists($creature_path . $creature_gfx_name)) {

@@ -29,13 +29,13 @@
 			</table>
 			<table border="0" cellpadding="4" cellspacing="1" width="100%">
 				<tr bgcolor="{{ config.vdarkborder }}">
-					{% if config.account_country %}
+					{% if setting('core.account_country') %}
 					<td style="width: 11px" class="white">#</td>
 					{% endif %}
 
 					<td style="width: 10%" class="white"><b>Rank</b></td>
 
-					{% if config.highscores_outfit %}
+					{% if setting('core.highscores_outfit') %}
 					<td class="white"><b>Outfit</b></td>
 					{% endif %}
 
@@ -56,13 +56,13 @@
 					<tr bgcolor="{{ getStyle(row) }}">
 						{% set row = row + 1 %}
 
-						{% if config.account_country %}
+						{% if setting('core.account_country') %}
 						<td>{{ player.flag|raw }}</td>
 						{% endif %}
 
 						<td>{{ player.rank }}.</td>
 
-						{% if config.highscores_outfit %}
+						{% if setting('core.highscores_outfit') %}
 						<td>{{ player.outfit|raw }}</td>
 						{% endif %}
 
@@ -70,7 +70,7 @@
 							<a href="{{ player.link }}">
 								<span style="color: {% if player.online > 0 %}green{% else %}red{% endif %}">{{ player.name }}</span>
 							</a>
-							{% if config.highscores_vocation %}
+							{% if setting('core.highscores_vocation') %}
 							<br/><small>{{ player.vocation }}</small>
 							{% endif %}
 						</td>

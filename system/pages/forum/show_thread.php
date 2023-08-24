@@ -57,7 +57,7 @@ foreach($posts as &$post) {
 	}
 
 	if($config['characters']['outfit']) {
-		$post['outfit'] = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($lookaddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
+		$post['outfit'] = setting('core.outfit_images_url') . '?id=' . $player->getLookType() . ($lookaddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
 	}
 
 	$groupName = '';

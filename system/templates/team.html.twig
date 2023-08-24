@@ -17,7 +17,7 @@
 			<td>
 				<div class="InnerTableContainer">
 					{% set i = 0 %}
-					{% if config.team_style == 1 %}
+					{% if setting('core.team_style') == 1 %}
 
 						<table border="0" cellpadding="4" cellspacing="1" width="100%">
 							<tr bgcolor="{{ config.vdarkborder }}">
@@ -63,12 +63,12 @@
 
 										{% if setting('core.team_outfit') %}
 										<td>
-											<img style="position: absolute; margin-top: {% if member.player.looktype in config.outfit_images_wrong_looktypes %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
+											<img style="position: absolute; margin-top: {% if member.player.looktype in setting('core.outfit_images_wrong_looktypes') %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
 										</td>
 										{% endif %}
 
 										<td>
-											{% if config.account_country %}
+											{% if setting('core.account_country') %}
 												{{ member.flag_image|raw }}
 											{% endif %}
 											{{ member.link|raw }}
@@ -100,7 +100,7 @@
 								{% endif %}
 							{% endfor %}
 						</table>
-					{% elseif config.team_style == 2 %}
+					{% elseif setting('core.team_style') == 2 %}
 						{% for group in groupmember|reverse %}
 							{% if group.members is not empty %}
 							<div style="text-align:center"><h2>{{ group.group_name|capitalize }}</h2></div>
@@ -141,12 +141,12 @@
 									<tr bgcolor="{{ getStyle(i) }}" style="height: 32px;">
 									{% if setting('core.team_outfit') %}
 									<td>
-										<img style="position: absolute; margin-top: {% if member.player.looktype in config.outfit_images_wrong_looktypes %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
+										<img style="position: absolute; margin-top: {% if member.player.looktype in setting('core.outfit_images_wrong_looktypes') %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
 									</td>
 									{% endif %}
 
 									<td>
-										{% if config.account_country %}
+										{% if setting('core.account_country') %}
 											{{ member.flag_image|raw }}
 										{% endif %}
 										{{ member.link|raw }}

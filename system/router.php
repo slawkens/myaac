@@ -170,7 +170,7 @@ if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
 		$_REQUEST['subtopic'] = $_REQUEST['p'];
 	}
 
-	if (config('backward_support')) {
+	if (setting('core.backward_support')) {
 		require SYSTEM . 'compat/pages.php';
 	}
 
@@ -271,7 +271,7 @@ if($hooks->trigger(HOOK_BEFORE_PAGE)) {
 
 unset($file);
 
-if(config('backward_support') && isset($main_content[0]))
+if(setting('core.backward_support') && isset($main_content[0]))
 	$content .= $main_content;
 
 $content .= ob_get_contents();
@@ -282,7 +282,7 @@ if(!isset($title)) {
 	$title = ucfirst($page);
 }
 
-if(config('backward_support')) {
+if(setting('core.backward_support')) {
 	$main_content = $content;
 	$topic = $title;
 }

@@ -17,7 +17,7 @@ $title = 'Creatures';
 
 if (empty($_REQUEST['name'])) {
 	// display list of monsters
-	$preview = config('monsters_images_preview');
+	$preview = setting('core.monsters_images_preview');
 	$creatures = Monster::where('hidden', '!=', 1)->when(!empty($_REQUEST['boss']), function ($query) {
 		$query->where('rewardboss', 1);
 	})->get()->toArray();
@@ -65,7 +65,7 @@ if (isset($creature['name'])) {
 		$item['name'] = getItemNameById($item['id']);
 		$item['rarity_chance'] = round($item['chance'] / 1000, 2);
 		$item['rarity'] = getItemRarity($item['chance']);
-		$item['tooltip'] = ucfirst($item['name']) . '<br/>Chance: ' . $item['rarity'] . (config('monsters_loot_percentage') ? ' ('. $item['rarity_chance'] .'%)' : '') . '<br/>Max count: ' . $item['count'];
+		$item['tooltip'] = ucfirst($item['name']) . '<br/>Chance: ' . $item['rarity'] . (setting('core.monsters_loot_percentage') ? ' ('. $item['rarity_chance'] .'%)' : '') . '<br/>Max count: ' . $item['count'];
 	}
 
 	$creature['loot'] = isset($loot) ? $loot : null;

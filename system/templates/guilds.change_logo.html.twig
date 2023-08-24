@@ -6,7 +6,7 @@ Here you can change logo of your guild.<br/>Actuall logo: <img src="{{ constant(
 	Select new logo: <input name="newlogo" id="newlogo" type="file" />
 	<input type="submit" value="Send new logo" />
 </form>
-Only <b>jpg, gif, png, bmp</b> pictures. Max. size: <b>{{ config.guild_image_size_kb }} KB</b><br>
+Only <b>jpg, gif, png, bmp</b> pictures. Max. size: <b>{{ setting('core.guild_image_size_kb') }} KB</b><br>
 <br/>
 <div style="text-align:center">
 	<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=manager" method="post">
@@ -16,7 +16,7 @@ Only <b>jpg, gif, png, bmp</b> pictures. Max. size: <b>{{ config.guild_image_siz
 <script type="text/javascript">
 	$(function() {
 		$('#upload_form').submit(function (event) {
-			var max_img_size = {{ config.guild_image_size_kb * 1024 }};
+			var max_img_size = {{ setting('core.guild_image_size_kb') * 1024 }};
 			var input = document.getElementById("newlogo");
 			// check for browser support (may need to be modified)
 			if (input.files && input.files.length == 1) {

@@ -85,9 +85,9 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 				'content' => $_GET['body'],
 				'date' => time(),
 				'icon' => $categories[$_GET['category']]['icon_id'],
-				'author' => $config['news_author'] ? $author : '',
+				'author' => setting('core.news_author') ? $author : '',
 				'comments' => null,
-				'news_date_format' => $config['news_date_format'],
+				'news_date_format' => setting('core.news_date_format'),
 				'hidden'=> 0
 			)));
 	}

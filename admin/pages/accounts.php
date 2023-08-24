@@ -16,7 +16,7 @@ $title = 'Account editor';
 $admin_base = ADMIN_URL . '?p=accounts';
 $use_datatable = true;
 
-if ($config['account_country'])
+if (setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
 $nameOrNumberColumn = 'name';
@@ -30,7 +30,7 @@ $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $hasTypeColumn = $db->hasColumn('accounts', 'type');
 $hasGroupColumn = $db->hasColumn('accounts', 'group_id');
 
-if ($config['account_country']) {
+if (setting('core.account_country')) {
 	$countries = array();
 	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
 		$countries[$c] = $config['countries'][$c];

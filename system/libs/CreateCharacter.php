@@ -140,8 +140,8 @@ class CreateCharacter
 		if(empty($errors))
 		{
 			$number_of_players_on_account = $account->getPlayersList(true)->count();
-			if($number_of_players_on_account >= config('characters_per_account'))
-				$errors[] = 'You have too many characters on your account <b>('.$number_of_players_on_account.'/'.config('characters_per_account').')</b>!';
+			if($number_of_players_on_account >= setting('core.characters_per_account'))
+				$errors[] = 'You have too many characters on your account <b>('.$number_of_players_on_account . '/' . setting('core.characters_per_account') . ')</b>!';
 		}
 
 		if(empty($errors))

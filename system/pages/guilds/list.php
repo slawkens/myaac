@@ -26,7 +26,7 @@ if(count($guilds_list) > 0)
 
 		$description = $guild->getCustomField('description');
 		$description_with_lines = str_replace(array("\r\n", "\n", "\r"), '<br />', $description, $count);
-		if ($count < $config['guild_description_lines_limit'])
+		if ($count < setting('core.guild_description_lines_limit'))
 			$description = nl2br($description);
 
 		$guildName = $guild->getName();

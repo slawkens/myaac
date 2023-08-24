@@ -71,7 +71,7 @@ $twig->display('spells.html.twig', array(
 	'post_vocation_id' => $vocation_id,
 	'post_vocation' => $vocation,
 	'spells' => $spells,
-	'item_path' => $config['item_images_url'],
+	'item_path' => setting('core.item_images_url'),
 ));
 ?>
 

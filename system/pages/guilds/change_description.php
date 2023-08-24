@@ -43,7 +43,7 @@ if(empty($errors)) {
 		$saved = false;
 		if($guild_leader) {
 			if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-				$description = htmlspecialchars(stripslashes(substr(trim($_REQUEST['description']),0,$config['guild_description_chars_limit'])));
+				$description = htmlspecialchars(stripslashes(substr(trim($_REQUEST['description']),0, setting('core.guild_description_chars_limit'))));
 				$guild->setCustomField('description', $description);
 				$saved = true;
 			}
