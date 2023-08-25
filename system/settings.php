@@ -1047,12 +1047,12 @@ Sent by MyAAC,<br/>
 			'desc' => 'Show player outfit?',
 			'default' => true,
 		],
-		/*'highscores_country_box' => [ // not implemented yet
+		'highscores_country_box' => [ // not implemented yet
 			'name' => 'Display Country Box',
 			'type' => 'hidden',
 			'desc' => 'Show player outfit?',
 			'default' => false,
-		],*/
+		],
 		'highscores_groups_hidden' => [
 			'name' => 'Hidden Groups',
 			'type' => 'number',
