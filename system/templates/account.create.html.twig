@@ -59,7 +59,7 @@
 													<td></td><td><span id="email_error" class="FormFieldError">{% if errors.email is defined %}{{ errors.email }}{% endif %}</span></td>
 												</tr>
 
-												{% if setting('core.mail_enabled') and setting('account_mail_verify') %}
+												{% if setting('core.mail_enabled') and setting('core.account_mail_verify') %}
 													<tr><td></td><td><span><strong>Please use real address!<br/>We will send a link to validate your Email.</strong></span></td></tr>
 												{% endif %}
 
@@ -122,7 +122,7 @@
 
 							{{ hook('HOOK_ACCOUNT_CREATE_BETWEEN_BOXES_1') }}
 
-							{% if (not setting('core.mail_enabled') or not setting('core.account_mail_verify')) and setting('account_create_character_create') %}
+							{% if (not setting('core.mail_enabled') or not setting('core.account_mail_verify')) and setting('core.account_create_character_create') %}
 							<tr>
 								<td>
 									<div class="TableShadowContainerRightTop">

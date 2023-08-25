@@ -211,8 +211,8 @@ if($save)
 			}
 		}
 
-		if(setting('account_premium_points') && setting('account_premium_points') > 0) {
-			$new_account->setCustomField('premium_points', setting('account_premium_points'));
+		if(setting('core.account_premium_points') && setting('core.account_premium_points') > 0) {
+			$new_account->setCustomField('premium_points', setting('core.account_premium_points'));
 		}
 
 		$tmp_account = $email;
@@ -295,7 +295,7 @@ if($save)
 				'custom_buttons' => setting('core.account_create_character_create') ? '' : null
 			));
 
-			if(setting('core.mail_enabled') && setting('account_welcome_mail'))
+			if(setting('core.mail_enabled') && setting('core.account_welcome_mail'))
 			{
 				$mailBody = $twig->render('account.welcome_mail.html.twig', array(
 					'account' => $tmp_account
