@@ -151,7 +151,7 @@ class Plugins {
 		foreach(self::getAllPluginsJson() as $plugin) {
 			if (isset($plugin['hooks'])) {
 				foreach ($plugin['hooks'] as $_name => $info) {
-					if (str_contains($info['type'], 'HOOK_')) {
+					if (strpos($info['type'], 'HOOK_') !== false) {
 						$info['type'] = str_replace('HOOK_', '', $info['type']);
 					}
 
