@@ -1,7 +1,7 @@
 var list = new Array();
 {% set i = 0 %}
 {% for cat in categories %}
-	{% if cat.id != 'shops' or config.gifts_system %}
+	{% if cat.id != 'shops' or setting('core.gifts_system') %}
 	list[{{ i }}] = '{{ cat.id }}';
 	{% endif %}
 {% set i = i + 1 %}

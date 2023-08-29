@@ -11,8 +11,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Bans list';
 
-$configBansPerPage = config('bans_per_page');
-$_page = isset($_GET['page']) ? $_GET['page'] : 1;
+$configBansPerPage = setting('core.bans_per_page');
+$_page = $_GET['page'] ?? 1;
 
 if(!is_numeric($_page) || $_page < 1 || $_page > PHP_INT_MAX) {
 	$_page = 1;
@@ -50,7 +50,8 @@ if(!$bansQuery->rowCount())
 
 $nextPage = false;
 $i = 0;
-$bans = $bansQuery->fetchAll();
+$bans = $bansQuery->fetchAll(PDO::FETCH_ASSOC);
+
 foreach ($bans as $id => &$ban)
 {
 	if(++$i > $configBansPerPage)
@@ -69,11 +70,22 @@ foreach ($bans as $id => &$ban)
 		$accountId = $ban['account_id'];
 	}
 
-	$ban['player'] = getPlayerLink(getPlayerNameByAccount($accountId));
-
+	$playerName = 'Unknown';
 	if ($configBans['hasType']) {
 		$ban['type'] = getBanType($ban['type']);
+
+		if ($ban['type'] == 2) { // namelock
+			$playerName = getPlayerNameById($accountId);
+		}
+		else {
+			$playerName = getPlayerNameByAccount($accountId);
+		}
 	}
+	else {
+		$playerName = getPlayerNameByAccount($accountId);
+	}
+
+	$ban['player'] = getPlayerLink($playerName);
 
 	$expiresColumn = 'expires_at';
 	if ($db->hasColumn('bans', 'expires')) {
@@ -104,7 +116,7 @@ foreach ($bans as $id => &$ban)
 		}
 	}
 	else {
-		$addedBy = getPlayerLink(getPlayerNameByAccount($ban['banned_by']));
+		$addedBy = getPlayerLink(getPlayerNameById($ban['banned_by']));
 	}
 
 	if ($db->hasColumn('bans', 'added')) {

@@ -10,12 +10,12 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $logged = false;
 $logged_flags = 0;
+$account_logged = new OTS_Account();
 
 // stay-logged with sessions
 $current_session = getSession('account');
 if($current_session !== false)
 {
-	$account_logged = new OTS_Account();
 	$account_logged->load($current_session);
 	if($account_logged->isLoaded() && $account_logged->getPassword() == getSession('password')
 		//&& (!isset($_SESSION['admin']) || admin())

@@ -30,6 +30,7 @@ define('HOOK_CHARACTERS_AFTER_CHARACTERS', ++$i);
 define('HOOK_LOGIN', ++$i);
 define('HOOK_LOGIN_ATTEMPT', ++$i);
 define('HOOK_LOGOUT', ++$i);
+define('HOOK_ACCOUNT_CHANGE_PASSWORD_POST', ++$i);
 define('HOOK_ACCOUNT_CREATE_BEFORE_FORM', ++$i);
 define('HOOK_ACCOUNT_CREATE_BEFORE_BOXES', ++$i);
 define('HOOK_ACCOUNT_CREATE_BETWEEN_BOXES_1', ++$i);
@@ -39,6 +40,7 @@ define('HOOK_ACCOUNT_CREATE_BEFORE_ACCOUNT', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_ACCOUNT', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_EMAIL', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_COUNTRY', ++$i);
+define('HOOK_ACCOUNT_CREATE_AFTER_PASSWORD', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_PASSWORDS', ++$i);
 define('HOOK_ACCOUNT_CREATE_BEFORE_CHARACTER_NAME', ++$i);
 define('HOOK_ACCOUNT_CREATE_AFTER_CHARACTER_NAME', ++$i);
@@ -51,6 +53,7 @@ define('HOOK_ACCOUNT_CREATE_POST', ++$i);
 define('HOOK_ACCOUNT_LOGIN_BEFORE_PAGE', ++$i);
 define('HOOK_ACCOUNT_LOGIN_BEFORE_ACCOUNT', ++$i);
 define('HOOK_ACCOUNT_LOGIN_AFTER_ACCOUNT', ++$i);
+define('HOOK_ACCOUNT_LOGIN_BEFORE_PASSWORD', ++$i);
 define('HOOK_ACCOUNT_LOGIN_AFTER_PASSWORD', ++$i);
 define('HOOK_ACCOUNT_LOGIN_AFTER_REMEMBER_ME', ++$i);
 define('HOOK_ACCOUNT_LOGIN_AFTER_PAGE', ++$i);
@@ -64,10 +67,18 @@ define('HOOK_ADMIN_MENU', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_ACCOUNT', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_PASSWORD', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_SIGN_IN', ++$i);
+define('HOOK_ADMIN_ACCOUNTS_SAVE_POST', ++$i);
+define('HOOK_ADMIN_SETTINGS_BEFORE_SAVE', ++$i);
 define('HOOK_CRONJOB', ++$i);
 define('HOOK_EMAIL_CONFIRMED', ++$i);
+define('HOOK_GUILDS_BEFORE_GUILD_HEADER', ++$i);
+define('HOOK_GUILDS_AFTER_GUILD_HEADER', ++$i);
+define('HOOK_GUILDS_AFTER_GUILD_INFORMATION', ++$i);
+define('HOOK_GUILDS_AFTER_GUILD_MEMBERS', ++$i);
+define('HOOK_GUILDS_AFTER_INVITED_CHARACTERS', ++$i);
+
 const HOOK_FIRST = HOOK_STARTUP;
-const HOOK_LAST = HOOK_EMAIL_CONFIRMED;
+define('HOOK_LAST', $i);
 
 require_once LIBS . 'plugins.php';
 class Hook
@@ -82,15 +93,25 @@ class Hook
 
 	public function execute($params)
 	{
-		extract($params);
-		/*if(is_callable($this->_callback))
-		{
-			$tmp = $this->_callback;
-			$ret = $tmp($params);
-		}*/
-
 		global $db, $config, $template_path, $ots, $content, $twig;
-		$ret = include BASE . $this->_file;
+
+		if(is_callable($this->_file))
+		{
+			$params['db'] = $db;
+			$params['config'] = $config;
+			$params['template_path'] = $template_path;
+			$params['ots'] = $ots;
+			$params['content'] = $content;
+			$params['twig'] = $twig;
+
+			$tmp = $this->_file;
+			$ret = $tmp($params);
+		}
+		else {
+			extract($params);
+
+			$ret = include BASE . $this->_file;
+		}
 
 		return !isset($ret) || $ret == 1 || $ret;
 	}

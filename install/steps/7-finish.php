@@ -8,7 +8,7 @@ if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['save
 else {
 	require SYSTEM . 'init.php';
 	if(!$error) {
-		if(USE_ACCOUNT_NAME)
+		if(USE_ACCOUNT_NAME || USE_ACCOUNT_NUMBER)
 			$account = isset($_SESSION['var_account']) ? $_SESSION['var_account'] : null;
 		else
 			$account_id = isset($_SESSION['var_account_id']) ? $_SESSION['var_account_id'] : null;
@@ -65,7 +65,6 @@ else {
 			$new_account->setPassword(encrypt($password));
 			$new_account->setEMail($email);
 
-			$new_account->unblock();
 			$new_account->save();
 
 			$new_account->setCustomField('created', time());
@@ -117,24 +116,44 @@ else {
 			}
 		}
 
+		$settings = Settings::getInstance();
+		foreach($_SESSION as $key => $value) {
+			if (in_array($key, ['var_usage', 'var_date_timezone', 'var_client'])) {
+				if ($key == 'var_usage') {
+					$key = 'anonymous_usage_statistics';
+					$value = ((int)$value == 1 ? 'true' : 'false');
+				} elseif ($key == 'var_date_timezone') {
+					$key = 'date_timezone';
+				} elseif ($key == 'var_client') {
+					$key = 'client';
+				}
+
+				$settings->updateInDatabase('core', $key, $value);
+			}
+		}
+		success('Settings saved.');
+
 		$twig->display('install.installer.html.twig', array(
 			'url' => 'tools/7-finish.php',
 			'message' => $locale['importing_spinner']
 		));
 
 		if(!isset($_SESSION['installed'])) {
-			$report_url = 'https://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL);
-			if (function_exists('curl_version'))
-			{
-				$curl = curl_init();
-				curl_setopt($curl, CURLOPT_URL, $report_url);
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-				curl_exec($curl);
-				curl_close($curl);
+			if (!array_key_exists('CI', getenv())) {
+				$report_url = 'https://my-aac.org/report_install.php?v=' . MYAAC_VERSION . '&b=' . urlencode(BASE_URL);
+				if (function_exists('curl_version'))
+				{
+					$curl = curl_init();
+					curl_setopt($curl, CURLOPT_URL, $report_url);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+					curl_exec($curl);
+					curl_close($curl);
+				}
+				else if (ini_get('allow_url_fopen') ) {
+					file_get_contents($report_url);
+				}
 			}
-			else if (ini_get('allow_url_fopen') ) {
-				file_get_contents($report_url);
-			}
+
 			$_SESSION['installed'] = true;
 		}
 

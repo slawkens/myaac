@@ -43,7 +43,7 @@ if($email_new_time < 10) {
 		}
 
 		if(empty($errors)) {
-			$email_new_time = time() + $config['account_mail_change'] * 24 * 3600;
+			$email_new_time = time() + setting('core.account_mail_change') * 24 * 3600;
 			$account_logged->setCustomField("email_new", $email_new);
 			$account_logged->setCustomField("email_new_time", $email_new_time);
 			$twig->display('success.html.twig', array(
@@ -166,4 +166,3 @@ if(isset($_POST['emailchangecancel']) && $_POST['emailchangecancel'] == 1) {
 		'custom_buttons' => $custom_buttons
 	));
 }
-?>

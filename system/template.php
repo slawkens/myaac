@@ -7,11 +7,14 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Menu;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 // template
-$template_name = $config['template'];
-if($config['template_allow_change'])
+$template_name = setting('core.template');
+if(setting('core.template_allow_change'))
 {
 	if(isset($_GET['template']))
 	{
@@ -51,7 +54,7 @@ if(file_exists(BASE . $template_path . '/index.php')) {
 elseif(file_exists(BASE . $template_path . '/template.php')) {
 	$template_index = 'template.php';
 }
-elseif($config['backward_support'] && file_exists(BASE . $template_path . '/layout.php')) {
+elseif(setting('core.backward_support') && file_exists(BASE . $template_path . '/layout.php')) {
 	$template_index = 'layout.php';
 }
 else {
@@ -74,7 +77,7 @@ if ($cache->enabled() && $cache->fetch('template_ini_' . $template_name, $tmp)) 
 else {
 	$file = BASE . $template_path . '/config.ini';
 	$exists = file_exists($file);
-	if ($exists || ($config['backward_support'] && file_exists(BASE . $template_path . '/layout_config.ini'))) {
+	if ($exists || (setting('core.backward_support') && file_exists(BASE . $template_path . '/layout_config.ini'))) {
 		if (!$exists) {
 			$file = BASE . $template_path . '/layout_config.ini';
 		}
@@ -111,12 +114,13 @@ $template['link_screenshots'] = getLink('gallery');
 $template['link_movies'] = getLink('videos');
 
 $template['link_gifts_history'] = getLink('gifts', 'history');
-if($config['forum'] != '')
+$forumSetting = setting('core.forum');
+if($forumSetting != '')
 {
-	if(strtolower($config['forum']) == 'site')
+	if(strtolower($forumSetting) == 'site')
 		$template['link_forum'] = "<a href='" . getLink('forum') . "'>";
 	else
-		$template['link_forum'] = "<a href='" . $config['forum'] . "' target='_blank'>";
+		$template['link_forum'] = "<a href='" . $forumSetting . "' target='_blank'>";
 }
 
 $twig->addGlobal('template_path', $template_path);
@@ -125,7 +129,7 @@ if($twig_loader) {
 }
 
 function get_template_menus() {
-	global $db, $template_name;
+	global $template_name;
 
 	$cache = Cache::getInstance();
 	if ($cache->enabled()) {
@@ -136,11 +140,15 @@ function get_template_menus() {
 	}
 
 	if (!isset($result)) {
-		$query = $db->query('SELECT `name`, `link`, `blank`, `color`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `category`, `ordering` ASC');
-		$result = $query->fetchAll();
+
+		$result = Menu::select(['name', 'link', 'blank', 'color', 'category'])
+			->where('template', $template_name)
+			->orderBy('category')
+			->orderBy('ordering')
+			->get();
 
 		if ($cache->enabled()) {
-			$cache->set('template_menus', serialize($result), 600);
+			$cache->set('template_menus', serialize($result->toArray()), 600);
 		}
 	}
 

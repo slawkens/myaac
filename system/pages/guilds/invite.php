@@ -72,6 +72,8 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$player->find($name);
 		if(!$player->isLoaded()) {
 			$errors[] = 'Player with name <b>' . $name . '</b> doesn\'t exist.';
+		} else if ($player->isDeleted()) {
+			$errors[] = "Character with name <b>$name</b> has been deleted.";
 		}
 		else
 		{

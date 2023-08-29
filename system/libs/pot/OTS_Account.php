@@ -21,7 +21,6 @@
  * @property string $password Password.
  * @property string $eMail Email address.
  * @property int $premiumEnd Timestamp of PACC end.
- * @property bool $blocked Blocked flag state.
  * @property bool $deleted Deleted flag state.
  * @property bool $warned Warned flag state.
  * @property bool $banned Ban state.
@@ -39,7 +38,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @var array
  * @version 0.1.5
  */
-    private $data = array('email' => '', 'blocked' => false, 'rlname' => '','location' => '', 'country' => '','web_flags' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
+    private $data = array('email' => '', 'rlname' => '','location' => '', 'country' => '','web_flags' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
 
 	public static $cache = array();
 
@@ -231,26 +230,22 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @param int $id Account number.
  * @throws PDOException On PDO operation error.
  */
-    public function load($id, $fresh = false, $searchOnlyById = false)
+    public function load($id, $fresh = false)
     {
 		if(!$fresh && isset(self::$cache[$id])) {
 			$this->data = self::$cache[$id];
 			return;
 		}
 
-		$numberColumn = 'id';
 		$nameOrNumber = '';
-		if (!$searchOnlyById) {
-			if (USE_ACCOUNT_NAME) {
-				$nameOrNumber = '`name`,';
-			} else if (USE_ACCOUNT_NUMBER) {
-				$nameOrNumber = '`number`,';
-				$numberColumn = 'number';
-			}
+		if (USE_ACCOUNT_NAME) {
+			$nameOrNumber = '`name`,';
+		} else if (USE_ACCOUNT_NUMBER) {
+			$nameOrNumber = '`number`,';
 		}
 
         // SELECT query on database
-		$this->data = $this->db->query('SELECT `id`, ' . $nameOrNumber . '`password`, `email`, `blocked`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `' . $numberColumn . '` = ' . (int) $id)->fetch();
+		$this->data = $this->db->query('SELECT `id`, ' . $nameOrNumber . '`password`, `email`, `rlname`, `location`, `country`, `web_flags`, ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays`, ' : '') . ($this->db->hasColumn('accounts', 'lastday') ? '`lastday`, ' : ($this->db->hasColumn('accounts', 'premend') ? '`premend`,' : ($this->db->hasColumn('accounts', 'premium_ends_at') ? '`premium_ends_at`,' : ''))) . '`created` FROM `accounts` WHERE `id` = ' . (int) $id)->fetch();
 		self::$cache[$id] = $this->data;
     }
 
@@ -268,8 +263,13 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
     public function find($name)
     {
+		$nameOrNumberColumn = 'name';
+		if (USE_ACCOUNT_NUMBER) {
+			$nameOrNumberColumn = 'number';
+		}
+
         // finds player's ID
-        $id = $this->db->query('SELECT `id` FROM `accounts` WHERE `name` = ' . $this->db->quote($name) )->fetch();
+        $id = $this->db->query('SELECT `id` FROM `accounts` WHERE `' . $nameOrNumberColumn . '` = ' . $this->db->quote($name) )->fetch();
 
         // if anything was found
         if( isset($id['id']) )
@@ -345,7 +345,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 	}
 
         // UPDATE query on database
-        $this->db->exec('UPDATE `accounts` SET ' . ($this->db->hasColumn('accounts', 'name') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `blocked` = ' . (int) $this->data['blocked'] . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `country` = ' . $this->db->quote($this->data['country']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $field . '` = ' . (int) $this->data[$field] . ' WHERE `id` = ' . $this->data['id']);
+        $this->db->exec('UPDATE `accounts` SET ' . ($this->db->hasColumn('accounts', 'name') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `country` = ' . $this->db->quote($this->data['country']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $field . '` = ' . (int) $this->data[$field] . ' WHERE `id` = ' . $this->data['id']);
     }
 
 /**
@@ -649,53 +649,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     {
         $this->data['email'] = (string) $email;
     }
-
-/**
- * Checks if account is blocked.
- *
- * <p>
- * Note: Since 0.0.3 version this method throws {@link E_OTS_NotLoaded E_OTS_NotLoaded} exception instead of triggering E_USER_WARNING.
- * </p>
- *
- * @version 0.0.3
- * @return bool Blocked state.
- * @throws E_OTS_NotLoaded If account is not loaded.
- */
-    public function isBlocked()
-    {
-        if( !isset($this->data['blocked']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
-
-        return $this->data['blocked'];
-    }
-
-/**
- * Unblocks account.
- *
- * <p>
- * This method only updates object state. To save changes in database you need to use {@link OTS_Account::save() save() method} to flush changed to database.
- * </p>
- */
-    public function unblock()
-    {
-        $this->data['blocked'] = false;
-    }
-
-/**
- * Blocks account.
- *
- * <p>
- * This method only updates object state. To save changes in databaseed to use {@link OTS_Account::save() save() method} to flush changed to database.
- * </p>
- */
-    public function block()
-    {
-        $this->data['blocked'] = true;
-    }
-
-
 
 /**
  * Reads custom field.
@@ -1041,7 +994,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $access = 0;
 
         // finds ranks of all characters
-        foreach($this->getPlayersList() as $player)
+        foreach($this->getPlayersList(false) as $player)
         {
             $rank = $player->getRank();
 
@@ -1147,9 +1100,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
             case 'playersList':
                 return $this->getPlayersList();
 
-            case 'blocked':
-                return $this->isBlocked();
-
             case 'deleted':
                 return $this->isDeleted();
 
@@ -1193,17 +1143,6 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
             case 'premiumEnd':
                 $this->setPremiumEnd($value);
-                break;
-
-            case 'blocked':
-                if($value)
-                {
-                    $this->block();
-                }
-                else
-                {
-                    $this->unblock();
-                }
                 break;
 
             case 'deleted':
@@ -1259,5 +1198,3 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 }
 
 /**#@-*/
-
-?>

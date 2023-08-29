@@ -1,8 +1,11 @@
 <?php
 
-$menus = [
+return [
 	['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'order' => 10, 'link' => 'dashboard'],
-	['name' => 'News', 'icon' => 'newspaper', 'order' => 20, 'link' =>
+	['name' => 'Settings', 'icon' => 'edit', 'order' => 19, 'link' =>
+		require ADMIN . 'includes/settings_menus.php'
+	],
+	['name' => 'News', 'icon' => 'newspaper', 'order' => 20,  'link' =>
 		[
 			['name' => 'View', 'link' => 'news', 'icon' => 'list', 'order' => 10],
 			['name' => 'Add news', 'link' => 'news&action=new&type=1', 'icon' => 'plus', 'order' => 20],
@@ -16,7 +19,7 @@ $menus = [
 			['name' => 'Add', 'link' => 'changelog&action=new', 'icon' => 'plus', 'order' => 20],
 		],
 	],
-	['name' => 'Mailer', 'icon' => 'envelope', 'order' => 40, 'link' => 'mailer', 'disabled' => !config('mail_enabled')],
+	['name' => 'Mailer', 'icon' => 'envelope', 'order' => 40, 'link' => 'mailer', 'disabled' => !setting('core.mail_enabled')],
 	['name' => 'Pages', 'icon' => 'book', 'order' => 50, 'link' =>
 		[
 			['name' => 'View', 'link' => 'pages', 'icon' => 'list', 'order' => 10],

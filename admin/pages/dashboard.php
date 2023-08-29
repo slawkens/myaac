@@ -47,12 +47,11 @@ $tmp = '';
 if (fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
 
-$configAdminPanelModules = config('admin_panel_modules');
-if (isset($configAdminPanelModules)) {
+$settingAdminPanelModules = setting('core.admin_panel_modules');
+if (count($settingAdminPanelModules) > 0) {
 	echo '<div class="row">';
-	$configAdminPanelModules = explode(',', $configAdminPanelModules);
 	$twig_loader->prependPath(__DIR__ . '/modules/templates');
-	foreach ($configAdminPanelModules as $box) {
+	foreach ($settingAdminPanelModules as $box) {
 		$file = __DIR__ . '/modules/' . $box . '.php';
 		if (file_exists($file)) {
 			include($file);

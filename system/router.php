@@ -4,9 +4,13 @@
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2021 MyAAC
+ * @copyright 2023 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Pages;
+
+defined('MYAAC') or die('Direct access not allowed!');
 
 if(!isset($content[0]))
 	$content = '';
@@ -50,15 +54,18 @@ if (false !== $pos = strpos($uri, '?')) {
 $uri = rawurldecode($uri);
 if (BASE_DIR !== '') {
 	$tmp = str_replace_first('/', '', BASE_DIR);
-	$uri = str_replace_first($tmp . '/', '', $uri);
+	$uri = str_replace_first($tmp, '', $uri);
+}
+
+if(0 === strpos($uri, '/')) {
+	$uri = str_replace_first('/', '', $uri);
 }
 
 define('URI', $uri);
 
-/** @var boolean $load_it */
 if(!$load_it) {
 	// ignore warnings in some functions/plugins
-	// page is not loaded anyways
+	// page is not loaded anyway
 	define('PAGE', '');
 
 	return;
@@ -115,10 +122,22 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 		if ($route[0] === '*') {
 			$route[0] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'];
 		}
+		else {
+			if (is_string($route[0])) {
+				$route[0] = explode(',', $route[0]);
+			}
+
+			$toUpperCase = function(string $value): string {
+				return trim(strtoupper($value));
+			};
+
+			// convert to upper case, fast-route accepts only upper case
+			$route[0] = array_map($toUpperCase, $route[0]);
+		}
 
 		$aliases = [
 			[':int', ':string', ':alphanum'],
-			[':\d+', ':[A-Za-z0-9-_%+\']+}', ':[A-Za-z0-9]+'],
+			[':\d+', ':[A-Za-z0-9-_%+\' ]+', ':[A-Za-z0-9]+'],
 		];
 
 		// apply aliases
@@ -147,7 +166,11 @@ $found = true;
 // old support for pages like /?subtopic=accountmanagement
 $page = $_REQUEST['p'] ?? ($_REQUEST['subtopic'] ?? '');
 if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
-	if (config('backward_support')) {
+	if (isset($_REQUEST['p'])) { // some plugins may require this
+		$_REQUEST['subtopic'] = $_REQUEST['p'];
+	}
+
+	if (setting('core.backward_support')) {
 		require SYSTEM . 'compat/pages.php';
 	}
 
@@ -161,7 +184,6 @@ else {
 	switch ($routeInfo[0]) {
 		case FastRoute\Dispatcher::NOT_FOUND:
 			// ... 404 Not Found
-			//var_dump('not found');
 			/**
 			 * Fallback to load page from templates/ or system/pages/ directory
 			 */
@@ -187,6 +209,7 @@ else {
 
 			$_REQUEST = array_merge($_REQUEST, $vars);
 			$_GET = array_merge($_GET, $vars);
+			extract($vars);
 
 			if (strpos($path, '__database__/') !== false) {
 				$pageName = str_replace('__database__/', '', $path);
@@ -248,7 +271,7 @@ if($hooks->trigger(HOOK_BEFORE_PAGE)) {
 
 unset($file);
 
-if(config('backward_support') && isset($main_content[0]))
+if(setting('core.backward_support') && isset($main_content[0]))
 	$content .= $main_content;
 
 $content .= ob_get_contents();
@@ -259,30 +282,29 @@ if(!isset($title)) {
 	$title = ucfirst($page);
 }
 
-if(config('backward_support')) {
+if(setting('core.backward_support')) {
 	$main_content = $content;
 	$topic = $title;
 }
 
 unset($page);
 
-function getDatabasePages() {
-	global $db;
-	$pages = $db->query('SELECT `name` FROM ' . TABLE_PREFIX . 'pages');
-	$ret = [];
+function getDatabasePages($withHidden = false): array
+{
+	global $logged_access;
+	$pages = Pages::where('access', '<=', $logged_access)->when(!$withHidden, function ($q) {
+		$q->isPublic();
+	})->get('name');
 
-	if ($pages->rowCount() < 1) {
-		return $ret;
-	}
-
-	foreach($pages->fetchAll() as $page) {
-		$ret [] = $page['name'];
+	foreach($pages as $page) {
+		$ret[] = $page->name;
 	}
 
 	return $ret;
 }
 
-function loadPageFromFileSystem($page, &$found) {
+function loadPageFromFileSystem($page, &$found): string
+{
 	$file = SYSTEM . 'pages/' . $page . '.php';
 	if (!is_file($file)) {
 		// feature: convert camelCase to snake_case

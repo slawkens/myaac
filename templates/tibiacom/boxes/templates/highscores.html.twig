@@ -45,8 +45,8 @@
 	<div class="top_level" style="background:url({{ template_path }}/images/themeboxes/bg_top.png)" align="	">
     {% for player in topPlayers %}
 	    <div style="text-align:left"><a href="{{ getPlayerLink(player['name'], false) }} " class="topfont {% if player['online'] %}online{% else %}offline{% endif %}">
-			{% if config.online_outfit %}
-				<img style="position:absolute;margin-top:{% if player.looktype in config.outfit_images_wrong_looktypes %}-20px;margin-left:-0px;{% else %}-45px;margin-left:-25px;{%  endif %}" src="{{ player.outfit }}" alt="player outfit"/>
+			{% if setting('core.online_outfit') %}
+				<img style="position:absolute;margin-top:{% if player.looktype in setting('core.outfit_images_wrong_looktypes') %}-20px;margin-left:-0px;{% else %}-45px;margin-left:-25px;{%  endif %}" src="{{ player.outfit }}" alt="player outfit"/>
 			{% endif %}
 				<span style="color: #CCC; margin-left: 40px">{{ player['rank'] }} - </span>
 				{{ player['name'] }}

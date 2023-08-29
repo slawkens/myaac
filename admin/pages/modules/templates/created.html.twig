@@ -1,4 +1,4 @@
-{% if players is iterable %}
+{% if accounts is iterable %}
 	<div class=" col-md-6 col-lg-3">
 		<div class="card card-info card-outline">
 			<div class="card-header">
@@ -15,7 +15,7 @@
 					</thead>
 					<tbody>
 					{% set i = 0 %}
-					{% for result in players %}
+					{% for result in accounts %}
 						{% set i = i + 1 %}
 						<tr>
 							<th>{{ i }}</th>

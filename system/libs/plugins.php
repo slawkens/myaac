@@ -10,7 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-function is_sub_dir($path = NULL, $parent_folder = SITE_PATH) {
+function is_sub_dir($path = NULL, $parent_folder = BASE) {
 
 	//Get directory path minus last folder
 	$dir = dirname($path);
@@ -39,11 +39,12 @@ function is_sub_dir($path = NULL, $parent_folder = SITE_PATH) {
 }
 
 use Composer\Semver\Semver;
+use MyAAC\Models\Menu;
 
 class Plugins {
-	private static $warnings = array();
+	private static $warnings = [];
 	private static $error = null;
-	private static $plugin_json = array();
+	private static $plugin_json = [];
 
 	public static function getRoutes()
 	{
@@ -56,22 +57,8 @@ class Plugins {
 		}
 
 		$routes = [];
-		foreach(get_plugins() as $filename) {
-			$string = file_get_contents(PLUGINS . $filename . '.json');
-			$string = self::removeComments($string);
-			$plugin = json_decode($string, true);
-			self::$plugin_json = $plugin;
-			if ($plugin == null) {
-				self::$warnings[] = 'Cannot load ' . $filename . '.json. File might be not a valid json code.';
-				continue;
-			}
-
-			if(isset($plugin['enabled']) && !getBoolean($plugin['enabled'])) {
-				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
-				continue;
-			}
-
-			$warningPreTitle = 'Plugin: ' . $filename . ' - ';
+		foreach(self::getAllPluginsJson() as $plugin) {
+			$warningPreTitle = 'Plugin: ' . $plugin['name'] . ' - ';
 
 			if (isset($plugin['routes'])) {
 				foreach ($plugin['routes'] as $_name => $info) {
@@ -80,7 +67,8 @@ class Plugins {
 					if ($method !== '*') {
 						$methods = is_string($method) ? explode(',', $info['method']) : $method;
 						foreach ($methods as $method) {
-							if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'])) {
+							$method = strtolower($method);
+							if (!in_array($method, ['get', 'post', 'put', 'patch', 'delete', 'head'])) {
 								self::$warnings[] = $warningPreTitle . 'Not allowed method ' . $method . '... Disabling this route...';
 							}
 						}
@@ -161,28 +149,18 @@ class Plugins {
 		}
 
 		$hooks = [];
-		foreach(get_plugins() as $filename) {
-			$string = file_get_contents(PLUGINS . $filename . '.json');
-			$string = self::removeComments($string);
-			$plugin = json_decode($string, true);
-			self::$plugin_json = $plugin;
-			if ($plugin == null) {
-				self::$warnings[] = 'Cannot load ' . $filename . '.json. File might be not a valid json code.';
-				continue;
-			}
-
-			if(isset($plugin['enabled']) && !getBoolean($plugin['enabled'])) {
-				self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
-				continue;
-			}
-
+		foreach(self::getAllPluginsJson() as $plugin) {
 			if (isset($plugin['hooks'])) {
 				foreach ($plugin['hooks'] as $_name => $info) {
+					if (str_contains($info['type'], 'HOOK_')) {
+						$info['type'] = str_replace('HOOK_', '', $info['type']);
+					}
+
 					if (defined('HOOK_'. $info['type'])) {
 						$hook = constant('HOOK_'. $info['type']);
 						$hooks[] = ['name' => $_name, 'type' => $hook, 'file' => $info['file']];
 					} else {
-						self::$warnings[] = 'Plugin: ' . $filename . '. Unknown event type: ' . $info['type'];
+						self::$warnings[] = 'Plugin: ' . $plugin['name'] . '. Unknown event type: ' . $info['type'];
 					}
 				}
 			}
@@ -195,7 +173,108 @@ class Plugins {
 		return $hooks;
 	}
 
-	public static function install($file) {
+	public static function getAllPluginsSettings()
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('plugins_settings', $tmp)) {
+				return unserialize($tmp);
+			}
+		}
+
+		$settings = [];
+		foreach (self::getAllPluginsJson() as $plugin) {
+			if (isset($plugin['settings'])) {
+				$settingsFile = require BASE . $plugin['settings'];
+				if (!isset($settingsFile['key'])) {
+					warning("Settings file for plugin - {$plugin['name']} does not contain 'key' field");
+					continue;
+				}
+
+				$settings[$settingsFile['key']] = ['pluginFilename' => $plugin['filename'], 'settingsFilename' => $plugin['settings']];
+			}
+		}
+
+		if ($cache->enabled()) {
+			$cache->set('plugins_settings', serialize($settings), 600); // cache for 10 minutes
+		}
+
+		return $settings;
+	}
+
+	public static function getAllPluginsJson($disabled = false)
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('plugins', $tmp)) {
+				return unserialize($tmp);
+			}
+		}
+
+		$plugins = [];
+		foreach (get_plugins($disabled) as $filename) {
+			$plugin = self::getPluginJson($filename);
+
+			if (!$plugin) {
+				continue;
+			}
+
+			$plugin['filename'] = $filename;
+			$plugins[] = $plugin;
+		}
+
+		if ($cache->enabled()) {
+			$cache->set('plugins', serialize($plugins), 600); // cache for 10 minutes
+		}
+
+		return $plugins;
+	}
+
+	public static function getPluginSettings($filename)
+	{
+		$plugin_json = self::getPluginJson($filename);
+		if (!$plugin_json) {
+			return false;
+		}
+
+		if (!isset($plugin_json['settings']) || !file_exists(BASE . $plugin_json['settings'])) {
+			return false;
+		}
+
+		return $plugin_json['settings'];
+	}
+
+	public static function getPluginJson($filename = null)
+	{
+		if(!isset($filename)) {
+			return self::$plugin_json;
+		}
+
+		$pathToPlugin = PLUGINS . $filename . '.json';
+		if (!file_exists($pathToPlugin)) {
+			self::$warnings[] = "Cannot load $filename.json. File doesn't exist.";
+			return false;
+		}
+
+		$string = file_get_contents($pathToPlugin);
+		$plugin_json = json_decode($string, true);
+		if ($plugin_json == null) {
+			self::$warnings[] = "Cannot load $filename.json. File might be not a valid json code.";
+			return false;
+		}
+
+		if (isset($plugin_json['enabled']) && !getBoolean($plugin_json['enabled'])) {
+			self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
+			return false;
+		}
+
+		return $plugin_json;
+	}
+
+	public static function install($file): bool
+	{
 		global $db;
 
 		if(!\class_exists('ZipArchive')) {
@@ -234,8 +313,13 @@ class Plugins {
 			return false;
 		}
 
+		$pluginFilename = str_replace('.json', '', basename($json_file));
+		if (self::existDisabled($pluginFilename)) {
+			success('The plugin already existed, but was disabled. It has been enabled again and will be now reinstalled.');
+			self::enable($pluginFilename);
+		}
+
 		$string = file_get_contents($file_name);
-		$string = self::removeComments($string);
 		$plugin_json = json_decode($string, true);
 		self::$plugin_json = $plugin_json;
 		if ($plugin_json == null) {
@@ -435,7 +519,45 @@ class Plugins {
 		return false;
 	}
 
-	public static function uninstall($plugin_name)
+	public static function isEnabled($pluginFileName): bool
+	{
+		$filenameJson = $pluginFileName . '.json';
+		return !is_file(PLUGINS . 'disabled.' . $filenameJson) && is_file(PLUGINS . $filenameJson);
+	}
+
+	public static function existDisabled($pluginFileName): bool
+	{
+		$filenameJson = $pluginFileName . '.json';
+		return is_file(PLUGINS . 'disabled.' . $filenameJson);
+	}
+
+	public static function enable($pluginFileName): bool {
+		return self::enableDisable($pluginFileName, true);
+	}
+
+	public static function disable($pluginFileName): bool {
+		return self::enableDisable($pluginFileName, false);
+	}
+
+	private static function enableDisable($pluginFileName, $enable): bool
+	{
+		$filenameJson = $pluginFileName . '.json';
+		$fileExist = is_file(PLUGINS . ($enable ? 'disabled.' : '') . $filenameJson);
+		if (!$fileExist) {
+			self::$error = 'Cannot ' . ($enable ? 'enable' : 'disable') . ' plugin: ' . $pluginFileName . '. File does not exist.';
+			return false;
+		}
+
+		$result = rename(PLUGINS . ($enable ? 'disabled.' : '') . $filenameJson, PLUGINS . ($enable ? '' : 'disabled.') . $filenameJson);
+		if (!$result) {
+			self::$error = 'Cannot ' . ($enable ? 'enable' : 'disable') . ' plugin: ' . $pluginFileName . '. Permission problem.';
+			return false;
+		}
+
+		return true;
+	}
+
+	public static function uninstall($plugin_name): bool
 	{
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
@@ -443,9 +565,8 @@ class Plugins {
 			return false;
 		}
 		$string = file_get_contents($filename);
-		$string = self::removeComments($string);
 		$plugin_info = json_decode($string, true);
-		if($plugin_info == false) {
+		if(!$plugin_info) {
 			self::$error = 'Cannot load plugin info ' . $plugin_name . '.json';
 			return false;
 		}
@@ -492,7 +613,8 @@ class Plugins {
 		return false;
 	}
 
-	public static function is_installed($plugin_name, $version) {
+	public static function is_installed($plugin_name, $version): bool
+	{
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
 			return false;
@@ -500,7 +622,7 @@ class Plugins {
 
 		$string = file_get_contents($filename);
 		$plugin_info = json_decode($string, true);
-		if($plugin_info == false) {
+		if(!$plugin_info) {
 			return false;
 		}
 
@@ -523,26 +645,6 @@ class Plugins {
 		return self::$error;
 	}
 
-	public static function getPluginJson() {
-		return self::$plugin_json;
-	}
-
-	public static function removeComments($string) {
-		$string = preg_replace('!/\*.*?\*/!s', '', $string);
-		$string = preg_replace('/\n\s*\n/', "\n", $string);
-		//  Removes multi-line comments and does not create
-		//  a blank line, also treats white spaces/tabs
-		$string = preg_replace('!^[ \t]*/\*.*?\*/[ \t]*[\r\n]!s', '', $string);
-
-		//  Removes single line '//' comments, treats blank characters
-		$string = preg_replace('![ \t]*//.*[ \t]*[\r\n]!', '', $string);
-
-		//  Strip blank lines
-		$string = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $string);
-
-		return $string;
-	}
-
 	/**
 	 * Install menus
 	 * Helper function for plugins
@@ -552,11 +654,9 @@ class Plugins {
 	 */
 	public static function installMenus($templateName, $categories)
 	{
-		global $db;
-
 		// check if menus already exist
-		$query = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($templateName) . ' LIMIT 1;');
-		if ($query->rowCount() > 0) {
+		$menuInstalled = Menu::where('template', $templateName)->select('id')->first();
+		if ($menuInstalled) {
 			return;
 		}
 
@@ -590,7 +690,7 @@ class Plugins {
 					'color' => $color,
 				];
 
-				$db->insert(TABLE_PREFIX . 'menu', $insert_array);
+				Menu::create($insert_array);
 			}
 		}
 	}

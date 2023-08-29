@@ -149,5 +149,3 @@ class OTS_Container extends OTS_Item implements IteratorAggregate
 }
 
 /**#@-*/
-
-?>

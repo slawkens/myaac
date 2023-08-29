@@ -1,33 +1,37 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
-$reward = config('account_mail_confirmed_reward');
+$reward = setting('core.account_mail_confirmed_reward');
 
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
-if ($reward['coins'] > 0 && $hasCoinsColumn) {
-	log_append('email_confirm_error.log', 'accounts.coins column does not exist.');
+$rewardCoins = setting('core.account_mail_confirmed_reward_coins');
+if ($rewardCoins > 0 && !$hasCoinsColumn) {
+	log_append('error.log', 'email_confirm: accounts.coins column does not exist.');
 }
 
 if (!isset($account) || !$account->isLoaded()) {
-	log_append('email_confirm_error.log', 'Account not loaded.');
 	return;
 }
 
-if ($reward['premium_points'] > 0) {
-	$account->setCustomField('premium_points', (int)$account->getCustomField('premium_points') + $reward['premium_points']);
+$rewardMessage = 'You received %d %s for confirming your E-Mail address.';
 
-	success(sprintf($reward['message'], $reward['premium_points'], 'premium points'));
+$rewardPremiumPoints = setting('core.account_mail_confirmed_reward_premium_points');
+if ($rewardPremiumPoints > 0) {
+	$account->setCustomField('premium_points', (int)$account->getCustomField('premium_points') + $rewardPremiumPoints);
+
+	success(sprintf($rewardMessage, $rewardPremiumPoints, 'premium points'));
 }
 
-if ($reward['coins'] > 0 && $hasCoinsColumn) {
-	$account->setCustomField('coins', (int)$account->getCustomField('coins') + $reward['coins']);
+if ($rewardCoins > 0 && $hasCoinsColumn) {
+	$account->setCustomField('coins', (int)$account->getCustomField('coins') + $rewardCoins);
 
-	success(sprintf($reward['message'], $reward['coins'], 'coins'));
+	success(sprintf($rewardMessage, $rewardCoins, 'coins'));
 }
 
-if ($reward['premium_days'] > 0) {
-	$account->setPremDays($account->getPremDays() + $reward['premium_days']);
+$rewardPremiumDays = setting('core.account_mail_confirmed_reward_premium_days');
+if ($rewardPremiumDays > 0) {
+	$account->setPremDays($account->getPremDays() + $rewardPremiumDays);
 	$account->save();
 
-	success(sprintf($reward['message'], $reward['premium_days'], 'premium days'));
+	success(sprintf($rewardMessage, $rewardPremiumDays, 'premium days'));
 }

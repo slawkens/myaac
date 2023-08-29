@@ -11,8 +11,6 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Characters';
 
-require_once SYSTEM . 'item.php';
-
 $groups = new OTS_Groups_List();
 function generate_search_form($autofocus = false)
 {
@@ -79,10 +77,10 @@ if($player->isLoaded() && !$player->isDeleted())
 	$rows = 0;
 
 	if($config['characters']['outfit'])
-		$outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
+		$outfit = setting('core.outfit_images_url') . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
 
 	$flag = '';
-	if($config['account_country']) {
+	if(setting('core.account_country')) {
 		$flag = getFlagImage($account->getCountry());
 	}
 
@@ -201,8 +199,7 @@ if($player->isLoaded() && !$player->isDeleted())
 		unset($storage);
 	}
 
-	if($config['characters']['equipment']) {
-		global $db;
+	if($config['characters']['equipment'] && $db->hasTable('player_items') && $db->hasColumn('player_items', 'pid') && $db->hasColumn('player_items', 'sid') && $db->hasColumn('player_items', 'itemtype')) {
 		$eq_sql = $db->query('SELECT `pid`, `itemtype` FROM player_items WHERE player_id = '.$player->getId().' AND (`pid` >= 1 and `pid` <= 10)');
 		$equipment = array();
 		foreach($eq_sql as $eq)
@@ -285,7 +282,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				$deaths[] = array('time' => $death['date'], 'description' => $description . '.');
 			}
 		}
-	} else {
+	} else if ($db->hasColumn('player_deaths', 'time') && $db->hasColumn('player_deaths', 'level') && $db->hasColumn('player_deaths', 'killed_by') && $db->hasColumn('player_deaths', 'is_player')) {
 		$mostdamage = '';
 		if($db->hasColumn('player_deaths', 'mostdamage_by'))
 			$mostdamage = ', `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`';
@@ -341,8 +338,8 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 	}
 
 	// signature
-	if($config['signature_enabled']) {
-		$signature_url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . urlencode($player->getName()) . '.png';
+	if(setting('core.signature_enabled')) {
+		$signature_url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . urlencode($player->getName()) . '.png';
 	}
 
 	$hidden = $player->isHidden();
@@ -397,7 +394,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			'rank' => isset($guild_name) ? $rank_of_player->getName() : null,
 			'link' => isset($guild_name) ? getGuildLink($guild_name) : null
 		),
-		'comment' => !empty($comment) ? wordwrap(nl2br($comment), 60, "<br/>", true) : null,
+		'comment' => !empty($comment) ? nl2br($comment) : null,
 		'skills' => isset($skills) ? $skills : null,
 		'quests_enabled' => $quests_enabled,
 		'quests' => isset($quests) ? $quests : null,
@@ -426,7 +423,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 	if($db->hasColumn('players', 'deletion'))
 		$deleted = 'deletion';
 
-	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . (int)config('characters_search_limit') . ';');
+	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . (int)setting('core.characters_search_limit') . ';');
 	if($query->rowCount() > 0) {
 		echo 'Did you mean:<ul>';
 		foreach($query as $player) {

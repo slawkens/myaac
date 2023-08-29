@@ -56,22 +56,6 @@ if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|zip|rar|g
 	exit;
 }
 
-if(file_exists(BASE . 'config.local.php')) {
-	require_once BASE . 'config.local.php';
-}
-
-ini_set('log_errors', 1);
-if(config('env') === 'dev') {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-}
-else {
-	ini_set('display_errors', 0);
-	ini_set('display_startup_errors', 0);
-	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
-}
-
 if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE . 'install'))
 {
 	header('Location: ' . BASE_URL . 'install/');
@@ -100,13 +84,11 @@ $twig->addGlobal('status', $status);
 
 require_once SYSTEM . 'router.php';
 
-require SYSTEM . 'migrate.php';
-
 $hooks->trigger(HOOK_STARTUP);
 
 // anonymous usage statistics
 // sent only when user agrees
-if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_statistics']) {
+if(setting('core.anonymous_usage_statistics')) {
 	$report_time = 30 * 24 * 60 * 60; // report one time per 30 days
 	$should_report = true;
 
@@ -139,17 +121,16 @@ if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_stat
 	}
 }
 
-if($config['views_counter'])
+if(setting('core.views_counter'))
 	require_once SYSTEM . 'counter.php';
 
-if($config['visitors_counter'])
-{
+if(setting('core.visitors_counter')) {
 	require_once SYSTEM . 'libs/visitors.php';
-	$visitors = new Visitors($config['visitors_counter_ttl']);
+	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
 }
 
 // backward support for gesior
-if($config['backward_support']) {
+if(setting('core.backward_support')) {
 	define('INITIALIZED', true);
 	$SQL = $db;
 	$layout_header = template_header();
@@ -165,7 +146,8 @@ if($config['backward_support']) {
 
 	$config['site'] = &$config;
 	$config['server'] = &$config['lua'];
-	$config['site']['shop_system'] = $config['gifts_system'];
+	$config['site']['shop_system'] = setting('core.gifts_system');
+	$config['site']['gallery_page'] = true;
 
 	if(!isset($config['vdarkborder']))
 		$config['vdarkborder'] = '#505050';
@@ -178,8 +160,9 @@ if($config['backward_support']) {
 	$config['site']['serverinfo_page'] = true;
 	$config['site']['screenshot_page'] = true;
 
-	if($config['forum'] != '')
-		$config['forum_link'] = (strtolower($config['forum']) === 'site' ? getLink('forum') : $config['forum']);
+	$forumSetting = setting('core.forum');
+	if($forumSetting != '')
+		$config['forum_link'] = (strtolower($forumSetting) === 'site' ? getLink('forum') : $forumSetting);
 
 	foreach($status as $key => $value)
 		$config['status']['serverStatus_' . $key] = $value;

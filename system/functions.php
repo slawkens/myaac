@@ -7,11 +7,15 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\Models\Config;
+use MyAAC\Models\Guild;
+use MyAAC\Models\House;
+use MyAAC\Models\Pages;
+use MyAAC\Models\Player;
 use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
-
-defined('MYAAC') or die('Direct access not allowed!');
 
 function message($message, $type, $return)
 {
@@ -33,55 +37,49 @@ function message($message, $type, $return)
 	return true;
 }
 function success($message, $return = false) {
-    return message($message, 'success', $return);
+	return message($message, 'success', $return);
 }
 function warning($message, $return = false) {
-    return message($message, 'warning', $return);
+	return message($message, 'warning', $return);
 }
 function note($message, $return = false) {
-    return message($message, 'note', $return);
+	return message($message, 'note', $return);
 }
 function error($message, $return = false) {
-    return message($message, ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'danger' : 'error'), $return);
+	return message($message, ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'danger' : 'error'), $return);
 }
 
-function longToIp($ip)
+function longToIp($ip): string
 {
 	$exp = explode(".", long2ip($ip));
 	return $exp[3].".".$exp[2].".".$exp[1].".".$exp[0];
 }
 
-function generateLink($url, $name, $blank = false) {
+function generateLink($url, $name, $blank = false): string {
 	return '<a href="' . $url . '"' . ($blank ? ' target="_blank"' : '') . '>' . $name . '</a>';
 }
 
-function getFullLink($page, $name, $blank = false) {
+function getFullLink($page, $name, $blank = false): string {
 	return generateLink(getLink($page), $name, $blank);
 }
 
-function getLink($page, $action = null)
-{
-	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . $page . ($action ? '/' . $action : '');
+function getLink($page, $action = null): string {
+	return BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . $page . ($action ? '/' . $action : '');
 }
-function internalLayoutLink($page, $action = null) {return getLink($page, $action);}
-
-function getForumThreadLink($thread_id, $page = NULL)
-{
-	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
+function internalLayoutLink($page, $action = null): string {
+	return getLink($page, $action);
 }
 
-function getForumBoardLink($board_id, $page = NULL)
-{
-	global $config;
-	return BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
+function getForumThreadLink($thread_id, $page = NULL): string {
+	return BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'forum/thread/' . (int)$thread_id . (isset($page) ? '/' . $page : '');
 }
 
-function getPlayerLink($name, $generate = true)
-{
-	global $config;
+function getForumBoardLink($board_id, $page = NULL): string {
+	return BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
+}
 
+function getPlayerLink($name, $generate = true): string
+{
 	if(is_numeric($name))
 	{
 		$player = new OTS_Player();
@@ -90,53 +88,45 @@ function getPlayerLink($name, $generate = true)
 			$name = $player->getName();
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'characters/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'characters/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
 }
 
-function getMonsterLink($name, $generate = true)
+function getMonsterLink($name, $generate = true): string
 {
-	global $config;
-
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'creatures/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'creatures/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
 }
 
-function getHouseLink($name, $generate = true)
+function getHouseLink($name, $generate = true): string
 {
-	global $db, $config;
-
 	if(is_numeric($name))
 	{
-		$house = $db->query(
-			'SELECT `name` FROM `houses` WHERE `id` = ' . (int)$name);
-		if($house->rowCount() > 0)
-			$name = $house->fetchColumn();
+		$house = House::find(intval($name), ['name']);
+		if ($house) {
+			$name = $house->name;
+		}
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'houses/' . urlencode($name);
+
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'houses/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
 }
 
-function getGuildLink($name, $generate = true)
+function getGuildLink($name, $generate = true): string
 {
-	global $db, $config;
-
-	if(is_numeric($name))
-	{
-		$guild = $db->query(
-			'SELECT `name` FROM `guilds` WHERE `id` = ' . (int)$name);
-		if($guild->rowCount() > 0)
-			$name = $guild->fetchColumn();
+	if(is_numeric($name)) {
+		$guild = Guild::find(intval($name), ['name']);
+		$name = $guild->name ?? 'Unknown';
 	}
 
-	$url = BASE_URL . ($config['friendly_urls'] ? '' : 'index.php/') . 'guilds/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'guilds/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -161,8 +151,7 @@ function getItemImage($id, $count = 1)
 	if($count > 1)
 		$file_name .= '-' . $count;
 
-	global $config;
-	return '<img src="' . $config['item_images_url'] . $file_name . config('item_images_extension') . '"' . $tooltip . ' width="32" height="32" border="0" alt="' .$id . '" />';
+	return '<img src="' . setting('core.item_images_url') . $file_name . setting('core.item_images_extension') . '"' . $tooltip . ' width="32" height="32" border="0" alt="' .$id . '" />';
 }
 
 function getItemRarity($chance) {
@@ -182,7 +171,7 @@ function getItemRarity($chance) {
 	return '';
 }
 
-function getFlagImage($country)
+function getFlagImage($country): string
 {
 	if(!isset($country[0]))
 		return '';
@@ -204,7 +193,7 @@ function getFlagImage($country)
  * @param mixed $v Variable to check.
  * @return bool Value boolean status.
  */
-function getBoolean($v)
+function getBoolean($v): bool
 {
 	if(is_bool($v)) {
 		return $v;
@@ -227,7 +216,7 @@ function getBoolean($v)
  * @param bool $special Should special characters by used?
  * @return string Generated string.
  */
-function generateRandomString($length, $lowCase = true, $upCase = false, $numeric = false, $special = false)
+function generateRandomString($length, $lowCase = true, $upCase = false, $numeric = false, $special = false): string
 {
 	$characters = '';
 	if($lowCase)
@@ -284,13 +273,12 @@ function getForumBoards()
  */
 function fetchDatabaseConfig($name, &$value)
 {
-	global $db;
-
-	$query = $db->query('SELECT `value` FROM `' . TABLE_PREFIX . 'config` WHERE `name` = ' . $db->quote($name));
-	if($query->rowCount() <= 0)
+	$config = Config::select('value')->where('name', '=', $name)->first();
+	if (!$config) {
 		return false;
+	}
 
-	$value = $query->fetchColumn();
+	$value = $config->value;
 	return true;
 }
 
@@ -315,8 +303,7 @@ function getDatabaseConfig($name)
  */
 function registerDatabaseConfig($name, $value)
 {
-	global $db;
-	$db->insert(TABLE_PREFIX . 'config', array('name' => $name, 'value' => $value));
+	Config::create(compact('name', 'value'));
 }
 
 /**
@@ -327,8 +314,9 @@ function registerDatabaseConfig($name, $value)
  */
 function updateDatabaseConfig($name, $value)
 {
-	global $db;
-	$db->update(TABLE_PREFIX . 'config', array('value' => $value), array('name' => $name));
+	Config::where('name', '=', $name)->update([
+		'value' => $value
+	]);
 }
 
 /**
@@ -355,47 +343,55 @@ function encrypt($str)
 //delete player with name
 function delete_player($name)
 {
-	global $db;
-	$player = new OTS_Player();
-	$player->find($name);
-	if($player->isLoaded()) {
-		try { $db->exec("DELETE FROM player_skills WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM guild_invites WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_items WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_depotitems WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_spells WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_storage WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_viplist WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_deaths WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
-		try { $db->exec("DELETE FROM player_deaths WHERE killed_by = '".$player->getId()."';"); } catch(PDOException $error) {}
-		$rank = $player->getRank();
-		if($rank->isLoaded()) {
-			$guild = $rank->getGuild();
-			if($guild->getOwner()->getId() == $player->getId()) {
-				$rank_list = $guild->getGuildRanksList();
-				if(count($rank_list) > 0) {
-					$rank_list->orderBy('level');
-					foreach($rank_list as $rank_in_guild) {
-						$players_with_rank = $rank_in_guild->getPlayersList();
-						$players_with_rank->orderBy('name');
-						$players_with_rank_number = count($players_with_rank);
-						if($players_with_rank_number > 0) {
-							foreach($players_with_rank as $player_in_guild) {
-								$player_in_guild->setRank();
-								$player_in_guild->save();
-							}
-						}
-						$rank_in_guild->delete();
-					}
-					$guild->delete();
-				}
-			}
-		}
-		$player->delete();
-		return true;
+	// DB::beginTransaction();
+	global $capsule;
+	$player = Player::where(compact('name'))->first();
+	if (!$player) {
+		return false;
 	}
 
 	return false;
+	// global $db;
+	// $player = new OTS_Player();
+	// $player->find($name);
+	// if($player->isLoaded()) {
+	// 	try { $db->exec("DELETE FROM player_skills WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM guild_invites WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_items WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_depotitems WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_spells WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_storage WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_viplist WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_deaths WHERE player_id = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	try { $db->exec("DELETE FROM player_deaths WHERE killed_by = '".$player->getId()."';"); } catch(PDOException $error) {}
+	// 	$rank = $player->getRank();
+	// 	if($rank->isLoaded()) {
+	// 		$guild = $rank->getGuild();
+	// 		if($guild->getOwner()->getId() == $player->getId()) {
+	// 			$rank_list = $guild->getGuildRanksList();
+	// 			if(count($rank_list) > 0) {
+	// 				$rank_list->orderBy('level');
+	// 				foreach($rank_list as $rank_in_guild) {
+	// 					$players_with_rank = $rank_in_guild->getPlayersList();
+	// 					$players_with_rank->orderBy('name');
+	// 					$players_with_rank_number = count($players_with_rank);
+	// 					if($players_with_rank_number > 0) {
+	// 						foreach($players_with_rank as $player_in_guild) {
+	// 							$player_in_guild->setRank();
+	// 							$player_in_guild->save();
+	// 						}
+	// 					}
+	// 					$rank_in_guild->delete();
+	// 				}
+	// 				$guild->delete();
+	// 			}
+	// 		}
+	// 	}
+	// 	$player->delete();
+	// 	return true;
+	// }
+
+	// return false;
 }
 
 //delete guild with id
@@ -467,7 +463,7 @@ function tickers()
  * Types: head_start, head_end, body_start, body_end, center_top
  *
  */
-function template_place_holder($type)
+function template_place_holder($type): string
 {
 	global $twig, $template_place_holders;
 	$ret = '';
@@ -491,10 +487,10 @@ function template_place_holder($type)
 /**
  * Returns <head> content to be used by templates.
  */
-function template_header($is_admin = false)
+function template_header($is_admin = false): string
 {
-	global $title_full, $config, $twig;
-	$charset = isset($config['charset']) ? $config['charset'] : 'utf-8';
+	global $title_full, $twig;
+	$charset = setting('core.charset') ?? 'utf-8';
 
 	return $twig->render('templates.header.html.twig',
 		[
@@ -508,29 +504,32 @@ function template_header($is_admin = false)
 /**
  * Returns footer content to be used by templates.
  */
-function template_footer()
+function template_footer(): string
 {
-	global $config, $views_counter;
+	global $views_counter;
 	$ret = '';
-	if(admin())
+	if(admin()) {
 		$ret .= generateLink(ADMIN_URL, 'Admin Panel', true);
+	}
 
-	if($config['visitors_counter'])
-	{
+	if(setting('core.visitors_counter')) {
 		global $visitors;
 		$amount = $visitors->getAmountVisitors();
 		$ret .= '<br/>Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
 	}
 
-	if($config['views_counter'])
+	if(setting('core.views_counter')) {
 		$ret .= '<br/>Page has been viewed ' . $views_counter . ' times.';
+	}
 
-	if(config('footer_show_load_time')) {
+	if(setting('core.footer_load_time')) {
 		$ret .= '<br/>Load time: ' . round(microtime(true) - START_TIME, 4) . ' seconds.';
 	}
 
-	if(isset($config['footer'][0]))
-		$ret .= '<br/>' . $config['footer'];
+	$settingFooter = setting('core.footer');
+	if(isset($settingFooter[0])) {
+		$ret .= '<br/>' . $settingFooter;
+	}
 
 	// please respect my work and help spreading the word, thanks!
 	return $ret . '<br/>' . base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
@@ -538,8 +537,8 @@ function template_footer()
 
 function template_ga_code()
 {
-	global $config, $twig;
-	if(!isset($config['google_analytics_id'][0]))
+	global $twig;
+	if(!isset(setting('core.google_analytics_id')[0]))
 		return '';
 
 	return $twig->render('google_analytics.html.twig');
@@ -756,10 +755,10 @@ function get_browser_languages()
 {
 	$ret = array();
 
-	$acceptLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-	if(!isset($acceptLang[0]))
+	if(empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		return $ret;
 
+	$acceptLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 	$languages = strtolower($acceptLang);
 	// $languages = 'pl,en-us;q=0.7,en;q=0.3 ';
 	// need to remove spaces from strings to avoid error
@@ -792,16 +791,21 @@ function get_templates()
  * Generates list of installed plugins
  * @return array $plugins
  */
-function get_plugins()
+function get_plugins($disabled = false): array
 {
-	$ret = array();
+	$ret = [];
 
 	$path = PLUGINS;
-	foreach(scandir($path, 0) as $file) {
+	foreach(scandir($path, SCANDIR_SORT_ASCENDING) as $file) {
 		$file_ext = pathinfo($file, PATHINFO_EXTENSION);
 		$file_name = pathinfo($file, PATHINFO_FILENAME);
-		if ($file === '.' || $file === '..' || $file === 'disabled' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file))
+		if ($file === '.' || $file === '..' || $file === 'example.json' || $file_ext !== 'json' || is_dir($path . $file)) {
 			continue;
+		}
+
+		if (!$disabled && strpos($file, 'disabled.') !== false) {
+			continue;
+		}
 
 		$ret[] = str_replace('.json', '', $file_name);
 	}
@@ -819,7 +823,7 @@ function getWorldName($id)
 
 /**
  * Mailing users.
- * $config['mail_enabled'] have to be enabled.
+ * Mailing has to be enabled in settings (in Admin Panel).
  *
  * @param string $to Recipient email address.
  * @param string $subject Subject of the message.
@@ -831,8 +835,9 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 {
 	global $mailer, $config;
 
-	if (!config('mail_enabled')) {
-		log_append('mailer-error.log', '_mail() function has been used, but config.mail_enabled is disabled.');
+	if (!setting('core.mail_enabled')) {
+		log_append('mailer-error.log', '_mail() function has been used, but Mail Support is disabled.');
+		return false;
 	}
 
 	if(!$mailer)
@@ -844,47 +849,60 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 		$mailer->clearAllRecipients();
 	}
 
-	$signature_html = '';
-	if(isset($config['mail_signature']['html']))
-		$signature_html = $config['mail_signature']['html'];
-
+	$signature_html = setting('core.mail_signature_html');
 	if($add_html_tags && isset($body[0]))
 		$tmp_body = '<html><head></head><body>' . $body . '<br/><br/>' . $signature_html . '</body></html>';
 	else
 		$tmp_body = $body . '<br/><br/>' . $signature_html;
 
-	if($config['smtp_enabled'])
+	define('MAIL_MAIL', 0);
+	define('MAIL_SMTP', 1);
+
+	$mailOption = setting('core.mail_option');
+	if($mailOption == MAIL_SMTP)
 	{
 		$mailer->isSMTP();
-		$mailer->Host = $config['smtp_host'];
-		$mailer->Port = (int)$config['smtp_port'];
-		$mailer->SMTPAuth = $config['smtp_auth'];
-		$mailer->Username = $config['smtp_user'];
-		$mailer->Password = $config['smtp_pass'];
-		$mailer->SMTPSecure = isset($config['smtp_secure']) ? $config['smtp_secure'] : '';
+		$mailer->Host = setting('core.smtp_host');
+		$mailer->Port = setting('core.smtp_port');
+		$mailer->SMTPAuth = setting('core.smtp_auth');
+		$mailer->Username = setting('core.smtp_user');
+		$mailer->Password = setting('core.smtp_pass');
+
+		define('SMTP_SECURITY_NONE', 0);
+		define('SMTP_SECURITY_SSL', 1);
+		define('SMTP_SECURITY_TLS', 2);
+
+		$security = setting('core.smtp_security');
+
+		$tmp = '';
+		if ($security === SMTP_SECURITY_SSL) {
+			$tmp = 'ssl';
+		}
+		else if ($security == SMTP_SECURITY_TLS) {
+			$tmp = 'tls';
+		}
+
+		$mailer->SMTPSecure = $tmp;
 	}
 	else {
 		$mailer->isMail();
 	}
 
 	$mailer->isHTML(isset($body[0]) > 0);
-	$mailer->From = $config['mail_address'];
-	$mailer->Sender = $config['mail_address'];
+	$mailer->From = setting('core.mail_address');
+	$mailer->Sender = setting('core.mail_address');
 	$mailer->CharSet = 'utf-8';
 	$mailer->FromName = $config['lua']['serverName'];
 	$mailer->Subject = $subject;
 	$mailer->addAddress($to);
 	$mailer->Body = $tmp_body;
 
-	if(config('smtp_debug')) {
+	if(setting('core.smtp_debug')) {
 		$mailer->SMTPDebug = 2;
 		$mailer->Debugoutput = 'echo';
 	}
 
-	$signature_plain = '';
-	if(isset($config['mail_signature']['plain']))
-		$signature_plain = $config['mail_signature']['plain'];
-
+	$signature_plain = setting('core.mail_signature_plain');
 	if(isset($altBody[0])) {
 		$mailer->AltBody = $altBody . $signature_plain;
 	}
@@ -926,8 +944,8 @@ function load_config_lua($filename)
 	$config_file = $filename;
 	if(!@file_exists($config_file))
 	{
-		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $filename . '). Error: ' . print_r(error_get_last(), true));
-		throw new RuntimeException('ERROR: Cannot find ' . $filename . ' file. More info in system/logs/error.log');
+		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $filename . ').');
+		throw new RuntimeException('ERROR: Cannot find ' . $filename . ' file.');
 	}
 
 	$result = array();
@@ -1017,14 +1035,14 @@ function get_browser_real_ip() {
 	return '0';
 }
 function setSession($key, $data) {
-	$_SESSION[config('session_prefix') . $key] = $data;
+	$_SESSION[setting('core.session_prefix') . $key] = $data;
 }
 function getSession($key) {
-	$key = config('session_prefix') . $key;
+	$key = setting('core.session_prefix') . $key;
 	return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
 }
 function unsetSession($key) {
-	unset($_SESSION[config('session_prefix') . $key]);
+	unset($_SESSION[setting('core.session_prefix') . $key]);
 }
 
 function getTopPlayers($limit = 5) {
@@ -1039,26 +1057,38 @@ function getTopPlayers($limit = 5) {
 	}
 
 	if (!isset($players)) {
-		$deleted = 'deleted';
-		if($db->hasColumn('players', 'deletion'))
-			$deleted = 'deletion';
+		$columns = [
+			'id', 'name', 'level', 'vocation', 'experience',
+			'looktype', 'lookhead', 'lookbody', 'looklegs', 'lookfeet'
+		];
 
-		$is_tfs10 = $db->hasTable('players_online');
-		$players = $db->query('SELECT `id`, `name`, `level`, `vocation`, `experience`, `looktype`' . ($db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `lookhead`, `lookbody`, `looklegs`, `lookfeet`' . ($is_tfs10 ? '' : ', `online`') . ' FROM `players` WHERE `group_id` < ' . config('highscores_groups_hidden') . ' AND `id` NOT IN (' . implode(', ', config('highscores_ids_hidden')) . ') AND `' . $deleted . '` = 0 AND `account_id` != 1 ORDER BY `experience` DESC LIMIT ' . (int)$limit)->fetchAll();
-
-		if($is_tfs10) {
-			foreach($players as &$player) {
-				$query = $db->query('SELECT `player_id` FROM `players_online` WHERE `player_id` = ' . $player['id']);
-				$player['online'] = ($query->rowCount() > 0 ? 1 : 0);
-			}
-			unset($player);
+		if ($db->hasColumn('players', 'lookaddons')) {
+			$columns[] = 'lookaddons';
 		}
 
-		$i = 0;
-		foreach($players as &$player) {
-			$player['rank'] = ++$i;
+		if ($db->hasColumn('players', 'online')) {
+			$columns[] = 'online';
 		}
-		unset($player);
+
+		$players = Player::query()
+			->select($columns)
+			->withOnlineStatus()
+			->notDeleted()
+			->where('group_id', '<', setting('core.highscores_groups_hidden'))
+			->whereNotIn('id', setting('core.highscores_ids_hidden'))
+			->where('account_id', '!=', 1)
+			->orderByDesc('experience')
+			->limit($limit)
+			->get()
+			->map(function ($e, $i) {
+				$row = $e->toArray();
+				$row['online'] = $e->online_status;
+				$row['rank'] = $i + 1;
+
+				unset($row['online_table']);
+
+				return $row;
+			})->toArray();
 
 		if($cache->enabled()) {
 			$cache->set('top_' . $limit . '_level', serialize($players), 120);
@@ -1097,6 +1127,9 @@ function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
 function config($key) {
 	global $config;
 	if (is_array($key)) {
+		if (is_null($key[1])) {
+			unset($config[$key[0]]);
+		}
 		return $config[$key[0]] = $key[1];
 	}
 
@@ -1110,6 +1143,21 @@ function configLua($key) {
 	}
 
 	return @$config['lua'][$key];
+}
+
+function setting($key)
+{
+	$settings = Settings::getInstance();
+
+	if (is_array($key)) {
+		if (is_null($key[1])) {
+			unset($settings[$key[0]]);
+		}
+
+		return $settings[$key[0]] = $key[1];
+	}
+
+	return $settings[$key]['value'];
 }
 
 function clearCache()
@@ -1174,49 +1222,44 @@ function clearCache()
 	return true;
 }
 
-function getCustomPageInfo($page)
+function getCustomPageInfo($name)
 {
-	global $db, $logged_access;
-	$query =
-		$db->query(
-			'SELECT `id`, `title`, `body`, `php`, `hidden`' .
-			' FROM `' . TABLE_PREFIX . 'pages`' .
-			' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
-	if($query->rowCount() > 0) // found page
-	{
-		return $query->fetch(PDO::FETCH_ASSOC);
+	global $logged_access;
+	$page = Pages::isPublic()
+		->where('name', 'LIKE', $name)
+		->where('access', '<=', $logged_access)
+		->first();
+
+	if (!$page) {
+		return null;
 	}
 
-	return null;
+	return $page->toArray();
 }
-function getCustomPage($page, &$success)
+function getCustomPage($name, &$success): string
 {
-	global $db, $twig, $title, $ignore, $logged_access;
+	global $twig, $title, $ignore;
 
 	$success = false;
 	$content = '';
-	$query =
-		$db->query(
-			'SELECT `id`, `title`, `body`, `php`, `hidden`' .
-			' FROM `' . TABLE_PREFIX . 'pages`' .
-			' WHERE `name` LIKE ' . $db->quote($page) . ' AND `hidden` != 1 AND `access` <= ' . $db->quote($logged_access));
-	if($query->rowCount() > 0) // found page
+	$page = getCustomPageInfo($name);
+
+	if($page) // found page
 	{
 		$success = $ignore = true;
-		$query = $query->fetch();
-		$title = $query['title'];
+		$title = $page['title'];
 
-		if($query['php'] == '1') // execute it as php code
+		if($page['php'] == '1') // execute it as php code
 		{
-			$tmp = substr($query['body'], 0, 10);
+			$tmp = substr($page['body'], 0, 10);
 			if(($pos = strpos($tmp, '<?php')) !== false) {
-				$tmp = preg_replace('/<\?php/', '', $query['body'], 1);
+				$tmp = preg_replace('/<\?php/', '', $page['body'], 1);
 			}
 			else if(($pos = strpos($tmp, '<?')) !== false) {
-				$tmp = preg_replace('/<\?/', '', $query['body'], 1);
+				$tmp = preg_replace('/<\?/', '', $page['body'], 1);
 			}
 			else
-				$tmp = $query['body'];
+				$tmp = $page['body'];
 
 			$php_errors = array();
 			function error_handler($errno, $errstr) {
@@ -1226,7 +1269,7 @@ function getCustomPage($page, &$success)
 			set_error_handler('error_handler');
 
 			global $config;
-			if($config['backward_support']) {
+			if(setting('core.backward_support')) {
 				global $SQL, $main_content, $subtopic;
 			}
 
@@ -1244,7 +1287,7 @@ function getCustomPage($page, &$success)
 			$oldLoader = $twig->getLoader();
 
 			$twig_loader_array = new Twig_ArrayLoader(array(
-				'content.html' => $query['body']
+				'content.html' => $page['body']
 			));
 
 			$twig->setLoader($twig_loader_array);
@@ -1359,39 +1402,42 @@ function getChangelogWhere($v)
 
 	return 'unknown';
 }
-function getPlayerNameByAccount($id)
+
+function getPlayerNameByAccountId($id)
 {
-	global $vowels, $ots, $db;
-	if(is_numeric($id))
-	{
-		$player = new OTS_Player();
-		$player->load($id);
-		if($player->isLoaded())
-			return $player->getName();
-		else
-		{
-			$playerQuery = $db->query('SELECT `id` FROM `players` WHERE `account_id` = ' . $id . ' ORDER BY `lastlogin` DESC LIMIT 1;')->fetch();
+	if (!is_numeric($id)) {
+		return '';
+	}
 
-			$tmp = "*Error*";
-			/*
-			$acco = new OTS_Account();
-			$acco->load($id);
-			if(!$acco->isLoaded())
-				return "Unknown name";
-
-			foreach($acco->getPlayersList() as $p)
-			{
-				$player= new OTS_Player();
-				$player->find($p);*/
-				$player->load($playerQuery['id']);
-				//echo 'id gracza = ' . $p . '<br/>';
-				if($player->isLoaded())
-					$tmp = $player->getName();
-			//	break;
-			//}
-
-			return $tmp;
+	$account = \MyAAC\Models\Account::find(intval($id), ['id']);
+	if ($account) {
+		$player = \MyAAC\Models\Player::where('account_id', $account->id)->orderByDesc('lastlogin')->select('name')->first();
+		if (!$player) {
+			return '';
 		}
+		return $player->name;
+	}
+
+	return '';
+}
+
+function getPlayerNameByAccount($account) {
+	if (is_numeric($account)) {
+		return getPlayerNameByAccountId($account);
+	}
+
+	return '';
+}
+
+function getPlayerNameById($id)
+{
+	if (!is_numeric($id)) {
+		return '';
+	}
+
+	$player = \MyAAC\Models\Player::find((int)$id, ['name']);
+	if ($player) {
+		return $player->name;
 	}
 
 	return '';
@@ -1399,13 +1445,13 @@ function getPlayerNameByAccount($id)
 
 function echo_success($message)
 {
-	echo '<div class="col-12 success mb-2">' . $message . '</div>';
+	echo '<div class="col-12 alert alert-success mb-2">' . $message . '</div>';
 }
 
 function echo_error($message)
 {
 	global $error;
-	echo '<div class="col-12 error mb-2">' . $message . '</div>';
+	echo '<div class="col-12 alert alert-error mb-2">' . $message . '</div>';
 	$error = true;
 }
 
@@ -1480,8 +1526,8 @@ function right($str, $length) {
 }
 
 function getCreatureImgPath($creature){
-	$creature_path = config('creatures_images_url');
-	$creature_gfx_name = trim(strtolower($creature)) . config('creatures_images_extension');
+	$creature_path = setting('core.monsters_images_url');
+	$creature_gfx_name = trim(strtolower($creature)) . setting('core.monsters_images_extension');
 	if (!file_exists($creature_path . $creature_gfx_name)) {
 		$creature_gfx_name = str_replace(" ", "", $creature_gfx_name);
 		if (file_exists($creature_path . $creature_gfx_name)) {
@@ -1542,6 +1588,40 @@ function removeIfFirstSlash(&$text) {
 
 function escapeHtml($html) {
 	return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function getGuildNameById($id)
+{
+	$guild = Guild::where('id', intval($id))->select('name')->first();
+	if ($guild) {
+		return $guild->name;
+	}
+
+	return false;
+}
+
+function getGuildLogoById($id)
+{
+	$logo = 'default.gif';
+
+	$guild = Guild::where('id', intval($id))->select('logo_name')->first();
+	if ($guild) {
+		$guildLogo = $query->logo_name;
+
+		if (!empty($guildLogo) && file_exists(GUILD_IMAGES_DIR . $guildLogo)) {
+			$logo = $guildLogo;
+		}
+	}
+
+	return BASE_URL . GUILD_IMAGES_DIR . $logo;
+}
+
+function displayErrorBoxWithBackButton($errors, $action = null) {
+	global $twig;
+	$twig->display('error_box.html.twig', ['errors' => $errors]);
+	$twig->display('account.back_button.html.twig', [
+		'action' => $action ?: getLink('')
+	]);
 }
 
 // validator functions

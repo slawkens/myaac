@@ -1,5 +1,14 @@
 <?php
-$balance = ($db->hasColumn('players', 'balance') ? $db->query('SELECT `balance`, `id`, `name`,`level` FROM `players` ORDER BY `balance` DESC LIMIT 10;') : 0);
+
+use MyAAC\Models\Player;
+
+defined('MYAAC') or die('Direct access not allowed!');
+
+$balance = 0;
+
+if ($db->hasColumn('players', 'balance')) {
+	$balance = Player::orderByDesc('balance')->limit(10)->get(['balance', 'id','name', 'level'])->toArray();
+}
 
 $twig->display('balance.html.twig', array(
 	'balance' => $balance

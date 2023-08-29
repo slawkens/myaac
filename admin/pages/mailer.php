@@ -15,8 +15,8 @@ if (!hasFlag(FLAG_CONTENT_MAILER) && !superAdmin()) {
 	return;
 }
 
-if (!config('mail_enabled')) {
-	echo 'Mail support disabled.';
+if (!setting('core.mail_enabled')) {
+	echo 'Mail support disabled in config.';
 	return;
 }
 
@@ -54,7 +54,7 @@ if (!empty($mail_content) && !empty($mail_subject) && empty($mail_to)) {
 	$failed = 0;
 
 	$add = '';
-	if (config('account_mail_verify')) {
+	if (setting('core.account_mail_verify')) {
 		note('Note: Sending only to users with verified E-Mail.');
 		$add = ' AND `email_verified` = 1';
 	}

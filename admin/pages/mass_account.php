@@ -9,6 +9,9 @@
  * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Account;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Mass Account Actions';
@@ -26,15 +29,14 @@ function admin_give_points($points)
 		return;
 	}
 
+
 	$statement = $db->prepare('UPDATE `accounts` SET `premium_points` = `premium_points` + :points');
 	if (!$statement) {
 		displayMessage('Failed to prepare query statement.');
 		return;
 	}
 
-	if (!$statement->execute([
-		'points' => $points
-	])) {
+	if (!Account::query()->increment('premium_points', $points)) {
 		displayMessage('Failed to add points.');
 		return;
 	}
@@ -50,15 +52,7 @@ function admin_give_coins($coins)
 		return;
 	}
 
-	$statement = $db->prepare('UPDATE `accounts` SET `coins` = `coins` + :coins');
-	if (!$statement) {
-		displayMessage('Failed to prepare query statement.');
-		return;
-	}
-
-	if (!$statement->execute([
-		'coins' => $coins
-	])) {
+	if (!Account::query()->increment('coins', $coins)) {
 		displayMessage('Failed to add coins.');
 		return;
 	}

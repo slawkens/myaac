@@ -27,7 +27,7 @@ if(isset($config['boxes']))
 		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
 		<?php
 			if(PAGE !== 'news') {
-				if(strpos(URI, 'subtopic=') !== false) {
+				if(isset($_REQUEST['subtopic'])) {
 					$tmp = $_REQUEST['subtopic'];
 					if($tmp === 'accountmanagement') {
 						$tmp = 'accountmanage';
@@ -124,7 +124,7 @@ if(isset($config['boxes']))
 		  document.getElementById("ActiveSubmenuItemIcon_"+activeSubmenuItem).style.visibility = "visible";
 		  menus = localStorage.getItem('menus');
 		  if(menus.lastIndexOf("&") === -1) {
-			  menus = "news=1&account=0&community=0&library=0&forum=0<?php if($config['gifts_system']) echo '&shops=0'; ?>&";
+			  menus = "news=1&account=0&community=0&library=0&forum=0<?php if (setting('core.gifts_system')) echo '&shops=0'; ?>&";
 		  }
 		  FillMenuArray();
 		  InitializeMenu();
@@ -289,7 +289,7 @@ if(isset($config['boxes']))
             <img id="TibiaLogoArtworkTop" src="<?php echo $template_path; ?>/images/header/<?php echo $config['logo_image']; ?>" onClick="window.location = '<?php echo getLink('news')?>';" alt="logoartwork" />
             <img id="TibiaLogoArtworkBottom" src="<?php echo $template_path; ?>/images/header/tibia-logo-artwork-bottom.gif" alt="logoartwork" />
             <img id="Statue_2" src="<?php echo $template_path; ?>/images/header/animated-statue.gif" alt="logoartwork" />
-            <img id="LogoLink" src="<?php echo $template_path; ?>/images/header/tibia-logo-artwork-string.gif" onClick="window.location = 'mailto:<?php echo $config['mail_address']; ?>';" alt="logoartwork" />
+            <img id="LogoLink" src="<?php echo $template_path; ?>/images/header/tibia-logo-artwork-string.gif" onClick="window.location = 'mailto:<?php echo setting('core.mail_address'); ?>';" alt="logoartwork" />
           </div>
 
   <div id="Loginbox" >
@@ -329,7 +329,7 @@ if(isset($config['boxes']))
 $menus = get_template_menus();
 
 foreach($config['menu_categories'] as $id => $cat) {
-	if(!isset($menus[$id]) || ($id == MENU_CATEGORY_SHOP && !$config['gifts_system'])) {
+	if(!isset($menus[$id]) || ($id == MENU_CATEGORY_SHOP && !setting('core.gifts_system'))) {
 		continue;
 	}
 	?>
@@ -368,7 +368,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 	?>
 	</div>
 	<?php
-	if($id == MENU_CATEGORY_SHOP || (!$config['gifts_system'] && $id == MENU_CATEGORY_SHOP - 1)) {
+	if($id == MENU_CATEGORY_SHOP || (!setting('core.gifts_system') && $id == MENU_CATEGORY_SHOP - 1)) {
 	?>
 		<div id='MenuBottom' style='background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);'></div>
 	<?php
@@ -459,4 +459,3 @@ function logo_monster()
 	global $config;
 	return str_replace(" ", "", trim(strtolower($config['logo_monster'])));
 }
-?>

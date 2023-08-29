@@ -7,14 +7,22 @@
  * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Player;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Account editor';
-$admin_base = BASE_URL . 'admin/?p=accounts';
+$admin_base = ADMIN_URL . '?p=accounts';
 $use_datatable = true;
 
-if ($config['account_country'])
+if (setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
+
+$nameOrNumberColumn = 'name';
+if (USE_ACCOUNT_NUMBER) {
+	$nameOrNumberColumn = 'number';
+}
 
 $hasSecretColumn = $db->hasColumn('accounts', 'secret');
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
@@ -22,7 +30,7 @@ $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $hasTypeColumn = $db->hasColumn('accounts', 'type');
 $hasGroupColumn = $db->hasColumn('accounts', 'group_id');
 
-if ($config['account_country']) {
+if (setting('core.account_country')) {
 	$countries = array();
 	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
 		$countries[$c] = $config['countries'][$c];
@@ -32,7 +40,7 @@ if ($config['account_country']) {
 		$countries[$code] = $c;
 }
 $web_acc = ACCOUNT_WEB_FLAGS;
-$acc_type = config('account_types');
+$acc_type = setting('core.account_types');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
@@ -48,16 +56,16 @@ else if (isset($_REQUEST['search'])) {
 	if (strlen($search_account) < 3 && !Validator::number($search_account)) {
 		echo_error('Player name is too short.');
 	} else {
-		$query = $db->query('SELECT `id` FROM `accounts` WHERE `name` = ' . $db->quote($search_account));
+		$query = $db->query('SELECT `id` FROM `accounts` WHERE `' . $nameOrNumberColumn . '` = ' . $db->quote($search_account));
 		if ($query->rowCount() == 1) {
 			$query = $query->fetch();
 			$id = (int)$query['id'];
 		} else {
-			$query = $db->query('SELECT `id`, `name` FROM `accounts` WHERE `name` LIKE ' . $db->quote('%' . $search_account . '%'));
+			$query = $db->query('SELECT `id`, `' . $nameOrNumberColumn . '` FROM `accounts` WHERE `' . $nameOrNumberColumn . '` LIKE ' . $db->quote('%' . $search_account . '%'));
 			if ($query->rowCount() > 0 && $query->rowCount() <= 10) {
 				$str_construct = 'Do you mean?<ul class="mb-0">';
 				foreach ($query as $row)
-					$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row['id'] . '">' . $row['name'] . '</a></li>';
+					$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row['id'] . '">' . $row[$nameOrNumberColumn] . '</a></li>';
 				$str_construct .= '</ul>';
 				echo_error($str_construct);
 			} else if ($query->rowCount() > 10)
@@ -145,7 +153,7 @@ else if (isset($_REQUEST['search'])) {
 			$web_lastlogin = strtotime($_POST['web_lastlogin']);
 			verify_number($web_lastlogin, 'Web Last login', 11);
 
-			if (!$error) {
+			if (!$error && $hooks->trigger(HOOK_ADMIN_ACCOUNTS_SAVE_POST, ['account_id' => $account->getId(), 'account_email' =>  $account->getEMail()])) {
 				if (USE_ACCOUNT_NAME) {
 					$account->setName($name);
 				}
@@ -203,7 +211,7 @@ else if (isset($_REQUEST['search'])) {
 			}
 		}
 	} else if ($id == 0) {
-		$accounts_db = $db->query('SELECT `id`, `name`' . ($hasTypeColumn ? ',type' : ($hasGroupColumn ? ',group_id' : '')) . ' FROM `accounts` ORDER BY `id` ASC');
+		$accounts_db = $db->query('SELECT `id`, `' . $nameOrNumberColumn . '`' . ($hasTypeColumn ? ',type' : ($hasGroupColumn ? ',group_id' : '')) . ' FROM `accounts` ORDER BY `id` ASC');
 		?>
 		<div class="col-12 col-sm-12 col-lg-10">
 			<div class="card card-info card-outline">
@@ -215,7 +223,7 @@ else if (isset($_REQUEST['search'])) {
 						<thead>
 						<tr>
 							<th>ID</th>
-							<th>Name</th>
+							<th><?= ($nameOrNumberColumn == 'number' ? 'Number' : 'Name'); ?></th>
 							<?php if($hasTypeColumn || $hasGroupColumn): ?>
 							<th>Position</th>
 							<?php endif; ?>
@@ -226,7 +234,7 @@ else if (isset($_REQUEST['search'])) {
 						<?php foreach ($accounts_db as $account_lst): ?>
 							<tr>
 								<th><?php echo $account_lst['id']; ?></th>
-								<td><?php echo $account_lst['name']; ?></a></td>
+								<td><?php echo $account_lst[$nameOrNumberColumn]; ?></a></td>
 								<?php if($hasTypeColumn || $hasGroupColumn): ?>
 								<td>
 									<?php if ($hasTypeColumn) {
@@ -267,7 +275,7 @@ else if (isset($_REQUEST['search'])) {
 							</li>
 						<?php endif;
 
-						if ($db->hasTable('store_history')) : ?>
+						if ($db->hasTable('store_history') && $db->hasColumn('store_history', 'time')) : ?>
 							<li class="nav-item">
 								<a class="nav-link" id="accounts-store-tab" data-toggle="pill" href="#accounts-store">Store History</a>
 							</li>
@@ -283,6 +291,11 @@ else if (isset($_REQUEST['search'])) {
 										<div class="col-12 col-sm-12 col-lg-4">
 											<label for="name">Account Name:</label>
 											<input type="text" class="form-control" id="name" name="name" autocomplete="off" value="<?php echo $account->getName(); ?>"/>
+										</div>
+									<?php elseif (USE_ACCOUNT_NUMBER): ?>
+										<div class="col-12 col-sm-12 col-lg-4">
+											<label for="name">Account Number:</label>
+											<input type="text" class="form-control" id="name" name="name" autocomplete="off" value="<?php echo $account->getNumber(); ?>"/>
 										</div>
 									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-5">
@@ -351,7 +364,7 @@ else if (isset($_REQUEST['search'])) {
 								</div>
 								<div class="form-group row">
 									<div class="col-12 col-sm-12 col-lg-6">
-										<label for="email">Email:</label><?php echo (config('mail_enabled') ? ' (<a href="' . ADMIN_URL . '?p=mailer&mail_to=' . $account->getEMail() . '">Send Mail</a>)' : ''); ?>
+										<label for="email">Email:</label><?php echo (setting('core.mail_enabled') ? ' (<a href="' . ADMIN_URL . '?p=mailer&mail_to=' . $account->getEMail() . '">Send Mail</a>)' : ''); ?>
 										<input type="text" class="form-control" id="email" name="email" autocomplete="off" value="<?php echo $account->getEMail(); ?>"/>
 									</div>
 									<?php if ($hasCoinsColumn): ?>
@@ -414,8 +427,7 @@ else if (isset($_REQUEST['search'])) {
 							<div class="row">
 								<?php
 								if (isset($account) && $account->isLoaded()) {
-									$account_players = $account->getPlayersList();
-									$account_players->orderBy('id');
+									$account_players = Player::where('account_id', $account->getId())->orderBy('id')->get();
 									if (isset($account_players)) { ?>
 										<table class="table table-striped table-condensed table-responsive d-md-table">
 											<thead>
@@ -428,25 +440,13 @@ else if (isset($_REQUEST['search'])) {
 											</tr>
 											</thead>
 											<tbody>
-											<?php $i= 0;
-											foreach ($account_players as $i => $player):
-												$i++;
-												$player_vocation = $player->getVocation();
-												$player_promotion = $player->getPromotion();
-												if (isset($player_promotion)) {
-													if ((int)$player_promotion > 0)
-														$player_vocation += ($player_promotion * $config['vocations_amount']);
-												}
-
-												if (isset($config['vocations'][$player_vocation])) {
-													$vocation_name = $config['vocations'][$player_vocation];
-												} ?>
+											<?php foreach ($account_players as $i => $player): ?>
 												<tr>
-													<th><?php echo $i; ?></th>
-													<td><?php echo $player->getName(); ?></td>
-													<td><?php echo $player->getLevel(); ?></td>
-													<td><?php echo $vocation_name; ?></td>
-													<td><a href="?p=players&id=<?php echo $player->getId() ?>" class=" btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></a></td>
+													<th><?php echo $i + 1; ?></th>
+													<td><?php echo $player->name; ?></td>
+													<td><?php echo $player->level; ?></td>
+													<td><?php echo $player->vocation_name; ?></td>
+													<td><a href="?p=players&id=<?php echo $player->getKey() ?>" class=" btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></a></td>
 												</tr>
 											<?php endforeach ?>
 											</tbody>
@@ -513,7 +513,7 @@ else if (isset($_REQUEST['search'])) {
 								} ?>
 							</div>
 						<?php endif;
-						if ($db->hasTable('store_history')) { ?>
+						if ($db->hasTable('store_history') && $db->hasColumn('store_history', 'time')) { ?>
 							<div class="tab-pane fade" id="accounts-store">
 								<?php $store_history = $db->query('SELECT * FROM `store_history` WHERE `account_id` = "' . $account->getId() . '" ORDER BY `time` DESC')->fetchAll(); ?>
 								<table class="table table-striped table-condensed table-responsive d-md-table">

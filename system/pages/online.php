@@ -8,10 +8,14 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\ServerConfig;
+use MyAAC\Models\ServerRecord;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Who is online?';
 
-if($config['account_country'])
+if (setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
 $promotion = '';
@@ -38,7 +42,7 @@ if($db->hasColumn('players', 'skull_time')) {
 
 $outfit_addons = false;
 $outfit = '';
-if($config['online_outfit']) {
+if (setting('core.online_outfit')) {
 	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
 	if($db->hasColumn('players', 'lookaddons')) {
 		$outfit .= ', lookaddons';
@@ -46,7 +50,7 @@ if($config['online_outfit']) {
 	}
 }
 
-if($config['online_vocations']) {
+if (setting('core.online_vocations')) {
 	$vocs = array();
 	foreach($config['vocations'] as $id => $name) {
 		$vocs[$id] = 0;
@@ -54,16 +58,16 @@ if($config['online_vocations']) {
 }
 
 if($db->hasTable('players_online')) // tfs 1.0
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 else
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `level`, `vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
 
 $players_data = array();
 $players = 0;
 $data = '';
 foreach($playersOnline as $player) {
 	$skull = '';
-	if($config['online_skulls'])
+	if (setting('core.online_skulls'))
 	{
 		if($player['skulltime'] > 0)
 		{
@@ -86,33 +90,31 @@ foreach($playersOnline as $player) {
 		'player' => $player,
 		'level' => $player['level'],
 		'vocation' => $config['vocations'][$player['vocation']],
-		'country_image' => $config['account_country'] ? getFlagImage($player['country']) : null,
-		'outfit' => $config['online_outfit'] ? $config['outfit_images_url'] . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] : null
+		'country_image' => setting('core.account_country') ? getFlagImage($player['country']) : null,
+		'outfit' => setting('core.online_outfit') ? setting('core.outfit_images_url') . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] : null
 	);
 
-	if($config['online_vocations']) {
+	if (setting('core.online_vocations')) {
 		$vocs[($player['vocation'] > $config['vocations_amount'] ? $player['vocation'] - $config['vocations_amount'] : $player['vocation'])]++;
 	}
 }
 
 $record = '';
 if($players > 0) {
-	if($config['online_record']) {
+	if( setting('core.online_record')) {
+		$result = null;
 		$timestamp = false;
 		if($db->hasTable('server_record')) {
-			$query =
-				$db->query(
-					'SELECT `record`, `timestamp` FROM `server_record` WHERE `world_id` = ' . (int)$config['lua']['worldId'] .
-					' ORDER BY `record` DESC LIMIT 1');
 			$timestamp = true;
+			$result = ServerRecord::where('world_id', $config['lua']['worldId'])->orderByDesc('record')->first()->toArray();
 		} else if($db->hasTable('server_config')) { // tfs 1.0
-			$query = $db->query('SELECT `value` as `record` FROM `server_config` WHERE `config` = ' . $db->quote('players_record'));
-		} else {
-			$query = NULL;
+			$row = ServerConfig::where('config', 'players_record')->first();
+			if ($row) {
+				$result = ['record' => $row->value];
+			}
 		}
 
-		if(isset($query) && $query->rowCount() > 0) {
-			$result = $query->fetch();
+		if($record) {
 			$record = 'The maximum on this game world was ' . $result['record'] . ' players' . ($timestamp ? ' on ' . date("M d Y, H:i:s", $result['timestamp']) . '.' : '.');
 		}
 	}

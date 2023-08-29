@@ -369,4 +369,3 @@ function getColorByPercent($percent)
         echo 'This poll doesn\'t exist.<br>';
         echo '<div class=\'hr1\'></div><a href="?subtopic='.$link.'"><span style="font-size: 13px"><b>Go to list of  polls</b></span></a>';
     }
-?>

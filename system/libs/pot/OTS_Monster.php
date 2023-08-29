@@ -36,6 +36,7 @@
  * @property-read int $armor Armor rate.
  * @property-read array $defenses List of defenses.
  * @property-read array $attacks List of attacks.
+ * @property-read array $look List of looks.
  */
 class OTS_Monster extends DOMDocument
 {
@@ -271,6 +272,34 @@ class OTS_Monster extends DOMDocument
         }
 
         return $loot;
+    }
+
+/**
+ * Returns look of the monster.
+ *
+ * @return array Look with all the attributes of the look.
+ * @throws DOMException On DOM operation error.
+ */
+    public function getLook()
+    {
+        $look = array();
+
+        $element = $this->documentElement->getElementsByTagName('look')->item(0);
+
+        if (!$element) {
+            return $look;
+        }
+
+        $look['type'] = $element->getAttribute('type');
+        $look['typeex'] = $element->getAttribute('typeex');
+        $look['head'] = $element->getAttribute('head');
+        $look['body'] = $element->getAttribute('body');
+        $look['legs'] = $element->getAttribute('legs');
+        $look['feet'] = $element->getAttribute('feet');
+        $look['addons'] = $element->getAttribute('addons');
+        $look['corpse'] = $element->getAttribute('corpse');
+
+        return $look;
     }
 
 /**
@@ -559,6 +588,9 @@ class OTS_Monster extends DOMDocument
 
             case 'attacks':
                 return $this->getAttacks();
+
+            case 'look':
+                return $this->getLook();
 
             default:
                 throw new OutOfBoundsException();

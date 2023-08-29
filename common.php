@@ -23,11 +23,11 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-if (version_compare(phpversion(), '7.2.5', '<')) die('PHP version 7.2.5 or higher is required.');
+if (version_compare(phpversion(), '8.0', '<')) die('PHP version 8.0 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '0.9.0-dev';
-const DATABASE_VERSION = 33;
+const MYAAC_VERSION = '0.10.0-dev';
+const DATABASE_VERSION = 36;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -138,11 +138,25 @@ if(!IS_CLI) {
 
 	define('SERVER_URL', 'http' . (isset($_SERVER['HTTPS'][0]) && strtolower($_SERVER['HTTPS']) === 'on' ? 's' : '') . '://' . $baseHost);
 	define('BASE_URL', SERVER_URL . BASE_DIR . '/');
-	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/admin/');
+	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/' . ADMIN_PANEL_FOLDER . '/');
 
 	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
+}
 
-	require SYSTEM . 'exception.php';
+if (file_exists(BASE . 'config.local.php')) {
+	require BASE . 'config.local.php';
+}
+
+ini_set('log_errors', 1);
+if(@$config['env'] === 'dev') {
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
+}
+else {
+	ini_set('display_errors', 0);
+	ini_set('display_startup_errors', 0);
+	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 }
 
 $autoloadFile = VENDOR . 'autoload.php';

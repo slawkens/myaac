@@ -9,6 +9,8 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Models\Account;
+
 // we need some functions
 require '../common.php';
 require SYSTEM . 'functions.php';
@@ -27,15 +29,16 @@ if(isset($_GET['account']))
 		error_(Validator::getLastError());
 
 	$_account = new OTS_Account();
-	if(USE_ACCOUNT_NAME)
+	if(USE_ACCOUNT_NAME || USE_ACCOUNT_NUMBER)
 		$_account->find($account);
 	else
 		$_account->load($account);
 
+	$accountNameOrNumber = (USE_ACCOUNT_NAME ? ' name' : 'number');
 	if($_account->isLoaded())
-		error_('Account with this name already exist.');
+		error_("Account with this $accountNameOrNumber already exist.");
 
-	success_('Good account' . (USE_ACCOUNT_NAME ? ' name' : '') . ' ( ' . $account . ' ).');
+	success_("Good account $accountNameOrNumber ($account).");
 }
 else if(isset($_GET['email']))
 {
@@ -43,11 +46,9 @@ else if(isset($_GET['email']))
 	if(!Validator::email($email))
 		error_(Validator::getLastError());
 
-	if($config['account_mail_unique'])
+	if(setting('core.account_mail_unique'))
 	{
-		$account = new OTS_Account();
-		$account->findByEMail($email);
-		if($account->isLoaded())
+		if(Account::where('email', '=', $email)->exists())
 			error_('Account with this e-mail already exist.');
 	}
 

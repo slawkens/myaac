@@ -11,26 +11,26 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Forum';
 
-if(strtolower($config['forum']) != 'site')
-{
-	if($config['forum'] != '')
-	{
-		header('Location: ' . $config['forum']);
+require_once LIBS . 'forum.php';
+
+$forumSetting = setting('core.forum');
+if(strtolower($forumSetting) != 'site') {
+	if($forumSetting != '') {
+		header('Location: ' . $forumSetting);
 		exit;
 	}
 
 	echo 'Forum is disabled on this site.';
-	return;
+	return false;
 }
 
-if(!$logged)
-	echo  'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum') . '">Log in</a> to post on the forum.<br /><br />';
-
-require_once LIBS . 'forum.php';
+if(!$logged) {
+	echo 'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum') . '">Log in</a> to post on the forum.<br /><br />';
+	return false;
+}
 
 $sections = array();
-foreach(getForumBoards() as $section)
-{
+foreach(getForumBoards() as $section) {
 	$sections[$section['id']] = array(
 		'id' => $section['id'],
 		'name' => $section['name'],

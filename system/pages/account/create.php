@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Create Account';
 
-if($config['account_country'])
+if (setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
 if($logged)
@@ -20,14 +20,19 @@ if($logged)
 	return;
 }
 
-if(config('account_create_character_create')) {
+if(setting('core.account_create_character_create')) {
 	require_once LIBS . 'CreateCharacter.php';
 	$createCharacter = new CreateCharacter();
 }
 
 $account_type = 'number';
-if(USE_ACCOUNT_NAME) {
-	$account_type = 'name';
+if (config('account_login_by_email')) {
+	$account_type = 'Email Address';
+}
+else {
+	if(USE_ACCOUNT_NAME) {
+		$account_type = 'name';
+	}
 }
 
 $errors = array();
@@ -63,7 +68,7 @@ if($save)
 
 	// country
 	$country = '';
-	if($config['account_country'])
+	if (setting('core.account_country'))
 	{
 		$country = $_POST['country'];
 		if(!isset($country))
@@ -88,7 +93,7 @@ if($save)
 		$errors['password'] = 'Password may not be the same as account name.';
 	}
 
-	if($config['account_mail_unique'])
+	if(setting('core.account_mail_unique'))
 	{
 		$test_email_account = new OTS_Account();
 		$test_email_account->findByEMail($email);
@@ -110,7 +115,7 @@ if($save)
 	}
 
 	if($account_db->isLoaded()) {
-		if (config('account_login_by_email') && !config('account_mail_unique')) {
+		if (config('account_login_by_email') && !setting('core.account_mail_unique')) {
 			$errors['account'] = 'Account with this email already exist.';
 		}
 		else if (!config('account_login_by_email')) {
@@ -145,7 +150,7 @@ if($save)
 		return;
 	}
 
-	if(config('account_create_character_create')) {
+	if(setting('core.account_create_character_create')) {
 		$character_name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : null;
 		$character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
 		$character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;
@@ -156,9 +161,12 @@ if($save)
 
 	if(empty($errors))
 	{
+		$hasBeenCreatedByEMail = false;
+
 		$new_account = new OTS_Account();
 		if (config('account_login_by_email')) {
 			$new_account->createWithEmail($email);
+			$hasBeenCreatedByEMail = true;
 		}
 		else {
 			if(USE_ACCOUNT_NAME)
@@ -175,7 +183,6 @@ if($save)
 
 		$new_account->setPassword(encrypt($password));
 		$new_account->setEMail($email);
-		$new_account->unblock();
 		$new_account->save();
 
 		if(USE_ACCOUNT_SALT)
@@ -184,27 +191,28 @@ if($save)
 		$new_account->setCustomField('created', time());
 		$new_account->logAction('Account created.');
 
-		if($config['account_country']) {
+		if(setting('core.account_country')) {
 			$new_account->setCustomField('country', $country);
 		}
 
-		if($config['account_premium_days'] && $config['account_premium_days'] > 0) {
+		$settingAccountPremiumDays = setting('core.account_premium_days');
+		if($settingAccountPremiumDays && $settingAccountPremiumDays > 0) {
 			if($db->hasColumn('accounts', 'premend')) { // othire
-				$new_account->setCustomField('premend', time() + $config['account_premium_days'] * 86400);
+				$new_account->setCustomField('premend', time() + $settingAccountPremiumDays * 86400);
 			}
 			else { // rest
 				if ($db->hasColumn('accounts', 'premium_ends_at')) { // TFS 1.4+
-					$new_account->setCustomField('premium_ends_at', time() + $config['account_premium_days'] * (60 * 60 * 24));
+					$new_account->setCustomField('premium_ends_at', time() + $settingAccountPremiumDays * (60 * 60 * 24));
 				}
 				else {
-					$new_account->setCustomField('premdays', $config['account_premium_days']);
+					$new_account->setCustomField('premdays', $settingAccountPremiumDays);
 					$new_account->setCustomField('lastday', time());
 				}
 			}
 		}
 
-		if($config['account_premium_points']) {
-			$new_account->setCustomField('premium_points', $config['account_premium_points']);
+		if(setting('core.account_premium_points') && setting('core.account_premium_points') > 0) {
+			$new_account->setCustomField('premium_points', setting('core.account_premium_points'));
 		}
 
 		$tmp_account = $email;
@@ -212,7 +220,7 @@ if($save)
 			$tmp_account = (USE_ACCOUNT_NAME ? $account_name : $account_id);
 		}
 
-		if($config['mail_enabled'] && $config['account_mail_verify'])
+		if(setting('core.mail_enabled') && setting('core.account_mail_verify'))
 		{
 			$hash = md5(generateRandomString(16, true, true) . $email);
 			$new_account->setCustomField('email_hash', $hash);
@@ -231,7 +239,7 @@ if($save)
 					'description' => 'Your account ' . $account_type . ' is <b>' . $tmp_account . '</b><br/>You will need the account ' . $account_type . ' and your password to play on ' . configLua('serverName') . '.
 						Please keep your account ' . $account_type . ' and password in a safe place and
 						never give your account ' . $account_type . ' or password to anybody.',
-					'custom_buttons' => config('account_create_character_create') ? '' : null
+					'custom_buttons' => setting('core.account_create_character_create') ? '' : null
 				));
 			}
 			else
@@ -242,24 +250,31 @@ if($save)
 		}
 		else
 		{
-			if(config('account_create_character_create')) {
+			if(setting('core.account_create_character_create')) {
 				// character creation
 				$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
 				if (!$character_created) {
 					error('There was an error creating your character. Please create your character later in account management page.');
+					error(implode(' ', $errors));
 				}
 			}
 
-			if($config['account_create_auto_login']) {
-				$_POST['account_login'] = USE_ACCOUNT_NAME ? $account_name : $account_id;
+			if(setting('core.account_create_auto_login')) {
+				if ($hasBeenCreatedByEMail) {
+					$_POST['account_login'] = $email;
+				}
+				else {
+					$_POST['account_login'] = USE_ACCOUNT_NAME ? $account_name : $account_id;
+				}
+
 				$_POST['password_login'] = $password2;
 
-				require SYSTEM . 'login.php';
+				require PAGES . 'account/login.php';
 				header('Location: ' . getLink('account/manage'));
 			}
 
 			echo 'Your account';
-			if(config('account_create_character_create')) {
+			if(setting('core.account_create_character_create')) {
 				echo ' and character have';
 			}
 			else {
@@ -267,7 +282,7 @@ if($save)
 			}
 
 			echo ' been created.';
-			if(!config('account_create_character_create')) {
+			if(!setting('core.account_create_character_create')) {
 				echo ' Now you can login and create your first character.';
 			}
 
@@ -277,10 +292,10 @@ if($save)
 				'description' => 'Your account ' . $account_type . ' is <b>' . $tmp_account . '</b><br/>You will need the account ' . $account_type . ' and your password to play on ' . configLua('serverName') . '.
 						Please keep your account ' . $account_type . ' and password in a safe place and
 						never give your account ' . $account_type . ' or password to anybody.',
-				'custom_buttons' => config('account_create_character_create') ? '' : null
+				'custom_buttons' => setting('core.account_create_character_create') ? '' : null
 			));
 
-			if($config['mail_enabled'] && $config['account_welcome_mail'])
+			if(setting('core.mail_enabled') && setting('core.account_welcome_mail'))
 			{
 				$mailBody = $twig->render('account.welcome_mail.html.twig', array(
 					'account' => $tmp_account
@@ -299,7 +314,7 @@ if($save)
 }
 
 $country_recognized = null;
-if($config['account_country_recognize']) {
+if(setting('core.account_country_recognize')) {
 	$country_session = getSession('country');
 	if($country_session !== false) { // get from session
 		$country_recognized = $country_session;
@@ -316,7 +331,7 @@ if($config['account_country_recognize']) {
 if(!empty($errors))
 	$twig->display('error_box.html.twig', array('errors' => $errors));
 
-if($config['account_country']) {
+if (setting('core.account_country')) {
 	$countries = array();
 	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
 		$countries[$c] = $config['countries'][$c];
@@ -339,7 +354,7 @@ $params = array(
 	'save' => $save
 );
 
-if($save && config('account_create_character_create')) {
+if($save && setting('core.account_create_character_create')) {
 	$params = array_merge($params, array(
 		'name' => $character_name,
 		'sex' => $character_sex,

@@ -21,12 +21,14 @@
 	define('SIGNATURES_IMAGES', SIGNATURES . 'images/');
 	define('SIGNATURES_ITEMS', BASE . 'images/items/');
 
-	if(!$config['signature_enabled'])
+	if(!setting('core.signature_enabled')) {
 		die('Signatures are disabled on this server.');
+	}
 
-	$file = trim(strtolower($config['signature_type'])) . '.php';
-	if(!file_exists($file))
-		die('ERROR: Wrong signature_type in config.');
+	$file = trim(strtolower(setting('core.signature_type'))) . '.php';
+	if(!file_exists($file)) {
+		die('ERROR: Wrong signature_type in Settings.');
+	}
 
 	putenv('GDFONTPATH=' . SIGNATURES_FONTS);
 
@@ -52,7 +54,7 @@
 	}
 
 	$cached = SIGNATURES_CACHE.$player->getId() . '.png';
-	if(file_exists($cached) && (time() < (filemtime($cached) + (60 * $config['signature_cache_time']))))
+	if(file_exists($cached) && (time() < (filemtime($cached) + (60 * setting('core.signature_cache_time')))))
 	{
 		header( 'Content-type: image/png' );
 		readfile( SIGNATURES_CACHE.$player->getId().'.png' );
@@ -61,7 +63,7 @@
 
 	require $file;
 	header('Content-type: image/png');
-	$seconds_to_cache = $config['signature_browser_cache'] * 60;
+	$seconds_to_cache = setting('core.signature_browser_cache') * 60;
 	$ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";
 	header('Expires: ' . $ts);
 	header('Pragma: cache');

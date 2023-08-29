@@ -7,10 +7,13 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Player;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Player editor';
-$player_base = BASE_URL . 'admin/?p=players';
+$player_base = ADMIN_URL . '?p=players';
 
 $use_datatable = true;
 require_once LIBS . 'forum.php';
@@ -566,7 +569,7 @@ else if (isset($_REQUEST['search'])) {
 								<?php } ?>
 							</div>
 							<div class="tab-pane fade" id="tabs-pos">
-								<?php $outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($hasLookAddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet(); ?>
+								<?php $outfit = setting('core.outfit_images_url') . '?id=' . $player->getLookType() . ($hasLookAddons ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet(); ?>
 								<div id="imgchar" style="width:64px;height:64px;position:absolute; top:30px; right:30px">
 									<img id="player_outfit" style="margin-left:0;margin-top:0;width:64px;height:64px;" src="<?php echo $outfit; ?>" alt="player outfit"/>
 								</div>
@@ -663,7 +666,14 @@ else if (isset($_REQUEST['search'])) {
 									</div>
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="lastip" class="control-label">Last IP:</label>
-										<input type="text" class="form-control" id="lastip" name="lastip" autocomplete="off" maxlength="10" value="<?php echo longToIp($player->getLastIP()); ?>" readonly/>
+										<input type="text" class="form-control" id="lastip" name="lastip" autocomplete="off" maxlength="10" value="<?php
+										if (strlen($player->getLastIP()) > 11) {
+											echo inet_ntop($player->getLastIP());
+										}
+										else {
+											echo longToIp($player->getLastIP());
+										}
+										?>" readonly/>
 									</div>
 								</div>
 								<?php if ($db->hasColumn('players', 'loss_experience')): ?>
@@ -737,8 +747,7 @@ else if (isset($_REQUEST['search'])) {
 								<div class="row">
 									<?php
 									if (isset($account) && $account->isLoaded()) {
-										$account_players = $account->getPlayersList();
-										$account_players->orderBy('id');
+										$account_players = Player::where('account_id', $account->getId())->orderBy('id')->get();
 										if (isset($account_players)) { ?>
 											<table class="table table-striped table-condensed table-responsive d-md-table">
 												<thead>
@@ -751,23 +760,13 @@ else if (isset($_REQUEST['search'])) {
 												</tr>
 												</thead>
 												<tbody>
-												<?php foreach ($account_players as $i => $player):
-													$player_vocation = $player->getVocation();
-													$player_promotion = $player->getPromotion();
-													if (isset($player_promotion)) {
-														if ((int)$player_promotion > 0)
-															$player_vocation += ($player_promotion * $config['vocations_amount']);
-													}
-
-													if (isset($config['vocations'][$player_vocation])) {
-														$vocation_name = $config['vocations'][$player_vocation];
-													} ?>
+												<?php foreach ($account_players as $i => $player): ?>
 													<tr>
-														<th><?php echo $i; ?></th>
-														<td><?php echo $player->getName(); ?></td>
-														<td><?php echo $player->getLevel(); ?></td>
-														<td><?php echo $vocation_name; ?></td>
-														<td><a href="?p=players&id=<?php echo $player->getId() ?>" class=" btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></a></td>
+														<th><?php echo $i + 1; ?></th>
+														<td><?php echo $player->name; ?></td>
+														<td><?php echo $player->level; ?></td>
+														<td><?php echo $player->vocation_name; ?></td>
+														<td><a href="?p=players&id=<?php echo $player->getKey() ?>" class=" btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></a></td>
 													</tr>
 												<?php endforeach ?>
 												</tbody>
@@ -859,7 +858,7 @@ else if (isset($_REQUEST['search'])) {
 				<?php if($hasLookAddons): ?>
 				look_addons = '&addons=' + $('#look_addons').val();
 				<?php endif; ?>
-				$("#player_outfit").attr("src", '<?= $config['outfit_images_url']; ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet);
+				$("#player_outfit").attr("src", '<?= setting('core.outfit_images_url'); ?>?id=' + look_type + look_addons + '&head=' + look_head + '&body=' + look_body + '&legs=' + look_legs + '&feet=' + look_feet);
 			}
 		</script>
 	<?php } ?>

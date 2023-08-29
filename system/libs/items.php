@@ -78,8 +78,6 @@ class Items
 	}
 
 	public static function getDescription($id, $count = 1) {
-		global $db;
-
 		$item = self::get($id);
 
 		$attr = $item['attributes'];
@@ -112,17 +110,15 @@ class Items
 			$s .= 'an item of type ' . $item['id'];
 
 		if(isset($attr['type']) && strtolower($attr['type']) == 'rune') {
-			$query = $db->query('SELECT `level`, `maglevel`, `vocations` FROM `' . TABLE_PREFIX . 'spells` WHERE `item_id` = ' . $id);
-			if($query->rowCount() == 1) {
-				$query = $query->fetch();
-
-				if($query['level'] > 0 && $query['maglevel'] > 0) {
+			$item = Spells::where('item_id', $id)->first();
+			if($item) {
+				if($item->level > 0 && $item->maglevel > 0) {
 					$s .= '. ' . ($count > 1 ? "They" : "It") . ' can only be used by ';
 				}
 
 				$configVocations = config('vocations');
-				if(!empty(trim($query['vocations']))) {
-					$vocations = json_decode($query['vocations']);
+				if(!empty(trim($item->vocations))) {
+					$vocations = json_decode($item->vocations);
 					if(count($vocations) > 0) {
 						foreach($vocations as $voc => $show) {
 							$vocations[$configVocations[$voc]] = $show;

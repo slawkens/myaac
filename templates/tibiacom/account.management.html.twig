@@ -146,10 +146,12 @@
 								<div class="TableContentAndRightShadow" style="background-image:url({{ template_path }}/images/content/table-shadow-rm.gif);">
 									<div class="TableContentContainer">
 										<table class="TableContent" width="100%">
+											{% if not config.account_login_by_email or config.account_login_by_email_fallback %}
 											<tr style="background-color: {{ config.lightborder }};" >
 												<td class="LabelV" >Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</td>
 												<td style="width:90%;" >{{ account }}</td>
 											</tr>
+											{% endif %}
 											<tr style="background-color: {{ config.darkborder }};" >
 												<td class="LabelV" >Email Address:</td>
 												<td style="width:90%;" >{{ account_email ~ email_change}}</td>
@@ -440,7 +442,7 @@
 												{% else %}
 												<td><span style="color: red"><b>Offline</b></span></td>
 												{% endif %}
-												<td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]</td>
+												<td>{% if not player.isDeleted() %}[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]{% endif %}</td>
 											</tr>
 											{% endfor %}
 										</table>
@@ -468,7 +470,7 @@
 												</form>
 											</table>
 										</td>
-										{% if config.account_change_character_name %}
+										{% if setting('core.account_change_character_name') %}
 										<td>
 											<table border="0" cellspacing="0" cellpadding="0" >
 												<form action="{{ getLink('account/character/name') }}" method="post" >
@@ -481,7 +483,7 @@
 											</table>
 										</td>
 										{% endif %}
-										{% if config.account_change_character_sex %}
+										{% if setting('core.account_change_character_sex') %}
 										<td>
 											<table border="0" cellspacing="0" cellpadding="0" >
 												<form action="{{ getLink('account/character/sex') }}" method="post" >

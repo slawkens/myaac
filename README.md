@@ -1,23 +1,29 @@
 # [MyAAC](https://my-aac.org)
 
-[![Build Status Master](https://img.shields.io/travis/slawkens/myaac/master)](https://travis-ci.org/github/slawkens/myaac)
-[![License: GPL-3.0](https://img.shields.io/github/license/slawkens/myaac)](https://opensource.org/licenses/gpl-license)
-[![Downloads Count](https://img.shields.io/github/downloads/slawkens/myaac/total)](https://github.com/slawkens/myaac/releases)
-[![PHP Versions](https://img.shields.io/travis/php-v/slawkens/myaac/master)](https://github.com/slawkens/myaac/blob/d8b3b4135827ee17e3c6d41f08a925e718c587ed/.travis.yml#L3)
-[![OpenTibia Discord](https://img.shields.io/discord/288399552581468162)](https://discord.gg/2J39Wus)
-[![Closed Issues](https://img.shields.io/github/issues-closed-raw/slawkens/myaac)](https://github.com/slawkens/myaac/issues?q=is%3Aissue+is%3Aclosed)
-
 MyAAC is a free and open-source Automatic Account Creator (AAC) written in PHP. It is a fork of the [Gesior](https://github.com/gesior/Gesior2012) project. It supports only MySQL databases.
 
 Official website: https://my-aac.org
 
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/slawkens/myaac/cypress.yml)](https://github.com/slawkens/myaac/actions)
+[![License: GPL-3.0](https://img.shields.io/github/license/slawkens/myaac)](https://opensource.org/licenses/gpl-license)
+[![Downloads Count](https://img.shields.io/github/downloads/slawkens/myaac/total)](https://github.com/slawkens/myaac/releases)
+[![OpenTibia Discord](https://img.shields.io/discord/288399552581468162)](https://discord.gg/2J39Wus)
+[![Closed Issues](https://img.shields.io/github/issues-closed-raw/slawkens/myaac)](https://github.com/slawkens/myaac/issues?q=is%3Aissue+is%3Aclosed)
+
+| Version    | Status                                    | Branch  | Requirements   |
+|:-----------|:------------------------------------------|:--------|:---------------|
+| **0.10.x** | **Active development**                    | develop | **PHP >= 8.0** |
+| 0.9.x      | Active support                            | 0.9     | PHP >= 7.2.5   |
+| 0.8.x      | Active support                            | master  | PHP >= 7.2.5   |
+| 0.7.x      | End Of Life                               | 0.7     | PHP >= 5.3.3   |
+
 ### Requirements
 
-	- PHP 5.6 or later
+	- PHP 8.0 or later
 	- MySQL database
 	- PDO PHP Extension
 	- XML PHP Extension
-	- ZIP PHP Extension
+	- (optional) ZIP PHP Extension
 	- (optional) mod_rewrite to use friendly_urls
 
 ### Installation
@@ -36,7 +42,7 @@ Official website: https://my-aac.org
 			chmod 660 images/guilds
 			chmod 660 images/houses
 			chmod 660 images/gallery
-			chmod -R 770 system/cache
+			chmod -R 760 system/cache
 
 	Visit http://your_domain/install (http://localhost/install) and follow instructions in the browser.
 
@@ -71,7 +77,13 @@ Look: [Contributing](https://github.com/otsoft/myaac/wiki/Contributing) in our w
 
 ### Other Notes
 
-	If you have a great idea or want contribute to the project - visit our website at https://www.my-aac.org
+If you have a great idea or want contribute to the project - visit our website at https://www.my-aac.org
+
+## Project supported by JetBrains
+
+Many thanks to Jetbrains for kindly providing a license for me to work on this and other open-source projects.
+
+[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=https://github.com/slawkens)
 
 ### License
 

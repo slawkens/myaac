@@ -1,5 +1,5 @@
 To generate new recovery key for your account please enter your password.<br/>
-<span style="color: red"><b>New recovery key cost {{ config.generate_new_reckey_price }} Premium Points.</span> You have {{ points }} premium points. You will receive e-mail with this recovery key.</b><br/>
+<span style="color: red"><b>New recovery key cost {{ setting('core.account_generate_new_reckey_price') }} Premium Points.</span> You have {{ points }} premium points. You will receive e-mail with this recovery key.</b><br/>
 <form action="{{ getLink('account/register/new') }}" method="post">
 	<input type="hidden" name="registeraccountsave" value="1">
 	<div class="TableContainer" >

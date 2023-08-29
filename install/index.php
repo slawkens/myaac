@@ -12,9 +12,7 @@ require SYSTEM . 'functions.php';
 require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 require SYSTEM . 'clients.conf.php';
-
-if(file_exists(BASE . 'config.local.php'))
-	require BASE . 'config.local.php';
+require LIBS . 'settings.php';
 
 // ignore undefined index from Twig autoloader
 $config['env'] = 'prod';
@@ -26,13 +24,13 @@ $twig = new Twig_Environment($twig_loader, array(
 ));
 
 // load installation status
-$step = isset($_POST['step']) ? $_POST['step'] : 'welcome';
+$step = $_REQUEST['step'] ?? 'welcome';
 
 $install_status = array();
 if(file_exists(CACHE . 'install.txt')) {
 	$install_status = unserialize(file_get_contents(CACHE . 'install.txt'));
 
-	if(!isset($_POST['step'])) {
+	if(!isset($_REQUEST['step'])) {
 		$step = isset($install_status['step']) ? $install_status['step'] : '';
 	}
 }
@@ -70,7 +68,7 @@ if($step == 'database') {
 
 		$key = str_replace('var_', '', $key);
 
-		if(in_array($key, array('account', 'password', 'password_confirm', 'email', 'player_name'))) {
+		if(in_array($key, array('account', 'account_id', 'password', 'password_confirm', 'email', 'player_name'))) {
 			continue;
 		}
 
@@ -91,10 +89,6 @@ if($step == 'database') {
 				break;
 			}
 		}
-		else if($key == 'mail_admin' && !Validator::email($value)) {
-			$errors[] = $locale['step_config_mail_admin_error'];
-			break;
-		}
 		else if($key == 'timezone' && !in_array($value, DateTimeZone::listIdentifiers())) {
 			$errors[] = $locale['step_config_timezone_error'];
 			break;
@@ -110,13 +104,11 @@ if($step == 'database') {
 	}
 }
 else if($step == 'admin') {
-	$config_failed = true;
-	if(file_exists(BASE . 'config.local.php') && isset($config['installed']) && $config['installed'] && isset($_SESSION['saved'])) {
-		$config_failed = false;
-	}
-
-	if($config_failed) {
+	if(!file_exists(BASE . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
 		$step = 'database';
+	}
+	else {
+		$_SESSION['saved'] = true;
 	}
 }
 else if($step == 'finish') {

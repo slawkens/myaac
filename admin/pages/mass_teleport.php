@@ -8,22 +8,19 @@
  * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Player;
+use MyAAC\Models\PlayerOnline;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Mass Teleport Actions';
 
 function admin_teleport_position($x, $y, $z) {
-	global $db;
-	$statement = $db->prepare('UPDATE `players` SET `posx` = :x, `posy` = :y, `posz` = :z');
-	if (!$statement) {
-		displayMessage('Failed to prepare query statement.');
-		return;
-	}
-
-	if (!$statement->execute([
-		'x' => $x, 'y' => $y, 'z' => $z
+	if (!Player::query()->update([
+		'posx' => $x, 'posy' => $y, 'posz' => $z
 	])) {
-		displayMessage('Failed to execute query.');
+		displayMessage('Failed to execute query. Probably already updated.');
 		return;
 	}
 
@@ -31,17 +28,10 @@ function admin_teleport_position($x, $y, $z) {
 }
 
 function admin_teleport_town($town_id) {
-	global $db;
-	$statement = $db->prepare('UPDATE `players` SET `town_id` = :town_id');
-	if (!$statement) {
-		displayMessage('Failed to prepare query statement.');
-		return;
-	}
-
-	if (!$statement->execute([
-		'town_id' => $town_id
+	if (!Player::query()->update([
+		'town_id' => $town_id,
 	])) {
-		displayMessage('Failed to execute query.');
+		displayMessage('Failed to execute query. Probably already updated.');
 		return;
 	}
 
@@ -58,13 +48,12 @@ if (isset($_POST['action']) && $_POST['action'])    {
 
 		$playersOnline = 0;
 		if($db->hasTable('players_online')) {// tfs 1.0
-			$query = $db->query('SELECT count(*) AS `count` FROM `players_online`');
+			$playersOnline = PlayerOnline::count();
 		} else {
-			$query = $db->query('SELECT count(*) AS `count` FROM `players` WHERE `players`.`online` > 0');
+			$playersOnline = Player::online()->count();
 		}
 
-		$playersOnline = $query->fetch(PDO::FETCH_ASSOC);
-		if ($playersOnline['count'] > 0) {
+		if ($playersOnline > 0) {
 			displayMessage('Please, close the server before execute this action otherwise players will not be affected.');
 			return;
 		}

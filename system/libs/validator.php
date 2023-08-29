@@ -7,6 +7,10 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Monster;
+use MyAAC\Models\Spell;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Validator
@@ -117,7 +121,7 @@ class Validator
 			return false;
 		}
 
-		if(config('account_mail_block_plus_sign')) {
+		if(setting('core.account_mail_block_plus_sign')) {
 			$explode = explode('@', $email);
 			if(isset($explode[0]) && (strpos($explode[0],'+') !== false)) {
 				self::$lastError = 'Please do not use plus (+) sign in your e-mail.';
@@ -180,14 +184,15 @@ class Validator
 			return false;
 		}
 
-		$minLength = config('character_name_min_length');
-		$maxLength = config('character_name_max_length');
-
 		// installer doesn't know config.php yet
 		// that's why we need to ignore the nulls
-		if(is_null($minLength) || is_null($maxLength)) {
+		if(defined('MYAAC_INSTALL')) {
 			$minLength = 4;
 			$maxLength = 21;
+		}
+		else {
+			$minLength = setting('core.create_character_name_min_length');
+			$maxLength = setting('core.create_character_name_max_length');
 		}
 
 		$length = strlen($name);
@@ -221,16 +226,6 @@ class Validator
 			return false;
 		}
 
-		$npcCheck = config('character_name_npc_check');
-		if ($npcCheck) {
-			require_once LIBS . 'npc.php';
-			NPCS::load();
-			if(NPCS::$npcs && in_array(strtolower($name), NPCS::$npcs)) {
-				self::$lastError = "Invalid name format. Do not use NPC Names";
-				return false;
-			}
-		}
-
 		return true;
 	}
 
@@ -247,9 +242,8 @@ class Validator
 
 		$name_lower = strtolower($name);
 
-		$first_words_blocked = array('admin ', 'administrator ', 'gm ', 'cm ', 'god ','tutor ', "'", '-');
-		foreach($first_words_blocked as $word)
-		{
+		$first_words_blocked = array_merge(["'", '-'], setting('core.create_character_name_blocked_prefix'));
+		foreach($first_words_blocked as $word) {
 			if($word == substr($name_lower, 0, strlen($word))) {
 				self::$lastError = 'Your name contains blocked words.';
 				return false;
@@ -271,8 +265,7 @@ class Validator
 			return false;
 		}
 
-		if(preg_match('/ {2,}/', $name))
-		{
+		if(preg_match('/ {2,}/', $name)) {
 			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
 			return false;
 		}
@@ -282,18 +275,16 @@ class Validator
 			return false;
 		}
 
-		$names_blocked = array('admin', 'administrator', 'gm', 'cm', 'god', 'tutor');
-		foreach($names_blocked as $word)
-		{
+		$names_blocked = setting('core.create_character_name_blocked_names');
+		foreach($names_blocked as $word) {
 			if($word == $name_lower) {
 				self::$lastError = 'Your name contains blocked words.';
 				return false;
 			}
 		}
 
-		$words_blocked = array('admin', 'administrator', 'gamemaster', 'game master', 'game-master', "game'master", '--', "''","' ", " '", '- ', ' -', "-'", "'-", 'fuck', 'sux', 'suck', 'noob', 'tutor');
-		foreach($words_blocked as $word)
-		{
+		$words_blocked = array_merge(['--', "''","' ", " '", '- ', ' -', "-'", "'-"], setting('core.create_character_name_blocked_words'));
+		foreach($words_blocked as $word) {
 			if(!(strpos($name_lower, $word) === false)) {
 				self::$lastError = 'Your name contains illegal words.';
 				return false;
@@ -309,7 +300,7 @@ class Validator
 			}
 		}
 
-		//check if was namelocked previously
+		// check if was namelocked previously
 		if($db->hasTable('player_namelocks') && $db->hasColumn('player_namelocks', 'name')) {
 			$namelock = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));
 			if($namelock->rowCount() > 0) {
@@ -318,39 +309,38 @@ class Validator
 			}
 		}
 
-		$monsters = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'monsters` WHERE `name` LIKE ' . $db->quote($name_lower));
-		if($monsters->rowCount() > 0) {
-			self::$lastError = 'Your name cannot contains monster name.';
-			return false;
-		}
-
-		$spells_name = $db->query('SELECT `name` FROM `' . TABLE_PREFIX . 'spells` WHERE `name` LIKE ' . $db->quote($name_lower));
-		if($spells_name->rowCount() > 0) {
-			self::$lastError = 'Your name cannot contains spell name.';
-			return false;
-		}
-
-		$spells_words = $db->query('SELECT `words` FROM `' . TABLE_PREFIX . 'spells` WHERE `words` = ' . $db->quote($name_lower));
-		if($spells_words->rowCount() > 0) {
-			self::$lastError = 'Your name cannot contains spell name.';
-			return false;
-		}
-
-		if(isset($config['npc']))
-		{
-			if(in_array($name_lower, $config['npc'])) {
-				self::$lastError = 'Your name cannot contains NPC name.';
+		$monstersCheck = setting('core.create_character_name_monsters_check');
+		if ($monstersCheck) {
+			if (Monster::where('name', 'like', $name_lower)->exists()) {
+				self::$lastError = 'Your name cannot contains monster name.';
 				return false;
 			}
 		}
 
-		$npcCheck = config('character_name_npc_check');
+		$spellsCheck = setting('core.create_character_name_spells_check');
+		if ($spellsCheck) {
+			if (Spell::where('name', 'like', $name_lower)->exists()) {
+				self::$lastError = 'Your name cannot contains spell name.';
+				return false;
+			}
+
+			if (Spell::where('words', $name_lower)->exists()) {
+				self::$lastError = 'Your name cannot contains spell name.';
+				return false;
+			}
+		}
+
+		$npcCheck = setting('core.create_character_name_npc_check');
 		if ($npcCheck) {
 			require_once LIBS . 'npc.php';
 			NPCS::load();
-			if(NPCS::$npcs && in_array($name_lower, NPCS::$npcs)) {
-				self::$lastError = "Invalid name format. Do not use NPC Names";
-				return false;
+			if(NPCS::$npcs) {
+				foreach (NPCs::$npcs as $npc) {
+					if(strpos($name_lower, $npc) !== false) {
+						self::$lastError = 'Your name cannot contains NPC name.';
+						return false;
+					}
+				}
 			}
 		}
 
@@ -451,4 +441,3 @@ class Validator
 		return self::$lastError;
 	}
 }
-?>

@@ -1489,6 +1489,25 @@ img {
   width: 135px;
   z-index: 20;
 }
+.BigButtonText {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 135px;
+	height: 25px;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+	background: 0 0;
+	border: none;
+	text-align: center;
+	color: #ffd18c;
+	font-family: Verdana,Arial,Times New Roman,sans-serif;
+	font-size: 12px;
+	font-weight: 400;
+	z-index: 20;
+	text-shadow: -1px -1px 0 #000,0 -1px 0 #000,1px -1px 0 #000,1px 0 0 #000,1px 1px 0 #000,0 1px 0 #000,-1px 1px 0 #000,-1px 0 0 #000
+}
 .TopButtonContainer {
   position: relative;
   right: 4px;

@@ -96,5 +96,3 @@ interface IOTS_Display
 }
 
 /**#@-*/
-
-?>

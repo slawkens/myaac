@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Account;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Confirm Email';
@@ -17,14 +20,12 @@ if(empty($hash)) {
 	return;
 }
 
-$res = $db->query('SELECT `email_hash` FROM `accounts` WHERE `email_hash` = ' . $db->quote($hash));
-if(!$res->rowCount()) {
+if(!Account::where('email_hash', $hash)->exists()) {
 	note("Your email couldn't be verified. Please contact staff to do it manually.");
 }
 else
 {
-	$query = $db->query('SELECT id FROM accounts WHERE email_hash = ' . $db->quote($hash) . ' AND email_verified = 0');
-	if ($query->rowCount() == 1) {
+	if (Account::where('email_hash', $hash)->where('email_verified', 0)->exists()) {
 		$query = $query->fetch(PDO::FETCH_ASSOC);
 		$account = new OTS_Account();
 		$account->load($query['id']);
@@ -33,7 +34,7 @@ else
 		}
 	}
 
-	$db->update('accounts', array('email_verified' => '1'), array('email_hash' => $hash));
+	Account::where('email_hash', $hash)->update('email_verified', 1);
 	success('You have now verified your e-mail, this will increase the security of your account. Thank you for doing this.');
 }
 ?>

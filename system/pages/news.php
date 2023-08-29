@@ -62,7 +62,7 @@ if(isset($_GET['archive']))
 				'content' => $content_,
 				'date' => $news['date'],
 				'icon' => $categories[$news['category']]['icon_id'],
-				'author' => $config['news_author'] ? $author : '',
+				'author' => setting('core.news_author') ? $author : '',
 				'comments' => $news['comments'] != 0 ? getForumThreadLink($news['comments']) : null,
 			));
 		}
@@ -116,7 +116,7 @@ if(!$news_cached)
 		);
 	}
 
-	$tickers_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . TICKER .($canEdit ? '' : ' AND `hidden` != 1') .' ORDER BY `date` DESC LIMIT ' . $config['news_ticker_limit']);
+	$tickers_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . TICKER .($canEdit ? '' : ' AND `hidden` != 1') .' ORDER BY `date` DESC LIMIT ' . setting('core.news_ticker_limit'));
 	$tickers_content = '';
 	if($tickers_db->rowCount() > 0)
 	{
@@ -167,7 +167,7 @@ else {
 if(!$news_cached)
 {
 	ob_start();
-	$newses = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news') . ' WHERE type = ' . NEWS . ($canEdit ? '' : ' AND hidden != 1') . ' ORDER BY date' . ' DESC LIMIT ' . $config['news_limit']);
+	$newses = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news') . ' WHERE type = ' . NEWS . ($canEdit ? '' : ' AND hidden != 1') . ' ORDER BY date' . ' DESC LIMIT ' . setting('core.news_limit'));
 	if($newses->rowCount() > 0)
 	{
 		foreach($newses as $news)
@@ -182,13 +182,13 @@ if(!$news_cached)
 			$admin_options = '';
 			if($canEdit)
 			{
-				$admin_options = '<br/><br/><a target="_blank" rel="noopener noreferrer" href="/admin/?p=news&action=edit&id=' . $news['id'] . '" title="Edit">
+				$admin_options = '<br/><br/><a target="_blank" rel="noopener noreferrer" href="' . ADMIN_URL . '?p=news&action=edit&id=' . $news['id'] . '" title="Edit">
 					<img src="images/edit.png"/>Edit
 				</a>
-				<a id="delete" target="_blank" rel="noopener noreferrer" href="/admin/?p=news&action=delete&id=' . $news['id'] . '" onclick="return confirm(\'Are you sure?\');" title="Delete">
+				<a id="delete" target="_blank" rel="noopener noreferrer" href="' . ADMIN_URL . '?p=news&action=delete&id=' . $news['id'] . '" onclick="return confirm(\'Are you sure?\');" title="Delete">
 					<img src="images/del.png"/>Delete
 				</a>
-				<a target="_blank" rel="noopener noreferrer" href="/admin/?p=news&action=hide&id=' . $news['id'] . '" title="' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '">
+				<a target="_blank" rel="noopener noreferrer" href="' . ADMIN_URL . '?p=news&action=hide&id=' . $news['id'] . '" title="' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '">
 					<img src="images/' . ($news['hidden'] != 1 ? 'success' : 'error') . '.png"/>
 					' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '
 				</a>';
@@ -211,7 +211,7 @@ if(!$news_cached)
 				'content' => $content_ . $admin_options,
 				'date' => $news['date'],
 				'icon' => $categories[$news['category']]['icon_id'],
-				'author' => $config['news_author'] ? $author : '',
+				'author' => setting('core.news_author') ? $author : '',
 				'comments' => $news['comments'] != 0 ? getForumThreadLink($news['comments']) : null,
 				'hidden'=> $news['hidden']
 			));

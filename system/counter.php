@@ -51,4 +51,3 @@ else
 		updateDatabaseConfig('views_counter', $views_counter); // update counter
 	}
 }
-?>

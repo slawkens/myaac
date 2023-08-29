@@ -10,10 +10,12 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-require __DIR__ . '/base.php';
+$ret = require __DIR__ . '/base.php';
+if ($ret === false) {
+	return;
+}
 
-if(!$logged)
-{
+if(!$logged) {
 	$extra_url = '';
 	if(isset($_GET['thread_id'])) {
 		$extra_url = '&action=new_post&thread_id=' . $_GET['thread_id'];
@@ -23,56 +25,58 @@ if(!$logged)
 	return;
 }
 
-if(Forum::canPost($account_logged))
-{
+if(Forum::canPost($account_logged)) {
 	$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
 	$thread_id = isset($_REQUEST['thread_id']) ? (int) $_REQUEST['thread_id'] : 0;
 	if($thread_id == 0) {
-		echo "Thread with this id doesn't exist.";
+		$errors[] = "Thread with this id doesn't exist.";
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
 		return;
 	}
 
-	$thread = $db->query("SELECT `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`id`, `" . FORUM_TABLE_PREFIX . "forum`.`section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." LIMIT 1")->fetch();
-	echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
-	if(isset($thread['id']) && Forum::hasAccess($thread['section']))
-	{
+	$thread = $db->query("SELECT `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`id`, `" . FORUM_TABLE_PREFIX . "forum`.`section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".$thread_id." LIMIT 1")->fetch();
+
+	if(isset($thread['id']) && Forum::hasAccess($thread['section'])) {
+		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.$thread['post_topic'].'</a> >> <b>Post new reply</b><br /><h3>'.$thread['post_topic'].'</h3>';
+
 		$quote = isset($_REQUEST['quote']) ? (int) $_REQUEST['quote'] : NULL;
 		$text = isset($_REQUEST['text']) ? stripslashes(trim($_REQUEST['text'])) : NULL;
-		$char_id = (int) (isset($_REQUEST['char_id']) ? $_REQUEST['char_id'] : 0);
+		$char_id = (int) ($_REQUEST['char_id'] ?? 0);
 		$post_topic = isset($_REQUEST['topic']) ? stripslashes(trim($_REQUEST['topic'])) : '';
-		$smile = (isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0);
-		$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
+		$smile = (int)($_REQUEST['smile'] ?? 0);
+		$html = (int)($_REQUEST['html'] ?? 0);
 		$saved = false;
-		if(isset($_REQUEST['quote']))
-		{
+
+		if(isset($_REQUEST['quote'])) {
 			$quoted_post = $db->query("SELECT `players`.`name`, `" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $quote)->fetchAll();
-			if(isset($quoted_post[0]['name']))
-				$text = '[i]Originally posted by '.$quoted_post[0]['name'].' on '.date('d.m.y H:i:s', $quoted_post[0]['post_date']).':[/i][quote]'.$quoted_post[0]['post_text'].'[/quote]';
-		}
-		elseif(isset($_REQUEST['save']))
-		{
-			$lenght = 0;
-			for($i = 0; $i < strlen($text); $i++)
-			{
-				if(ord($text[$i]) >= 33 && ord($text[$i]) <= 126)
-					$lenght++;
+			if(isset($quoted_post[0]['name'])) {
+				$text = '[i]Originally posted by ' . $quoted_post[0]['name'] . ' on ' . date('d.m.y H:i:s', $quoted_post[0]['post_date']) . ':[/i][quote]' . $quoted_post[0]['post_text'] . '[/quote]';
 			}
-			if($lenght < 1 || strlen($text) > 15000)
-				$errors[] = 'Too short or too long post (short: '.$lenght.' long: '.strlen($text).' letters). Minimum 1 letter, maximum 15000 letters.';
-			if($char_id == 0)
+		}
+		elseif(isset($_REQUEST['save'])) {
+			$length = strlen($text);
+			if($length < 1 || strlen($text) > 15000) {
+				$errors[] = 'Too short or too long post (Length: $length letters). Minimum 1 letter, maximum 15000 letters.';
+			}
+
+			if($char_id == 0) {
 				$errors[] = 'Please select a character.';
+			}
 
 			$player_on_account = false;
-			if(count($errors) == 0)
-			{
-				foreach($players_from_account as $player)
-					if($char_id == $player['id'])
+			if(count($errors) == 0) {
+				foreach($players_from_account as $player) {
+					if ($char_id == $player['id']) {
 						$player_on_account = true;
-				if(!$player_on_account)
-					$errors[] = 'Player with selected ID '.$char_id.' doesn\'t exist or isn\'t on your account';
+					}
+				}
+
+				if(!$player_on_account) {
+					$errors[] = 'Player with selected ID ' . $char_id . ' doesn\'t exist or isn\'t on your account';
+				}
 			}
-			if(count($errors) == 0)
-			{
+
+			if(count($errors) == 0) {
 				$last_post = 0;
 				$query = $db->query('SELECT post_date FROM ' . FORUM_TABLE_PREFIX . 'forum ORDER BY post_date DESC LIMIT 1');
 				if($query->rowCount() > 0)
@@ -80,27 +84,28 @@ if(Forum::canPost($account_logged))
 					$query = $query->fetch();
 					$last_post = $query['post_date'];
 				}
-				if($last_post+$config['forum_post_interval']-time() > 0 && !Forum::isModerator())
-					$errors[] = 'You can post one time per '.$config['forum_post_interval'].' seconds. Next post after '.($last_post+$config['forum_post_interval']-time()).' second(s).';
+				if($last_post+setting('core.forum_post_interval')-time() > 0 && !Forum::isModerator())
+					$errors[] = 'You can post one time per ' . setting('core.forum_post_interval') . ' seconds. Next post after '.($last_post + setting('core.forum_post_interval')-time()).' second(s).';
 			}
-			if(count($errors) == 0)
-			{
+
+			if(count($errors) == 0) {
 				$saved = true;
-				Forum::add_post($thread['id'], $thread['section'], $account_logged->getId(), (int) $char_id, $text, $post_topic, $smile, $html, time(), $_SERVER['REMOTE_ADDR']);
-				$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".(int) $thread_id);
+				Forum::add_post($thread['id'], $thread['section'], $account_logged->getId(), $char_id, $text, $post_topic, $smile, $html);
+				$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `replies`=`replies`+1, `last_post`=".time()." WHERE `id` = ".$thread_id);
 				$post_page = $db->query("SELECT COUNT(`" . FORUM_TABLE_PREFIX . "forum`.`id`) AS posts_count FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`post_date` <= ".time()." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread['id'])->fetch();
-				$_page = (int) ceil($post_page['posts_count'] / $config['forum_threads_per_page']) - 1;
+				$_page = (int) ceil($post_page['posts_count'] / setting('core.forum_threads_per_page')) - 1;
 				header('Location: ' . getForumThreadLink($thread_id, $_page));
 				echo '<br />Thank you for posting.<br /><a href="' . getForumThreadLink($thread_id, $_page) . '">GO BACK TO LAST THREAD</a>';
 			}
 		}
 
-		if(!$saved)
-		{
-			if(!empty($errors))
+		if(!$saved) {
+			if(!empty($errors)) {
 				$twig->display('error_box.html.twig', array('errors' => $errors));
+			}
 
 			$threads = $db->query("SELECT `players`.`name`, `" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`post_smile`, `" . FORUM_TABLE_PREFIX . "forum`.`post_html`, `" . FORUM_TABLE_PREFIX . "forum`.`author_aid` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".(int) $thread_id." ORDER BY `" . FORUM_TABLE_PREFIX . "forum`.`post_date` DESC LIMIT 5")->fetchAll();
+
 			foreach($threads as &$thread) {
 				$player_account = new OTS_Account();
 				$player_account->load($thread['author_aid']);
@@ -123,10 +128,14 @@ if(Forum::canPost($account_logged))
 			));
 		}
 	}
-	else
-		echo "Thread with ID " . $thread_id . " doesn't exist.";
+	else {
+		$errors[] = "Thread with ID " . $thread_id . " doesn't exist.";
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
-else
-	echo "Your account is banned, deleted or you don't have any player with level " . $config['forum_level_required'] . " on your account. You can't post.";
+else {
+	$errors[] = "Your account is banned, deleted or you don't have any player with level " . setting('core.forum_level_required') . " on your account. You can't post.";
+	displayErrorBoxWithBackButton($errors, getLink('forum'));
+}
 
 $twig->display('forum.fullscreen.html.twig');

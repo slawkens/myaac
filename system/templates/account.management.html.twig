@@ -39,10 +39,10 @@
 			{% for name, link in menus %}
 				<a href="{{ getLink(link) }}">{{ name }}</a>
 			{% endfor %}
-			{% if config.account_change_character_name %}
+			{% if setting('core.account_change_character_name') %}
 				<a href="{{ getLink('account/character/name') }}">Change Name</a>
 			{% endif %}
-			{% if config.account_change_character_sex %}
+			{% if setting('core.account_change_character_sex') %}
 				<a href="{{ getLink('account/character/sex') }}">Change Sex</a>
 			{% endif %}
 			<a href="{{ getLink('account/logout') }}">Logout</a>
@@ -89,10 +89,12 @@
 		<a name="General+Information"></a>
 		<h2>General Information</h2>
 		<table width="100%">
+			{% if not config.account_login_by_email or config.account_login_by_email_fallback %}
 			<tr style="background-color: {{ config.lightborder }};" >
 				<td style="width: 90px;">Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</td>
 				<td>{{ account }}</td>
 			</tr>
+			{% endif %}
 			<tr style="background-color: {{ config.darkborder }};" >
 				<td style="width: 90px;">Email Address:</td>
 				<td>{{ account_email ~ email_change }}
@@ -168,7 +170,16 @@
 			{% for player in players %}
 				{% set i = i + 1 %}
 				<tr bgcolor="{{ getStyle(i) }}">
-					<td><a href="{{ getLink('characters/' ~ player.getName()|urlencode) }}">{{ player.getName() }}</a></td><td>{{ player.getLevel() }}</td><td>{{ player.getVocationName() }}</td><td>{{ config.towns[player.getTownId()] }}</td><td>{% if player.getLastLogin() > 0 %}{{ player.getLastLogin|date('d F Y (H:i)') }}{% else %}Never.{% endif %}</td><td>{%  if player.isOnline() %}<span style="color: green">ONLINE</span>{% else %}<span style="color: red">Offline</span>{% endif %}</td><td>{% if player.isHidden() %}Hidden{% else %}Visible{% endif %}</td><td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]</td>
+					<td>
+						<a href="{{ getLink('characters/' ~ player.getName()|urlencode) }}">{{ player.getName() }}</a>
+					</td>
+					<td>{{ player.getLevel() }}</td>
+					<td>{{ player.getVocationName() }}</td>
+					<td>{{ config.towns[player.getTownId()] }}</td>
+					<td>{% if player.getLastLogin() > 0 %}{{ player.getLastLogin|date('d F Y (H:i)') }}{% else %}Never.{% endif %}</td>
+					<td>{% if player.isOnline() %}<span style="color: green">ONLINE</span>{% else %}<span style="color: red">Offline</span>{% endif %}</td>
+					<td>{% if player.isHidden() %}Hidden{% else %}Visible{% endif %}</td>
+					<td>{% if not player.isDeleted() %}[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]{% endif %}</td>
 				</tr>
 			{% endfor %}
 		</table>
@@ -181,7 +192,7 @@
 						{% include('buttons.base.html.twig') %}
 					</form>
 				</td>
-				{% if config.account_change_character_name %}
+				{% if setting('core.account_change_character_name') %}
 				<td>
 					<form action="{{ getLink('account/character/name') }}" method="post" >
 						{% set button_name = 'Change Name' %}
@@ -189,7 +200,7 @@
 					</form>
 				</td>
 				{% endif %}
-				{% if config.account_change_character_sex %}
+				{% if setting('core.account_change_character_sex') %}
 				<td>
 					<form action="{{ getLink('account/character/sex') }}" method="post" >
 						{% set button_name = 'Change Sex' %}

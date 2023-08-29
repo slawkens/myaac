@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Support in game';
 
-if($config['account_country'])
+if(setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
 $groups = new OTS_Groups_List();
@@ -23,7 +23,7 @@ if(!$groups->count())
 
 $outfit_addons = false;
 $outfit = '';
-if($config['team_display_outfit']) {
+if(setting('core.team_outfit')) {
 	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
 	if($db->hasColumn('players', 'lookaddons')) {
 		$outfit .= ', lookaddons';
@@ -56,12 +56,12 @@ foreach($groupList as $id => $group)
 		$members[] = array(
 			'group_name' => $group->getName(),
 			'player' => $member,
-			'outfit' => $config['team_display_outfit'] ? $config['outfit_images_url'] . '?id=' . $member->getLookType() . ($outfit_addons ? '&addons=' . $member->getLookAddons() : '') . '&head=' . $member->getLookHead() . '&body=' . $member->getLookBody() . '&legs=' . $member->getLookLegs() . '&feet=' . $member->getLookFeet() : null,
-			'status' => $config['team_display_status'] ? $member->isOnline() : null,
+			'outfit' => setting('core.team_outfit') ? setting('core.outfit_images_url') . '?id=' . $member->getLookType() . ($outfit_addons ? '&addons=' . $member->getLookAddons() : '') . '&head=' . $member->getLookHead() . '&body=' . $member->getLookBody() . '&legs=' . $member->getLookLegs() . '&feet=' . $member->getLookFeet() : null,
+			'status' => setting('core.team_status') ? $member->isOnline() : null,
 			'link' => getPlayerLink($member->getName()),
-			'flag_image' => $config['account_country'] ? getFlagImage($member->getAccount()->getCountry()) : null,
-			'world_name' => ($config['multiworld'] || $config['team_display_world']) ? getWorldName($member->getWorldId()) : null,
-			'last_login' => $config['team_display_lastlogin'] ? $lastLogin : null
+			'flag_image' => setting('core.account_country') ? getFlagImage($member->getAccount()->getCountry()) : null,
+			'world_name' => (setting('core.multiworld') || setting('core.team_world')) ? getWorldName($member->getWorldId()) : null,
+			'last_login' => setting('core.team_lastlogin') ? $lastLogin : null
 		);
 	}
 
@@ -74,4 +74,3 @@ foreach($groupList as $id => $group)
 $twig->display('team.html.twig', array(
 	'groupmember' => $groupMember
 ));
-?>

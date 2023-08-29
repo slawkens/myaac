@@ -1,4 +1,7 @@
 <?php
+
+use MyAAC\Models\Player;
+
 /**
  * CreateCharacter
  *
@@ -18,8 +21,8 @@ class CreateCharacter
 	 */
 	public function checkName($name, &$errors)
 	{
-		$minLength = config('character_name_min_length');
-		$maxLength = config('character_name_max_length');
+		$minLength = setting('core.create_character_name_min_length');
+		$maxLength = setting('core.create_character_name_max_length');
 
 		if(empty($name)) {
 			$errors['name'] = 'Please enter a name for your character!';
@@ -52,9 +55,7 @@ class CreateCharacter
 			return false;
 		}
 
-		$player = new OTS_Player();
-		$player->find($name);
-		if($player->isLoaded()) {
+		if(Player::where('name', '=', $name)->exists()) {
 			$errors['name'] = 'Character with this name already exist.';
 			return false;
 		}
@@ -138,9 +139,9 @@ class CreateCharacter
 
 		if(empty($errors))
 		{
-			$number_of_players_on_account = $account->getPlayersList(false)->count();
-			if($number_of_players_on_account >= config('characters_per_account'))
-				$errors[] = 'You have too many characters on your account <b>('.$number_of_players_on_account.'/'.config('characters_per_account').')</b>!';
+			$number_of_players_on_account = $account->getPlayersList(true)->count();
+			if($number_of_players_on_account >= setting('core.characters_per_account'))
+				$errors[] = 'You have too many characters on your account <b>('.$number_of_players_on_account . '/' . setting('core.characters_per_account') . ')</b>!';
 		}
 
 		if(empty($errors))
@@ -149,7 +150,7 @@ class CreateCharacter
 			$char_to_copy = new OTS_Player();
 			$char_to_copy->find($char_to_copy_name);
 			if(!$char_to_copy->isLoaded())
-				$errors[] = 'Wrong characters configuration. Try again or contact with admin. ADMIN: Edit file config.php and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
+				$errors[] = 'Wrong characters configuration. Try again or contact with admin. ADMIN: Go to Admin Panel -> Settings -> Create Character and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
 		}
 
 		if(!empty($errors)) {
@@ -195,7 +196,7 @@ class CreateCharacter
 
 		for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++) {
 			$value = 10;
-			if (config('use_character_sample_skills')) {
+			if (setting('core.use_character_sample_skills')) {
 				$value = $char_to_copy->getSkill($skill);
 			}
 
@@ -239,22 +240,24 @@ class CreateCharacter
 		}
 
 		if($db->hasTable('player_skills')) {
-			for($i=0; $i<7; $i++) {
+			for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++) {
 				$value = 10;
-				if (config('use_character_sample_skills')) {
-					$value = $char_to_copy->getSkill($i);
+				if (setting('core.use_character_sample_skills')) {
+					$value = $char_to_copy->getSkill($skill);
 				}
-				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $i);
+				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $skill);
 				if($skillExists->rowCount() <= 0) {
-					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$i.', ' . $value . ', 0)');
+					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$skill.', ' . $value . ', 0)');
 				}
 			}
 		}
 
-		$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = ".$char_to_copy->getId()."");
-		foreach($loaded_items_to_copy as $save_item) {
-			$blob = $db->quote($save_item['attributes']);
-			$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', $blob);");
+		if ($db->hasTable('player_items') && $db->hasColumn('player_items', 'pid') && $db->hasColumn('player_items', 'sid') && $db->hasColumn('player_items', 'itemtype')) {
+			$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = ".$char_to_copy->getId()."");
+			foreach($loaded_items_to_copy as $save_item) {
+				$blob = $db->quote($save_item['attributes']);
+				$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', $blob);");
+			}
 		}
 
 		global $twig;

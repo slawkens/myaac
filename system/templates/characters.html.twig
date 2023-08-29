@@ -11,13 +11,13 @@
 	<td>
         {{ hook(constant('HOOK_CHARACTERS_BEFORE_INFORMATIONS')) }}
 		{% if canEdit %}
-			<a href="admin/?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
+			<a href="{{ constant('ADMIN_URL') }}?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
 				<img src="images/edit.png"/>Edit
 			</a>
 		{% endif %}
 		<table border="0" cellspacing="1" cellpadding="4" width="100%">
 			{% if config.characters.outfit %}
-			<div style="width:64px;height:64px;border:2px solid #F1E0C6; border-radius:50px; padding:13px; margin-top:38px;margin-left:376px;position:absolute;"><img style="margin-left:{% if player.getLookType() in config.outfit_images_wrong_looktypes %}-0px;margin-top:-0px;width:64px;height:64px;{% else %}-60px;margin-top:-60px;width:128px;height:128px;{% endif %}" src="{{ outfit }}" alt="player outfit"/></div>
+			<div style="width:64px;height:64px;border:2px solid #F1E0C6; border-radius:50px; padding:13px; margin-top:38px;margin-left:376px;position:absolute;"><img style="margin-left:{% if player.getLookType() in setting('core.outfit_images_wrong_looktypes') %}-0px;margin-top:-0px;width:64px;height:64px;{% else %}-60px;margin-top:-60px;width:128px;height:128px;{% endif %}" src="{{ outfit }}" alt="player outfit"/></div>
 			{% endif %}
 
 			<tr bgcolor="{{ config.vdarkborder }}">
@@ -142,7 +142,7 @@
 			{% set rows = rows + 1 %}
 			<tr bgcolor="{{ getStyle(rows) }}">
 				<td valign="top">Comment:</td>
-				<td>{{ comment|raw }}</td>
+				<td style="word-break: break-all">{{ comment|raw }}</td>
 			</tr>
 			{% endif %}
 
@@ -237,11 +237,13 @@
 				</td>
 				<!-- EQUIPMENT_END -->
 				{% endif %}
+
 				{{ hook(constant('HOOK_CHARACTERS_AFTER_EQUIPMENT')) }}
 			</tr>
 		</table>
 
 		{{ hook(constant('HOOK_CHARACTERS_BEFORE_DEATHS')) }}
+
 		{% if deaths|length > 0 %}
 		<!-- DEATHS -->
 		<br/>
@@ -282,7 +284,7 @@
 
 		{{ hook(constant('HOOK_CHARACTERS_BEFORE_SIGNATURE')) }}
 
-		{% if config.signature_enabled %}
+		{% if setting('core.signature_enabled') %}
 		<!-- SIGNATURE -->
 		<script type="text/javascript">
 			function showSignLinks()
@@ -404,7 +406,8 @@
 							<tr>
 								<td>
 									<input type="hidden" name="name" value="{{ player.getName() }}"/>
-									<input type="image" name="View {{ player.getName() }}" alt="View {{ player.getName() }}" src="{{ template_path }}/images/global/buttons/sbutton_view.gif" border="0" width="120" height="18"/>
+									{% set button_name = "View" %}
+									{{ include('buttons.base.html.twig') }}
 								</td>
 							</tr>
 						</form>
@@ -418,7 +421,7 @@
 		{% endif %}
 		{{ hook(constant('HOOK_CHARACTERS_AFTER_CHARACTERS')) }}
 		{% if canEdit %}
-			<a href="admin/?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
+			<a href="{{ constant('ADMIN_URL') }}?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
 				<img src="images/edit.png"/>Edit
 			</a>
 		{% endif %}

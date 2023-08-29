@@ -31,7 +31,7 @@ Here you can tell other players about yourself. This information will be display
 									<input name="info_location" value="{{ account_location }}" size="30" maxlength="50" >
 								</td>
 							</tr>
-							{% if config.account_country %}
+							{% if setting('core.account_country') %}
 							<tr>
 								<td class="LabelV" >Country:</td>
 								<td>

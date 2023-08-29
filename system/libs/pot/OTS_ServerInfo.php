@@ -14,7 +14,7 @@
 
 /**
  * Various server status querying methods.
- * 
+ *
  * @package POT
  * @property-read OTS_InfoRespond|bool $status status() method wrapper.
  * @property-read OTS_ServerStatus|bool $info Full info() method wrapper.
@@ -23,21 +23,21 @@ class OTS_ServerInfo
 {
 /**
  * Server address.
- * 
+ *
  * @var string
  */
     private $server;
 
 /**
  * Connection port.
- * 
+ *
  * @var int
  */
     private $port;
 
 /**
  * Creates handler for new server.
- * 
+ *
  * @param string $server Server IP/domain.
  * @param int $port OTServ port.
  */
@@ -49,7 +49,7 @@ class OTS_ServerInfo
 
 /**
  * Sends packet to server.
- * 
+ *
  * @param OTS_Buffer|string $packet Buffer to send.
  * @return OTS_Buffer|null Respond buffer (null if server is offline).
  * @throws E_OTS_OutOfBuffer When there is read attemp after end of packet stream.
@@ -57,7 +57,7 @@ class OTS_ServerInfo
     private function send(OTS_Buffer $packet)
     {
         // connects to server
-        $socket = @fsockopen($this->server, $this->port, $error, $message, config('status_timeout'));
+        $socket = @fsockopen($this->server, $this->port, $error, $message, setting('core.status_timeout'));
 
         // if connected then checking statistics
         if($socket)
@@ -75,7 +75,7 @@ class OTS_ServerInfo
 
             // reads respond
             //$data = stream_get_contents($socket);
-			$data = ''; 
+			$data = '';
 			while (!feof($socket))
 				$data .= fgets($socket, 1024);
 
@@ -97,11 +97,11 @@ class OTS_ServerInfo
 
 /**
  * Queries server status.
- * 
+ *
  * <p>
  * Sends 'info' packet to OTS server and return output. Returns {@link OTS_InfoRespond OTS_InfoRespond} (wrapper for XML data) with results or <var>false</var> if server is online.
  * </p>
- * 
+ *
  * @return OTS_InfoRespond|bool Respond content document (false when server is offline).
  * @throws DOMException On DOM operation error.
  * @throws E_OTS_OutOfBuffer When there is read attemp after end of packet stream.
@@ -123,7 +123,7 @@ class OTS_ServerInfo
         {
             // loads respond XML
             $info = new OTS_InfoRespond();
-            if(!$info->loadXML( utf8_encode($status->getBuffer())))
+            if(!$info->loadXML( $status->getBuffer()))
 				return false;
 
             return $info;
@@ -135,11 +135,11 @@ class OTS_ServerInfo
 
 /**
  * Queries server information.
- * 
+ *
  * <p>
  * This method uses binary info protocol. It provides more infromation then {@link OTS_Toolbox::serverStatus() XML way}.
  * </p>
- * 
+ *
  * @param int $flags Requested info flags.
  * @return OTS_ServerStatus|bool Respond content document (false when server is offline).
  * @throws E_OTS_OutOfBuffer When there is read attemp after end of packet stream.
@@ -169,11 +169,11 @@ class OTS_ServerInfo
 
 /**
  * Checks player online status.
- * 
+ *
  * <p>
  * This method uses binary info protocol.
  * </p>
- * 
+ *
  * @param string $name Player name.
  * @return bool True if player is online, false if player or server is online.
  * @throws E_OTS_OutOfBuffer When there is read attemp after end of packet stream.
@@ -204,7 +204,7 @@ class OTS_ServerInfo
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @param string $name Property name.
  * @param mixed $value Property value.
  * @throws OutOfBoundsException For non-supported properties.
@@ -227,5 +227,3 @@ class OTS_ServerInfo
 }
 
 /**#@-*/
-
-?>

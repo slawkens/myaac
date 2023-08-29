@@ -113,5 +113,3 @@ class OTS_Toolbox
 }
 
 /**#@-*/
-
-?>

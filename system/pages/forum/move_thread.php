@@ -10,18 +10,22 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-require __DIR__ . '/base.php';
+$ret = require __DIR__ . '/base.php';
+if ($ret === false) {
+	return;
+}
 
 if(!Forum::isModerator()) {
 	echo 'You are not logged in or you are not moderator.';
 }
 
-$save = isset($_REQUEST['save']) ? (int)$_REQUEST['save'] == 1 : false;
+$save = isset($_REQUEST['save']) && (int)$_REQUEST['save'] == 1;
 if($save) {
 	$post_id = (int)$_REQUEST['id'];
 	$board = (int)$_REQUEST['section'];
 	if(!Forum::hasAccess($board)) {
-		echo "You don't have access to this board.";
+		$errors[] = "You don't have access to this board.";
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
 		return;
 	}
 
@@ -33,8 +37,10 @@ if($save) {
 			header('Location: ' . getForumBoardLink($nPost['section']));
 		}
 	}
-	else
-		echo 'Post with ID ' . $post_id . ' does not exist.';
+	else {
+		$errors[] = 'Post with ID ' . $post_id . ' does not exist.';
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
 else {
 	$post_id = (int)$_REQUEST['id'];
@@ -60,7 +66,8 @@ else {
 			));
 		}
 	}
-	else
-		echo 'Post with ID ' . $post_id . ' does not exist.';
+	else {
+		$errors[] = 'Post with ID ' . $post_id . ' does not exist.';
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
-?>

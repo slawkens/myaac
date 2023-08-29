@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Weapon;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Weapons {
@@ -15,10 +18,10 @@ class Weapons {
 
 	public static function loadFromXML($show = false)
 	{
-		global $config, $db;
+		global $config;
 
 		try {
-			$db->exec("DELETE FROM `myaac_weapons`;");
+			Weapon::query()->delete();
 		} catch (PDOException $error) {
 		}
 
@@ -45,7 +48,7 @@ class Weapons {
 	}
 
 	public static function parseNode($node, $show = false) {
-		global $config, $db;
+		global $config;
 
 		$id = (int)$node->getAttribute('id');
 		$vocations_ids = array_flip($config['vocations']);
@@ -64,14 +67,15 @@ class Weapons {
 			$vocations[$voc_id] = strlen($show) == 0 || $show != '0';
 		}
 
-		$exist = $db->query('SELECT `id` FROM `' . TABLE_PREFIX . 'weapons` WHERE `id` = ' . $id);
-		if($exist->rowCount() > 0) {
+		if(Weapon::find($id)) {
 			if($show) {
 				warning('Duplicated weapon with id: ' . $id);
 			}
 		}
 		else {
-			$db->insert(TABLE_PREFIX . 'weapons', array('id' => $id, 'level' => $level, 'maglevel' => $maglevel, 'vocations' => json_encode($vocations)));
+			Weapon::create([
+				'id' => $id, 'level' => $level, 'maglevel' => $maglevel, 'vocations' => json_encode($vocations)
+			]);
 		}
 	}
 

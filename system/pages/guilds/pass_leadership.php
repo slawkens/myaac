@@ -36,6 +36,8 @@ if(empty($guild_errors)) {
 			$to_player->find($pass_to);
 			if(!$to_player->isLoaded()) {
 				$guild_errors2[] = 'Player with name <b>'.$pass_to.'</b> doesn\'t exist.';
+			} else if ($to_player->isDeleted()) {
+				$guild_errors2[] = "Character with name <b>$pass_to</b> has been deleted.";
 			}
 
 			if(empty($guild_errors2)) {
@@ -117,5 +119,3 @@ if(!empty($guild_errors)) {
 
 	echo '<br/><div style="text-align:center"><form action="?subtopic=guilds" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }
-
-?>

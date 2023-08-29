@@ -35,7 +35,7 @@ if(empty($recovery_key))
 	$account_registered = '<b><span style="color: red">No</span></b>';
 else
 {
-	if($config['generate_new_reckey'] && $config['mail_enabled'])
+	if(setting('core.account_generate_new_reckey') && setting('core.mail_enabled'))
 		$account_registered = '<b><span style="color: green">Yes ( <a href="' . getLink('account/register/new') . '"> Buy new Recovery Key </a> )</span></b>';
 	else
 		$account_registered = '<b><span style="color: green">Yes</span></b>';
@@ -86,7 +86,7 @@ $twig->display('account.management.html.twig', array(
 	'email_request' => $email_request,
 	'email_new_time' => $email_new_time,
 	'email_new' => isset($email_new) ? $email_new : '',
-	'account' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId(),
+	'account' => (USE_ACCOUNT_NAME ? $account_logged->getName() : (USE_ACCOUNT_NUMBER ? $account_logged->getNumber() : $account_logged->getId())),
 	'account_email' => $account_email,
 	'account_created' => $account_created,
 	'account_status' => $account_status,

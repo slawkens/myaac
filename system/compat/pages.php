@@ -10,6 +10,10 @@
 defined('MYAAC') or die('Direct access not allowed!');
 switch($page)
 {
+	case 'adminpanel':
+		header('Location: ' . ADMIN_URL);
+		die;
+
 	case 'createaccount':
 		$page = 'account/create';
 		break;
@@ -30,6 +34,7 @@ switch($page)
 		$page = 'news';
 		break;
 
+	case 'archive':
 	case 'newsarchive':
 		$page = 'news/archive';
 		break;

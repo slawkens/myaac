@@ -8,4 +8,3 @@ if(!$db->hasColumn(TABLE_PREFIX . 'forum_boards', 'guild')) {
 if(!$db->hasColumn(TABLE_PREFIX . 'forum_boards', 'access')) {
 	$db->query("ALTER TABLE `" . TABLE_PREFIX . "forum_boards` ADD `access` TINYINT(1) NOT NULL DEFAULT 0 AFTER `guild`;");
 }
-?>

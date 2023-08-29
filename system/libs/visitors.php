@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Visitor;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 class Visitors
@@ -34,10 +37,12 @@ class Visitors
 		$this->cleanVisitors();
 
 		$ip = $_SERVER['REMOTE_ADDR'];
+		$userAgentShortened = substr($_SERVER['HTTP_USER_AGENT'] ?? 'unknown', 0, 255);
+
 		if($this->visitorExists($ip))
-			$this->updateVisitor($ip, $_SERVER['REQUEST_URI']);
+			$this->updateVisitor($ip, $_SERVER['REQUEST_URI'], $userAgentShortened);
 		else
-			$this->addVisitor($ip, $_SERVER['REQUEST_URI']);
+			$this->addVisitor($ip, $_SERVER['REQUEST_URI'], $userAgentShortened);
 	}
 
 	public function __destruct()
@@ -52,9 +57,7 @@ class Visitors
 			return isset($this->data[$ip]);
 		}
 
-		global $db;
-		$users = $db->query('SELECT COUNT(`ip`) as count FROM `' . TABLE_PREFIX . 'visitors' . '` WHERE ' . $db->fieldName('ip') . ' = ' . $db->quote($ip))->fetch();
-		return ($users['count'] > 0);
+		return Visitor::where('ip', $ip)->exists();
 	}
 
 	private function cleanVisitors()
@@ -71,30 +74,27 @@ class Visitors
 			return;
 		}
 
-		global $db;
-		$db->exec('DELETE FROM ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' WHERE ' . $db->fieldName('lastvisit') . ' < ' . (time() - $this->sessionTime * 60));
+		Visitor::where('lastvisit', '<', (time() - $this->sessionTime * 60))->delete();
 	}
 
-	private function updateVisitor($ip, $page)
+	private function updateVisitor($ip, $page, $userAgent)
 	{
 		if($this->cacheEnabled) {
-			$this->data[$ip] = array('page' => $page, 'lastvisit' => time());
+			$this->data[$ip] = array('page' => $page, 'lastvisit' => time(), 'user_agent' => $userAgent);
 			return;
 		}
 
-		global $db;
-		$db->exec('UPDATE ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' SET ' . $db->fieldName('lastvisit') . ' = ' . time() . ', ' . $db->fieldName('page') . ' = ' . $db->quote($page) . ' WHERE ' . $db->fieldName('ip') . ' = ' . $db->quote($ip));
+		Visitor::where('ip', $ip)->update(['lastvisit' => time(), 'page' => $page, 'user_agent' => $userAgent]);
 	}
 
-	private function addVisitor($ip, $page)
+	private function addVisitor($ip, $page, $userAgent)
 	{
 		if($this->cacheEnabled) {
-			$this->data[$ip] = array('page' => $page, 'lastvisit' => time());
+			$this->data[$ip] = array('page' => $page, 'lastvisit' => time(), 'user_agent' => $userAgent);
 			return;
 		}
 
-		global $db;
-		$db->exec('INSERT INTO ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' (' . $db->fieldName('ip') . ' ,' . $db->fieldName('lastvisit') . ', ' . $db->fieldName('page') . ') VALUE (' . $db->quote($ip) . ', ' . time() . ', ' . $db->quote($page) . ')');
+		Visitor::create(['ip' => $ip, 'lastvisit' => time(), 'page' => $page, 'user_agent' => $userAgent]);
 	}
 
 	public function getVisitors()
@@ -106,8 +106,7 @@ class Visitors
 			return $this->data;
 		}
 
-		global $db;
-		return $db->query('SELECT ' . $db->fieldName('ip') . ', ' . $db->fieldName('lastvisit') . ', ' . $db->fieldName('page') . ' FROM ' . $db->tableName(TABLE_PREFIX . 'visitors') . ' ORDER BY ' . $db->fieldName('lastvisit') . ' DESC')->fetchAll();
+		return Visitor::orderByDesc('lastvisit')->get()->toArray();
 	}
 
 	public function getAmountVisitors()
@@ -116,9 +115,7 @@ class Visitors
 			return count($this->data);
 		}
 
-		global $db;
-		$users = $db->query('SELECT COUNT(`ip`) as count FROM `' . TABLE_PREFIX . 'visitors`')->fetch();
-		return $users['count'];
+		return Visitor::count();
 	}
 
 	public function show() {

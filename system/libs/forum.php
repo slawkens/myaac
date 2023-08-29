@@ -10,13 +10,13 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-$configForumTablePrefix = config('forum_table_prefix');
-if(null !== $configForumTablePrefix && !empty(trim($configForumTablePrefix))) {
-	if(!in_array($configForumTablePrefix, array('myaac_', 'z_'))) {
+$settingForumTablePrefix = setting('core.forum_table_prefix');
+if(null !== $settingForumTablePrefix && !empty(trim($settingForumTablePrefix))) {
+	if(!in_array($settingForumTablePrefix, array('myaac_', 'z_'))) {
 		throw new RuntimeException('Invalid value for forum_table_prefix in config.php. Can be only: "myaac_" or "z_".');
 	}
 
-	define('FORUM_TABLE_PREFIX', $configForumTablePrefix);
+	define('FORUM_TABLE_PREFIX', $settingForumTablePrefix);
 }
 else {
 	if($db->hasTable('z_forum')) {
@@ -47,7 +47,7 @@ class Forum
 		return
 			$db->query(
 				'SELECT `id` FROM `players` WHERE `account_id` = ' . $db->quote($account->getId()) .
-				' AND `level` >= ' . $db->quote($config['forum_level_required']) .
+				' AND `level` >= ' . $db->quote(setting('core.forum_level_required')) .
 				' LIMIT 1')->rowCount() > 0;
 	}
 
