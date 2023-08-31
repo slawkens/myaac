@@ -1048,8 +1048,9 @@ Sent by MyAAC,<br/>
 			'default' => true,
 		],
 		'highscores_country_box' => [ // not implemented yet
+			'hidden' => true,
 			'name' => 'Display Country Box',
-			'type' => 'hidden',
+			'type' => 'boolean',
 			'desc' => 'Show player outfit?',
 			'default' => false,
 		],
