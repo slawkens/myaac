@@ -2,6 +2,8 @@
 
 use MyAAC\Models\BoostedCreature;
 use MyAAC\Models\PlayerOnline;
+use MyAAC\Models\Account;
+use MyAAC\Models\Player;
 
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';
