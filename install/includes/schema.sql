@@ -127,11 +127,6 @@ CREATE TABLE `myaac_menu`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-/* MENU_CATEGORY_SHOP tibiacom */
-INSERT INTO `myaac_menu` (`template`, `name`, `link`, `category`, `ordering`) VALUES ('tibiacom', 'Buy Points', 'points', 6, 0);
-INSERT INTO `myaac_menu` (`template`, `name`, `link`, `category`, `ordering`) VALUES ('tibiacom', 'Shop Offer', 'gifts', 6, 1);
-INSERT INTO `myaac_menu` (`template`, `name`, `link`, `category`, `ordering`) VALUES ('tibiacom', 'Shop History', 'gifts/history', 6, 2);
-
 CREATE TABLE `myaac_monsters` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`hidden` tinyint(1) NOT NULL default 0,
