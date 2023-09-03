@@ -52,9 +52,8 @@
 				});
 			});
 		</script>
-		{{ generateLink('?creatures', 'All', false)|raw }} - <a href="?subtopic=creatures&boss=view">Bosses</a>
-		<div style="float: right;"><input id="cSearch" type="text" placeholder="Search.."></div>
-		<table width="100%">
+		{{ generateLink(getLink('creatures'), 'All', false)|raw }} - <a href="?subtopic=creatures&boss=view">Bosses</a>
+		<table width="100%" id="creaturestb">
 			<thead>
 			<tr>
 				<th>Name</th>
@@ -83,7 +82,15 @@
 			</tbody>
 		</table>
 	{% endif %}
-	<script src="tools/js/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#creaturestb').DataTable();
+		});
+
+	</script>
+
+	<script src="tools/js/datatables.min.js"></script>
+	<link rel="stylesheet" href="tools/css/datatables.min.css">
 {% else %}
 	<table width="100%">
 		<tr>
