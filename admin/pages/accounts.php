@@ -267,6 +267,9 @@ else if (isset($_REQUEST['search'])) {
 							<a class="nav-link active" id="accounts-acc-tab" data-toggle="pill" href="#accounts-acc">Account</a>
 						</li>
 						<li class="nav-item">
+							<a class="nav-link" id="accounts-logs-tab" data-toggle="pill" href="#accounts-logs">Logs</a>
+						</li>
+						<li class="nav-item">
 							<a class="nav-link" id="accounts-chars-tab" data-toggle="pill" href="#accounts-chars">Characters</a>
 						</li>
 						<?php if ($db->hasTable('bans')) : ?>
@@ -422,6 +425,34 @@ else if (isset($_REQUEST['search'])) {
 								<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> Update</button>
 								<a href="<?php echo ADMIN_URL; ?>?p=accounts" class="btn btn-danger float-right"><i class="fas fa-cancel"></i> Cancel</a>
 							</form>
+						</div>
+						<div class="tab-pane fade" id="accounts-logs">
+							<div class="row">
+								<table class="table table-striped table-condensed table-responsive d-md-table">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Date</th>
+											<th>Action</th>
+											<th>IP</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php
+											$accountActions = \MyAAC\Models\AccountAction::where('account_id', $account->getId())->orderByDesc('date')->get();
+											foreach ($accountActions as $i => $log):
+												$log->ip = ($log->ip != 0 ? long2ip($log->ip) : inet_ntop($log->ipv6));
+												?>
+											<tr>
+												<td><?php echo $i + 1; ?></td>
+												<td><?= date("M d Y, H:i:s", $log->date); ?></td>
+												<td><?= $log->action; ?></td>
+												<td><?= $log->ip; ?></td>
+											</tr>
+											<?php endforeach; ?>
+									</tbody>
+								</table>
+							</div>
 						</div>
 						<div class="tab-pane fade" id="accounts-chars">
 							<div class="row">
