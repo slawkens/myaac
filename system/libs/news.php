@@ -78,12 +78,14 @@ class News
 		if(isset($id))
 		{
 			$row = ModelsNews::find($id);
-			if($row)
+			if($row) {
 				if (!$row->delete()) {
 					$errors[] = 'Fail during delete News.';
 				}
-			else
+			}
+			else {
 				$errors[] = 'News with id ' . $id . ' does not exists.';
+			}
 		}
 		else
 			$errors[] = 'News id not set.';
