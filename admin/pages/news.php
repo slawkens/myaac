@@ -23,10 +23,10 @@ if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 header('X-XSS-Protection:0');
 
 // some constants, used mainly by database (cannot by modified without schema changes)
-define('NEWS_TITLE_LIMIT', 100);
-define('NEWS_BODY_LIMIT', 65535); // maximum news body length
-define('ARTICLE_TEXT_LIMIT', 300);
-define('ARTICLE_IMAGE_LIMIT', 100);
+const NEWS_TITLE_LIMIT = 100;
+const NEWS_BODY_LIMIT = 65535; // maximum news body length
+const ARTICLE_TEXT_LIMIT = 300;
+const ARTICLE_IMAGE_LIMIT = 100;
 
 $name = $p_title = '';
 if(!empty($action))
@@ -52,12 +52,12 @@ if(!empty($action))
 			$p_title = $body = $comments = $article_text = $article_image = '';
 			$type = $category = $player_id = 0;
 
-			success("Added successful.");
+			success('Added successful.');
 		}
 	}
 	else if($action == 'delete') {
 		if (News::delete($id, $errors)) {
-			success("Deleted successful.");
+			success('Deleted successful.');
 		}
 	}
 	else if($action == 'edit')
@@ -83,7 +83,7 @@ if(!empty($action))
 				$action = $p_title = $body = $comments = $article_text = $article_image = '';
 				$type = $category = $player_id = 0;
 
-				success("Updated successful.");
+				success('Updated successful.');
 			}
 		}
 	}
