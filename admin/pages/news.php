@@ -56,8 +56,9 @@ if(!empty($action))
 		}
 	}
 	else if($action == 'delete') {
-		News::delete($id, $errors);
-		success("Deleted successful.");
+		if (News::delete($id, $errors)) {
+			success("Deleted successful.");
+		}
 	}
 	else if($action == 'edit')
 	{

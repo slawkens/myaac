@@ -75,8 +75,7 @@ class News
 
 	static public function delete($id, &$errors)
 	{
-		if(isset($id))
-		{
+		if(isset($id)) {
 			$row = ModelsNews::find($id);
 			if($row) {
 				if (!$row->delete()) {
@@ -87,8 +86,9 @@ class News
 				$errors[] = 'News with id ' . $id . ' does not exists.';
 			}
 		}
-		else
+		else {
 			$errors[] = 'News id not set.';
+		}
 
 		if(count($errors)) {
 			return false;
