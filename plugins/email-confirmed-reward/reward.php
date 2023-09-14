@@ -4,12 +4,12 @@ defined('MYAAC') or die('Direct access not allowed!');
 $reward = config('account_mail_confirmed_reward');
 
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
-if ($reward['coins'] > 0 && $hasCoinsColumn) {
+if ($reward['coins'] > 0 && !$hasCoinsColumn) {
 	log_append('email_confirm_error.log', 'accounts.coins column does not exist.');
 }
 
 if (!isset($account) || !$account->isLoaded()) {
-	log_append('email_confirm_error.log', 'Account not loaded.');
+	//log_append('email_confirm_error.log', 'Account not loaded.');
 	return;
 }
 
