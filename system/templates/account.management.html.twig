@@ -68,6 +68,7 @@
 		<div style="text-align:center">
 			You can register your account for increased protection. Click on "Register Account" and get your free recovery key today!<br/>
 			<form action="{{ getLink('account/register') }}" method="post">
+				{{ csrf() }}
 				{% set button_name = 'Register Account' %}
 				{% include('buttons.base.html.twig') %}
 			</form>
@@ -80,6 +81,7 @@
 				A request has been submitted to change the email address of this account to <b>{{ email_new }}</b>. After <b>{{ email_new_time|date("j F Y, G:i:s") }}</b> you can accept the new email address and finish the process. Please cancel the request if you do not want your email address to be changed! Also cancel the request if you have no access to the new email address!
 
 				<form action="{{ getLink('account/email') }}" method="post">
+					{{ csrf() }}
 					{% set button_name = 'Edit' %}
 					{% include('buttons.base.html.twig') %}
 				</form>
@@ -99,6 +101,7 @@
 				<td style="width: 90px;">Email Address:</td>
 				<td>{{ account_email ~ email_change }}
 					<form action="{{ getLink('account/email') }}" method="post">
+						{{ csrf() }}
 						{% set button_name = 'Change Email' %}
 						{% include('buttons.base.html.twig') %}
 					</form>
@@ -137,6 +140,7 @@
 			</tr>
 		</table>
 		<form action="{{ getLink('account/info') }}" method="post">
+			{{ csrf() }}
 			{% set button_name = 'Change Info' %}
 			{% include('buttons.base.html.twig') %}
 		</form>
@@ -188,6 +192,7 @@
 			<tr>
 				<td>
 					<form action="{{ getLink('account/character/create') }}" method="post" >
+						{{ csrf() }}
 						{% set button_name = 'Create Character' %}
 						{% include('buttons.base.html.twig') %}
 					</form>
@@ -195,6 +200,7 @@
 				{% if setting('core.account_change_character_name') %}
 				<td>
 					<form action="{{ getLink('account/character/name') }}" method="post" >
+						{{ csrf() }}
 						{% set button_name = 'Change Name' %}
 						{% include('buttons.base.html.twig') %}
 					</form>
@@ -203,6 +209,7 @@
 				{% if setting('core.account_change_character_sex') %}
 				<td>
 					<form action="{{ getLink('account/character/sex') }}" method="post" >
+						{{ csrf() }}
 						{% set button_name = 'Change Sex' %}
 						{% include('buttons.base.html.twig') %}
 					</form>
@@ -210,6 +217,7 @@
 				{% endif %}
 				<td>
 					<form action="{{ getLink('account/character/delete') }}" method="post">
+						{{ csrf() }}
 						{% set button_name = 'Delete Character' %}
 						{% include('buttons.base.html.twig') %}
 					</form>

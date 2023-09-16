@@ -1,4 +1,5 @@
 <form action="?" method="post">
+	{{ csrf() }}
 	<input type="hidden" name="action" value="new_thread" />
 	<input type="hidden" name="section_id" value="{{ section_id }}" />
 	<input type="hidden" name="subtopic" value="forum" />

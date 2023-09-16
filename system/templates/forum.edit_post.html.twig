@@ -1,5 +1,6 @@
 <br/>
 <form action="{{ getLink('forum') }}" method="post">
+	{{ csrf() }}
 	<input type="hidden" name="action" value="edit_post" />
 	<input type="hidden" name="id" value="{{ post_id }}" />
 	<input type="hidden" name="save" value="save" />

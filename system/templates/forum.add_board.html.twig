@@ -1,4 +1,5 @@
 <form method="post" action="{{ link }}">
+	{{ csrf() }}
 	{% if action == 'edit_board' %}
 	<input type="hidden" name="id" value="{{ id }}" />
 	{% endif %}

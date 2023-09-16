@@ -9,11 +9,14 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'News Panel';
+
+csrfProtect();
+
+$use_datatable = true;
+
 require_once LIBS . 'forum.php';
 require_once LIBS . 'news.php';
-
-$title = 'News Panel';
-$use_datatable = true;
 
 if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 	echo 'Access denied.';

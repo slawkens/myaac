@@ -8,6 +8,7 @@
 	<tr bgcolor="{{ config.darkborder }}">
 		<td>
 			<form action="?subtopic=guilds&action=accept_invite&guild={{ guild_name }}&todo=save" method="post">
+				{{ csrf() }}
 				{% set i = 0 %}
 				{% for player in invited_players %}
 				<input type="radio" name="name" id="name_{{ i }}" value="{{ player }}" /><label for="name_{{ i }}">{{ player }}</label>
@@ -24,6 +25,7 @@
 		<tr>
 			<td>
 				<form action="{{ getLink('guilds') ~ '/' ~ guild_name }}" method="post">
+					{{ csrf() }}
 					{{ include('buttons.back.html.twig') }}
 				</form>
 			</td>

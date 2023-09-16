@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\CsrfToken;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 if(!isset($config['installed']) || !$config['installed']) {
@@ -131,6 +134,12 @@ require SYSTEM . 'migrate.php';
 require_once LIBS . 'Settings.php';
 $settings = Settings::getInstance();
 $settings->load();
+
+// csrf protection
+$token = getSession('csrf_token');
+if (!isset($token)) {
+	CsrfToken::generate();
+}
 
 // deprecated config values
 require_once SYSTEM . 'compat/config.php';

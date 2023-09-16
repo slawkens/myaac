@@ -9,6 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\CsrfToken;
 use MyAAC\Models\Config;
 use MyAAC\Models\Guild;
 use MyAAC\Models\House;
@@ -1043,6 +1044,28 @@ function getSession($key) {
 }
 function unsetSession($key) {
 	unset($_SESSION[setting('core.session_prefix') . $key]);
+}
+
+function csrf(): void {
+	CsrfToken::create();
+}
+
+function csrfToken(): string {
+	return CsrfToken::get();
+}
+
+function isValidToken(): bool {
+	$token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
+	return ($_SERVER['REQUEST_METHOD'] !== 'POST' || (isset($token) && CsrfToken::isValid($token)));
+}
+
+function csrfProtect(): void
+{
+	if (!isValidToken()) {
+		$lastUri = BASE_URL . str_replace_first('/', '', getSession('last_uri'));
+		echo 'Request has been cancelled due to security reasons - token is invalid. Go <a href="' . $lastUri . '">back</a>';
+		exit();
+	}
 }
 
 function getTopPlayers($limit = 5) {

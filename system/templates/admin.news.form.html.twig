@@ -4,6 +4,7 @@
 			<h5 class="m-0">{% if action == 'edit' %}Edit{% else %}Add{% endif %} news</h5>
 		</div>
 		<form id="form" role="form" method="post" action="{{ news_link_form }}">
+			{{ csrf() }}
 			<div class="card-body " id="page-edit-table">
 				{% if action == 'edit' %}
 					<input type="hidden" name="id" value="{{ news_id }}"/>

@@ -1,6 +1,7 @@
 Here you can see and edit the information about your character.<br/>
 If you do not want to specify a certain field, just leave it blank.<br/><br/>
 <form action="{{ getLink('account/character/comment') }}" method="post">
+	{{ csrf() }}
 	<div class="TableContainer" >
 		<table class="Table5" cellpadding="0" cellspacing="0">
 			<div class="CaptionContainer">
@@ -99,6 +100,7 @@ If you do not want to specify a certain field, just leave it blank.<br/><br/>
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
 					<form action="{{ getLink('account/manage') }}" method="post">
+						{{ csrf() }}
 						<tr>
 							<td style="border:0px;">
 								{{ include('buttons.back.html.twig') }}

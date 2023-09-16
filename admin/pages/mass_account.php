@@ -16,6 +16,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Mass Account Actions';
 
+csrfProtect();
+
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
 $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $freePremium = $config['lua']['freePremium'];

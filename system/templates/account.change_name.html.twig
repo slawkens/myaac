@@ -1,6 +1,7 @@
 To change a name of character select player and choose a new name.<br/>
 <span style="color: red">Change name cost {{ setting('core.account_change_character_name_price') }} premium points. You have {{ points }} premium points.</span><br/><br/>
 <form action="{{ getLink('account/character/name') }}" method="post">
+	{{ csrf() }}
 	<input type="hidden" name="changenamesave" value="1">
 	<div class="TableContainer">
 		<table class="Table1" cellpadding="0" cellspacing="0">
@@ -64,6 +65,7 @@ To change a name of character select player and choose a new name.<br/>
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
 					<form action="{{ getLink('account/manage') }}" method="post">
+						{{ csrf() }}
 						<tr>
 							<td style="border:0px;">
 								{{ include('buttons.back.html.twig') }}

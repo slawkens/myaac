@@ -13,6 +13,8 @@ use MyAAC\Models\Menu;
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Menus';
 
+csrfProtect();
+
 if (!hasFlag(FLAG_CONTENT_MENUS) && !superAdmin()) {
 	echo 'Access denied.';
 	return;
@@ -93,6 +95,7 @@ if (isset($_REQUEST['template'])) {
 		</p>
 		<?php if (isset($config['menu_default_color'])) {?>
 		<form method="post" action="?p=menus&reset_colors" onsubmit="return confirm('Do you really want to reset colors?');">
+			<?php csrf(); ?>
 			<input type="hidden" name="template" value="<?php echo $template ?>"/>
 			<button type="submit" class="btn btn-danger">Reset Colors to default</button>
 		</form>
@@ -112,6 +115,7 @@ if (isset($_REQUEST['template'])) {
 	$last_id = array();
 	?>
 	<form method="post" id="menus-form" action="?p=menus">
+		<?php csrf(); ?>
 		<input type="hidden" name="template" value="<?php echo $template ?>"/>
 		<button type="submit" class="btn btn-info">Save</button><br/><br/>
 		<div class="row">

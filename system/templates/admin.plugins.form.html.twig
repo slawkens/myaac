@@ -4,6 +4,7 @@
 			<h5 class="m-0">Install plugin</h5>
 		</div>
 		<form enctype="multipart/form-data" method="post" action="{{ constant('ADMIN_URL') }}?p=plugins">
+			{{ csrf() }}
 			<div class="card-body">
 				<input type="hidden" name="upload_plugin"/>
 

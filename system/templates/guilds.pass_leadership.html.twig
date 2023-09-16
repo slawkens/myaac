@@ -20,6 +20,7 @@
 						<tr>
 							<td>Pass leadership to: </b><br>
 								<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=pass_leadership" method="post">
+									{{ csrf() }}
 									<input type="hidden" name="todo" value="save"/>
 									<input type="text" size="40" name="player"/>
 									<input type="submit" value="Save">
@@ -35,6 +36,7 @@
 <br/>
 <div style="text-align:center">
 	<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=manager" method="post">
+		{{ csrf() }}
 		{{ include('buttons.back.html.twig') }}
 	</form>
 </div>

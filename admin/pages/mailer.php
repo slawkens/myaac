@@ -10,6 +10,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Mailer';
 
+csrfProtect();
+
 if (!hasFlag(FLAG_CONTENT_MAILER) && !superAdmin()) {
 	echo 'Access denied.';
 	return;

@@ -106,6 +106,7 @@
 							<td>{{ house.name ~ house.town ~ house.add }}</td>
 							<td>
 								<form action="?subtopic=houses&page=view" method="post">
+									{{ csrf() }}
 									<input type="hidden" name="house" value="{{ house.name }}">
 									<input type="image" name="View" alt="View" src="{{ template_path }}/images/global/buttons/sbutton_view.gif" border="0" width="120">
 								</form>
@@ -402,7 +403,8 @@
 				<td>{% if player.isOnline() %}<b><span style="color: green">Online</span></b>{% endif %}</td>
 				<td>
 					<table border="0" cellspacing="0" cellpadding="0">
-						<form action="{{ getLink('characters') }}" method=post>
+						<form action="{{ getLink('characters') }}" method="post">
+							{{ csrf() }}
 							<tr>
 								<td>
 									<input type="hidden" name="name" value="{{ player.getName() }}"/>

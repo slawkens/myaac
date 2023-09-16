@@ -1,6 +1,7 @@
 <div class="col-12 col-md-6">
 	<div class="card card-warning card-outline">
 		<form action="?p=dashboard&maintenance" method="post" class="form-horizontal">
+			{{ csrf() }}
 			<div class="card-header">
 				<span class="m-0">Website Status<span class="float-right">
 				<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">

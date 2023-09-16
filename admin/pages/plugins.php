@@ -9,6 +9,9 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Plugin manager';
+
+csrfProtect();
+
 $use_datatable = true;
 
 require_once LIBS . 'plugins.php';

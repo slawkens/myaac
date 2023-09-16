@@ -6,6 +6,7 @@
 				<h5 class="m-0">Give Premium Points</h5>
 			</div>
 			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_account">
+				{{ csrf() }}
 				<div class="card-body">
 					<div class="form-group">
 						<label>Premium Points</label>
@@ -28,6 +29,7 @@
 				<h5 class="m-0">Give Coins</h5>
 			</div>
 			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_account">
+				{{ csrf() }}
 				<div class="card-body">
 					<div class="form-group">
 						<label>Coins</label>
@@ -50,6 +52,7 @@
 				<h5 class="m-0">Give Premium Days</h5>
 			</div>
 			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_account">
+				{{ csrf() }}
 				<div class="card-body">
 					<div class="form-group">
 						<label>Premium Days</label>

@@ -13,6 +13,9 @@ use MyAAC\Models\Player;
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Account editor';
+
+csrfProtect();
+
 $admin_base = ADMIN_URL . '?p=accounts';
 $use_datatable = true;
 
@@ -289,6 +292,7 @@ else if (isset($_REQUEST['search'])) {
 					<div class="tab-content" id="accounts-tabContent">
 						<div class="tab-pane fade active show" id="accounts-acc">
 							<form action="<?php echo $admin_base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post">
+								<?php csrf(); ?>
 								<div class="form-group row">
 									<?php if (USE_ACCOUNT_NAME): ?>
 										<div class="col-12 col-sm-12 col-lg-4">
@@ -581,6 +585,7 @@ else if (isset($_REQUEST['search'])) {
 				<div class="row">
 					<div class="col-6 col-lg-12">
 						<form action="<?php echo $admin_base; ?>" method="post">
+							<?php csrf(); ?>
 							<label for="name">Account Name:</label>
 							<div class="input-group input-group-sm">
 								<input type="text" class="form-control" name="search" value="<?php echo $search_account; ?>" maxlength="32" size="32">
@@ -590,6 +595,7 @@ else if (isset($_REQUEST['search'])) {
 					</div>
 					<div class="col-6 col-lg-12">
 						<form action="<?php echo $admin_base; ?>" method="post">
+							<?php csrf(); ?>
 							<label for="name">Account ID:</label>
 							<div class="input-group input-group-sm">
 								<input type="text" class="form-control" name="id" value="" maxlength="32" size="32">

@@ -1,5 +1,6 @@
 Please enter your password and the new email address. Make sure that you enter a valid email address which you have access to. <br/><b>For security reasons, the actual change will be finalised after a waiting period of {{ setting('core.account_mail_change') }} days.</b><br/><br/>
 <form action="{{ getLink('account/email') }}" method="post">
+	{{ csrf() }}
 <div class="TableContainer">
 	<table class="Table1" cellpadding="0" cellspacing="0">
 		<div class="CaptionContainer">
@@ -58,6 +59,7 @@ Please enter your password and the new email address. Make sure that you enter a
 		<td>
 			<table border="0" cellspacing="0" cellpadding="0">
 				<form action="{{ getLink('account/manage') }}" method="post">
+					{{ csrf() }}
 					<tr>
 						<td style="border:0px;">
 							{{ include('buttons.back.html.twig') }}

@@ -10,6 +10,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Dashboard';
 
+csrfProtect();
+
 if (isset($_GET['clear_cache'])) {
 	if (clearCache()) {
 		success('Cache cleared.');

@@ -13,12 +13,15 @@ use MyAAC\Models\Changelog as ModelsChangelog;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Changelog';
+
+csrfProtect();
+
 if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 	echo 'Access denied.';
 	return;
 }
 
-$title = 'Changelog';
 $use_datatable = true;
 const CL_LIMIT = 600; // maximum changelog body length
 ?>

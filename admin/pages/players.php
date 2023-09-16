@@ -13,6 +13,9 @@ use MyAAC\Models\Player;
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Player editor';
+
+csrfProtect();
+
 $player_base = ADMIN_URL . '?p=players';
 
 $use_datatable = true;
@@ -373,6 +376,7 @@ else if (isset($_REQUEST['search'])) {
 					</ul>
 				</div>
 				<form action="<?php echo $player_base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post">
+					<?php csrf(); ?>
 					<div class="card-body">
 						<div class="tab-content" id="tabs-tabContent">
 							<div class="tab-pane fade active show" id="tabs-home">
@@ -870,6 +874,7 @@ else if (isset($_REQUEST['search'])) {
 			<div class="card-body row">
 				<div class="col-6 col-lg-12">
 					<form action="<?php echo $player_base; ?>" method="post">
+						<?php csrf(); ?>
 						<label for="name">Player Name:</label>
 						<div class="input-group input-group-sm">
 							<input type="text" class="form-control" name="search" value="<?php echo $search_player; ?>" maxlength="32" size="32">
@@ -879,6 +884,7 @@ else if (isset($_REQUEST['search'])) {
 				</div>
 				<div class="col-6 col-lg-12">
 					<form action="<?php echo $player_base; ?>" method="post">
+						<?php csrf(); ?>
 						<label for="name">Player ID:</label>
 						<div class="input-group input-group-sm">
 							<input type="text" class="form-control" name="id" value="" maxlength="32" size="32">

@@ -16,6 +16,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Mass Teleport Actions';
 
+csrfProtect();
+
 function admin_teleport_position($x, $y, $z) {
 	if (!Player::query()->update([
 		'posx' => $x, 'posy' => $y, 'posz' => $z

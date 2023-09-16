@@ -61,6 +61,7 @@
 																			<tr>
 																				<td style="border:0;">
 																					<form action="{{ guild.link }}" method="post">
+																						{{ csrf() }}
 																						{{ include('buttons.view.html.twig') }}
 																					</form>
 																				</td>
@@ -82,11 +83,10 @@
 															<td>
 																<table border="0" cellpadding="0" cellspacing="0" width="100%">
 																	<form action="?subtopic=guilds&action=create" method="post">
-																		<form action="?subtopic=guilds&action=create" method="post">
-																			{% set button_name = 'Found Guild' %}
-																			{% set button_image = '_sbutton_foundguild' %}
-																			{% include('buttons.base.html.twig') %}
-																		</form>
+																		{{ csrf() }}
+																		{% set button_name = 'Found Guild' %}
+																		{% set button_image = '_sbutton_foundguild' %}
+																		{% include('buttons.base.html.twig') %}
 																	</form>
 																</table>
 															</td>
@@ -128,6 +128,7 @@
 						{% if logged %}
 						No guild found that suits your needs?
 						<form action="?subtopic=guilds&action=create" method="post">
+							{{ csrf() }}
 							{% set button_name = 'Found Guild' %}
 							{% set button_image = '_sbutton_foundguild' %}
 							{% include('buttons.base.html.twig') %}
@@ -136,6 +137,7 @@
 						<b>Before you can create a guild you must login.</b>
 						<br/>
 						<form action="?subtopic=accountmanagement&redirect={{ getLink('guilds') }}" method="post">
+							{{ csrf() }}
 							{% include('buttons.login.html.twig') %}
 						</form>
 						{% endif %}
