@@ -35,8 +35,6 @@ RUN echo "apc.enable=1" >> /usr/local/etc/php/php.ini
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN ls
-
 COPY docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # Create system user to run Composer Commands
@@ -44,7 +42,7 @@ COPY docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data.www-data /var/www
 
 USER $user
 
@@ -57,5 +55,5 @@ COPY docker/config.lua /home/$user/forgottenserver
 
 WORKDIR /var/www/html
 
-COPY . .
+COPY --chown=www-data:www-data . .
 RUN composer install

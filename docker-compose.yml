@@ -13,8 +13,8 @@ services:
     working_dir: /var/www/html
     depends_on:
       - db
-    volumes:
-      - ./:/var/www/html
+    #volumes:
+    #  - ./:/var/www/html
 
   db:
     image: mysql:8.0
