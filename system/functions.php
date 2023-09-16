@@ -1606,7 +1606,7 @@ function getGuildLogoById($id)
 
 	$guild = Guild::where('id', intval($id))->select('logo_name')->first();
 	if ($guild) {
-		$guildLogo = $query->logo_name;
+		$guildLogo = $guild->logo_name;
 
 		if (!empty($guildLogo) && file_exists(GUILD_IMAGES_DIR . $guildLogo)) {
 			$logo = $guildLogo;
