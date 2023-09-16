@@ -1451,7 +1451,7 @@ function echo_success($message)
 function echo_error($message)
 {
 	global $error;
-	echo '<div class="col-12 alert alert-error mb-2">' . $message . '</div>';
+	echo '<div class="col-12 alert alert-danger mb-2">' . $message . '</div>';
 	$error = true;
 }
 
