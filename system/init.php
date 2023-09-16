@@ -36,6 +36,11 @@ if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HT
 require_once SYSTEM . 'libs/cache.php';
 $cache = Cache::getInstance();
 
+// event system
+require_once SYSTEM . 'hooks.php';
+$hooks = new Hooks();
+$hooks->load();
+
 // twig
 require_once SYSTEM . 'twig.php';
 

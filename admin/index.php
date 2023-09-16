@@ -30,11 +30,6 @@ if(!$db->hasTable('myaac_account_actions')) {
 	throw new RuntimeException('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
 }
 
-// event system
-require_once SYSTEM . 'hooks.php';
-$hooks = new Hooks();
-$hooks->load();
-
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
 require __DIR__ . '/includes/functions.php';
