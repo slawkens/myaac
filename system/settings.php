@@ -1127,7 +1127,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Display Quests',
 			'type' => 'boolean',
 			'desc' => 'Show characters quests. Can be configured below',
-			'default' => true,
+			'default' => false,
 		],
 		'quests' => [
 			'name' => 'Quests List',

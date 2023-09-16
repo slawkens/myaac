@@ -1451,7 +1451,7 @@ function echo_success($message)
 function echo_error($message)
 {
 	global $error;
-	echo '<div class="col-12 alert alert-error mb-2">' . $message . '</div>';
+	echo '<div class="col-12 alert alert-danger mb-2">' . $message . '</div>';
 	$error = true;
 }
 
@@ -1606,7 +1606,7 @@ function getGuildLogoById($id)
 
 	$guild = Guild::where('id', intval($id))->select('logo_name')->first();
 	if ($guild) {
-		$guildLogo = $query->logo_name;
+		$guildLogo = $guild->logo_name;
 
 		if (!empty($guildLogo) && file_exists(GUILD_IMAGES_DIR . $guildLogo)) {
 			$logo = $guildLogo;

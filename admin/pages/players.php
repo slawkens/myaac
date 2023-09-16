@@ -390,8 +390,8 @@ else if (isset($_REQUEST['search'])) {
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="group">Group:</label>
 										<select name="group" id="group" class="form-control custom-select">
-											<?php foreach ($groups->getGroups() as $id => $group): ?>
-												<option value="<?php echo $id; ?>" <?php echo($player->getGroup()->getId() == $id ? 'selected' : ''); ?>><?php echo $group->getName(); ?></option>
+											<?php foreach ($groups->getGroups() as $_id => $group): ?>
+												<option value="<?php echo $_id; ?>" <?php echo($player->getGroup()->getId() == $_id ? 'selected' : ''); ?>><?php echo $group->getName(); ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>
@@ -399,8 +399,8 @@ else if (isset($_REQUEST['search'])) {
 										<label for="vocation">Vocation</label>
 										<select name="vocation" id="vocation" class="form-control custom-select">
 											<?php
-											foreach ($config['vocations'] as $id => $name) {
-												echo '<option value=' . $id . ($id == $player->getVocation() ? ' selected' : '') . '>' . $name . '</option>';
+											foreach ($config['vocations'] as $_id => $name) {
+												echo '<option value=' . $_id . ($_id == $player->getVocation() ? ' selected' : '') . '>' . $name . '</option>';
 											}
 											?>
 										</select>
@@ -410,8 +410,8 @@ else if (isset($_REQUEST['search'])) {
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="sex">Sex:</label>
 										<select name="sex" id="sex" class="form-control custom-select">>
-											<?php foreach ($config['genders'] as $id => $sex): ?>
-												<option value="<?php echo $id; ?>" <?php echo($player->getSex() == $id ? 'selected' : ''); ?>><?php echo strtolower($sex); ?></option>
+											<?php foreach ($config['genders'] as $_id => $sex): ?>
+												<option value="<?php echo $_id; ?>" <?php echo($player->getSex() == $_id ? 'selected' : ''); ?>><?php echo strtolower($sex); ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>
@@ -424,8 +424,8 @@ else if (isset($_REQUEST['search'])) {
 												$configTowns[$player->getTownId()] = 'Unknown Town';
 											}
 
-											foreach ($configTowns as $id => $town): ?>
-												<option value="<?php echo $id; ?>" <?php echo($player->getTownId() == $id ? 'selected' : ''); ?>><?php echo $town; ?></option>
+											foreach ($configTowns as $_id => $town): ?>
+												<option value="<?php echo $_id; ?>" <?php echo($player->getTownId() == $_id ? 'selected' : ''); ?>><?php echo $town; ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>
@@ -436,8 +436,8 @@ else if (isset($_REQUEST['search'])) {
 										<select name="skull" id="skull" class="form-control custom-select">
 											<?php
 
-											foreach ($skull_type as $id => $s_name) {
-												echo '<option value=' . $id . ($id == $player->getSkull() ? ' selected' : '') . '>' . $s_name . '</option>';
+											foreach ($skull_type as $_id => $s_name) {
+												echo '<option value=' . $_id . ($_id == $player->getSkull() ? ' selected' : '') . '>' . $s_name . '</option>';
 											}
 											?>
 										</select>
@@ -554,16 +554,16 @@ else if (isset($_REQUEST['search'])) {
 							</div>
 							<div class="tab-pane fade" id="tabs-skills">
 								<?php
-								foreach ($skills as $id => $info) {
+								foreach ($skills as $_id => $info) {
 									?>
 									<div class="form-group row">
 										<div class="col-12 col-sm-12 col-lg-6">
-											<?php echo '<label for="skills[' . $id . ']" class="control-label">' . $info[0] . '</label>
-									<input type="text" class="form-control" id="skills[' . $id . ']" name="skills[' . $id . ']" maxlength="10" autocomplete="off" value="' . $player->getSkill($id) . '"/>'; ?>
+											<?php echo '<label for="skills[' . $_id . ']" class="control-label">' . $info[0] . '</label>
+									<input type="text" class="form-control" id="skills[' . $_id . ']" name="skills[' . $_id . ']" maxlength="10" autocomplete="off" value="' . $player->getSkill($_id) . '"/>'; ?>
 										</div>
 										<div class="col-12 col-sm-12 col-lg-6">
-											<?php echo '<label for="skills_tries[' . $id . ']" class="control-label">' . $info[0] . ' tries</label>
-									<input type="text" class="form-control" id="skills_tries[' . $id . ']" name="skills_tries[' . $id . ']" maxlength="10" autocomplete="off" value="' . $player->getSkillTries($id) . '"/>'; ?>
+											<?php echo '<label for="skills_tries[' . $_id . ']" class="control-label">' . $info[0] . ' tries</label>
+									<input type="text" class="form-control" id="skills_tries[' . $_id . ']" name="skills_tries[' . $_id . ']" maxlength="10" autocomplete="off" value="' . $player->getSkillTries($_id) . '"/>'; ?>
 										</div>
 									</div>
 								<?php } ?>
@@ -622,7 +622,7 @@ else if (isset($_REQUEST['search'])) {
 										if ($outfitlist) { ?>
 											<select name="look_type" id="look_type" class="form-control custom-select">
 												<?php
-												foreach ($outfitlist as $id => $outfit) {
+												foreach ($outfitlist as $_id => $outfit) {
 													if ($outfit['enabled'] == 'yes') ;
 													echo '<option value=' . $outfit['id'] . ($outfit['id'] == $player->getLookType() ? ' selected' : '') . '>' . $outfit['name'] . ' - ' . ($outfit['type'] == 1 ? 'Male' : 'Female') . '</option>';
 												}
@@ -638,8 +638,8 @@ else if (isset($_REQUEST['search'])) {
 											<select name="look_addons" id="look_addons" class="form-control custom-select">
 												<?php
 												$addon_type = array("None", "First", "Second", "Both");
-												foreach ($addon_type as $id => $s_name) {
-													echo '<option value=' . $id . ($id == $player->getLookAddons() ? ' selected' : '') . '>' . $s_name . '</option>';
+												foreach ($addon_type as $_id => $s_name) {
+													echo '<option value=' . $_id . ($_id == $player->getLookAddons() ? ' selected' : '') . '>' . $s_name . '</option>';
 												}
 												?>
 											</select>
@@ -704,7 +704,7 @@ else if (isset($_REQUEST['search'])) {
 								<div class="form-group row">
 									<div class="col-12">
 										<label for="comment" class="control-label">Comment:</label>
-										<textarea class="form-control" name="comment" rows="10" cols="50" wrap="virtual"><?php echo $player->getCustomField("comment"); ?></textarea>
+										<textarea class="form-control" id="comment" name="comment" rows="10" cols="50" wrap="virtual"><?php echo $player->getCustomField("comment"); ?></textarea>
 										<small>[max. length: 2000 chars, 50 lines (ENTERs)]</small>
 									</div>
 								</div>
@@ -841,7 +841,7 @@ else if (isset($_REQUEST['search'])) {
 
 				<?php if($hasLookAddons): ?>
 				const $addonvalue = $('#look_addons');
-				$('#look_addons').on('change', () => {
+				$addonvalue.on('change', () => {
 					updateOutfit();
 				});
 				<?php endif; ?>
@@ -870,18 +870,18 @@ else if (isset($_REQUEST['search'])) {
 			<div class="card-body row">
 				<div class="col-6 col-lg-12">
 					<form action="<?php echo $player_base; ?>" method="post">
-						<label for="name">Player Name:</label>
+						<label for="search">Player Name:</label>
 						<div class="input-group input-group-sm">
-							<input type="text" class="form-control" name="search" value="<?php echo $search_player; ?>" maxlength="32" size="32">
+							<input type="text" class="form-control" id="search" name="search" value="<?= escapeHtml($search_player); ?>" maxlength="32" size="32">
 							<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
 						</div>
 					</form>
 				</div>
 				<div class="col-6 col-lg-12">
 					<form action="<?php echo $player_base; ?>" method="post">
-						<label for="name">Player ID:</label>
+						<label for="id">Player ID:</label>
 						<div class="input-group input-group-sm">
-							<input type="text" class="form-control" name="id" value="" maxlength="32" size="32">
+							<input type="text" class="form-control" id="id" name="id" value="<?= $id; ?>" maxlength="32" size="32">
 							<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
 						</div>
 					</form>
@@ -892,7 +892,7 @@ else if (isset($_REQUEST['search'])) {
 </div>
 
 <script>
-	$(document).ready(function () {
+	$(function () {
 		$('.player_datatable').DataTable({
 			"order": [[0, "asc"]]
 		});

@@ -14,8 +14,9 @@ CREATE TABLE `myaac_menu`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 ");
-
-	require_once LIBS . 'plugins.php';
-	Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
-	Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
 }
+
+require_once LIBS . 'plugins.php';
+Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
+Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
+
