@@ -28,7 +28,7 @@ if(isset($config['boxes']))
 		<?php
 			if(PAGE !== 'news') {
 				if(isset($_REQUEST['subtopic'])) {
-					$tmp = $_REQUEST['subtopic'];
+					$tmp = escapeHtml($_REQUEST['subtopic']);
 					if($tmp === 'accountmanagement') {
 						$tmp = 'accountmanage';
 					}
