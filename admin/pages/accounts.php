@@ -331,8 +331,8 @@ else if (isset($_REQUEST['search'])) {
 										<div class="col-12 col-sm-12 col-lg-6">
 											<label for="group">Account Type:</label>
 											<select name="group" id="group" class="form-control">
-												<?php foreach ($acc_type as $id => $a_type): ?>
-													<option value="<?php echo($id); ?>" <?php echo($acc_group == ($id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
+												<?php foreach ($acc_type as $_id => $a_type): ?>
+													<option value="<?php echo($_id); ?>" <?php echo($acc_group == ($_id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
 												<?php endforeach; ?>
 											</select>
 										</div>
@@ -342,8 +342,8 @@ else if (isset($_REQUEST['search'])) {
 										<div class="col-12 col-sm-12 col-lg-6">
 											<label for="group">Account Type:</label>
 											<select name="group" id="group" class="form-control">
-												<?php foreach ($groups->getGroups() as $id => $group): ?>
-													<option value="<?php echo $id; ?>" <?php echo($acc_group == $id ? 'selected' : ''); ?>><?php echo $group->getName(); ?></option>
+												<?php foreach ($groups->getGroups() as $_id => $group): ?>
+													<option value="<?php echo $_id; ?>" <?php echo($acc_group == $_id ? 'selected' : ''); ?>><?php echo $group->getName(); ?></option>
 												<?php endforeach; ?>
 											</select>
 										</div>
@@ -351,8 +351,8 @@ else if (isset($_REQUEST['search'])) {
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="web_flags">Website Access:</label>
 										<select name="web_flags" id="web_flags" class="form-control">
-											<?php foreach ($web_acc as $id => $a_type): ?>
-												<option value="<?php echo($id); ?>" <?php echo($account->getWebFlags() == ($id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
+											<?php foreach ($web_acc as $_id => $a_type): ?>
+												<option value="<?php echo($_id); ?>" <?php echo($account->getWebFlags() == ($_id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>
@@ -407,8 +407,8 @@ else if (isset($_REQUEST['search'])) {
 									<div class="col-12 col-sm-12 col-lg-4">
 										<label for="rl_country">Country:</label>
 										<select name="rl_country" id="rl_country" class="form-control">
-											<?php foreach ($countries as $id => $a_type): ?>
-												<option value="<?php echo($id); ?>" <?php echo($account->getCountry() == ($id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
+											<?php foreach ($countries as $_id => $a_type): ?>
+												<option value="<?php echo($_id); ?>" <?php echo($account->getCountry() == ($_id) ? 'selected' : ''); ?>><?php echo $a_type; ?></option>
 											<?php endforeach; ?>
 										</select>
 									</div>
@@ -586,9 +586,9 @@ else if (isset($_REQUEST['search'])) {
 					<div class="col-6 col-lg-12">
 						<form action="<?php echo $admin_base; ?>" method="post">
 							<?php csrf(); ?>
-							<label for="name">Account Name:</label>
+							<label for="search">Account Name:</label>
 							<div class="input-group input-group-sm">
-								<input type="text" class="form-control" name="search" value="<?php echo $search_account; ?>" maxlength="32" size="32">
+								<input type="text" class="form-control" id="search" name="search" value="<?= escapeHtml($search_account); ?>" maxlength="32" size="32">
 								<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
 							</div>
 						</form>
@@ -596,9 +596,9 @@ else if (isset($_REQUEST['search'])) {
 					<div class="col-6 col-lg-12">
 						<form action="<?php echo $admin_base; ?>" method="post">
 							<?php csrf(); ?>
-							<label for="name">Account ID:</label>
+							<label for="id">Account ID:</label>
 							<div class="input-group input-group-sm">
-								<input type="text" class="form-control" name="id" value="" maxlength="32" size="32">
+								<input type="text" class="form-control" id="id" name="id" value="<?= $id; ?>" maxlength="32" size="32">
 								<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
 							</div>
 						</form>
