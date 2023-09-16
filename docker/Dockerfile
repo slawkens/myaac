@@ -25,18 +25,22 @@ RUN docker-php-ext-install pdo pdo_mysql bcmath gd zip
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Create system user to run Composer Commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
+#RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-RUN cd /home/$user
-RUN git clone https://github.com/otland/forgottenserver.git
+RUN chown -R www-data:www-data /var/www
 
 USER $user
 
-# Set working directory
+WORKDIR /home/$user
+RUN git clone https://github.com/otland/forgottenserver.git
+
+COPY docker/config.lua /home/$user/forgottenserver
+
+#WORKDIR /home/$user/forgottenserver
+
 WORKDIR /var/www/html
 
-#RUN composer install
-
-
+COPY . .
+RUN composer install
