@@ -3,11 +3,11 @@
 ## [0.8.13 - 16.09.2023]
 
 ### Added
-* latest client versions to config
-* patching from develop - twig context for hooks
+* latest client versions to config (https://github.com/slawkens/myaac/commit/765886f0c782807400c429577cde5e45bd7c308f)
+* patching from develop - twig context for hooks (https://github.com/slawkens/myaac/commit/f1670f4012cc7595433fe0b1937c1f9b15a60b07)
 
 ### Fixed
-* fixed XSS vulnerability in some pages
+* fixed XSS vulnerability in some pages (https://github.com/slawkens/myaac/commit/5c3b01aca4f3cfe8abc86b8ce48194b2da87b808)
 
 Nothing more or less!
 
