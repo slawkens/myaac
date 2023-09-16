@@ -91,8 +91,9 @@ if(!empty($action))
 		}
 	}
 	else if($action == 'hide') {
-		News::toggleHidden($id, $errors, $status);
-		success(($status == 1 ? 'Show' : 'Hide') . " successful.");
+		if (News::toggleHidden($id, $errors, $status)) {
+			success(($status == 1 ? 'Show' : 'Hide') . ' successful.');
+		}
 	}
 
 	if(!empty($errors))

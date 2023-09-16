@@ -95,6 +95,7 @@ class Changelog
 				if (!$row->save()) {
 					$errors[] = 'Fail during toggle hidden Changelog.';
 				}
+				$status = $row->hidden;
 			} else {
 				$errors[] = 'Changelog with id ' . $id . ' does not exists.';
 			}

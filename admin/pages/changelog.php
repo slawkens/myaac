@@ -49,12 +49,13 @@ if(!empty($action))
 			$body = '';
 			$type = $where = $player_id = $create_date = 0;
 
-			success("Added successful.");
+			success('Added successful.');
 		}
 	}
 	else if($action == 'delete') {
-		Changelog::delete($id, $errors);
-		success("Deleted successful.");
+		if (Changelog::delete($id, $errors)) {
+			success('Deleted successful.');
+		}
 	}
 	else if($action == 'edit')
 	{
@@ -71,13 +72,14 @@ if(!empty($action))
 				$action = $body = '';
 				$type = $where = $player_id = $create_date = 0;
 
-				success("Updated successful.");
+				success('Updated successful.');
 			}
 		}
 	}
 	else if($action == 'hide') {
-		Changelog::toggleHidden($id, $errors, $status);
-		success(($status == 1 ? 'Show' : 'Hide') . " successful.");
+		if (Changelog::toggleHidden($id, $errors, $status)) {
+			success(($status == 1 ? 'Show' : 'Hide') . ' successful.');
+		}
 	}
 
 	if(!empty($errors))

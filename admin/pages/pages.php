@@ -89,8 +89,9 @@ if (!empty($action)) {
 			}
 		}
 	} else if ($action == 'hide') {
-		Pages::toggleHidden($id, $errors, $status);
-		success(($status == 1 ? 'Show' : 'Hide') . ' successful.');
+		if (Pages::toggleHidden($id, $errors, $status)) {
+			success(($status == 1 ? 'Show' : 'Hide') . ' successful.');
+		}
 	}
 
 	if (!empty($errors))
@@ -238,7 +239,9 @@ class Pages
 			$row = ModelsPages::find($id);
 			if ($row) {
 				$row->hidden = $row->hidden == 1 ? 0 : 1;
-				$row->save();
+				if (!$row->save()) {
+					$errors[] = 'Fail during toggle hidden Page.';
+				}
 				$status = $row->hidden;
 			}
 			else {

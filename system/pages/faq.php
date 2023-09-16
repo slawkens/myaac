@@ -153,7 +153,9 @@ class FAQ
 			$row = ModelsFAQ::find($id);
 			if ($row) {
 				$row->hidden = ($row->hidden == 1 ? 0 : 1);
-				$row->save();
+				if (!$row->save()) {
+					$errors[] = 'Fail during toggle hidden FAQ.';
+				}
 			} else {
 				$errors[] = 'FAQ with id ' . $id . ' does not exists.';
 			}
