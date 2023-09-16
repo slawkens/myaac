@@ -1,5 +1,7 @@
 FROM php:8.2-apache
 
+ARG APCU_VERSION=5.1.22
+
 # Arguments defined in docker-compose.yml
 ARG user
 ARG uid
@@ -19,10 +21,23 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql bcmath gd zip
+RUN docker-php-ext-install pdo pdo_mysql gd zip opcache
+
+RUN docker-php-ext-configure opcache --enable-opcache
+
+#INSTALL APCU
+RUN pecl install apcu-${APCU_VERSION} && docker-php-ext-enable apcu
+RUN echo "extension=apcu.so" >> /usr/local/etc/php/php.ini
+RUN echo "apc.enable_cli=1" >> /usr/local/etc/php/php.ini
+RUN echo "apc.enable=1" >> /usr/local/etc/php/php.ini
+#APCU
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN ls
+
+COPY docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # Create system user to run Composer Commands
 #RUN useradd -G www-data,root -u $uid -d /home/$user $user
