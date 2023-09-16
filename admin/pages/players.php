@@ -872,7 +872,7 @@ else if (isset($_REQUEST['search'])) {
 					<form action="<?php echo $player_base; ?>" method="post">
 						<label for="name">Player Name:</label>
 						<div class="input-group input-group-sm">
-							<input type="text" class="form-control" name="search" value="<?php echo $search_player; ?>" maxlength="32" size="32">
+							<input type="text" class="form-control" id="search" name="search" value="<?= escapeHtml($search_player); ?>" maxlength="32" size="32">
 							<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
 						</div>
 					</form>
