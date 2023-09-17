@@ -11,6 +11,7 @@ foreach($config['clients'] as $client) {
 }
 
 $twig->display('install.config.html.twig', array(
+	'config' => $config,
 	'clients' => $clients,
 	'timezones' => DateTimeZone::listIdentifiers(),
 	'locale' => $locale,
