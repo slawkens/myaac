@@ -20,7 +20,7 @@ cypress/e2e/2-advanced-examples
 releases
 tmp
 
-config.local.php
+./config.local.php
 
 # all custom templates
 templates/*
