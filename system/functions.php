@@ -1197,13 +1197,9 @@ function clearCache()
 		if ($cache->fetch('failed_logins', $tmp))
 			$cache->delete('failed_logins');
 
-		global $template_name;
-		if ($cache->fetch('template_ini' . $template_name, $tmp))
-			$cache->delete('template_ini' . $template_name);
-
 		foreach (get_templates() as $template) {
-			if ($cache->fetch('template_ini' . $template, $tmp)) {
-				$cache->delete('template_ini' . $template);
+			if ($cache->fetch('template_ini_' . $template, $tmp)) {
+				$cache->delete('template_ini_' . $template);
 			}
 		}
 
