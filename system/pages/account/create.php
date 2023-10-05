@@ -50,7 +50,7 @@ if($save)
 
 	$email = $_POST['email'];
 	$password = $_POST['password'];
-	$password2 = $_POST['password2'];
+	$password_confirm = $_POST['password_confirm'];
 
 	// account
 	if(!config('account_login_by_email')) {
@@ -81,7 +81,7 @@ if($save)
 	if(empty($password)) {
 		$errors['password'] = 'Please enter the password for your new account.';
 	}
-	elseif($password != $password2) {
+	elseif($password != $password_confirm) {
 		$errors['password'] = 'Passwords are not the same.';
 	}
 	else if(!Validator::password($password)) {
@@ -134,7 +134,7 @@ if($save)
 		'email' => $email,
 		'country' => $country,
 		'password' => $password,
-		'password2' => $password2,
+		'password_confirm' => $password_confirm,
 		'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] === 'true' : false,
 	);
 
@@ -267,7 +267,7 @@ if($save)
 					$_POST['account_login'] = USE_ACCOUNT_NAME ? $account_name : $account_id;
 				}
 
-				$_POST['password_login'] = $password2;
+				$_POST['password_login'] = $password_confirm;
 
 				require PAGES . 'account/login.php';
 				header('Location: ' . getLink('account/manage'));

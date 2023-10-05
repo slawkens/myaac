@@ -17,7 +17,7 @@
 		$('#password').blur(function() {
 			checkPassword();
 		});
-		$('#password2').blur(function() {
+		$('#password_confirm').blur(function() {
 			checkPassword();
 		});
 		$('#SuggestAccountNumber a').click(function (event) {
@@ -150,11 +150,11 @@
 			return;
 		}
 
-		if(document.getElementById("password2").value == "")
+		if(document.getElementById("password_confirm").value == "")
 		{
-			$('#password2_error').html('Please enter the password again!');
-			$('#password2_indicator').attr('src', 'images/global/general/nok.gif');
-			$('#password2_indicator').show();
+			$('#password_confirm_error').html('Please enter the password again!');
+			$('#password_confirm_indicator').attr('src', 'images/global/general/nok.gif');
+			$('#password_confirm_indicator').show();
 			return;
 		}
 
@@ -172,24 +172,24 @@
 		}
 
 		var password = document.getElementById("password").value;
-		var password2 = document.getElementById("password2").value;
-		$.getJSON("tools/validate.php", { password: password, password2: password2, uid: Math.random() },
+		var password_confirm = document.getElementById("password_confirm").value;
+		$.getJSON("tools/validate.php", { password: password, password_confirm: password_confirm, uid: Math.random() },
 			function(data){
 				if(data.hasOwnProperty('success')) {
 					$('#password_error').html ('');
-					$('#password2_error').html ('');
+					$('#password_confirm_error').html ('');
 					$('#password_indicator').attr('src', 'images/global/general/ok.gif');
-					$('#password2_indicator').attr('src', 'images/global/general/ok.gif');
+					$('#password_confirm_indicator').attr('src', 'images/global/general/ok.gif');
 				}
 				else if(data.hasOwnProperty('error')) {
 					$('#password_error').html(data.error);
-					$('#password2_error').html(data.error);
+					$('#password_confirm_error').html(data.error);
 					$('#password_indicator').attr('src', 'images/global/general/nok.gif');
-					$('#password2_indicator').attr('src', 'images/global/general/nok.gif');
+					$('#password_confirm_indicator').attr('src', 'images/global/general/nok.gif');
 				}
 
 				$('#password_indicator').show();
-				$('#password2_indicator').show();
+				$('#password_confirm_indicator').show();
 			}
 		);
 
