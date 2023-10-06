@@ -18,18 +18,18 @@ if(!$logged) {
 }
 
 $new_password = $_POST['newpassword'] ?? NULL;
-$new_password2 = $_POST['newpassword2'] ?? NULL;
+$new_password_confirm = $_POST['newpassword_confirm'] ?? NULL;
 $old_password = $_POST['oldpassword'] ?? NULL;
-if(empty($new_password) && empty($new_password2) && empty($old_password)) {
+if(empty($new_password) && empty($new_password_confirm) && empty($old_password)) {
 	$twig->display('account.change_password.html.twig');
 }
 else
 {
-	if(empty($new_password) || empty($new_password2) || empty($old_password)){
+	if(empty($new_password) || empty($new_password_confirm) || empty($old_password)){
 		$errors[] = 'Please fill in form.';
 	}
 	$password_strlen = strlen($new_password);
-	if($new_password != $new_password2) {
+	if($new_password != $new_password_confirm) {
 		$errors[] = 'The new passwords do not match!';
 	}
 

@@ -14,7 +14,7 @@ describe('Create Account Page', () => {
 		cy.get('#email').type('tester@example.com')
 
 		cy.get('#password').type('test1234')
-		cy.get('#password2').type('test1234')
+		cy.get('#password_confirm').type('test1234')
 
 		cy.get('#character_name').type('Slaw')
 
