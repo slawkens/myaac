@@ -136,7 +136,7 @@ if(!IS_CLI) {
 		}
 	}
 
-	define('SERVER_URL', 'http' . (isset($_SERVER['HTTPS'][0]) && strtolower($_SERVER['HTTPS']) === 'on' ? 's' : '') . '://' . $baseHost);
+	define('SERVER_URL', 'http' . (isHttps() ? 's' : '') . '://' . $baseHost);
 	define('BASE_URL', SERVER_URL . BASE_DIR . '/');
 	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/' . ADMIN_PANEL_FOLDER . '/');
 
@@ -165,3 +165,11 @@ if (!is_file($autoloadFile)) {
 }
 
 require $autoloadFile;
+
+function isHttps(): bool
+{
+	return
+		(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+		|| (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+		|| $_SERVER['SERVER_PORT'] == 443;
+}
