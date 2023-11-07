@@ -147,6 +147,7 @@ if (file_exists(BASE . 'config.local.php')) {
 	require BASE . 'config.local.php';
 }
 
+/** @var array $config */
 ini_set('log_errors', 1);
 if(@$config['env'] === 'dev') {
 	ini_set('display_errors', 1);
