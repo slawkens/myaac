@@ -123,7 +123,7 @@ if(isset($config['boxes']))
 		  document.getElementById("submenu_"+activeSubmenuItem).style.color = "white";
 		  document.getElementById("ActiveSubmenuItemIcon_"+activeSubmenuItem).style.visibility = "visible";
 		  menus = localStorage.getItem('menus');
-		  if(menus.lastIndexOf("&") === -1) {
+		  if(menus == null || menus.lastIndexOf("&") === -1) {
 			  menus = "news=1&account=0&community=0&library=0&forum=0<?php if (setting('core.gifts_system')) echo '&shops=0'; ?>&";
 		  }
 		  FillMenuArray();
