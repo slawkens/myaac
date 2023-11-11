@@ -20,18 +20,9 @@
 						<div id="TickerEntry-{{ i }}-ShortText" class="NewsTickerShortText">{{ ticker.body_short|raw }}</div>
 						<div id="TickerEntry-{{ i }}-FullText" class="NewsTickerFullText">{{ ticker.body|raw }}
 							{% if canEdit %}
-							<a href="{{ constant('ADMIN_URL') }}?p=news&action=edit&id={{ ticker.id }}" title="Edit">
-								<img src="images/edit.png"/>
-								Edit
-							</a>
-							<a id="delete" href="{{ constant('ADMIN_URL') }}?p=news&action=delete&id={{ ticker.id }}" onclick="return confirm('Are you sure?');" title="Delete">
-								<img src="images/del.png"/>
-								Delete
-							</a>
-							<a href="{{ constant('ADMIN_URL') }}?p=news&action=hide&id={{ ticker.id }}" title="{% if ticker.hidden != 1 %}Hide{% else %}Show{% endif %}">
-								<img src="images/{% if ticker.hidden != 1 %}success{% else %}error{% endif %}.png"/>
-								{% if ticker.hidden != 1 %}Hide{% else %}Show{% endif %}
-							</a>
+								<table>
+									{{ include('admin.links.html.twig', {page: 'news', id: ticker.id, hidden: ticker.hidden }) }}
+								</table>
 							{% endif %}
 						</div>
 					</div>

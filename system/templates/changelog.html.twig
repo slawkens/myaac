@@ -25,15 +25,7 @@
 			<td>{{ log.body|nl2br}}</td>
 			{% if canEdit  %}
 				<td>
-					<a href="{{ constant('ADMIN_URL') }}?p=changelog&action=edit&id={{ log.id }}" title="Edit in Admin Panel" target="_blank">
-						<img src="images/edit.png"/>Edit
-					</a>
-					<a href="{{ constant('ADMIN_URL') }}?p=changelog&action=delete&id={{ log.id }}" onclick="return confirm('Are you sure?');" title="Delete in Admin Panel" target="_blank">
-						<img src="images/del.png"/>Delete
-					</a>
-					<a href="{{ constant('ADMIN_URL') }}?p=changelog&action=hide&id={{ log.id }}"  title="{% if log.hidden != 1 %}Hide{% else %}Show{% endif %} in Admin Panel" target="_blank">
-						<img src="images/{{ (log.hidden != 1 ? 'success' : 'error') }}.png"/>{{ (log.hidden != 1) ? 'Hide' : 'Show' }}
-					</a>
+					{{ include('admin.links.html.twig', {page: 'changelog', id: log.id, hidden: log.hidden }) }}
 				</td>
 			{% endif %}
 		</tr>
