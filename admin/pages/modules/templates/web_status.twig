@@ -24,7 +24,7 @@
 			<form method="post" action="?p=dashboard" class="float-right">
 				{{ csrf() }}
 				<input type="hidden" name="clear_cache" value="1" />
-				<button type="submit" onclick="return confirm('Are you sure?');" class="btn btn-danger" title="Clear Cache"><i class="fas fa-clear"></i>Clear cache</button>
+				<button type="submit" onclick="return confirm('Are you sure that you want to clear cache?');" class="btn btn-danger" title="Clear Cache"><i class="fas fa-clear"></i>Clear cache</button>
 			</form>
 		</div>
 	</div>
