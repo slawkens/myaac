@@ -16,7 +16,8 @@
         "peppeocchi/php-cron-scheduler": "4.*"
     },
     "require-dev": {
-        "filp/whoops": "^2.15"
+        "filp/whoops": "^2.15",
+        "maximebf/debugbar": "dev-master"
     },
     "autoload": {
         "psr-4": {

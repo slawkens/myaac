@@ -469,20 +469,30 @@ function tickers()
  */
 function template_place_holder($type): string
 {
-	global $twig, $template_place_holders;
+	global $twig, $template_place_holders, $debugBar;
 	$ret = '';
+
+	if (isset($debugBar)) {
+		$debugBarRenderer = $debugBar->getJavascriptRenderer();
+	}
 
 	if(array_key_exists($type, $template_place_holders) && is_array($template_place_holders[$type]))
 		$ret = implode($template_place_holders[$type]);
 
 	if($type === 'head_start') {
 		$ret .= template_header();
+		if (isset($debugBar)) {
+			$ret .= $debugBarRenderer->renderHead();
+		}
 	}
 	elseif ($type === 'body_start') {
 		$ret .= $twig->render('browsehappy.html.twig');
 	}
 	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
+		if (isset($debugBar)) {
+			$ret .= $debugBarRenderer->render();
+		}
 	}
 
 	return $ret;

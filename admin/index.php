@@ -30,6 +30,27 @@ if(!$db->hasTable('myaac_account_actions')) {
 	throw new RuntimeException('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
 }
 
+$hooks->register('debugbar_admin_head_end', HOOK_ADMIN_HEAD_END, function ($params) {
+	global $debugBar;
+
+	if (!isset($debugBar)) {
+		return;
+	}
+
+	$debugBarRenderer = $debugBar->getJavascriptRenderer();
+	echo $debugBarRenderer->renderHead();
+});
+$hooks->register('debugbar_admin_body_end', HOOK_ADMIN_BODY_END, function ($params) {
+	global $debugBar;
+
+	if (!isset($debugBar)) {
+		return;
+	}
+
+	$debugBarRenderer = $debugBar->getJavascriptRenderer();
+	echo $debugBarRenderer->render();
+});
+
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
 require __DIR__ . '/includes/functions.php';

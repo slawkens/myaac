@@ -370,7 +370,14 @@ class POT
             throw new RuntimeException('Please install PHP pdo extension. MyAAC will not work without it.');
         }
 
-        $this->db = new OTS_DB_MySQL($params);
+	    global $debugBar;
+		if (isset($debugBar)) {
+			$this->db = new DebugBar\DataCollector\PDO\TraceablePDO(new OTS_DB_MySQL($params));
+			$debugBar->addCollector(new DebugBar\DataCollector\PDO\PDOCollector($this->db));
+		}
+		else {
+			$this->db = new OTS_DB_MySQL($params);
+		}
 
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
