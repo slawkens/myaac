@@ -38,7 +38,7 @@ if(!empty($action))
 	$p_title = $_POST['title'] ?? null;
 	$body = isset($_POST['body']) ? stripslashes($_POST['body']) : null;
 	$comments = $_POST['comments'] ?? null;
-	$type = isset($_POST['type']) ? (int)$_POST['type'] : 1;
+	$type = isset($_REQUEST['type']) ? (int)$_REQUEST['type'] : 1;
 	$category = isset($_POST['category']) ? (int)$_POST['category'] : null;
 	$player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : null;
 	$article_text = $_POST['article_text'] ?? null;
