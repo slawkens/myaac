@@ -32,7 +32,6 @@ const ARTICLE_TEXT_LIMIT = 300;
 const ARTICLE_IMAGE_LIMIT = 100;
 
 $name = $p_title = '';
-$action = $_POST['action'] ?? '';
 if(!empty($action))
 {
 	$id = $_POST['id'] ?? null;
