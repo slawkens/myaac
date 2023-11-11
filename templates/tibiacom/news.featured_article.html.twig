@@ -20,16 +20,7 @@
 						<b>
 							<p>{{ article.title|raw }}
 								{% if canEdit %}
-									<a href="{{ constant('ADMIN_URL') }}?p=news&action=edit&id={{ article.id }}" title="Edit">
-										<img src="images/edit.png"/>Edit
-									</a>
-									<a id="delete" href="{{ constant('ADMIN_URL') }}?p=news&action=delete&id={{ article.id }}" onclick="return confirm('Are you sure?');" title="Delete">
-										<img src="images/del.png"/>Delete
-									</a>
-									<a href="{{ constant('ADMIN_URL') }}?p=news&action=hide&id={{ article.id }}" title="{% if article.hidden != 1 %}Hide{% else %}Show{% endif %}">
-										<img src="images/{% if article.hidden != 1 %}success{% else %}error{% endif %}.png"/>
-										{% if article.hidden != 1 %}Hide{% else %}Show{% endif %}
-									</a>
+									{{ include('admin.links.html.twig', {page: 'news', id: article.id, hidden: article.hidden }) }}
 								{% endif %}
 							</p>
 						</b>

@@ -1,0 +1,22 @@
+<br/><br/>
+
+<form action="{{ constant('ADMIN_URL') }}?p={{ page }}" method="post" style="float: left">
+	{{ csrf() }}
+	<input type="hidden" name="action" value="edit" />
+	<input type="hidden" name="id" value="{{ id }}" />
+	<button type="submit" class="btn btn-success btn-sm" title="Edit"><img src="images/edit.png"/> Edit</button>
+</form>
+
+<form action="{{ constant('ADMIN_URL') }}?p={{ page }}" method="post" style="float: left">
+	{{ csrf() }}
+	<input type="hidden" name="action" value="delete" />
+	<input type="hidden" name="id" value="{{ id }}" />
+	<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');" title="Delete"><img src="images/del.png"/>Delete</button>
+</form>
+
+<form action="{{ constant('ADMIN_URL') }}?p={{ page }}" method="post" style="float: left">
+	{{ csrf() }}
+	<input type="hidden" name="action" value="hide" />
+	<input type="hidden" name="id" value="{{ id }}" />
+	<button type="submit" class="btn btn-{{ (hidden != 1) ? 'info' : 'default' }} btn-sm" title="{% if hidden != 1 %}Hide{% else %}Show{% endif %}"><img src="images/{{ hidden != 1 ? 'success' : 'error' }}.png"/>{{ hidden != 1 ? 'Hide' : 'Show' }}</button>
+</form>

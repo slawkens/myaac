@@ -32,19 +32,20 @@ const ARTICLE_TEXT_LIMIT = 300;
 const ARTICLE_IMAGE_LIMIT = 100;
 
 $name = $p_title = '';
+$action = $_POST['action'] ?? '';
 if(!empty($action))
 {
-	$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-	$p_title = isset($_REQUEST['title']) ? $_REQUEST['title'] : null;
-	$body = isset($_REQUEST['body']) ? stripslashes($_REQUEST['body']) : null;
-	$comments = isset($_REQUEST['comments']) ? $_REQUEST['comments'] : null;
-	$type = isset($_REQUEST['type']) ? (int)$_REQUEST['type'] : null;
-	$category = isset($_REQUEST['category']) ? (int)$_REQUEST['category'] : null;
-	$player_id = isset($_REQUEST['player_id']) ? (int)$_REQUEST['player_id'] : null;
-	$article_text = isset($_REQUEST['article_text']) ? $_REQUEST['article_text'] : null;
-	$article_image = isset($_REQUEST['article_image']) ? $_REQUEST['article_image'] : null;
-	$forum_section = isset($_REQUEST['forum_section']) ? $_REQUEST['forum_section'] : null;
-	$errors = array();
+	$id = $_POST['id'] ?? null;
+	$p_title = $_POST['title'] ?? null;
+	$body = isset($_POST['body']) ? stripslashes($_POST['body']) : null;
+	$comments = $_POST['comments'] ?? null;
+	$type = isset($_POST['type']) ? (int)$_POST['type'] : 1;
+	$category = isset($_POST['category']) ? (int)$_POST['category'] : null;
+	$player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : null;
+	$article_text = $_POST['article_text'] ?? null;
+	$article_image = $_POST['article_image'] ?? null;
+	$forum_section = $_POST['forum_section'] ?? null;
+	$errors = [];
 
 	if($action == 'new') {
 		if(isset($forum_section) && $forum_section != '-1') {
@@ -92,7 +93,7 @@ if(!empty($action))
 	}
 	else if($action == 'hide') {
 		if (News::toggleHidden($id, $errors, $status)) {
-			success(($status == 1 ? 'Show' : 'Hide') . ' successful.');
+			success(($status == 1 ? 'Hide' : 'Show') . ' successful.');
 		}
 	}
 
@@ -119,12 +120,10 @@ if($action == 'edit' || $action == 'new') {
 	$account_players->orderBy('group_id', POT::ORDER_DESC);
 	$twig->display('admin.news.form.html.twig', array(
 		'action' => $action,
-		'news_link' => getLink(PAGE),
-		'news_link_form' => '?p=news&action=' . ($action == 'edit' ? 'edit' : 'new'),
 		'news_id' => $id ?? null,
 		'title' => $p_title ?? '',
 		'body' => isset($body) ? escapeHtml($body) : '',
-		'type' => $type ?? null,
+		'type' => $type,
 		'player' => isset($player) && $player->isLoaded() ? $player : null,
 		'player_id' => $player_id ?? null,
 		'account_players' => $account_players,
