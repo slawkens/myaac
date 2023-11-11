@@ -12,6 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 return [
 	['GET', '', 'news.php'], // empty URL = show news
 	['GET', 'news/archive/{id:int}[/]', 'news/archive.php'],
+	['GET', 'news/{id:int}[/]', 'news/archive.php'],
 
 	// block access to some files
 	['*', 'account/base[/]', '404.php'], // this is to block account/base.php

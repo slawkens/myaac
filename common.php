@@ -108,6 +108,13 @@ const TFS_FIRST = TFS_02;
 const TFS_LAST = TFS_03;
 
 // other definitions
+const MAIL_MAIL = 0;
+const MAIL_SMTP = 1;
+
+const SMTP_SECURITY_NONE = 0;
+const SMTP_SECURITY_SSL = 1;
+const SMTP_SECURITY_TLS = 2;
+
 const ACCOUNT_NUMBER_LENGTH = 8;
 
 if (!IS_CLI) {

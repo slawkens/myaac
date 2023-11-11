@@ -1,8 +1,11 @@
 <div class="card card-info card-outline">
 	<div class="card-header">
 		<h5 class="m-0">News:
-			<a href="{{ constant('ADMIN_URL') }}?p=changelog&action=new" class="float-right"><span
-					class="btn btn-sm btn-success">New</span></a>
+			<form method="post" class="float-right">
+				{{ csrf() }}
+				<input type="hidden" name="action" value="new" />
+				<button type="submit" class="btn btn-sm btn-success">New</button>
+			</form>
 		</h5>
 	</div>
 
@@ -30,15 +33,26 @@
 						<td><img src="{{ constant('BASE_URL') }}images/changelog/{{ log.where }}.png" alt="icon" title="{{ log.where|capitalize }}"/> {{ log.where|capitalize }}</td>
 						<td>
 							<div class="btn-group">
-								<a href="{{ constant('ADMIN_URL') }}?p=changelog&action=edit&id={{ log.id }}" class="btn btn-success btn-sm" title="Edit">
-									<i class="fas fa-pencil-alt"></i>
-								</a>
-								<a href="{{ constant('ADMIN_URL') }}?p=changelog&action=delete&id={{ log.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');" title="Delete">
-									<i class="fas fa-trash"></i>
-								</a>
-								<a href="{{ constant('ADMIN_URL') }}?p=changelog&action=hide&id={{ log.id }}" class="btn btn-{{ (log.hidden != 1) ? 'info' : 'default' }} btn-sm" title="{% if log.hidden != 1 %}Hide{% else %}Show{% endif %}">
-									<i class="fas fa-eye{{ (log.hidden != 1) ? '' : '-slash' }}"></i>
-								</a>
+								<form method="post">
+									{{ csrf() }}
+									<input type="hidden" name="action" value="edit" />
+									<input type="hidden" name="id" value="{{ log.id }}" />
+									<button type="submit" class="btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+								</form>
+
+								<form method="post">
+									{{ csrf() }}
+									<input type="hidden" name="action" value="delete" />
+									<input type="hidden" name="id" value="{{ log.id }}" />
+									<button type="submit" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm('Are you sure?');"><i class="fas fa-pencil-alt"></i></button>
+								</form>
+
+								<form method="post">
+									{{ csrf() }}
+									<input type="hidden" name="action" value="hide" />
+									<input type="hidden" name="id" value="{{ log.id }}" />
+									<button type="submit" class="btn btn-{{ (log.hidden != 1) ? 'info' : 'default' }} btn-sm" title="{% if log.hidden != 1 %}Hide{% else %}Show{% endif %}"><i class="fas fa-eye{{ (log.hidden != 1) ? '' : '-slash' }}"></i></button>
+								</form>
 							</div>
 						</td>
 					</tr>
@@ -53,3 +67,15 @@
 		</table>
 	</div>
 </div>
+<link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/jquery.datetimepicker.css"/ >
+<script src="{{ constant('BASE_URL') }}tools/js/jquery.datetimepicker.js"></script>
+<script>
+	$(document).ready(function () {
+		$('#createdate').datetimepicker({format: "M d Y, H:i:s",});
+
+		$('.tb_datatable').DataTable({
+			"order": [[0, "desc"]],
+			"columnDefs": [{targets: [1, 2,4,5],orderable: false}]
+		});
+	});
+</script>

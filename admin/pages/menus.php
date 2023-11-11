@@ -13,19 +13,21 @@ use MyAAC\Models\Menu;
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Menus';
 
+csrfProtect();
+
 if (!hasFlag(FLAG_CONTENT_MENUS) && !superAdmin()) {
 	echo 'Access denied.';
 	return;
 }
 
-if (isset($_REQUEST['template'])) {
-	$template = $_REQUEST['template'];
+if (isset($_POST['template'])) {
+	$template = $_POST['template'];
 
-	if (isset($_REQUEST['menu'])) {
-		$post_menu = $_REQUEST['menu'];
-		$post_menu_link = $_REQUEST['menu_link'];
-		$post_menu_blank = $_REQUEST['menu_blank'];
-		$post_menu_color = $_REQUEST['menu_color'];
+	if (isset($_POST['menu'])) {
+		$post_menu = $_POST['menu'];
+		$post_menu_link = $_POST['menu_link'];
+		$post_menu_blank = $_POST['menu_blank'];
+		$post_menu_color = $_POST['menu_color'];
 		if (count($post_menu) != count($post_menu_link)) {
 			echo 'Menu count is not equal menu links. Something went wrong when sending form.';
 			return;
@@ -69,9 +71,10 @@ if (isset($_REQUEST['template'])) {
 		return;
 	}
 
-	if (isset($_REQUEST['reset_colors'])) {
+	if (isset($_GET['reset_colors'])) {
 		if (isset($config['menu_default_color'])) {
 			Menu::where('template', $template)->update(['color' => str_replace('#', '', $config['menu_default_color'])]);
+			success('Colors has been reset.');
 		}
 		else {
 			warning('There is no default color defined, cannot reset colors.');
@@ -93,6 +96,7 @@ if (isset($_REQUEST['template'])) {
 		</p>
 		<?php if (isset($config['menu_default_color'])) {?>
 		<form method="post" action="?p=menus&reset_colors" onsubmit="return confirm('Do you really want to reset colors?');">
+			<?php csrf(); ?>
 			<input type="hidden" name="template" value="<?php echo $template ?>"/>
 			<button type="submit" class="btn btn-danger">Reset Colors to default</button>
 		</form>
@@ -112,6 +116,7 @@ if (isset($_REQUEST['template'])) {
 	$last_id = array();
 	?>
 	<form method="post" id="menus-form" action="?p=menus">
+		<?php csrf(); ?>
 		<input type="hidden" name="template" value="<?php echo $template ?>"/>
 		<button type="submit" class="btn btn-info">Save</button><br/><br/>
 		<div class="row">

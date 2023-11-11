@@ -1,4 +1,5 @@
 <form action="?subtopic=guilds&action=leave_guild&guild={{ guild_name }}&todo=save" METHOD="post">
+	{{ csrf() }}
 <table border="0" cellspacing="1" cellpadding="4" width="100%">
 	<tr bgcolor="{{ config.vdarkborder }}">
 		<td class="white"><b>Leave guild</b></td></tr>
@@ -27,6 +28,7 @@
 </form>
 		<td>
 			<form action="?subtopic=guilds&action=show&guild={{ guild_name }}" method="post">
+				{{ csrf() }}
 				{{ include('buttons.back.html.twig') }}
 			</form>
 		</td>

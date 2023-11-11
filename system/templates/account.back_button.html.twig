@@ -2,5 +2,6 @@
 	<br/>
 {% endif %}
 <form action="{% if action is not defined %}{{ getLink('account/manage') }}{% else %}{{ action }}{% endif %}" method="post">
+	{{ csrf() }}
 	{{ include('buttons.back.html.twig') }}
 </form>

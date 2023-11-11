@@ -1,5 +1,6 @@
 The Lost Account Interface can help you to get back your account name and password. Please enter your character name and select what you want to do.<br/>
-<form action="?subtopic=lostaccount&action=step1" method=post>
+<form action="?subtopic=lostaccount&action=step1" method="post">
+	{{ csrf() }}
 	<input type="hidden" name="character" value="">
 	<table cellspacing="1" cellpadding="4" border="0" width="100%">
 		<tr>

@@ -8,12 +8,14 @@
 		<tr>
 			<td align="right" width="50%">
 				<form action="?subtopic=guilds&action=delete_invite&guild={{ guild_name }}&name={{ player_name }}&todo=save" method="post">
+				{{ csrf() }}
 				{{ include('buttons.submit.html.twig') }}
 				</form>
 			</td>
 			<td style="width: 10px; "></td>
 			<td>
 				<form action="?subtopic=guilds&action=show&guild={{ guild_name }}" method="post">
+					{{ csrf() }}
 					{{ include('buttons.back.html.twig') }}
 				</form>
 			</td>

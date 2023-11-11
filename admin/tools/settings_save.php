@@ -16,6 +16,8 @@ if(!admin()) {
 	die('Access denied.');
 }
 
+csrfProtect();
+
 if (!isset($_REQUEST['plugin'])) {
 	http_response_code(500);
 	die('Please enter plugin name.');

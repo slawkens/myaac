@@ -13,6 +13,9 @@ use MyAAC\Models\Player;
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Player editor';
+
+csrfProtect();
+
 $player_base = ADMIN_URL . '?p=players';
 
 $use_datatable = true;
@@ -75,7 +78,7 @@ else if (isset($_REQUEST['search'])) {
 		$player = new OTS_Player();
 		$player->load($id);
 
-		if (isset($player) && $player->isLoaded() && isset($_POST['save'])) {// we want to save
+		if ($player->isLoaded() && isset($_POST['save'])) {// we want to save
 			$error = false;
 
 			if ($player->isOnline())
@@ -373,6 +376,7 @@ else if (isset($_REQUEST['search'])) {
 					</ul>
 				</div>
 				<form action="<?php echo $player_base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post">
+					<?php csrf(); ?>
 					<div class="card-body">
 						<div class="tab-content" id="tabs-tabContent">
 							<div class="tab-pane fade active show" id="tabs-home">
@@ -870,6 +874,7 @@ else if (isset($_REQUEST['search'])) {
 			<div class="card-body row">
 				<div class="col-6 col-lg-12">
 					<form action="<?php echo $player_base; ?>" method="post">
+						<?php csrf(); ?>
 						<label for="search">Player Name:</label>
 						<div class="input-group input-group-sm">
 							<input type="text" class="form-control" id="search" name="search" value="<?= escapeHtml($search_player); ?>" maxlength="32" size="32">
@@ -879,6 +884,7 @@ else if (isset($_REQUEST['search'])) {
 				</div>
 				<div class="col-6 col-lg-12">
 					<form action="<?php echo $player_base; ?>" method="post">
+						<?php csrf(); ?>
 						<label for="id">Player ID:</label>
 						<div class="input-group input-group-sm">
 							<input type="text" class="form-control" id="id" name="id" value="<?= $id; ?>" maxlength="32" size="32">

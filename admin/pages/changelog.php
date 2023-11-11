@@ -13,30 +13,29 @@ use MyAAC\Models\Changelog as ModelsChangelog;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Changelog';
+
+csrfProtect();
+
 if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 	echo 'Access denied.';
 	return;
 }
 
-$title = 'Changelog';
 $use_datatable = true;
 const CL_LIMIT = 600; // maximum changelog body length
-?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>tools/css/jquery.datetimepicker.css"/ >
-<script src="<?php echo BASE_URL; ?>tools/js/jquery.datetimepicker.js"></script>
-<?php
 $id = $_GET['id'] ?? 0;
 require_once LIBS . 'changelog.php';
 
 if(!empty($action))
 {
-	$id = $_REQUEST['id'] ?? null;
-	$body = isset($_REQUEST['body']) ? stripslashes($_REQUEST['body']) : null;
-	$create_date = isset($_REQUEST['createdate']) ? (int)strtotime($_REQUEST['createdate'] ): null;
-	$player_id = isset($_REQUEST['player_id']) ? (int)$_REQUEST['player_id'] : null;
-	$type = isset($_REQUEST['type']) ? (int)$_REQUEST['type'] : null;
-	$where = isset($_REQUEST['where']) ? (int)$_REQUEST['where'] : null;
+	$id = $_POST['id'] ?? null;
+	$body = isset($_POST['body']) ? stripslashes($_POST['body']) : null;
+	$create_date = isset($_POST['createdate']) ? (int)strtotime($_POST['createdate'] ): null;
+	$player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : null;
+	$type = isset($_POST['type']) ? (int)$_POST['type'] : null;
+	$where = isset($_POST['where']) ? (int)$_POST['where'] : null;
 
 	$errors = array();
 
@@ -46,12 +45,13 @@ if(!empty($action))
 			$body = '';
 			$type = $where = $player_id = $create_date = 0;
 
-			success("Added successful.");
+			success('Added successful.');
 		}
 	}
 	else if($action == 'delete') {
-		Changelog::delete($id, $errors);
-		success("Deleted successful.");
+		if (Changelog::delete($id, $errors)) {
+			success('Deleted successful.');
+		}
 	}
 	else if($action == 'edit')
 	{
@@ -68,13 +68,14 @@ if(!empty($action))
 				$action = $body = '';
 				$type = $where = $player_id = $create_date = 0;
 
-				success("Updated successful.");
+				success('Updated successful.');
 			}
 		}
 	}
 	else if($action == 'hide') {
-		Changelog::toggleHidden($id, $errors, $status);
-		success(($status == 1 ? 'Show' : 'Hide') . " successful.");
+		if (Changelog::toggleHidden($id, $errors, $status)) {
+			success(($status == 1 ? 'Hide' : 'Show') . ' successful.');
+		}
 	}
 
 	if(!empty($errors))
@@ -113,7 +114,7 @@ if($action == 'edit' || $action == 'new') {
 	$account_players->orderBy('group_id', POT::ORDER_DESC);
 	$twig->display('admin.changelog.form.html.twig', array(
 		'action' => $action,
-		'cl_link_form' => constant('ADMIN_URL').'?p=changelog&action=' . ($action == 'edit' ? 'edit' : 'new'),
+		'cl_link_form' => constant('ADMIN_URL').'?p=changelog',
 		'cl_id' => $id ?? null,
 		'body' => isset($body) ? escapeHtml($body) : '',
 		'create_date' => $create_date ?? '',
@@ -128,15 +129,3 @@ if($action == 'edit' || $action == 'new') {
 $twig->display('admin.changelog.html.twig', array(
 	'changelogs' => $changelogs,
 ));
-
-?>
-<script>
-	$(document).ready(function () {
-		$('#createdate').datetimepicker({format: "M d Y, H:i:s",});
-
-		$('.tb_datatable').DataTable({
-			"order": [[0, "desc"]],
-			"columnDefs": [{targets: [1, 2,4,5],orderable: false}]
-		});
-	});
-</script>

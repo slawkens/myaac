@@ -1,0 +1,64 @@
+<div class="card card-info card-outline">
+	<div class="card-header">
+		<h5 class="m-0">{{ title }}:
+			<form method="post" class="float-right">
+				{{ csrf() }}
+				<input type="hidden" name="action" value="new" />
+				<input type="hidden" name="type" value="{{ type }}" />
+				<button type="submit" class="btn btn-sm btn-success">New</button>
+			</form>
+		</h5>
+	</div>
+
+	<div class="card-body">
+		<table class="tb_datatable table table-striped table-bordered table-responsive d-md-table">
+			<thead>
+			<tr>
+				<th width="5%">ID</th>
+				<th>Title</th>
+				<th>Date</th>
+				<th>Player</th>
+				<th style="width: 150px;">Options</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for news in newses[type] %}
+				<tr>
+					<td>{{ news.id|raw }}</td>
+					<td>
+						<i>
+							<a href="{{ getLink('news') }}/{{ news.id }}" target="_blank">{{ news.title }}</a>
+						</i>
+					</td>
+					<td>{{ news.date|date(setting('core.news_date_format')) }}</td>
+					<td><a target="_blank" href="{{ news.player_link }}">{{ news.player_name }}</a></td>
+					<td>
+						<div class="btn-group">
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="action" value="edit" />
+								<input type="hidden" name="id" value="{{ news.id }}" />
+								<button type="submit" class="btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+							</form>
+
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="action" value="delete" />
+								<input type="hidden" name="id" value="{{ news.id }}" />
+								<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');" title="Delete"><i class="fas fa-trash"></i></button>
+							</form>
+
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="action" value="hide" />
+								<input type="hidden" name="id" value="{{ news.id }}" />
+								<button type="submit" class="btn btn-{{ (news.hidden != 1) ? 'info' : 'default' }} btn-sm" title="{% if news.hidden != 1 %}Hide{% else %}Show{% endif %}"><i class="fas fa-eye{{ (news.hidden != 1) ? '' : '-slash' }}"></i></button>
+							</form>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>

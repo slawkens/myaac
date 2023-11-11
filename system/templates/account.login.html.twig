@@ -1,6 +1,7 @@
 {{ hook('HOOK_ACCOUNT_LOGIN_BEFORE_PAGE') }}
 Please enter your account {{ account|lower }} and your password.<br/><a href="{{ getLink('account/create') }}">Create an account</a> if you do not have one yet.<br/><br/>
-<form action="{{ getLink('account/manage') }}" method="post" >
+<form action="{{ getLink('account/manage') }}" method="post">
+	{{ csrf() }}
 	{% if redirect is not null %}
 		<input type="hidden" name="redirect" value="{{ redirect }}" />
 	{% endif %}
@@ -66,6 +67,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="{{
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
 					<form action="{{ getLink('account/lost') }}" method="post">
+						{{ csrf() }}
 						<tr>
 							<td style="border:0px;">
 								{{ include('buttons.account_lost.html.twig') }}

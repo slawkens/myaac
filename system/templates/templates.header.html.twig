@@ -1,6 +1,8 @@
 <meta charset="{{ charset }}">
 <meta http-equiv="content-language" content="{{ config.language }}" />
 <meta http-equiv="content-type" content="text/html; charset={{ charset }}" />
+<!-- CSRF Token -->
+<meta name="csrf-token" content="{{ csrfToken() }}">
 {% if not is_admin %}
 <base href="{{ constant('BASE_URL') }}" />
 <title>{{ title }}</title>

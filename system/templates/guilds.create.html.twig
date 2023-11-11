@@ -1,4 +1,5 @@
 <form action="?subtopic=guilds&action=create&todo=save" method="post">
+	{{ csrf() }}
 	<table width="100%" border="0" cellspacing="1" cellpadding="4">
 		<tr>
 			<td bgcolor="{{ config.vdarkborder }}" class="white"><B>Create a {{ config.lua.serverName }} Guild</b></td>
@@ -47,6 +48,7 @@
 			</td>
 			<td align="center">
 				<form  action="?subtopic=guilds" method="post">
+					{{ csrf() }}
 					{{ include('buttons.back.html.twig') }}
 				</form>
 			</td>

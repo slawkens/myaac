@@ -9,6 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\CsrfToken;
 use Twig\Environment as Twig_Environment;
 use Twig\Extension\DebugExtension as Twig_DebugExtension;
 use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
@@ -115,6 +116,16 @@ $twig->addFunction($function);
 $function = new TwigFunction('getCustomPage', function ($name) {
 	$success = false;
 	return getCustomPage($name, $success);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('csrf', function () {
+	csrf();
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('csrfToken', function () {
+	return csrfToken();
 });
 $twig->addFunction($function);
 

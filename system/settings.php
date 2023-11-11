@@ -65,6 +65,12 @@ return [
 			'default' => false,
 			'is_config' => true,
 		],
+		'csrf_protection' => [
+			'name' => 'CSRF protection',
+			'type' => 'boolean',
+			'desc' => 'Its recommended to keep it enabled. Disable only if you know what you are doing.',
+			'default' => true,
+		],
 		'google_analytics_id' => [
 			'name' => 'Google Analytics ID',
 			'type' => 'text',

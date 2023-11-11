@@ -3,7 +3,9 @@
 		<div class="card-header">
 			<h5 class="m-0">{% if action == 'edit' %}Edit{% else %}Add{% endif %} page</h5>
 		</div>
-		<form id="form" class="form-horizontal" method="post" action="?p=pages&action={% if action == 'edit' %}edit{% else %}new{% endif %}">
+		<form id="form" class="form-horizontal" method="post">
+			{{ csrf() }}
+			<input type="hidden" name="action" value="{{ action }}" />
 			{% if action == 'edit' %}
 				<input type="hidden" name="id" value="{{ id }}"/>
 			{% endif %}

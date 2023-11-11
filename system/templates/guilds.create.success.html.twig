@@ -14,6 +14,7 @@
 		<td>
 			<div style="text-align:center">
 				<form action="{{ getLink('guilds') ~ '/' ~ guild_name }}" method="post">
+				{{ csrf() }}
 				{{ include('buttons.submit.html.twig') }}
 				</form>
 			</div>

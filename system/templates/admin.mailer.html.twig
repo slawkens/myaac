@@ -9,6 +9,7 @@
 		<h5 class="m-0">Mailer</h5>
 	</div>
 	<form id="form" method="post">
+		{{ csrf() }}
 		<div class="card-body">
 			<div class="form-group row">
 				<label for="mail_to">To: (enter email, or leave empty to all)</label>

@@ -1,7 +1,12 @@
 <div class="card card-info card-outline">
 	<div class="card-header">
 		<h5 class="m-0">Pages
-			<a href="?p=pages&action=new" class="float-right"><span class="btn btn-sm btn-success">New</span></a></h5>
+			<form method="post" class="float-right">
+				{{ csrf() }}
+				<input type="hidden" name="action" value="new" />
+				<button type="submit" class="btn btn-sm btn-success">New</button>
+			</form>
+		</h5>
 	</div>
 	<div class="card-body">
 		<table class="table table-striped table-bordered table-responsive d-md-table" id="tb_pages">
@@ -21,15 +26,26 @@
 					<td>{% if page.php %}Yes{% else %}No{% endif %}</td>
 					<td>
 						<div class="btn-group">
-							<a href="?p=pages&action=edit&id={{ page.id }}" class="btn btn-success btn-sm" title="Edit">
-								<i class="fas fa-pencil-alt"></i>
-							</a>
-							<a href="?p=pages&action=delete&id={{ page.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');" title="Delete">
-								<i class="fas fa-trash"></i>
-							</a>
-							<a href="?p=pages&action=hide&id={{ page.id }}" class="btn btn-{{ (page.hidden != 1) ? 'info' : 'default' }} btn-sm" title="{% if page.hidden != 1 %}Hide{% else %}Show{% endif %}">
-								<i class="fas fa-eye{{ (page.hidden != 1) ? '' : '-slash' }}"></i>
-							</a>
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="action" value="edit" />
+								<input type="hidden" name="id" value="{{ page.id }}" />
+								<button type="submit" class="btn btn-success btn-sm" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+							</form>
+
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="action" value="delete" />
+								<input type="hidden" name="id" value="{{ page.id }}" />
+								<button type="submit" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm('Are you sure?');"><i class="fas fa-pencil-alt"></i></button>
+							</form>
+
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="action" value="hide" />
+								<input type="hidden" name="id" value="{{ page.id }}" />
+								<button type="submit" class="btn btn-{{ (page.hidden != 1) ? 'info' : 'default' }} btn-sm" title="{% if page.hidden != 1 %}Hide{% else %}Show{% endif %}"><i class="fas fa-eye{{ (log.hidden != 1) ? '' : '-slash' }}"></i></button>
+							</form>
 						</div>
 					</td>
 				</tr>
