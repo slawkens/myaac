@@ -115,14 +115,14 @@
 											<tr>
 												<td >
 													<div style="float: right; margin-top: 20px;" >
-														{% spaceless %}
+														{% apply spaceless %}
 														<form class="MediumButtonForm" action="{{ getLink('account/create') }}" method="post" >
 															<div class="MediumButtonBackground" style="background-image:url({{ template_path }}/images/global/buttons/mediumbutton.gif)" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);">
 																<div class="MediumButtonOver" style="background-image:url({{ template_path }}/images/global/buttons/mediumbutton-over.gif)" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);"></div>
 																<input class="MediumButtonText" type="image" name="Create Account" alt="Create Account" src="{{ template_path }}/images/global/buttons/mediumbutton_createaccount.png" />
 															</div>
 														</form>
-														{% endspaceless %}
+														{% endapply %}
 													</div>
 													<div id="LoginCreateAccountBox" >
 														<p><b>{{ config.lua.serverName }}...</b></p>

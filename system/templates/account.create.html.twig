@@ -105,11 +105,11 @@
 														<span{% if errors.password is defined %} class="red"{% endif %}>Repeat password:</span>
 													</td>
 													<td>
-														<input type="password" name="password2" id="password2" value="" size="30" maxlength="29" />
-														<img id="password2_indicator" src="images/global/general/{% if not save or errors.password is defined %}n{% endif %}ok.gif" style="display: none;" />
+														<input type="password" name="password_confirm" id="password_confirm" value="" size="30" maxlength="29" />
+														<img id="password_confirm_indicator" src="images/global/general/{% if not save or errors.password is defined %}n{% endif %}ok.gif" style="display: none;" />
 													</td>
 												</tr>
-												<tr><td></td><td><span id="password2_error" class="FormFieldError">{% if errors.password is defined %}{{ errors.password }}{% endif %}</span></td></tr>
+												<tr><td></td><td><span id="password_confirm_error" class="FormFieldError">{% if errors.password is defined %}{{ errors.password }}{% endif %}</span></td></tr>
 
 												{{ hook('HOOK_ACCOUNT_CREATE_AFTER_PASSWORDS') }}
 												</tbody>

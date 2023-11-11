@@ -31,7 +31,7 @@ if($dev_mode) {
 }
 unset($dev_mode);
 
-$filter = new Twig_SimpleFilter('timeago', function ($datetime) {
+$filter = new TwigFilter('timeago', function ($datetime) {
 
 	$time = time() - strtotime($datetime);
 

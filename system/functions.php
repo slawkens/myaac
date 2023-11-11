@@ -1220,15 +1220,37 @@ function clearCache()
 		if ($cache->fetch('failed_logins', $tmp))
 			$cache->delete('failed_logins');
 
-		global $template_name;
-		if ($cache->fetch('template_ini' . $template_name, $tmp))
-			$cache->delete('template_ini' . $template_name);
+		foreach (get_templates() as $template) {
+			if ($cache->fetch('template_ini_' . $template, $tmp)) {
+				$cache->delete('template_ini_' . $template);
+			}
+		}
 
-		if ($cache->fetch('plugins_hooks', $tmp))
+		if ($cache->fetch('template_menus', $tmp)) {
+			$cache->delete('template_menus');
+		}
+		if ($cache->fetch('database_tables', $tmp)) {
+			$cache->delete('database_tables');
+		}
+		if ($cache->fetch('database_columns', $tmp)) {
+			$cache->delete('database_columns');
+		}
+		if ($cache->fetch('database_checksum', $tmp)) {
+			$cache->delete('database_checksum');
+		}
+		if ($cache->fetch('last_kills', $tmp)) {
+			$cache->delete('last_kills');
+		}
+
+		if ($cache->fetch('hooks', $tmp)) {
+			$cache->delete('hooks');
+		}
+		if ($cache->fetch('plugins_hooks', $tmp)) {
 			$cache->delete('plugins_hooks');
-
-		if ($cache->fetch('plugins_routes', $tmp))
+		}
+		if ($cache->fetch('plugins_routes', $tmp)) {
 			$cache->delete('plugins_routes');
+		}
 	}
 
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);

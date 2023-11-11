@@ -1,8 +1,8 @@
-{% spaceless %}
+{% apply spaceless %}
 <div class="BigButton" style="background-image:url({{ template_path }}/images/global/buttons/button_blue.gif)">
 	<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);">
 		<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/global/buttons/{% if button_color is defined and button_color == 'green' %}button_green{% else %}button_blue_over{% endif %}.gif);" ></div>
 		<input class="BigButtonText" type="submit" value="{{ button_name }}">
 	</div>
 </div>
-{% endspaceless %}
+{% endapply %}

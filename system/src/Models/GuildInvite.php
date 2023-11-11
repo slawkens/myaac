@@ -3,7 +3,7 @@
 namespace MyAAC\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class GuildInvites extends Model {
+class GuildInvite extends Model {
 
 	protected $table = 'guild_invites';
 
