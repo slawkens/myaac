@@ -28,7 +28,6 @@ const CL_LIMIT = 600; // maximum changelog body length
 $id = $_GET['id'] ?? 0;
 require_once LIBS . 'changelog.php';
 
-$action = $_POST['action'] ?? '';
 if(!empty($action))
 {
 	$id = $_POST['id'] ?? null;
