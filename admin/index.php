@@ -31,7 +31,6 @@ if(!$db->hasTable('myaac_account_actions')) {
 }
 
 require __DIR__ . '/includes/debugbar.php';
-
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
 require __DIR__ . '/includes/functions.php';
