@@ -327,7 +327,7 @@
 															{% endif %}
 
 															{% if players_from_account_in_guild|length > 0 %}
-																<form action="?subtopic=guilds&action=leave_guild&guild={{ guild_name|url_encode }}" method="post">
+																<form action="?subtopic=guilds&action=leave&guild={{ guild_name|url_encode }}" method="post">
 																	{{ csrf() }}
 																	<td>
 																		{% set button_name = 'Leave Guild' %}
