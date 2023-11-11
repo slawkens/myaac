@@ -247,6 +247,10 @@ else {
 				}
 
 				$page = $uri;
+				if (empty($page)) {
+					$page = 'news';
+				}
+
 				$file = BASE . $path;
 			}
 
