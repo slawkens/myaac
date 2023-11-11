@@ -6,6 +6,7 @@ Thumbs.db
 /.htaccess
 
 # composer
+composer.phar
 composer.lock
 vendor
 
