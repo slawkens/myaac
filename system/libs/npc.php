@@ -41,7 +41,7 @@ class NPCs
 		}
 
 		require_once LIBS . 'cache_php.php';
-		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE);
+		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent');
 		$cache_php->set('npcs', $npcs, 5 * 365 * 24 * 60 * 60);
 		return true;
 	}
@@ -53,7 +53,7 @@ class NPCs
 		}
 
 		require_once LIBS . 'cache_php.php';
-		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE);
+		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent');
 		self::$npcs = $cache_php->get('npcs');
 	}
 }

@@ -38,7 +38,7 @@ class DataLoader
 	{
 		self::$startTime = microtime(true);
 
-		require LIBS . 'items.php';
+		require_once LIBS . 'items.php';
 		if(Items::loadFromXML()) {
 			success(self::$locale['step_database_loaded_items'] . self::getLoadedTime());
 		}

@@ -47,6 +47,7 @@ system/cache/*
 !system/cache/twig/index.html
 !system/cache/signatures/index.html
 !system/cache/plugins/index.html
+!system/cache/persistent/index.html
 
 # logs
 system/logs/*
