@@ -50,7 +50,7 @@ if (!empty($action)) {
 	}
 
 	$php = isset($_POST['php']) && $_POST['php'] == 1;
-	$enable_tinymce = isset($_POST['enable_tinymce']) && $_POST['enable_tinymce'] == 1;
+	$enable_tinymce = (isset($_POST['enable_tinymce']) && $_POST['enable_tinymce'] == 1) ?: $enable_tinymce;
 	if ($php) {
 		$body = $_POST['body'];
 	}
