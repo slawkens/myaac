@@ -54,9 +54,12 @@ class Settings implements ArrayAccess
 		}
 	}
 
-	public function save($pluginName, $values) {
+	public function save($pluginName, $values)
+	{
+		$this->loadPlugin($pluginName);
+
 		if (!isset($this->settingsFile[$pluginName])) {
-			throw new RuntimeException('Error on save settings: plugin does not exist');
+			throw new RuntimeException("Error on save settings: plugin $pluginName does not exist");
 		}
 
 		$settings = $this->settingsFile[$pluginName];
