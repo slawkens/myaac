@@ -142,7 +142,7 @@ $settings->load();
 
 // csrf protection
 $token = getSession('csrf_token');
-if (!isset($token)) {
+if (!isset($token) || !$token) {
 	CsrfToken::generate();
 }
 
