@@ -44,7 +44,10 @@ function warning($message, $return = false) {
 	return message($message, 'warning', $return);
 }
 function note($message, $return = false) {
-	return message($message, 'note', $return);
+	return info($message, $return);
+}
+function info($message, $return = false) {
+	return message($message, 'info', $return);
 }
 function error($message, $return = false) {
 	return message($message, ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'danger' : 'error'), $return);
