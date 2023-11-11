@@ -66,7 +66,8 @@
 				if (!this.checked) {
 					tinymce.remove('#editor');
 				} else {
-					if (tinymce.get('#editor')!== null){
+					$('#php').prop('checked', false);
+					if (tinymce.get('#editor')!== null) {
 						tinymce.activeEditor.show();
 					} else {
 						tinymceInit();
