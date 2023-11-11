@@ -111,6 +111,8 @@ try {
 	$capsule->addConnection([
 		'driver' => 'mysql',
 		'database' => $config['database_name'],
+		'username' => $config['database_user'],
+		'password' => $config['database_password'],
 	]);
 
 	$capsule->getConnection()->setPdo($db);

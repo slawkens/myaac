@@ -13,7 +13,9 @@
         "nikic/fast-route": "^1.3",
         "matomo/device-detector": "^6.0",
         "illuminate/database": "^10.18",
-        "peppeocchi/php-cron-scheduler": "4.*"
+        "illuminate/filesystem": "^10.18",
+        "peppeocchi/php-cron-scheduler": "4.*",
+        "symfony/process": "^6.3"
     },
     "require-dev": {
         "filp/whoops": "^2.15",
