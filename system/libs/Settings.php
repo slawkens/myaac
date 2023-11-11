@@ -249,6 +249,10 @@ class Settings implements ArrayAccess
 				}
 
 				else if($setting['type'] === 'textarea') {
+					if (is_array($settingsDb[$key])) {
+						$settingsDb[$key] = implode(',', $settingsDb[$key]);
+					}
+
 					$value = ($settingsDb[$key] ?? ($setting['default'] ?? ''));
 					$valueWithSpaces = array_map('trim', preg_split('/\r\n|\r|\n/', trim($value)));
 					$rows = count($valueWithSpaces);
