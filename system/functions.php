@@ -856,9 +856,6 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	else
 		$tmp_body = $body . '<br/><br/>' . $signature_html;
 
-	define('MAIL_MAIL', 0);
-	define('MAIL_SMTP', 1);
-
 	$mailOption = setting('core.mail_option');
 	if($mailOption == MAIL_SMTP)
 	{
@@ -868,10 +865,6 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 		$mailer->SMTPAuth = setting('core.smtp_auth');
 		$mailer->Username = setting('core.smtp_user');
 		$mailer->Password = setting('core.smtp_pass');
-
-		define('SMTP_SECURITY_NONE', 0);
-		define('SMTP_SECURITY_SSL', 1);
-		define('SMTP_SECURITY_TLS', 2);
 
 		$security = setting('core.smtp_security');
 
