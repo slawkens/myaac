@@ -373,7 +373,6 @@ class Settings implements ArrayAccess
 		}
 
 		$this->settingsDatabase[$pluginKeyName][$key] = $value;
-		$this->updateInDatabase($pluginKeyName, $key, $value);
 	}
 
 	#[\ReturnTypeWillChange]
@@ -414,7 +413,6 @@ class Settings implements ArrayAccess
 
 		unset($this->settingsFile[$pluginKeyName]['settings'][$key]);
 		unset($this->settingsDatabase[$pluginKeyName][$key]);
-		$this->deleteFromDatabase($pluginKeyName, $key);
 	}
 
 	/**
