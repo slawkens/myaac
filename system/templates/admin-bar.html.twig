@@ -106,9 +106,11 @@ html { margin-top: 32px !important; }
 			</a>
 		</li>
 		<li>
-			<a class="ab-item" href="{{ constant('ADMIN_URL') }}?p=dashboard&clear_cache">
-				Clear Cache
-			</a>
+			<form method="post" action="{{ constant('ADMIN_URL') }}?p=dashboard">
+				{{ csrf() }}
+				<input type="hidden" name="clear_cache" value="1" />
+				<a class="ab-item" href="#" onclick="confirm('Are you sure?') && $(this).closest('form').submit()" title="Clear Cache">Clear Cache</a>
+			</form>
 		</li>
 	</ul>
 	<ul class="ab-top-secondary">
