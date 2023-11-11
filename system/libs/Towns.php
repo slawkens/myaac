@@ -33,7 +33,7 @@ class Towns
 	/**
 	 * @var string
 	 */
-	private static $filename = CACHE . 'persistent' . 'towns.php';
+	private static $filename = CACHE . 'persistent/' . 'towns.php';
 
 	/**
 	 * Determine towns

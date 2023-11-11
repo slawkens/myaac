@@ -40,7 +40,7 @@ class Items
 		}
 
 		require_once LIBS . 'cache_php.php';
-		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent');
+		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent/');
 		$cache_php->set('items', $items, 5 * 365 * 24 * 60 * 60);
 		return true;
 	}
@@ -68,7 +68,7 @@ class Items
 		}
 
 		require_once LIBS . 'cache_php.php';
-		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent');
+		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent/');
 		self::$items = $cache_php->get('items');
 	}
 
