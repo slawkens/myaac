@@ -85,7 +85,7 @@ else if (isset($_REQUEST['search'])) {
 		$account = new OTS_Account();
 		$account->load($id);
 
-		if (isset($account, $_POST['save']) && $account->isLoaded()) {
+		if (isset($_POST['save']) && $account->isLoaded()) {
 			$error = false;
 
 			$_error = '';

@@ -78,7 +78,7 @@ else if (isset($_REQUEST['search'])) {
 		$player = new OTS_Player();
 		$player->load($id);
 
-		if (isset($player) && $player->isLoaded() && isset($_POST['save'])) {// we want to save
+		if ($player->isLoaded() && isset($_POST['save'])) {// we want to save
 			$error = false;
 
 			if ($player->isOnline())
