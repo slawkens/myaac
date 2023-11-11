@@ -129,6 +129,9 @@ class Settings implements ArrayAccess
 			if (is_bool($value)) {
 				$settingsDb[$key] = $value ? 'true' : 'false';
 			}
+			elseif (is_array($value)) {
+				$settingsDb[$key] = $value;
+			}
 			else {
 				$settingsDb[$key] = (string)$value;
 			}
@@ -530,8 +533,11 @@ class Settings implements ArrayAccess
 
 	public static function saveConfig($config, $filename, &$content = '')
 	{
-		$content = "<?php" . PHP_EOL .
-			"\$config['installed'] = true;" . PHP_EOL;
+		$content = "<?php" . PHP_EOL;
+
+		unset($config['installed']);
+
+		$content .= "\$config['installed'] = true;" . PHP_EOL;
 
 		foreach ($config as $key => $value) {
 			$content .= "\$config['$key'] = ";

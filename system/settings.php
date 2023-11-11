@@ -1588,7 +1588,13 @@ Sent by MyAAC,<br/>
 		'beforeSave' => function(&$settings, &$values) {
 			global $config;
 
-			$configToSave = [];
+			$configOriginal = $config;
+			unset($config);
+
+			$config = [];
+			require BASE . 'config.local.php';
+
+			$configToSave = $config;
 
 			$server_path = '';
 			$database = [];
@@ -1625,7 +1631,7 @@ Sent by MyAAC,<br/>
 			// if fail - revert the setting and inform the user
 			if (!file_exists($server_path . 'config.lua')) {
 				error('Server Path is invalid - cannot find config.lua in the directory. Setting have been reverted.');
-				$configToSave['server_path'] = $config['server_path'];
+				$configToSave['server_path'] = $configOriginal['server_path'];
 			}
 
 			// test database connection
@@ -1633,7 +1639,7 @@ Sent by MyAAC,<br/>
 			if ($database['database_overwrite'] && !Settings::testDatabaseConnection($database)) {
 				foreach ($database as $key => $value) {
 					if (!in_array($key, ['database_log', 'database_persistent'])) { // ignore these two
-						$configToSave[$key] = $config[$key];
+						$configToSave[$key] = $configOriginal[$key];
 					}
 				}
 			}
