@@ -1,5 +1,7 @@
 <?php
 
+require_once LIBS . 'Settings.php';
+
 $query = $db->query("SELECT `id` FROM `players` WHERE (`name` = " . $db->quote("Rook Sample") . " OR `name` = " . $db->quote("Sorcerer Sample") . " OR `name` = " . $db->quote("Druid Sample") . " OR `name` = " . $db->quote("Paladin Sample") . " OR `name` = " . $db->quote("Knight Sample") . " OR `name` = " . $db->quote("Account Manager") . ") ORDER BY `id`;");
 
 $highscores_ignored_ids = array();
