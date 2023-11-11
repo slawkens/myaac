@@ -117,12 +117,15 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			}
 		}
 
+		$driverAttributes = []; // debugbar dont like persistent connection
+		if (config('env') !== 'dev' && !getBoolean(config('enable_debugbar'))) {
+			$driverAttributes[PDO::ATTR_PERSISTENT] = $params['persistent'];
+		}
+
 		if(isset($params['socket'][0])) {
 			$dns[] = 'unix_socket=' . $params['socket'];
 
-			parent::__construct('mysql:' . implode(';', $dns), $user, $password, array(
-				PDO::ATTR_PERSISTENT => $params['persistent']
-			));
+			parent::__construct('mysql:' . implode(';', $dns), $user, $password, $driverAttributes);
 
 			return;
 		}
@@ -135,9 +138,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			$dns[] = 'port=' . $params['port'];
 		}
 
-		parent::__construct('mysql:' . implode(';', $dns), $user, $password, array(
-			PDO::ATTR_PERSISTENT => $params['persistent']
-		));
+		parent::__construct('mysql:' . implode(';', $dns), $user, $password, $driverAttributes);
     }
 
 	public function __destruct()
