@@ -79,7 +79,7 @@ $ignore = false;
 
 /** @var boolean $logged */
 /** @var OTS_Account $account_logged */
-$logged_access = 1;
+$logged_access = 0;
 if($logged && $account_logged && $account_logged->isLoaded()) {
 	$logged_access = $account_logged->getAccess();
 }

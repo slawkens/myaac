@@ -21,10 +21,12 @@
 				<div class="form-group row">
 					<label for="access">Access</label>
 					<select class="form-control" id="access" name="access">
+						<option value="0" {% if access == 0 %}selected{% endif %}>Guest*</option>
 						{% for id, group in groups %}
-							<option value="{{ group.getId() }}"{% if access == group.getId() %} selected{% endif %}>{{ group.getName() }}</option>
+							<option value="{{ group.getId() }}"{% if access == group.getId() %} selected{% endif %}>{{ group.getName()|title }}</option>
 						{% endfor %}
 					</select>
+					<br>* Guest means everyone will have access to this page. Player means registered and logged in user.
 				</div>
 				<div class="form-group row">
 					<label for="php">PHP
