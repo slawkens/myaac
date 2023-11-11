@@ -340,7 +340,7 @@ class Settings implements ArrayAccess
 									echo $setting['default'];
 								}
 								else if ($setting['type'] === 'options') {
-									if (is_int($setting['default'])) {
+									if (is_int($setting['default']) || !empty($setting['default'])) {
 										echo $setting['options'][$setting['default']];
 									}
 								}
