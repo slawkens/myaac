@@ -329,7 +329,7 @@ class Settings implements ArrayAccess
 						</td>
 						<td>
 							<div class="well setting-default"><?php
-								echo ($setting['desc'] ?? '');
+								echo (isset($setting['desc']) ? makeLinksClickable($setting['desc']) : '');
 								echo '<br/>';
 								echo '<strong>Default:</strong> ';
 
