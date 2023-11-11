@@ -211,7 +211,7 @@ else {
 			$_GET = array_merge($_GET, $vars);
 			extract($vars);
 
-			if (strpos($path, '__database__/') !== false) {
+			if (str_contains($path, '__database__/')) {
 				$pageName = str_replace('__database__/', '', $path);
 
 				$success = false;
@@ -227,7 +227,7 @@ else {
 					$page = $pageName;
 					$file = false;
 				}
-			} else if (strpos($path, '__redirect__/') !== false) {
+			} else if (str_contains($path, '__redirect__/')) {
 				$path = str_replace('__redirect__/', '', $path);
 				header('Location: ' . BASE_URL . $path);
 				exit;
@@ -242,7 +242,7 @@ else {
 				if (false !== $pos = strpos($uri, '?')) {
 					$uri = substr($uri, 0, $pos);
 				}
-				if (0 === strpos($uri, '/')) {
+				if (str_starts_with($uri, '/')) {
 					$uri = str_replace_first('/', '', $uri);
 				}
 
