@@ -45,7 +45,7 @@ return [
 			'name' => 'Date Timezone',
 			'type' => 'options',
 			'options' => '$timezones',
-			'desc' => 'Timezone of the server, more info at http://php.net/manual/en/timezones.php',
+			'desc' => 'Timezone of the server, more info at https://php.net/manual/en/timezones.php',
 			'default' => 'Europe/Warsaw',
 		],
 		'friendly_urls' => [
@@ -289,7 +289,7 @@ return [
 		'vocations' => [
 			'name' => 'Vocation Names',
 			'type' => 'textarea',
-			'desc' => 'Separated by comma ,',
+			'desc' => 'Separated by comma. Must be in the same order as in vocations.xml, starting with id: 0.',
 			'default' => 'None, Sorcerer, Druid, Paladin, Knight, Master Sorcerer, Elder Druid,Royal Paladin, Elite Knight',
 			'callbacks' => [
 				'get' => function ($value) {
@@ -939,7 +939,7 @@ Sent by MyAAC,<br/>
 		'news_date_format' => [
 			'name' => 'News Date Format',
 			'type' => 'text',
-			'desc' => 'Check php manual date() function for more info about this',
+			'desc' => 'Check php manual date() - https://www.php.net/manual/de/datetime.format.php function for more info about this',
 			'default' => 'j.n.Y',
 		],
 		[
@@ -1262,6 +1262,28 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
+			'title' => 'Monsters Page'
+		],
+		'monsters_images_preview' => [
+			'name' => 'Monsters Images Preview',
+			'type' => 'boolean',
+			'desc' => 'Set to yes to allow picture previews for creatures',
+			'default' => false,
+		],
+		'monsters_items_url' => [
+			'name' => 'Monsters Items URL',
+			'type' => 'text',
+			'desc' => 'Set to website which shows details about items',
+			'default' => 'https://tibia.fandom.com/wiki/',
+		],
+		'monsters_loot_percentage' => [
+			'name' => 'Monsters Loot Percentage',
+			'type' => 'boolean',
+			'desc' => 'Set to yes to show the loot tooltip percent',
+			'default' => true,
+		],
+		[
+			'type' => 'section',
 			'title' => 'Bans Page'
 		],
 		'bans_per_page' => [
@@ -1393,24 +1415,6 @@ Sent by MyAAC,<br/>
 			'type' => 'text',
 			'desc' => '',
 			'default' => '.gif',
-		],
-		'monsters_images_preview' => [
-			'name' => 'Monsters Images Preview',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to allow picture previews for creatures',
-			'default' => false,
-		],
-		'monsters_items_url' => [
-			'name' => 'Monsters Items URL',
-			'type' => 'text',
-			'desc' => 'Set to website which shows details about items',
-			'default' => 'https://tibia.fandom.com/wiki/',
-		],
-		'monsters_loot_percentage' => [
-			'name' => 'Monsters Items URL',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to show the loot tooltip percent',
-			'default' => true,
 		],
 		// this is hidden, because no implemented yet
 		'multiworld' => [
