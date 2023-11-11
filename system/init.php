@@ -54,6 +54,9 @@ require_once SYSTEM . 'twig.php';
 $action = $_REQUEST['action'] ?? '';
 define('ACTION', $action);
 
+// errors, is also often used
+$errors = [];
+
 // trim values we receive
 if(isset($_POST))
 {
