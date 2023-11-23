@@ -89,7 +89,7 @@ class Player extends Model {
 
 	public function onlineTable()
 	{
-		return $this->belongsTo(PlayerOnline::class);
+		return $this->hasOne(PlayerOnline::class);
 	}
 
 	public function account()
