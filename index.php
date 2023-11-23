@@ -78,6 +78,45 @@ require_once SYSTEM . 'status.php';
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
 
+// backward support for gesior
+if(setting('core.backward_support')) {
+	define('INITIALIZED', true);
+	$SQL = $db;
+	$layout_header = template_header();
+	$layout_name = $template_path;
+	$news_content = '';
+	$tickers_content = '';
+	$main_content = '';
+
+	$config['access_admin_panel'] = 2;
+	$group_id_of_acc_logged = 0;
+	if($logged && $account_logged)
+		$group_id_of_acc_logged = $account_logged->getGroupId();
+
+	$config['site'] = &$config;
+	$config['server'] = &$config['lua'];
+	$config['site']['shop_system'] = setting('core.gifts_system');
+	$config['site']['gallery_page'] = true;
+
+	if(!isset($config['vdarkborder']))
+		$config['vdarkborder'] = '#505050';
+	if(!isset($config['darkborder']))
+		$config['darkborder'] = '#D4C0A1';
+	if(!isset($config['lightborder']))
+		$config['lightborder'] = '#F1E0C6';
+
+	$config['site']['download_page'] = true;
+	$config['site']['serverinfo_page'] = true;
+	$config['site']['screenshot_page'] = true;
+
+	$forumSetting = setting('core.forum');
+	if($forumSetting != '')
+		$config['forum_link'] = (strtolower($forumSetting) === 'site' ? getLink('forum') : $forumSetting);
+
+	foreach($status as $key => $value)
+		$config['status']['serverStatus_' . $key] = $value;
+}
+
 require_once SYSTEM . 'router.php';
 
 $hooks->trigger(HOOK_STARTUP);
@@ -123,45 +162,6 @@ if(setting('core.views_counter'))
 if(setting('core.visitors_counter')) {
 	require_once SYSTEM . 'libs/visitors.php';
 	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
-}
-
-// backward support for gesior
-if(setting('core.backward_support')) {
-	define('INITIALIZED', true);
-	$SQL = $db;
-	$layout_header = template_header();
-	$layout_name = $template_path;
-	$news_content = '';
-	$tickers_content = '';
-	$main_content = '';
-
-	$config['access_admin_panel'] = 2;
-	$group_id_of_acc_logged = 0;
-	if($logged && $account_logged)
-		$group_id_of_acc_logged = $account_logged->getGroupId();
-
-	$config['site'] = &$config;
-	$config['server'] = &$config['lua'];
-	$config['site']['shop_system'] = setting('core.gifts_system');
-	$config['site']['gallery_page'] = true;
-
-	if(!isset($config['vdarkborder']))
-		$config['vdarkborder'] = '#505050';
-	if(!isset($config['darkborder']))
-		$config['darkborder'] = '#D4C0A1';
-	if(!isset($config['lightborder']))
-		$config['lightborder'] = '#F1E0C6';
-
-	$config['site']['download_page'] = true;
-	$config['site']['serverinfo_page'] = true;
-	$config['site']['screenshot_page'] = true;
-
-	$forumSetting = setting('core.forum');
-	if($forumSetting != '')
-		$config['forum_link'] = (strtolower($forumSetting) === 'site' ? getLink('forum') : $forumSetting);
-
-	foreach($status as $key => $value)
-		$config['status']['serverStatus_' . $key] = $value;
 }
 
 /**
