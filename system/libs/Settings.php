@@ -109,7 +109,13 @@ class Settings implements ArrayAccess
 
 	public function updateInDatabase($pluginName, $key, $value)
 	{
-		ModelsSettings::where(['name' => $pluginName, 'key' => $key])->update(['value' => $value]);
+		if (ModelsSettings::where(['name' => $pluginName, 'key' => $key])->exists()) {
+			ModelsSettings::where(['name' => $pluginName, 'key' => $key])->update(['value' => $value]);
+		}
+		else {
+			// insert new
+			ModelsSettings::create(['name' => $pluginName, 'key' => $key, 'value' => $value]);
+		}
 	}
 
 	public function deleteFromDatabase($pluginName, $key = null)
