@@ -63,7 +63,7 @@ class Pages
 			return false;
 		}
 
-		if (!ModelsPages::where('name', $name)->exists())
+		if (!ModelsPages::where('name', $name)->exists()) {
 			ModelsPages::create([
 				'name' => $name,
 				'title' => $title,
@@ -73,6 +73,8 @@ class Pages
 				'enable_tinymce' => $enable_tinymce ? '1' : '0',
 				'access' => $access
 			]);
+			clearRouteCache();
+		}
 		else
 			$errors[] = 'Page with this link already exists.';
 
@@ -94,6 +96,8 @@ class Pages
 			'enable_tinymce' => $enable_tinymce ? '1' : '0',
 			'access' => $access
 		]);
+
+		clearRouteCache();
 		return true;
 	}
 
@@ -103,6 +107,7 @@ class Pages
 			$row = ModelsPages::find($id);
 			if ($row) {
 				$row->delete();
+				clearRouteCache();
 			}
 			else
 				$errors[] = 'Page with id ' . $id . ' does not exists.';
@@ -120,6 +125,9 @@ class Pages
 				$row->hidden = $row->hidden == 1 ? 0 : 1;
 				if (!$row->save()) {
 					$errors[] = 'Fail during toggle hidden Page.';
+				}
+				else {
+					clearRouteCache();
 				}
 				$status = $row->hidden;
 			}

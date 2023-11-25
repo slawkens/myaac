@@ -1265,12 +1265,17 @@ function clearCache()
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html', 'persistent'], true);
 
 	// routes cache
+	clearRouteCache();
+
+	return true;
+}
+
+function clearRouteCache(): void
+{
 	$routeCacheFile = CACHE . 'route.cache';
 	if (file_exists($routeCacheFile)) {
 		unlink($routeCacheFile);
 	}
-
-	return true;
 }
 
 function getCustomPageInfo($name)
