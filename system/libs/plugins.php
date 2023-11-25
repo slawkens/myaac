@@ -505,12 +505,7 @@ class Plugins {
 						self::$warnings[] = 'Cannot load install script. Your plugin might be not working correctly.';
 				}
 
-				$cache = Cache::getInstance();
-				if($cache->enabled()) {
-					$cache->delete('templates');
-					$cache->delete('hooks');
-					$cache->delete('template_menus');
-				}
+				clearCache();
 
 				return true;
 			}
