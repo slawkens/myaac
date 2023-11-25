@@ -557,6 +557,45 @@ class Plugins {
 		return true;
 	}
 
+	/**
+	 * This function is to execute the "install" part of the plugin
+	 *
+	 * @param $plugin_name
+	 * @return bool
+	 */
+	public static function executeInstall($plugin_name): bool
+	{
+		$filename = BASE . 'plugins/' . $plugin_name . '.json';
+		if(!file_exists($filename)) {
+			self::$error = 'Plugin ' . $plugin_name . ' does not exist.';
+			return false;
+		}
+
+		$string = file_get_contents($filename);
+		$plugin_json = json_decode($string, true);
+		if(!$plugin_json) {
+			self::$error = 'Cannot load plugin info ' . $plugin_name . '.json';
+			return false;
+		}
+
+		if(!isset($plugin_json['install'])) {
+			self::$error = "Plugin doesn't have install options defined. Skipping...";
+			return false;
+		}
+
+		global $db;
+		if (file_exists(BASE . $plugin_json['install'])) {
+			$db->revalidateCache();
+			require BASE . $plugin_json['install'];
+			$db->revalidateCache();
+		}
+		else {
+			self::$warnings[] = 'Cannot load install script. Your plugin might be not working correctly.';
+		}
+
+		return true;
+	}
+
 	public static function uninstall($plugin_name): bool
 	{
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
