@@ -27,7 +27,7 @@
 				{% for log in changelogs %}
 					<tr>
 						<td>{{ log.id }}</td>
-						<td>{{ log.date|date("j.m.Y") }}</td>
+						<td data-sort="{{ log.date }}">{{ log.date|date("j.m.Y") }}</td>
 						<td>{{ truncate(log.body|raw,20) }}</td>
 						<td><img src="{{ constant('BASE_URL') }}images/changelog/{{ log.type }}.png" alt="icon" title="{{ log.type|capitalize }}"/> {{ log.type|capitalize }}</td>
 						<td><img src="{{ constant('BASE_URL') }}images/changelog/{{ log.where }}.png" alt="icon" title="{{ log.where|capitalize }}"/> {{ log.where|capitalize }}</td>
@@ -75,7 +75,7 @@
 
 		$('.tb_datatable').DataTable({
 			"order": [[0, "desc"]],
-			"columnDefs": [{targets: [1, 2,4,5],orderable: false}]
+			"columnDefs": [{targets: [2, 5], orderable: false}]
 		});
 	});
 </script>

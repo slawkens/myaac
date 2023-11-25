@@ -19,7 +19,7 @@ $next_page = false;
 
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 
-$changelogs = Changelog::isPublic()->orderByDesc('id')->limit($limit + 1)->offset($offset)->get()->toArray();
+$changelogs = Changelog::isPublic()->orderByDesc('date')->limit($limit + 1)->offset($offset)->get()->toArray();
 
 $i = 0;
 foreach($changelogs as $key => &$log)
