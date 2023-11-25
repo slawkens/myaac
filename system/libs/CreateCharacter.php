@@ -260,6 +260,20 @@ class CreateCharacter
 			}
 		}
 
+		global $hooks;
+		if (!$hooks->trigger(HOOK_ACCOUNT_CREATE_CHARACTER_AFTER,
+			[
+				'account' => $account,
+				'player' => $player,
+				'name' => $name,
+				'sex' => $sex,
+				'vocation' => $vocation,
+				'town' => $town,
+			]
+		)) {
+			return false;
+		}
+
 		global $twig;
 		$twig->display('success.html.twig', array(
 			'title' => 'Character Created',
