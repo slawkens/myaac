@@ -141,7 +141,7 @@
 	foreach ( $slots as $pid => $position )
 	{
 		$item = $db->query( 'SELECT `itemtype`, `attributes` FROM `player_items` WHERE `player_items`.`player_id` = '.$player->getId().' AND `player_items`.`pid` = '.$pid.';' )->fetch();
-		if ( $item['itemtype'] != null )
+		if ( $item && $item['itemtype'] != null )
 		{
 			$count = unpack( 'C*', $item['attributes'] );
 			if ( isset( $count[2] ) ) {
