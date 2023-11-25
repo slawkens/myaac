@@ -8,7 +8,7 @@ if($query->rowCount() === 0) {
 <div style=\"text-align: center;\">We''re using official Tibia Client <strong>{{ config.client / 100 }}</strong><br />
 <p>Download Tibia Client <strong>{{ config.client / 100 }}</strong>&nbsp;for Windows <a href=\"https://drive.google.com/drive/folders/0B2-sMQkWYzhGSFhGVlY2WGk5czQ\" target=\"_blank\" rel=\"noopener\">HERE</a>.</p>
 <h2>IP Changer:</h2>
-<a href=\"https://static.otland.net/ipchanger.exe\" target=\"_blank\" rel=\"noopener\">HERE</a></div>', 0, 1, 0, 1, 0);");
+<a href=\"https://static.otland.net/ipchanger.exe\" target=\"_blank\" rel=\"noopener\">HERE</a></div>', 0, 1, 0, 0, 0);");
 }
 
 $query = $db->query("SELECT `id` FROM `" . TABLE_PREFIX . "pages` WHERE `name` LIKE " . $db->quote('commands') . " LIMIT 1;");
@@ -33,5 +33,5 @@ if($query->rowCount() === 0) {
 <td style=\"width: 33.3333%; height: 18px;\">Buy AoL</td>
 </tr>
 </tbody>
-</table>', 0, 1, 0, 1, 0);");
+</table>', 0, 1, 0, 0, 0);");
 }

@@ -27,5 +27,5 @@ a) Excessive killing of characters who are not marked with a \"skull\" on worlds
 
 A violation of the Tibia Rules may lead to temporary banishment of characters and accounts. In severe cases removal or modification of character skills, attributes and belongings, as well as the permanent removal of accounts without any compensation may be considered. The sanction is based on the seriousness of the rule violation and the previous record of the player. It is determined by the gamemaster imposing the banishment.
 
-These rules may be changed at any time. All changes will be announced on the official website.', 0, 1, 0, 0, 1, 0);");
+These rules may be changed at any time. All changes will be announced on the official website.', 0, 1, 0, 0, 0, 0);");
 }
