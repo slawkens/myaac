@@ -299,6 +299,7 @@ function getDatabasePages($withHidden = false): array
 		$q->isPublic();
 	})->get('name');
 
+	$ret = [];
 	foreach($pages as $page) {
 		$ret[] = $page->name;
 	}
