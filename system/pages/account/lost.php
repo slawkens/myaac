@@ -95,7 +95,7 @@ elseif($action == 'sendcode')
 					<p>Account name: '.$account->getName().'</p>
 					<br />
 					To do so, please click this link:
-					<p><a href="' . getLink('account/lost') . '?action=checkcode&code='.$newcode.'&character='.urlencode($nick).'">'.BASE_URL.'/?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'</a></p>
+					<p><a href="' . getLink('account/lost') . '?action=checkcode&code='.$newcode.'&character='.urlencode($nick).'">' . getLink('account/lost') . '?action=checkcode&code='.$newcode.'&character='.urlencode($nick).'</a></p>
 					<p>or open page: <i>' . getLink('account/lost') . '?action=checkcode</i> and in field "code" write <b>'.$newcode.'</b></p>
 					<br/>
 						<p>If you did not request a password change, you may ignore this message and your password will remain unchanged.';
@@ -172,7 +172,7 @@ elseif($action == 'step1' && $action_type == 'reckey')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><div style="text-align:center">
-				<a href="?subtopic=lostaccount" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
+				<a href="' . getLink('account/lost') . '" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'step2')
@@ -232,7 +232,7 @@ elseif($action == 'step2')
 					}
 					</script>';
 					echo 'Set new password and e-mail to your account.<BR>
-					<FORM ACTION="?subtopic=lostaccount&action=step3" onsubmit="return validate_form(this)" METHOD=post>
+					<FORM ACTION="' . getLink('account/lost') . '?action=step3" onsubmit="return validate_form(this)" METHOD=post>
 					<INPUT TYPE=hidden NAME="character" VALUE="">
 					<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 					<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Please enter new password and e-mail</B></TD></TR>
@@ -261,7 +261,7 @@ elseif($action == 'step2')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><div style="text-align:center">
-				<a href="?subtopic=lostaccount&action=step1&action_type=reckey&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
+				<a href="' . getLink('account/lost') . '?action=step1&action_type=reckey&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'step3')
@@ -361,7 +361,7 @@ elseif($action == 'step3')
 	else
 		echo 'Invalid player name format. If you have other characters on account try with other name.';
 	echo '<BR /><TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><div style="text-align:center">
-				<a href="?subtopic=lostaccount&action=step1&action_type=reckey&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
+				<a href="' . getLink('account/lost') . '?action=step1&action_type=reckey&nick='.urlencode($nick).'" border="0"><IMG SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" NAME="Back" ALT="Back" BORDER=0 WIDTH=120 HEIGHT=18></a></div>
 				</TD></TR></FORM></TABLE></TABLE>';
 }
 elseif($action == 'checkcode')
@@ -370,7 +370,7 @@ elseif($action == 'checkcode')
 	$character = stripslashes(trim($_REQUEST['character']));
 	if(empty($code) || empty($character))
 		echo 'Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
-				<FORM ACTION="?subtopic=lostaccount&action=checkcode" METHOD=post>
+				<FORM ACTION="' . getLink('account/lost') . '?action=checkcode" METHOD=post>
 				<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 				<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Code & character name</B></TD></TR>
 				<TR><TD BGCOLOR="'.$config['darkborder'].'">
@@ -418,7 +418,7 @@ elseif($action == 'checkcode')
 				}
 				</script>
 				Please enter new password to your account and repeat to make sure you remember password.<BR>
-				<FORM ACTION="?subtopic=lostaccount&action=setnewpassword" onsubmit="return validate_form(this)" METHOD=post>
+				<FORM ACTION="' . getLink('account/lost') . '?action=setnewpassword" onsubmit="return validate_form(this)" METHOD=post>
 				<INPUT TYPE=hidden NAME="character" VALUE="'.$character.'">
 				<INPUT TYPE=hidden NAME="code" VALUE="'.$code.'">
 				<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
@@ -441,7 +441,7 @@ elseif($action == 'checkcode')
 	}
 	if(!empty($error))
 				echo '<span style="color: red"><b>'.$error.'</b></span><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
-				<FORM ACTION="?subtopic=lostaccount&action=checkcode" METHOD=post>
+				<FORM ACTION="' . getLink('account/lost') . '?action=checkcode" METHOD=post>
 				<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 				<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Code & character name</B></TD></TR>
 				<TR><TD BGCOLOR="'.$config['darkborder'].'">
@@ -462,7 +462,7 @@ elseif($action == 'setnewpassword')
 	echo '';
 	if(empty($code) || empty($character) || empty($newpassword))
 		echo '<span style="color: red"><b>Error. Try again.</b></span><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
-				<BR><FORM ACTION="?subtopic=lostaccount&action=checkcode" METHOD=post>
+				<BR><FORM ACTION="' . getLink('account/lost') . '?action=checkcode" METHOD=post>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><div style="text-align:center">
 				<INPUT TYPE=image NAME="Back" ALT="Back" SRC="'.$template_path.'/images/global/buttons/sbutton_back.gif" BORDER=0 WIDTH=120 HEIGHT=18></div>
 				</TD></TR></FORM></TABLE></TABLE>';
@@ -533,7 +533,7 @@ elseif($action == 'setnewpassword')
 	}
 	if(!empty($error))
 				echo '<span style="color: red"><b>'.$error.'</b></span><br />Please enter code from e-mail and name of one character from account. Then press Submit.<BR>
-				<FORM ACTION="?subtopic=lostaccount&action=checkcode" METHOD=post>
+				<FORM ACTION="' . getLink('account/lost') . '?action=checkcode" METHOD=post>
 				<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 				<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Code & character name</B></TD></TR>
 				<TR><TD BGCOLOR="'.$config['darkborder'].'">
