@@ -87,16 +87,16 @@
 			switch( $this->extension )
 			{
 				case MADGD_PNG:
-					$this->instance = imagecreatefrompng( $this->background );
+					$this->instance = @imagecreatefrompng( $this->background );
 					break;
 
 				case MADGD_GIF:
-					$this->instance = imagecreatefromgif( $this->background );
+					$this->instance = @imagecreatefromgif( $this->background );
 					break;
 
 				case MADGD_JPG:
 				case MADGD_JPEG:
-					$this->instance = imagecreatefromjpeg( $this->background );
+					$this->instance = @imagecreatefromjpeg( $this->background );
 					break;
 			}
 			return $this->instance;
@@ -182,7 +182,7 @@
 		{
 			if ( !is_array( $hex ) )
 			{
-				$hex = preg_replace( '/#/', null, $hex );
+				$hex = preg_replace( '/#/', '', $hex );
 				if ( strlen( $hex ) == 6 )
 				{
 					$hex = array(
@@ -319,19 +319,21 @@
 			switch( $this->extension )
 			{
 				case MADGD_PNG:
-					$this->instance = imagecreatefrompng( $this->icon );
+					$this->instance = @imagecreatefrompng( $this->icon );
 					break;
 
 				case MADGD_GIF:
-					$this->instance = imagecreatefromgif( $this->icon );
+					$this->instance = @imagecreatefromgif( $this->icon );
 					break;
 
 				case MADGD_JPG:
 				case MADGD_JPEG:
-					$this->instance = imagecreatefromjpeg( $this->icon );
+					$this->instance = @imagecreatefromjpeg( $this->icon );
 					break;
 			}
-			return imagecopyresampled( $this->parent->instance, $this->instance, $this->parent->x, $this->parent->y, 0, 0, ( $this->width != null ? $this->width : $imageWidth ), ( $this->height != null ? $this->height : $imageHeight ), $imageWidth, $imageHeight );
+			return imagecopyresampled( $this->parent->instance, $this->instance, $this->parent->x, $this->parent->y,
+				0, 0, ( $this->width != null ? (int)$this->width : (int)$imageWidth ), ( $this->height != null ?
+					(int)$this->height : (int)$imageHeight ), (int)$imageWidth, (int)$imageHeight );
 		}
 	}
 
