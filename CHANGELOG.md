@@ -1,5 +1,17 @@
 # Changelog
 
+## [0-8.14 - 27.11.2023]
+Security fixes.
+
+### Fixed
+* XSS vulnerability in bugtracker (https://github.com/slawkens/myaac/commit/83a91ec540072d319dd338abff45f8d5ebf48190)
+* XSS vulnerability in forum (https://github.com/slawkens/myaac/commit/d1bc63d07ad88a143358cacd2c417891eea74dcc + https://github.com/slawkens/myaac/commit/55dbade8d5280c5baed45e5f7ebc3613b8e9b9e8)
+* Session Fixation (https://github.com/slawkens/myaac/commit/483155cf4c1e3068aaee0d44541dfa61f6223379)
+* displaying ban info on account page (https://github.com/slawkens/myaac/commit/764db0c203d1826ffce3a5a78f83a97e56bd0685)
+
+### Changed
+* Clear some additional cache keys - like database cache (https://github.com/slawkens/myaac/commit/4327b66f915d06dce504211692173606b9ef3b4e)
+
 ## [0.8.13 - 16.09.2023]
 
 ### Added
