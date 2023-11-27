@@ -33,6 +33,11 @@ if(Forum::canPost($account_logged))
 		$smile = (isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0);
 		$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
 		$saved = false;
+
+		if (!superAdmin()) {
+			$html = 0;
+		}
+		
 		if(isset($_REQUEST['quote']))
 		{
 			$quoted_post = $db->query("SELECT `players`.`name`, `" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $quote)->fetchAll();
