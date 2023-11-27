@@ -26,6 +26,11 @@ if(Forum::canPost($account_logged))
 			$post_topic = isset($_REQUEST['topic']) ? stripslashes($_REQUEST['topic']) : '';
 			$smile = (isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0);
 			$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
+
+			if (!superAdmin()) {
+				$html = 0;
+			}
+
 			$saved = false;
 			if (isset($_REQUEST['save'])) {
 				$length = strlen($post_topic);

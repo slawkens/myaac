@@ -37,6 +37,10 @@ if(Forum::canPost($account_logged))
 				$smile = isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0;
 				$html = isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0;
 
+				if (!superAdmin()) {
+					$html = 0;
+				}
+
 				$length = strlen($post_topic);
 				if(($length < 1 || $length > 60) && $thread['id'] == $thread['first_post'])
 					$errors[] = "Too short or too long topic (Length: $length letters). Minimum 1 letter, maximum 60 letters.";
