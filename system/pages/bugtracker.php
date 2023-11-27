@@ -193,9 +193,9 @@ $showed = $post = $reply = false;
                     $value = '<span style="color: red">[CLOSED]</span>';
 
                 echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Bug Tracker</B></TD></TR>';
-                echo '<TR BGCOLOR="'.$dark.'"><td width=40%><i><b>Subject</b></i></td><td>'.$tags[$bug[2]['tag']].' '.$bug[2]['subject'].' '.$value.'</td></tr>';
+                echo '<TR BGCOLOR="'.$dark.'"><td width=40%><i><b>Subject</b></i></td><td>'.$tags[$bug[2]['tag']].' '.escapeHtml($bug[2]['subject']).' '.$value.'</td></tr>';
                 echo '<TR BGCOLOR="'.$light.'"><td colspan=2><i><b>Description</b></i></td></tr>';
-                echo '<TR BGCOLOR="'.$dark.'"><td colspan=2>'.nl2br($bug[2]['text']).'</td></tr>';
+                echo '<TR BGCOLOR="'.$dark.'"><td colspan=2>'.nl2br(escapeHtml($bug[2]['text'])).'</td></tr>';
                 echo '</TABLE>';
 
                 $answers = Bugtracker::where('account', $account_logged->getId())->where('id', $id)->where('type', 2)->orderBy('reply')->get()->toArray();
@@ -294,7 +294,7 @@ $showed = $post = $reply = false;
                         $bgcolor = $light;
                     }
 
-                    echo '<TR BGCOLOR="'.$bgcolor.'"><td width=75%><a href="?subtopic=bugtracker&id='.$report['id'].'">'.$tags[$report['tag']].' '.$report['subject'].'</a></td><td>'.$value.'</td></tr>';
+                    echo '<TR BGCOLOR="'.$bgcolor.'"><td width=75%><a href="?subtopic=bugtracker&id='.$report['id'].'">'.$tags[$report['tag']].' '.escapeHtml($report['subject']).'</a></td><td>'.$value.'</td></tr>';
 
                     $showed=true;
                 }
