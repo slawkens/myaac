@@ -100,6 +100,10 @@ for($i = 1; $i < $size; $i++)
 $basedir = str_replace(array('/admin', '/install', '/tools'), '', $basedir);
 define('BASE_DIR', $basedir);
 
+if (file_exists(BASE . 'config.local.php')) {
+	require BASE . 'config.local.php';
+}
+
 if(!IS_CLI) {
 	if (isset($_SERVER['HTTP_HOST'][0])) {
 		$baseHost = $_SERVER['HTTP_HOST'];
@@ -117,6 +121,8 @@ if(!IS_CLI) {
 
 	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
 
-	require SYSTEM . 'exception.php';
+	if(@$config['env'] !== 'prod') {
+		require SYSTEM . 'exception.php';
+	}
 }
 require SYSTEM . 'autoload.php';
