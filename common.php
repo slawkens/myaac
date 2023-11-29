@@ -120,8 +120,7 @@ if(!IS_CLI) {
 	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/admin/');
 
 	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
-
-	if(@$config['env'] !== 'prod') {
+	if(@$config['env'] === 'dev') {
 		require SYSTEM . 'exception.php';
 	}
 }
