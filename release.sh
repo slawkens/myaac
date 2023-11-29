@@ -38,7 +38,7 @@ if [ $1 = "prepare" ]; then
 	cd $dir || exit
 
 	# dependencies
-	composer install --no-dev
+	composer install --no-dev --prefer-dist --optimize-autoloader
 
 	echo "Now you can make changes to $dir. When you are ready, type 'release.sh pack'"
 	exit
