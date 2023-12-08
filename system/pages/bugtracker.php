@@ -54,7 +54,7 @@ $showed = $post = $reply = false;
                     $value = '<span style="color: blue">[NEW ANSWER]</span>';
 
                 echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Bug Tracker</B></TD></TR>';
-                echo '<TR BGCOLOR="'.$dark.'"><td width=40%><i><b>Subject</b></i></td><td>'.$tags[$bug[2]['tag']].' '.$bug[2]['subject'].' '.$value.'</td></tr>';
+                echo '<TR BGCOLOR="'.$dark.'"><td width=40%><i><b>Subject</b></i></td><td>'.$tags[$bug[2]['tag']].' '.escapeHtml($bug[2]['subject']).' '.$value.'</td></tr>';
                 echo '<TR BGCOLOR="'.$light.'"><td><i><b>Posted by</b></i></td><td>';
 
                 foreach($players as $player)
@@ -64,7 +64,7 @@ $showed = $post = $reply = false;
 
                 echo '</td></tr>';
                 echo '<TR BGCOLOR="'.$dark.'"><td colspan=2><i><b>Description</b></i></td></tr>';
-                echo '<TR BGCOLOR="'.$light.'"><td colspan=2>'.nl2br($bug[2]['text']).'</td></tr>';
+                echo '<TR BGCOLOR="'.$light.'"><td colspan=2>'.nl2br(escapeHtml($bug[2]['text'])).'</td></tr>';
                 echo '</TABLE>';
 
                 $answers = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'bugtracker').' where `account` = '.$_REQUEST['acc'].' and `id` = '.$_REQUEST['id'].' and `type` = 2 order by `reply`');
@@ -75,10 +75,10 @@ $showed = $post = $reply = false;
                     else
                         $who = '<span style="color: green">[PLAYER]</span>';
 
-                    echo '<br><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Answer #'.$answer['reply'].'</B></TD></TR>';
+                    echo '<br><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Answer #'.escapeHtml($answer['reply']).'</B></TD></TR>';
                     echo '<TR BGCOLOR="'.$dark.'"><td width=70%><i><b>Posted by</b></i></td><td>'.$who.'</td></tr>';
                     echo '<TR BGCOLOR="'.$light.'"><td colspan=2><i><b>Description</b></i></td></tr>';
-                    echo '<TR BGCOLOR="'.$dark.'"><td colspan=2>'.nl2br($answer['text']).'</td></tr>';
+                    echo '<TR BGCOLOR="'.$dark.'"><td colspan=2>'.nl2br(escapeHtml($answer['text'])).'</td></tr>';
                     echo '</TABLE>';
                 }
                 if($bug[2]['status'] != 3)
@@ -137,7 +137,7 @@ $showed = $post = $reply = false;
                 elseif($report['status'] == 1)
                     $value = '<span style="color: blue">[NEW ANSWER]</span>';
 
-                echo '<TR BGCOLOR="' . getStyle($i) . '"><td width=75%><a href="?subtopic=bugtracker&control=true&id='.$report['id'].'&acc='.$report['account'].'">'.$tags[$report['tag']].' '.$report['subject'].'</a></td><td>'.$value.'</td></tr>';
+                echo '<TR BGCOLOR="' . getStyle($i) . '"><td width=75%><a href="?subtopic=bugtracker&control=true&id='.$report['id'].'&acc='.$report['account'].'">'.$tags[$report['tag']].' '.escapeHtml($report['subject']).'</a></td><td>'.$value.'</td></tr>';
 
                 $showed=true;
                 $i++;
@@ -194,10 +194,10 @@ $showed = $post = $reply = false;
                     else
                         $who = '<span style="color: green">[YOU]</span>';
 
-                    echo '<br><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Answer #'.$answer['reply'].'</B></TD></TR>';
+                    echo '<br><TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 CLASS=white><B>Answer #'.escapeHtml($answer['reply']).'</B></TD></TR>';
                     echo '<TR BGCOLOR="'.$dark.'"><td width=70%><i><b>Posted by</b></i></td><td>'.$who.'</td></tr>';
                     echo '<TR BGCOLOR="'.$light.'"><td colspan=2><i><b>Description</b></i></td></tr>';
-                    echo '<TR BGCOLOR="'.$dark.'"><td colspan=2>'.nl2br($answer['text']).'</td></tr>';
+                    echo '<TR BGCOLOR="'.$dark.'"><td colspan=2>'.nl2br(escapeHtml($answer['text'])).'</td></tr>';
                     echo '</TABLE>';
                 }
                 if($bug[2]['status'] != 3)
