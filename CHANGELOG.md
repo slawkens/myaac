@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.15 - 09.12.2023]
+
+More security fixes, especially in bugtracker.
+
 ## [0-8.14 - 27.11.2023]
 Security fixes.
 
