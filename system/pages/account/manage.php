@@ -18,6 +18,16 @@ if(!$logged) {
 	return;
 }
 
+if(isset($_REQUEST['redirect']))
+{
+	$redirect = urldecode($_REQUEST['redirect']);
+
+	$twig->display('account.redirect.html.twig', array(
+		'redirect' => $redirect
+	));
+	return;
+}
+
 $groups = new OTS_Groups_List();
 
 $freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
