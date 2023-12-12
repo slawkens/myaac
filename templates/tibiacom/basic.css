@@ -11,6 +11,11 @@ img {
 	border: none;
 }
 
+.myaac-table tbody tr:nth-child(even) {background: #F1E0C6} /* light border */
+.myaac-table tbody tr:nth-child(odd) {background: #D4C0A1} /* dark border */
+.myaac-table thead td {background: #505050; color: #ffffff !important;} /* vdark border */
+.myaac-table tfoot td {background: #505050; color: #ffffff !important;} /* vdark border */
+
 #ArtworkHelper {
   text-align: center;
   background-position: top center;
