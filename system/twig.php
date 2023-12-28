@@ -48,7 +48,14 @@ $function = new TwigFunction('hook', function ($context, $hook, array $params = 
 	global $hooks;
 
 	if(is_string($hook)) {
-		$hook = constant($hook);
+		if (defined($hook)) {
+			$hook = constant($hook);
+		}
+		else {
+			// plugin/template has a hook that this version of myaac does not support
+			// just silently return
+			return;
+		}
 	}
 
 	$params['context'] = $context;
