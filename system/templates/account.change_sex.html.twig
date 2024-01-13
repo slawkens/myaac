@@ -1,5 +1,5 @@
 To change a sex of character select player and choose a new sex.<br/>
-<span style="color: red">Change sex cost {{ setting('core.account_change_character_sex_price') }} premium points. You have {{ points }} premium points.</span><br/><br/>
+<span style="color: red">Change sex cost {{ setting('core.account_change_character_sex_price') }} {{ setting('core.donate_column') == 'coins' ? 'coins' : 'premium points' }}. You have {{ points }} {{ setting('core.donate_column') == 'coins' ? 'coins' : 'premium points' }}.</span><br/><br/>
 <form action="{{ getLink('account/character/sex') }}" method="post">
 	{{ csrf() }}
 	<input type="hidden" name="changesexsave" value="1"/>
