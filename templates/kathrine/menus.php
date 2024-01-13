@@ -12,7 +12,6 @@ return [
 		'Lost Account?' => 'account/lost',
 		'Server Rules' => 'rules',
 		'Downloads' => 'downloads',
-		'Report Bug' => 'bugtracker',
 	],
 	MENU_CATEGORY_COMMUNITY => [
 		'Characters' => 'characters',
