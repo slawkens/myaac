@@ -103,7 +103,7 @@ class Plugins {
 						}
 					}
 
-					// replace first occurence of / in pattern if found (will be auto-added later)
+					// replace first occurrence of / in pattern if found (will be auto-added later)
 					removeIfFirstSlash($info['pattern']);
 
 					foreach ($routes as $id => &$route) {
