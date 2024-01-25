@@ -60,7 +60,7 @@ if(isset($_GET['archive']))
 
 			$admin_options = '';
 			if($canEdit) {
-				$admin_options = $twig->render('admin.links.html.twig', ['page' => 'news', 'id' => $news['id'], 'hidden' => $news['hidden']]);
+				$admin_options = '<br/><br/>' . $twig->render('admin.links.html.twig', ['page' => 'news', 'id' => $news['id'], 'hidden' => $news['hidden']]);
 			}
 
 			$twig->display('news.html.twig', array(
@@ -186,7 +186,7 @@ if(!$news_cached)
 
 			$admin_options = '';
 			if($canEdit) {
-				$admin_options = $twig->render('admin.links.html.twig', ['page' => 'news', 'id' => $news['id'], 'hidden' => $news['hidden']]);
+				$admin_options = '<br/><br/>' . $twig->render('admin.links.html.twig', ['page' => 'news', 'id' => $news['id'], 'hidden' => $news['hidden']]);
 			}
 
 			$content_ = $news['body'];
