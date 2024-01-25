@@ -57,6 +57,15 @@ class Plugins {
 		}
 
 		$routes = [];
+
+		$pluginPages = glob(PLUGINS . '*/pages/*.php');
+		foreach ($pluginPages as $file) {
+			$file = str_replace(PLUGINS, 'plugins/', $file);
+			$name = pathinfo($file, PATHINFO_FILENAME);
+
+			$routes[] = [['get', 'post'], $name, $file, 1000];
+		}
+
 		foreach(self::getAllPluginsJson() as $plugin) {
 			$warningPreTitle = 'Plugin: ' . $plugin['name'] . ' - ';
 
