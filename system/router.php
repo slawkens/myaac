@@ -282,7 +282,8 @@ ob_end_clean();
 $hooks->trigger(HOOK_AFTER_PAGE);
 
 if(!isset($title)) {
-	$title = ucfirst($page);
+	$title = str_replace('index.php/', '', $page);
+	$title = ucfirst($title);
 }
 
 if(setting('core.backward_support')) {
