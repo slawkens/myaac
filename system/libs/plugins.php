@@ -147,6 +147,32 @@ class Plugins {
 		return $routes;
 	}
 
+	public static function getThemes()
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('plugins_themes', $tmp)) {
+				return unserialize($tmp);
+			}
+		}
+
+		$themes = [];
+		$pluginThemes = glob(PLUGINS . '*/themes/*', GLOB_ONLYDIR);
+		foreach ($pluginThemes as $path) {
+			$path = str_replace(PLUGINS, 'plugins/', $path);
+			$name = pathinfo($path, PATHINFO_FILENAME);
+
+			$themes[$name] = $path;
+		}
+
+		if ($cache->enabled()) {
+			$cache->set('plugins_themes', serialize($themes), 600);
+		}
+
+		return $themes;
+	}
+
 	public static function getHooks()
 	{
 		$cache = Cache::getInstance();

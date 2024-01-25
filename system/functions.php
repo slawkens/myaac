@@ -798,6 +798,10 @@ function get_templates()
 			$ret[] = $file;
 	}
 
+	foreach (Plugins::getThemes() as $name => $path) {
+		$ret[] = $name;
+	}
+
 	return $ret;
 }
 

@@ -46,7 +46,14 @@ if(setting('core.template_allow_change'))
 		}
 	}
 }
-$template_path = 'templates/' . $template_name;
+
+$themes = Plugins::getThemes();
+if (isset($themes[$template_name])) {
+	$template_path = $themes[$template_name];
+}
+else {
+	$template_path = 'templates/' . $template_name;
+}
 
 if(file_exists(BASE . $template_path . '/index.php')) {
 	$template_index = 'index.php';
