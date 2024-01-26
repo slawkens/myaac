@@ -11,6 +11,7 @@ if(!IS_CLI) {
 require_once SYSTEM . 'functions.php';
 require_once SYSTEM . 'init.php';
 
+use MyAAC\Plugins;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
@@ -26,7 +27,7 @@ foreach ($commandsGlob as $item) {
 	$application->add(new ($commandPre . $name));
 }
 
-$pluginCommands = glob(PLUGINS . '*/commands/*.php');
+$pluginCommands = Plugins::getCommands();
 foreach ($pluginCommands as $item) {
 	$application->add(require $item);
 }

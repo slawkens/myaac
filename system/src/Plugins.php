@@ -122,12 +122,14 @@ class Plugins {
 		}
 
 		$themes = [];
-		$pluginThemes = glob(PLUGINS . '*/themes/*', GLOB_ONLYDIR);
-		foreach ($pluginThemes as $path) {
-			$path = str_replace(PLUGINS, 'plugins/', $path);
-			$name = pathinfo($path, PATHINFO_FILENAME);
+		foreach(self::getAllPluginsJson() as $plugin) {
+			$pluginThemes = glob(PLUGINS . $plugin['filename'] . '/themes/*', GLOB_ONLYDIR);
+			foreach ($pluginThemes as $path) {
+				$path = str_replace(PLUGINS, 'plugins/', $path);
+				$name = pathinfo($path, PATHINFO_FILENAME);
 
-			$themes[$name] = $path;
+				$themes[$name] = $path;
+			}
 		}
 
 		if ($cache->enabled()) {
@@ -135,6 +137,31 @@ class Plugins {
 		}
 
 		return $themes;
+	}
+
+	public static function getCommands()
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$tmp = '';
+			if ($cache->fetch('plugins_commands', $tmp)) {
+				return unserialize($tmp);
+			}
+		}
+
+		$commands = [];
+		foreach(self::getAllPluginsJson() as $plugin) {
+			$pluginCommands = glob(PLUGINS . $plugin['filename'] . '/commands/*.php');
+			foreach ($pluginCommands as $path) {
+				$commands[] = $path;
+			}
+		}
+
+		if ($cache->enabled()) {
+			$cache->set('plugins_commands', serialize($commands), 600);
+		}
+
+		return $commands;
 	}
 
 	public static function getHooks()
