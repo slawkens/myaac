@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Forum';
 
-require_once LIBS . 'forum.php';
+class_exists('MyAAC\Forum');
 
 $forumSetting = setting('core.forum');
 if(strtolower($forumSetting) != 'site') {

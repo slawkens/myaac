@@ -8,7 +8,11 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-defined('MYAAC') or die('Direct access not allowed!');
+
+namespace MyAAC;
+
+use MyAAC\Cache\PHP as CachePHP;
+use MyAAC\Models\Spell;
 
 class Items
 {
@@ -23,7 +27,7 @@ class Items
 			return false;
 		}
 
-		$xml = new DOMDocument;
+		$xml = new \DOMDocument;
 		$xml->load($file_path);
 
 		$items = array();
@@ -39,8 +43,7 @@ class Items
 			}
 		}
 
-		require_once LIBS . 'cache_php.php';
-		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent/');
+		$cache_php = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
 		$cache_php->set('items', $items, 5 * 365 * 24 * 60 * 60);
 		return true;
 	}
@@ -67,8 +70,7 @@ class Items
 			return;
 		}
 
-		require_once LIBS . 'cache_php.php';
-		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent/');
+		$cache_php = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
 		self::$items = $cache_php->get('items');
 	}
 
@@ -110,7 +112,7 @@ class Items
 			$s .= 'an item of type ' . $item['id'];
 
 		if(isset($attr['type']) && strtolower($attr['type']) == 'rune') {
-			$item = Spells::where('item_id', $id)->first();
+			$item = Spell::where('item_id', $id)->first();
 			if($item) {
 				if($item->level > 0 && $item->maglevel > 0) {
 					$s .= '. ' . ($count > 1 ? "They" : "It") . ' can only be used by ';

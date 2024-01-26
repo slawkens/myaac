@@ -1,44 +1,9 @@
 <?php
-/**
- * Plugins class
- *
- * @package   MyAAC
- * @author    Gesior <jerzyskalski@wp.pl>
- * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2019 MyAAC
- * @link      https://my-aac.org
- */
-defined('MYAAC') or die('Direct access not allowed!');
 
-function is_sub_dir($path = NULL, $parent_folder = BASE) {
-
-	//Get directory path minus last folder
-	$dir = dirname($path);
-	$folder = substr($path, strlen($dir));
-
-	//Check the the base dir is valid
-	$dir = realpath($dir);
-
-	//Only allow valid filename characters
-	$folder = preg_replace('/[^a-z0-9\.\-_]/i', '', $folder);
-
-	//If this is a bad path or a bad end folder name
-	if( !$dir OR !$folder OR $folder === '.') {
-		return FALSE;
-	}
-
-	//Rebuild path
-	$path = $dir. '/' . $folder;
-
-	//If this path is higher than the parent folder
-	if( strcasecmp($path, $parent_folder) > 0 ) {
-		return $path;
-	}
-
-	return FALSE;
-}
+namespace MyAAC;
 
 use Composer\Semver\Semver;
+use MyAAC\Cache\Cache;
 use MyAAC\Models\Menu;
 
 class Plugins {
@@ -123,17 +88,17 @@ class Plugins {
 				}
 			}
 		}
-/*
-		usort($routes, function ($a, $b)
-		{
-			// key 3 is priority
-			if ($a[3] == $b[3]) {
-				return 0;
-			}
+		/*
+				usort($routes, function ($a, $b)
+				{
+					// key 3 is priority
+					if ($a[3] == $b[3]) {
+						return 0;
+					}
 
-			return ($a[3] > $b[3]) ? -1 : 1;
-		});
-*/
+					return ($a[3] > $b[3]) ? -1 : 1;
+				});
+		*/
 		// cleanup before passing back
 		// priority is not needed anymore
 		foreach ($routes as &$route) {
@@ -312,11 +277,11 @@ class Plugins {
 	{
 		global $db;
 
-		if(!\class_exists('ZipArchive')) {
-			throw new RuntimeException('Please install PHP zip extension. Plugins upload disabled until then.');
+		if(!\class_exists('\ZipArchive')) {
+			throw new \RuntimeException('Please install PHP zip extension. Plugins upload disabled until then.');
 		}
 
-		$zip = new ZipArchive();
+		$zip = new \ZipArchive();
 		if($zip->open($file) !== true) {
 			self::$error = 'There was a problem with opening zip archive.';
 			return false;

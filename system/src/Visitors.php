@@ -8,9 +8,10 @@
  * @link      https://my-aac.org
  */
 
-use MyAAC\Models\Visitor;
+namespace MyAAC;
 
-defined('MYAAC') or die('Direct access not allowed!');
+use MyAAC\Cache\Cache;
+use MyAAC\Models\Visitor;
 
 class Visitors
 {

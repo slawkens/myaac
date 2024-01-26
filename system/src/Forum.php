@@ -8,12 +8,13 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-defined('MYAAC') or die('Direct access not allowed!');
+
+namespace MyAAC;
 
 $settingForumTablePrefix = setting('core.forum_table_prefix');
 if(null !== $settingForumTablePrefix && !empty(trim($settingForumTablePrefix))) {
 	if(!in_array($settingForumTablePrefix, array('myaac_', 'z_'))) {
-		throw new RuntimeException('Invalid value for forum_table_prefix in config.php. Can be only: "myaac_" or "z_".');
+		throw new \RuntimeException('Invalid value for forum_table_prefix in config.php. Can be only: "myaac_" or "z_".');
 	}
 
 	define('FORUM_TABLE_PREFIX', $settingForumTablePrefix);
@@ -30,9 +31,9 @@ else {
 class Forum
 {
 	/**
-	 * @param OTS_Account $account
+	 * @param \OTS_Account $account
 	 * @return bool
-	 * @throws E_OTS_NotLoaded
+	 * @throws \E_OTS_NotLoaded
 	 */
 	public static function canPost($account)
 	{
@@ -294,7 +295,7 @@ class Forum
 		$section = $sections[$board_id];
 		if($section['guild'] > 0) {
 			if($logged) {
-				$guild = new OTS_Guild();
+				$guild = new \OTS_Guild();
 				$guild->load($section['guild']);
 				$status = false;
 				if($guild->isLoaded()) {
@@ -322,4 +323,3 @@ class Forum
 		return $hasAccess;
 	}
 }
-?>

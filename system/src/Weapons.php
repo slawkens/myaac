@@ -9,6 +9,8 @@
  * @link      https://my-aac.org
  */
 
+namespace MyAAC;
+
 use MyAAC\Models\Weapon;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -22,7 +24,7 @@ class Weapons {
 
 		try {
 			Weapon::query()->delete();
-		} catch (PDOException $error) {
+		} catch (\PDOException $error) {
 		}
 
 		$file_path = $config['data_path'] . 'weapons/weapons.xml';
@@ -31,7 +33,7 @@ class Weapons {
 			return false;
 		}
 
-		$xml = new DOMDocument;
+		$xml = new \DOMDocument;
 		$xml->load($file_path);
 
 		foreach ($xml->getElementsByTagName('wand') as $weapon) {

@@ -9,6 +9,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\CreateCharacter;
 use MyAAC\Models\Account;
 
 // we need some functions
@@ -67,7 +68,6 @@ else if(isset($_GET['name']))
 	if(!admin() && !Validator::newCharacterName($name))
 		error_(Validator::getLastError());
 
-	require_once LIBS . 'CreateCharacter.php';
 	$createCharacter = new CreateCharacter();
 	if (!$createCharacter->checkName($name, $errors)) {
 		error_($errors['name']);

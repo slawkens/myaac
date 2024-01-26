@@ -12,6 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Client\Browser;
 use DeviceDetector\Parser\OperatingSystem;
+use MyAAC\Visitors;
 
 $title = 'Visitors';
 $use_datatable = true;
@@ -24,7 +25,6 @@ if (!setting('core.visitors_counter')): ?>
 	return;
 endif;
 
-require SYSTEM . 'libs/visitors.php';
 $visitors = new Visitors(setting('core.visitors_counter_ttl'));
 
 function compare($a, $b): int {

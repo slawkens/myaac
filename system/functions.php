@@ -9,12 +9,17 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
+use MyAAC\Items;
 use MyAAC\Models\Config;
 use MyAAC\Models\Guild;
 use MyAAC\Models\House;
 use MyAAC\Models\Pages;
 use MyAAC\Models\Player;
+use MyAAC\News;
+use MyAAC\Plugins;
+use MyAAC\Settings;
 use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
@@ -137,7 +142,6 @@ function getGuildLink($name, $generate = true): string
 }
 
 function getItemNameById($id) {
-	require_once LIBS . 'items.php';
 	$item = Items::get($id);
 	return !empty($item['name']) ? $item['name'] : '';
 }
@@ -1195,7 +1199,6 @@ function setting($key)
 
 function clearCache()
 {
-	require_once LIBS . 'news.php';
 	News::clearCache();
 
 	$cache = Cache::getInstance();
@@ -1689,7 +1692,6 @@ function makeLinksClickable($text, $blank = true) {
 }
 
 // validator functions
-require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat/base.php';
 
 // custom functions

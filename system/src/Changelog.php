@@ -1,5 +1,8 @@
 <?php
 
+namespace MyAAC;
+
+use MyAAC\Cache\Cache;
 use MyAAC\Models\Changelog as ModelsChangelog;
 
 class Changelog

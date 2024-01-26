@@ -9,14 +9,13 @@
  * @link      https://my-aac.org
  */
 
+namespace MyAAC;
+
 use MyAAC\Models\Monster;
 
-defined('MYAAC') or die('Direct access not allowed!');
-
-require_once LIBS . 'items.php';
 class Creatures {
 	/**
-	 * @var OTS_MonstersList
+	 * @var \OTS_MonstersList
 	 */
 	private static $monstersList;
 	private static $lastError = '';
@@ -24,7 +23,7 @@ class Creatures {
 	public static function loadFromXML($show = false) {
 		try {
 			Monster::query()->delete();
-		} catch(Exception $error) {}
+		} catch(\Exception $error) {}
 
 		if($show) {
 			echo '<h2>Reload monsters.</h2>';
@@ -32,9 +31,9 @@ class Creatures {
 		}
 
 		try {
-			self::$monstersList = new OTS_MonstersList(config('data_path') . 'monster/');
+			self::$monstersList = new \OTS_MonstersList(config('data_path') . 'monster/');
 		}
-		catch(Exception $e) {
+		catch(\Exception $e) {
 			self::$lastError = $e->getMessage();
 			return false;
 		}
@@ -119,7 +118,7 @@ class Creatures {
 			$summons = $monster->getSummons();
 			$loot = $monster->getLoot();
 			foreach($loot as &$item) {
-				if(!Validator::number($item['id'])) {
+				if(!\Validator::number($item['id'])) {
 					if(isset($items[$item['id']])) {
 						$item['id'] = $items[$item['id']];
 					}
@@ -161,7 +160,7 @@ class Creatures {
 						success('Added: ' . $name . '<br/>');
 					}
 				}
-				catch(Exception $error) {
+				catch(\Exception $error) {
 					if($show) {
 						warning('Error while adding monster (' . $name . '): ' . $error->getMessage());
 					}

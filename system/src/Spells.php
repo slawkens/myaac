@@ -9,9 +9,9 @@
  * @link      https://my-aac.org
  */
 
-use MyAAC\Models\Spell;
+namespace MyAAC;
 
-defined('MYAAC') or die('Direct access not allowed!');
+use MyAAC\Models\Spell;
 
 class Spells {
 	private static $spellsList = null;
@@ -38,7 +38,7 @@ class Spells {
 
 		try {
 			Spell::query()->delete();
-		} catch(Exception $error) {}
+		} catch(\Exception $error) {}
 
 		if($show) {
 			echo '<h2>Reload spells.</h2>';
@@ -46,9 +46,9 @@ class Spells {
 		}
 
 		try {
-			self::$spellsList = new OTS_SpellsList($config['data_path'].'spells/spells.xml');
+			self::$spellsList = new \OTS_SpellsList($config['data_path'].'spells/spells.xml');
 		}
-		catch(Exception $e) {
+		catch(\Exception $e) {
 			self::$lastError = $e->getMessage();
 			return false;
 		}
@@ -88,7 +88,7 @@ class Spells {
 					success('Added: ' . $name . '<br/>');
 				}
 			}
-			catch(PDOException $error) {
+			catch(\PDOException $error) {
 				if($show) {
 					warning('Error while adding spell (' . $name . '): ' . $error->getMessage());
 				}
@@ -128,7 +128,7 @@ class Spells {
 					success('Added: ' . $name . '<br/>');
 				}
 			}
-			catch(PDOException $error) {
+			catch(\PDOException $error) {
 				if($show) {
 					warning('Error while adding spell (' . $name . '): ' . $error->getMessage());
 				}
@@ -166,7 +166,7 @@ class Spells {
 					success('Added: ' . $name . '<br/>');
 				}
 			}
-			catch(PDOException $error) {
+			catch(\PDOException $error) {
 				if($show) {
 					warning('Error while adding spell (' . $name . '): ' . $error->getMessage());
 				}

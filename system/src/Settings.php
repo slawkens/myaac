@@ -1,17 +1,11 @@
 <?php
 
+namespace MyAAC;
+
+use MyAAC\Cache\Cache;
 use MyAAC\Models\Settings as ModelsSettings;
 
-/**
- * CreateCharacter
- *
- * @package   MyAAC
- * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2020 MyAAC
- * @link      https://my-aac.org
- */
-
-class Settings implements ArrayAccess
+class Settings implements \ArrayAccess
 {
 	static private $instance;
 	private $settingsFile = [];
@@ -59,7 +53,7 @@ class Settings implements ArrayAccess
 		$this->loadPlugin($pluginName);
 
 		if (!isset($this->settingsFile[$pluginName])) {
-			throw new RuntimeException("Error on save settings: plugin $pluginName does not exist");
+			throw new \RuntimeException("Error on save settings: plugin $pluginName does not exist");
 		}
 
 		$settings = $this->settingsFile[$pluginName];
@@ -94,7 +88,7 @@ class Settings implements ArrayAccess
 					'key' => $key,
 					'value' => $value
 				]);
-			} catch (PDOException $error) {
+			} catch (\PDOException $error) {
 				$this->errors[] = 'Error while saving setting (' . $pluginName . ' - ' . $key . '): ' . $error->getMessage();
 			}
 		}
@@ -296,7 +290,7 @@ class Settings implements ArrayAccess
 					}
 					else if ($setting['options'] == '$timezones') {
 						$timezones = [];
-						foreach (DateTimeZone::listIdentifiers() as $value) {
+						foreach (\DateTimeZone::listIdentifiers() as $value) {
 							$timezones[$value] = $value;
 						}
 
@@ -455,7 +449,7 @@ class Settings implements ArrayAccess
 		// return specified plugin settings (all)
 		if(!isset($key)) {
 			if (!isset($this->settingsFile[$pluginKeyName]['settings'])) {
-				throw new RuntimeException('Unknown plugin settings: ' . $pluginKeyName);
+				throw new \RuntimeException('Unknown plugin settings: ' . $pluginKeyName);
 			}
 			return $this->settingsFile[$pluginKeyName]['settings'];
 		}
@@ -595,10 +589,10 @@ class Settings implements ArrayAccess
 		}
 
 		try {
-			$connectionTest = new PDO('mysql:' . implode(';', $dns), $user, $password);
-			$connectionTest->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$connectionTest = new \PDO('mysql:' . implode(';', $dns), $user, $password);
+			$connectionTest->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		}
-		catch(PDOException $error) {
+		catch(\PDOException $error) {
 			error('MySQL connection failed. Settings has been reverted.');
 			error($error->getMessage());
 			return false;

@@ -7,6 +7,10 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Plugins;
+use MyAAC\Settings;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Settings';
 

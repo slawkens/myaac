@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Forum;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $ret = require __DIR__ . '/base.php';

@@ -7,7 +7,8 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-defined('MYAAC') or die('Direct access not allowed!');
+
+namespace MyAAC;
 
 class Timer
 {

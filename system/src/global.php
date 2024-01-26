@@ -1,15 +1,7 @@
 <?php
-/**
- * Events system
- *
- * @package   MyAAC
- * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2019 MyAAC
- * @link      https://my-aac.org
- */
-defined('MYAAC') or die('Direct access not allowed!');
 
 $i = 0;
+
 define('HOOK_STARTUP', ++$i);
 define('HOOK_BEFORE_PAGE', ++$i);
 define('HOOK_AFTER_PAGE', ++$i);
@@ -82,83 +74,30 @@ define('HOOK_TWIG', ++$i);
 const HOOK_FIRST = HOOK_STARTUP;
 define('HOOK_LAST', $i);
 
-require_once LIBS . 'plugins.php';
-class Hook
+function is_sub_dir($path = NULL, $parent_folder = BASE): bool|string
 {
-	private $_name, $_type, $_file;
+	//Get directory path minus last folder
+	$dir = dirname($path);
+	$folder = substr($path, strlen($dir));
 
-	public function __construct($name, $type, $file) {
-		$this->_name = $name;
-		$this->_type = $type;
-		$this->_file = $file;
+	//Check the base dir is valid
+	$dir = realpath($dir);
+
+	//Only allow valid filename characters
+	$folder = preg_replace('/[^a-z0-9\.\-_]/i', '', $folder);
+
+	//If this is a bad path or a bad end folder name
+	if( !$dir OR !$folder OR $folder === '.') {
+		return false;
 	}
 
-	public function execute($params)
-	{
-		global $db, $config, $template_path, $ots, $content, $twig;
+	//Rebuild path
+	$path = $dir. '/' . $folder;
 
-		if(is_callable($this->_file))
-		{
-			$params['db'] = $db;
-			$params['config'] = $config;
-			$params['template_path'] = $template_path;
-			$params['ots'] = $ots;
-			$params['content'] = $content;
-			$params['twig'] = $twig;
-
-			$tmp = $this->_file;
-			$ret = $tmp($params);
-		}
-		else {
-			extract($params);
-
-			$ret = include BASE . $this->_file;
-		}
-
-		return !isset($ret) || $ret == 1 || $ret;
+	//If this path is higher than the parent folder
+	if( strcasecmp($path, $parent_folder) > 0 ) {
+		return $path;
 	}
 
-	public function name() {return $this->_name;}
-	public function type() {return $this->_type;}
-}
-
-class Hooks
-{
-	private static $_hooks = array();
-
-	public function register($hook, $type = '', $file = null) {
-		if(!($hook instanceof Hook))
-			$hook = new Hook($hook, $type, $file);
-
-		self::$_hooks[$hook->type()][] = $hook;
-	}
-
-	public function trigger($type, $params = array())
-	{
-		$ret = true;
-		if(isset(self::$_hooks[$type]))
-		{
-			foreach(self::$_hooks[$type] as $name => $hook) {
-				/** @var $hook Hook */
-				if (!$hook->execute($params)) {
-					$ret = false;
-				}
-			}
-		}
-
-		return $ret;
-	}
-
-	public function exist($type) {
-		return isset(self::$_hooks[$type]);
-	}
-
-	public function load()
-	{
-		foreach(Plugins::getHooks() as $hook) {
-			$this->register($hook['name'], $hook['type'], $hook['file']);
-		}
-
-		Plugins::clearWarnings();
-	}
+	return false;
 }

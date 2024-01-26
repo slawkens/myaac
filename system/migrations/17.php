@@ -1,5 +1,7 @@
 <?php
 
+use MyAAC\Plugins;
+
 if(!$db->hasTable('myaac_menu')) {
 	$db->query("
 CREATE TABLE `myaac_menu`
@@ -16,7 +18,6 @@ CREATE TABLE `myaac_menu`
 ");
 }
 
-require_once LIBS . 'plugins.php';
 Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
 Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
 

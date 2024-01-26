@@ -1,5 +1,7 @@
 <?php
 
+use MyAAC\Plugins;
+
 $order = 10;
 
 $settingsMenu = [];

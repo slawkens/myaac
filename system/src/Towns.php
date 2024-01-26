@@ -23,11 +23,10 @@
  * @link      https://my-aac.org
  */
 
+namespace MyAAC;
+
 use MyAAC\Models\Town;
 
-/**
- * Class Towns
- */
 class Towns
 {
 	/**
@@ -109,7 +108,6 @@ class Towns
 		if (file_exists($mapFile)) {
 			ini_set('memory_limit', '-1');
 
-			require LIBS . 'TownsReader.php';
 			$townsReader = new TownsReader($mapFile);
 			$townsReader->load();
 

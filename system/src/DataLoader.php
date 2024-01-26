@@ -23,9 +23,8 @@
  * @link      https://my-aac.org
  */
 
-/**
- * Class DataLoader
- */
+namespace MyAAC;
+
 class DataLoader
 {
 	private static $locale;
@@ -38,7 +37,6 @@ class DataLoader
 	{
 		self::$startTime = microtime(true);
 
-		require_once LIBS . 'items.php';
 		if(Items::loadFromXML()) {
 			success(self::$locale['step_database_loaded_items'] . self::getLoadedTime());
 		}
@@ -48,7 +46,6 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		require LIBS . 'creatures.php';
 		if(Creatures::loadFromXML()) {
 			success(self::$locale['step_database_loaded_monsters'] . self::getLoadedTime());
 
@@ -63,7 +60,6 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		require_once LIBS . 'npc.php';
 		if(NPCs::loadFromXML()) {
 			success(self::$locale['step_database_loaded_npcs'] . self::getLoadedTime());
 		}
@@ -73,7 +69,6 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		require LIBS . 'spells.php';
 		if(Spells::loadFromXML()) {
 			success(self::$locale['step_database_loaded_spells'] . self::getLoadedTime());
 		}
@@ -92,7 +87,6 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		require LIBS . 'weapons.php';
 		if(Weapons::loadFromXML()) {
 			success(self::$locale['step_database_loaded_weapons'] . self::getLoadedTime());
 		}

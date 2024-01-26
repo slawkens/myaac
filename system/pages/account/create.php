@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\CreateCharacter;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Create Account';
 
@@ -21,7 +24,6 @@ if($logged)
 }
 
 if(setting('core.account_create_character_create')) {
-	require_once LIBS . 'CreateCharacter.php';
 	$createCharacter = new CreateCharacter();
 }
 

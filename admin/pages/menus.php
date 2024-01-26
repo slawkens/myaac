@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Cache\Cache;
 use MyAAC\Models\Menu;
 
 defined('MYAAC') or die('Direct access not allowed!');

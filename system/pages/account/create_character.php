@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\CreateCharacter;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Create Character';
@@ -30,7 +33,6 @@ $character_created = false;
 $save = isset($_POST['save']) && $_POST['save'] == 1;
 $errors = array();
 if($save) {
-	require_once LIBS . 'CreateCharacter.php';
 	$createCharacter = new CreateCharacter();
 
 	$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $account_logged, $errors);

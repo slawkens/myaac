@@ -9,7 +9,10 @@
  * @copyright 2021 MyAAC
  * @link      https://my-aac.org
  */
-defined('MYAAC') or die('Direct access not allowed!');
+
+namespace MyAAC;
+
+use MyAAC\Cache\PHP as CachePHP;
 
 class NPCs
 {
@@ -22,7 +25,7 @@ class NPCs
 			return false;
 
 		$npcs = [];
-		$xml = new DOMDocument();
+		$xml = new \DOMDocument();
 		foreach (preg_grep('~\.(xml)$~i', scandir($npc_path)) as $npc) {
 			$xml->load($npc_path . $npc);
 			if ($xml) {
@@ -40,8 +43,7 @@ class NPCs
 			return false;
 		}
 
-		require_once LIBS . 'cache_php.php';
-		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent/');
+		$cache_php = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
 		$cache_php->set('npcs', $npcs, 5 * 365 * 24 * 60 * 60);
 		return true;
 	}
@@ -52,8 +54,7 @@ class NPCs
 			return;
 		}
 
-		require_once LIBS . 'cache_php.php';
-		$cache_php = new Cache_PHP(config('cache_prefix'), CACHE . 'persistent/');
+		$cache_php = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
 		self::$npcs = $cache_php->get('npcs');
 	}
 }

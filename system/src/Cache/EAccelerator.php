@@ -1,6 +1,6 @@
 <?php
 /**
- * Cache APC class
+ * Cache eAccelerator class
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
@@ -8,9 +8,10 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-defined('MYAAC') or die('Direct access not allowed!');
 
-class Cache_APCu
+namespace MyAAC\Cache;
+
+class EAccelerator
 {
 	private $prefix;
 	private $enabled;
@@ -18,35 +19,38 @@ class Cache_APCu
 	public function __construct($prefix = '')
 	{
 		$this->prefix = $prefix;
-		$this->enabled = function_exists('apcu_fetch');
+		$this->enabled = function_exists('eaccelerator_get');
 	}
 
 	public function set($key, $var, $ttl = 0)
 	{
 		$key = $this->prefix . $key;
-		apcu_delete($key);
-		apcu_store($key, $var, $ttl);
+		eaccelerator_rm($key);
+		eaccelerator_put($key, $var, $ttl);
 	}
 
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($this->prefix . $key, $tmp)) {
+		if ($this->fetch($this->prefix . $key, $tmp)) {
 			return $tmp;
 		}
 
 		return '';
 	}
 
-	public function fetch($key, &$var) {
-		return ($var = apcu_fetch($this->prefix . $key)) !== false;
+	public function fetch($key, &$var)
+	{
+		return ($var = eaccelerator_get($this->prefix . $key)) !== null;
 	}
 
-	public function delete($key) {
-		apcu_delete($this->prefix . $key);
+	public function delete($key)
+	{
+		eaccelerator_rm($this->prefix . $key);
 	}
 
-	public function enabled() {
+	public function enabled()
+	{
 		return $this->enabled;
 	}
 }

@@ -47,11 +47,9 @@ if($success) {
 	success($locale['step_database_imported_players']);
 }
 
-require_once LIBS . 'plugins.php';
 Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
 Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
 
-require LIBS . 'DataLoader.php';
 DataLoader::setLocale($locale);
 DataLoader::load();
 
@@ -65,7 +63,10 @@ require_once SYSTEM . 'migrations/22.php';
 require_once SYSTEM . 'migrations/27.php';
 require_once SYSTEM . 'migrations/30.php';
 
+use MyAAC\DataLoader;
 use MyAAC\Models\FAQ as ModelsFAQ;
+use MyAAC\Plugins;
+
 if(ModelsFAQ::count() == 0) {
 	ModelsFAQ::create([
 		'question' => 'What is this?',

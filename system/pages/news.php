@@ -8,10 +8,11 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-defined('MYAAC') or die('Direct access not allowed!');
 
-require_once LIBS . 'forum.php';
-require_once LIBS . 'news.php';
+use MyAAC\Cache\Cache;
+use MyAAC\News;
+
+defined('MYAAC') or die('Direct access not allowed!');
 
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 if(isset($_GET['archive']))

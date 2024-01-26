@@ -7,14 +7,15 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Plugins;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Plugin manager';
 
 csrfProtect();
 
 $use_datatable = true;
-
-require_once LIBS . 'plugins.php';
 
 if (!getBoolean(setting('core.admin_plugins_manage_enable'))) {
 	warning('Plugin installation and management is disabled in Settings.<br/>If you wish to enable, go to Settings and enable <strong>Enable Plugins Manage</strong>.');

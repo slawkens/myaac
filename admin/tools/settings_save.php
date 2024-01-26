@@ -1,4 +1,8 @@
 <?php
+
+use MyAAC\Hooks;
+use MyAAC\Settings;
+
 const MYAAC_ADMIN = true;
 
 require '../../common.php';
@@ -7,7 +11,6 @@ require SYSTEM . 'init.php';
 require SYSTEM . 'login.php';
 
 // event system
-require_once SYSTEM . 'hooks.php';
 $hooks = new Hooks();
 $hooks->load();
 

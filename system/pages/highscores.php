@@ -9,6 +9,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Cache\Cache;
 use MyAAC\Models\Player;
 use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;

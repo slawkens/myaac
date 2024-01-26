@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Forum;
 use MyAAC\Models\Player;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -19,7 +20,6 @@ csrfProtect();
 $player_base = ADMIN_URL . '?p=players';
 
 $use_datatable = true;
-require_once LIBS . 'forum.php';
 
 $skills = array(
 	POT::SKILL_FIST => array('Fist fighting', 'fist'),

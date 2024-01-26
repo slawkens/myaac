@@ -7,6 +7,10 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Forum;
+use MyAAC\News;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'News Panel';
@@ -14,9 +18,6 @@ $title = 'News Panel';
 csrfProtect();
 
 $use_datatable = true;
-
-require_once LIBS . 'forum.php';
-require_once LIBS . 'news.php';
 
 if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 	echo 'Access denied.';

@@ -1,4 +1,7 @@
 <?php
+
+use MyAAC\Settings;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 ini_set('max_execution_time', 300);

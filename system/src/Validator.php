@@ -8,10 +8,10 @@
  * @link      https://my-aac.org
  */
 
+namespace MyAAC;
+
 use MyAAC\Models\Monster;
 use MyAAC\Models\Spell;
-
-defined('MYAAC') or die('Direct access not allowed!');
 
 class Validator
 {
@@ -332,9 +332,8 @@ class Validator
 
 		$npcCheck = setting('core.create_character_name_npc_check');
 		if ($npcCheck) {
-			require_once LIBS . 'npc.php';
-			NPCS::load();
-			if(NPCS::$npcs) {
+			NPCs::load();
+			if(NPCs::$npcs) {
 				foreach (NPCs::$npcs as $npc) {
 					if(strpos($name_lower, $npc) !== false) {
 						self::$lastError = 'Your name cannot contains NPC name.';

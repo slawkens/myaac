@@ -9,6 +9,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Changelog;
 use MyAAC\Models\Changelog as ModelsChangelog;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -26,7 +27,6 @@ $use_datatable = true;
 const CL_LIMIT = 600; // maximum changelog body length
 
 $id = $_GET['id'] ?? 0;
-require_once LIBS . 'changelog.php';
 
 if(!empty($action))
 {

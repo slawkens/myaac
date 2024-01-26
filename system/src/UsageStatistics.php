@@ -7,9 +7,12 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-defined('MYAAC') or die('Direct access not allowed!');
 
-class Usage_Statistics {
+namespace MyAAC;
+
+use MyAAC\Cache\Cache;
+
+class UsageStatistics {
 	private static $report_url = 'https://my-aac.org/report_usage.php';
 
 	public static function report() {

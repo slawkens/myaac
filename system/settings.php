@@ -10,6 +10,9 @@
  * Additional options
  *  - for number: min, max, step
  */
+
+use MyAAC\Settings;
+
 return [
 	'name' => 'MyAAC',
 	'settings' =>

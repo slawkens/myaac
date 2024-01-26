@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Cache\Cache;
 use MyAAC\Models\Config;
 use MyAAC\Models\PlayerOnline;
 

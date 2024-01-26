@@ -8,6 +8,8 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
+use MyAAC\Cache\Cache;
+
 /**
  * List of groups.
  *

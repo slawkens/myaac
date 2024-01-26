@@ -24,6 +24,9 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\UsageStatistics;
+use MyAAC\Visitors;
+
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';
 
@@ -146,8 +149,7 @@ if(setting('core.anonymous_usage_statistics')) {
 	}
 
 	if($should_report) {
-		require_once LIBS . 'usage_statistics.php';
-		Usage_Statistics::report();
+		UsageStatistics::report();
 
 		updateDatabaseConfig('last_usage_report', time());
 		if($cache->enabled()) {
@@ -160,7 +162,6 @@ if(setting('core.views_counter'))
 	require_once SYSTEM . 'counter.php';
 
 if(setting('core.visitors_counter')) {
-	require_once SYSTEM . 'libs/visitors.php';
 	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
 }
 

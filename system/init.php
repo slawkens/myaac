@@ -8,15 +8,18 @@
  * @link      https://my-aac.org
  */
 
+use DebugBar\StandardDebugBar;
+use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
+use MyAAC\Hooks;
+use MyAAC\Settings;
+use MyAAC\Towns;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
 if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
-
-use DebugBar\StandardDebugBar;
 
 if(config('env') === 'dev') {
 	require SYSTEM . 'exception.php';
@@ -39,11 +42,9 @@ if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HT
 	ob_start('ob_gzhandler');
 
 // cache
-require_once SYSTEM . 'libs/cache.php';
 $cache = Cache::getInstance();
 
 // event system
-require_once SYSTEM . 'hooks.php';
 $hooks = new Hooks();
 $hooks->load();
 
@@ -145,7 +146,6 @@ require_once SYSTEM . 'database.php';
 require SYSTEM . 'migrate.php';
 
 // settings
-require_once LIBS . 'Settings.php';
 $settings = Settings::getInstance();
 $settings->load();
 
@@ -176,5 +176,4 @@ define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
 define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
 
-require LIBS . 'Towns.php';
 Towns::load();

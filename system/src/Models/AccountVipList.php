@@ -1,6 +1,7 @@
 <?php
 
 namespace MyAAC\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class AccountVipList extends Model {

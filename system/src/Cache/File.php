@@ -1,21 +1,23 @@
 <?php
 /**
- * PHP cache class
+ * File cache class
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-defined('MYAAC') or die('Direct access not allowed!');
 
-class Cache_PHP
+namespace MyAAC\Cache;
+
+class File
 {
 	private $prefix;
 	private $dir;
 	private $enabled;
 
-	public function __construct($prefix = '', $dir = '') {
+	public function __construct($prefix = '', $dir = '')
+	{
 		$this->prefix = $prefix;
 		$this->dir = $dir;
 		$this->enabled = (file_exists($this->dir) && is_dir($this->dir) && is_writable($this->dir));
@@ -23,14 +25,8 @@ class Cache_PHP
 
 	public function set($key, $var, $ttl = 0)
 	{
-		$var = var_export($var, true);
-
-		// Write to temp file first to ensure atomicity
-		$tmp = $this->dir . "tmp_$key." . uniqid('', true) . '.tmp';
-		file_put_contents($tmp, '<?php $var = ' . $var . ';', LOCK_EX);
-
 		$file = $this->_name($key);
-		rename($tmp, $file);
+		file_put_contents($file, $var);
 
 		if ($ttl === 0) {
 			$ttl = 365 * 24 * 60 * 60; // 365 days
@@ -42,7 +38,7 @@ class Cache_PHP
 	public function get($key)
 	{
 		$tmp = '';
-		if($this->fetch($key, $tmp)) {
+		if ($this->fetch($key, $tmp)) {
 			return $tmp;
 		}
 
@@ -52,28 +48,29 @@ class Cache_PHP
 	public function fetch($key, &$var)
 	{
 		$file = $this->_name($key);
-		if(!file_exists($file) || filemtime($file) < time()) {
+		if (!file_exists($file) || filemtime($file) < time()) {
 			return false;
 		}
 
-		@include $file;
-		$var = isset($var) ? $var : null;
+		$var = file_get_contents($file);
 		return true;
 	}
 
 	public function delete($key)
 	{
 		$file = $this->_name($key);
-		if(file_exists($file)) {
+		if (file_exists($file)) {
 			unlink($file);
 		}
 	}
 
-	public function enabled() {
+	public function enabled()
+	{
 		return $this->enabled;
 	}
 
-	private function _name($key) {
-		return sprintf('%s%s%s', $this->dir, $this->prefix, sha1($key) . '.php');
+	private function _name($key)
+	{
+		return sprintf('%s%s%s', $this->dir, $this->prefix, sha1($key));
 	}
 }

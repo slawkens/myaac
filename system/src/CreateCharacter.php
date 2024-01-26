@@ -1,5 +1,7 @@
 <?php
 
+namespace MyAAC;
+
 use MyAAC\Models\Player;
 
 /**
@@ -50,8 +52,8 @@ class CreateCharacter
 			return false;
 		}
 
-		if(!admin() && !Validator::newCharacterName($name)) {
-			$errors['name'] = Validator::getLastError();
+		if(!admin() && !\Validator::newCharacterName($name)) {
+			$errors['name'] = \Validator::getLastError();
 			return false;
 		}
 
@@ -123,13 +125,13 @@ class CreateCharacter
 	 * @param int $sex
 	 * @param int $vocation
 	 * @param int $town
-	 * @param OTS_Account $account
+	 * @param \OTS_Account $account
 	 * @param array $errors
 	 * @return bool
-	 * @throws E_OTS_NotLoaded
-	 * @throws Twig_Error_Loader
-	 * @throws Twig_Error_Runtime
-	 * @throws Twig_Error_Syntax
+	 * @throws \E_OTS_NotLoaded
+	 * @throws \Twig_Error_Loader
+	 * @throws \Twig_Error_Runtime
+	 * @throws \Twig_Error_Syntax
 	 */
 	public function doCreate($name, $sex, $vocation, $town, $account, &$errors)
 	{
@@ -147,7 +149,7 @@ class CreateCharacter
 		if(empty($errors))
 		{
 			$char_to_copy_name = config('character_samples')[$vocation];
-			$char_to_copy = new OTS_Player();
+			$char_to_copy = new \OTS_Player();
 			$char_to_copy->find($char_to_copy_name);
 			if(!$char_to_copy->isLoaded())
 				$errors[] = 'Wrong characters configuration. Try again or contact with admin. ADMIN: Go to Admin Panel -> Settings -> Create Character and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
@@ -162,7 +164,7 @@ class CreateCharacter
 		if($sex == "0")
 			$char_to_copy->setLookType(136);
 
-		$player = new OTS_Player();
+		$player = new \OTS_Player();
 		$player->setName($name);
 		$player->setAccount($account);
 		$player->setGroupId(1);
@@ -194,7 +196,7 @@ class CreateCharacter
 		$player->setManaSpent($char_to_copy->getManaSpent());
 		$player->setSoul($char_to_copy->getSoul());
 
-		for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++) {
+		for($skill = \POT::SKILL_FIRST; $skill <= \POT::SKILL_LAST; $skill++) {
 			$value = 10;
 			if (setting('core.use_character_sample_skills')) {
 				$value = $char_to_copy->getSkill($skill);
@@ -231,7 +233,7 @@ class CreateCharacter
 		$player->save();
 		$player->setCustomField('created', time());
 
-		$player = new OTS_Player();
+		$player = new \OTS_Player();
 		$player->find($name);
 
 		if(!$player->isLoaded()) {
@@ -240,7 +242,7 @@ class CreateCharacter
 		}
 
 		if($db->hasTable('player_skills')) {
-			for($skill = POT::SKILL_FIRST; $skill <= POT::SKILL_LAST; $skill++) {
+			for($skill = \POT::SKILL_FIRST; $skill <= \POT::SKILL_LAST; $skill++) {
 				$value = 10;
 				if (setting('core.use_character_sample_skills')) {
 					$value = $char_to_copy->getSkill($skill);

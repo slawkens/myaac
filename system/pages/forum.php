@@ -8,6 +8,9 @@
  * @copyright 2021 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Forum;
+
 defined('MYAAC') or exit;
 
 $ret = require __DIR__ . '/forum/base.php';

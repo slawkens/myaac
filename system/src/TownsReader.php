@@ -19,8 +19,10 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+namespace MyAAC;
+
 /*
-    This code bases on oryginal OTServ code for .otbm files - file iomapotbm.cpp rev.2141
+    This code bases on original OTServ code for .otbm files - file iomapotbm.cpp rev.2141
 */
 class TownsReader
 {

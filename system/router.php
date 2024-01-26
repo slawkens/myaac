@@ -9,6 +9,7 @@
  */
 
 use MyAAC\Models\Pages;
+use MyAAC\Plugins;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
