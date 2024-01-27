@@ -620,7 +620,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Account Login By E-Mail',
 			'type' => 'boolean',
 			'desc' => "use email instead of Account Name like in latest Tibia",
-			'default' => true,
+			'default' => false,
 		],
 		'account_login_by_email_fallback' => [
 			'name' => 'Account Login By E-Mail Fallback',
