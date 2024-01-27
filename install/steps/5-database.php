@@ -17,7 +17,7 @@ if(!$error) {
 	$configToSave = [
 		// by default, set env to prod
 		// user can disable when he wants
-		'env' => 'prod',
+		'env' => 'dev',
 	];
 
 	foreach($_SESSION as $key => $value)
