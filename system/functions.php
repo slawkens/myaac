@@ -1254,6 +1254,9 @@ function clearCache()
 	// routes cache
 	clearRouteCache();
 
+	global $hooks;
+	$hooks->trigger(HOOK_CACHE_CLEAR, ['cache' => Cache::getInstance()]);
+
 	return true;
 }
 
