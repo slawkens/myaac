@@ -1,6 +1,10 @@
 <?php
 define('MYAAC_INSTALL', true);
 
+use MyAAC\DataLoader;
+use MyAAC\Models\FAQ as ModelsFAQ;
+use MyAAC\Plugins;
+
 require_once '../../common.php';
 
 require SYSTEM . 'functions.php';
@@ -62,10 +66,6 @@ require_once SYSTEM . 'migrations/22.php';
 // add myaac_pages pages
 require_once SYSTEM . 'migrations/27.php';
 require_once SYSTEM . 'migrations/30.php';
-
-use MyAAC\DataLoader;
-use MyAAC\Models\FAQ as ModelsFAQ;
-use MyAAC\Plugins;
 
 if(ModelsFAQ::count() == 0) {
 	ModelsFAQ::create([
