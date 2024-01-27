@@ -1,5 +1,8 @@
 <?php
 
+const SKILL_FRAGS = -1;
+const SKILL_BALANCE = -2;
+
 $i = 0;
 
 define('HOOK_STARTUP', ++$i);

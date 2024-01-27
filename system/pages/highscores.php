@@ -53,9 +53,6 @@ if($settingHighscoresVocationBox && $vocation !== 'all')
 	}
 }
 
-const SKILL_FRAGS = -1;
-const SKILL_BALANCE = -2;
-
 $skill = POT::SKILL__LEVEL;
 if(is_numeric($list))
 {
