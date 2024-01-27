@@ -1236,8 +1236,8 @@ function clearCache()
 			}
 		}
 
-		$tmp = '';
 		foreach ($keysToClear as $item) {
+			$tmp = '';
 			if ($cache->fetch($item, $tmp)) {
 				$cache->delete($item);
 			}

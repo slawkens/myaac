@@ -96,7 +96,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
         }
 
 		global $config;
-		if(class_exists('MyAAC\Cache\Cache') && ($cache = Cache::getInstance()) && $cache->enabled()) {
+		if(class_exists('Cache') && ($cache = Cache::getInstance()) && $cache->enabled()) {
 			$tmp = null;
 			$need_revalidation = true;
 			if($cache->fetch('database_checksum', $tmp) && $tmp) {
@@ -147,7 +147,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
     {
 		global $config;
 
-	    if(class_exists('MyAAC\Cache\Cache') && ($cache = Cache::getInstance()) && $cache->enabled()) {
+	    if(class_exists('Cache') && ($cache = Cache::getInstance()) && $cache->enabled()) {
 			$cache->set('database_tables', serialize($this->has_table_cache), 3600);
 			$cache->set('database_columns', serialize($this->has_column_cache), 3600);
 			$cache->set('database_checksum', serialize(sha1($config['database_host'] . '.' . $config['database_name'])), 3600);
