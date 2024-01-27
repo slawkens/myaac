@@ -1264,6 +1264,12 @@ function clearCache()
 		if ($cache->fetch('plugins_routes', $tmp)) {
 			$cache->delete('plugins_routes');
 		}
+		if ($cache->fetch('plugins_themes', $tmp)) {
+			$cache->delete('plugins_themes');
+		}
+		if ($cache->fetch('plugins_commands', $tmp)) {
+			$cache->delete('plugins_commands');
+		}
 	}
 
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
