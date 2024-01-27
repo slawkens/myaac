@@ -47,53 +47,50 @@ if(!empty($action))
 	$forum_section = $_POST['forum_section'] ?? null;
 	$errors = [];
 
-	if($action == 'new') {
-		if(isset($forum_section) && $forum_section != '-1') {
-			$forum_add = Forum::add_thread($p_title, $body, $forum_section, $player_id, $account_logged->getId(), $errors);
-		}
+	if (isRequestMethod('post')) {
+		if ($action == 'new') {
+			if (isset($forum_section) && $forum_section != '-1') {
+				$forum_add = Forum::add_thread($p_title, $body, $forum_section, $player_id, $account_logged->getId(), $errors);
+			}
 
-		if(isset($p_title) && News::add($p_title, $body, $type, $category, $player_id, isset($forum_add) && $forum_add != 0 ? $forum_add : 0, $article_text, $article_image, $errors)) {
-			$p_title = $body = $comments = $article_text = $article_image = '';
-			$type = $category = $player_id = 0;
-
-			success('Added successful.');
-		}
-	}
-	else if($action == 'delete') {
-		if (News::delete($id, $errors)) {
-			success('Deleted successful.');
-		}
-	}
-	else if($action == 'edit')
-	{
-		if(isset($id) && !isset($p_title)) {
-			$news = News::get($id);
-			$p_title = $news['title'];
-			$body = $news['body'];
-			$comments = $news['comments'];
-			$type = $news['type'];
-			$category = $news['category'];
-			$player_id = $news['player_id'];
-			$article_text = $news['article_text'];
-			$article_image = $news['article_image'];
-		}
-		else {
-			if(News::update($id, $p_title, $body, $type, $category, $player_id, $forum_section, $article_text, $article_image, $errors)) {
-				// update forum thread if exists
-				if(isset($forum_section) && Validator::number($forum_section)) {
-					$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `author_guid` = ".(int) $player_id.", `post_text` = ".$db->quote($body).", `post_topic` = ".$db->quote($p_title).", `edit_date` = " . time() . " WHERE `id` = " . $db->quote($forum_section));
-				}
-
-				$action = $p_title = $body = $comments = $article_text = $article_image = '';
+			if (isset($p_title) && News::add($p_title, $body, $type, $category, $player_id, isset($forum_add) && $forum_add != 0 ? $forum_add : 0, $article_text, $article_image, $errors)) {
+				$p_title = $body = $comments = $article_text = $article_image = '';
 				$type = $category = $player_id = 0;
 
-				success('Updated successful.');
+				success('Added successful.');
 			}
-		}
-	}
-	else if($action == 'hide') {
-		if (News::toggleHidden($id, $errors, $status)) {
-			success(($status == 1 ? 'Hide' : 'Show') . ' successful.');
+		} else if ($action == 'delete') {
+			if (News::delete($id, $errors)) {
+				success('Deleted successful.');
+			}
+		} else if ($action == 'edit') {
+			if (isset($id) && !isset($p_title)) {
+				$news = News::get($id);
+				$p_title = $news['title'];
+				$body = $news['body'];
+				$comments = $news['comments'];
+				$type = $news['type'];
+				$category = $news['category'];
+				$player_id = $news['player_id'];
+				$article_text = $news['article_text'];
+				$article_image = $news['article_image'];
+			} else {
+				if (News::update($id, $p_title, $body, $type, $category, $player_id, $forum_section, $article_text, $article_image, $errors)) {
+					// update forum thread if exists
+					if (isset($forum_section) && Validator::number($forum_section)) {
+						$db->query("UPDATE `" . TABLE_PREFIX . "forum` SET `author_guid` = " . (int)$player_id . ", `post_text` = " . $db->quote($body) . ", `post_topic` = " . $db->quote($p_title) . ", `edit_date` = " . time() . " WHERE `id` = " . $db->quote($forum_section));
+					}
+
+					$action = $p_title = $body = $comments = $article_text = $article_image = '';
+					$type = $category = $player_id = 0;
+
+					success('Updated successful.');
+				}
+			}
+		} else if ($action == 'hide') {
+			if (News::toggleHidden($id, $errors, $status)) {
+				success(($status == 1 ? 'Hide' : 'Show') . ' successful.');
+			}
 		}
 	}
 

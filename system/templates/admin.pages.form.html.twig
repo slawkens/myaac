@@ -54,7 +54,7 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> Update</button>
+				<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> {% if action == 'edit' %}Update{% else %}Add{% endif %}</button>
 				<button type="button" onclick="window.location = '{{ constant('ADMIN_URL') }}?p=pages';" class="btn btn-danger float-right"><i class="fas fa-cancel"></i> Cancel</button>
 			</div>
 		</form>

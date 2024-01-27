@@ -162,9 +162,9 @@ function admin_give_premdays($days)
 	displayMessage('Premium Days not supported.');
 }
 
-if (isset($_POST['action']) && $_POST['action']) {
+if (!empty(ACTION) && isRequestMethod('post')) {
 
-	$action = $_POST['action'];
+	$action = ACTION;
 
 	if (preg_match("/[^A-z0-9_\-]/", $action)) {
 		displayMessage('Invalid action.');

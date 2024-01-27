@@ -1070,7 +1070,7 @@ function csrfToken(): string {
 
 function isValidToken(): bool {
 	$token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
-	return ($_SERVER['REQUEST_METHOD'] !== 'POST' || (isset($token) && CsrfToken::isValid($token)));
+	return (!isRequestMethod('post') || (isset($token) && CsrfToken::isValid($token)));
 }
 
 function csrfProtect(): void
@@ -1663,6 +1663,10 @@ function displayErrorBoxWithBackButton($errors, $action = null) {
 
 function makeLinksClickable($text, $blank = true) {
 	return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1"' . (!$blank ?: ' target="_blank"') . '>$1</a>', $text);
+}
+
+function isRequestMethod(string $method): bool {
+	return strtolower($_SERVER['REQUEST_METHOD']) == strtolower($method);
 }
 
 // validator functions

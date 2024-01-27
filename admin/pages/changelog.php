@@ -28,7 +28,7 @@ const CL_LIMIT = 600; // maximum changelog body length
 
 $id = $_GET['id'] ?? 0;
 
-if(!empty($action))
+if(!empty($action) && isRequestMethod('post'))
 {
 	$id = $_POST['id'] ?? null;
 	$body = isset($_POST['body']) ? stripslashes($_POST['body']) : null;

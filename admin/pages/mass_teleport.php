@@ -40,9 +40,9 @@ function admin_teleport_town($town_id) {
 	displayMessage('Player\'s town updated.', true);
 }
 
-if (isset($_POST['action']) && $_POST['action'])    {
+if (!empty(ACTION) && isRequestMethod('post'))    {
 
-	$action = $_POST['action'];
+	$action = ACTION;
 
 	if (preg_match("/[^A-z0-9_\-]/", $action)) {
 		displayMessage('Invalid action.');

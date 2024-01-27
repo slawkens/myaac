@@ -5,6 +5,7 @@
 				<h5 class="m-0">Set Town</h5>
 			</div>
 			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_teleport">
+				{{ csrf() }}
 				<div class="card-body">
 					<div class="form-group">
 						<label>Town</label>
@@ -32,6 +33,7 @@
 				<h5 class="m-0">Set Position</h5>
 			</div>
 			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_teleport">
+				{{ csrf() }}
 				<div class="card-body">
 					<div class="row">
 						<div class="col-md-4">
@@ -67,6 +69,7 @@
 				<h5 class="m-0">Teleport to Temple</h5>
 			</div>
 			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_teleport">
+				{{ csrf() }}
 				<div class="card-footer">
 					<input type="hidden" name="action" value="set-position">
 					<input type="hidden" name="posx" value="0">

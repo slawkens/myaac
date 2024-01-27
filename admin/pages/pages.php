@@ -36,7 +36,7 @@ const PAGE_TITLE_LIMIT = 30;
 const PAGE_NAME_LIMIT = 30;
 const PAGE_BODY_LIMIT = 65535; // maximum page body length
 
-if (!empty($action)) {
+if (!empty($action) && isRequestMethod('post')) {
 	if ($action == 'delete' || $action == 'edit' || $action == 'hide') {
 		$id = $_POST['id'];
 	}
