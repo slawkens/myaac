@@ -38,7 +38,6 @@ describe('Install MyAAC', () => {
 		cy.contains('Basic configuration');
 
 		cy.get('#vars_server_path').click().clear().type(Cypress.env('SERVER_PATH'))
-		cy.get('#vars_mail_admin').click().clear().type('noone@example.net')
 
 		cy.get('[type="checkbox"]').uncheck() // usage statistics uncheck
 
