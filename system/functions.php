@@ -201,7 +201,7 @@ function getFlagImage($country): string
  * @param mixed $v Variable to check.
  * @return bool Value boolean status.
  */
-function getBoolean($v): bool
+function getBoolean(mixed $v): bool
 {
 	if(is_bool($v)) {
 		return $v;
@@ -209,6 +209,10 @@ function getBoolean($v): bool
 
 	if(is_numeric($v))
 		return (int)$v > 0;
+
+	if (is_null($v)) {
+		return false;
+	}
 
 	$v = strtolower($v);
 	return $v === 'yes' || $v === 'true';

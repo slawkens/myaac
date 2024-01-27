@@ -41,9 +41,10 @@
 class OTS_Monster extends DOMDocument
 {
 	private $loaded = false;
-	public function loadXML($source , $options = 0)
+	public function loadXML(string $source , int $options = 0): bool
 	{
 		$this->loaded = parent::loadXML($source, $options);
+		return $this->loaded;
 	}
 
 	public function loaded()
