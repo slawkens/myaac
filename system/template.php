@@ -164,7 +164,7 @@ function get_template_menus() {
 	$menus = array();
 	foreach($result as $menu) {
 		$link_full = strpos(trim($menu['link']), 'http') === 0 ? $menu['link'] : getLink($menu['link']);
-		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'link_full' => $link_full, 'blank' => $menu['blank'] == 1, 'color' => $menu['color']);
+		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'link_full' => $link_full, 'blank' => $menu['blank'] == 1, 'target_blank' => ($menu['blank'] == 1 ? ' target="blank"' : ''), 'color' => $menu['color']);
 	}
 
 	$new_menus = array();
