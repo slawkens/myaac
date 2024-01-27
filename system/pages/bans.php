@@ -14,6 +14,7 @@ $title = 'Bans list';
 $configBansPerPage = setting('core.bans_per_page');
 $_page = $_GET['page'] ?? 1;
 
+test
 if(!is_numeric($_page) || $_page < 1 || $_page > PHP_INT_MAX) {
 	$_page = 1;
 }
