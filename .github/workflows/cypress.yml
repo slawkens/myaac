@@ -106,15 +106,15 @@ jobs:
             CYPRESS_SERVER_PATH: /home/runner/work/myaac/myaac/tfs
 
         - name: Save screenshots
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           if: always()
           with:
-            name: cypress-screenshots
+            name: cypress-screenshots-${{ matrix.php-versions }}
             path: cypress/screenshots
 
         - name: Upload Cypress Videos
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           if: always()
           with:
-            name: cypress-videos
+            name: cypress-videos-${{ matrix.php-versions }}
             path: cypress/videos
