@@ -82,7 +82,7 @@ describe('Check Public Pages', () => {
 
 	it('Go to last kills page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/lastkills',
+			url: Cypress.env('URL') + '/last-kills',
 			method: 'GET',
 		})
 	})
@@ -132,7 +132,7 @@ describe('Check Public Pages', () => {
 
 	it('Go to server info page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/serverInfo',
+			url: Cypress.env('URL') + '/server-info',
 			method: 'GET',
 		})
 	})
@@ -160,7 +160,7 @@ describe('Check Public Pages', () => {
 
 	it('Go to experience table page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/experienceTable',
+			url: Cypress.env('URL') + '/exp-table',
 			method: 'GET',
 		})
 	})
