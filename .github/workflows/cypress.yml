@@ -34,7 +34,7 @@ jobs:
         - name: Checkout MyAAC
           uses: actions/checkout@v3
           with:
-            ref: 0.9
+            ref: develop
 
         - name: Checkout TFS
           uses: actions/checkout@v3
