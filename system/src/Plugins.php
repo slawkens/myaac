@@ -712,17 +712,15 @@ class Plugins {
 	 * @param string $templateName
 	 * @param array $categories
 	 */
-	public static function installMenus($templateName, $categories)
+	public static function installMenus($templateName, $categories, $clearOld = true)
 	{
 		global $db;
 		if (!$db->hasTable(TABLE_PREFIX . 'menu')) {
 			return;
 		}
 
-		// check if menus already exist
-		$menuInstalled = Menu::where('template', $templateName)->select('id')->first();
-		if ($menuInstalled) {
-			return;
+		if ($clearOld) {
+			Menu::where('template', $templateName)->delete();
 		}
 
 		foreach ($categories as $category => $menus) {
