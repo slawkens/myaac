@@ -1213,7 +1213,6 @@ function clearCache()
 			'towns', 'groups', 'vocations',
 			'visitors', 'views_counter', 'failed_logins',
 			'template_menus',
-			'database_tables', 'database_columns', 'database_checksum',
 			'last_kills',
 			'hooks', 'plugins_hooks', 'plugins_routes', 'plugins_settings', 'plugins_themes', 'plugins_commands',
 			'settings',
@@ -1242,6 +1241,9 @@ function clearCache()
 				$cache->delete($item);
 			}
 		}
+
+		global $db;
+		$db->setClearCacheAfter(true);
 	}
 
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
