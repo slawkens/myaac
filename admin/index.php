@@ -50,7 +50,7 @@ if(!$logged || !admin()) {
 // include our page
 $file = __DIR__ . '/pages/' . $page . '.php';
 if(!@file_exists($file)) {
-	if (strpos($page, 'plugins/') !== false) {
+	if (str_contains($page, 'plugins/')) {
 		$file = BASE . $page;
 	}
 	else {
