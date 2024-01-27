@@ -724,7 +724,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Towns List',
 			'type' => 'text',
 			'desc' => "Towns List used when creating character separated by comma (,). Won't be displayed if there is only one item (rookgaard for example)",
-			'default' => '1,2',
+			'default' => '1',
 			'callbacks' => [
 				'get' => function ($value) {
 					return array_map('trim', explode(',', $value));
