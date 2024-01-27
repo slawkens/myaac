@@ -117,19 +117,19 @@ class Pages
 		return !count($errors);
 	}
 
-	static public function toggleHidden($id, &$errors, &$status)
+	static public function toggleHide($id, &$errors, &$status)
 	{
 		if (isset($id)) {
 			$row = ModelsPages::find($id);
 			if ($row) {
-				$row->hidden = $row->hidden == 1 ? 0 : 1;
+				$row->hide = $row->hide == 1 ? 0 : 1;
 				if (!$row->save()) {
-					$errors[] = 'Fail during toggle hidden Page.';
+					$errors[] = 'Fail during toggle hide Page.';
 				}
 				else {
 					clearRouteCache();
 				}
-				$status = $row->hidden;
+				$status = $row->hide;
 			}
 			else {
 				$errors[] = 'Page with id ' . $id . ' does not exists.';

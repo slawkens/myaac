@@ -88,17 +88,17 @@ class Changelog
 		return true;
 	}
 
-	static public function toggleHidden($id, &$errors, &$status)
+	static public function toggleHide($id, &$errors, &$status)
 	{
 		if(isset($id))
 		{
 			$row = ModelsChangelog::find($id);
 			if ($row) {
-				$row->hidden = $row->hidden == 1 ? 0 : 1;
+				$row->hide = $row->hide == 1 ? 0 : 1;
 				if (!$row->save()) {
-					$errors[] = 'Fail during toggle hidden Changelog.';
+					$errors[] = 'Fail during toggle hide Changelog.';
 				}
-				$status = $row->hidden;
+				$status = $row->hide;
 			} else {
 				$errors[] = 'Changelog with id ' . $id . ' does not exists.';
 			}

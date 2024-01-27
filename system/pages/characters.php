@@ -342,8 +342,8 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		$signature_url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . urlencode($player->getName()) . '.png';
 	}
 
-	$hidden = $player->isHidden();
-	if(!$hidden) {
+	$hide = $player->isHidden();
+	if(!$hide) {
 		// check if account has been banned
 		$bannedUntil = '';
 		$banned = array();
@@ -363,7 +363,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		$query = $db->query('SELECT `id` FROM `players` WHERE `account_id` = ' . $account->getId() . ' ORDER BY `name`')->fetchAll();
 		foreach($query as $p) {
 			$_player = new OTS_Player();
-			$fields = array('id', 'name', 'vocation', 'level', 'online', 'deleted', 'hidden');
+			$fields = array('id', 'name', 'vocation', 'level', 'online', 'deleted', 'hide');
 			$_player->load($p['id'], $fields, false);
 			if($_player->isLoaded() && !$_player->isHidden()) {
 				$account_players[] = $_player;
@@ -404,7 +404,8 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		'frags' => $frags,
 		'signature_url' => isset($signature_url) ? $signature_url : null,
 		'player_link' => getPlayerLink($player->getName(), false),
-		'hidden' => $hidden,
+		'hide' => $hide,
+		'hidden' => $hide,
 		'bannedUntil' => isset($bannedUntil) ? $bannedUntil : null,
 		'account_players' => isset($account_players) ? $account_players : null,
 		'search_form' => generate_search_form(),

@@ -20,7 +20,7 @@
 						<b>
 							<p>{{ article.title|raw }}
 								{% if canEdit %}
-									{{ include('admin.links.html.twig', {page: 'news', id: article.id, hidden: article.hidden }) }}
+									{{ include('admin.links.html.twig', {page: 'news', id: article.id, hide: article.hide }) }}
 								{% endif %}
 							</p>
 						</b>

@@ -328,7 +328,7 @@
 		<!-- SIGNATURE_END -->
 		{% endif %}
 		{{ hook(constant('HOOK_CHARACTERS_AFTER_SIGNATURE')) }}
-		{% if not hidden %}
+		{% if not player.isHidden() %}
 		{% set rows = 0 %}
 		<!-- ACCOUNT_INFORMATION -->
 		<br/><br/>

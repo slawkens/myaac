@@ -180,17 +180,17 @@ if(!$db->hasColumn('players', 'deleted') && !$db->hasColumn('players', 'deletion
 }
 
 if($db->hasColumn('players', 'hide_char')) {
-	if(!$db->hasColumn('players', 'hidden')) {
-		if(query("ALTER TABLE `players` CHANGE `hide_char` `hidden` TINYINT(1) NOT NULL DEFAULT 0;")) {
+	if(!$db->hasColumn('players', 'hide')) {
+		if(query("ALTER TABLE `players` CHANGE `hide_char` `hide` TINYINT(1) NOT NULL DEFAULT 0;")) {
 			$tmp = str_replace('$FIELD$', 'players.hide_char', $locale['step_database_changing_field']);
-			$tmp = str_replace('$FIELD_NEW$', 'players.hidden', $tmp);
+			$tmp = str_replace('$FIELD_NEW$', 'players.hide', $tmp);
 			success($tmp);
 		}
 	}
 }
-else if(!$db->hasColumn('players', 'hidden')) {
-	if(query("ALTER TABLE `players` ADD `hidden` TINYINT(1) NOT NULL DEFAULT 0;"))
-		success($locale['step_database_adding_field'] . ' players.hidden...');
+else if(!$db->hasColumn('players', 'hide')) {
+	if(query("ALTER TABLE `players` ADD `hide` TINYINT(1) NOT NULL DEFAULT 0;"))
+		success($locale['step_database_adding_field'] . ' players.hide...');
 }
 
 if(!$db->hasColumn('players', 'comment')) {

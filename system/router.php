@@ -221,7 +221,7 @@ else {
 					$content .= $tmp_content;
 					if (hasFlag(FLAG_CONTENT_PAGES) || superAdmin()) {
 						$pageInfo = getCustomPageInfo($pageName);
-						$content = $twig->render('admin.links.html.twig', ['page' => 'pages', 'id' => $pageInfo !== null ? $pageInfo['id'] : 0, 'hidden' => $pageInfo !== null ? $pageInfo['hidden'] : '0']
+						$content = $twig->render('admin.links.html.twig', ['page' => 'pages', 'id' => $pageInfo !== null ? $pageInfo['id'] : 0, 'hide' => $pageInfo !== null ? $pageInfo['hide'] : '0']
 							) . $content;
 					}
 

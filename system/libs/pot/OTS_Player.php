@@ -90,7 +90,7 @@ class OTS_Player extends OTS_Row_DAO
  * @version 0.1.2
  * @var array
  */
-    private $data = array('sex' => 0, 'vocation' => 0, 'experience' => 0, 'level' => 1, 'maglevel' => 0, 'health' => 100, 'healthmax' => 100, 'mana' => 100, 'manamax' => 100, 'manaspent' => 0, 'soul' => 0, 'lookbody' => 10, 'lookfeet' => 10, 'lookhead' => 10, 'looklegs' => 10, 'looktype' => 136, 'lookaddons' => 0, 'posx' => 0, 'posy' => 0, 'posz' => 0, 'cap' => 0, 'lastlogin' => 0, 'lastip' => 0, 'save' => true, 'skulltime' => 0, 'skull' => 0, 'balance' => 0, 'lastlogout' => 0, 'blessings' => 0, 'stamina' => 0, 'online' => 0, 'comment' => '', 'created' => 0, 'hidden' => 0);
+    private $data = array('sex' => 0, 'vocation' => 0, 'experience' => 0, 'level' => 1, 'maglevel' => 0, 'health' => 100, 'healthmax' => 100, 'mana' => 100, 'manamax' => 100, 'manaspent' => 0, 'soul' => 0, 'lookbody' => 10, 'lookfeet' => 10, 'lookhead' => 10, 'looklegs' => 10, 'looktype' => 136, 'lookaddons' => 0, 'posx' => 0, 'posy' => 0, 'posz' => 0, 'cap' => 0, 'lastlogin' => 0, 'lastip' => 0, 'save' => true, 'skulltime' => 0, 'skull' => 0, 'balance' => 0, 'lastlogout' => 0, 'blessings' => 0, 'stamina' => 0, 'online' => 0, 'comment' => '', 'created' => 0, 'hide' => 0);
 
 /**
  * Player skills.
@@ -231,7 +231,7 @@ class OTS_Player extends OTS_Row_DAO
 		}
 		else {
 			// SELECT query on database
-			$this->data = $this->db->query('SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . ($this->db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $__load['skull_time'] . '` as `skulltime`, `' . $__load['skull_type'] . '` as `skull`' . $__load['guild_info'] . ', `town_id`' . $__load['loss_experience'] . $__load['loss_items'] . ', `balance`' . ($__load['blessings'] ? ', `blessings`' : '') . ($__load['direction'] ? ', `direction`' : '') . ($__load['stamina'] ? ', `stamina`' : '') . ($__load['world_id'] ? ', `world_id`' : '') . ($__load['online'] ? ', `online`' : '') . ', `' . ($__load['deletion'] ? 'deletion' : 'deleted') . '`' . ($__load['promotion'] ? ', `promotion`' : '') . ($__load['marriage'] ? ', `marriage`' : '') . ', `comment`, `created`, `hidden` FROM `players` WHERE `id` = ' . (int)$id)->fetch();
+			$this->data = $this->db->query('SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . ($this->db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $__load['skull_time'] . '` as `skulltime`, `' . $__load['skull_type'] . '` as `skull`' . $__load['guild_info'] . ', `town_id`' . $__load['loss_experience'] . $__load['loss_items'] . ', `balance`' . ($__load['blessings'] ? ', `blessings`' : '') . ($__load['direction'] ? ', `direction`' : '') . ($__load['stamina'] ? ', `stamina`' : '') . ($__load['world_id'] ? ', `world_id`' : '') . ($__load['online'] ? ', `online`' : '') . ', `' . ($__load['deletion'] ? 'deletion' : 'deleted') . '`' . ($__load['promotion'] ? ', `promotion`' : '') . ($__load['marriage'] ? ', `marriage`' : '') . ', `comment`, `created`, `hide` FROM `players` WHERE `id` = ' . (int)$id)->fetch();
 		}
 
         // loads skills
@@ -521,17 +521,17 @@ class OTS_Player extends OTS_Row_DAO
 
     public function isHidden()
     {
-        if( !isset($this->data['hidden']) )
+        if( !isset($this->data['hide']) )
         {
             throw new E_OTS_NotLoaded();
         }
 
-        return $this->data['hidden'] == 1;
+        return $this->data['hide'] == 1;
     }
 
     public function setHidden($hidden)
     {
-        $this->data['hidden'] = (int) $hidden;
+        $this->data['hide'] = (int) $hidden;
     }
 
     public function getMarriage()

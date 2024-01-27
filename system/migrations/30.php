@@ -2,7 +2,7 @@
 
 $query = $db->query("SELECT `id` FROM `" . TABLE_PREFIX . "pages` WHERE `name` LIKE " . $db->quote('rules_on_the_page') . " LIMIT 1;");
 if($query->rowCount() === 0) {
-	$db->exec("INSERT INTO `myaac_pages` (`id`, `name`, `title`, `body`, `date`, `player_id`, `php`, `enable_tinymce`, `access`, `hidden`) VALUES
+	$db->exec("INSERT INTO `myaac_pages` (`id`, `name`, `title`, `body`, `date`, `player_id`, `php`, `enable_tinymce`, `access`, `hide`) VALUES
 	(null, 'rules_on_the_page', 'Rules', '1. Names
 a) Names which contain insulting (e.g. \"Bastard\"), racist (e.g. \"Nigger\"), extremely right-wing (e.g. \"Hitler\"), sexist (e.g. \"Bitch\") or offensive (e.g. \"Copkiller\") language.
 b) Names containing parts of sentences (e.g. \"Mike returns\"), nonsensical combinations of letters (e.g. \"Fgfshdsfg\") or invalid formattings (e.g. \"Thegreatknight\").

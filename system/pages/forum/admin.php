@@ -64,7 +64,7 @@ if($canEdit) {
 			}
 		}
 		else if($action == 'hide_board') {
-			Forum::toggleHidden_board($id, $errors);
+			Forum::toggleHide_board($id, $errors);
 			$action = '';
 		}
 		else if($action == 'moveup_board') {

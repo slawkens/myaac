@@ -18,7 +18,7 @@ $title = 'Creatures';
 if (empty($_REQUEST['name'])) {
 	// display list of monsters
 	$preview = setting('core.monsters_images_preview');
-	$creatures = Monster::where('hidden', '!=', 1)->when(!empty($_REQUEST['boss']), function ($query) {
+	$creatures = Monster::where('hide', '!=', 1)->when(!empty($_REQUEST['boss']), function ($query) {
 		$query->where('rewardboss', 1);
 	})->get()->toArray();
 
@@ -39,7 +39,7 @@ if (empty($_REQUEST['name'])) {
 
 // display monster
 $creature_name = urldecode(stripslashes(ucwords(strtolower($_REQUEST['name']))));
-$creature = Monster::where('hidden', '!=', 1)->where('name', $creature_name)->first()->toArray();
+$creature = Monster::where('hide', '!=', 1)->where('name', $creature_name)->first()->toArray();
 
 if (isset($creature['name'])) {
 	function sort_by_chance($a, $b)

@@ -20,7 +20,7 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 {
 	$categories = array();
 	foreach($db->query(
-		'SELECT id, name, icon_id FROM ' . TABLE_PREFIX . 'news_categories WHERE hidden != 1') as $cat)
+		'SELECT id, name, icon_id FROM ' . TABLE_PREFIX . 'news_categories WHERE hide != 1') as $cat)
 	{
 		$categories[$cat['id']] = array(
 			'name' => $cat['name'],
@@ -51,6 +51,7 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 					'title' => $_GET['title'],
 					'text' => $_GET['article_text'],
 					'image' => $_GET['article_image'],
+					'hide' => 0,
 					'hidden' => 0,
 					'read_more'=> '#'
 				),
@@ -68,6 +69,7 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 		foreach($tickers as &$ticker) {
 			$ticker['icon'] = $categories[$ticker['category']]['icon_id'];
 			$ticker['body_short'] = short_text(strip_tags($ticker['body']), 100);
+			$ticker['hidden'] = $ticker['hide'];
 		}
 
 		$tickers_content = $twig->render('news.tickers.html.twig', array(
@@ -88,7 +90,8 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 				'author' => setting('core.news_author') ? $author : '',
 				'comments' => null,
 				'news_date_format' => setting('core.news_date_format'),
-				'hidden'=> 0
+				'hide'=> 0,
+				'hidden' => 0,
 			)));
 	}
 }

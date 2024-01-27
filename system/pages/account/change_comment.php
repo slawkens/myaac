@@ -40,7 +40,7 @@ if($player_name != null) {
 
 			if (isset($_POST['changecommentsave']) && $_POST['changecommentsave'] == 1) {
 				if(empty($errors)) {
-					$player->hidden = $new_hideacc;
+					$player->hide = $new_hideacc;
 					$player->comment = $new_comment;
 					$player->save();
 					$account_logged->logAction('Changed comment for character <b>' . $player->name . '</b>.');

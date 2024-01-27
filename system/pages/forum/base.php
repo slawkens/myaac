@@ -41,10 +41,10 @@ foreach(getForumBoards() as $section) {
 	);
 
 	if($canEdit) {
-		$sections[$section['id']]['hidden'] = $section['hidden'];
+		$sections[$section['id']]['hide'] = $section['hide'];
 	}
 	else {
-		$sections[$section['id']]['hidden'] = 0;
+		$sections[$section['id']]['hide'] = 0;
 	}
 }
 

@@ -213,7 +213,7 @@ else if (isset($_REQUEST['search'])) {
 			}
 
 			$deleted = (isset($_POST['deleted']) && $_POST['deleted'] == 'true');
-			$hidden = (isset($_POST['hidden']) && $_POST['hidden'] == 'true');
+			$hide = (isset($_POST['hide']) && $_POST['hide'] == 'true');
 
 			$created = strtotime($_POST['created']);
 			verify_number($created, 'Created', 11);
@@ -290,7 +290,7 @@ else if (isset($_REQUEST['search'])) {
 					$player->setCustomField('deletion', $deleted ? '1' : '0');
 				else
 					$player->setCustomField('deleted', $deleted ? '1' : '0');
-				$player->setCustomField('hidden', $hidden ? '1' : '0');
+				$player->setCustomField('hide', $hide ? '1' : '0');
 				$player->setCustomField('created', $created);
 				if (isset($comment))
 					$player->setCustomField('comment', $comment);
@@ -485,8 +485,8 @@ else if (isset($_REQUEST['search'])) {
 									</div>
 									<div class="col-12 col-sm-12 col-lg-6">
 										<div class="custom-control custom-switch custom-switch-on-success">
-											<input type="checkbox" class="custom-control-input" name="hidden" id="hidden" value="true" <?php echo($player->isHidden() ? ' checked' : ''); ?>>
-											<label class="custom-control-label" for="hidden">Hidden</label>
+											<input type="checkbox" class="custom-control-input" name="hide" id="hide" value="true" <?php echo($player->isHidden() ? ' checked' : ''); ?>>
+											<label class="custom-control-label" for="hide">Hidden</label>
 										</div>
 									</div>
 								</div>

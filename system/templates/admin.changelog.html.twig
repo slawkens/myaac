@@ -51,7 +51,7 @@
 									{{ csrf() }}
 									<input type="hidden" name="action" value="hide" />
 									<input type="hidden" name="id" value="{{ log.id }}" />
-									<button type="submit" class="btn btn-{{ (log.hidden != 1) ? 'info' : 'default' }} btn-sm" title="{% if log.hidden != 1 %}Hide{% else %}Show{% endif %}"><i class="fas fa-eye{{ (log.hidden != 1) ? '' : '-slash' }}"></i></button>
+									<button type="submit" class="btn btn-{{ (log.hide != 1) ? 'info' : 'default' }} btn-sm" title="{% if log.hide != 1 %}Hide{% else %}Show{% endif %}"><i class="fas fa-eye{{ (log.hide != 1) ? '' : '-slash' }}"></i></button>
 								</form>
 							</div>
 						</td>

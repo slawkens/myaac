@@ -73,7 +73,7 @@ if(!empty($action) && isRequestMethod('post'))
 		}
 	}
 	else if($action == 'hide') {
-		if (Changelog::toggleHidden($id, $errors, $status)) {
+		if (Changelog::toggleHide($id, $errors, $status)) {
 			success(($status == 1 ? 'Hide' : 'Show') . ' successful.');
 		}
 	}

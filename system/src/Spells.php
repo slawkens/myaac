@@ -81,7 +81,7 @@ class Spells {
 					'conjure_count' => $spell->getConjureCount(),
 					'conjure_id' => $spell->getConjureId(),
 					'reagent' => $spell->getReagentId(),
-					'hidden' => $spell->isEnabled() ? 0 : 1
+					'hide' => $spell->isEnabled() ? 0 : 1
 				));
 
 				if($show) {
@@ -121,7 +121,7 @@ class Spells {
 					'premium' => $spell->isPremium() ? 1 : 0,
 					'vocations' => json_encode($spell->getVocations()),
 					'conjure_count' => 0,
-					'hidden' => $spell->isEnabled() ? 0 : 1
+					'hide' => $spell->isEnabled() ? 0 : 1
 				));
 
 				if($show) {
@@ -159,7 +159,7 @@ class Spells {
 					'vocations' => json_encode($spell->getVocations()),
 					'conjure_count' => 0,
 					'item_id' => $spell->getID(),
-					'hidden' => $spell->isEnabled() ? 0 : 1
+					'hide' => $spell->isEnabled() ? 0 : 1
 				));
 
 				if($show) {

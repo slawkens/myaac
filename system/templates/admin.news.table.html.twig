@@ -52,7 +52,7 @@
 								{{ csrf() }}
 								<input type="hidden" name="action" value="hide" />
 								<input type="hidden" name="id" value="{{ news.id }}" />
-								<button type="submit" class="btn btn-{{ (news.hidden != 1) ? 'info' : 'default' }} btn-sm" title="{% if news.hidden != 1 %}Hide{% else %}Show{% endif %}"><i class="fas fa-eye{{ (news.hidden != 1) ? '' : '-slash' }}"></i></button>
+								<button type="submit" class="btn btn-{{ (news.hide != 1) ? 'info' : 'default' }} btn-sm" title="{% if news.hide != 1 %}Hide{% else %}Show{% endif %}"><i class="fas fa-eye{{ (news.hide != 1) ? '' : '-slash' }}"></i></button>
 							</form>
 						</div>
 					</td>

@@ -25,7 +25,7 @@
 			<td>{{ log.body|nl2br}}</td>
 			{% if canEdit  %}
 				<td>
-					{{ include('admin.links.html.twig', {page: 'changelog', id: log.id, hidden: log.hidden }) }}
+					{{ include('admin.links.html.twig', {page: 'changelog', id: log.id, hide: log.hide }) }}
 				</td>
 			{% endif %}
 		</tr>

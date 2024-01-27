@@ -155,14 +155,14 @@ class Forum
 		return !count($errors);
 	}
 
-	public static function toggleHidden_board($id, &$errors)
+	public static function toggleHide_board($id, &$errors)
 	{
 		global $db;
 		if(isset($id))
 		{
 			$query = self::get_board($id);
 			if($query !== false)
-				$db->update(TABLE_PREFIX . 'forum_boards', array('hidden' => ($query['hidden'] == 1 ? 0 : 1)), array('id' => $id));
+				$db->update(TABLE_PREFIX . 'forum_boards', array('hide' => ($query['hide'] == 1 ? 0 : 1)), array('id' => $id));
 			else
 				$errors[] = 'Forum board with id ' . $id . ' does not exists.';
 		}

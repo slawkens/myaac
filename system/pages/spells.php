@@ -37,7 +37,7 @@ else {
 
 $order = 'name';
 $spells = array();
-$spells_db = Spell::where('hidden', '!=', 1)->where('type', '<', 4)->orderBy($order)->get();
+$spells_db = Spell::where('hide', '!=', 1)->where('type', '<', 4)->orderBy($order)->get();
 
 if((string)$vocation_id != 'all') {
 	foreach($spells_db as $spell) {

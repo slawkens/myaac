@@ -1,4 +1,4 @@
-SET @myaac_database_version = 36;
+SET @myaac_database_version = 39;
 
 CREATE TABLE `myaac_account_actions`
 (
@@ -44,11 +44,11 @@ CREATE TABLE `myaac_changelog`
 	`where` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 - server, 2 - site',
 	`date` INT(11) NOT NULL DEFAULT 0,
 	`player_id` INT(11) NOT NULL DEFAULT 0,
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
+	`hide` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `myaac_changelog` (`id`, `type`, `where`, `date`, `body`, `hidden`) VALUES (1, 3, 2, UNIX_TIMESTAMP(), 'MyAAC installed. (:', 0);
+INSERT INTO `myaac_changelog` (`id`, `type`, `where`, `date`, `body`, `hide`) VALUES (1, 3, 2, UNIX_TIMESTAMP(), 'MyAAC installed. (:', 0);
 
 CREATE TABLE `myaac_config`
 (
@@ -67,7 +67,7 @@ CREATE TABLE `myaac_faq`
 	`question` VARCHAR(255) NOT NULL DEFAULT '',
 	`answer` VARCHAR(1020) NOT NULL DEFAULT '',
 	`ordering` INT(11) NOT NULL DEFAULT 0,
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
+	`hide` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -80,7 +80,7 @@ CREATE TABLE `myaac_forum_boards`
 	`guild` INT(11) NOT NULL DEFAULT 0,
 	`access` INT(11) NOT NULL DEFAULT 0,
 	`closed` TINYINT(1) NOT NULL DEFAULT 0,
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
+	`hide` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`, `closed`) VALUES (NULL, 'News', 'News commenting', 0, 1);
@@ -129,7 +129,7 @@ CREATE TABLE `myaac_menu`
 
 CREATE TABLE `myaac_monsters` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`hidden` tinyint(1) NOT NULL default 0,
+	`hide` tinyint(1) NOT NULL default 0,
 	`name` varchar(255) NOT NULL,
 	`mana` int(11) NOT NULL DEFAULT 0,
 	`exp` int(11) NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE `myaac_news`
 	`comments` VARCHAR(50) NOT NULL DEFAULT '',
 	`article_text` VARCHAR(300) NOT NULL DEFAULT '',
 	`article_image` VARCHAR(100) NOT NULL DEFAULT '',
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
+	`hide` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -184,7 +184,7 @@ CREATE TABLE `myaac_news_categories`
 	`name` VARCHAR(50) NOT NULL DEFAULT "",
 	`description` VARCHAR(50) NOT NULL DEFAULT "",
 	`icon_id` INT(2) NOT NULL DEFAULT 0,
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
+	`hide` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -215,7 +215,7 @@ CREATE TABLE `myaac_pages`
 	`php` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0 - plain html, 1 - php',
 	`enable_tinymce` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1 - enabled, 0 - disabled',
 	`access` TINYINT(2) NOT NULL DEFAULT 0,
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
+	`hide` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`),
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
@@ -228,7 +228,7 @@ CREATE TABLE `myaac_gallery`
 	`thumb` VARCHAR(255) NOT NULL,
 	`author` VARCHAR(50) NOT NULL DEFAULT '',
 	`ordering` INT(11) NOT NULL DEFAULT 0,
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
+	`hide` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -262,7 +262,7 @@ CREATE TABLE `myaac_spells`
 	`item_id` INT(11) NOT NULL DEFAULT 0,
 	`premium` TINYINT(1) NOT NULL DEFAULT 0,
 	`vocations` VARCHAR(100) NOT NULL DEFAULT '',
-	`hidden` TINYINT(1) NOT NULL DEFAULT 0,
+	`hide` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`),
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

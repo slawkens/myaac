@@ -19,7 +19,7 @@
 				{{ csrf() }}
 				<input type="hidden" name="action" value="hide" />
 				<input type="hidden" name="id" value="{{ id }}" />
-				<button type="submit" title="{% if hidden != 1 %}Hide{% else %}Show{% endif %}"><img src="images/{{ hidden != 1 ? 'success' : 'error' }}.png"/>{{ hidden != 1 ? 'Hide' : 'Show' }}</button>
+				<button type="submit" title="{% if hide != 1 %}Hide{% else %}Show{% endif %}"><img src="images/{{ hide != 1 ? 'success' : 'error' }}.png"/>{{ hide != 1 ? 'Hide' : 'Show' }}</button>
 			</form>
 		</td>
 	</tr>

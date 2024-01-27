@@ -97,7 +97,7 @@ if (!empty($action) && isRequestMethod('post')) {
 			}
 		}
 	} else if ($action == 'hide') {
-		if (Pages::toggleHidden($id, $errors, $status)) {
+		if (Pages::toggleHide($id, $errors, $status)) {
 			success(($status == 0 ? 'Show' : 'Hide') . ' successful.');
 		}
 	}
@@ -112,7 +112,7 @@ $pages = ModelsPages::all()->map(function ($e) {
 		'title' => substr($e->title, 0, 20),
 		'php' => $e->php == '1',
 		'id' => $e->id,
-		'hidden' => $e->hidden
+		'hide' => $e->hide
 	];
 })->toArray();
 

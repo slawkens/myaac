@@ -88,7 +88,7 @@ if(!empty($action))
 				}
 			}
 		} else if ($action == 'hide') {
-			if (News::toggleHidden($id, $errors, $status)) {
+			if (News::toggleHide($id, $errors, $status)) {
 				success(($status == 1 ? 'Hide' : 'Show') . ' successful.');
 			}
 		}
@@ -99,7 +99,7 @@ if(!empty($action))
 }
 
 $categories = array();
-foreach($db->query('SELECT `id`, `name`, `icon_id` FROM `' . TABLE_PREFIX . 'news_categories` WHERE `hidden` != 1') as $cat)
+foreach($db->query('SELECT `id`, `name`, `icon_id` FROM `' . TABLE_PREFIX . 'news_categories` WHERE `hide` != 1') as $cat)
 {
 	$categories[$cat['id']] = array(
 		'name' => $cat['name'],
@@ -142,7 +142,7 @@ foreach ($query as $_news) {
 
 	$newses[$_news['type']][] = array(
 		'id' => $_news['id'],
-		'hidden' => $_news['hidden'],
+		'hide' => $_news['hide'],
 		'archive_link' => getLink('news') . '/archive/' . $_news['id'],
 		'title' => $_news['title'],
 		'date' => $_news['date'],

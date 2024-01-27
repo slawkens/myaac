@@ -12,7 +12,7 @@ class News extends Model {
 	protected $fillable = [
 		'title', 'body', 'type', 'date', 'category', 'player_id',
 		'last_modified_by', 'last_modified_date', 'comments', 'article_text',
-		'article_image', 'hidden'
+		'article_image', 'hide'
 	];
 
 	public function player()
