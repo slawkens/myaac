@@ -1202,73 +1202,41 @@ function clearCache()
 	News::clearCache();
 
 	$cache = Cache::getInstance();
-
 	if($cache->enabled()) {
-		$tmp = '';
-
-		if ($cache->fetch('status', $tmp))
-			$cache->delete('status');
-
-		if ($cache->fetch('templates', $tmp))
-			$cache->delete('templates');
-
-		if ($cache->fetch('config_lua', $tmp))
-			$cache->delete('config_lua');
-
-		if ($cache->fetch('vocations', $tmp))
-			$cache->delete('vocations');
-
-		if ($cache->fetch('towns', $tmp))
-			$cache->delete('towns');
-
-		if ($cache->fetch('groups', $tmp))
-			$cache->delete('groups');
-
-		if ($cache->fetch('visitors', $tmp))
-			$cache->delete('visitors');
-
-		if ($cache->fetch('views_counter', $tmp))
-			$cache->delete('views_counter');
-
-		if ($cache->fetch('failed_logins', $tmp))
-			$cache->delete('failed_logins');
+		$keysToClear = [
+			'status', 'templates',
+			'config_lua',
+			'towns', 'groups', 'vocations',
+			'visitors', 'views_counter', 'failed_logins',
+			'template_menus',
+			'database_tables', 'database_columns', 'database_checksum',
+			'last_kills',
+			'hooks', 'plugins_hooks', 'plugins_routes', 'plugins_settings', 'plugins_themes', 'plugins_commands',
+			'settings',
+		];
 
 		foreach (get_templates() as $template) {
-			if ($cache->fetch('template_ini_' . $template, $tmp)) {
-				$cache->delete('template_ini_' . $template);
+			$keysToClear[] = 'template_ini_' . $template;
+		}
+
+		// highscores cache
+		$configHighscoresPerPage = setting('core.highscores_per_page');
+		$skills = [POT::SKILL_FIST, POT::SKILL_CLUB, POT::SKILL_SWORD, POT::SKILL_AXE, POT::SKILL_DIST, POT::SKILL_SHIELD, POT::SKILL_FISH, POT::SKILL_LEVEL, POT::SKILL__MAGLEVEL, SKILL_FRAGS, SKILL_BALANCE];
+		foreach ($skills as $skill) {
+			$vocations = config('vocations') + ['all'];
+			foreach ($vocations as $vocation) {
+				for($page = 0; $page < 10; $page++) {
+					$cacheKey = 'highscores_' . $skill . '_' . strtolower($vocation) . '_' . $page . '_' . $configHighscoresPerPage;
+					$keysToClear[] = $cacheKey;
+				}
 			}
 		}
 
-		if ($cache->fetch('template_menus', $tmp)) {
-			$cache->delete('template_menus');
-		}
-		if ($cache->fetch('database_tables', $tmp)) {
-			$cache->delete('database_tables');
-		}
-		if ($cache->fetch('database_columns', $tmp)) {
-			$cache->delete('database_columns');
-		}
-		if ($cache->fetch('database_checksum', $tmp)) {
-			$cache->delete('database_checksum');
-		}
-		if ($cache->fetch('last_kills', $tmp)) {
-			$cache->delete('last_kills');
-		}
-
-		if ($cache->fetch('hooks', $tmp)) {
-			$cache->delete('hooks');
-		}
-		if ($cache->fetch('plugins_hooks', $tmp)) {
-			$cache->delete('plugins_hooks');
-		}
-		if ($cache->fetch('plugins_routes', $tmp)) {
-			$cache->delete('plugins_routes');
-		}
-		if ($cache->fetch('plugins_themes', $tmp)) {
-			$cache->delete('plugins_themes');
-		}
-		if ($cache->fetch('plugins_commands', $tmp)) {
-			$cache->delete('plugins_commands');
+		$tmp = '';
+		foreach ($keysToClear as $item) {
+			if ($cache->fetch($item, $tmp)) {
+				$cache->delete($item);
+			}
 		}
 	}
 
