@@ -118,3 +118,10 @@ jobs:
           with:
             name: cypress-videos-${{ matrix.php-versions }}
             path: cypress/videos
+
+        - name: Upload PHP Logs
+          uses: actions/upload-artifact@v4
+          if: always()
+          with:
+            name: php-log-${{ matrix.php-versions }}
+            path: php.log
