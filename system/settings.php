@@ -1465,7 +1465,7 @@ Sent by MyAAC,<br/>
 			'max' => 10, // more than 10 seconds waiting makes no sense
 			'step' => 0.1,
 			'desc' => 'How long to wait for the initial response from the server',
-			'default' => 2.0,
+			'default' => 1.0,
 			'show_if' => [
 				'status_enabled', '=', 'true',
 			]
