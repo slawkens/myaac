@@ -12,7 +12,7 @@ HTML;
 $query = $db->query("SELECT `id` FROM `" . TABLE_PREFIX . "pages` WHERE `name` LIKE " . $db->quote('downloads') . " LIMIT 1;");
 if($query->rowCount() === 0) {
 	$db->exec("INSERT INTO `myaac_pages` (`id`, `name`, `title`, `body`, `date`, `player_id`, `php`, `access`, `hide`) VALUES
-	(null, 'downloads', 'Downloads', $downloadsPage, 0, 1, 0, 0, 0);");
+	(null, 'downloads', 'Downloads', $db->quote($downloadsPage), 0, 1, 0, 0, 0);");
 }
 
 $commandsPage = <<<HTML
@@ -43,5 +43,5 @@ HTML;
 $query = $db->query("SELECT `id` FROM `" . TABLE_PREFIX . "pages` WHERE `name` LIKE " . $db->quote('commands') . " LIMIT 1;");
 if($query->rowCount() === 0) {
 	$db->exec("INSERT INTO `myaac_pages` (`id`, `name`, `title`, `body`, `date`, `player_id`, `php`, `access`, `hide`) VALUES
-(null, 'commands', 'Commands', $commandsPage, 0, 1, 0, 0, 0);");
+(null, 'commands', 'Commands', $db->quote($commandsPage), 0, 1, 0, 0, 0);");
 }
