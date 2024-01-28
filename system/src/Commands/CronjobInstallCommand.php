@@ -24,7 +24,7 @@ class CronjobInstallCommand extends Command
 			return 2;
 		}
 
-		$job = '* * * * * /usr/bin/php ' . SYSTEM . 'bin/cronjob.php >> ' . SYSTEM . 'logs/cron.log 2>&1';
+		$job = '* * * * * /usr/bin/php ' . BASE . 'ma cronjob >> ' . SYSTEM . 'logs/cron.log 2>&1';
 
 		if ($this->cronjobExists($job)) {
 			$io->info('MyAAC cronjob already installed.');
