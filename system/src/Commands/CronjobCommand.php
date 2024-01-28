@@ -19,7 +19,8 @@ class CronjobCommand extends Command
 		// Create a new scheduler
 		$scheduler = new Scheduler();
 
-		$this->hooks->trigger(HOOK_CRONJOB, ['scheduler' => $scheduler]);
+		global $hooks;
+		$hooks->trigger(HOOK_CRONJOB, ['scheduler' => $scheduler]);
 
 		// Let the scheduler execute jobs which are due.
 		$scheduler->run();
