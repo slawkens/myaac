@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.9.0-alpha - 02.06.2023]
+## [1.0-beta - 28.01.2024]
 
-Minimum PHP version for this release is 7.2.5.
+Minimum PHP version for this release is 8.1.
 
 ### Added
 * reworked Admin Panel (@Leesneaks, @gpedro, @slawkens)
@@ -11,17 +11,26 @@ Minimum PHP version for this release is 7.2.5.
   * new Dashboard: statistics, server status
   * new Admin Bar showed on top when admin logged in
   * new page: Server Data, to reload server data
+    * Towns, NPCs & Items are stored in permanent cache
   * new pages: mass account & teleport tools
   * changelogs editor
   * revised Accounts & Players editors
-  * option to add/modify menus with plugins
+  * option to add/modify admin menus with plugins
   * option to enable/disable plugins
   * better, updated TinyMCE editor (v6.x)
     * with option to upload images
-  * list of open source libraries used in project
+  * list of open source libraries used in project page
+* auto-loading of themes, commands & pages from plugins/ folder. You need just to place them in correct folder and they will be loaded automatically - this allows better customization, without interfering with core AAC folders. This will allow in the future automatic updates for plugins as well the AAC as whole.
+* config.php moved to Admin Panel -> Settings page
+* new console script: ma (comes from MyAAC) - using symfony/console
+  * usage: `php ma` (will list all commands by default)
+  * example: `php ma cache:clear`
+  * example: `php ma plugin:install theme-example.zip`
+* replace POT Query Builder to Eloquent ORM. Not 100% yet - in some places there is still old $db approach used (@gpedro) (https://github.com/slawkens/myaac/pull/230)
 * brand new charming installation page (by @fernandomatos)
   * using Bootstrap
 * new pages router: nikic/fast-route, allowing for better customisation
+* Plugin cronjobs: central control of the cronjobs
 * Guild Wars support (available as plugin)
 * support for login and create account only by email (configurable)
   * with no need for account name
@@ -31,7 +40,10 @@ Minimum PHP version for this release is 7.2.5.
   * suggest account number option
 * many new functions, hooks and configurables
 * better Exception Handler (Whoops - https://github.com/filp/whoops)
-* add Cypress testing
+* automated website tests (using Cypress)
+* csrf protection (https://github.com/slawkens/myaac/pull/235)
+* option to restrict Page view to specified group of users (Not-Logged in, logged-in players, tutors, gamemasters etc.)
+* phpdebug bar (http://phpdebugbar.com/). Activated if env == 'dev', can be also activated in production by enabling "enable_debugbar" in local config
 
 ### Changed
 * Composer is now used for external libraries like: Twig, PHPMailer, fast-route etc.
