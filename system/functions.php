@@ -1307,14 +1307,6 @@ function getCustomPage($name, &$success): string
 			else
 				$tmp = $page['body'];
 
-			$php_errors = array();
-			$errorHandler = function ($errno, $errstr): void
-			{
-				global $php_errors;
-				$php_errors[] = array('errno' => $errno, 'errstr' => $errstr);
-			};
-			set_error_handler($errorHandler);
-
 			global $config;
 			if(setting('core.backward_support')) {
 				global $SQL, $main_content, $subtopic;
@@ -1324,11 +1316,6 @@ function getCustomPage($name, &$success): string
 			eval($tmp);
 			$content .= ob_get_contents();
 			ob_end_clean();
-
-			restore_error_handler();
-			if(isset($php_errors[0]) && superAdmin()) {
-				var_dump($php_errors);
-			}
 		}
 		else {
 			$oldLoader = $twig->getLoader();
