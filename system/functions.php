@@ -1312,7 +1312,7 @@ function getCustomPage($name, &$success): string
 			{
 				global $php_errors;
 				$php_errors[] = array('errno' => $errno, 'errstr' => $errstr);
-			}
+			};
 			set_error_handler($errorHandler);
 
 			global $config;
