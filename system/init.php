@@ -59,27 +59,20 @@ define('ACTION', $action);
 $errors = [];
 
 // trim values we receive
-if(isset($_POST))
-{
-	foreach($_POST as $var => $value) {
-		if(is_string($value)) {
-			$_POST[$var] = trim($value);
-		}
+foreach($_POST as $var => $value) {
+	if(is_string($value)) {
+		$_POST[$var] = trim($value);
 	}
 }
-if(isset($_GET))
-{
-	foreach($_GET as $var => $value) {
-		if(is_string($value))
-			$_GET[$var] = trim($value);
-	}
+
+foreach($_GET as $var => $value) {
+	if(is_string($value))
+		$_GET[$var] = trim($value);
 }
-if(isset($_REQUEST))
-{
-	foreach($_REQUEST as $var => $value) {
-		if(is_string($value))
-			$_REQUEST[$var] = trim($value);
-	}
+
+foreach($_REQUEST as $var => $value) {
+	if(is_string($value))
+		$_REQUEST[$var] = trim($value);
 }
 
 // load otserv config file
