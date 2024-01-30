@@ -252,7 +252,7 @@ class Settings implements \ArrayAccess
 				}
 
 				else if($setting['type'] === 'textarea') {
-					if (is_array($settingsDb[$key])) {
+					if (isset($settingsDb[$key]) && is_array($settingsDb[$key])) {
 						$settingsDb[$key] = implode(',', $settingsDb[$key]);
 					}
 
