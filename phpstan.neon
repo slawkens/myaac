@@ -28,5 +28,4 @@ parameters:
 		- '#Variable \$[a-zA-Z0-9\\_]+ might not be defined#'
 		# Eloquent models
 		- '#Call to an undefined static method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+()#'
-		- '#Variable \$tmp in empty\(\) always exists and is always falsy#'
 
