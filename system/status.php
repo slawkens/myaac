@@ -11,6 +11,7 @@
 use MyAAC\Cache\Cache;
 use MyAAC\Models\Config;
 use MyAAC\Models\PlayerOnline;
+use MyAAC\Models\Player;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
