@@ -114,9 +114,10 @@ $template['link_account_logout'] = getLink('account/logout');
 
 $template['link_news_archive'] = getLink('news/archive');
 
-$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts', 'bugtracker', 'gallery');
-foreach($links as $link) {
-	$template['link_' . $link] = getLink($link);
+$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills' => 'last-kills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'exp-stages', 'freeHouses', 'serverInfo', 'exp-table', 'faq', 'points', 'gifts', 'bugtracker', 'gallery');
+foreach($links as $key => $value) {
+	$key = is_string($key) ? $key : $value;
+	$template['link_' . $key] = getLink($value);
 }
 
 $template['link_screenshots'] = getLink('gallery');

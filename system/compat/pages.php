@@ -44,7 +44,7 @@ switch($page)
 		break;
 
 	case 'killstatistics':
-		$page = 'lastkills';
+		$page = 'last-kills';
 		break;
 
 	case 'buypoints':

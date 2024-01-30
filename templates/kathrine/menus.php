@@ -17,7 +17,7 @@ return [
 		'Characters' => 'characters',
 		'Who is Online?' => 'online',
 		'Highscores' => 'highscores',
-		'Last Kills' => 'lastkills',
+		'Last Kills' => 'last-kills',
 		'Houses' => 'houses',
 		'Guilds' => 'guilds',
 		'Polls' => 'polls',
@@ -28,11 +28,11 @@ return [
 	MENU_CATEGORY_LIBRARY => [
 		'Monsters' => 'creatures',
 		'Spells' => 'spells',
-		'Server Info' => 'serverInfo',
+		'Server Info' => 'server-info',
 		'Commands' => 'commands',
-		'Exp Stages' => 'experienceStages',
+		'Exp Stages' => 'exp-stages',
 		'Gallery' => 'gallery',
-		'Exp Table' => 'experienceTable',
+		'Exp Table' => 'exp-table',
 		'FAQ' => 'faq',
 	],
 	MENU_CATEGORY_SHOP => [
