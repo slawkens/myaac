@@ -8,10 +8,10 @@ require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 
 ini_set('max_execution_time', 300);
-if(ob_get_length() > 0) {
-	ob_implicit_flush();
-	ob_end_flush();
-}
+
+@ob_end_flush();
+ob_implicit_flush();
+
 header('X-Accel-Buffering: no');
 
 if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['saved'])) {
