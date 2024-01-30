@@ -73,7 +73,7 @@ class CreateCharacter
 	 * @param array $errors
 	 * @return bool
 	 */
-	public function check($name, $sex, &$vocation, &$town, &$errors)
+	public function check($name, $sex, ?int &$vocation, ?int &$town, &$errors)
 	{
 		$this->checkName($name, $errors);
 

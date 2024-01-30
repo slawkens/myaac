@@ -291,7 +291,7 @@ else if (isset($_REQUEST['search'])) {
 				<div class="card-body">
 					<div class="tab-content" id="accounts-tabContent">
 						<div class="tab-pane fade active show" id="accounts-acc">
-							<form action="<?php echo $admin_base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post">
+							<form action="<?php echo $admin_base . ($id > 0 ? '&id=' . $id : ''); ?>" method="post">
 								<?php csrf(); ?>
 								<div class="form-group row">
 									<?php if (USE_ACCOUNT_NAME): ?>

@@ -27,7 +27,7 @@ $configBans = [];
 $configBans['hasType'] = false;
 $configBans['hasReason'] = false;
 
-$limit = 'LIMIT ' . ($configBansPerPage + 1) . (isset($offset) ? ' OFFSET ' . $offset : '');
+$limit = 'LIMIT ' . ($configBansPerPage + 1) . ' OFFSET ' . $offset;
 if ($db->hasTable('account_bans')) {
 	$bansQuery = $db->query('SELECT * FROM `account_bans` ORDER BY `banned_at` DESC ' . $limit);
 }

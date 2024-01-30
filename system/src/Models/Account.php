@@ -4,6 +4,10 @@ namespace MyAAC\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property integer $lastday
+ * @property integer $premdays
+ */
 class Account extends Model {
 
 	protected $table = 'accounts';
@@ -46,8 +50,8 @@ class Account extends Model {
 			return 65535;
 		}
 
-		$ret = ceil($this->premdays - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->lastday))) - date("z", $this->lastday)));
-		return $ret > 0 ? $ret : 0;
+		$ret = ceil($this->premdays - ((int)date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->lastday))) - date("z", $this->lastday)));
+		return max($ret, 0);
 	}
 
 	public function getIsPremiumAttribute()

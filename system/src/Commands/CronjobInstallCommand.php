@@ -47,7 +47,7 @@ class CronjobInstallCommand extends Command
 	{
 		exec('crontab -l', $crontab);
 
-		if(isset($crontab) && is_array($crontab)) {
+		if(is_array($crontab)) {
 			$crontab = array_flip($crontab);
 
 			if(isset($crontab[$command])){

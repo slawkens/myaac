@@ -375,7 +375,7 @@ else if (isset($_REQUEST['search'])) {
 						</li>
 					</ul>
 				</div>
-				<form action="<?php echo $player_base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post">
+				<form action="<?php echo $player_base . ($id > 0 ? '&id=' . $id : ''); ?>" method="post">
 					<?php csrf(); ?>
 					<div class="card-body">
 						<div class="tab-content" id="tabs-tabContent">

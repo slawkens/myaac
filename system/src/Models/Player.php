@@ -2,7 +2,14 @@
 
 namespace MyAAC\Models;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property int $level
+ * @property int $vocation
+ * @property int $online
+ * @property hasOne $onlineTable
+ */
 class Player extends Model {
 
 	protected $table = 'players';

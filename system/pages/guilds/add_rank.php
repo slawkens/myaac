@@ -67,13 +67,9 @@ if(empty($errors)) {
 }
 else
 {
-	if(!empty($errors)) {
-		$twig->display('error_box.html.twig', array('errors' => $errors));
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 
-		$twig->display('guilds.back_button.html.twig', array(
+	$twig->display('guilds.back_button.html.twig', array(
 			'new_line' => true
 		));
-	}
 }
-
-?>

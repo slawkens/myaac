@@ -146,8 +146,8 @@ foreach ($query as $_news) {
 		'archive_link' => getLink('news') . '/archive/' . $_news['id'],
 		'title' => $_news['title'],
 		'date' => $_news['date'],
-		'player_name' => isset($_player) && $_player->isLoaded() ? $_player->getName() : '',
-		'player_link' => isset($_player) && $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
+		'player_name' => $_player->isLoaded() ? $_player->getName() : '',
+		'player_link' => $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
 	);
 }
 
