@@ -236,7 +236,7 @@ else {
 				// parse for define PAGE
 				$tmp = BASE_DIR;
 				$uri = $_SERVER['REQUEST_URI'];
-				if (!empty($tmp)) {
+				if (strlen($tmp) > 0) {
 					$uri = str_replace(BASE_DIR . '/', '', $uri);
 				}
 
