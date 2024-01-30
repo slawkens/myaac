@@ -787,7 +787,7 @@ function get_browser_languages()
 	$languages = str_replace(' ', '', $languages);
 
 	foreach(explode(',', $languages) as $language_list)
-		$ret[] .= substr($language_list, 0, 2);
+		$ret[] = substr($language_list, 0, 2);
 
 	return $ret;
 }
@@ -1308,11 +1308,12 @@ function getCustomPage($name, &$success): string
 				$tmp = $page['body'];
 
 			$php_errors = array();
-			function error_handler($errno, $errstr) {
+			$errorHandler = function ($errno, $errstr): void
+			{
 				global $php_errors;
 				$php_errors[] = array('errno' => $errno, 'errstr' => $errstr);
 			}
-			set_error_handler('error_handler');
+			set_error_handler($errorHandler);
 
 			global $config;
 			if(setting('core.backward_support')) {
