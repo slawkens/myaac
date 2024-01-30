@@ -189,7 +189,7 @@ return [
 		'cache_engine' => [
 			'name' => 'Cache Engine',
 			'type' => 'options',
-			'options' => ['auto' => 'Auto', 'file' => 'Files', 'apc' => 'APC', 'apcu' => 'APCu', 'eaccelerator' => 'eAccelerator', 'disable' => 'Disable'],
+			'options' => ['auto' => 'Auto', 'file' => 'Files', 'apc' => 'APC', 'apcu' => 'APCu', 'disable' => 'Disable'],
 			'desc' => 'Auto is most reasonable. It will detect the best cache engine',
 			'default' => 'auto',
 			'is_config' => true,

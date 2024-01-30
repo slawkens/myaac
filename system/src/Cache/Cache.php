@@ -56,10 +56,6 @@ class Cache
 				self::$instance = new APCu($prefix);
 				break;
 
-			case 'eaccelerator':
-				self::$instance = new eAccelerator($prefix);
-				break;
-
 			case 'xcache':
 				self::$instance = new XCache($prefix);
 				break;
@@ -93,8 +89,6 @@ class Cache
 			return 'apc';
 		else if (function_exists('apcu_fetch'))
 			return 'apcu';
-		else if (function_exists('eaccelerator_get'))
-			return 'eaccelerator';
 		else if (function_exists('xcache_get') && ini_get('xcache.var_size'))
 			return 'xcache';
 
