@@ -11,6 +11,8 @@ if(!IS_CLI) {
 require_once SYSTEM . 'functions.php';
 require_once SYSTEM . 'init.php';
 
+define('SELF_NAME', basename(__FILE__));
+
 use MyAAC\Plugins;
 use Symfony\Component\Console\Application;
 
