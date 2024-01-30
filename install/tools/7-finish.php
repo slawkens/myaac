@@ -67,6 +67,9 @@ require_once SYSTEM . 'migrations/22.php';
 require_once SYSTEM . 'migrations/27.php';
 require_once SYSTEM . 'migrations/30.php';
 
+// new monster columns
+require_once SYSTEM . 'migrations/31.php';
+
 if(ModelsFAQ::count() == 0) {
 	ModelsFAQ::create([
 		'question' => 'What is this?',
