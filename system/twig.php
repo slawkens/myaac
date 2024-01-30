@@ -126,8 +126,8 @@ $function = new TwigFunction('getCustomPage', function ($name) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('csrf', function () {
-	csrf();
+$function = new TwigFunction('csrf', function ($return = false) {
+	return csrf($return);
 });
 $twig->addFunction($function);
 

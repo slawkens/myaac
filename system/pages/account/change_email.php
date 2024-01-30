@@ -93,21 +93,21 @@ else
 		<td width="30">&nbsp;</td>
 		<td align=left>
 			<form action="' . getLink('account/email') . '" method="post">
-				' . csrf() . '
+				' . csrf(true) . '
 				<input type="hidden" name="changeemailsave" value=1 >
 				<INPUT TYPE=image NAME="I Agree" SRC="' . $template_path . '/images/global/buttons/sbutton_iagree.gif" BORDER=0 WIDTH=120 HEIGHT=17>
 			</form>
 		</td>
 		<td align=left>
 			<form action="' . getLink('account/email') . '" method="post">
-				' . csrf() . '
+				' . csrf(true) . '
 				<input type="hidden" name="emailchangecancel" value=1 >
 				' . $twig->render('buttons.cancel.html.twig') . '
 			</form>
 		</td>
 		<td align=right>
 			<form action="?subtopic=accountmanagement" method="post" >
-				' . csrf() . '
+				' . csrf(true) . '
 				' . $twig->render('buttons.back.html.twig') . '
 			</form>
 		</td>
@@ -129,7 +129,7 @@ else
 		<td>
 			<table border="0" cellspacing="0" cellpadding="0" >
 				<form action="' .getLink('account/email') . '" method="post" >
-					' . csrf() . '
+					' . csrf(true) . '
 					<tr>
 						<td style="border:0px;" >
 							<input type="hidden" name="emailchangecancel" value="1" >
@@ -142,7 +142,7 @@ else
 		<td>
 			<table border="0" cellspacing="0" cellpadding="0" >
 				<form action="' . getLink('account/manage') . '" method="post" >
-					' . csrf() . '
+					' . csrf(true) . '
 					<tr>
 						<td style="border:0px;" >
 							' . $twig->render('buttons.back.html.twig') . '

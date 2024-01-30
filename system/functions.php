@@ -1064,8 +1064,8 @@ function unsetSession($key) {
 	unset($_SESSION[setting('core.session_prefix') . $key]);
 }
 
-function csrf(): void {
-	CsrfToken::create();
+function csrf(bool $return = false): string {
+	return CsrfToken::create($return);
 }
 
 function csrfToken(): string {
