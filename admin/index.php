@@ -25,11 +25,6 @@ define('PAGE', $page);
 require SYSTEM . 'functions.php';
 require SYSTEM . 'init.php';
 
-// verify myaac tables exists in database
-if(!$db->hasTable('myaac_account_actions')) {
-	throw new RuntimeException('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
-}
-
 require __DIR__ . '/includes/debugbar.php';
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
