@@ -1111,7 +1111,7 @@ function getTopPlayers($limit = 5) {
 			$columns[] = 'online';
 		}
 
-		$players = Player::query()/** @phpstan-ignore-line */
+		$players = Player::query()
 			->select($columns)
 			->withOnlineStatus()
 			->notDeleted()

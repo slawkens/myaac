@@ -147,7 +147,7 @@ if ($cache->enabled()) {
 }
 
 $offset = ($page - 1) * $configHighscoresPerPage;
-$query->join('accounts', 'accounts.id', '=', 'players.account_id') /** @phpstan-ignore-line */
+$query->join('accounts', 'accounts.id', '=', 'players.account_id')
 	->withOnlineStatus()
 	->whereNotIn('players.id', setting('core.highscores_ids_hidden'))
 	->notDeleted()
@@ -203,8 +203,8 @@ if (empty($highscores)) {
 
 	$highscores = $query->get()->map(function($row) {
 		$tmp = $row->toArray();
-		$tmp['online'] = $row->online_status; /** @phpstan-ignore-line */
-		$tmp['vocation'] = $row->vocation_name; /** @phpstan-ignore-line */
+		$tmp['online'] = $row->online_status;
+		$tmp['vocation'] = $row->vocation_name;
 		unset($tmp['online_table']);
 
 		return $tmp;

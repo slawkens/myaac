@@ -30,4 +30,7 @@ parameters:
 		- '#Variable \$[a-zA-Z0-9\\_]+ might not be defined#'
 		# Eloquent models
 		- '#Call to an undefined static method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+()#'
-
+		# system/pages/highscores.php
+		- '#Call to an undefined method Illuminate\\Database\\Query\\Builder::withOnlineStatus\(\)#'
+		- '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$online_status#'
+		- '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$vocation_name#'
