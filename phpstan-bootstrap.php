@@ -9,4 +9,5 @@ require __DIR__ . '/common.php';
 
 const ACTION = '';
 const PAGE = '';
+const URI = '';
 define('SELF_NAME', basename(__FILE__));
