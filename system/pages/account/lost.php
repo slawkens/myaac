@@ -55,7 +55,7 @@ elseif($action == 'step1' && $action_type == 'email')
 				</TD></TR></FORM></TABLE></TABLE>';
 			else
 			{
-				$insec = $account->getCustomField('email_next') - time();
+				$insec = (int)$account->getCustomField('email_next') - time();
 				$minutesleft = floor($insec / 60);
 				$secondsleft = $insec - ($minutesleft * 60);
 				$timeleft = $minutesleft.' minutes '.$secondsleft.' seconds';
@@ -118,7 +118,7 @@ elseif($action == 'sendcode')
 			}
 			else
 			{
-				$insec = $account->getCustomField('email_next') - time();
+				$insec = (int)$account->getCustomField('email_next') - time();
 				$minutesleft = floor($insec / 60);
 				$secondsleft = $insec - ($minutesleft * 60);
 				$timeleft = $minutesleft.' minutes '.$secondsleft.' seconds';

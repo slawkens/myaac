@@ -418,7 +418,10 @@ function delete_guild($id)
 	if(count($rank_list) > 0) {
 		$rank_list->orderBy('level');
 
-		global $db, $ots;
+		global $db;
+		/**
+		 * @var OTS_GuildRank $rank_in_guild
+		 */
 		foreach($rank_list as $rank_in_guild) {
 			if($db->hasTable('guild_members'))
 				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_members`.`rank_id` as `rank_id` FROM `players`, `guild_members` WHERE `guild_members`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_members`.`player_id` ORDER BY `name`;');
@@ -710,11 +713,8 @@ function getSkillName($skillId, $suffix = true)
 /**
  * Performs flag check on the current logged in user.
  * Table in database: accounts, field: website_flags
- *
- * @param int @flag Flag to be verified.
- * @return bool If user got flag.
  */
-function hasFlag($flag) {
+function hasFlag(int $flag): bool {
 	global $logged, $logged_flags;
 	return ($logged && ($logged_flags & $flag) == $flag);
 }
@@ -1111,7 +1111,7 @@ function getTopPlayers($limit = 5) {
 			$columns[] = 'online';
 		}
 
-		$players = Player::query()
+		$players = Player::query()/** @phpstan-ignore-line */
 			->select($columns)
 			->withOnlineStatus()
 			->notDeleted()

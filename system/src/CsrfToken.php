@@ -25,7 +25,7 @@ class CsrfToken
 	 *
 	 * @access public
 	 * @static true
-	 * @return void
+	 * @return string
 	 **/
 	public static function create(bool $return = false): string {
 		$input = '<input type="hidden" name="csrf_token" value="' . self::get() . '" />';

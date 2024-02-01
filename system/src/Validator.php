@@ -141,8 +141,8 @@ class Validator
 	 * Validate account password
 	 * Name lenght must be 3-32 chars
 	 *
-	 * @param string $name Account name to check
-	 * @return bool Is account name valid?
+	 * @param string $password Password to check
+	 * @return bool Is password valid?
 	 */
 	public static function password($password)
 	{

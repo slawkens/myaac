@@ -23,9 +23,15 @@ $guilds_list = new OTS_Guilds_List();
 $guilds_list->init();
 if(count($guilds_list) > 0)
 {
+	/**
+	 * @var OTS_Guild $guild
+	 */
 	foreach($guilds_list as $guild)
 	{
 		$error = 0;
+		/**
+		 * @var OTS_Player $leader
+		 */
 		$leader = $guild->getOwner();
 		if($leader->isLoaded())
 		{

@@ -1,5 +1,5 @@
 parameters:
-	level: 1
+	level: 2
 	paths:
 		- .
 		- templates/tibiacom
@@ -10,6 +10,8 @@ parameters:
 		- plugins/*
 		- templates/*
 		- system/libs
+		- tools/signature/mango.php
+		- tools/signature/gd.class.php
 	bootstrapFiles:
 		- phpstan-bootstrap.php
 	ignoreErrors:
