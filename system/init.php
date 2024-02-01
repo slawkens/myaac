@@ -134,6 +134,11 @@ $ots = POT::getInstance();
 $eloquentConnection = null;
 require_once SYSTEM . 'database.php';
 
+// verify myaac tables exists in database
+if(!$db->hasTable('myaac_account_actions')) {
+	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
+}
+
 // execute migrations
 require SYSTEM . 'migrate.php';
 
