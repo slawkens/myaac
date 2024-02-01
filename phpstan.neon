@@ -33,7 +33,6 @@ parameters:
 		- '#Call to an undefined method Illuminate\\Database\\Query\\Builder::withOnlineStatus\(\)#'
 		- '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$online_status#'
 		- '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$vocation_name#'
-		# templates/kathrine/javascript.php
 		-
-			message: '#Variable \$tmp in empty\(\) always exists and is not falsy#'
+			message: '#Variable \$tmp in empty\(\) always exists and is always falsy#'
 			path: templates\kathrine\javascript.php
