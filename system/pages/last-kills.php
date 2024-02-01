@@ -39,13 +39,13 @@ else {
 						if($i == 1) {
 							if($count <= 4)
 								$killers_string .= 'killed';
-							else if($count > 4 and $count < 10)
+							else if($count < 10)
 								$killers_string .= 'slain';
-							else if($count > 9 and $count < 15)
+							else if($count < 15)
 								$killers_string .= 'crushed';
-							else if($count > 14 and $count < 20)
+							else if($count < 20)
 								$killers_string .= 'eliminated';
-							else if($count > 19)
+							else
 								$killers_string .= 'annihilated';
 							$killers_string .= ' at level <b>' . $death['level'] . '</b> ';
 						} else if($i == $count)
