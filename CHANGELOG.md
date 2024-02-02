@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0-beta - 28.01.2024]
+## [1.0-beta - 02.02.2024]
 
 Minimum PHP version for this release is 8.1.
 
