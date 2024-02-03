@@ -19,7 +19,7 @@
 					<table style="width:100%;" >
 						<tr>
 							<td>Are you sure you want delete guild <b>{{ guild.getName() }}</b>?<br/>
-								<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=delete_guild" method="post">
+								<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=delete_guild" method="post">
 									{{ csrf() }}
 									<input type="hidden" name="todo" value="save"/>
 									<input type="submit" value="Yes, delete"/>
@@ -34,7 +34,7 @@
 </div>
 <br/>
 <div style="text-align:center">
-	<form action="?subtopic=guilds&guild={{ guild.getName() }}&action=manager" method="post">
+	<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=manager" method="post">
 		{{ csrf() }}
 		{{ include('buttons.back.html.twig') }}
 	</form>

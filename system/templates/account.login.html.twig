@@ -29,7 +29,7 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="{{
 								<td class="LabelV" >
 									<span{% if error is not null %} class="red"{% endif %}>{{ account_login_by }}:</span>
 								</td>
-								<td style="width:100%;" ><input type="text" name="account_login" size="30" maxlength="30" autofocus/></td>
+								<td style="width:100%;" ><input type="text" name="account_login" size="30" maxlength="{{ setting('core.account_login_by_email') ? '255' : '30' }}" autofocus/></td>
 							</tr>
 							{{ hook('HOOK_ACCOUNT_LOGIN_AFTER_ACCOUNT') }}
 							<tr>

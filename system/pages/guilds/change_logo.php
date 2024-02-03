@@ -121,7 +121,7 @@ if(!empty($errors)) {
 
 	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
-		'action' => '?subtopic=guilds'
+		'action' => getLink('guilds')
 	));
 }
 ?>

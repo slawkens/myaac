@@ -24,7 +24,7 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fa fa-lock"></i></span>
 						</div>
-						<input type="text" class="form-control" id="account-name-input" name="account_login" placeholder="{{ account_login_by }}" required autofocus>
+						<input type="text" class="form-control" id="account-name-input" name="account_login" maxlength="{{ setting('core.account_login_by_email') ? '255' : '30' }}" placeholder="{{ account_login_by }}" required autofocus>
 					</div>
 					{{ hook('HOOK_ADMIN_LOGIN_AFTER_ACCOUNT') }}
 					<div class="input-group mb-3">

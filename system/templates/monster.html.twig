@@ -1,7 +1,7 @@
 <script type="text/javascript" src="tools/js/tipped.js"></script>
 <link rel="stylesheet" type="text/css" href="tools/css/tipped.css"/>
 <style>
-	.creature_img {
+	.monster_img {
 		background-position: center center;
 		background-repeat: no-repeat;
 		width: 64px;
@@ -9,7 +9,7 @@
 		padding: 5px;
 	}
 
-	.creature_name {
+	.monster_name {
 		font-size: 18px;
 		font-weight: bold;
 		width: 100%;
@@ -20,7 +20,7 @@
 		padding-bottom: 15px;
 	}
 
-	.creature_voice {
+	.monster_voice {
 		font-weight: bold;
 		font-size: 8pt;
 		color: #FE6500;
@@ -63,8 +63,8 @@
 	});
 </script>
 
-<div class="creature_name">{{ creature.name }}</div>
-<table class="CreatureInfo" border="0" cellspacing="0" cellpadding="4" width="100%">
+<div class="monster_name">{{ monster.name }}</div>
+<table class="MonsterInfo" border="0" cellspacing="0" cellpadding="4" width="100%">
 	<thead>
 	<tr>
 		<th align="center" colspan="4"><b>General information</b></th>
@@ -73,50 +73,50 @@
 	<tbody>
 	<tr>
 		<td width="10%">
-			<div class="creature_img" style="background-image: url({{ creature.img_link }}"></div>
+			<div class="monster_img" style="background-image: url({{ monster.img_link }}"></div>
 		</td>
 		<td align="center" width="30%">
-			<strong>Health:</strong> {{ creature.health }}<br>
-			<strong>Experience:</strong> {{ creature.exp }}<br>
-			<strong>Speed:</strong> {{ creature.speed_lvl }} {{ (creature.use_haste) ? ' (+haste)' : '' }}
+			<strong>Health:</strong> {{ monster.health }}<br>
+			<strong>Experience:</strong> {{ monster.exp }}<br>
+			<strong>Speed:</strong> {{ monster.speed_lvl }} {{ (monster.use_haste) ? ' (+haste)' : '' }}
 		</td>
 		<td align="center" width="30%">
-			<b>Summonable:</b> {{ (creature.summonable) ? creature.mana ~ ' mana' : 'Impossible' }}<br>
-			<b>Convinceable:</b> {{ (creature.convinceable) ? creature.mana ~ ' mana' : 'Impossible' }}
+			<b>Summonable:</b> {{ (monster.summonable) ? monster.mana ~ ' mana' : 'Impossible' }}<br>
+			<b>Convinceable:</b> {{ (monster.convinceable) ? monster.mana ~ ' mana' : 'Impossible' }}
 		</td>
 		<td width="30%" align="center">
-			<strong>Armor:</strong> {{ creature.armor }}<br>
-			<strong>Defense:</strong> {{ creature.defense }}
+			<strong>Armor:</strong> {{ monster.armor }}<br>
+			<strong>Defense:</strong> {{ monster.defense }}
 		</td>
 	</tr>
 	</tbody>
 </table><br>
 
-{% if ( creature.voices is not empty or creature.summons is not empty) %}
-	<table class="CreatureVoice" border="0" cellspacing="0" cellpadding="4" width="100%">
+{% if ( monster.voices is not empty or monster.summons is not empty) %}
+	<table class="MonsterVoice" border="0" cellspacing="0" cellpadding="4" width="100%">
 		<thead>
 		<tr>
-			{% if ( creature.summons is not empty) %}
+			{% if ( monster.summons is not empty) %}
 				<th width="50%"><b>Summons</b></th>
 			{% endif %}
-			{% if ( creature.voices is not empty) %}
+			{% if ( monster.voices is not empty) %}
 				<th width="50%"><b>Voices</b></th>
 			{% endif %}
 		</tr>
 		</thead>
 		<tbody>
 		<tr>
-			{% if ( creature.summons is not empty) %}
+			{% if ( monster.summons is not empty) %}
 				<td>
-					{% for summon in creature.summons %}
+					{% for summon in monster.summons %}
 						<span>{{ summon.chance }}% chance to summon a <b>{{ getMonsterLink(summon.name, true)|raw }}</b><br/></span>
 					{% endfor %}
 				</td>
 			{% endif %}
-			{% if ( creature.voices is not empty) %}
+			{% if ( monster.voices is not empty) %}
 				<td align="center">
-					<span class="creature_voice">
-						{% for voice in creature.voices %}
+					<span class="monster_voice">
+						{% for voice in monster.voices %}
 							"{{ voice }}"<br/>
 						{% endfor %}
 					</span>
@@ -127,30 +127,30 @@
 	</table><br/>
 {% endif %}
 
-{% if (creature.elements|length > 0 or creature.immunities|length > 0 ) %}
-	<table class="CreatureElements" border="0" cellspacing="0" cellpadding="4" width="100%">
+{% if (monster.elements|length > 0 or monster.immunities|length > 0 ) %}
+	<table class="MonsterElements" border="0" cellspacing="0" cellpadding="4" width="100%">
 		<tr>
-			<th colspan="{{ creature.elements|length }}">Elements and Immunities</th>
+			<th colspan="{{ monster.elements|length }}">Elements and Immunities</th>
 		</tr>
-		{% if (creature.elements|length > 0) %}
-			<tr>{% for element in creature.elements %}
+		{% if (monster.elements|length > 0) %}
+			<tr>{% for element in monster.elements %}
 					<td align="center"><b> {{ element.name }}</b><br/>{{ element.percent }}%</td>
 				{% endfor %}</tr>
 		{% endif %}
-		{% if (creature.immunities|length > 0 ) %}
+		{% if (monster.immunities|length > 0 ) %}
 			<tr>
-				<td colspan="{{ creature.elements|length }}"><b>Immunities:</b> {{ creature.immunities|join(' | ') }}</td>
+				<td colspan="{{ monster.elements|length }}"><b>Immunities:</b> {{ monster.immunities|join(' | ') }}</td>
 			</tr>
 		{% endif %}
 	</table><br/>
 {% endif %}
 
-{% if (not creature.loot is empty) %}
-	<table class="CreatureLoot" border="0" cellspacing="0" cellpadding="4" width="100%">
+{% if (not monster.loot is empty) %}
+	<table class="MonsterLoot" border="0" cellspacing="0" cellpadding="4" width="100%">
 		<tr><th>Loot</th></tr>
 		<tr>
 			<td>
-				{% for item in creature.loot %}
+				{% for item in monster.loot %}
 					<span class="loot_bg">
 					{% if (item.count > 1) %}
 						<span class="loot_amount">{{ item.count }}</span>

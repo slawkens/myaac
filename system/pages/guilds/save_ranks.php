@@ -63,7 +63,7 @@ if(empty($errors)) {
 			}
 			//show errors or redirect
 			if(empty($errors)) {
-				header("Location: ?subtopic=guilds&action=manager&guild=".$guild->getName());
+				header("Location: " . getLink('guilds') . "?action=manager&guild=".$guild->getName());
 			}
 		}
 		else

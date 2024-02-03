@@ -105,7 +105,7 @@ function getPlayerLink($name, $generate = true): string
 
 function getMonsterLink($name, $generate = true): string
 {
-	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'creatures/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'monsters/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -1559,18 +1559,19 @@ function right($str, $length) {
 	return substr($str, -$length);
 }
 
-function getCreatureImgPath($creature){
-	$creature_path = setting('core.monsters_images_url');
-	$creature_gfx_name = trim(strtolower($creature)) . setting('core.monsters_images_extension');
-	if (!file_exists($creature_path . $creature_gfx_name)) {
-		$creature_gfx_name = str_replace(" ", "", $creature_gfx_name);
-		if (file_exists($creature_path . $creature_gfx_name)) {
-			return $creature_path . $creature_gfx_name;
+function getMonsterImgPath($monster): string
+{
+	$monster_path = setting('core.monsters_images_url');
+	$monster_gfx_name = trim(strtolower($monster)) . setting('core.monsters_images_extension');
+	if (!file_exists($monster_path . $monster_gfx_name)) {
+		$monster_gfx_name = str_replace(" ", "", $monster_gfx_name);
+		if (file_exists($monster_path . $monster_gfx_name)) {
+			return $monster_path . $monster_gfx_name;
 		} else {
-			return $creature_path . 'nophoto.png';
+			return $monster_path . 'nophoto.png';
 		}
 	} else {
-		return $creature_path . $creature_gfx_name;
+		return $monster_path . $monster_gfx_name;
 	}
 }
 

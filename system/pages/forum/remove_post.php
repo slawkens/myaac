@@ -18,6 +18,11 @@ if ($ret === false) {
 	return;
 }
 
+if(!$logged) {
+	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . BASE_URL . urlencode(getLink('forum')) . '">Log in</a> to post on the forum.<br /><br />';
+	return;
+}
+
 if(Forum::isModerator()) {
 	$id = (int) $_REQUEST['id'];
 	$post = $db->query("SELECT `id`, `first_post`, `section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `id` = ".$id." LIMIT 1")->fetch();

@@ -45,7 +45,7 @@ if(empty($errors)) {
 				$twig->display('success.html.twig', array(
 					'title' => 'Delete Guild',
 					'description' => 'Are you sure you want delete guild <b>' . $guild_name . '</b>?<br/>
-				<form action="?subtopic=guilds&guild=' . $guild->getName() . '&action=delete_by_admin" METHOD="post"><input type="hidden" name="todo" value="save"><input type="submit" value="Yes, delete"></form>',
+				<form action="' . getLink('guilds') . '?guild=' . $guild->getName() . '&action=delete_by_admin" METHOD="post"><input type="hidden" name="todo" value="save"><input type="submit" value="Yes, delete"></form>',
 					'custom_buttons' => $twig->render('guilds.back_button.html.twig')
 				));
 			}
@@ -63,6 +63,6 @@ if(!empty($errors)) {
 
 	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
-		'action' => '?subtopic=guilds'
+		'action' => getLink('guilds')
 	));
 }

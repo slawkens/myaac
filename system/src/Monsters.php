@@ -13,7 +13,7 @@ namespace MyAAC;
 
 use MyAAC\Models\Monster;
 
-class Creatures {
+class Monsters {
 	/**
 	 * @var \OTS_MonstersList
 	 */

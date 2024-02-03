@@ -67,7 +67,7 @@
 
 															The guild was founded on {{ config.lua.serverName }} on {{ guild_creation_date|date("j F Y") }}.
 															{% if isLeader %}
-																<a href="?subtopic=guilds&action=manager&guild={{ guild_name }}" style="float: right;">
+																<a href="{{ getLink('guilds') }}?action=manager&guild={{ guild_name }}" style="float: right;">
 																	<img src="{{ template_path }}/images/global/buttons/sbutton_manageguild.png" style="width: 120px; height: 20px;" alt="Manage Guild">
 																</a>
 															{% endif %}
@@ -141,7 +141,7 @@
 
 																	<td>
 																		{% set playerName = player.getName() %}
-																		<form action="?subtopic=guilds&action=change_nick&name={{ playerName }}&guild={{ guild_name }}" method="post">
+																		<form action="{{ getLink('guilds') }}?action=change_nick&name={{ playerName }}&guild={{ guild_name }}" method="post">
 																			{{ csrf() }}
 																			{{ getPlayerLink(playerName, true)|raw }}
 
@@ -161,7 +161,7 @@
 																				{% if level_in_guild > rank.rank_level or isLeader %}
 																					{% if guildOwnerName != playerName %}
 																						<span style="font-size: 10px; float: right">
-																							{<a href="?subtopic=guilds&action=kick_player&guild={{ guild_name|url_encode }}&name={{ playerName|url_encode }}">KICK</a>}
+																							{<a href="{{ getLink('guilds') }}?action=kick_player&guild={{ guild_name|url_encode }}&name={{ playerName|url_encode }}">KICK</a>}
 																						</span>
 																					{% endif %}
 																				{% endif %}
@@ -245,7 +245,7 @@
 
 																	{% if isVice %}
 																		<div style="float: right">
-																			{<a href="?subtopic=guilds&action=delete_invite&guild={{ guild_name|url_encode }}&name={{ invited_player.getName()|url_encode }}">Cancel Invitation</a>}
+																			{<a href="{{ getLink('guilds') }}?action=delete_invite&guild={{ guild_name|url_encode }}&name={{ invited_player.getName()|url_encode }}">Cancel Invitation</a>}
 																		</div>
 																	{% endif %}
 																</td>
@@ -298,7 +298,7 @@
 															</form>
 														{% else %}
 															{% if show_accept_invite > 0 %}
-																<form action="?subtopic=guilds&action=accept_invite&guild={{ guild_name|url_encode }}" method="post">
+																<form action="{{ getLink('guilds') }}?action=accept_invite&guild={{ guild_name|url_encode }}" method="post">
 																	{{ csrf() }}
 																	<td>
 																		<input type="image" name="Accept Invite" alt="Accept Invite" src="{{ template_path }}/images/global/buttons/sbutton_acceptinvite.png" style="width: 120px; height: 20px;">
@@ -307,7 +307,7 @@
 															{% endif %}
 
 															{% if isVice %}
-																<form action="?subtopic=guilds&action=invite&guild={{ guild_name|url_encode }}" method="post">
+																<form action="{{ getLink('guilds') }}?action=invite&guild={{ guild_name|url_encode }}" method="post">
 																	{{ csrf() }}
 																	<td>
 																		{% set button_name = 'Invite Character' %}
@@ -316,7 +316,7 @@
 																	</td>
 																</form>
 
-																<form action="?subtopic=guilds&action=change_rank&guild={{ guild_name|url_encode }}" method="post">
+																<form action="{{ getLink('guilds') }}?action=change_rank&guild={{ guild_name|url_encode }}" method="post">
 																	{{ csrf() }}
 																	<td>
 																		{% set button_name = 'Edit Ranks' %}
@@ -327,7 +327,7 @@
 															{% endif %}
 
 															{% if players_from_account_in_guild|length > 0 %}
-																<form action="?subtopic=guilds&action=leave&guild={{ guild_name|url_encode }}" method="post">
+																<form action="{{ getLink('guilds') }}?action=leave&guild={{ guild_name|url_encode }}" method="post">
 																	{{ csrf() }}
 																	<td>
 																		{% set button_name = 'Leave Guild' %}
