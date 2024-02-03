@@ -26,7 +26,7 @@ function getColorByPercent($percent)
 }
 	$number_of_rows = 0;
 	$showed = false;
-	$link = "polls"; // your link to polls in index.php
+	$link = getLink('polls'); // your link to polls in index.php
 	$dark = $config['darkborder'];
 	$light = $config['lightborder'];
 	$time = time();
@@ -49,9 +49,9 @@ function getColorByPercent($percent)
 				<td>
 					<a href="';
 					if($logged)
-						echo '?subtopic='.$link.'&id='.$poll['id'];
+						echo $link.'?id='.$poll['id'];
 					else
-						echo '?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic='.$link.'&id='.$poll['id']);
+						echo getLink('account/manage') . '?redirect=' . BASE_URL . urlencode($link.'?id='.$poll['id']);
 
 					echo '">'.$poll['question'] . '</a>
 				</td>
@@ -78,9 +78,9 @@ function getColorByPercent($percent)
 				<td>
 					<a href="';
 					if($logged)
-						echo '?subtopic='.$link.'&id='.$poll['id'];
+						echo $link.'?id='.$poll['id'];
 					else
-						echo '?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic='.$link.'&id='.$poll['id']);
+						echo getLink('account/manage') . '?redirect=' . BASE_URL . urlencode($link.'?id='.$poll['id']);
 
 					echo '">'.$poll['question'] . '</a>
 				</td>
@@ -178,12 +178,12 @@ function getColorByPercent($percent)
 								$account_logged->setCustomField("vote", $vote);
 								$UPDATE_poll = $db->query('UPDATE `z_polls` SET `votes_all` = `votes_all` + 1 where `id` = '.addslashes(htmlspecialchars(trim($_REQUEST['id']))).'');
 								$UPDATE_answer = $db->query('UPDATE `z_polls_answers` SET `votes` = `votes` + 1 where `answer_id` = '.addslashes(htmlspecialchars($_POST['answer'])).' and`poll_id` = '.addslashes(htmlspecialchars(trim($_REQUEST['id']))).'');
-								header('Location: ?subtopic='.$link.'&id='.$_REQUEST['id'].'');
+								header('Location: ' . $link.'?id='.$_REQUEST['id'].'');
 							}
 						}
 						else
 						{
-							header('Location: ?subtopic='.$link.'&id='.$_REQUEST['id'].'');
+							header('Location: ' . $link.'?id='.$_REQUEST['id'].'');
 						}
 					}
 
@@ -191,7 +191,7 @@ function getColorByPercent($percent)
 					{
 						echo '<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=4 WIDTH=100%><TR BGCOLOR='.$config['vdarkborder'].'><TD COLSPAN=2 class=white><B>Vote</B></TD></TR>';
 						echo '<TR BGCOLOR="'.$dark.'"><td COLSPAN=2><b>'.$POLL['question'].'</b><br/>' . $POLL['description'] . '</td></tr>
-						<form action="?subtopic='.$link.'&id='.$_REQUEST['id'].'&vote=true" method="POST"> ';
+						<form action="' . $link . '?id='.$_REQUEST['id'].'&vote=true" method="POST"> ';
 						$ANSWERS_input = $db->query('SELECT * FROM '.$db->tableName('z_polls_answers').' where `poll_id` = '.$_REQUEST['id'].' order by `answer_id`');
 						$i=1;
 						foreach($ANSWERS_input as $answer)
@@ -282,14 +282,14 @@ function getColorByPercent($percent)
 
 				}
 				$showed=true;
-				echo '<div class=\'hr1\'></div><a href="?subtopic='.$link.'"><span style="font-size: 13px"><b>Go to list of polls</b></span></a>';
+				echo '<div class=\'hr1\'></div><a href="'.$link.'"><span style="font-size: 13px"><b>Go to list of polls</b></span></a>';
 			}
 		}
 	}
 
 	if(admin() && (!isset($_REQUEST['control']) || $_REQUEST['control'] != "true"))
 	{
-		echo '<br><a href="?subtopic='.$link.'&control=true"><b>Panel Control</b></a><br><br>';
+		echo '<br><a href="'.$link.'?control=true"><b>Panel Control</b></a><br><br>';
 	}
 
 	/* Control Panel - Only Add Poll Function */
@@ -361,11 +361,11 @@ function getColorByPercent($percent)
 			}
 		}
 		$showed=true;
-		echo '<br><div class=\'hr1\'></div><a href="?subtopic='.$link.'"><span style="font-size: 13px"><b>Go to list of polls</b></span></a>';
+		echo '<br><div class=\'hr1\'></div><a href="'.$link.'"><span style="font-size: 13px"><b>Go to list of polls</b></span></a>';
 	}
 
 	if(!$showed)
 	{
 		echo 'This poll doesn\'t exist.<br>';
-		echo '<div class=\'hr1\'></div><a href="?subtopic='.$link.'"><span style="font-size: 13px"><b>Go to list of  polls</b></span></a>';
+		echo '<div class=\'hr1\'></div><a href="'.$link.'"><span style="font-size: 13px"><b>Go to list of  polls</b></span></a>';
 	}

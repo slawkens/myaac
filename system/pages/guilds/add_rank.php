@@ -49,7 +49,7 @@ if(empty($errors)) {
 			$new_rank->setLevel(1);
 			$new_rank->setName($rank_name);
 			$new_rank->save();
-			header("Location: ?subtopic=guilds&guild=".$guild->getName()."&action=manager");
+			header("Location: " . getLink('guilds') . "?guild=".$guild->getName()."&action=manager");
 			echo 'New rank added. Redirecting...';
 		}
 		else {
@@ -61,7 +61,7 @@ if(empty($errors)) {
 
 		$twig->display('guilds.back_button.html.twig', array(
 			'new_line' => true,
-			'action' => '?subtopic=guilds&guild='.$guild_name.'&action=show'
+			'action' => getLink('guilds') . '?guild='.$guild_name.'&action=show'
 		));
 	}
 }

@@ -46,7 +46,7 @@
 
 																<td style="word-break: break-all">
 																	<span{% if guild.description is not empty %} valign="top"{% endif %}>
-																		<b>{{ guild.name }}</b>{% if isAdmin %}<a href="?subtopic=guilds&action=delete_by_admin&guild={{ guild.name }}"> - Delete this guild (for ADMIN only!)</a>{% endif %}
+																		<b>{{ guild.name }}</b>{% if isAdmin %}<a href="{{ getLink('guilds') }}?action=delete_by_admin&guild={{ guild.name }}"> - Delete this guild (for ADMIN only!)</a>{% endif %}
 																	</span>
 
 																	{% if guild.description is not empty %}
@@ -82,7 +82,7 @@
 															{% if logged %}
 															<td>
 																<table border="0" cellpadding="0" cellspacing="0" width="100%">
-																	<form action="?subtopic=guilds&action=create" method="post">
+																	<form action="{{ getLink('guilds') }}?action=create" method="post">
 																		{{ csrf() }}
 																		{% set button_name = 'Found Guild' %}
 																		{% set button_image = '_sbutton_foundguild' %}
@@ -127,7 +127,7 @@
 					<tbody>
 						{% if logged %}
 						No guild found that suits your needs?
-						<form action="?subtopic=guilds&action=create" method="post">
+						<form action="{{ getLink('guilds') }}?action=create" method="post">
 							{{ csrf() }}
 							{% set button_name = 'Found Guild' %}
 							{% set button_image = '_sbutton_foundguild' %}
@@ -148,9 +148,9 @@
 					<br/>
 					If you have any problem with guilds try:
 					<br/>
-					<a href="?subtopic=guilds&action=cleanup_players">Cleanup players</a> - can't join guild/be invited? Can't create guild? Try cleanup players.
+					<a href="{{ getLink('guilds') }}?action=cleanup_players">Cleanup players</a> - can't join guild/be invited? Can't create guild? Try cleanup players.
 					<br/>
-					<a href="?subtopic=guilds&action=cleanup_guilds">Cleanup guilds</a> - made guild, you are a leader, but you are not on players list? Cleanup guilds!
+					<a href="{{ getLink('guilds') }}?action=cleanup_guilds">Cleanup guilds</a> - made guild, you are a leader, but you are not on players list? Cleanup guilds!
 				{% endif %}
 			</td>
 

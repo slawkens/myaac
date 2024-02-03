@@ -21,10 +21,10 @@ if ($ret === false) {
 if(!$logged) {
 	$extra_url = '';
 	if(isset($_GET['section_id'])) {
-		$extra_url = '&action=new_thread&section_id=' . $_GET['section_id'];
+		$extra_url = '?action=new_thread&section_id=' . $_GET['section_id'];
 	}
 
-	echo 'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum' . $extra_url) . '">Log in</a> to post on the forum.<br /><br />';
+	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . BASE_URL . urlencode(getLink('forum') . $extra_url) . '">Log in</a> to post on the forum.<br /><br />';
 	return;
 }
 

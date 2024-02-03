@@ -104,7 +104,7 @@ if(empty($guild_errors)) {
 
 			$twig->display('guilds.back_button.html.twig', array(
 				'new_line' => true,
-				'action' => '?subtopic=guilds&guild='.$guild->getName().'&action=manager'
+				'action' => getLink('guilds') . '?guild='.$guild->getName().'&action=manager'
 			));
 		}
 		else
@@ -122,6 +122,6 @@ if(!empty($guild_errors)) {
 
 	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
-		'action' => '?subtopic=guilds'
+		'action' => getLink('guilds')
 	));
 }

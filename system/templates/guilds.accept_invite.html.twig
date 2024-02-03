@@ -7,7 +7,7 @@
 	</tr>
 	<tr bgcolor="{{ config.darkborder }}">
 		<td>
-			<form action="?subtopic=guilds&action=accept_invite&guild={{ guild_name }}&todo=save" method="post">
+			<form action="{{ getLink('guilds') }}?action=accept_invite&guild={{ guild_name }}&todo=save" method="post">
 				{{ csrf() }}
 				{% set i = 0 %}
 				{% for player in invited_players %}

@@ -304,7 +304,7 @@ elseif($action == 'step3')
 								$account->setCustomField('salt', $salt);
 
 							echo 'Your account name, new password and new e-mail.<BR>
-							<FORM ACTION="?subtopic=accountmanagement" onsubmit="return validate_form(this)" METHOD=post>
+							<FORM ACTION="' . getLink('account/manage') . '" onsubmit="return validate_form(this)" METHOD=post>
 							<INPUT TYPE=hidden NAME="character" VALUE="">
 							<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 							<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Your account name, new password and new e-mail</B></TD></TR>
@@ -518,7 +518,7 @@ elseif($action == 'setnewpassword')
 				</TABLE>
 				<BR>
 				<TABLE CELLSPACING=0 CELLPADDING=0 BORDER=0 WIDTH=100%><TR><TD><div style="text-align:center">
-				<FORM ACTION="?subtopic=accountmanagement" METHOD=post>
+				<FORM ACTION="' . getLink('account/manage') . '" METHOD=post>
 				<INPUT TYPE=image NAME="Login" ALT="Login" SRC="'.$template_path.'/images/global/buttons/sbutton_login.gif" BORDER=0 WIDTH=120 HEIGHT=18></div>
 				</TD></TR></FORM></TABLE></TABLE>';
 				}
