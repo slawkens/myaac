@@ -24,7 +24,7 @@ if(!$logged) {
 		$extra_url = '&action=new_post&thread_id=' . $_GET['thread_id'];
 	}
 
-	header('Location: ' . BASE_URL . '?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum' . $extra_url));
+	echo 'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum' . $extra_url) . '">Log in</a> to post on the forum.<br /><br />';
 	return;
 }
 

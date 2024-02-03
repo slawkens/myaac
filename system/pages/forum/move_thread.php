@@ -18,6 +18,11 @@ if ($ret === false) {
 	return;
 }
 
+if(!$logged) {
+	echo 'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum') . '">Log in</a> to post on the forum.<br /><br />';
+	return;
+}
+
 if(!Forum::isModerator()) {
 	echo 'You are not logged in or you are not moderator.';
 }

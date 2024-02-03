@@ -18,6 +18,16 @@ if ($ret === false) {
 	return;
 }
 
+if(!$logged) {
+	$extra_url = '';
+	if(isset($_GET['section_id'])) {
+		$extra_url = '&action=new_thread&section_id=' . $_GET['section_id'];
+	}
+
+	echo 'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum' . $extra_url) . '">Log in</a> to post on the forum.<br /><br />';
+	return;
+}
+
 if(Forum::canPost($account_logged)) {
 	$players_from_account = $db->query('SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = '.(int) $account_logged->getId())->fetchAll();
 	$section_id = $_REQUEST['section_id'] ?? null;

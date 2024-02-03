@@ -22,7 +22,7 @@
 						<td>
 							<select name="access">
 								{% for id, group in groups %}
-									<option value="{{ group.getId() }}"{% if access == group.getId() %} selected{% endif %}>{{ group.getName() }}</option>
+									<option value="{{ group.id }}"{% if access == group.id %} selected{% endif %}>{{ group.name }}</option>
 								{% endfor %}
 							</select>
 						</td>
