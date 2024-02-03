@@ -46,16 +46,16 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		if(Creatures::loadFromXML()) {
+		if(Monsters::loadFromXML()) {
 			success(self::$locale['step_database_loaded_monsters'] . self::getLoadedTime());
 
-			if(Creatures::getMonstersList()->hasErrors()) {
+			if(Monsters::getMonstersList()->hasErrors()) {
 				self::$locale['step_database_error_monsters'] = str_replace('$LOG$', 'system/logs/error.log', self::$locale['step_database_error_monsters']);
 				warning(self::$locale['step_database_error_monsters']);
 			}
 		}
 		else {
-			error(Creatures::getLastError());
+			error(Monsters::getLastError());
 		}
 
 		self::$startTime = microtime(true);

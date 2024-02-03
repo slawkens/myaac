@@ -57,7 +57,7 @@ Minimum PHP version for this release is 8.1.
 	* Highscores
 		* frags works for TFS 1.x
 		* cached
-	* creatures
+	* Monsters
 * moved pages to Twig:
   * experience stages
 * update player_deaths entries on name change

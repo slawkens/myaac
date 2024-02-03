@@ -1,15 +1,15 @@
-{% if creatures is not empty %}
+{% if monsters is not empty %}
 
 	{% if preview %}
 		<style>
-			.creatureImages {
+			.monsterImages {
 				width: 100px;
 				height: 100px;
 				margin: 0px;
 				float: left;
 			}
 
-			.creatureBoss {
+			.monsterBoss {
 				box-sizing: border-box;
 				border-radius: 10px;
 				border: 1px rgba(179, 179, 179, 0.50) solid;
@@ -20,7 +20,7 @@
 			$(document).ready(function () {
 				$("#ciSearch").on("keyup", function () {
 					var value = $(this).val().toLowerCase();
-					$("#creatureiTable div").filter(function () {
+					$("#monsteriTable div").filter(function () {
 						$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 					});
 				});
@@ -28,15 +28,15 @@
 		</script>
 		<div style="float: right;"><input id="ciSearch" type="text" placeholder="Search.."></div>
 		<div style="display: table; width: 100%; ">
-			<div style="text-align: center; " id="creatureiTable">
-				{% for creature in creatures %}
+			<div style="text-align: center; " id="monsteriTable">
+				{% for monster in monsters %}
 					{% set i = i + 1 %}
-					<div class="creatureImages">
-						<a href="{{ getMonsterLink(creature.name, false)|raw }}">
-							<div class="creature_img " style="background-image: url({{ creature.img_link }}"></div>
-							<img class=" {{ (creature.rewardboss ? 'creatureBoss' : '') }}" src="{{ creature.img_link }}" border="0"/>
+					<div class="monsterImages">
+						<a href="{{ getMonsterLink(monster.name, false)|raw }}">
+							<div class="monster_img " style="background-image: url({{ monster.img_link }}"></div>
+							<img class=" {{ (monster.rewardboss ? 'monsterBoss' : '') }}" src="{{ monster.img_link }}" border="0"/>
 						</a>
-						<div>{{ creature.name }}</div>
+						<div>{{ monster.name }}</div>
 					</div>
 				{% endfor %}
 			</div>
@@ -46,14 +46,14 @@
 			$(document).ready(function () {
 				$("#cSearch").on("keyup", function () {
 					var value = $(this).val().toLowerCase();
-					$("#creatureTable tr").filter(function () {
+					$("#monsterTable tr").filter(function () {
 						$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 					});
 				});
 			});
 		</script>
-		{{ generateLink(getLink('creatures'), 'All', false)|raw }} - <a href="?subtopic=creatures&boss=view">Bosses</a>
-		<table width="100%" id="creaturestb">
+		{{ generateLink(getLink('monsters'), 'All', false)|raw }} - <a href="{{ getLink('monsters') }}?boss=view">Bosses</a>
+		<table width="100%" id="monsters_datatable">
 			<thead>
 			<tr>
 				<th>Name</th>
@@ -65,18 +65,18 @@
 				<th>Race</th>
 			</tr>
 			</thead>
-			<tbody id="creatureTable">
+			<tbody id="monsterTable">
 			{% set i = 0 %}
-			{% for creature in creatures %}
+			{% for monster in monsters %}
 				{% set i = i + 1 %}
 				<tr>
-					<td>{{ getMonsterLink(creature.name, true)|raw }}</td>
-					<td>{{ (creature.rewardboss) ? 'Yes' : '---' }}</td>
-					<td>{{ creature.health|number_format(0, '.', ',') }}</td>
-					<td>{{ creature.exp|number_format(0, '.', ',') }}</td>
-					<td>{{ (creature.convinceable) ? creature.mana : '---' }} </td>
-					<td>{{ (creature.summonable) ? creature.mana  : '---' }} </td>
-					<td>{{ creature.race|title }}</td>
+					<td>{{ getMonsterLink(monster.name, true)|raw }}</td>
+					<td>{{ (monster.rewardboss) ? 'Yes' : '---' }}</td>
+					<td>{{ monster.health|number_format(0, '.', ',') }}</td>
+					<td>{{ monster.exp|number_format(0, '.', ',') }}</td>
+					<td>{{ (monster.convinceable) ? monster.mana : '---' }} </td>
+					<td>{{ (monster.summonable) ? monster.mana  : '---' }} </td>
+					<td>{{ monster.race|title }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>
@@ -84,7 +84,7 @@
 	{% endif %}
 	<script>
 		$(document).ready(function () {
-			$('#creaturestb').DataTable();
+			$('#monsters_datatable').DataTable();
 		});
 
 	</script>
@@ -94,10 +94,10 @@
 {% else %}
 	<table width="100%">
 		<tr>
-			<th>Creatures</th>
+			<th>Monsters</th>
 		</tr>
 		<tr>
-			<td>No Creatures on the server.</td>
+			<td>No Monsters on the server.</td>
 		</tr>
 	</table>
 {% endif %}
