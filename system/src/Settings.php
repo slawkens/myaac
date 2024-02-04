@@ -38,8 +38,7 @@ class Settings implements \ArrayAccess
 		}
 
 		$settings = ModelsSettings::all();
-		foreach ($settings as $setting)
-		{
+		foreach ($settings as $setting) {
 			$this->settingsDatabase[$setting->name][$setting->key] = $setting->value;
 		}
 
@@ -93,11 +92,7 @@ class Settings implements \ArrayAccess
 			}
 		}
 
-		$cache = Cache::getInstance();
-		if ($cache->enabled()) {
-			$cache->delete('settings');
-		}
-
+		$this->clearCache();
 		return true;
 	}
 
@@ -110,6 +105,8 @@ class Settings implements \ArrayAccess
 			// insert new
 			ModelsSettings::create(['name' => $pluginName, 'key' => $key, 'value' => $value]);
 		}
+
+		$this->clearCache();
 	}
 
 	public function deleteFromDatabase($pluginName, $key = null)
@@ -120,6 +117,8 @@ class Settings implements \ArrayAccess
 		else {
 			ModelsSettings::where('name', $pluginName)->where('key', $key)->delete();
 		}
+
+		$this->clearCache();
 	}
 
 	public static function display($plugin, $settings): array
@@ -603,5 +602,13 @@ class Settings implements \ArrayAccess
 
 	public function getErrors() {
 		return $this->errors;
+	}
+
+	public function clearCache(): void
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$cache->delete('settings');
+		}
 	}
 }
