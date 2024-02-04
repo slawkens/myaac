@@ -22,10 +22,10 @@ Minimum PHP version for this release is 8.1.
   * list of open source libraries used in project page
 * auto-loading of themes, commands & pages from plugins/ folder. You need just to place them in correct folder and they will be loaded automatically - this allows better customization, without interfering with core AAC folders. This will allow in the future automatic updates for plugins as well the AAC as whole.
 * config.php moved to Admin Panel -> Settings page
-* new console script: ma (comes from MyAAC) - using symfony/console
-  * usage: `php ma` (will list all commands by default)
-  * example: `php ma cache:clear`
-  * example: `php ma plugin:install theme-example.zip`
+* new console script: aac (comes from MyAAC) - using symfony/console
+  * usage: `php aac` (will list all commands by default)
+  * example: `php aac cache:clear`
+  * example: `php aac plugin:install theme-example.zip`
 * replace POT Query Builder to Eloquent ORM. Not 100% yet - in some places there is still old $db approach used (@gpedro) (https://github.com/slawkens/myaac/pull/230)
 * brand new charming installation page (by @fernandomatos)
   * using Bootstrap
