@@ -557,10 +557,10 @@ class Settings implements \ArrayAccess
 			$content .= ';' . PHP_EOL;
 		}
 
-		$success = file_put_contents($filename, $content);
+		$success = @file_put_contents($filename, $content);
 
 		// we saved new config.php, need to revalidate cache (only if opcache is enabled)
-		if (function_exists('opcache_invalidate')) {
+		if ($success && function_exists('opcache_invalidate')) {
 			opcache_invalidate($filename);
 		}
 
@@ -606,7 +606,7 @@ class Settings implements \ArrayAccess
 		return true;
 	}
 
-	public function getErrors() {
+	public function getErrors(): array {
 		return $this->errors;
 	}
 
