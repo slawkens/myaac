@@ -464,8 +464,14 @@ class Settings implements \ArrayAccess
 			$ret['value'] = $value;
 		}
 		else {
+			if (!isset($this->settingsFile[$pluginKeyName]['settings'][$key])) {
+				return null;
+			}
+
 			$ret['value'] = $this->settingsFile[$pluginKeyName]['settings'][$key]['default'];
 		}
+
+		$ret['key'] = $key;
 
 		if(isset($ret['type'])) {
 			switch($ret['type']) {
