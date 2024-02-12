@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.16 - 02.12.2024]
+
+### Fixed
+* broken installation
+* database and finish step warnings/errors (https://github.com/slawkens/myaac/pull/245, @danilopucci)
+* silently ignore if the hook does not exist
+
 ## [0.8.15 - 09.12.2023]
 
 More security fixes, especially in bugtracker.
