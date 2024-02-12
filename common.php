@@ -100,7 +100,7 @@ for($i = 1; $i < $size; $i++)
 $basedir = str_replace(array('/admin', '/install', '/tools'), '', $basedir);
 define('BASE_DIR', $basedir);
 
-if (file_exists(BASE . 'config.local.php')) {
+if (file_exists(BASE . 'config.local.php') && !defined('MYAAC_INSTALL')) {
 	require BASE . 'config.local.php';
 }
 
