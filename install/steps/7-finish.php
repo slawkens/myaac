@@ -137,5 +137,14 @@ else {
 			}
 			$_SESSION['installed'] = true;
 		}
+
+		foreach($_SESSION as $key => $value) {
+			if(strpos($key, 'var_') !== false)
+				unset($_SESSION[$key]);
+		}
+		unset($_SESSION['saved']);
+		if(file_exists(CACHE . 'install.txt')) {
+			unlink(CACHE . 'install.txt');
+		}
 	}
 }
