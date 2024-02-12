@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.8.16 - 02.12.2024]
+## [0.8.16 - 12.02.2024]
 
 ### Fixed
 * broken installation
