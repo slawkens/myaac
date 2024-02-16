@@ -400,7 +400,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			'rank' => isset($guild_name) ? $rank_of_player->getName() : null,
 			'link' => isset($guild_name) ? getGuildLink($guild_name) : null
 		),
-		'comment' => !empty($comment) ? wordwrap(nl2br($comment), 60, "<br/>", true) : null,
+		'comment' => !empty($comment) ? nl2br($comment) : null,
 		'skills' => isset($skills) ? $skills : null,
 		'quests_enabled' => $quests_enabled,
 		'quests' => isset($quests) ? $quests : null,

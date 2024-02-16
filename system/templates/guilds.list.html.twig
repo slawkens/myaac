@@ -44,7 +44,7 @@
                                                                     <img src="images/guilds/{{ guild.logo }}" width="64" height="64">
                                                                 </td>
 
-                                                                <td>
+                                                                <td style="word-break: break-all">
                                                                     <span{% if guild.description is not empty %} valign="top"{% endif %}>
                                                                         <b>{{ guild.name }}</b>{% if isAdmin %}<a href="?subtopic=guilds&action=delete_by_admin&guild={{ guild.name }}"> - Delete this guild (for ADMIN only!)</a>{% endif %}
                                                                     </span>
