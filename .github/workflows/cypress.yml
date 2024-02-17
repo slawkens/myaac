@@ -24,7 +24,7 @@ jobs:
       matrix:
         php-versions: [ '8.1', '8.2', '8.3' ]
         ots: ['tfs-master', 'tfs-1.4', 'canary-3.1.2']
-    name: MyAAC Cypress on PHP ${{ matrix.php-versions }} OTS ${{ matrix.ots }}
+    name: Cypress on PHP ${{ matrix.php-versions }} - ${{ matrix.ots }}
     steps:
         - name: 📌 MySQL Start & init & show db
           run: |
