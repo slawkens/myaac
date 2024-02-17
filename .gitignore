@@ -12,6 +12,7 @@ vendor
 
 # npm
 node_modules
+tools/ext
 
 # cypress
 cypress.env.json
