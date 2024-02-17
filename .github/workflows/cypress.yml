@@ -24,7 +24,7 @@ jobs:
       matrix:
         php-versions: [ '8.1', '8.2', '8.3' ]
         ots: ['tfs-master', 'tfs-1.4', 'canary-3.1.2']
-    name: MyAAC on PHP ${{ matrix.php-versions }}
+    name: MyAAC Cypress on PHP ${{ matrix.php-versions }} OTS ${{ matrix.ots }}
     steps:
         - name: 📌 MySQL Start & init & show db
           run: |
@@ -127,19 +127,19 @@ jobs:
           uses: actions/upload-artifact@v4
           if: always()
           with:
-            name: cypress-screenshots-${{ matrix.php-versions }}
+            name: cypress-screenshots-${{ matrix.php-versions }}-${{ matrix.ots }}
             path: cypress/screenshots
 
         - name: Upload Cypress Videos
           uses: actions/upload-artifact@v4
           if: always()
           with:
-            name: cypress-videos-${{ matrix.php-versions }}
+            name: cypress-videos-${{ matrix.php-versions }}-${{ matrix.ots }}
             path: cypress/videos
 
         - name: Upload PHP Logs
           uses: actions/upload-artifact@v4
           if: always()
           with:
-            name: php-log-${{ matrix.php-versions }}
+            name: php-log-${{ matrix.php-versions }}-${{ matrix.ots }}
             path: php.log
