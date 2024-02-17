@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "cypress:open": "cypress open",
     "postinstall": "node ./npm-post-install.js"
   },
   "devDependencies": {
