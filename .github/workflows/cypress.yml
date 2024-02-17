@@ -88,20 +88,9 @@ jobs:
 
         - name: Replace mysqlDatabase (TFS 1.4)
           uses: jacobtomlinson/gha-find-replace@v2
-          if: matrix.ots == 'tfs-1.4'
           with:
-              find: 'mysqlDatabase = "forgottenserver"'
+              find: 'mysqlDatabase = "*"'
               replace: 'mysqlDatabase = "myaac"'
-              regex: false
-              include: 'ots/config.lua'
-
-        - name: Replace mysqlDatabase (Canary)
-          uses: jacobtomlinson/gha-find-replace@v2
-          if: matrix.ots == 'canary-3.1.2'
-          with:
-              find: 'mysqlDatabase = "otservbr-global"'
-              replace: 'mysqlDatabase = "myaac"'
-              regex: false
               include: 'ots/config.lua'
 
         - name: Setup PHP
