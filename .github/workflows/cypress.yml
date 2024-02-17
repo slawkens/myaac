@@ -24,7 +24,7 @@ jobs:
       matrix:
         php-versions: [ '8.1', '8.2', '8.3' ]
         ots: ['tfs-1.4', 'canary-3.1.2'] # TODO: add 'tfs-master' (actually doesn't work cause AAC doesn't support reading .env configuration)
-    name: Cypress on PHP ${{ matrix.php-versions }} - ${{ matrix.ots }}
+    name: Cypress (PHP ${{ matrix.php-versions }}, ${{ matrix.ots }})
     steps:
         - name: 📌 MySQL Start & init & show db
           run: |
