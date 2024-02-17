@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: [ '8.1', '8.2', '8.3' ]
-        ots: ['tfs-master', 'tfs-1.4', 'canary-3.1.2']
+        ots: ['tfs-1.4', 'canary-3.1.2'] # TODO: add 'tfs-master' (actually doesn't work cause AAC doesn't support reading .env configuration)
     name: Cypress on PHP ${{ matrix.php-versions }} - ${{ matrix.ots }}
     steps:
         - name: 📌 MySQL Start & init & show db
@@ -68,26 +68,38 @@ jobs:
         - name: Rename config.lua
           run: mv ots/config.lua.dist ots/config.lua
 
-        - name: Replace mysqlUser
+        - name: Replace mysqlUser (TFS 1.4)
           uses: jacobtomlinson/gha-find-replace@v2
+          if: matrix.ots == 'tfs-1.4'
           with:
             find: 'mysqlUser = "forgottenserver"'
             replace: 'mysqlUser = "root"'
             regex: false
             include: 'ots/config.lua'
 
-        - name: Replace mysqlPass
+        - name: Replace mysqlPass (TFS 1.4)
           uses: jacobtomlinson/gha-find-replace@v2
+          if: matrix.ots == 'tfs-1.4'
           with:
               find: 'mysqlPass = ""'
               replace: 'mysqlPass = "root"'
               regex: false
               include: 'ots/config.lua'
 
-        - name: Replace mysqlDatabase
+        - name: Replace mysqlDatabase (TFS 1.4)
           uses: jacobtomlinson/gha-find-replace@v2
+          if: matrix.ots == 'tfs-1.4'
           with:
               find: 'mysqlDatabase = "forgottenserver"'
+              replace: 'mysqlDatabase = "myaac"'
+              regex: false
+              include: 'ots/config.lua'
+
+        - name: Replace mysqlDatabase (Canary)
+          uses: jacobtomlinson/gha-find-replace@v2
+          if: matrix.ots == 'canary-3.1.2'
+          with:
+              find: 'mysqlDatabase = "otservbr-global"'
               replace: 'mysqlDatabase = "myaac"'
               regex: false
               include: 'ots/config.lua'
