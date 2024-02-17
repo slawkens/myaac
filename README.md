@@ -10,21 +10,20 @@ Official website: https://my-aac.org
 [![OpenTibia Discord](https://img.shields.io/discord/288399552581468162)](https://discord.gg/2J39Wus)
 [![Closed Issues](https://img.shields.io/github/issues-closed-raw/slawkens/myaac)](https://github.com/slawkens/myaac/issues?q=is%3Aissue+is%3Aclosed)
 
-| Version    | Status                                    | Branch  | Requirements   |
-|:-----------|:------------------------------------------|:--------|:---------------|
-| **0.10.x** | **Active development**                    | develop | **PHP >= 8.0** |
-| 0.9.x      | Active support                            | 0.9     | PHP >= 7.2.5   |
-| 0.8.x      | Active support                            | master  | PHP >= 7.2.5   |
-| 0.7.x      | End Of Life                               | 0.7     | PHP >= 5.3.3   |
+| Version | Status                 | Branch  | Requirements   |
+|:--------|:-----------------------|:--------|:---------------|
+| **1.x** | **Active development** | develop | **PHP >= 8.1** |
+| 0.9.x   | Not developed anymore  | 0.9     | PHP >= 7.2.5   |
+| 0.8.x   | Active support         | master  | PHP >= 7.2.5   |
+| 0.7.x   | End Of Life            | 0.7     | PHP >= 5.3.3   |
 
 ### Requirements
 
-	- PHP 7.2.5 or later
 	- MySQL database
-	- PDO PHP Extension
-	- XML PHP Extension
-	- ZIP PHP Extension
-	- (optional) mod_rewrite to use friendly_urls
+	- PHP Extensions: pdo, xml, json
+	- (optional) apache2 mod_rewrite (to use friendly_urls)
+	- (optional) zip PHP Extension (to install plugins)
+	- (optional) gd PHP Extension (for generating signature images)
 
 ### Installation
 
@@ -48,7 +47,8 @@ Official website: https://my-aac.org
 
 ### Configuration
 
-Check *config.php* to get more informations.
+Check *config.php* to get more informations. (Notice: MyAAC 1.0+ doesn't use config.php anymore, it has been moved to Admin Panel - Settings page).
+
 Use *config.local.php* for your local configuration changes.
 
 ### Branches
