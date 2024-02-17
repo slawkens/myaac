@@ -69,7 +69,7 @@ jobs:
           run: mv ots/config.lua.dist ots/config.lua
 
         - name: Replace mysqlUser (TFS 1.4)
-          uses: jacobtomlinson/gha-find-replace@v2
+          uses: jacobtomlinson/gha-find-replace@v3
           if: matrix.ots == 'tfs-1.4'
           with:
             find: 'mysqlUser = "forgottenserver"'
@@ -78,7 +78,7 @@ jobs:
             include: 'ots/config.lua'
 
         - name: Replace mysqlPass (TFS 1.4)
-          uses: jacobtomlinson/gha-find-replace@v2
+          uses: jacobtomlinson/gha-find-replace@v3
           if: matrix.ots == 'tfs-1.4'
           with:
               find: 'mysqlPass = ""'
@@ -87,7 +87,7 @@ jobs:
               include: 'ots/config.lua'
 
         - name: Replace mysqlDatabase (TFS 1.4)
-          uses: jacobtomlinson/gha-find-replace@v2
+          uses: jacobtomlinson/gha-find-replace@v3
           if: matrix.ots == 'tfs-1.4'
           with:
               find: 'mysqlDatabase = "forgottenserver"'
@@ -96,7 +96,7 @@ jobs:
               include: 'ots/config.lua'
 
         - name: Replace mysqlDatabase (Canary)
-          uses: jacobtomlinson/gha-find-replace@v2
+          uses: jacobtomlinson/gha-find-replace@v3
           if: matrix.ots == 'canary-3.1.2'
           with:
               find: 'mysqlDatabase = "otservbr-global"'
