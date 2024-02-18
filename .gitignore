@@ -11,10 +11,12 @@ vendor
 
 # npm
 node_modules
+tools/ext
 
 # cypress
 cypress.env.json
 cypress/e2e/2-advanced-examples
+cypress/screenshots
 
 # created by release.sh
 releases
