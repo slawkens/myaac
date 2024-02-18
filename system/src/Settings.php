@@ -38,8 +38,7 @@ class Settings implements \ArrayAccess
 		}
 
 		$settings = ModelsSettings::all();
-		foreach ($settings as $setting)
-		{
+		foreach ($settings as $setting) {
 			$this->settingsDatabase[$setting->name][$setting->key] = $setting->value;
 		}
 
@@ -93,11 +92,7 @@ class Settings implements \ArrayAccess
 			}
 		}
 
-		$cache = Cache::getInstance();
-		if ($cache->enabled()) {
-			$cache->delete('settings');
-		}
-
+		$this->clearCache();
 		return true;
 	}
 
@@ -110,6 +105,8 @@ class Settings implements \ArrayAccess
 			// insert new
 			ModelsSettings::create(['name' => $pluginName, 'key' => $key, 'value' => $value]);
 		}
+
+		$this->clearCache();
 	}
 
 	public function deleteFromDatabase($pluginName, $key = null)
@@ -120,6 +117,8 @@ class Settings implements \ArrayAccess
 		else {
 			ModelsSettings::where('name', $pluginName)->where('key', $key)->delete();
 		}
+
+		$this->clearCache();
 	}
 
 	public static function display($plugin, $settings): array
@@ -465,8 +464,14 @@ class Settings implements \ArrayAccess
 			$ret['value'] = $value;
 		}
 		else {
+			if (!isset($this->settingsFile[$pluginKeyName]['settings'][$key])) {
+				return null;
+			}
+
 			$ret['value'] = $this->settingsFile[$pluginKeyName]['settings'][$key]['default'];
 		}
+
+		$ret['key'] = $key;
 
 		if(isset($ret['type'])) {
 			switch($ret['type']) {
@@ -552,10 +557,10 @@ class Settings implements \ArrayAccess
 			$content .= ';' . PHP_EOL;
 		}
 
-		$success = file_put_contents($filename, $content);
+		$success = @file_put_contents($filename, $content);
 
 		// we saved new config.php, need to revalidate cache (only if opcache is enabled)
-		if (function_exists('opcache_invalidate')) {
+		if ($success && function_exists('opcache_invalidate')) {
 			opcache_invalidate($filename);
 		}
 
@@ -601,7 +606,15 @@ class Settings implements \ArrayAccess
 		return true;
 	}
 
-	public function getErrors() {
+	public function getErrors(): array {
 		return $this->errors;
+	}
+
+	public function clearCache(): void
+	{
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$cache->delete('settings');
+		}
 	}
 }

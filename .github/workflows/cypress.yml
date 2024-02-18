@@ -23,7 +23,8 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: [ '8.1', '8.2', '8.3' ]
-    name: MyAAC on PHP ${{ matrix.php-versions }}
+        ots: ['tfs-1.4', 'canary-3.1.2'] # TODO: add 'tfs-master' (actually doesn't work cause AAC doesn't support reading .env configuration)
+    name: Cypress (PHP ${{ matrix.php-versions }}, ${{ matrix.ots }})
     steps:
         - name: 📌 MySQL Start & init & show db
           run: |
@@ -36,43 +37,77 @@ jobs:
           with:
             ref: develop
 
+        - uses: actions/setup-node@v4
+          with:
+            node-version: 18
+        - run: npm ci
+
         - name: Checkout TFS
           uses: actions/checkout@v4
+          if: matrix.ots == 'tfs-1.4'
           with:
             repository: otland/forgottenserver
             ref: 1.4
-            path: tfs
+            path: ots
 
-        - name: Import TFS Schema
+        - name: Checkout TFS
+          uses: actions/checkout@v4
+          if: matrix.ots == 'tfs-master'
+          with:
+            repository: otland/forgottenserver
+            ref: master
+            path: ots
+
+        - name: Checkout Canary
+          uses: actions/checkout@v4
+          if: matrix.ots == 'canary-3.1.2'
+          with:
+            repository: opentibiabr/canary
+            ref: v3.1.2
+            path: ots
+
+        - name: Import OTS Schema
           run: |
-              mysql -uroot -proot myaac < tfs/schema.sql
+              mysql -uroot -proot myaac < ots/schema.sql
 
         - name: Rename config.lua
-          run: mv tfs/config.lua.dist tfs/config.lua
+          run: mv ots/config.lua.dist ots/config.lua
 
-        - name: Replace mysqlUser
-          uses: jacobtomlinson/gha-find-replace@v2
+        - name: Replace mysqlUser (TFS 1.4)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'tfs-1.4'
           with:
             find: 'mysqlUser = "forgottenserver"'
             replace: 'mysqlUser = "root"'
             regex: false
-            include: 'tfs/config.lua'
+            include: 'ots/config.lua'
 
-        - name: Replace mysqlPass
-          uses: jacobtomlinson/gha-find-replace@v2
+        - name: Replace mysqlPass (TFS 1.4)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'tfs-1.4'
           with:
               find: 'mysqlPass = ""'
               replace: 'mysqlPass = "root"'
               regex: false
-              include: 'tfs/config.lua'
+              include: 'ots/config.lua'
 
-        - name: Replace mysqlDatabase
-          uses: jacobtomlinson/gha-find-replace@v2
+        - name: Replace mysqlDatabase (TFS 1.4)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'tfs-1.4'
           with:
               find: 'mysqlDatabase = "forgottenserver"'
               replace: 'mysqlDatabase = "myaac"'
               regex: false
-              include: 'tfs/config.lua'
+              include: 'ots/config.lua'
+
+        - name: Replace mysqlDatabase (Canary)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'canary-3.1.2'
+          with:
+              find: 'mysqlDatabase = "otservbr-global"'
+              replace: 'mysqlDatabase = "myaac"'
+              regex: false
+              include: 'ots/config.lua'
 
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
@@ -91,7 +126,7 @@ jobs:
             # Use composer.json for key, if composer.lock is not committed.
             key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
             #key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-            restore-keys: ${{ runner.os }}-composer-
+            restore-keys: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
 
         - name: Install Composer dependencies
           run: composer install --no-progress --prefer-dist --optimize-autoloader
@@ -103,25 +138,25 @@ jobs:
           uses: cypress-io/github-action@v6
           env:
             CYPRESS_URL: http://localhost:8080
-            CYPRESS_SERVER_PATH: /home/runner/work/myaac/myaac/tfs
+            CYPRESS_SERVER_PATH: /home/runner/work/myaac/myaac/ots
 
         - name: Save screenshots
           uses: actions/upload-artifact@v4
           if: always()
           with:
-            name: cypress-screenshots-${{ matrix.php-versions }}
+            name: cypress-screenshots-${{ matrix.php-versions }}-${{ matrix.ots }}
             path: cypress/screenshots
 
         - name: Upload Cypress Videos
           uses: actions/upload-artifact@v4
           if: always()
           with:
-            name: cypress-videos-${{ matrix.php-versions }}
+            name: cypress-videos-${{ matrix.php-versions }}-${{ matrix.ots }}
             path: cypress/videos
 
         - name: Upload PHP Logs
           uses: actions/upload-artifact@v4
           if: always()
           with:
-            name: php-log-${{ matrix.php-versions }}
+            name: php-log-${{ matrix.php-versions }}-${{ matrix.ots }}
             path: php.log

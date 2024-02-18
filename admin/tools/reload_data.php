@@ -25,7 +25,7 @@
 
 use MyAAC\DataLoader;
 
-define('MYAAC_ADMIN', true);
+const MYAAC_ADMIN = true;
 
 require '../../common.php';
 require SYSTEM . 'functions.php';
@@ -37,7 +37,7 @@ if (!admin())
 
 ini_set('max_execution_time', 300);
 ob_implicit_flush();
-ob_end_flush();
+@ob_end_flush();
 header('X-Accel-Buffering: no');
 
 require LOCALE . 'en/main.php';

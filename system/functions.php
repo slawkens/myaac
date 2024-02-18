@@ -1226,7 +1226,8 @@ function clearCache()
 		$configHighscoresPerPage = setting('core.highscores_per_page');
 		$skills = [POT::SKILL_FIST, POT::SKILL_CLUB, POT::SKILL_SWORD, POT::SKILL_AXE, POT::SKILL_DIST, POT::SKILL_SHIELD, POT::SKILL_FISH, POT::SKILL_LEVEL, POT::SKILL__MAGLEVEL, SKILL_FRAGS, SKILL_BALANCE];
 		foreach ($skills as $skill) {
-			$vocations = config('vocations') + ['all'];
+			// config('vocations') may be empty after previous cache clear
+			$vocations = (config('vocations') ?? []) + ['all'];
 			foreach ($vocations as $vocation) {
 				for($page = 0; $page < 10; $page++) {
 					$cacheKey = 'highscores_' . $skill . '_' . strtolower($vocation) . '_' . $page . '_' . $configHighscoresPerPage;
