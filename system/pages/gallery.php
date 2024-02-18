@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Cache\Cache;
 use MyAAC\Models\Gallery as ModelsGallery;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -47,7 +48,7 @@ if($canEdit) {
 					$action = $comment = $image = $author = '';
 				}
 			} else if ($action == 'hide') {
-				Gallery::toggleHidden($id, $errors);
+				Gallery::toggleHide($id, $errors);
 			} else if ($action == 'moveup') {
 				Gallery::move($id, -1, $errors);
 			} else if ($action == 'movedown') {
@@ -106,9 +107,9 @@ if(isset($_GET['image']))
 
 $images = Cache::remember('gallery_' . ($canEdit ? '1' : '0'), 60, function () use ($db, $canEdit) {
 	return $db->query('SELECT `id`, `comment`, `image`, `author`, `thumb`' .
-		($canEdit ? ', `hidden`, `ordering`' : '') .
+		($canEdit ? ', `hide`, `ordering`' : '') .
 		' FROM `' . TABLE_PREFIX . 'gallery`' .
-		(!$canEdit ? ' WHERE `hidden` != 1' : '') .
+		(!$canEdit ? ' WHERE `hide` != 1' : '') .
 		' ORDER BY `ordering`;')->fetchAll(PDO::FETCH_ASSOC);
 });
 
@@ -203,15 +204,15 @@ class Gallery
 		return !count($errors);
 	}
 
-	static public function toggleHidden($id, &$errors)
+	static public function toggleHide($id, &$errors)
 	{
 		if(isset($id))
 		{
 			$row = ModelsGallery::find($id);
 			if($row) {
-				$row->hidden = $row->hidden == 1 ? 0 : 1;
+				$row->hide = $row->hide == 1 ? 0 : 1;
 				if (!$row->save()) {
-					$errors[] = 'Fail during toggle hidden Gallery';
+					$errors[] = 'Fail during toggle hide Gallery';
 				}
 			} else
 				$errors[] = 'Image with id ' . $id . ' does not exists.';

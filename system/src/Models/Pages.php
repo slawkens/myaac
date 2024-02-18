@@ -9,13 +9,13 @@ class Pages extends Model {
 
 	public $timestamps = false;
 
-	protected $fillable = ['name', 'title', 'body', 'date', 'player_id', 'php', 'enable_tinymce', 'access', 'hidden'];
+	protected $fillable = ['name', 'title', 'body', 'date', 'player_id', 'php', 'enable_tinymce', 'access', 'hide'];
 
 	protected $casts = [
 		'player_id' => 'integer',
 		'enable_tinymce' => 'integer',
 		'access' => 'integer',
-		'hidden' => 'integer',
+		'hide' => 'integer',
 	];
 
 	public function player()
@@ -24,7 +24,7 @@ class Pages extends Model {
 	}
 
 	public function scopeIsPublic($query) {
-		$query->where('hidden', '!=', 1);
+		$query->where('hide', '!=', 1);
 	}
 
 }

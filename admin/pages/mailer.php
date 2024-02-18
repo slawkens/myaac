@@ -10,6 +10,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Mailer';
 
+csrfProtect();
+
 if (!hasFlag(FLAG_CONTENT_MAILER) && !superAdmin()) {
 	echo 'Access denied.';
 	return;
@@ -20,7 +22,7 @@ if (!setting('core.mail_enabled')) {
 	return;
 }
 
-$mail_to = isset($_REQUEST['mail_to']) ? stripslashes(trim($_REQUEST['mail_to'])) : null;
+$mail_to = isset($_POST['mail_to']) ? stripslashes(trim($_POST['mail_to'])) : null;
 $mail_subject = isset($_POST['mail_subject']) ? stripslashes($_POST['mail_subject']) : null;
 $mail_content = isset($_POST['mail_content']) ? stripslashes($_POST['mail_content']) : null;
 

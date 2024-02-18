@@ -101,7 +101,7 @@ if(isset($_GET['page']) && $_GET['page'] == 'view' && isset($_REQUEST['house']))
 		'houseSize' => isset($house['size']) ? $house['size'] : null,
 		'houseRent' => isset($house['rent']) ? $house['rent'] : null,
 		'owner' => isset($owner) ? $owner : null,
-		'rentType' => isset($rentType) ? $rentType : null
+		'rentType' => $rentType
 	));
 
 	if (count($errors) > 0) {

@@ -1,5 +1,6 @@
 To delete a character enter the name of the character and your password.<br/><br/>
 <form action="{{ getLink('account/character/delete') }}" method="post">
+	{{ csrf() }}
 	<input type="hidden" name="deletecharactersave" value="1"/>
 	<div class="TableContainer">
 		<table class="Table1" cellpadding="0" cellspacing="0" >
@@ -54,6 +55,7 @@ To delete a character enter the name of the character and your password.<br/><br
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
 					<form action="{{ getLink('account/manage') }}" method="post">
+						{{ csrf() }}
 						<tr>
 							<td style="border:0px;">
 								{{ include('buttons.back.html.twig') }}

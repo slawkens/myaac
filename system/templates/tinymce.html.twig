@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/ext/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
 	let unsaved = false;
 	let lastContent = '';
@@ -6,6 +6,7 @@
 	function tinymceInit() {
 		tinymce.init({
 			selector: "#editor",
+			content_css: '{{ constant('ADMIN_URL') }}template/style.css',
 			theme: "silver",
 			plugins: 'preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help code emoticons',
 			toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | emoticons link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
@@ -16,6 +17,11 @@
 
 			relative_urls: true,
 			document_base_url: "{{ constant('BASE_URL') }}",
+
+			table_class_list: [
+				{title: 'None', value: ''},
+				{title: 'Colored Table', value: 'myaac-table'},
+			],
 
 			setup: function (ed) {
 				ed.on('NodeChange', function (e) {

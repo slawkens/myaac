@@ -1,6 +1,10 @@
 <?php
 define('MYAAC_INSTALL', true);
 
+use MyAAC\DataLoader;
+use MyAAC\Models\FAQ as ModelsFAQ;
+use MyAAC\Plugins;
+
 require_once '../../common.php';
 
 require SYSTEM . 'functions.php';
@@ -8,8 +12,10 @@ require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 
 ini_set('max_execution_time', 300);
+
+@ob_end_flush();
 ob_implicit_flush();
-ob_end_flush();
+
 header('X-Accel-Buffering: no');
 /*
 if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['saved'])) {
@@ -29,7 +35,7 @@ function insert_sample_if_not_exist($p) {
 
 	$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($p['name']));
 	if($query->rowCount() == 0) {
-		if(!query("INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `save`, `lastlogout`, `balance`, `$deleted`, `created`, `hidden`, `comment`) VALUES (null, " . $db->quote($p['name']) . ", 1, " . getSession('account') . ", " . $p['level'] . ", " . $p['vocation_id'] . ", " . $p['health'] . ", " . $p['healthmax'] . ", " . $p['experience'] . ", 118, 114, 38, 57, " . $p['looktype'] . ", 0, " . $p['mana'] . ", " . $p['manamax'] . ", 0, " . $p['soul'] . ", 1, 1000, 1000, 7, '', " . $p['cap'] . ", 1, " . $time . ", 2130706433, 1, " . $time . ", 0, 0, " . $time . ", 1, '');"))
+		if(!query("INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `save`, `lastlogout`, `balance`, `$deleted`, `created`, `hide`, `comment`) VALUES (null, " . $db->quote($p['name']) . ", 1, " . getSession('account') . ", " . $p['level'] . ", " . $p['vocation_id'] . ", " . $p['health'] . ", " . $p['healthmax'] . ", " . $p['experience'] . ", 118, 114, 38, 57, " . $p['looktype'] . ", 0, " . $p['mana'] . ", " . $p['manamax'] . ", 0, " . $p['soul'] . ", 1, 1000, 1000, 7, '', " . $p['cap'] . ", 1, " . $time . ", 2130706433, 1, " . $time . ", 0, 0, " . $time . ", 1, '');"))
 			$success = false;
 	}
 }
@@ -45,11 +51,9 @@ if($success) {
 	success($locale['step_database_imported_players']);
 }
 
-require_once LIBS . 'plugins.php';
 Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
 Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
 
-require LIBS . 'DataLoader.php';
 DataLoader::setLocale($locale);
 DataLoader::load();
 
@@ -63,13 +67,17 @@ require_once SYSTEM . 'migrations/22.php';
 require_once SYSTEM . 'migrations/27.php';
 require_once SYSTEM . 'migrations/30.php';
 
-use MyAAC\Models\FAQ as ModelsFAQ;
+// new monster columns
+require_once SYSTEM . 'migrations/31.php';
+
 if(ModelsFAQ::count() == 0) {
 	ModelsFAQ::create([
 		'question' => 'What is this?',
 		'answer' => 'This is website for OTS powered by MyAAC.',
 	]);
 }
+
+$db->setClearCacheAfter(true);
 
 $locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(str_replace('tools/', '',ADMIN_URL), $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
 $locale['step_finish_desc'] = str_replace('$HOMEPAGE$', generateLink(str_replace('tools/', '', BASE_URL), $locale['step_finish_homepage'], true), $locale['step_finish_desc']);

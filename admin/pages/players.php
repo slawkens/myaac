@@ -8,15 +8,18 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Forum;
 use MyAAC\Models\Player;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Player editor';
+
+csrfProtect();
+
 $player_base = ADMIN_URL . '?p=players';
 
 $use_datatable = true;
-require_once LIBS . 'forum.php';
 
 $skills = array(
 	POT::SKILL_FIST => array('Fist fighting', 'fist'),
@@ -75,7 +78,7 @@ else if (isset($_REQUEST['search'])) {
 		$player = new OTS_Player();
 		$player->load($id);
 
-		if (isset($player) && $player->isLoaded() && isset($_POST['save'])) {// we want to save
+		if ($player->isLoaded() && isset($_POST['save'])) {// we want to save
 			$error = false;
 
 			if ($player->isOnline())
@@ -210,7 +213,7 @@ else if (isset($_REQUEST['search'])) {
 			}
 
 			$deleted = (isset($_POST['deleted']) && $_POST['deleted'] == 'true');
-			$hidden = (isset($_POST['hidden']) && $_POST['hidden'] == 'true');
+			$hide = (isset($_POST['hide']) && $_POST['hide'] == 'true');
 
 			$created = strtotime($_POST['created']);
 			verify_number($created, 'Created', 11);
@@ -287,7 +290,7 @@ else if (isset($_REQUEST['search'])) {
 					$player->setCustomField('deletion', $deleted ? '1' : '0');
 				else
 					$player->setCustomField('deleted', $deleted ? '1' : '0');
-				$player->setCustomField('hidden', $hidden ? '1' : '0');
+				$player->setCustomField('hide', $hide ? '1' : '0');
 				$player->setCustomField('created', $created);
 				if (isset($comment))
 					$player->setCustomField('comment', $comment);
@@ -372,7 +375,8 @@ else if (isset($_REQUEST['search'])) {
 						</li>
 					</ul>
 				</div>
-				<form action="<?php echo $player_base . ((isset($id) && $id > 0) ? '&id=' . $id : ''); ?>" method="post">
+				<form action="<?php echo $player_base . ($id > 0 ? '&id=' . $id : ''); ?>" method="post">
+					<?php csrf(); ?>
 					<div class="card-body">
 						<div class="tab-content" id="tabs-tabContent">
 							<div class="tab-pane fade active show" id="tabs-home">
@@ -481,8 +485,8 @@ else if (isset($_REQUEST['search'])) {
 									</div>
 									<div class="col-12 col-sm-12 col-lg-6">
 										<div class="custom-control custom-switch custom-switch-on-success">
-											<input type="checkbox" class="custom-control-input" name="hidden" id="hidden" value="true" <?php echo($player->isHidden() ? ' checked' : ''); ?>>
-											<label class="custom-control-label" for="hidden">Hidden</label>
+											<input type="checkbox" class="custom-control-input" name="hide" id="hide" value="true" <?php echo($player->isHidden() ? ' checked' : ''); ?>>
+											<label class="custom-control-label" for="hide">Hidden</label>
 										</div>
 									</div>
 								</div>
@@ -870,6 +874,7 @@ else if (isset($_REQUEST['search'])) {
 			<div class="card-body row">
 				<div class="col-6 col-lg-12">
 					<form action="<?php echo $player_base; ?>" method="post">
+						<?php csrf(); ?>
 						<label for="search">Player Name:</label>
 						<div class="input-group input-group-sm">
 							<input type="text" class="form-control" id="search" name="search" value="<?= escapeHtml($search_player); ?>" maxlength="32" size="32">
@@ -879,6 +884,7 @@ else if (isset($_REQUEST['search'])) {
 				</div>
 				<div class="col-6 col-lg-12">
 					<form action="<?php echo $player_base; ?>" method="post">
+						<?php csrf(); ?>
 						<label for="id">Player ID:</label>
 						<div class="input-group input-group-sm">
 							<input type="text" class="form-control" id="id" name="id" value="<?= $id; ?>" maxlength="32" size="32">

@@ -7,6 +7,14 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use DebugBar\StandardDebugBar;
+use MyAAC\Cache\Cache;
+use MyAAC\CsrfToken;
+use MyAAC\Hooks;
+use MyAAC\Settings;
+use MyAAC\Towns;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 if(!isset($config['installed']) || !$config['installed']) {
@@ -15,6 +23,10 @@ if(!isset($config['installed']) || !$config['installed']) {
 
 if(config('env') === 'dev') {
 	require SYSTEM . 'exception.php';
+}
+
+if (config('env') === 'dev' || getBoolean(config('enable_debugbar'))) {
+	$debugBar = new StandardDebugBar();
 }
 
 if(empty($config['server_path'])) {
@@ -30,11 +42,9 @@ if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HT
 	ob_start('ob_gzhandler');
 
 // cache
-require_once SYSTEM . 'libs/cache.php';
 $cache = Cache::getInstance();
 
 // event system
-require_once SYSTEM . 'hooks.php';
 $hooks = new Hooks();
 $hooks->load();
 
@@ -45,28 +55,24 @@ require_once SYSTEM . 'twig.php';
 $action = $_REQUEST['action'] ?? '';
 define('ACTION', $action);
 
+// errors, is also often used
+$errors = [];
+
 // trim values we receive
-if(isset($_POST))
-{
-	foreach($_POST as $var => $value) {
-		if(is_string($value)) {
-			$_POST[$var] = trim($value);
-		}
+foreach($_POST as $var => $value) {
+	if(is_string($value)) {
+		$_POST[$var] = trim($value);
 	}
 }
-if(isset($_GET))
-{
-	foreach($_GET as $var => $value) {
-		if(is_string($value))
-			$_GET[$var] = trim($value);
-	}
+
+foreach($_GET as $var => $value) {
+	if(is_string($value))
+		$_GET[$var] = trim($value);
 }
-if(isset($_REQUEST))
-{
-	foreach($_REQUEST as $var => $value) {
-		if(is_string($value))
-			$_REQUEST[$var] = trim($value);
-	}
+
+foreach($_REQUEST as $var => $value) {
+	if(is_string($value))
+		$_REQUEST[$var] = trim($value);
 }
 
 // load otserv config file
@@ -122,20 +128,33 @@ if(!isset($foundValue)) {
 $config['data_path'] = $foundValue;
 unset($foundValue);
 
-
 // POT
 require_once SYSTEM . 'libs/pot/OTS.php';
 $ots = POT::getInstance();
 $eloquentConnection = null;
 require_once SYSTEM . 'database.php';
 
+if ($config_lua_reload) {
+	clearCache();
+}
+
+// verify myaac tables exists in database
+if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {
+	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting ' . BASE_URL . 'install');
+}
+
 // execute migrations
 require SYSTEM . 'migrate.php';
 
 // settings
-require_once LIBS . 'Settings.php';
 $settings = Settings::getInstance();
 $settings->load();
+
+// csrf protection
+$token = getSession('csrf_token');
+if (!isset($token) || !$token) {
+	CsrfToken::generate();
+}
 
 // deprecated config values
 require_once SYSTEM . 'compat/config.php';
@@ -158,5 +177,4 @@ define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
 define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
 
-require LIBS . 'Towns.php';
 Towns::load();

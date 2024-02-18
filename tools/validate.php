@@ -9,6 +9,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\CreateCharacter;
 use MyAAC\Models\Account;
 
 // we need some functions
@@ -67,7 +68,6 @@ else if(isset($_GET['name']))
 	if(!admin() && !Validator::newCharacterName($name))
 		error_(Validator::getLastError());
 
-	require_once LIBS . 'CreateCharacter.php';
 	$createCharacter = new CreateCharacter();
 	if (!$createCharacter->checkName($name, $errors)) {
 		error_($errors['name']);
@@ -75,9 +75,9 @@ else if(isset($_GET['name']))
 
 	success_('Good. Your name will be:<br /><b>' . (admin() ? $name : ucwords($name)) . '</b>');
 }
-else if(isset($_GET['password']) && isset($_GET['password2'])) {
+else if(isset($_GET['password']) && isset($_GET['password_confirm'])) {
 	$password = $_GET['password'];
-	$password2 = $_GET['password2'];
+	$password_confirm = $_GET['password_confirm'];
 
 	if(!isset($password[0])) {
 		error_('Please enter the password for your new account.');
@@ -86,7 +86,7 @@ else if(isset($_GET['password']) && isset($_GET['password2'])) {
 	if(!Validator::password($password))
 		error_(Validator::getLastError());
 
-	if($password != $password2)
+	if($password != $password_confirm)
 		error_('Passwords are not the same.');
 
 	success_(1);

@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Forum;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $ret = require __DIR__ . '/base.php';
@@ -18,10 +21,10 @@ if ($ret === false) {
 if(!$logged) {
 	$extra_url = '';
 	if(isset($_GET['thread_id'])) {
-		$extra_url = '&action=new_post&thread_id=' . $_GET['thread_id'];
+		$extra_url = '?action=new_post&thread_id=' . $_GET['thread_id'];
 	}
 
-	header('Location: ' . BASE_URL . '?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum' . $extra_url));
+	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . BASE_URL . urlencode(getLink('forum') . $extra_url) . '">Log in</a> to post on the forum.<br /><br />';
 	return;
 }
 
@@ -46,6 +49,10 @@ if(Forum::canPost($account_logged)) {
 		$smile = (int)($_REQUEST['smile'] ?? 0);
 		$html = (int)($_REQUEST['html'] ?? 0);
 		$saved = false;
+
+		if (!superAdmin()) {
+			$html = 0;
+		}
 
 		if(isset($_REQUEST['quote'])) {
 			$quoted_post = $db->query("SELECT `players`.`name`, `" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_date` FROM `players`, `" . FORUM_TABLE_PREFIX . "forum` WHERE `players`.`id` = `" . FORUM_TABLE_PREFIX . "forum`.`author_guid` AND `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $quote)->fetchAll();

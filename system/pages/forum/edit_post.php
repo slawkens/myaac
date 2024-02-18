@@ -8,10 +8,18 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Forum;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $ret = require __DIR__ . '/base.php';
 if ($ret === false) {
+	return;
+}
+
+if(!$logged) {
+	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . BASE_URL . urlencode(getLink('forum')) . '">Log in</a> to post on the forum.<br /><br />';
 	return;
 }
 
@@ -39,6 +47,10 @@ if(Forum::canPost($account_logged))
 				$post_topic = stripslashes(trim($_REQUEST['topic']));
 				$smile = isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0;
 				$html = isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0;
+
+				if (!superAdmin()) {
+					$html = 0;
+				}
 
 				$length = strlen($post_topic);
 				if(($length < 1 || $length > 60) && $thread['id'] == $thread['first_post']) {

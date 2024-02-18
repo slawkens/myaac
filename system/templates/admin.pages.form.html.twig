@@ -3,7 +3,9 @@
 		<div class="card-header">
 			<h5 class="m-0">{% if action == 'edit' %}Edit{% else %}Add{% endif %} page</h5>
 		</div>
-		<form id="form" class="form-horizontal" method="post" action="?p=pages&action={% if action == 'edit' %}edit{% else %}new{% endif %}">
+		<form id="form" class="form-horizontal" method="post">
+			{{ csrf() }}
+			<input type="hidden" name="action" value="{{ action }}" />
 			{% if action == 'edit' %}
 				<input type="hidden" name="id" value="{{ id }}"/>
 			{% endif %}
@@ -19,10 +21,12 @@
 				<div class="form-group row">
 					<label for="access">Access</label>
 					<select class="form-control" id="access" name="access">
+						<option value="0" {% if access == 0 %}selected{% endif %}>Guest*</option>
 						{% for id, group in groups %}
-							<option value="{{ group.getId() }}"{% if access == group.getId() %} selected{% endif %}>{{ group.getName() }}</option>
+							<option value="{{ group.getId() }}"{% if access == group.getId() %} selected{% endif %}>{{ group.getName()|title }}</option>
 						{% endfor %}
 					</select>
+					<br>* Guest means everyone will have access to this page. Player means registered and logged in user.
 				</div>
 				<div class="form-group row">
 					<label for="php">PHP
@@ -50,7 +54,7 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> Update</button>
+				<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> {% if action == 'edit' %}Update{% else %}Add{% endif %}</button>
 				<button type="button" onclick="window.location = '{{ constant('ADMIN_URL') }}?p=pages';" class="btn btn-danger float-right"><i class="fas fa-cancel"></i> Cancel</button>
 			</div>
 		</form>
@@ -64,7 +68,8 @@
 				if (!this.checked) {
 					tinymce.remove('#editor');
 				} else {
-					if (tinymce.get('#editor')!== null){
+					$('#php').prop('checked', false);
+					if (tinymce.get('#editor')!== null) {
 						tinymce.activeEditor.show();
 					} else {
 						tinymceInit();

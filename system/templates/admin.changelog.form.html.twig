@@ -4,6 +4,8 @@
 			<h5 class="m-0">{{ (action == 'edit') ? 'Edit' : 'Add' }}</h5>
 		</div>
 		<form role="form" method="post" action="{{ cl_link_form }}" id="cl-edit-form">
+			{{ csrf() }}
+			<input type="hidden" name="action" value="{{ action }}" />
 			<div class="card-body">
 				{% if action == 'edit' %}
 					<input type="hidden" name="id" value="{{ cl_id }}"/>

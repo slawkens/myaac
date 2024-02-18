@@ -13,6 +13,8 @@ use MyAAC\Models\Notepad as ModelsNotepad;
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Notepad';
 
+csrfProtect();
+
 /**
  * @var $account_logged OTS_Account
  */

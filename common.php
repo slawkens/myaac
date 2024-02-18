@@ -23,11 +23,11 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
-if (version_compare(phpversion(), '8.0', '<')) die('PHP version 8.0 or higher is required.');
+if (version_compare(phpversion(), '8.1', '<')) die('PHP version 8.1 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '0.10.0-dev';
-const DATABASE_VERSION = 36;
+const MYAAC_VERSION = '1.0-beta';
+const DATABASE_VERSION = 40;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -108,6 +108,13 @@ const TFS_FIRST = TFS_02;
 const TFS_LAST = TFS_03;
 
 // other definitions
+const MAIL_MAIL = 0;
+const MAIL_SMTP = 1;
+
+const SMTP_SECURITY_NONE = 0;
+const SMTP_SECURITY_SSL = 1;
+const SMTP_SECURITY_TLS = 2;
+
 const ACCOUNT_NUMBER_LENGTH = 8;
 
 if (!IS_CLI) {
@@ -136,7 +143,7 @@ if(!IS_CLI) {
 		}
 	}
 
-	define('SERVER_URL', 'http' . (isset($_SERVER['HTTPS'][0]) && strtolower($_SERVER['HTTPS']) === 'on' ? 's' : '') . '://' . $baseHost);
+	define('SERVER_URL', 'http' . (isHttps() ? 's' : '') . '://' . $baseHost);
 	define('BASE_URL', SERVER_URL . BASE_DIR . '/');
 	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/' . ADMIN_PANEL_FOLDER . '/');
 
@@ -147,6 +154,7 @@ if (file_exists(BASE . 'config.local.php')) {
 	require BASE . 'config.local.php';
 }
 
+/** @var array $config */
 ini_set('log_errors', 1);
 if(@$config['env'] === 'dev') {
 	ini_set('display_errors', 1);
@@ -165,3 +173,11 @@ if (!is_file($autoloadFile)) {
 }
 
 require $autoloadFile;
+
+function isHttps(): bool
+{
+	return
+		(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+		|| (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+		|| (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
+}

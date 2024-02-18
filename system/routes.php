@@ -12,6 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 return [
 	['GET', '', 'news.php'], // empty URL = show news
 	['GET', 'news/archive/{id:int}[/]', 'news/archive.php'],
+	['GET', 'news/{id:int}[/]', 'news/archive.php'],
 
 	// block access to some files
 	['*', 'account/base[/]', '404.php'], // this is to block account/base.php
@@ -32,7 +33,7 @@ return [
 	['GET', 'bans/{page:int}[/]', 'bans.php'],
 	[['GET', 'POST'], 'characters[/{name:string}]', 'characters.php'],
 	['GET', 'changelog[/{page:int}]', 'changelog.php'],
-	[['GET', 'POST'], 'creatures[/{name:string}]', 'creatures.php'],
+	[['GET', 'POST'], 'monsters[/{name:string}]', 'monsters.php'],
 
 	[['GET', 'POST'], 'faq[/{action:string}]', 'faq.php'],
 

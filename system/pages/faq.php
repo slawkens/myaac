@@ -49,7 +49,7 @@ if($canEdit)
 			}
 		}
 		else if($action == 'hide') {
-			FAQ::toggleHidden($id, $errors);
+			FAQ::toggleHide($id, $errors);
 		}
 		else if($action == 'moveup') {
 			FAQ::move($id, -1, $errors);
@@ -72,11 +72,11 @@ if($canEdit)
 }
 
 $faqs = ModelsFAQ::select('id', 'question', 'answer')->when(!$canEdit, function ($query) {
-	$query->where('hidden', '!=', 1);
+	$query->where('hide', '!=', 1);
 })->orderBy('ordering');
 
 if ($canEdit) {
-	$faqs->addSelect(['hidden', 'ordering']);
+	$faqs->addSelect(['hide', 'ordering']);
 }
 
 $faqs = $faqs->get()->toArray();
@@ -146,14 +146,16 @@ class FAQ
 		return !count($errors);
 	}
 
-	static public function toggleHidden($id, &$errors)
+	static public function toggleHide($id, &$errors)
 	{
 		if(isset($id))
 		{
 			$row = ModelsFAQ::find($id);
 			if ($row) {
-				$row->hidden = ($row->hidden == 1 ? 0 : 1);
-				$row->save();
+				$row->hide = ($row->hide == 1 ? 0 : 1);
+				if (!$row->save()) {
+					$errors[] = 'Fail during toggle hide FAQ.';
+				}
 			} else {
 				$errors[] = 'FAQ with id ' . $id . ' does not exists.';
 			}

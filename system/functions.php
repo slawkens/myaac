@@ -9,11 +9,17 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\Cache\Cache;
+use MyAAC\CsrfToken;
+use MyAAC\Items;
 use MyAAC\Models\Config;
 use MyAAC\Models\Guild;
 use MyAAC\Models\House;
 use MyAAC\Models\Pages;
 use MyAAC\Models\Player;
+use MyAAC\News;
+use MyAAC\Plugins;
+use MyAAC\Settings;
 use PHPMailer\PHPMailer\PHPMailer;
 use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
@@ -43,7 +49,10 @@ function warning($message, $return = false) {
 	return message($message, 'warning', $return);
 }
 function note($message, $return = false) {
-	return message($message, 'note', $return);
+	return info($message, $return);
+}
+function info($message, $return = false) {
+	return message($message, 'info', $return);
 }
 function error($message, $return = false) {
 	return message($message, ((defined('MYAAC_INSTALL') || defined('MYAAC_ADMIN')) ? 'danger' : 'error'), $return);
@@ -96,7 +105,7 @@ function getPlayerLink($name, $generate = true): string
 
 function getMonsterLink($name, $generate = true): string
 {
-	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'creatures/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'monsters/' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -133,7 +142,6 @@ function getGuildLink($name, $generate = true): string
 }
 
 function getItemNameById($id) {
-	require_once LIBS . 'items.php';
 	$item = Items::get($id);
 	return !empty($item['name']) ? $item['name'] : '';
 }
@@ -193,7 +201,7 @@ function getFlagImage($country): string
  * @param mixed $v Variable to check.
  * @return bool Value boolean status.
  */
-function getBoolean($v): bool
+function getBoolean(mixed $v): bool
 {
 	if(is_bool($v)) {
 		return $v;
@@ -201,6 +209,10 @@ function getBoolean($v): bool
 
 	if(is_numeric($v))
 		return (int)$v > 0;
+
+	if (is_null($v)) {
+		return false;
+	}
 
 	$v = strtolower($v);
 	return $v === 'yes' || $v === 'true';
@@ -249,7 +261,7 @@ function generateRandomString($length, $lowCase = true, $upCase = false, $numeri
 function getForumBoards()
 {
 	global $db, $canEdit;
-	$sections = $db->query('SELECT `id`, `name`, `description`, `closed`, `guild`, `access`' . ($canEdit ? ', `hidden`, `ordering`' : '') . ' FROM `' . TABLE_PREFIX . 'forum_boards` ' . (!$canEdit ? ' WHERE `hidden` != 1' : '') .
+	$sections = $db->query('SELECT `id`, `name`, `description`, `closed`, `guild`, `access`' . ($canEdit ? ', `hide`, `ordering`' : '') . ' FROM `' . TABLE_PREFIX . 'forum_boards` ' . (!$canEdit ? ' WHERE `hide` != 1' : '') .
 		' ORDER BY `ordering`;');
 	if($sections)
 		return $sections->fetchAll();
@@ -465,20 +477,30 @@ function tickers()
  */
 function template_place_holder($type): string
 {
-	global $twig, $template_place_holders;
+	global $twig, $template_place_holders, $debugBar;
 	$ret = '';
+
+	if (isset($debugBar)) {
+		$debugBarRenderer = $debugBar->getJavascriptRenderer();
+	}
 
 	if(array_key_exists($type, $template_place_holders) && is_array($template_place_holders[$type]))
 		$ret = implode($template_place_holders[$type]);
 
 	if($type === 'head_start') {
 		$ret .= template_header();
+		if (isset($debugBar)) {
+			$ret .= $debugBarRenderer->renderHead();
+		}
 	}
 	elseif ($type === 'body_start') {
 		$ret .= $twig->render('browsehappy.html.twig');
 	}
 	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
+		if (isset($debugBar)) {
+			$ret .= $debugBarRenderer->render();
+		}
 	}
 
 	return $ret;
@@ -765,7 +787,7 @@ function get_browser_languages()
 	$languages = str_replace(' ', '', $languages);
 
 	foreach(explode(',', $languages) as $language_list)
-		$ret[] .= substr($language_list, 0, 2);
+		$ret[] = substr($language_list, 0, 2);
 
 	return $ret;
 }
@@ -782,6 +804,10 @@ function get_templates()
 	{
 		if($file[0] !== '.' && $file !== '..' && is_dir($path . $file))
 			$ret[] = $file;
+	}
+
+	foreach (Plugins::getThemes() as $name => $path) {
+		$ret[] = $name;
 	}
 
 	return $ret;
@@ -855,9 +881,6 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	else
 		$tmp_body = $body . '<br/><br/>' . $signature_html;
 
-	define('MAIL_MAIL', 0);
-	define('MAIL_SMTP', 1);
-
 	$mailOption = setting('core.mail_option');
 	if($mailOption == MAIL_SMTP)
 	{
@@ -867,10 +890,6 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 		$mailer->SMTPAuth = setting('core.smtp_auth');
 		$mailer->Username = setting('core.smtp_user');
 		$mailer->Password = setting('core.smtp_pass');
-
-		define('SMTP_SECURITY_NONE', 0);
-		define('SMTP_SECURITY_SSL', 1);
-		define('SMTP_SECURITY_TLS', 2);
 
 		$security = setting('core.smtp_security');
 
@@ -1045,6 +1064,28 @@ function unsetSession($key) {
 	unset($_SESSION[setting('core.session_prefix') . $key]);
 }
 
+function csrf(bool $return = false): string {
+	return CsrfToken::create($return);
+}
+
+function csrfToken(): string {
+	return CsrfToken::get();
+}
+
+function isValidToken(): bool {
+	$token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
+	return (!isRequestMethod('post') || (isset($token) && CsrfToken::isValid($token)));
+}
+
+function csrfProtect(): void
+{
+	if (!isValidToken()) {
+		$lastUri = BASE_URL . str_replace_first('/', '', getSession('last_uri'));
+		echo 'Request has been cancelled due to security reasons - token is invalid. Go <a href="' . $lastUri . '">back</a>';
+		exit();
+	}
+}
+
 function getTopPlayers($limit = 5) {
 	global $db;
 
@@ -1162,64 +1203,70 @@ function setting($key)
 
 function clearCache()
 {
-	require_once LIBS . 'news.php';
 	News::clearCache();
 
 	$cache = Cache::getInstance();
-
 	if($cache->enabled()) {
-		$tmp = '';
+		$keysToClear = [
+			'status', 'templates',
+			'config_lua',
+			'towns', 'groups', 'vocations',
+			'visitors', 'views_counter', 'failed_logins',
+			'template_menus',
+			'last_kills',
+			'hooks', 'plugins_hooks', 'plugins_routes', 'plugins_settings', 'plugins_themes', 'plugins_commands',
+			'settings',
+		];
 
-		if ($cache->fetch('status', $tmp))
-			$cache->delete('status');
+		foreach (get_templates() as $template) {
+			$keysToClear[] = 'template_ini_' . $template;
+		}
 
-		if ($cache->fetch('templates', $tmp))
-			$cache->delete('templates');
+		// highscores cache
+		$configHighscoresPerPage = setting('core.highscores_per_page');
+		$skills = [POT::SKILL_FIST, POT::SKILL_CLUB, POT::SKILL_SWORD, POT::SKILL_AXE, POT::SKILL_DIST, POT::SKILL_SHIELD, POT::SKILL_FISH, POT::SKILL_LEVEL, POT::SKILL__MAGLEVEL, SKILL_FRAGS, SKILL_BALANCE];
+		foreach ($skills as $skill) {
+			// config('vocations') may be empty after previous cache clear
+			$vocations = (config('vocations') ?? []) + ['all'];
+			foreach ($vocations as $vocation) {
+				for($page = 0; $page < 10; $page++) {
+					$cacheKey = 'highscores_' . $skill . '_' . strtolower($vocation) . '_' . $page . '_' . $configHighscoresPerPage;
+					$keysToClear[] = $cacheKey;
+				}
+			}
+		}
 
-		if ($cache->fetch('config_lua', $tmp))
-			$cache->delete('config_lua');
+		foreach ($keysToClear as $item) {
+			$tmp = '';
+			if ($cache->fetch($item, $tmp)) {
+				$cache->delete($item);
+			}
+		}
 
-		if ($cache->fetch('vocations', $tmp))
-			$cache->delete('vocations');
-
-		if ($cache->fetch('towns', $tmp))
-			$cache->delete('towns');
-
-		if ($cache->fetch('groups', $tmp))
-			$cache->delete('groups');
-
-		if ($cache->fetch('visitors', $tmp))
-			$cache->delete('visitors');
-
-		if ($cache->fetch('views_counter', $tmp))
-			$cache->delete('views_counter');
-
-		if ($cache->fetch('failed_logins', $tmp))
-			$cache->delete('failed_logins');
-
-		global $template_name;
-		if ($cache->fetch('template_ini' . $template_name, $tmp))
-			$cache->delete('template_ini' . $template_name);
-
-		if ($cache->fetch('plugins_hooks', $tmp))
-			$cache->delete('plugins_hooks');
-
-		if ($cache->fetch('plugins_routes', $tmp))
-			$cache->delete('plugins_routes');
+		global $db;
+		$db->setClearCacheAfter(true);
 	}
 
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
 	deleteDirectory(CACHE . 'twig', ['index.html'], true);
 	deleteDirectory(CACHE . 'plugins', ['index.html'], true);
-	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html'], true);
+	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html', 'persistent'], true);
 
 	// routes cache
+	clearRouteCache();
+
+	global $hooks;
+	$hooks->trigger(HOOK_CACHE_CLEAR, ['cache' => Cache::getInstance()]);
+
+	return true;
+}
+
+function clearRouteCache(): void
+{
 	$routeCacheFile = CACHE . 'route.cache';
 	if (file_exists($routeCacheFile)) {
 		unlink($routeCacheFile);
 	}
-
-	return true;
 }
 
 function getCustomPageInfo($name)
@@ -1261,13 +1308,6 @@ function getCustomPage($name, &$success): string
 			else
 				$tmp = $page['body'];
 
-			$php_errors = array();
-			function error_handler($errno, $errstr) {
-				global $php_errors;
-				$php_errors[] = array('errno' => $errno, 'errstr' => $errstr);
-			}
-			set_error_handler('error_handler');
-
 			global $config;
 			if(setting('core.backward_support')) {
 				global $SQL, $main_content, $subtopic;
@@ -1277,11 +1317,6 @@ function getCustomPage($name, &$success): string
 			eval($tmp);
 			$content .= ob_get_contents();
 			ob_end_clean();
-
-			restore_error_handler();
-			if(isset($php_errors[0]) && superAdmin()) {
-				var_dump($php_errors);
-			}
 		}
 		else {
 			$oldLoader = $twig->getLoader();
@@ -1525,18 +1560,19 @@ function right($str, $length) {
 	return substr($str, -$length);
 }
 
-function getCreatureImgPath($creature){
-	$creature_path = setting('core.monsters_images_url');
-	$creature_gfx_name = trim(strtolower($creature)) . setting('core.monsters_images_extension');
-	if (!file_exists($creature_path . $creature_gfx_name)) {
-		$creature_gfx_name = str_replace(" ", "", $creature_gfx_name);
-		if (file_exists($creature_path . $creature_gfx_name)) {
-			return $creature_path . $creature_gfx_name;
+function getMonsterImgPath($monster): string
+{
+	$monster_path = setting('core.monsters_images_url');
+	$monster_gfx_name = trim(strtolower($monster)) . setting('core.monsters_images_extension');
+	if (!file_exists($monster_path . $monster_gfx_name)) {
+		$monster_gfx_name = str_replace(" ", "", $monster_gfx_name);
+		if (file_exists($monster_path . $monster_gfx_name)) {
+			return $monster_path . $monster_gfx_name;
 		} else {
-			return $creature_path . 'nophoto.png';
+			return $monster_path . 'nophoto.png';
 		}
 	} else {
-		return $creature_path . $creature_gfx_name;
+		return $monster_path . $monster_gfx_name;
 	}
 }
 
@@ -1624,8 +1660,15 @@ function displayErrorBoxWithBackButton($errors, $action = null) {
 	]);
 }
 
+function makeLinksClickable($text, $blank = true) {
+	return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1"' . (!$blank ?: ' target="_blank"') . '>$1</a>', $text);
+}
+
+function isRequestMethod(string $method): bool {
+	return strtolower($_SERVER['REQUEST_METHOD']) == strtolower($method);
+}
+
 // validator functions
-require_once LIBS . 'validator.php';
 require_once SYSTEM . 'compat/base.php';
 
 // custom functions

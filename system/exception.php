@@ -8,6 +8,8 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Exceptions\SensitiveException;
+
 if (class_exists(\Whoops\Run::class)) {
 	$whoops = new \Whoops\Run;
 	if(IS_CLI) {
@@ -20,8 +22,6 @@ if (class_exists(\Whoops\Run::class)) {
 	$whoops->register();
 	return;
 }
-
-require LIBS . 'SensitiveException.php';
 
 /**
  * @param Exception $exception

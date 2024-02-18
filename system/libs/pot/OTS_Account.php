@@ -952,7 +952,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			return $query['group_id'];
 		}
 
-		return 0;
+		return 1;
 	}
 
 	public function getAccGroupId()

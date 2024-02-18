@@ -11,6 +11,6 @@ class Changelog extends Model {
 	public $timestamps = false;
 
 	public function scopeIsPublic($query) {
-		$query->where('hidden', '!=', 1);
+		$query->where('hide', '!=', 1);
 	}
 }

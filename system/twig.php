@@ -9,6 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\CsrfToken;
 use Twig\Environment as Twig_Environment;
 use Twig\Extension\DebugExtension as Twig_DebugExtension;
 use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
@@ -94,7 +95,14 @@ $function = new TwigFunction('hook', function ($context, $hook, array $params = 
 	global $hooks;
 
 	if(is_string($hook)) {
-		$hook = constant($hook);
+		if (defined($hook)) {
+			$hook = constant($hook);
+		}
+		else {
+			// plugin/template has a hook that this version of myaac does not support
+			// just silently return
+			return;
+		}
 	}
 
 	$params['context'] = $context;
@@ -115,6 +123,16 @@ $twig->addFunction($function);
 $function = new TwigFunction('getCustomPage', function ($name) {
 	$success = false;
 	return getCustomPage($name, $success);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('csrf', function ($return = false) {
+	return csrf($return);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('csrfToken', function () {
+	return csrfToken();
 });
 $twig->addFunction($function);
 

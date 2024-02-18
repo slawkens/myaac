@@ -16,6 +16,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Mass Teleport Actions';
 
+csrfProtect();
+
 function admin_teleport_position($x, $y, $z) {
 	if (!Player::query()->update([
 		'posx' => $x, 'posy' => $y, 'posz' => $z
@@ -38,9 +40,9 @@ function admin_teleport_town($town_id) {
 	displayMessage('Player\'s town updated.', true);
 }
 
-if (isset($_POST['action']) && $_POST['action'])    {
+if (!empty(ACTION) && isRequestMethod('post'))    {
 
-	$action = $_POST['action'];
+	$action = ACTION;
 
 	if (preg_match("/[^A-z0-9_\-]/", $action)) {
 		displayMessage('Invalid action.');

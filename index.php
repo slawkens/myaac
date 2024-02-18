@@ -24,6 +24,9 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\UsageStatistics;
+use MyAAC\Visitors;
+
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';
 
@@ -59,17 +62,12 @@ if(preg_match("/^(.*)\.(gif|jpg|png|jpeg|tiff|bmp|css|js|less|map|html|zip|rar|g
 if((!isset($config['installed']) || !$config['installed']) && file_exists(BASE . 'install'))
 {
 	header('Location: ' . BASE_URL . 'install/');
-	throw new RuntimeException('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
+	exit();
 }
 
 $template_place_holders = array();
 
 require_once SYSTEM . 'init.php';
-
-// verify myaac tables exists in database
-if(!$db->hasTable('myaac_account_actions')) {
-	throw new RuntimeException('Seems that the table <strong>myaac_account_actions</strong> of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting <a href="' . BASE_URL . 'install">this</a> url.');
-}
 
 require_once SYSTEM . 'template.php';
 require_once SYSTEM . 'login.php';
@@ -77,53 +75,6 @@ require_once SYSTEM . 'status.php';
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
-
-require_once SYSTEM . 'router.php';
-
-$hooks->trigger(HOOK_STARTUP);
-
-// anonymous usage statistics
-// sent only when user agrees
-if(setting('core.anonymous_usage_statistics')) {
-	$report_time = 30 * 24 * 60 * 60; // report one time per 30 days
-	$should_report = true;
-
-	$value = '';
-	if($cache->enabled() && $cache->fetch('last_usage_report', $value)) {
-		$should_report = time() > (int)$value + $report_time;
-	}
-	else {
-		$value = '';
-		if(fetchDatabaseConfig('last_usage_report', $value)) {
-			$should_report = time() > (int)$value + $report_time;
-			if($cache->enabled()) {
-				$cache->set('last_usage_report', $value);
-			}
-		}
-		else {
-			registerDatabaseConfig('last_usage_report', time() - ($report_time - (7 * 24 * 60 * 60))); // first report after a week
-			$should_report = false;
-		}
-	}
-
-	if($should_report) {
-		require_once LIBS . 'usage_statistics.php';
-		Usage_Statistics::report();
-
-		updateDatabaseConfig('last_usage_report', time());
-		if($cache->enabled()) {
-			$cache->set('last_usage_report', time());
-		}
-	}
-}
-
-if(setting('core.views_counter'))
-	require_once SYSTEM . 'counter.php';
-
-if(setting('core.visitors_counter')) {
-	require_once SYSTEM . 'libs/visitors.php';
-	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
-}
 
 // backward support for gesior
 if(setting('core.backward_support')) {
@@ -162,6 +113,51 @@ if(setting('core.backward_support')) {
 
 	foreach($status as $key => $value)
 		$config['status']['serverStatus_' . $key] = $value;
+}
+
+require_once SYSTEM . 'router.php';
+
+$hooks->trigger(HOOK_STARTUP);
+
+// anonymous usage statistics
+// sent only when user agrees
+if(setting('core.anonymous_usage_statistics')) {
+	$report_time = 30 * 24 * 60 * 60; // report one time per 30 days
+	$should_report = true;
+
+	$value = '';
+	if($cache->enabled() && $cache->fetch('last_usage_report', $value)) {
+		$should_report = time() > (int)$value + $report_time;
+	}
+	else {
+		$value = '';
+		if(fetchDatabaseConfig('last_usage_report', $value)) {
+			$should_report = time() > (int)$value + $report_time;
+			if($cache->enabled()) {
+				$cache->set('last_usage_report', $value);
+			}
+		}
+		else {
+			registerDatabaseConfig('last_usage_report', time() - ($report_time - (7 * 24 * 60 * 60))); // first report after a week
+			$should_report = false;
+		}
+	}
+
+	if($should_report) {
+		UsageStatistics::report();
+
+		updateDatabaseConfig('last_usage_report', time());
+		if($cache->enabled()) {
+			$cache->set('last_usage_report', time());
+		}
+	}
+}
+
+if(setting('core.views_counter'))
+	require_once SYSTEM . 'counter.php';
+
+if(setting('core.visitors_counter')) {
+	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
 }
 
 /**

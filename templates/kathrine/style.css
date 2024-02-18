@@ -46,12 +46,12 @@ body
 		padding-top: 12px;
 		cursor: pointer;
 	}
-	
+
 	#tabs .tab:hover
 	{
 		text-decoration: underline;
 	}
-	
+
 	#tabs .tab-active
 	{
 		width: 113px;
@@ -64,7 +64,7 @@ body
 		padding-top: 10px;
 		cursor: pointer;
 	}
-	
+
 #mainsubmenu
 {
 	width: 760px;
@@ -85,12 +85,12 @@ body
 		margin-top: 7px;
 		text-decoration: none;
 	}
-	
+
 	#mainsubmenu a:hover
 	{
 		text-decoration: underline;
 	}
-	
+
 	#mainsubmenu .separator
 	{
 		width: 2px;
@@ -99,7 +99,7 @@ body
 		float: left;
 		background: url('images/separator.png') no-repeat;
 	}
-	
+
 #content
 {
 	width: 780px;

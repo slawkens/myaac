@@ -8,7 +8,9 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Cache\Cache;
 use MyAAC\Models\Menu;
+use MyAAC\Plugins;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
@@ -46,7 +48,14 @@ if(setting('core.template_allow_change'))
 		}
 	}
 }
-$template_path = 'templates/' . $template_name;
+
+$themes = Plugins::getThemes();
+if (isset($themes[$template_name])) {
+	$template_path = $themes[$template_name];
+}
+else {
+	$template_path = 'templates/' . $template_name;
+}
 
 if(file_exists(BASE . $template_path . '/index.php')) {
 	$template_index = 'index.php';
@@ -105,9 +114,10 @@ $template['link_account_logout'] = getLink('account/logout');
 
 $template['link_news_archive'] = getLink('news/archive');
 
-$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts', 'bugtracker', 'gallery');
-foreach($links as $link) {
-	$template['link_' . $link] = getLink($link);
+$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills' => 'last-kills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures' => 'monsters', 'monsters', 'spells', 'commands', 'exp-stages', 'freeHouses', 'serverInfo', 'exp-table', 'faq', 'points', 'gifts', 'bugtracker', 'gallery');
+foreach($links as $key => $value) {
+	$key = is_string($key) ? $key : $value;
+	$template['link_' . $key] = getLink($value);
 }
 
 $template['link_screenshots'] = getLink('gallery');
@@ -155,7 +165,7 @@ function get_template_menus() {
 	$menus = array();
 	foreach($result as $menu) {
 		$link_full = strpos(trim($menu['link']), 'http') === 0 ? $menu['link'] : getLink($menu['link']);
-		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'link_full' => $link_full, 'blank' => $menu['blank'] == 1, 'color' => $menu['color']);
+		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'link_full' => $link_full, 'blank' => $menu['blank'] == 1, 'target_blank' => ($menu['blank'] == 1 ? ' target="blank"' : ''), 'color' => $menu['color']);
 	}
 
 	$new_menus = array();

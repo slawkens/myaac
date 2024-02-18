@@ -8,10 +8,13 @@
  * @copyright 2021 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Forum;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Forum';
 
-require_once LIBS . 'forum.php';
+class_exists('MyAAC\Forum');
 
 $forumSetting = setting('core.forum');
 if(strtolower($forumSetting) != 'site') {
@@ -24,10 +27,7 @@ if(strtolower($forumSetting) != 'site') {
 	return false;
 }
 
-if(!$logged) {
-	echo 'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=forum') . '">Log in</a> to post on the forum.<br /><br />';
-	return false;
-}
+$canEdit = Forum::isModerator();
 
 $sections = array();
 foreach(getForumBoards() as $section) {
@@ -41,10 +41,10 @@ foreach(getForumBoards() as $section) {
 	);
 
 	if($canEdit) {
-		$sections[$section['id']]['hidden'] = $section['hidden'];
+		$sections[$section['id']]['hide'] = $section['hide'];
 	}
 	else {
-		$sections[$section['id']]['hidden'] = 0;
+		$sections[$section['id']]['hide'] = 0;
 	}
 }
 

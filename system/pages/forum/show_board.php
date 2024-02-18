@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Forum;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $ret = require __DIR__ . '/base.php';
@@ -43,7 +46,7 @@ echo '<a href="' . getLink('forum') . '">Boards</a> >> <b>'.$sections[$section_i
 
 if(!$sections[$section_id]['closed'] || Forum::isModerator()) {
 	echo '<br /><br />
-		<a href="?subtopic=forum&action=new_thread&section_id='.$section_id.'"><img src="images/forum/topic.gif" border="0" /></a>';
+		<a href="' . getLink('forum') . '?action=new_thread&section_id='.$section_id.'"><img src="images/forum/topic.gif" border="0" /></a>';
 }
 
 echo '<br /><br />Page: '.$links_to_pages.'<br />';
@@ -64,8 +67,8 @@ if(isset($last_threads[0])) {
 	foreach($last_threads as $thread) {
 		echo '<tr bgcolor="' . getStyle($number_of_rows++) . '"><td>';
 		if(Forum::isModerator()) {
-			echo '<a href="?subtopic=forum&action=move_thread&id='.$thread['id'].'"\')"><span style="color:darkgreen">[MOVE]</span></a>';
-			echo '<a href="?subtopic=forum&action=remove_post&id='.$thread['id'].'" onclick="return confirm(\'Are you sure you want remove thread > '.$thread['post_topic'].' <?\')"><span style="color: red">[REMOVE]</span></a>  ';
+			echo '<a href="' . getLink('forum') . '?action=move_thread&id='.$thread['id'].'"\')"><span style="color:darkgreen">[MOVE]</span></a>';
+			echo '<a href="' . getLink('forum') . '?action=remove_post&id='.$thread['id'].'" onclick="return confirm(\'Are you sure you want remove thread > '.$thread['post_topic'].' <?\')"><span style="color: red">[REMOVE]</span></a>  ';
 		}
 
 		$player->load($thread['player_id']);
@@ -92,7 +95,7 @@ if(isset($last_threads[0])) {
 
 	echo '</table>';
 	if(!$sections[$section_id]['closed'] || Forum::isModerator()) {
-		echo '<br /><a href="?subtopic=forum&action=new_thread&section_id=' . $section_id . '"><img src="images/forum/topic.gif" border="0" /></a>';
+		echo '<br /><a href="' . getLink('forum') . '?action=new_thread&section_id=' . $section_id . '"><img src="images/forum/topic.gif" border="0" /></a>';
 	}
 }
 else {

@@ -109,7 +109,7 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 if(empty($guild_errors) && !empty($guild_errors2)) {
 	$twig->display('error_box.html.twig', array('errors' => $guild_errors2));
 
-	echo '<br/><div style="text-align:center"><form action="?subtopic=guilds&guild='.$guild->getName().'&action=pass_leadership" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
+	echo '<br/><div style="text-align:center"><form action="' . getLink('guilds') . '?guild='.$guild->getName().'&action=pass_leadership" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }
 if(!empty($guild_errors)) {
 	if(!empty($guild_errors2)) {
@@ -117,5 +117,5 @@ if(!empty($guild_errors)) {
 	}
 	$twig->display('error_box.html.twig', array('errors' => $guild_errors));
 
-	echo '<br/><div style="text-align:center"><form action="?subtopic=guilds" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
+	echo '<br/><div style="text-align:center"><form action="' . getLink('guilds') . '" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }

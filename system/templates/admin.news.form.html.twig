@@ -1,9 +1,11 @@
 {% if action %}
 	<div class="card card-info card-outline">
 		<div class="card-header">
-			<h5 class="m-0">{% if action == 'edit' %}Edit{% else %}Add{% endif %} news</h5>
+			<h5 class="m-0">{% if action == 'edit' %}Edit{% else %}Add{% endif %} {% if type == constant('NEWS') %}News{% elseif type == constant('TICKER') %}Ticker{% else %}Article{% endif %}</h5>
 		</div>
-		<form id="form" role="form" method="post" action="{{ news_link_form }}">
+		<form id="form" role="form" method="post">
+			{{ csrf() }}
+			<input type="hidden" name="action" value="{{ action == 'edit' ? 'edit' : 'new' }}" />
 			<div class="card-body " id="page-edit-table">
 				{% if action == 'edit' %}
 					<input type="hidden" name="id" value="{{ news_id }}"/>
@@ -22,9 +24,9 @@
 				<div class="form-group row">
 					<label for="select-type">Type</label>
 					<select class="form-control" name="type" id="select-type">
-						<option value="{{ constant('NEWS') }}" {% if type is defined and type == constant('NEWS') %}selected="selected"{% endif %}{% if action == 'edit' and type != constant('NEWS') %} disabled{% endif %}>News</option>
-						<option value="{{ constant('TICKER') }}" {% if type is defined and type == constant('TICKER') %}selected="selected"{% endif %}{% if action == 'edit' and type != constant('TICKER') %} disabled{% endif %}>Ticker</option>
-						<option value="{{ constant('ARTICLE') }}" {% if type is defined and type == constant('ARTICLE') %}selected="selected"{% endif %}{% if action == 'edit' and type != constant('ARTICLE') %} disabled{% endif %}>Article</option>
+						<option value="{{ constant('NEWS') }}" {% if type == constant('NEWS') %}selected="selected"{% endif %}{% if action == 'edit' and type != constant('NEWS') %} disabled{% endif %}>News</option>
+						<option value="{{ constant('TICKER') }}" {% if type == constant('TICKER') %}selected="selected"{% endif %}{% if action == 'edit' and type != constant('TICKER') %} disabled{% endif %}>Ticker</option>
+						<option value="{{ constant('ARTICLE') }}" {% if type == constant('ARTICLE') %}selected="selected"{% endif %}{% if action == 'edit' and type != constant('ARTICLE') %} disabled{% endif %}>Article</option>
 					</select>
 				</div>
 
@@ -85,7 +87,7 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> Update</button>
+				<button type="submit" class="btn btn-info"><i class="fas fa-update"></i> {{ action == 'edit' ? 'Update' : 'Add' }}</button>
 				<button type="button" onclick="window.location = '{{ constant('ADMIN_URL') }}?p=news';" class="btn btn-danger float-right"><i class="fas fa-cancel"></i> Cancel</button>
 			</div>
 		</form>

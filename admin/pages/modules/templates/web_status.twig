@@ -1,28 +1,32 @@
 <div class="col-12 col-md-6">
 	<div class="card card-warning card-outline">
-		<form action="?p=dashboard&maintenance" method="post" class="form-horizontal">
-			<div class="card-header">
-				<span class="m-0">Website Status<span class="float-right">
-				<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-					<input type="checkbox" class="custom-control-input" name="status" id="status" value="true" {% if not is_closed %} checked{% endif %}>
-					<label id="status-label" class="custom-control-label" for="status"> {% if is_closed %}Closed{% else %}Open{% endif %}</label>
-				</div></span>
-				</span>
+		<div class="card-header">
+			<span class="m-0">Website Status<span class="float-right">
+			<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+				<input form="maintenance-form" type="checkbox" class="custom-control-input" name="status" id="status" value="true" {% if not is_closed %} checked{% endif %}>
+				<label id="status-label" class="custom-control-label" for="status"> {% if is_closed %}Closed{% else %}Open{% endif %}</label>
+			</div></span>
+			</span>
+		</div>
+		<div class="card-body p-2">
+			<div class="col-sm-12">
+				<label for="message" class="col-form-label">Maintenance Message</label>
+				<textarea form="maintenance-form" name="message" class="form-control" cols="40" rows="3" maxlength="255" placeholder="Enter ...">{{ closed_message }}</textarea>
+				<small>(only visible if closed)</small>
 			</div>
-			<div class="card-body p-2">
-				<div class="col-sm-12">
-					<label for="message" class="col-form-label">Maintenance Message</label>
-					<textarea name="message" class="form-control" cols="40" rows="3" maxlength="255" placeholder="Enter ...">{{ closed_message }}</textarea>
-					<small>(only visible if closed)</small>
-				</div>
-			</div>
-			<div class="card-footer">
+		</div>
+		<div class="card-footer">
+			<form id="maintenance-form" method="post" action="?p=dashboard" class="float-left">
+				{{ csrf() }}
+				<input type="hidden" name="maintenance" value="1" />
 				<button type="submit" class="btn btn-info"><i class="far fa-update"></i> Update</button>
-				<a href="?p=dashboard&clear_cache" onclick="return confirm('Are you sure?');" class="float-right">
-					<span class="btn btn-danger"><i class="fas fa-clear"></i>Clear cache</span>
-				</a>
-			</div>
-		</form>
+			</form>
+			<form method="post" action="?p=dashboard" class="float-right">
+				{{ csrf() }}
+				<input type="hidden" name="clear_cache" value="1" />
+				<button type="submit" onclick="return confirm('Are you sure that you want to clear cache?');" class="btn btn-danger" title="Clear Cache"><i class="fas fa-clear"></i>Clear cache</button>
+			</form>
+		</div>
 	</div>
 </div>
 

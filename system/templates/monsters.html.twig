@@ -1,0 +1,104 @@
+{% if monsters is not empty %}
+
+	{% if preview %}
+		<style>
+			.monsterImages {
+				width: 100px;
+				height: 100px;
+				margin: 0px;
+				float: left;
+			}
+
+			.monsterBoss {
+				box-sizing: border-box;
+				border-radius: 10px;
+				border: 1px rgba(179, 179, 179, 0.50) solid;
+				background-color: rgba(235, 235, 235, 0.50);
+			}
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$("#ciSearch").on("keyup", function () {
+					var value = $(this).val().toLowerCase();
+					$("#monsteriTable div").filter(function () {
+						$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+					});
+				});
+			});
+		</script>
+		<div style="float: right;"><input id="ciSearch" type="text" placeholder="Search.."></div>
+		<div style="display: table; width: 100%; ">
+			<div style="text-align: center; " id="monsteriTable">
+				{% for monster in monsters %}
+					{% set i = i + 1 %}
+					<div class="monsterImages">
+						<a href="{{ getMonsterLink(monster.name, false)|raw }}">
+							<div class="monster_img " style="background-image: url({{ monster.img_link }}"></div>
+							<img class=" {{ (monster.rewardboss ? 'monsterBoss' : '') }}" src="{{ monster.img_link }}" border="0"/>
+						</a>
+						<div>{{ monster.name }}</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	{% else %}
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$("#cSearch").on("keyup", function () {
+					var value = $(this).val().toLowerCase();
+					$("#monsterTable tr").filter(function () {
+						$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+					});
+				});
+			});
+		</script>
+		{{ generateLink(getLink('monsters'), 'All', false)|raw }} - <a href="{{ getLink('monsters') }}?boss=view">Bosses</a>
+		<table width="100%" id="monsters_datatable">
+			<thead>
+			<tr>
+				<th>Name</th>
+				<th>Boss</th>
+				<th>Health</th>
+				<th>Experience</th>
+				<th>Summonable Mana</th>
+				<th>Convinceable Mana</th>
+				<th>Race</th>
+			</tr>
+			</thead>
+			<tbody id="monsterTable">
+			{% set i = 0 %}
+			{% for monster in monsters %}
+				{% set i = i + 1 %}
+				<tr>
+					<td>{{ getMonsterLink(monster.name, true)|raw }}</td>
+					<td>{{ (monster.rewardboss) ? 'Yes' : '---' }}</td>
+					<td>{{ monster.health|number_format(0, '.', ',') }}</td>
+					<td>{{ monster.exp|number_format(0, '.', ',') }}</td>
+					<td>{{ (monster.convinceable) ? monster.mana : '---' }} </td>
+					<td>{{ (monster.summonable) ? monster.mana  : '---' }} </td>
+					<td>{{ monster.race|title }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+	<script>
+		$(document).ready(function () {
+			$('#monsters_datatable').DataTable();
+		});
+
+	</script>
+
+	<script src="tools/js/datatables.min.js"></script>
+	<link rel="stylesheet" href="tools/css/datatables.min.css">
+{% else %}
+	<table width="100%">
+		<tr>
+			<th>Monsters</th>
+		</tr>
+		<tr>
+			<td>No Monsters on the server.</td>
+		</tr>
+	</table>
+{% endif %}
+

@@ -6,15 +6,18 @@ Thumbs.db
 /.htaccess
 
 # composer
+composer.phar
 composer.lock
 vendor
 
 # npm
 node_modules
+tools/ext
 
 # cypress
 cypress.env.json
 cypress/e2e/2-advanced-examples
+cypress/screenshots
 
 # created by release.sh
 releases
@@ -48,6 +51,7 @@ system/cache/*
 !system/cache/twig/index.html
 !system/cache/signatures/index.html
 !system/cache/plugins/index.html
+!system/cache/persistent/index.html
 
 # logs
 system/logs/*

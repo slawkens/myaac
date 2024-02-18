@@ -1,6 +1,7 @@
 To generate new recovery key for your account please enter your password.<br/>
 <span style="color: red"><b>New recovery key cost {{ setting('core.account_generate_new_reckey_price') }} Premium Points.</span> You have {{ points }} premium points. You will receive e-mail with this recovery key.</b><br/>
 <form action="{{ getLink('account/register/new') }}" method="post">
+	{{ csrf() }}
 	<input type="hidden" name="registeraccountsave" value="1">
 	<div class="TableContainer" >
 		<table class="Table1" cellpadding="0" cellspacing="0">
@@ -47,6 +48,7 @@ To generate new recovery key for your account please enter your password.<br/>
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
 					<form action="{{ getLink('account/manage') }}" method="post">
+						{{ csrf() }}
 						<tr>
 							<td style="border:0px;">
 								{{ include('buttons.back.html.twig') }}

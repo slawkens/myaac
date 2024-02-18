@@ -2,7 +2,7 @@
 
 $query = $db->query("SELECT `id` FROM `" . TABLE_PREFIX . "pages` WHERE `name` LIKE " . $db->quote('rules_on_the_page') . " LIMIT 1;");
 if($query->rowCount() === 0) {
-	$db->exec("INSERT INTO `myaac_pages` (`id`, `name`, `title`, `body`, `date`, `player_id`, `php`, `enable_tinymce`, `access`, `hidden`) VALUES
+	$db->exec("INSERT INTO `myaac_pages` (`id`, `name`, `title`, `body`, `date`, `player_id`, `php`, `enable_tinymce`, `access`, `hide`) VALUES
 	(null, 'rules_on_the_page', 'Rules', '1. Names
 a) Names which contain insulting (e.g. \"Bastard\"), racist (e.g. \"Nigger\"), extremely right-wing (e.g. \"Hitler\"), sexist (e.g. \"Bitch\") or offensive (e.g. \"Copkiller\") language.
 b) Names containing parts of sentences (e.g. \"Mike returns\"), nonsensical combinations of letters (e.g. \"Fgfshdsfg\") or invalid formattings (e.g. \"Thegreatknight\").
@@ -27,5 +27,5 @@ a) Excessive killing of characters who are not marked with a \"skull\" on worlds
 
 A violation of the Tibia Rules may lead to temporary banishment of characters and accounts. In severe cases removal or modification of character skills, attributes and belongings, as well as the permanent removal of accounts without any compensation may be considered. The sanction is based on the seriousness of the rule violation and the previous record of the player. It is determined by the gamemaster imposing the banishment.
 
-These rules may be changed at any time. All changes will be announced on the official website.', 0, 1, 0, 0, 1, 0);");
+These rules may be changed at any time. All changes will be announced on the official website.', 0, 1, 0, 0, 0, 0);");
 }

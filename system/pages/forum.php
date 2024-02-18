@@ -8,6 +8,9 @@
  * @copyright 2021 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Forum;
+
 defined('MYAAC') or exit;
 
 $ret = require __DIR__ . '/forum/base.php';
@@ -50,7 +53,7 @@ foreach($sections as $id => $section)
 			'link' => getForumBoardLink($id),
 			'name' => $section['name'],
 			'description' => $section['description'],
-			'hidden' => $section['hidden'],
+			'hide' => $section['hide'],
 			'posts' => isset($counters[$id]['posts']) ? $counters[$id]['posts'] : 0,
 			'threads' => isset($counters[$id]['threads']) ? $counters[$id]['threads'] : 0,
 			'last_post' => array(

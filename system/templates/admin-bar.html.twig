@@ -98,6 +98,7 @@ html { margin-top: 32px !important; }
 			<div class="dropdown-content">
 				<a href="{{ constant('ADMIN_URL') }}?p=news&action=new">News</a>
 				<a href="{{ constant('ADMIN_URL') }}?p=pages&action=new">Page</a>
+				<a href="{{ constant('ADMIN_URL') }}?p=changelog&action=new">Changelog</a>
 			</div>
 		</li>
 		<li>
@@ -106,9 +107,11 @@ html { margin-top: 32px !important; }
 			</a>
 		</li>
 		<li>
-			<a class="ab-item" href="{{ constant('ADMIN_URL') }}?p=dashboard&clear_cache">
-				Clear Cache
-			</a>
+			<form method="post" action="{{ constant('ADMIN_URL') }}?p=dashboard">
+				{{ csrf() }}
+				<input type="hidden" name="clear_cache" value="1" />
+				<a class="ab-item" href="#" onclick="confirm('Are you sure that you want to clear cache?') && $(this).closest('form').submit()" title="Clear Cache">Clear Cache</a>
+			</form>
 		</li>
 	</ul>
 	<ul class="ab-top-secondary">

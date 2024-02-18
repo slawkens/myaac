@@ -12,6 +12,8 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
+use MyAAC\Cache\Cache;
+
 /**
  * MySQL connection interface.
  *
@@ -26,6 +28,8 @@ class OTS_DB_MySQL extends OTS_Base_DB
 {
 	private $has_table_cache = array();
 	private $has_column_cache = array();
+
+	private $clearCacheAfter = false;
 /**
  * Creates database connection.
  *
@@ -94,7 +98,8 @@ class OTS_DB_MySQL extends OTS_Base_DB
         }
 
 		global $config;
-		if(class_exists('Cache') && ($cache = Cache::getInstance()) && $cache->enabled()) {
+		$cache = Cache::getInstance();
+		if($cache->enabled()) {
 			$tmp = null;
 			$need_revalidation = true;
 			if($cache->fetch('database_checksum', $tmp) && $tmp) {
@@ -117,12 +122,15 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			}
 		}
 
+		$driverAttributes = []; // debugbar dont like persistent connection
+		if (config('env') !== 'dev' && !getBoolean(config('enable_debugbar'))) {
+			$driverAttributes[PDO::ATTR_PERSISTENT] = $params['persistent'];
+		}
+
 		if(isset($params['socket'][0])) {
 			$dns[] = 'unix_socket=' . $params['socket'];
 
-			parent::__construct('mysql:' . implode(';', $dns), $user, $password, array(
-				PDO::ATTR_PERSISTENT => $params['persistent']
-			));
+			parent::__construct('mysql:' . implode(';', $dns), $user, $password, $driverAttributes);
 
 			return;
 		}
@@ -135,19 +143,25 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			$dns[] = 'port=' . $params['port'];
 		}
 
-		parent::__construct('mysql:' . implode(';', $dns), $user, $password, array(
-			PDO::ATTR_PERSISTENT => $params['persistent']
-		));
+		parent::__construct('mysql:' . implode(';', $dns), $user, $password, $driverAttributes);
     }
 
 	public function __destruct()
     {
 		global $config;
 
-	    if(class_exists('Cache') && ($cache = Cache::getInstance()) && $cache->enabled()) {
-			$cache->set('database_tables', serialize($this->has_table_cache), 3600);
-			$cache->set('database_columns', serialize($this->has_column_cache), 3600);
-			$cache->set('database_checksum', serialize(sha1($config['database_host'] . '.' . $config['database_name'])), 3600);
+		$cache = Cache::getInstance();
+		if($cache->enabled()) {
+			if ($this->clearCacheAfter) {
+				$cache->delete('database_tables');
+				$cache->delete('database_columns');
+				$cache->delete('database_checksum');
+			}
+			else {
+				$cache->set('database_tables', serialize($this->has_table_cache), 3600);
+				$cache->set('database_columns', serialize($this->has_column_cache), 3600);
+				$cache->set('database_checksum', serialize(sha1($config['database_host'] . '.' . $config['database_name'])), 3600);
+			}
 		}
 
 		if($this->logged) {
@@ -234,6 +248,11 @@ class OTS_DB_MySQL extends OTS_Base_DB
 				$this->hasColumnInternal($explode[0], $explode[1]);
 			}
 		}
+	}
+
+	public function setClearCacheAfter($clearCache)
+	{
+		$this->clearCacheAfter = $clearCache;
 	}
 }
 

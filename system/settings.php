@@ -10,6 +10,9 @@
  * Additional options
  *  - for number: min, max, step
  */
+
+use MyAAC\Settings;
+
 return [
 	'name' => 'MyAAC',
 	'settings' =>
@@ -45,7 +48,7 @@ return [
 			'name' => 'Date Timezone',
 			'type' => 'options',
 			'options' => '$timezones',
-			'desc' => 'Timezone of the server, more info at http://php.net/manual/en/timezones.php',
+			'desc' => 'Timezone of the server, more info at https://php.net/manual/en/timezones.php',
 			'default' => 'Europe/Warsaw',
 		],
 		'friendly_urls' => [
@@ -64,6 +67,12 @@ return [
 			'desc' => 'gzip page content before sending it to the browser, uses less bandwidth but more cpu cycles',
 			'default' => false,
 			'is_config' => true,
+		],
+		'csrf_protection' => [
+			'name' => 'CSRF protection',
+			'type' => 'boolean',
+			'desc' => 'Its recommended to keep it enabled. Disable only if you know what you are doing.',
+			'default' => true,
 		],
 		'google_analytics_id' => [
 			'name' => 'Google Analytics ID',
@@ -180,7 +189,7 @@ return [
 		'cache_engine' => [
 			'name' => 'Cache Engine',
 			'type' => 'options',
-			'options' => ['auto' => 'Auto', 'file' => 'Files', 'apc' => 'APC', 'apcu' => 'APCu', 'eaccelerator' => 'eAccelerator', 'disable' => 'Disable'],
+			'options' => ['auto' => 'Auto', 'file' => 'Files', 'apc' => 'APC', 'apcu' => 'APCu', 'disable' => 'Disable'],
 			'desc' => 'Auto is most reasonable. It will detect the best cache engine',
 			'default' => 'auto',
 			'is_config' => true,
@@ -283,7 +292,7 @@ return [
 		'vocations' => [
 			'name' => 'Vocation Names',
 			'type' => 'textarea',
-			'desc' => 'Separated by comma ,',
+			'desc' => 'Separated by comma. Must be in the same order as in vocations.xml, starting with id: 0.',
 			'default' => 'None, Sorcerer, Druid, Paladin, Knight, Master Sorcerer, Elder Druid,Royal Paladin, Elite Knight',
 			'callbacks' => [
 				'get' => function ($value) {
@@ -611,7 +620,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Account Login By E-Mail',
 			'type' => 'boolean',
 			'desc' => "use email instead of Account Name like in latest Tibia",
-			'default' => true,
+			'default' => false,
 		],
 		'account_login_by_email_fallback' => [
 			'name' => 'Account Login By E-Mail Fallback',
@@ -715,7 +724,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Towns List',
 			'type' => 'text',
 			'desc' => "Towns List used when creating character separated by comma (,). Won't be displayed if there is only one item (rookgaard for example)",
-			'default' => '1,2',
+			'default' => '1',
 			'callbacks' => [
 				'get' => function ($value) {
 					return array_map('trim', explode(',', $value));
@@ -933,7 +942,7 @@ Sent by MyAAC,<br/>
 		'news_date_format' => [
 			'name' => 'News Date Format',
 			'type' => 'text',
-			'desc' => 'Check php manual date() function for more info about this',
+			'desc' => 'Check php manual date() - https://www.php.net/manual/de/datetime.format.php function for more info about this',
 			'default' => 'j.n.Y',
 		],
 		[
@@ -1256,6 +1265,28 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
+			'title' => 'Monsters Page'
+		],
+		'monsters_images_preview' => [
+			'name' => 'Monsters Images Preview',
+			'type' => 'boolean',
+			'desc' => 'Set to yes to allow picture previews for creatures',
+			'default' => false,
+		],
+		'monsters_items_url' => [
+			'name' => 'Monsters Items URL',
+			'type' => 'text',
+			'desc' => 'Set to website which shows details about items',
+			'default' => 'https://tibia.fandom.com/wiki/',
+		],
+		'monsters_loot_percentage' => [
+			'name' => 'Monsters Loot Percentage',
+			'type' => 'boolean',
+			'desc' => 'Set to yes to show the loot tooltip percent',
+			'default' => true,
+		],
+		[
+			'type' => 'section',
 			'title' => 'Bans Page'
 		],
 		'bans_per_page' => [
@@ -1388,24 +1419,6 @@ Sent by MyAAC,<br/>
 			'desc' => '',
 			'default' => '.gif',
 		],
-		'monsters_images_preview' => [
-			'name' => 'Monsters Images Preview',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to allow picture previews for creatures',
-			'default' => false,
-		],
-		'monsters_items_url' => [
-			'name' => 'Monsters Items URL',
-			'type' => 'text',
-			'desc' => 'Set to website which shows details about items',
-			'default' => 'https://tibia.fandom.com/wiki/',
-		],
-		'monsters_loot_percentage' => [
-			'name' => 'Monsters Items URL',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to show the loot tooltip percent',
-			'default' => true,
-		],
 		// this is hidden, because no implemented yet
 		'multiworld' => [
 			'hidden' => true,
@@ -1452,7 +1465,7 @@ Sent by MyAAC,<br/>
 			'max' => 10, // more than 10 seconds waiting makes no sense
 			'step' => 0.1,
 			'desc' => 'How long to wait for the initial response from the server',
-			'default' => 2.0,
+			'default' => 1.0,
 			'show_if' => [
 				'status_enabled', '=', 'true',
 			]
@@ -1582,7 +1595,13 @@ Sent by MyAAC,<br/>
 		'beforeSave' => function(&$settings, &$values) {
 			global $config;
 
-			$configToSave = [];
+			$configOriginal = $config;
+			unset($config);
+
+			$config = [];
+			require BASE . 'config.local.php';
+
+			$configToSave = $config;
 
 			$server_path = '';
 			$database = [];
@@ -1619,7 +1638,7 @@ Sent by MyAAC,<br/>
 			// if fail - revert the setting and inform the user
 			if (!file_exists($server_path . 'config.lua')) {
 				error('Server Path is invalid - cannot find config.lua in the directory. Setting have been reverted.');
-				$configToSave['server_path'] = $config['server_path'];
+				$configToSave['server_path'] = $configOriginal['server_path'];
 			}
 
 			// test database connection
@@ -1627,12 +1646,17 @@ Sent by MyAAC,<br/>
 			if ($database['database_overwrite'] && !Settings::testDatabaseConnection($database)) {
 				foreach ($database as $key => $value) {
 					if (!in_array($key, ['database_log', 'database_persistent'])) { // ignore these two
-						$configToSave[$key] = $config[$key];
+						$configToSave[$key] = $configOriginal[$key];
 					}
 				}
 			}
 
-			return Settings::saveConfig($configToSave, BASE . 'config.local.php');
+			$success = Settings::saveConfig($configToSave, BASE . 'config.local.php');
+			if (!$success) {
+				error('There has been error saving the config.local.php - probably problem with permissions.');
+			}
+
+			return $success;
 		},
 	],
 ];

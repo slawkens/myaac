@@ -9,6 +9,7 @@
  */
 
 use MyAAC\Models\Pages;
+use MyAAC\Plugins;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
@@ -79,7 +80,7 @@ $ignore = false;
 
 /** @var boolean $logged */
 /** @var OTS_Account $account_logged */
-$logged_access = 1;
+$logged_access = 0;
 if($logged && $account_logged && $account_logged->isLoaded()) {
 	$logged_access = $account_logged->getAccess();
 }
@@ -211,7 +212,7 @@ else {
 			$_GET = array_merge($_GET, $vars);
 			extract($vars);
 
-			if (strpos($path, '__database__/') !== false) {
+			if (str_contains($path, '__database__/')) {
 				$pageName = str_replace('__database__/', '', $path);
 
 				$success = false;
@@ -220,15 +221,14 @@ else {
 					$content .= $tmp_content;
 					if (hasFlag(FLAG_CONTENT_PAGES) || superAdmin()) {
 						$pageInfo = getCustomPageInfo($pageName);
-						$content = $twig->render('admin.pages.links.html.twig', array(
-								'page' => array('id' => $pageInfo !== null ? $pageInfo['id'] : 0, 'hidden' => $pageInfo !== null ? $pageInfo['hidden'] : '0')
-							)) . $content;
+						$content = $twig->render('admin.links.html.twig', ['page' => 'pages', 'id' => $pageInfo !== null ? $pageInfo['id'] : 0, 'hide' => $pageInfo !== null ? $pageInfo['hide'] : '0']
+							) . $content;
 					}
 
 					$page = $pageName;
 					$file = false;
 				}
-			} else if (strpos($path, '__redirect__/') !== false) {
+			} else if (str_contains($path, '__redirect__/')) {
 				$path = str_replace('__redirect__/', '', $path);
 				header('Location: ' . BASE_URL . $path);
 				exit;
@@ -243,11 +243,15 @@ else {
 				if (false !== $pos = strpos($uri, '?')) {
 					$uri = substr($uri, 0, $pos);
 				}
-				if (0 === strpos($uri, '/')) {
+				if (str_starts_with($uri, '/')) {
 					$uri = str_replace_first('/', '', $uri);
 				}
 
 				$page = $uri;
+				if (empty($page)) {
+					$page = 'news';
+				}
+
 				$file = BASE . $path;
 			}
 
@@ -279,7 +283,8 @@ ob_end_clean();
 $hooks->trigger(HOOK_AFTER_PAGE);
 
 if(!isset($title)) {
-	$title = ucfirst($page);
+	$title = str_replace('index.php/', '', $page);
+	$title = ucfirst($title);
 }
 
 if(setting('core.backward_support')) {
@@ -296,6 +301,7 @@ function getDatabasePages($withHidden = false): array
 		$q->isPublic();
 	})->get('name');
 
+	$ret = [];
 	foreach($pages as $page) {
 		$ret[] = $page->name;
 	}

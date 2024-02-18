@@ -1,6 +1,6 @@
 <?php
 
-return [
+$menus = [
 	['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'order' => 10, 'link' => 'dashboard'],
 	['name' => 'Settings', 'icon' => 'edit', 'order' => 19, 'link' =>
 		require ADMIN . 'includes/settings_menus.php'

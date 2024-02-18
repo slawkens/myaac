@@ -7,11 +7,15 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Plugins;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Plugin manager';
-$use_datatable = true;
 
-require_once LIBS . 'plugins.php';
+csrfProtect();
+
+$use_datatable = true;
 
 if (!getBoolean(setting('core.admin_plugins_manage_enable'))) {
 	warning('Plugin installation and management is disabled in Settings.<br/>If you wish to enable, go to Settings and enable <strong>Enable Plugins Manage</strong>.');
@@ -19,23 +23,23 @@ if (!getBoolean(setting('core.admin_plugins_manage_enable'))) {
 else {
 	$twig->display('admin.plugins.form.html.twig');
 
-	if (isset($_REQUEST['uninstall'])) {
-		$uninstall = $_REQUEST['uninstall'];
+	if (isset($_POST['uninstall'])) {
+		$uninstall = $_POST['uninstall'];
 
 		if (Plugins::uninstall($uninstall)) {
 			success('Successfully uninstalled plugin ' . $uninstall);
 		} else {
 			error('Error while uninstalling plugin ' . $uninstall . ': ' . Plugins::getError());
 		}
-	} else if (isset($_REQUEST['enable'])) {
-		$enable = $_REQUEST['enable'];
+	} else if (isset($_POST['enable'])) {
+		$enable = $_POST['enable'];
 		if (Plugins::enable($enable)) {
 			success('Successfully enabled plugin ' . $enable);
 		} else {
 			error('Error while enabling plugin ' . $enable . ': ' . Plugins::getError());
 		}
-	} else if (isset($_REQUEST['disable'])) {
-		$disable = $_REQUEST['disable'];
+	} else if (isset($_POST['disable'])) {
+		$disable = $_POST['disable'];
 		if (Plugins::disable($disable)) {
 			success('Successfully disabled plugin ' . $disable);
 		} else {
@@ -116,7 +120,7 @@ foreach (get_plugins(true) as $plugin) {
 	if (!$plugin_info) {
 		warning('Cannot load plugin info ' . $plugin . '.json');
 	} else {
-		$disabled = (strpos($plugin, 'disabled.') !== false);
+		$disabled = (str_contains($plugin, 'disabled.'));
 		$pluginOriginal = ($disabled ? str_replace('disabled.', '', $plugin) : $plugin);
 		$plugins[] = array(
 			'name' => $plugin_info['name'] ?? '',

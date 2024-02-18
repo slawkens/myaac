@@ -10,7 +10,9 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Dashboard';
 
-if (isset($_GET['clear_cache'])) {
+csrfProtect();
+
+if (isset($_POST['clear_cache'])) {
 	if (clearCache()) {
 		success('Cache cleared.');
 	} else {
@@ -18,7 +20,7 @@ if (isset($_GET['clear_cache'])) {
 	}
 }
 
-if (isset($_GET['maintenance'])) {
+if (isset($_POST['maintenance'])) {
 	$message = (!empty($_POST['message']) ? $_POST['message'] : null);
 	$_status = (isset($_POST['status']) && $_POST['status'] == 'true');
 	$_status = ($_status ? '0' : '1');

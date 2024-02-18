@@ -19,13 +19,17 @@
 				<tr>
 					<td>
 						{% if plugin.enabled %}
-						<a href="?p=plugins&disable={{ plugin.file }}" class="btn btn-success" onclick="return confirm('Are you sure you want to disable plugin {{ plugin.name }}?');" title="Disable">
-							<i class="fas fa-check"></i> Enabled
-						</a>
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="disable" value="{{ plugin.file }}" />
+								<button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to disable plugin {{ plugin.name }}?');" title="Disable"><i class="fas fa-check"></i> Enabled</button>
+							</form>
 						{% else %}
-							<a href="?p=plugins&enable={{ plugin.file }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to enable plugin {{ plugin.name }}?');" title="Enable">
-								<i class="fas fa-ban"></i> Disabled
-							</a>
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="enable" value="{{ plugin.file }}" />
+								<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to enable plugin {{ plugin.name }}?');" title="Enable"><i class="fas fa-ban"></i> Disabled</button>
+							</form>
 						{% endif %}
 					</td>
 					<td><b>{{ plugin.name }}</b><br>
@@ -38,9 +42,11 @@
 					<td>{{ plugin.file }}.json</td>
 					<td>
 						{% if plugin.uninstall %}
-							<a href="?p=plugins&uninstall={{ plugin.file }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to uninstall {{ plugin.name }}?');" title="Uninstall">
-								<i class="fas fa-trash"></i>
-							</a>
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="uninstall" value="{{ plugin.file }}" />
+								<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to uninstall {{ plugin.name }}?');" title="Uninstall"><i class="fas fa-trash"></i></button>
+							</form>
 						{% endif %}
 					</td>
 				</tr>

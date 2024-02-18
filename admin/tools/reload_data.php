@@ -22,7 +22,10 @@
  * @copyright 2020 MyAAC
  * @link      https://my-aac.org
  */
-define('MYAAC_ADMIN', true);
+
+use MyAAC\DataLoader;
+
+const MYAAC_ADMIN = true;
 
 require '../../common.php';
 require SYSTEM . 'functions.php';
@@ -34,10 +37,8 @@ if (!admin())
 
 ini_set('max_execution_time', 300);
 ob_implicit_flush();
-ob_end_flush();
+@ob_end_flush();
 header('X-Accel-Buffering: no');
-
-require LIBS . 'DataLoader.php';
 
 require LOCALE . 'en/main.php';
 require LOCALE . 'en/install.php';

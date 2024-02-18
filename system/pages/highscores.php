@@ -9,6 +9,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Cache\Cache;
 use MyAAC\Models\Player;
 use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
@@ -51,9 +52,6 @@ if($settingHighscoresVocationBox && $vocation !== 'all')
 		}
 	}
 }
-
-const SKILL_FRAGS = -1;
-const SKILL_BALANCE = -2;
 
 $skill = POT::SKILL__LEVEL;
 if(is_numeric($list))
@@ -135,6 +133,7 @@ if($settingHighscoresOutfit) {
 $configHighscoresPerPage = setting('core.highscores_per_page');
 $limit = $configHighscoresPerPage + 1;
 
+$highscores = [];
 $needReCache = true;
 $cacheKey = 'highscores_' . $skill . '_' . $vocation . '_' . $page . '_' . $configHighscoresPerPage;
 
@@ -158,7 +157,7 @@ $query->join('accounts', 'accounts.id', '=', 'players.account_id')
 	->selectRaw('accounts.country, players.id, players.name, players.account_id, players.level, players.vocation' . $outfit . $promotion)
 	->orderByDesc('value');
 
-if (!isset($highscores) || empty($highscores)) {
+if (empty($highscores)) {
 	if ($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 		if ($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
 			$skill_ids = array(
@@ -201,16 +200,16 @@ if (!isset($highscores) || empty($highscores)) {
 			$list = 'experience';
 		}
 	}
+
+	$highscores = $query->get()->map(function($row) {
+		$tmp = $row->toArray();
+		$tmp['online'] = $row->online_status;
+		$tmp['vocation'] = $row->vocation_name;
+		unset($tmp['online_table']);
+
+		return $tmp;
+	})->toArray();
 }
-
-$highscores = $query->get()->map(function($row) {
-	$tmp = $row->toArray();
-	$tmp['online'] = $row->online_status;
-	$tmp['vocation'] = $row->vocation_name;
-	unset($tmp['online_table']);
-
-	return $tmp;
-})->toArray();
 
 if ($cache->enabled() && $needReCache) {
 	$cache->set($cacheKey, serialize($highscores), setting('core.highscores_cache_ttl') * 60);

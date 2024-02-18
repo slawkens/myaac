@@ -10,5 +10,5 @@ class FAQ extends Model {
 
 	public $timestamps = false;
 
-	protected $fillable = ['question', 'answer', 'ordering', 'hidden'];
+	protected $fillable = ['question', 'answer', 'ordering', 'hide'];
 }
