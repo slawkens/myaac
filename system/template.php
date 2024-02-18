@@ -171,8 +171,6 @@ function get_template_menus() {
 	$new_menus = array();
 	/**
 	 * @var array $configMenuCategories
-	 * @var int $id
-	 * @var array $options
 	 */
 	$configMenuCategories = config('menu_categories');
 	if($configMenuCategories === null) {

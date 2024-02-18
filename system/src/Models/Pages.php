@@ -3,6 +3,13 @@
 namespace MyAAC\Models;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $title
+ * @property int $php
+ * @property int $hide
+ */
 class Pages extends Model {
 
 	protected $table = TABLE_PREFIX . 'pages';

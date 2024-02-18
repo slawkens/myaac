@@ -117,6 +117,9 @@ if(isset($todo) && $todo == 'save')
 	$ranks = $new_guild->getGuildRanksList();
 	$ranks->orderBy('level', POT::ORDER_DESC);
 	foreach($ranks as $rank) {
+		/**
+		 * @var OTS_GuildRank $rank
+		 */
 		if($rank->getLevel() == 3) {
 			$player->setRank($rank);
 		}
