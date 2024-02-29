@@ -16,7 +16,7 @@ $title = 'Notepad';
 csrfProtect();
 
 /**
- * @var $account_logged OTS_Account
+ * @var OTS_Account $account_logged
  */
 $_content = '';
 $notepad = ModelsNotepad::where('account_id', $account_logged->getId())->first();

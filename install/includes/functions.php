@@ -11,13 +11,13 @@ function query($query)
 		error($error_);
 		$error = true;
 	}
-	
+
 	return !$error;
 }
 
 // define php version id if its not already
 if(!defined('PHP_VERSION_ID')) {
-	$version = explode('.', PHP_VERSION);
+	$version = array_map('intval', explode('.', PHP_VERSION));
 
 	define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
 }

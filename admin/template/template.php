@@ -6,7 +6,7 @@
 	<?php echo template_header(true); ?>
 	<title><?php echo (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/ext/admin-lte/css/adminlte.min.css">
+	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/adminlte.min.css">
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/font-awesome.min.css">
 	<?php if (isset($use_datatable)) { ?>
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>tools/css/datatables.bs.min.css">
@@ -197,7 +197,7 @@ if ($logged && admin()) {
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.bs.min.js"></script>
 <?php } ?>
-<script src="<?php echo BASE_URL; ?>tools/ext/admin-lte/js/adminlte.min.js"></script>
+<script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
 <?php $hooks->trigger(HOOK_ADMIN_BODY_END); ?>
 </body>
 </html>

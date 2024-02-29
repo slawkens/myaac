@@ -102,6 +102,9 @@ if($status_interval && $status_timeout < $status_interval) {
 	$status_timeout = $status_interval;
 }
 
+/**
+ * @var int $status_timeout
+ */
 if($status['lastCheck'] + $status_timeout < time()) {
 	updateStatus();
 }

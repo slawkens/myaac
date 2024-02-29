@@ -67,6 +67,9 @@ if(isset($_GET['title'], $_GET['body'], $_GET['player_id'], $_GET['category'], $
 		);
 
 		foreach($tickers as &$ticker) {
+			/**
+			 * @var array $ticker
+			 */
 			$ticker['icon'] = $categories[$ticker['category']]['icon_id'];
 			$ticker['body_short'] = short_text(strip_tags($ticker['body']), 100);
 			$ticker['hidden'] = $ticker['hide'];

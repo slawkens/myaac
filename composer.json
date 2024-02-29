@@ -19,7 +19,8 @@
     },
     "require-dev": {
         "filp/whoops": "^2.15",
-        "maximebf/debugbar": "dev-master"
+        "maximebf/debugbar": "dev-master",
+        "phpstan/phpstan": "^1.10"
     },
     "autoload": {
         "psr-4": {
