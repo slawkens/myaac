@@ -1,40 +1,18 @@
 To generate recovery key for your account please enter your password.<br/><br/>
-<form action="{{ getLink('account/register') }}" method="post">
-	{{ csrf() }}
-<input type="hidden" name="registeraccountsave" value="1"/>
-<div class="TableContainer">
-	<table class="Table1" cellpadding="0" cellspacing="0">
-		<div class="CaptionContainer">
-			<div class="CaptionInnerContainer">
-				<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
-				<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
-				<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
-				<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
-				<div class="Text" >Generate recovery key</div>
-				<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
-				<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);"></span>
-				<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
-				<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
-			</div>
-		</div>
-		<tr>
-			<td>
-				<div class="InnerTableContainer">
-					<table style="width:100%;" >
-						<tr>
-							<td class="LabelV">
-								<span>Password:</span>
-							</td>
-							<td>
-								<input type="password" name="reg_password" size="30" maxlength="29" autofocus/>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</td>
-		</tr>
-	</table>
-</div>
+{% set title = 'Generate recovery key' %}
+{% set content %}
+<table style="width:100%;" >
+	<tr>
+		<td class="LabelV">
+			<span>Password:</span>
+		</td>
+		<td>
+			<input form="form" type="password" name="reg_password" size="30" maxlength="29" autofocus/>
+		</td>
+	</tr>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
 <br/>
 <table style="width:100%">
 	<tr align="center">
@@ -42,12 +20,15 @@ To generate recovery key for your account please enter your password.<br/><br/>
 			<table border="0" cellspacing="0" cellpadding="0" >
 				<tr>
 					<td style="border:0px;">
-						{{ include('buttons.submit.html.twig') }}
+						<form id="form" action="{{ getLink('account/register') }}" method="post">
+							{{ csrf() }}
+							<input type="hidden" name="registeraccountsave" value="1"/>
+							{{ include('buttons.submit.html.twig') }}
+						</form>
 					</td>
 				<tr>
 			</table>
 		</td>
-</form>
 		<td>
 			<table border="0" cellspacing="0" cellpadding="0">
 				<form action="{{ getLink('account/manage') }}" method="post">

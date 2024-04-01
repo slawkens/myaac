@@ -54,41 +54,25 @@ Here you can change names of ranks, delete and add ranks, pass leadership to oth
 	</tr>
 </table>
 <br/>
-<div class="TableContainer">
-	<table class="Table1" cellpadding="0" cellspacing="0">
-		<div class="CaptionContainer">
-			<div class="CaptionInnerContainer">
-				<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
-				<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
-				<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>        <span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
-				<div class="Text" >Add new rank</div>
-				<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);"></span>
-				<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
-				<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
-				<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);"></span>
-			</div>
-		</div>
-		<tr>
-			<td>
-				<div class="InnerTableContainer">
-					<table style="width:100%;">
-						<tr>
-							<td width="120" valign="top">New rank name:</td>
-							<td>
-								<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=add_rank" method="post">
-									{{ csrf() }}
-									<input type="text" name="rank_name" size="20"/>
-									<input type="submit" value="Add"/>
-								</form>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</td>
-		</tr>
-	</table>
-</div>
-<div style="text-align:center"><h3>Change rank names and levels</h3></div>
+{% set title = 'Add new rank' %}
+{% set content %}
+<table style="width:100%;">
+	<tr>
+		<td width="120" valign="top">New rank name:</td>
+		<td>
+			<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=add_rank" method="post">
+				{{ csrf() }}
+				<input type="text" name="rank_name" size="20"/>
+				<input type="submit" value="Add"/>
+			</form>
+		</td>
+	</tr>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+
+{% set title = 'Change rank names and levels' %}
+{% set content %}
 <form action="{{ getLink('guilds') }}?action=save_ranks&guild={{ guild.getName() }}" method="post">
 	{{ csrf() }}
 	<table style="clear:both" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -146,6 +130,7 @@ Here you can change names of ranks, delete and add ranks, pass leadership to oth
 		</tr>
 	</table>
 </form>
+
 <h3>Ranks info:</h3>
 <b>0. Owner of guild</b> - it's highest rank, only one player in guild may has this rank. Player with this rank can:
 <li>Invite/Cancel Invitation/Kick Player from guild</li>
@@ -155,15 +140,19 @@ Here you can change names of ranks, delete and add ranks, pass leadership to oth
 <li>Change {% if constant('MOTD_EXISTS') %}MOTD, {% endif %}logo and description of guild</li>
 <hr/>
 <b>1. Leader</b> - it's second rank in guild. Player with this rank can:
-<li>Invite/Cancel Invitation/Kick Player from guild (only with lower rank than his)
-<li>Change ranks of players with lower rank level ("vice leader", "member") in guild<hr>
+<li>Invite/Cancel Invitation/Kick Player from guild (only with lower rank than his)</li>
+<li>Change ranks of players with lower rank level ("vice leader", "member") in guild</li>
+<hr>
 <b>2. Vice Leader</b> - it's third rank in guild. Player with this rank can:
-<li>Invite/Cancel Invitation
-<li>Change ranks of players with lower rank level ("member") in guild<hr>
+<li>Invite/Cancel Invitation</li>
+<li>Change ranks of players with lower rank level ("member") in guild</li>
+<hr>
 <b>3. Member</b> - it's lowest rank in guild. Player with this rank can:
-<li>Be a member of guild
+<li>Be a member of guild</li>
 <br/>
-<div style="text-align:center">
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+	<div style="text-align:center">
 	<form action="{{ getLink('guilds') }}?action=show&guild={{ guild.getName() }}" method="post">
 		{{ csrf() }}
 		{{ include('buttons.back.html.twig') }}
