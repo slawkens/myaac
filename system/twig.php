@@ -71,8 +71,8 @@ $function = new TwigFunction('generateLink', function ($s, $n, $b = false) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getPlayerLink', function ($s, $p = true) {
-	return getPlayerLink($s, $p);
+$function = new TwigFunction('getPlayerLink', function ($s, $p = true, $colored = false) {
+	return getPlayerLink($s, $p, $colored);
 });
 $twig->addFunction($function);
 
