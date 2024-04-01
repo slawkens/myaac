@@ -1229,6 +1229,13 @@ class OTS_Player extends OTS_Row_DAO
         $this->data['direction'] = (int) $direction;
     }
 
+	public function getOutfit(): string
+	{
+		$hasLookAddons = $this->db->hasColumn('players', 'lookaddons');
+
+		return setting('core.outfit_images_url') . '?id=' . $this->getLookType() . ($hasLookAddons ? '&addons=' . $this->getLookAddons() : '') . '&head=' . $this->getLookHead() . '&body=' . $this->getLookBody() . '&legs=' . $this->getLookLegs() . '&feet=' . $this->getLookFeet();
+	}
+
 /**
  * Body color.
  *
