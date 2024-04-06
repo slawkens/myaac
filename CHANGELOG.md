@@ -22,7 +22,7 @@ Minimum PHP version for this release is 8.1.
   * list of open source libraries used in project page
 * auto-loading of themes, commands & pages from plugins/ folder. You need just to place them in correct folder and they will be loaded automatically - this allows better customization, without interfering with core AAC folders. This will allow in the future automatic updates for plugins as well the AAC as whole.
 * config.php moved to Admin Panel -> Settings page
-* new console script: aac (comes from MyAAC) - using symfony/console
+* new console script: aac - using symfony/console
   * usage: `php aac` (will list all commands by default)
   * example: `php aac cache:clear`
   * example: `php aac plugin:install theme-example.zip`
@@ -46,7 +46,7 @@ Minimum PHP version for this release is 8.1.
 * phpdebug bar (http://phpdebugbar.com/). Activated if env == 'dev', can be also activated in production by enabling "enable_debugbar" in local config
 
 ### Changed
-* Composer is now used for external libraries like: Twig, PHPMailer, fast-route etc.
+* Composer and NPM is now used for external libraries like: Twig, PHPMailer, fast-route, jquery, bootstrap etc.
 * mail support is disabled on fresh install, can be manually enabled by user
 * disable add php pages in admin panel for security. Option to disable plugins upload
 * visitors counter shows now user browser, and also if its bot
