@@ -46,7 +46,7 @@ Minimum PHP version for this release is 8.1.
 * phpdebug bar (http://phpdebugbar.com/). Activated if env == 'dev', can be also activated in production by enabling "enable_debugbar" in local config
 
 ### Changed
-* Composer and NPM is now used for external libraries like: Twig, PHPMailer, fast-route, jquery, bootstrap etc.
+* Composer and NPM is now used for external libraries like: Twig, PHPMailer, fast-route, jQuery, Bootstrap etc.
 * mail support is disabled on fresh install, can be manually enabled by user
 * disable add php pages in admin panel for security. Option to disable plugins upload
 * visitors counter shows now user browser, and also if its bot
