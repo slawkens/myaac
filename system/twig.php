@@ -31,6 +31,8 @@ if($dev_mode) {
 }
 unset($dev_mode);
 
+$twig->addExtension(new MyAAC\Twig\Extension\TypeCastingExtension());
+
 $filter = new TwigFilter('timeago', function ($datetime) {
 
 	$time = time() - strtotime($datetime);
