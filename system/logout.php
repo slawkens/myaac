@@ -22,11 +22,5 @@ if(isset($account_logged) && $account_logged->isLoaded()) {
 
 		$logged = false;
 		unset($account_logged);
-
-		if(isset($_REQUEST['redirect']))
-		{
-			header('Location: ' . urldecode($_REQUEST['redirect']));
-			exit;
-		}
 	}
 }
