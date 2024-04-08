@@ -42,12 +42,6 @@ if(ACTION === 'logout' && !isset($_REQUEST['account_login'])) {
 
 			$logged = false;
 			unset($account_logged);
-
-			if(isset($_REQUEST['redirect']))
-			{
-				header('Location: ' . urldecode($_REQUEST['redirect']));
-				exit;
-			}
 		}
 	}
 }

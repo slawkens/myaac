@@ -52,9 +52,16 @@ $errors = array();
 	{
 		$redirect = urldecode($_REQUEST['redirect']);
 
+		// should never happen, unless hacker modify the URL
+		if (strpos($_REQUEST['redirect'], BASE_URL) === false) {
+			error('Fatal error: Cannot redirect outside the website.');
+			return;
+		}
+
 		$twig->display('account.redirect.html.twig', array(
 			'redirect' => $redirect
 		));
+
 		return;
 	}
 
