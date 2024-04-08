@@ -24,6 +24,9 @@ if($dev_mode) {
 }
 unset($dev_mode);
 
+require LIBS . 'TwigTypeCastingExtension.php';
+$twig->addExtension(new MyAAC\Twig\Extension\TwigTypeCastingExtension());
+
 $function = new TwigFunction('getStyle', function ($i) {
 	return getStyle($i);
 });
