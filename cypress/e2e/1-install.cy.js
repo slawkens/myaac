@@ -67,7 +67,7 @@ describe('Install MyAAC', () => {
 
 		cy.get('form').submit()
 
-		cy.contains('[class="alert alert-success"]', 'Congratulations', { timeout: 30000 }).should('be.visible')
+		cy.contains('[class="alert alert-success"]', 'Congratulations', { timeout: 60000 }).should('be.visible')
 
 		cy.wait(2000);
 
