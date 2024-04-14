@@ -22,7 +22,7 @@ describe('Create Account Page', () => {
 		cy.get('#vocation1').check()
 		cy.get('#accept_rules').check()
 
-		cy.get('#createaccount').submit()
+		cy.get('#form').submit()
 
 		// no errors please
 		cy.contains('The Following Errors Have Occurred:').should('not.exist')
