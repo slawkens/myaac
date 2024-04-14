@@ -51,7 +51,7 @@ function getColorByPercent($percent)
 					if($logged)
 						echo $link.'?id='.$poll['id'];
 					else
-						echo getLink('account/manage') . '?redirect=' . BASE_URL . urlencode($link.'?id='.$poll['id']);
+						echo getLink('account/manage') . '?redirect=' . urlencode($link.'?id='.$poll['id']);
 
 					echo '">'.$poll['question'] . '</a>
 				</td>
@@ -80,7 +80,7 @@ function getColorByPercent($percent)
 					if($logged)
 						echo $link.'?id='.$poll['id'];
 					else
-						echo getLink('account/manage') . '?redirect=' . BASE_URL . urlencode($link.'?id='.$poll['id']);
+						echo getLink('account/manage') . '?redirect=' . urlencode($link.'?id='.$poll['id']);
 
 					echo '">'.$poll['question'] . '</a>
 				</td>

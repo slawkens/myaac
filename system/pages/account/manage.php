@@ -21,7 +21,7 @@ if(!$logged) {
 if(isset($_REQUEST['redirect']))
 {
 	$redirect = urldecode($_REQUEST['redirect']);
-	
+
 	// should never happen, unless hacker modify the URL
 	if (!str_contains($redirect, BASE_URL)) {
 		error('Fatal error: Cannot redirect outside the website.');
