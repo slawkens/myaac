@@ -23,12 +23,31 @@ class Plugins {
 
 		$routes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
+			//
+			// Get all plugins/*/pages/*.php pages
+			//
 			$pluginPages = glob(PLUGINS . $plugin['filename'] . '/pages/*.php');
 			foreach ($pluginPages as $file) {
 				$file = str_replace(PLUGINS, 'plugins/', $file);
 				$name = pathinfo($file, PATHINFO_FILENAME);
 
 				$routes[] = [['get', 'post'], $name, $file, 1000];
+			}
+
+			//
+			// Get all plugins/*/pages/subFolder/*.php pages
+			//
+			$pluginSubFolders = glob(PLUGINS . $plugin['filename'] . '/pages/*', GLOB_ONLYDIR);
+			foreach ($pluginSubFolders as $folder) {
+				$folderName = pathinfo($folder, PATHINFO_FILENAME);
+
+				$subFolders = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*.php');
+				foreach ($subFolders as $file) {
+					$file = str_replace(PLUGINS, 'plugins/', $file);
+					$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
+
+					$routes[] = [['get', 'post'], $name, $file, 1000];
+				}
 			}
 
 			$warningPreTitle = 'Plugin: ' . $plugin['name'] . ' - ';
