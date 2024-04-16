@@ -37,12 +37,12 @@ class Plugins {
 			//
 			// Get all plugins/*/pages/subFolder/*.php pages
 			//
-			$pluginSubFolders = glob(PLUGINS . $plugin['filename'] . '/pages/*', GLOB_ONLYDIR);
-			foreach ($pluginSubFolders as $folder) {
+			$pluginPagesSubFolders = glob(PLUGINS . $plugin['filename'] . '/pages/*', GLOB_ONLYDIR);
+			foreach ($pluginPagesSubFolders as $folder) {
 				$folderName = pathinfo($folder, PATHINFO_FILENAME);
 
-				$subFolders = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*.php');
-				foreach ($subFolders as $file) {
+				$subFiles = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*.php');
+				foreach ($subFiles as $file) {
 					$file = str_replace(PLUGINS, 'plugins/', $file);
 					$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
 
