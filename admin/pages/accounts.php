@@ -404,6 +404,7 @@ else if (isset($_REQUEST['search'])) {
 											   autocomplete="off" maxlength="20"
 											   value="<?php echo $account->getLocation(); ?>"/>
 									</div>
+									<?php if(setting('core.account_country')): ?>
 									<div class="col-12 col-sm-12 col-lg-4">
 										<label for="rl_country">Country:</label>
 										<select name="rl_country" id="rl_country" class="form-control">
@@ -412,6 +413,7 @@ else if (isset($_REQUEST['search'])) {
 											<?php endforeach; ?>
 										</select>
 									</div>
+									<?php endif; ?>
 								</div>
 								<div class="form-group row">
 									<div class="col-12 col-sm-12 col-lg-6">
