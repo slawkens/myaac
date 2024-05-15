@@ -270,7 +270,7 @@ $config = array(
 	'status_enabled' => true, // you can disable status checking by settings this to "false"
 	'status_ip' => '127.0.0.1',
 	'status_port' => '',
-	'status_timeout' => 1.0, // how long to wait for the initial response from the server (default: 2 seconds)
+	'status_timeout' => 1.0, // how long to wait for the initial response from the server (default: 1 second)
 
 	// how often to connect to server and update status (default: every minute)
 	// if your status timeout in config.lua is bigger, that it will be used instead
@@ -290,12 +290,12 @@ $config = array(
 	'footer_show_load_time' => true, // display load time of the page in the footer
 
 	'npc' => array(),
-	
+
 	// character name blocked
 	'character_name_blocked' => array(
 		'prefix' => array(),
 		'names' => array(),
 		'words' => array(),
 	),
-	
+
 );
