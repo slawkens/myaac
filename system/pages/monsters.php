@@ -79,7 +79,7 @@ if (isset($monster['name'])) {
 	));
 
 } else {
-	echo "Monster with name <b>" . $monster_name . "</b> doesn't exist.";
+	echo "Monster with name <b>" . htmlspecialchars($monster_name) . "</b> doesn't exist.";
 }
 
 // back button
