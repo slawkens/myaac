@@ -1265,7 +1265,7 @@ function getCustomPage($page, &$success)
 }
 
 function escapeHtml($html) {
-	return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	return htmlspecialchars($html);
 }
 
 function displayErrorBoxWithBackButton($errors, $action = null) {

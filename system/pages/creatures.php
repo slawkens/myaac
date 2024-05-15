@@ -157,7 +157,7 @@ if (empty($_REQUEST['creature'])) {
 		echo '</td></tr>';
 		echo '</TABLE>';
 	} else {
-		echo "Monster with name <b>" . $monster_name . "</b> doesn't exist.";
+		echo "Monster with name <b>" . htmlspecialchars($monster_name) . "</b> doesn't exist.";
 	}
 
 //back button
