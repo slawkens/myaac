@@ -1634,7 +1634,7 @@ function removeIfFirstSlash(&$text) {
 };
 
 function escapeHtml($html) {
-	return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	return htmlspecialchars($html);
 }
 
 function getGuildNameById($id)
