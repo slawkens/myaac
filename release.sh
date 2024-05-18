@@ -38,7 +38,7 @@ if [ $1 = "prepare" ]; then
 	cd $dir || exit
 
 	# dependencies
-	composer install --prefer-dist --optimize-autoloader
+	composer install --no-dev --prefer-dist --optimize-autoloader
 	npm install
 
 	# node_modules is useless, we already have copy in tools/ext
