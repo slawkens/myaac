@@ -16,6 +16,7 @@
         "peppeocchi/php-cron-scheduler": "4.*",
         "symfony/console": "^6.4",
         "symfony/string": "^6.4",
+        "symfony/var-dumper": "^6.4",
         "filp/whoops": "^2.15",
         "maximebf/debugbar": "dev-master"
     },
