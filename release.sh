@@ -39,6 +39,7 @@ if [ $1 = "prepare" ]; then
 
 	# dependencies
 	composer install --prefer-dist --optimize-autoloader
+	npm install
 
 	echo "Now you can make changes to $dir. When you are ready, type 'release.sh pack'"
 	exit
