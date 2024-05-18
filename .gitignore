@@ -7,7 +7,6 @@ Thumbs.db
 
 # composer
 composer.phar
-composer.lock
 vendor
 
 # npm
