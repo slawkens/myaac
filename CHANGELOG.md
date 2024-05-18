@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.17 - 15.04.2024]
+
+### Added
+* TwigTypeCastingExtension (https://github.com/slawkens/myaac/commit/7181b988e9518320d57486670ca4e2d3b2fe1cfa)
+
+### Fixed
+* fix XSS in creatures.php (https://github.com/slawkens/myaac/commit/02eea950e4fd756e8d5c32e56181986d51f5ac70, @gesior)
+* don't allow redirect to external website (https://github.com/slawkens/myaac/commit/ef62b53cec5a479cc85aa15940ad9ebbcefde876)
+* change_info if account_country is disabled (https://github.com/slawkens/myaac/commit/62d3c198d567541a90900fe2d7ede070e7b1ff68)
+
+### Changed
+* use word-break: break-all in guilds description + character comment (https://github.com/slawkens/myaac/commit/191ad25eb2d4c1cec6f6668da7a345fec0ad2a7f)
+* set default status_ip to 127.0.0.1, most server are hosted locally anyway (https://github.com/slawkens/myaac/commit/2793c41655b47f7db295143a298ccda70f11462b)
+
 ## [0.8.16 - 12.02.2024]
 
 ### Fixed
