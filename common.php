@@ -20,13 +20,13 @@
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2019 MyAAC
+ * @copyright 2024 MyAAC
  * @link      https://my-aac.org
  */
 if (version_compare(phpversion(), '8.1', '<')) die('PHP version 8.1 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '1.0-beta';
+const MYAAC_VERSION = '1.0-beta.2';
 const DATABASE_VERSION = 40;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
