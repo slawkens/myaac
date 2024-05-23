@@ -1,5 +1,6 @@
 <?php
 
+use MyAAC\Models\News;
 use MyAAC\Settings;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -104,19 +105,36 @@ else {
 			$player->save();
 		}
 
-		$player_id = 0;
-		$query = $db->query("SELECT `id` FROM `players` WHERE `name` = " . $db->quote($player_name) . ";");
-		if($query->rowCount() == 1) {
-			$query = $query->fetch();
-			$player_id = $query['id'];
-		}
-
-		$query = $db->query("SELECT `id` FROM `" . TABLE_PREFIX ."news` WHERE `title` LIKE 'Hello!';");
-		if($query->rowCount() == 0) {
-			if(query("INSERT INTO `" . TABLE_PREFIX ."news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hide`) VALUES (NULL, '1', UNIX_TIMESTAMP(), '2', 'Hello!', 'MyAAC is just READY to use!', " . $player_id . ", 'https://my-aac.org', '0');
-	INSERT INTO `myaac_news` (`id`, `type`, `date`, `category`, `title`, `body`, `player_id`, `comments`, `hide`) VALUES (NULL, '2', UNIX_TIMESTAMP(), '4', 'Hello tickets!', 'https://my-aac.org', " . $player_id . ", '', '0');")) {
-				success($locale['step_database_created_news']);
+		if(!News::all()->count()) {
+			$player_id = 0;
+			$tmpNewsPlayer = \MyAAC\Models\Player::where('name', $player_name)->first();
+			if($tmpNewsPlayer) {
+				$player_id = $tmpNewsPlayer->id;
 			}
+
+			News::create([
+				'type' => 1,
+				'date' => time(),
+				'category' => 2,
+				'title' => 'Hello!',
+				'body' => 'MyAAC is just READY to use!',
+				'player_id' => $player_id,
+				'comments' => 'https://my-aac.org',
+				'hide' => 0,
+			]);
+
+			News::create([
+				'type' => 2,
+				'date' => time(),
+				'category' => 4,
+				'title' => 'Hello tickers!',
+				'body' => 'https://my-aac.org',
+				'player_id' => $player_id,
+				'comments' => '',
+				'hide' => 0,
+			]);
+
+			success($locale['step_database_created_news']);
 		}
 
 		$settings = Settings::getInstance();
