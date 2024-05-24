@@ -144,6 +144,7 @@ if($db->hasColumn('players', 'guildnick'))
     $useGuildNick = true;
 
 $twig->display('guilds.view.html.twig', array(
+    'guild' => $guild,
     'logo' => $guild_logo,
     'guild_name' => $guild_name,
     'description' => $description,
