@@ -1,6 +1,11 @@
 # Changelog
 
-## [0.8.17 - 15.04.2024]
+## [0.8.18 - 29.05.2024]
+
+### Added
+* hook in guilds page to support guild wars (https://github.com/slawkens/myaac/commit/f875f3cd2059fac5c23a08ce73dd8621a66613e0)
+
+## [0.8.17 - 18.05.2024]
 
 ### Added
 * TwigTypeCastingExtension (https://github.com/slawkens/myaac/commit/7181b988e9518320d57486670ca4e2d3b2fe1cfa)
