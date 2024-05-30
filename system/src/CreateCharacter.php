@@ -149,9 +149,9 @@ class CreateCharacter
 		if(empty($errors))
 		{
 			$char_to_copy_name = config('character_samples')[$vocation];
-			$char_to_copy = new \OTS_Player();
-			$char_to_copy->find($char_to_copy_name);
-			if(!$char_to_copy->isLoaded())
+			$playerSample = new \OTS_Player();
+			$playerSample->find($char_to_copy_name);
+			if(!$playerSample->isLoaded())
 				$errors[] = 'Wrong characters configuration. Try again or contact with admin. ADMIN: Go to Admin Panel -> Settings -> Create Character and set valid characters to copy names. Character to copy: <b>'.$char_to_copy_name.'</b> doesn\'t exist.';
 		}
 
@@ -162,72 +162,72 @@ class CreateCharacter
 		global $db;
 
 		if($sex == "0")
-			$char_to_copy->setLookType(136);
+			$playerSample->setLookType(136);
 
 		$player = new \OTS_Player();
 		$player->setName($name);
 		$player->setAccount($account);
 		$player->setGroupId(1);
 		$player->setSex($sex);
-		$player->setVocation($char_to_copy->getVocation());
+		$player->setVocation($playerSample->getVocation());
 		if($db->hasColumn('players', 'promotion'))
-			$player->setPromotion($char_to_copy->getPromotion());
+			$player->setPromotion($playerSample->getPromotion());
 
 		if($db->hasColumn('players', 'direction'))
-			$player->setDirection($char_to_copy->getDirection());
+			$player->setDirection($playerSample->getDirection());
 
-		$player->setConditions($char_to_copy->getConditions());
-		$rank = $char_to_copy->getRank();
+		$player->setConditions($playerSample->getConditions());
+		$rank = $playerSample->getRank();
 		if($rank->isLoaded()) {
-			$player->setRank($char_to_copy->getRank());
+			$player->setRank($playerSample->getRank());
 		}
 
 		if($db->hasColumn('players', 'lookaddons'))
-			$player->setLookAddons($char_to_copy->getLookAddons());
+			$player->setLookAddons($playerSample->getLookAddons());
 
 		$player->setTownId($town);
-		$player->setExperience($char_to_copy->getExperience());
-		$player->setLevel($char_to_copy->getLevel());
-		$player->setMagLevel($char_to_copy->getMagLevel());
-		$player->setHealth($char_to_copy->getHealth());
-		$player->setHealthMax($char_to_copy->getHealthMax());
-		$player->setMana($char_to_copy->getMana());
-		$player->setManaMax($char_to_copy->getManaMax());
-		$player->setManaSpent($char_to_copy->getManaSpent());
-		$player->setSoul($char_to_copy->getSoul());
+		$player->setExperience($playerSample->getExperience());
+		$player->setLevel($playerSample->getLevel());
+		$player->setMagLevel($playerSample->getMagLevel());
+		$player->setHealth($playerSample->getHealth());
+		$player->setHealthMax($playerSample->getHealthMax());
+		$player->setMana($playerSample->getMana());
+		$player->setManaMax($playerSample->getManaMax());
+		$player->setManaSpent($playerSample->getManaSpent());
+		$player->setSoul($playerSample->getSoul());
 
 		for($skill = \POT::SKILL_FIRST; $skill <= \POT::SKILL_LAST; $skill++) {
 			$value = 10;
 			if (setting('core.use_character_sample_skills')) {
-				$value = $char_to_copy->getSkill($skill);
+				$value = $playerSample->getSkill($skill);
 			}
 
 			$player->setSkill($skill, $value);
 		}
 
-		$player->setLookBody($char_to_copy->getLookBody());
-		$player->setLookFeet($char_to_copy->getLookFeet());
-		$player->setLookHead($char_to_copy->getLookHead());
-		$player->setLookLegs($char_to_copy->getLookLegs());
-		$player->setLookType($char_to_copy->getLookType());
-		$player->setCap($char_to_copy->getCap());
+		$player->setLookBody($playerSample->getLookBody());
+		$player->setLookFeet($playerSample->getLookFeet());
+		$player->setLookHead($playerSample->getLookHead());
+		$player->setLookLegs($playerSample->getLookLegs());
+		$player->setLookType($playerSample->getLookType());
+		$player->setCap($playerSample->getCap());
 		$player->setBalance(0);
 		$player->setPosX(0);
 		$player->setPosY(0);
 		$player->setPosZ(0);
 
 		if($db->hasColumn('players', 'stamina')) {
-			$player->setStamina($char_to_copy->getStamina());
+			$player->setStamina($playerSample->getStamina());
 		}
 
 		if($db->hasColumn('players', 'loss_experience')) {
-			$player->setLossExperience($char_to_copy->getLossExperience());
-			$player->setLossMana($char_to_copy->getLossMana());
-			$player->setLossSkills($char_to_copy->getLossSkills());
+			$player->setLossExperience($playerSample->getLossExperience());
+			$player->setLossMana($playerSample->getLossMana());
+			$player->setLossSkills($playerSample->getLossSkills());
 		}
 		if($db->hasColumn('players', 'loss_items')) {
-			$player->setLossItems($char_to_copy->getLossItems());
-			$player->setLossContainers($char_to_copy->getLossContainers());
+			$player->setLossItems($playerSample->getLossItems());
+			$player->setLossContainers($playerSample->getLossContainers());
 		}
 
 		$player->save();
@@ -245,7 +245,7 @@ class CreateCharacter
 			for($skill = \POT::SKILL_FIRST; $skill <= \POT::SKILL_LAST; $skill++) {
 				$value = 10;
 				if (setting('core.use_character_sample_skills')) {
-					$value = $char_to_copy->getSkill($skill);
+					$value = $playerSample->getSkill($skill);
 				}
 				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $skill);
 				if($skillExists->rowCount() <= 0) {
@@ -255,7 +255,7 @@ class CreateCharacter
 		}
 
 		if ($db->hasTable('player_items') && $db->hasColumn('player_items', 'pid') && $db->hasColumn('player_items', 'sid') && $db->hasColumn('player_items', 'itemtype')) {
-			$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = ".$char_to_copy->getId()."");
+			$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = ".$playerSample->getId()."");
 			foreach($loaded_items_to_copy as $save_item) {
 				$blob = $db->quote($save_item['attributes']);
 				$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', $blob);");
@@ -267,6 +267,7 @@ class CreateCharacter
 			[
 				'account' => $account,
 				'player' => $player,
+				'samplePlayer' => $playerSample,
 				'name' => $name,
 				'sex' => $sex,
 				'vocation' => $vocation,
