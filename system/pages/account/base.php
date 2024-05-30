@@ -19,7 +19,8 @@ if(!$logged)
 		'redirect' => $_REQUEST['redirect'] ?? null,
 		'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
 		'account_login_by' => getAccountLoginByLabel(),
-		'error' => $errors[0] ?? null
+		'error' => $errors[0] ?? null,
+		'errors' => $errors ?? [],
 	));
 
 	return;
