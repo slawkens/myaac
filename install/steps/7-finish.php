@@ -1,5 +1,6 @@
 <?php
 
+use MyAAC\Cache\Cache;
 use MyAAC\Models\News;
 use MyAAC\Settings;
 
@@ -11,15 +12,21 @@ if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['save
 	return;
 }
 
+$cache = Cache::getInstance();
+if ($cache->enabled()) {
+	// clear plugin_hooks to have fresh hooks
+	$cache->delete('plugins_hooks');
+}
+
 require SYSTEM . 'init.php';
 if($error) {
 	return;
 }
 
 if(USE_ACCOUNT_NAME || USE_ACCOUNT_NUMBER)
-	$account = isset($_SESSION['var_account']) ? $_SESSION['var_account'] : null;
+	$account = $_SESSION['var_account'] ?? null;
 else
-	$account_id = isset($_SESSION['var_account_id']) ? $_SESSION['var_account_id'] : null;
+	$account_id = $_SESSION['var_account_id'] ?? null;
 
 $password = $_SESSION['var_password'];
 
@@ -190,3 +197,5 @@ unset($_SESSION['saved']);
 if(file_exists(CACHE . 'install.txt')) {
 	unlink(CACHE . 'install.txt');
 }
+
+$hooks->trigger(HOOK_INSTALL_FINISH);

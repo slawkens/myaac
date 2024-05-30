@@ -74,6 +74,7 @@ define('HOOK_GUILDS_AFTER_GUILD_MEMBERS', ++$i);
 define('HOOK_GUILDS_AFTER_INVITED_CHARACTERS', ++$i);
 define('HOOK_TWIG', ++$i);
 define('HOOK_CACHE_CLEAR', ++$i);
+define('HOOK_INSTALL_FINISH', ++$i);
 
 const HOOK_FIRST = HOOK_STARTUP;
 define('HOOK_LAST', $i);
