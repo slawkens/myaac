@@ -156,7 +156,7 @@ if (file_exists(BASE . 'config.local.php')) {
 
 /** @var array $config */
 ini_set('log_errors', 1);
-if(@$config['env'] === 'dev') {
+if(@$config['env'] === 'dev' || defined('MYAAC_INSTALL')) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);

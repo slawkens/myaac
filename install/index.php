@@ -3,9 +3,9 @@
 use Twig\Environment as Twig_Environment;
 use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
 
-require '../common.php';
+const MYAAC_INSTALL = true;
 
-define('MYAAC_INSTALL', true);
+require '../common.php';
 
 // includes
 require SYSTEM . 'functions.php';
