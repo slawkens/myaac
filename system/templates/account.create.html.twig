@@ -297,7 +297,7 @@
 			<table border="0" cellspacing="0" cellpadding="0" >
 				<tr>
 					<td style="border:0px;" >
-						<form id="form" action="{{ getLink('account/create') }}" method="post">
+						<form id="form" action="{{ getLink('account/create') }}" method="post" id="createaccount">
 							{{ csrf() }}
 							<input type="hidden" name="save" value="1" >
 							{{ include('buttons.submit.html.twig') }}
