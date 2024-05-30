@@ -210,7 +210,7 @@ if ($id > 0) {
 
 		if ($hasBlessingsColumn) {
 			$blessings = $_POST['blessings'];
-			verify_number($blessings, 'Blessings', 2);
+			verify_number($blessings, 'Blessings', 3);
 		}
 
 		$balance = $_POST['balance'];
