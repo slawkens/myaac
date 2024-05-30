@@ -196,6 +196,16 @@ class OTS_Buffer
         return $value[1];
     }
 
+	public function getLongLong()
+	{
+		// checks buffer size
+		$this->check(8);
+
+		$value = unpack('P', substr($this->buffer, $this->pos, 8) );
+		$this->pos += 8;
+		return $value[1];
+	}
+
 /**
  * Appends quater byte to buffer.
  * 
