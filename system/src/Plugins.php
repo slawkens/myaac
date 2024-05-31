@@ -23,6 +23,11 @@ class Plugins {
 
 		$routes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
+			$priority = 100;
+			if (isset($plugin['priority'])) {
+				$priority = $plugin['priority'];
+			}
+
 			//
 			// Get all plugins/*/pages/*.php pages
 			//
@@ -31,7 +36,7 @@ class Plugins {
 				$file = str_replace(PLUGINS, 'plugins/', $file);
 				$name = pathinfo($file, PATHINFO_FILENAME);
 
-				$routes[] = [['get', 'post'], $name, $file, 1000];
+				$routes[] = [['get', 'post'], $name, $file, $priority];
 			}
 
 			//
@@ -46,14 +51,14 @@ class Plugins {
 					$file = str_replace(PLUGINS, 'plugins/', $file);
 					$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
 
-					$routes[] = [['get', 'post'], $name, $file, 1000];
+					$routes[] = [['get', 'post'], $name, $file, $priority];
 				}
 			}
 
 			$warningPreTitle = 'Plugin: ' . $plugin['name'] . ' - ';
 
 			if (isset($plugin['routes'])) {
-				foreach ($plugin['routes'] as $_name => $info) {
+				foreach ($plugin['routes'] as $info) {
 					// default method: get
 					$method = $info['method'] ?? ['GET'];
 					if ($method !== '*') {
@@ -106,17 +111,17 @@ class Plugins {
 				}
 			}
 		}
-		/*
-				usort($routes, function ($a, $b)
-				{
-					// key 3 is priority
-					if ($a[3] == $b[3]) {
-						return 0;
-					}
 
-					return ($a[3] > $b[3]) ? -1 : 1;
-				});
-		*/
+		usort($routes, function ($a, $b)
+		{
+			// key 3 is priority
+			if ($a[3] == $b[3]) {
+				return 0;
+			}
+
+			return ($a[3] < $b[3]) ? -1 : 1;
+		});
+
 		// cleanup before passing back
 		// priority is not needed anymore
 		foreach ($routes as &$route) {
