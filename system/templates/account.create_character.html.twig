@@ -23,6 +23,9 @@ In any case the name must not violate the naming conventions stated in the <a hr
 		</div>
 		<tr>
 			<td>
+
+				{{ hook('HOOK_ACCOUNT_CREATE_CHARACTER_BEFORE_FIRST_TABLE') }}
+
 				<div class="InnerTableContainer">
 					<table style="width:100%;">
 						<tr>
@@ -66,6 +69,9 @@ In any case the name must not violate the naming conventions stated in the <a hr
 						</tr>
 					</table>
 				</div>
+
+				{{ hook('HOOK_ACCOUNT_CREATE_CHARACTER_BEFORE_VOCATION') }}
+
 				<div class="InnerTableContainer">
 					<table style="width: 100%;">
 						<tr>
@@ -90,6 +96,9 @@ In any case the name must not violate the naming conventions stated in the <a hr
 									</tr>
 								</table>
 							{% endif %}
+
+							{{ hook('HOOK_ACCOUNT_CREATE_CHARACTER_BEFORE_TOWNS') }}
+
 							{% if config.character_towns|length > 1 %}
 							<td>
 								<table class="TableContent" width="100%">
@@ -112,9 +121,15 @@ In any case the name must not violate the naming conventions stated in the <a hr
 								</table>
 							</td>
 							{% endif %}
+
+							{{ hook('HOOK_ACCOUNT_CREATE_CHARACTER_AFTER_TOWNS') }}
+
 						</tr>
 					</table>
 				</div>
+
+				{{ hook('HOOK_ACCOUNT_CREATE_CHARACTER_AFTER_SECOND_TABLE') }}
+
 			</td>
 		</tr>
 	</table>
