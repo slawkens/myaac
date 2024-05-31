@@ -77,6 +77,8 @@ if(ModelsFAQ::count() == 0) {
 	]);
 }
 
+$hooks->trigger(HOOK_INSTALL_FINISH);
+
 $db->setClearCacheAfter(true);
 
 $locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(str_replace('tools/', '',ADMIN_URL), $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);

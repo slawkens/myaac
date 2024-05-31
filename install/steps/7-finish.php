@@ -198,4 +198,4 @@ if(file_exists(CACHE . 'install.txt')) {
 	unlink(CACHE . 'install.txt');
 }
 
-$hooks->trigger(HOOK_INSTALL_FINISH);
+$hooks->trigger(HOOK_INSTALL_FINISH_END);
