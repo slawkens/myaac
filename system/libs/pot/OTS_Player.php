@@ -90,7 +90,7 @@ class OTS_Player extends OTS_Row_DAO
  * @version 0.1.2
  * @var array
  */
-    private $data = array('sex' => 0, 'vocation' => 0, 'experience' => 0, 'level' => 1, 'maglevel' => 0, 'health' => 100, 'healthmax' => 100, 'mana' => 100, 'manamax' => 100, 'manaspent' => 0, 'soul' => 0, 'lookbody' => 10, 'lookfeet' => 10, 'lookhead' => 10, 'looklegs' => 10, 'looktype' => 136, 'lookaddons' => 0, 'posx' => 0, 'posy' => 0, 'posz' => 0, 'cap' => 0, 'lastlogin' => 0, 'lastip' => 0, 'save' => true, 'skulltime' => 0, 'skull' => 0, 'balance' => 0, 'lastlogout' => 0, 'blessings' => 0, 'stamina' => 0, 'online' => 0, 'comment' => '', 'created' => 0, 'hide' => 0);
+    private $data = array('group_id' => 1, 'sex' => 0, 'vocation' => 0, 'experience' => 0, 'level' => 1, 'maglevel' => 0, 'health' => 100, 'healthmax' => 100, 'mana' => 100, 'manamax' => 100, 'manaspent' => 0, 'soul' => 0, 'lookbody' => 10, 'lookfeet' => 10, 'lookhead' => 10, 'looklegs' => 10, 'looktype' => 136, 'lookaddons' => 0, 'posx' => 0, 'posy' => 0, 'posz' => 0, 'cap' => 0, 'lastlogin' => 0, 'lastip' => 0, 'save' => true, 'skulltime' => 0, 'skull' => 0, 'balance' => 0, 'lastlogout' => 0, 'blessings' => 0, 'stamina' => 0, 'online' => 0, 'comment' => '', 'created' => 0, 'hide' => 0);
 
 /**
  * Player skills.
