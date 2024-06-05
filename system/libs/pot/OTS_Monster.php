@@ -135,13 +135,14 @@ class OTS_Monster extends DOMDocument
     {
         $flags = array();
 
-        // read all flags
-        foreach( $this->documentElement->getElementsByTagName('flags')->item(0)->getElementsByTagName('flag') as $flag)
-        {
-            $flag = $flag->attributes->item(0);
+	    if ($this->documentElement->getElementsByTagName('flags')->item(0)) {
+		    foreach( $this->documentElement->getElementsByTagName('flags')->item(0)->getElementsByTagName('flag') as $flag)
+		    {
+			    $flag = $flag->attributes->item(0);
 
-            $flags[$flag->nodeName] = (int) $flag->nodeValue;
-        }
+			    $flags[$flag->nodeName] = (int) $flag->nodeValue;
+		    }
+	    }
 
         return $flags;
     }
