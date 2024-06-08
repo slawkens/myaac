@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\PlayerDeath;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Characters';
 
@@ -322,17 +325,35 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 
 	$frags = array();
 	$frag_add_content = '';
-	if($config['characters']['frags'] && $db->hasTable('killers')) {
-		//frags list by Xampy
-		$i = 0;
+	if ($config['characters']['frags']) {
 		$frags_limit = 10; // frags limit to show? // default: 10
-		$player_frags = $db->query('SELECT `player_deaths`.*, `players`.`name`, `killers`.`unjustified` FROM `player_deaths` LEFT JOIN `killers` ON `killers`.`death_id` = `player_deaths`.`id` LEFT JOIN `player_killers` ON `player_killers`.`kill_id` = `killers`.`id` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `player_killers`.`player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,'.$frags_limit.';')->fetchAll();
-		if(count($player_frags)) {
-			$row_count = 0;
-			foreach($player_frags as $frag)
-			{
-				$description = 'Fragged <a href="' . getPlayerLink($frag['name'], false) . '">' . $frag['name'] . '</a> at level ' . $frag['level'];
-				$frags[] = array('time' => $frag['date'], 'description' => $description, 'unjustified' => $frag['unjustified'] != 0);
+
+		if ($db->hasTable('killers')) {
+			//frags list by Xampy
+			$i = 0;
+			$player_frags = $db->query('SELECT `player_deaths`.*, `players`.`name`, `killers`.`unjustified` FROM `player_deaths` LEFT JOIN `killers` ON `killers`.`death_id` = `player_deaths`.`id` LEFT JOIN `player_killers` ON `player_killers`.`kill_id` = `killers`.`id` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `player_killers`.`player_id` = ' . $player->getId() . ' ORDER BY `date` DESC LIMIT 0,' . $frags_limit . ';')->fetchAll();
+			if (count($player_frags)) {
+				$row_count = 0;
+				foreach ($player_frags as $frag) {
+					$description = 'Fragged <a href="' . getPlayerLink($frag['name'], false) . '">' . $frag['name'] . '</a> at level ' . $frag['level'];
+					$frags[] = array('time' => $frag['date'], 'description' => $description, 'unjustified' => $frag['unjustified'] != 0);
+				}
+			}
+		}
+		else if($db->hasTable('player_deaths') && $db->hasColumn('player_deaths', 'killed_by')) {
+			$i = 0;
+			$player_frags = PlayerDeath::where('player_deaths.killed_by', $player->getName())
+				->join('players', 'players.id', '=', 'player_deaths.player_id')
+				->limit($frags_limit)
+				->selectRaw('players.name, player_deaths.*')
+				->get();
+
+			if ($player_frags->count()) {
+				$row_count = 0;
+				foreach ($player_frags as $frag) {
+					$description = 'Fragged <a href="' . getPlayerLink($frag->name, false) . '">' . $frag->name . '</a> at level ' . $frag->level;
+					$frags[] = array('time' => $frag->time, 'description' => $description, 'unjustified' => $frag->unjustified != 0);
+				}
 			}
 		}
 	}
