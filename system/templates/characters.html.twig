@@ -275,7 +275,7 @@
 			{% for frag in frags %}
 			<tr bgcolor="{{ getStyle(i) }}">
 				<td width="20%" align="center">{{ frag.time|date("j M Y, H:i") }}</td>
-				<td>{{ frag.description|raw }}({% if frag.unjustified %}<span style="color: red; font-size: 10px">Unjustified</span>{% else %}<span style="color: green; font-size: 10px">Justified</span>{% endif %})</td>
+				<td>{{ frag.description|raw }} ({% if frag.unjustified %}<span style="color: red; font-size: 10px">Unjustified</span>{% else %}<span style="color: green; font-size: 10px">Justified</span>{% endif %})</td>
 			</tr>
 			{% set i = i + 1 %}
 			{% endfor %}
