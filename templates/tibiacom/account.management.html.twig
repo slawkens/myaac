@@ -139,7 +139,7 @@
 						{% endif %}
 						<tr style="background-color: {{ config.darkborder }};" >
 							<td class="LabelV" >Email Address:</td>
-							<td style="width:90%;" >{{ account_email ~ email_change}}</td>
+							<td style="width:90%;" >{{ account_email }}{{ email_change|raw }}</td>
 						</tr>
 						<tr style="background-color: {{ config.lightborder }};" >
 							<td class="LabelV" >Created:</td>

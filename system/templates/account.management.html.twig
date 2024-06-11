@@ -99,7 +99,7 @@
 			{% endif %}
 			<tr style="background-color: {{ config.darkborder }};" >
 				<td style="width: 90px;">Email Address:</td>
-				<td>{{ account_email ~ email_change }}
+				<td>{{ account_email }}{{ email_change|raw }}
 					<form action="{{ getLink('account/email') }}" method="post">
 						{{ csrf() }}
 						{% set button_name = 'Change Email' %}
