@@ -12,6 +12,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 if(!$logged)
 {
+	$title = 'Login';
+
 	if(!empty($errors))
 		$twig->display('error_box.html.twig', array('errors' => $errors));
 
