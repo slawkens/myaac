@@ -40,6 +40,8 @@
 			"redirect_to": "account/manage"
 		}
 	},
+	"routes-default-priority": 1000,
+	"pages-default-priority": 1000,
 	"settings": "plugins/your-plugin-folder/settings.php",
 	"autoload": {
 		"pages": true,

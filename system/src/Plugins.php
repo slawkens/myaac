@@ -24,9 +24,9 @@ class Plugins {
 		$duplicates = [];
 		$routes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
-			$priority = 100;
-			if (isset($plugin['priority'])) {
-				$priority = $plugin['priority'];
+			$routesDefaultPriority = 1000;
+			if (isset($plugin['routes-default-priority'])) {
+				$routesDefaultPriority = $plugin['routes-default-priority'];
 			}
 
 			$warningPreTitle = 'Plugin: ' . $plugin['name'] . ' - ';
@@ -49,7 +49,7 @@ class Plugins {
 					}
 
 					if (!isset($info['priority'])) {
-						$info['priority'] = 100; // default priority
+						$info['priority'] = $routesDefaultPriority; // default priority taken from plugin.json
 					}
 
 					if (isset($info['redirect_from'])) {
@@ -68,25 +68,13 @@ class Plugins {
 					// replace first occurrence of / in pattern if found (will be auto-added later)
 					removeIfFirstSlash($info['pattern']);
 
-					foreach ($routes as $id => &$route) {
-						if($route[1] == $info['pattern']) {
-							if($info['priority'] < $route[3]) {
-								self::$warnings[] = $warningPreTitle . "Duplicated route with lower priority: {$info['pattern']}. Disabling this route...";
-								continue 2;
-							}
-							else {
-								self::$warnings[] = $warningPreTitle . "Duplicated route with lower priority: {$route[1]} ({$route[3]}). Disabling this route...";
-								unset($routes[$id]);
-							}
-						}
-					}
-
-					$tmp = preg_replace("/\[[^)]+\]/",'', $info['pattern']);
-					if (!isset($duplicates[$tmp])) {
-						$routes[] = [$methods, $info['pattern'], $info['file'], $info['priority']];
-						$duplicates[$tmp] = true;
-					}
+					$routes[] = [$methods, $info['pattern'], $info['file'], $info['priority']];
 				}
+			}
+
+			$pagesDefaultPriority = 1000;
+			if (isset($plugin['pages-default-priority'])) {
+				$pagesDefaultPriority = $plugin['pages-default-priority'];
 			}
 
 			if (self::getAutoLoadOption($plugin, 'pages', true)) {
@@ -99,7 +87,7 @@ class Plugins {
 					$name = pathinfo($file, PATHINFO_FILENAME);
 
 					if (!isset($duplicates[$name])) {
-						$routes[] = [['get', 'post'], $name, $file, $priority];
+						$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
 						$duplicates[$name] = true;
 					}
 				}
@@ -119,7 +107,7 @@ class Plugins {
 						$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
 
 						if (!isset($duplicates[$name])) {
-							$routes[] = [['get', 'post'], $name, $file, $priority];
+							$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
 							$duplicates[$name] = true;
 						}
 					}
@@ -139,9 +127,9 @@ class Plugins {
 
 		// cleanup before passing back
 		// priority is not needed anymore
-		foreach ($routes as &$route) {
-			unset($route[3]);
-		}
+		//foreach ($routes as &$route) {
+		//	unset($route[3]);
+		//}
 
 		if ($cache->enabled()) {
 			$cache->set('plugins_routes', serialize($routes), 600);

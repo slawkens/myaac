@@ -15,9 +15,9 @@ return [
 	['GET', 'news/{id:int}', 'news/archive.php'],
 
 	// block access to some files
-	['*', 'account/base', '404.php'], // this is to block account/base.php
-	['*', 'forum/base', '404.php'],
-	['*', 'guilds/base', '404.php'],
+	['*', 'account/base', '404.php', 10], // this is to block account/base.php
+	['*', 'forum/base', '404.php', 10],
+	['*', 'guilds/base', '404.php', 10],
 
 	[['GET', 'POST'], 'account/password', 'account/change_password.php'],
 	[['GET', 'POST'], 'account/register/new', 'account/register_new.php'],
