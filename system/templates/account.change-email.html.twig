@@ -29,7 +29,7 @@ Please enter your password and the new email address. Make sure that you enter a
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td style="border:0px;">
-						<form id="form" action="{{ getLink('account/email') }}" method="post">
+						<form id="form" action="{{ getLink('account/change-email') }}" method="post">
 							{{ csrf() }}
 							<input type="hidden" name="changeemailsave" value="1"/>
 							{{ include('buttons.submit.html.twig') }}

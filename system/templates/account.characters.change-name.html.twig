@@ -36,7 +36,7 @@ To change a name of character select player and choose a new name.<br/>
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td style="border:0px;">
-						<form id="form" action="{{ getLink('account/character/name') }}" method="post">
+						<form id="form" action="{{ getLink('account/characters/change-name') }}" method="post">
 							{{ csrf() }}
 							<input type="hidden" name="changenamesave" value="1">
 							{{ include('buttons.submit.html.twig') }}

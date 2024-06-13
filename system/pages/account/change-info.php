@@ -76,7 +76,7 @@ if($show_form) {
 			$countries[$code] = $country;
 	}
 
-	$twig->display('account.change_info.html.twig', array(
+	$twig->display('account.change-info.html.twig', array(
 		'countries' => $countries ?? [],
 		'account_rlname' => $account_rlname,
 		'account_location' => $account_location,

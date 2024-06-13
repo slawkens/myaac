@@ -14,7 +14,7 @@ use MyAAC\CreateCharacter;
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Create Character';
-require __DIR__ . '/base.php';
+require PAGES . 'account/base.php';
 
 if(!$logged) {
 	return;
@@ -43,7 +43,7 @@ if(count($errors) > 0) {
 }
 
 if(!$character_created) {
-	$twig->display('account.create_character.html.twig', array(
+	$twig->display('account.characters.create.html.twig', array(
 		'name' => $character_name,
 		'sex' => $character_sex,
 		'vocation' => $character_vocation,

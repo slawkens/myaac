@@ -227,7 +227,7 @@ if($save)
 			$hash = md5(generateRandomString(16, true, true) . $email);
 			$new_account->setCustomField('email_hash', $hash);
 
-			$verify_url = getLink('account/confirm_email/' . $hash);
+			$verify_url = getLink('account/confirm-email/' . $hash);
 			$body_html = $twig->render('mail.account.verify.html.twig', array(
 				'account' => $tmp_account,
 				'verify_url' => generateLink($verify_url, $verify_url, true)

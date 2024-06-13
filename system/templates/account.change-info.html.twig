@@ -59,7 +59,7 @@ Here you can tell other players about yourself. This information will be display
 			<table border="0" cellspacing="0" cellpadding="0" >
 				<tr>
 					<td style="border:0px;" >
-						<form id="form" action="{{ getLink('account/info') }}" method="post">
+						<form id="form" action="{{ getLink('account/change-info') }}" method="post">
 							{{ csrf() }}
 							<input type="hidden" name="changeinfosave" value="1">
 							{{ include('buttons.submit.html.twig') }}

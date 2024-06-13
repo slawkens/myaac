@@ -36,7 +36,7 @@ To change a sex of character select player and choose a new sex.<br/>
 			<table border="0" cellspacing="0" cellpadding="0" >
 				<tr>
 					<td style="border:0px;">
-						<form id="form" action="{{ getLink('account/character/sex') }}" method="post">
+						<form id="form" action="{{ getLink('account/characters/change-sex') }}" method="post">
 							{{ csrf() }}
 							<input type="hidden" name="changesexsave" value="1"/>
 							{{ include('buttons.submit.html.twig') }}

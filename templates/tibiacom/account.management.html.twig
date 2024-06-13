@@ -94,7 +94,7 @@
 			</table>
 			<div style="text-align:center">
 				<table border="0" cellspacing="0" cellpadding="0">
-					<form action="{{ getLink('account/email') }}" method="post">
+					<form action="{{ getLink('account/change-email') }}" method="post">
 						<tr>
 							<td style="border:0px;">
 								{{ include('buttons.edit.html.twig') }}
@@ -176,7 +176,7 @@
 				<tr>
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0">
-							<form action="{{ getLink('account/password') }}" method="post">
+							<form action="{{ getLink('account/change-password') }}" method="post">
 								<tr>
 									<td style="border:0px;" >
 										{{ include('buttons.change_password.html.twig') }}
@@ -187,7 +187,7 @@
 					</td>
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0">
-							<form action="{{ getLink('account/email') }}" method="post">
+							<form action="{{ getLink('account/change-email') }}" method="post">
 								<tr>
 									<td style="border:0px;">
 										<input type="hidden" name="newemail" value=""/>
@@ -256,7 +256,7 @@
 							</td>
 							<td align=right>
 								<table border="0" cellspacing="0" cellpadding="0">
-									<form action="{{ getLink('account/info') }}" method="post">
+									<form action="{{ getLink('account/change-info') }}" method="post">
 										<tr>
 											<td style="border:0px;">
 												{{ include('buttons.edit.html.twig') }}
@@ -373,7 +373,7 @@
 							{% else %}
 							<td><span style="color: red"><b>Offline</b></span></td>
 							{% endif %}
-							<td>{% if not player.isDeleted() %}[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]{% endif %}</td>
+							<td>{% if not player.isDeleted() %}[<a href="{{ getLink('account/characters/change-comment?name=' ~ player.getName|urlencode) }}" >Edit</a>]{% endif %}</td>
 						</tr>
 						{% endfor %}
 					</table>
@@ -395,7 +395,7 @@
 						<table border="0" cellspacing="0" cellpadding="0" >
 							<tr>
 								<td style="border:0px;">
-									<form action="{{ getLink('account/character/create') }}" method="post" >
+									<form action="{{ getLink('account/characters/create') }}" method="post" >
 										{{ include('buttons.create_character.html.twig') }}
 									</form>
 								</td>
@@ -407,7 +407,7 @@
 						<table border="0" cellspacing="0" cellpadding="0" >
 							<tr>
 								<td style="border:0px;">
-									<form action="{{ getLink('account/character/name') }}" method="post" >
+									<form action="{{ getLink('account/characters/change-name') }}" method="post" >
 										{{ include('buttons.change_name.html.twig') }}
 									</form>
 								</td>
@@ -420,7 +420,7 @@
 						<table border="0" cellspacing="0" cellpadding="0" >
 							<tr>
 								<td style="border:0px;">
-									<form action="{{ getLink('account/character/sex') }}" method="post">
+									<form action="{{ getLink('account/characters/change-sex') }}" method="post">
 										{{ include('buttons.change_sex.html.twig') }}
 									</form>
 								</td>
@@ -433,7 +433,7 @@
 						<table border="0" cellspacing="0" cellpadding="0">
 							<tr>
 								<td style="border: 0px;">
-									<form action="{{ getLink('account/character/delete') }}" method="post">
+									<form action="{{ getLink('account/characters/delete') }}" method="post">
 										{{ include('buttons.delete_character.html.twig') }}
 									</form>
 								</td>

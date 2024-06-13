@@ -57,14 +57,14 @@ if($email_new_time < 10) {
 			$twig->display('error_box.html.twig', array('errors' => $errors));
 
 			//show form
-			$twig->display('account.change_mail.html.twig', array(
+			$twig->display('account.change-email.html.twig', array(
 				'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
 			));
 		}
 	}
 	else
 	{
-		$twig->display('account.change_mail.html.twig', array(
+		$twig->display('account.change-email.html.twig', array(
 			'new_email' => isset($_POST['new_email']) ? $_POST['new_email'] : null
 		));
 	}

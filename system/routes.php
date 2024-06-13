@@ -19,16 +19,7 @@ return [
 	['*', 'forum/base', '404.php', 10],
 	['*', 'guilds/base', '404.php', 10],
 
-	[['GET', 'POST'], 'account/password', 'account/change_password.php'],
-	[['GET', 'POST'], 'account/register/new', 'account/register_new.php'],
-	[['GET', 'POST'], 'account/email', 'account/change_email.php'],
-	[['GET', 'POST'], 'account/info', 'account/change_info.php'],
-	[['GET', 'POST'], 'account/character/create', 'account/create_character.php'],
-	[['GET', 'POST'], 'account/character/name', 'account/change_name.php'],
-	[['GET', 'POST'], 'account/character/sex', 'account/change_sex.php'],
-	[['GET', 'POST'], 'account/character/delete', 'account/delete_character.php'],
-	[['GET', 'POST'], 'account/character/comment[/{name:string}]', 'account/change_comment.php'],
-	['GET', 'account/confirm_email/{hash:alphanum}', 'account/confirm_email.php'],
+	['GET', 'account/confirm-email/{hash:alphanum}', 'account/confirm-email.php'],
 
 	['GET', 'bans/{page:int}', 'bans.php'],
 	[['GET', 'POST'], 'characters[/{name:string}]', 'characters.php'],
@@ -56,4 +47,20 @@ return [
 	'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
 	'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2'),
 	'/^houses\/view\/?$/' => array('subtopic' => 'houses', 'page' => 'view')*/
+
+	/**
+	 * Deprecated
+	 * To be removed in next versions
+	 * Kept just for compatibility
+	 */
+	[['GET', 'POST'], 'account/password', 'account/change-password.php'],
+	[['GET', 'POST'], 'account/register/new', 'account/register-new.php'],
+	[['GET', 'POST'], 'account/email', 'account/change-email.php'],
+	[['GET', 'POST'], 'account/info', 'account/change-info.php'],
+	[['GET', 'POST'], 'account/character/create', 'account/characters/create.php'],
+	[['GET', 'POST'], 'account/character/name', 'account/characters/change-name.php'],
+	[['GET', 'POST'], 'account/character/sex', 'account/characters/change-sex.php'],
+	[['GET', 'POST'], 'account/character/delete', 'account/characters/delete.php'],
+	[['GET', 'POST'], 'account/character/comment[/{name:string}]', 'account/characters/change-comment.php'],
+	['GET', 'account/confirm_email/{hash:alphanum}', 'account/confirm-email.php'],
 ];

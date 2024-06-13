@@ -26,8 +26,8 @@
 	}
 </style>
 {% set menus = {
-	'Create Character': 'account/character/create','Delete Character': 'account/character/delete',
-	'Change Info': 'account/info', 'Change Password': 'account/password', 'Change Email': 'account/email'
+	'Create Character': 'account/characters/create','Delete Character': 'account/characters/delete',
+	'Change Info': 'account/change-info', 'Change Password': 'account/change-password', 'Change Email': 'account/change-email'
 } %}
 <div id="account-manage">
 	<div id="one">
@@ -40,10 +40,10 @@
 				<a href="{{ getLink(link) }}">{{ name }}</a>
 			{% endfor %}
 			{% if setting('core.account_change_character_name') %}
-				<a href="{{ getLink('account/character/name') }}">Change Name</a>
+				<a href="{{ getLink('account/characters/change-name') }}">Change Name</a>
 			{% endif %}
 			{% if setting('core.account_change_character_sex') %}
-				<a href="{{ getLink('account/character/sex') }}">Change Sex</a>
+				<a href="{{ getLink('account/characters/change-sex') }}">Change Sex</a>
 			{% endif %}
 			<a href="{{ getLink('account/logout') }}">Logout</a>
 		</div>
@@ -80,7 +80,7 @@
 			<div style="text-align:center">
 				A request has been submitted to change the email address of this account to <b>{{ email_new }}</b>. After <b>{{ email_new_time|date("j F Y, G:i:s") }}</b> you can accept the new email address and finish the process. Please cancel the request if you do not want your email address to be changed! Also cancel the request if you have no access to the new email address!
 
-				<form action="{{ getLink('account/email') }}" method="post">
+				<form action="{{ getLink('account/change-email') }}" method="post">
 					{{ csrf() }}
 					{% set button_name = 'Edit' %}
 					{% include('buttons.base.html.twig') %}
@@ -100,7 +100,7 @@
 			<tr style="background-color: {{ config.darkborder }};" >
 				<td style="width: 90px;">Email Address:</td>
 				<td>{{ account_email }}{{ email_change|raw }}
-					<form action="{{ getLink('account/email') }}" method="post">
+					<form action="{{ getLink('account/change-email') }}" method="post">
 						{{ csrf() }}
 						{% set button_name = 'Change Email' %}
 						{% include('buttons.base.html.twig') %}
@@ -139,7 +139,7 @@
 				<td >{{ account_location }}</td>
 			</tr>
 		</table>
-		<form action="{{ getLink('account/info') }}" method="post">
+		<form action="{{ getLink('account/change-info') }}" method="post">
 			{{ csrf() }}
 			{% set button_name = 'Change Info' %}
 			{% include('buttons.base.html.twig') %}
@@ -183,7 +183,7 @@
 					<td>{% if player.getLastLogin() > 0 %}{{ player.getLastLogin|date('d F Y (H:i)') }}{% else %}Never.{% endif %}</td>
 					<td>{% if player.isOnline() %}<span style="color: green">ONLINE</span>{% else %}<span style="color: red">Offline</span>{% endif %}</td>
 					<td>{% if player.isHidden() %}Hidden{% else %}Visible{% endif %}</td>
-					<td>{% if not player.isDeleted() %}[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]{% endif %}</td>
+					<td>{% if not player.isDeleted() %}[<a href="{{ getLink('account/characters/change-comment?name=' ~ player.getName()|urlencode) }}" >Edit</a>]{% endif %}</td>
 				</tr>
 			{% endfor %}
 		</table>
@@ -191,7 +191,7 @@
 		<table>
 			<tr>
 				<td>
-					<form action="{{ getLink('account/character/create') }}" method="post" >
+					<form action="{{ getLink('account/characters/create') }}" method="post" >
 						{{ csrf() }}
 						{% set button_name = 'Create Character' %}
 						{% include('buttons.base.html.twig') %}
@@ -199,7 +199,7 @@
 				</td>
 				{% if setting('core.account_change_character_name') %}
 				<td>
-					<form action="{{ getLink('account/character/name') }}" method="post" >
+					<form action="{{ getLink('account/characters/change-name') }}" method="post" >
 						{{ csrf() }}
 						{% set button_name = 'Change Name' %}
 						{% include('buttons.base.html.twig') %}
@@ -208,7 +208,7 @@
 				{% endif %}
 				{% if setting('core.account_change_character_sex') %}
 				<td>
-					<form action="{{ getLink('account/character/sex') }}" method="post" >
+					<form action="{{ getLink('account/characters/change-sex') }}" method="post" >
 						{{ csrf() }}
 						{% set button_name = 'Change Sex' %}
 						{% include('buttons.base.html.twig') %}
@@ -216,7 +216,7 @@
 				</td>
 				{% endif %}
 				<td>
-					<form action="{{ getLink('account/character/delete') }}" method="post">
+					<form action="{{ getLink('account/characters/delete') }}" method="post">
 						{{ csrf() }}
 						{% set button_name = 'Delete Character' %}
 						{% include('buttons.base.html.twig') %}

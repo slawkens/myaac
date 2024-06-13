@@ -25,7 +25,7 @@ To delete a character enter the name of the character and your password.<br/><br
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td style="border:0px;">
-						<form id="form" action="{{ getLink('account/character/delete') }}" method="post">
+						<form id="form" action="{{ getLink('account/characters/delete') }}" method="post">
 							{{ csrf() }}
 							<input type="hidden" name="deletecharactersave" value="1"/>
 							{{ include('buttons.submit.html.twig') }}

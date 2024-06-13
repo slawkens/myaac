@@ -142,7 +142,7 @@ In any case the name must not violate the naming conventions stated in the <a hr
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td style="border:0px;">
-						<form id="form" action="{{ getLink('account/character/create') }}" method="post">
+						<form id="form" action="{{ getLink('account/characters/create') }}" method="post">
 							{{ csrf() }}
 							<input type="hidden" name="save" value="1">
 							{{ include('buttons.submit.html.twig') }}
