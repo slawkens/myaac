@@ -108,15 +108,14 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 	}
 
 	foreach ($routes as $route) {
-		$tmp = preg_replace("/\[[^)]+\]/","", $route[1]);
-
-		if(!isset($isAlreadyDefined[$tmp])) {
+		if(!isset($isAlreadyDefined[$route[1]])) {
 			if (strpos($route[2], '__redirect__') === false && strpos($route[2], '__database__') === false) {
 				$routesFinal[] = [$route[0], $route[1], 'system/pages/' . $route[2]];
 			}
 			else {
 				$routesFinal[] = [$route[0], $route[1], $route[2]];
 			}
+			$isAlreadyDefined[$route[1]] = true;
 		}
 	}
 

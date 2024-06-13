@@ -21,38 +21,12 @@ class Plugins {
 			}
 		}
 
+		$duplicates = [];
 		$routes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
 			$priority = 100;
 			if (isset($plugin['priority'])) {
 				$priority = $plugin['priority'];
-			}
-
-			//
-			// Get all plugins/*/pages/*.php pages
-			//
-			$pluginPages = glob(PLUGINS . $plugin['filename'] . '/pages/*.php');
-			foreach ($pluginPages as $file) {
-				$file = str_replace(PLUGINS, 'plugins/', $file);
-				$name = pathinfo($file, PATHINFO_FILENAME);
-
-				$routes[] = [['get', 'post'], $name, $file, $priority];
-			}
-
-			//
-			// Get all plugins/*/pages/subFolder/*.php pages
-			//
-			$pluginPagesSubFolders = glob(PLUGINS . $plugin['filename'] . '/pages/*', GLOB_ONLYDIR);
-			foreach ($pluginPagesSubFolders as $folder) {
-				$folderName = pathinfo($folder, PATHINFO_FILENAME);
-
-				$subFiles = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*.php');
-				foreach ($subFiles as $file) {
-					$file = str_replace(PLUGINS, 'plugins/', $file);
-					$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
-
-					$routes[] = [['get', 'post'], $name, $file, $priority];
-				}
 			}
 
 			$warningPreTitle = 'Plugin: ' . $plugin['name'] . ' - ';
@@ -107,7 +81,44 @@ class Plugins {
 						}
 					}
 
-					$routes[] = [$methods, $info['pattern'], $info['file'], $info['priority']];
+					$tmp = preg_replace("/\[[^)]+\]/",'', $info['pattern']);
+					if (!isset($duplicates[$tmp])) {
+						$routes[] = [$methods, $info['pattern'], $info['file'], $info['priority']];
+						$duplicates[$tmp] = true;
+					}
+				}
+			}
+
+			//
+			// Get all plugins/*/pages/*.php pages
+			//
+			$pluginPages = glob(PLUGINS . $plugin['filename'] . '/pages/*.php');
+			foreach ($pluginPages as $file) {
+				$file = str_replace(PLUGINS, 'plugins/', $file);
+				$name = pathinfo($file, PATHINFO_FILENAME);
+
+				if (!isset($duplicates[$name])) {
+					$routes[] = [['get', 'post'], $name, $file, $priority];
+					$duplicates[$name] = true;
+				}
+			}
+
+			//
+			// Get all plugins/*/pages/subFolder/*.php pages
+			//
+			$pluginPagesSubFolders = glob(PLUGINS . $plugin['filename'] . '/pages/*', GLOB_ONLYDIR);
+			foreach ($pluginPagesSubFolders as $folder) {
+				$folderName = pathinfo($folder, PATHINFO_FILENAME);
+
+				$subFiles = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*.php');
+				foreach ($subFiles as $file) {
+					$file = str_replace(PLUGINS, 'plugins/', $file);
+					$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
+
+					if (!isset($duplicates[$name])) {
+						$routes[] = [['get', 'post'], $name, $file, $priority];
+						$duplicates[$name] = true;
+					}
 				}
 			}
 		}
