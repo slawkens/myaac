@@ -115,17 +115,6 @@ if(isset($todo) && $todo == 'save')
 	$new_guild->setOwner($player);
 	$new_guild->save();
 	$new_guild->setCustomField('description', setting('core.guild_description_default'));
-	//$new_guild->setCustomField('creationdata', time());
-	$ranks = $new_guild->getGuildRanksList();
-	$ranks->orderBy('level', POT::ORDER_DESC);
-	foreach($ranks as $rank) {
-		/**
-		 * @var OTS_GuildRank $rank
-		 */
-		if($rank->getLevel() == 3) {
-			$player->setRank($rank);
-		}
-	}
 
 	if ($db->hasTable('guild_ranks')) {
 		if (!GuildRank::where('guild_id', $new_guild->getId())->first()) {
@@ -144,7 +133,18 @@ if(isset($todo) && $todo == 'save')
 			}
 		}
 	}
-	
+
+	$ranks = $new_guild->getGuildRanksList();
+	$ranks->orderBy('level', POT::ORDER_DESC);
+	foreach($ranks as $rank) {
+		/**
+		 * @var OTS_GuildRank $rank
+		 */
+		if($rank->getLevel() == 3) {
+			$player->setRank($rank);
+		}
+	}
+
 	$twig->display('guilds.create.success.html.twig', array(
 		'guild_name' => $guild_name,
 		'leader_name' => $player->getName()
