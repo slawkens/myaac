@@ -89,35 +89,39 @@ class Plugins {
 				}
 			}
 
-			//
-			// Get all plugins/*/pages/*.php pages
-			//
-			$pluginPages = glob(PLUGINS . $plugin['filename'] . '/pages/*.php');
-			foreach ($pluginPages as $file) {
-				$file = str_replace(PLUGINS, 'plugins/', $file);
-				$name = pathinfo($file, PATHINFO_FILENAME);
-
-				if (!isset($duplicates[$name])) {
-					$routes[] = [['get', 'post'], $name, $file, $priority];
-					$duplicates[$name] = true;
-				}
-			}
-
-			//
-			// Get all plugins/*/pages/subFolder/*.php pages
-			//
-			$pluginPagesSubFolders = glob(PLUGINS . $plugin['filename'] . '/pages/*', GLOB_ONLYDIR);
-			foreach ($pluginPagesSubFolders as $folder) {
-				$folderName = pathinfo($folder, PATHINFO_FILENAME);
-
-				$subFiles = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*.php');
-				foreach ($subFiles as $file) {
+			if (self::getAutoLoadOption($plugin, 'pages', true)) {
+				//
+				// Get all plugins/*/pages/*.php pages
+				//
+				$pluginPages = glob(PLUGINS . $plugin['filename'] . '/pages/*.php');
+				foreach ($pluginPages as $file) {
 					$file = str_replace(PLUGINS, 'plugins/', $file);
-					$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
+					$name = pathinfo($file, PATHINFO_FILENAME);
 
 					if (!isset($duplicates[$name])) {
 						$routes[] = [['get', 'post'], $name, $file, $priority];
 						$duplicates[$name] = true;
+					}
+				}
+			}
+
+			if (self::getAutoLoadOption($plugin, 'pagesSubFolders', true)) {
+				//
+				// Get all plugins/*/pages/subFolder/*.php pages
+				//
+				$pluginPagesSubFolders = glob(PLUGINS . $plugin['filename'] . '/pages/*', GLOB_ONLYDIR);
+				foreach ($pluginPagesSubFolders as $folder) {
+					$folderName = pathinfo($folder, PATHINFO_FILENAME);
+
+					$subFiles = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*.php');
+					foreach ($subFiles as $file) {
+						$file = str_replace(PLUGINS, 'plugins/', $file);
+						$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
+
+						if (!isset($duplicates[$name])) {
+							$routes[] = [['get', 'post'], $name, $file, $priority];
+							$duplicates[$name] = true;
+						}
 					}
 				}
 			}
@@ -158,6 +162,10 @@ class Plugins {
 
 		$themes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
+			if (!self::getAutoLoadOption($plugin, 'themes', true)) {
+				continue;
+			}
+
 			$pluginThemes = glob(PLUGINS . $plugin['filename'] . '/themes/*', GLOB_ONLYDIR);
 			foreach ($pluginThemes as $path) {
 				$path = str_replace(PLUGINS, 'plugins/', $path);
@@ -186,6 +194,10 @@ class Plugins {
 
 		$commands = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
+			if (!self::getAutoLoadOption($plugin, 'commands', true)) {
+				continue;
+			}
+
 			$pluginCommands = glob(PLUGINS . $plugin['filename'] . '/commands/*.php');
 			foreach ($pluginCommands as $path) {
 				$commands[] = $path;
@@ -791,5 +803,22 @@ class Plugins {
 				Menu::create($insert_array);
 			}
 		}
+	}
+
+	private static function getAutoLoadOption(array $plugin, string $optionName, bool $default = true)
+	{
+		if (isset($plugin['autoload'])) {
+			$autoload = $plugin['autoload'];
+			if (is_array($autoload)) {
+				if (isset($autoload[$optionName])) {
+					return getBoolean($autoload[$optionName]);
+				}
+			}
+			else if (is_bool($autoload)) {
+				return $autoload;
+			}
+		}
+
+		return $default;
 	}
 }

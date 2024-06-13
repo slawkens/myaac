@@ -40,5 +40,11 @@
 			"redirect_to": "account/manage"
 		}
 	},
-	"settings": "plugins/your-plugin-folder/settings.php"
+	"settings": "plugins/your-plugin-folder/settings.php",
+	"autoload": {
+		"pages": true,
+		"pagesSubFolders": false,
+		"commands": true,
+		"themes": true
+	}
  }
