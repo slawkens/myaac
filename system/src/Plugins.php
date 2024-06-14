@@ -21,7 +21,6 @@ class Plugins {
 			}
 		}
 
-		$duplicates = [];
 		$routes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
 			$routesDefaultPriority = 1000;
@@ -86,10 +85,7 @@ class Plugins {
 					$file = str_replace(PLUGINS, 'plugins/', $file);
 					$name = pathinfo($file, PATHINFO_FILENAME);
 
-					if (!isset($duplicates[$name])) {
-						$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
-						$duplicates[$name] = true;
-					}
+					$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
 				}
 			}
 
@@ -106,9 +102,19 @@ class Plugins {
 						$file = str_replace(PLUGINS, 'plugins/', $file);
 						$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
 
-						if (!isset($duplicates[$name])) {
-							$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
-							$duplicates[$name] = true;
+						$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
+					}
+
+					$subFolders = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*', GLOB_ONLYDIR);
+					foreach ($subFolders as $subFolder) {
+						$subFolderName = pathinfo($subFolder, PATHINFO_FILENAME);
+						$subSubFiles = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/' . $subFolderName . '/*.php');
+
+						foreach ($subSubFiles as $subSubFile) {
+							$subSubFile = str_replace(PLUGINS, 'plugins/', $subSubFile);
+							$name = $folderName . '/' . $subFolderName . '/' . pathinfo($subSubFile, PATHINFO_FILENAME);
+
+							$routes[] = [['get', 'post'], $name, $subSubFile, $pagesDefaultPriority];
 						}
 					}
 				}
