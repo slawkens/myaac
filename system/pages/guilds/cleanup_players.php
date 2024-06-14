@@ -40,7 +40,7 @@ if(count($players_list) > 0)
 				if(!$rank_guild->isLoaded())
 				{
 					$player->setRank();
-					$player->setGuildNick();
+					$player->setGuildNick('');
 					$changed_ranks_of[] = $player->getName();
 					$deleted_ranks[] = 'ID: '.$player_rank->getId().' - '.$player_rank->getName();
 					$player_rank->delete();
