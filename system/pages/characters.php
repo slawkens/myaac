@@ -346,6 +346,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				->join('players', 'players.id', '=', 'player_deaths.player_id')
 				->limit($frags_limit)
 				->selectRaw('players.name, player_deaths.*')
+				->orderBy('player_deaths.time', 'DESC')
 				->get();
 
 			if ($player_frags->count()) {
