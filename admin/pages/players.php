@@ -274,7 +274,7 @@ else if (isset($_REQUEST['search'])) {
 					$player->setLossContainers($loss_containers);
 					$player->setLossItems($loss_items);
 				}
-				if ($db->hasColumn('players', 'blessings'))
+				if ($hasBlessingsColumn)
 					$player->setBlessings($blessings);
 
 				if ($hasBlessingColumn) {
