@@ -218,9 +218,9 @@ class Plugins {
 		$hooks = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
 			if (isset($plugin['hooks'])) {
-				$priority = 1000;
-
 				foreach ($plugin['hooks'] as $_name => $info) {
+					$priority = 1000;
+
 					if (str_contains($info['type'], 'HOOK_')) {
 						$info['type'] = str_replace('HOOK_', '', $info['type']);
 					}
