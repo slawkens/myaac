@@ -25,7 +25,8 @@
 	"hooks": {
 		"Example Hook": {
 			"type": "BEFORE_PAGE",
-			"file": "plugins/example/before.php"
+			"file": "plugins/example/before.php",
+			"priority": 1000
 		}
 	},
 	"routes": {
@@ -33,7 +34,7 @@
 			"pattern": "/YourAwesomePage/{name:string}/{page:int}",
 			"file": "plugins/your-plugin/your-awesome-page.php",
 			"method": "GET",
-			"priority": "130"
+			"priority": 130
 		},
 		"Redirect Example": {
 			"redirect_from": "/redirectExample",

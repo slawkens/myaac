@@ -218,20 +218,35 @@ class Plugins {
 		$hooks = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
 			if (isset($plugin['hooks'])) {
+				$priority = 1000;
+
 				foreach ($plugin['hooks'] as $_name => $info) {
 					if (str_contains($info['type'], 'HOOK_')) {
 						$info['type'] = str_replace('HOOK_', '', $info['type']);
 					}
 
+					if (isset($info['priority'])) {
+						$priority = (int)$info['priority'];
+					}
+
 					if (defined('HOOK_'. $info['type'])) {
 						$hook = constant('HOOK_'. $info['type']);
-						$hooks[] = ['name' => $_name, 'type' => $hook, 'file' => $info['file']];
+						$hooks[] = ['name' => $_name, 'type' => $hook, 'file' => $info['file'], 'priority' => $priority];
 					} else {
 						self::$warnings[] = 'Plugin: ' . $plugin['name'] . '. Unknown event type: ' . $info['type'];
 					}
 				}
 			}
 		}
+
+		usort($hooks, function ($a, $b)
+		{
+			if ($a['priority'] == $b['priority']) {
+				return 0;
+			}
+
+			return ($a['priority'] < $b['priority']) ? -1 : 1;
+		});
 
 		if ($cache->enabled()) {
 			$cache->set('plugins_hooks', serialize($hooks), 600);
