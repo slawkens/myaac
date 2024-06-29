@@ -82,6 +82,16 @@ define('HOOK_CACHE_CLEAR', ++$i);
 define('HOOK_INSTALL_FINISH', ++$i);
 define('HOOK_INSTALL_FINISH_END', ++$i);
 
+// hook filters
+define('HOOK_FILTER_TWIG_DISPLAY', ++$i);
+define('HOOK_FILTER_TWIG_RENDER', ++$i);
+define('HOOK_FILTER_THEME_FOOTER', ++$i);
+
+const HOOK_FILTERS = [
+	HOOK_FILTER_TWIG_DISPLAY,
+	HOOK_FILTER_TWIG_RENDER,
+];
+
 const HOOK_FIRST = HOOK_STARTUP;
 define('HOOK_LAST', $i);
 
