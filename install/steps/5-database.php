@@ -72,16 +72,16 @@ if(!$error) {
 			}
 
 			if(!$error) {
-				$twig->display('install.installer.html.twig', array(
-					'url' => 'tools/5-database.php',
-					'message' => $locale['loading_spinner']
-				));
-
 				$content = '';
 				$saved = Settings::saveConfig($configToSave, BASE . 'config.local.php', $content);
 				if($saved) {
 					success($locale['step_database_config_saved']);
 					$_SESSION['saved'] = true;
+
+					$twig->display('install.installer.html.twig', array(
+						'url' => 'tools/5-database.php',
+						'message' => $locale['loading_spinner']
+					));
 				}
 				else {
 					$_SESSION['config_content'] = $content;
