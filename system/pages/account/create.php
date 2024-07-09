@@ -255,15 +255,6 @@ if($save)
 		}
 		else
 		{
-			if(setting('core.account_create_character_create')) {
-				// character creation
-				$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
-				if (!$character_created) {
-					error('There was an error creating your character. Please create your character later in account management page.');
-					error(implode(' ', $errors));
-				}
-			}
-
 			if(setting('core.account_create_auto_login')) {
 				if ($hasBeenCreatedByEMail) {
 					$_POST['account_login'] = $email;
@@ -311,6 +302,15 @@ if($save)
 				else {
 					error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
 				}
+			}
+		}
+
+		if(setting('core.account_create_character_create')) {
+			// character creation
+			$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
+			if (!$character_created) {
+				error('There was an error creating your character. Please create your character later in account management page.');
+				error(implode(' ', $errors));
 			}
 		}
 

@@ -157,13 +157,6 @@ require_once SYSTEM . 'compat/config.php';
 
 date_default_timezone_set(setting('core.date_timezone'));
 
-setting(
-	[
-		'core.account_create_character_create',
-		setting('core.account_create_character_create') && (!setting('core.mail_enabled') || !setting('core.account_mail_verify'))
-	]
-);
-
 $settingsItemImagesURL = setting('core.item_images_url');
 if($settingsItemImagesURL[strlen($settingsItemImagesURL) - 1] !== '/') {
 	setting(['core.item_images_url', $settingsItemImagesURL . '/']);
