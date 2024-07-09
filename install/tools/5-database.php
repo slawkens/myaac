@@ -32,6 +32,9 @@ if($db->hasTable(TABLE_PREFIX . 'account_actions')) {
 else {
 	// import schema
 	try {
+		$locale['step_database_importing'] = str_replace('$DATABASE_NAME$', config('database_name'), $locale['step_database_importing']);
+		success($locale['step_database_importing']);
+
 		$db->query(file_get_contents(BASE . 'install/includes/schema.sql'));
 
 		$locale['step_database_success_schema'] = str_replace('$PREFIX$', TABLE_PREFIX, $locale['step_database_success_schema']);
