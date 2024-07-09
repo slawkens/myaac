@@ -25,16 +25,20 @@ if(!Account::where('email_hash', $hash)->exists()) {
 }
 else
 {
-	if (Account::where('email_hash', $hash)->where('email_verified', 0)->exists()) {
-		$query = $query->fetch(PDO::FETCH_ASSOC);
+	$accountModel = Account::where('email_hash', $hash)->where('email_verified', 0)->first();
+	if ($accountModel) {
+		$accountModel->email_verified = 1;
+		$accountModel->save();
+
+		success('You have now verified your e-mail, this will increase the security of your account. Thank you for doing this. You can now <a href=' . getLink('account/manage') . '>log in</a>.');
+
 		$account = new OTS_Account();
-		$account->load($query['id']);
+		$account->load($accountModel->id);
 		if ($account->isLoaded()) {
 			$hooks->trigger(HOOK_EMAIL_CONFIRMED, ['account' => $account]);
 		}
 	}
-
-	Account::where('email_hash', $hash)->update('email_verified', 1);
-	success('You have now verified your e-mail, this will increase the security of your account. Thank you for doing this.');
+	else {
+		error('Link has expired.');
+	}
 }
-?>

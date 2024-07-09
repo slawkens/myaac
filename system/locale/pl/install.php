@@ -36,6 +36,10 @@ $locale['step_requirements'] = 'Wymagania';
 $locale['step_requirements_title'] = 'Sprawdzanie wymagań';
 $locale['step_requirements_php_version'] = 'Wersja PHP';
 $locale['step_requirements_write_perms'] = 'Uprawnienia do zapisu';
+$locale['step_requirements_folder_exists'] = 'Folder istnieje';
+$locale['step_requirements_folder_not_exists_tools_ext'] = 'Manadżer Pakietów NPM jest używany do zewnętrznych bibliotek JavaScript/CSS.'
+	. ' Trzeba go zainstalować poprzez wiersz poleceń: <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">https://docs.npmjs.com/downloading-and-installing-node-js-and-npm</a>'
+	. ' Po instalacji narzędzia, wywołaj następujące polecenie w głownym katalogu MyAAC: "npm install".';
 $locale['step_requirements_failed'] = 'Instalacja zostanie zablokowana dopóki te wymagania nie zostaną spełnione.</b><br/>Po więcej informacji zasięgnij do pliku <b>README</b>.';
 $locale['step_requirements_extension'] = 'Rozszerzenie PHP - $EXTENSION$';
 $locale['step_requirements_warning_images_guilds'] = 'Nie będzie możliwości uploadu obrazków gildii';

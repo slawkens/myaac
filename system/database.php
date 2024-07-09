@@ -127,6 +127,7 @@ try {
 	}
 
 	if(defined('MYAAC_INSTALL')) {
+		$error = $e->getMessage();
 		return; // installer will take care of this
 	}
 

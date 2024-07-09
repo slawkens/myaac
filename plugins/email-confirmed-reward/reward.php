@@ -1,8 +1,6 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
-$reward = setting('core.account_mail_confirmed_reward');
-
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
 $rewardCoins = setting('core.account_mail_confirmed_reward_coins');
 if ($rewardCoins > 0 && !$hasCoinsColumn) {
