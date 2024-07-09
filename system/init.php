@@ -157,6 +157,13 @@ require_once SYSTEM . 'compat/config.php';
 
 date_default_timezone_set(setting('core.date_timezone'));
 
+setting(
+	[
+		'core.account_mail_verify',
+		setting('core.account_mail_verify') && setting('core.mail_enabled')
+	]
+);
+
 $settingsItemImagesURL = setting('core.item_images_url');
 if($settingsItemImagesURL[strlen($settingsItemImagesURL) - 1] !== '/') {
 	setting(['core.item_images_url', $settingsItemImagesURL . '/']);
