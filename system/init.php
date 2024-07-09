@@ -116,7 +116,7 @@ if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hid
 	$config['highscores_ids_hidden'] = array(0);
 }
 
-$config['account_create_character_create'] = config('account_create_character_create') && (!config('mail_enabled') || !config('account_mail_verify'));
+$config['account_mail_verify'] = config('account_mail_verify') && config('mail_enabled');
 
 // POT
 require_once SYSTEM . 'libs/pot/OTS.php';

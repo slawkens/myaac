@@ -88,28 +88,32 @@ else
 				&& (!isset($t) || $t['attempts'] < 5)
 				)
 			{
-				session_regenerate_id();
-				setSession('account', $account_logged->getId());
-				setSession('password', encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password));
-				if($remember_me) {
-					setSession('remember_me', true);
-				}
-
-				$logged = true;
-				$logged_flags = $account_logged->getWebFlags();
-
-				if(isset($_POST['admin']) && !admin()) {
-					$errors[] = 'This account has no admin privileges.';
-					unsetSession('account');
-					unsetSession('password');
-					unsetSession('remember_me');
-					$logged = false;
+				if (config('mail_enabled') && config('account_mail_verify') && (int)$account_logged->getCustomField('email_verified') !== 1) {
+					$errors[] = 'Your account is not verified. Please verify your email address. If the message is not coming check the SPAM folder in your E-Mail client.';
 				}
 				else {
-					$account_logged->setCustomField('web_lastlogin', time());
-				}
+					session_regenerate_id();
+					setSession('account', $account_logged->getId());
+					setSession('password', encrypt(($config_salt_enabled ? $account_logged->getCustomField('salt') : '') . $login_password));
+					if ($remember_me) {
+						setSession('remember_me', true);
+					}
 
-				$hooks->trigger(HOOK_LOGIN, array('account' => $account_logged, 'password' => $login_password, 'remember_me' => $remember_me));
+					$logged = true;
+					$logged_flags = $account_logged->getWebFlags();
+
+					if (isset($_POST['admin']) && !admin()) {
+						$errors[] = 'This account has no admin privileges.';
+						unsetSession('account');
+						unsetSession('password');
+						unsetSession('remember_me');
+						$logged = false;
+					} else {
+						$account_logged->setCustomField('web_lastlogin', time());
+					}
+
+					$hooks->trigger(HOOK_LOGIN, array('account' => $account_logged, 'password' => $login_password, 'remember_me' => $remember_me));
+				}
 			}
 			else
 			{

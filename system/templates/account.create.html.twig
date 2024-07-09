@@ -130,7 +130,7 @@
 
 							{{ hook('HOOK_ACCOUNT_CREATE_BETWEEN_BOXES_1') }}
 
-							{% if (not config.mail_enabled or not config.account_mail_verify) and config.account_create_character_create %}
+							{% if config.account_create_character_create %}
 							<tr>
 								<td>
 									<div class="TableShadowContainerRightTop">

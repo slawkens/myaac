@@ -29,11 +29,13 @@ else
 		$account = new OTS_Account();
 		$account->load($query['id']);
 		if ($account->isLoaded()) {
+			$db->update('accounts', ['email_verified' => '1'], ['email_hash' => $hash]);
+			success('You have now verified your e-mail, this will increase the security of your account. Thank you for doing this. You can now <a href=' . getLink('account/manage') . '>log in</a>.');
+
 			$hooks->trigger(HOOK_EMAIL_CONFIRMED, ['account' => $account]);
 		}
 	}
-
-	$db->update('accounts', array('email_verified' => '1'), array('email_hash' => $hash));
-	success('You have now verified your e-mail, this will increase the security of your account. Thank you for doing this.');
+	else {
+		error('Link has expired.');
+	}
 }
-?>
