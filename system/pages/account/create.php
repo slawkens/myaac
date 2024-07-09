@@ -236,6 +236,9 @@ if($save)
 			if(_mail($email, 'New account on ' . $config['lua']['serverName'], $body_html))
 			{
 				echo 'Your account has been created.<br/><br/>';
+
+				warning("Before you can login - you need to verify your E-Mail. The verification link has been sent to $email. If the message is not coming - remember to check the SPAM folder.");
+
 				$twig->display('success.html.twig', array(
 					'title' => 'Account Created',
 					'description' => 'Your account ' . $account_type . ' is <b>' . $tmp_account . '</b><br/>You will need the account ' . $account_type . ' and your password to play on ' . configLua('serverName') . '.
