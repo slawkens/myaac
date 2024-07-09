@@ -382,6 +382,8 @@ class Settings implements \ArrayAccess
 		}
 
 		$this->settingsDatabase[$pluginKeyName][$key] = $value;
+		// invalidate cache
+		unset($this->cache[$offset]);
 	}
 
 	#[\ReturnTypeWillChange]
