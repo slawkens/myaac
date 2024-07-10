@@ -1,0 +1,24 @@
+Please enter code from e-mail and name of one character from account. Then press Submit.<br/>
+<form action="{{ getLink('account/lost') }}?action=check-code" method="post">
+	<table cellspacing="1" cellpadding="4" border="0" width="100%">
+		<tr>
+			<td bgcolor="{{ config('vdarkborder') }}" class="white">
+				<b>Code & character name</b>
+			</td>
+		</tr>
+		<tr>
+			<td bgcolor="{{ config('darkborder') }}">
+				Your code:&nbsp;<input type="text" name="code" value="{{ code }}" size="40"><br/>
+				Character:&nbsp;<input type="text" name="character" value="{{ character }}" size="40"><br/>
+			</td>
+		</tr>
+	</table>
+	<br>
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+		<tr>
+			<td align="center">
+				{{ include('buttons.submit.html.twig') }}
+			</td>
+		</tr>
+	</table>
+</form>

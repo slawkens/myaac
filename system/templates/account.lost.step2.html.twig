@@ -1,0 +1,27 @@
+Set new password and e-mail to your account.<br>
+<form action="{{ getLink('account/lost') }}?action=step3" method="post">
+	<input type="hidden" name="character" value="">
+	<table cellspacing="1" cellpadding="4" border="0" width="100%">
+		<tr>
+			<td bgcolor="{{ config('vdarkborder') }}" class="white">
+				<b>Please enter new password and e-mail</b>
+			</td>
+		</tr>
+		<tr>
+			<td bgcolor="{{ config('darkborder') }}">
+				Account of character:&nbsp;&nbsp;<input type="text" name="nick" value="{{ nick }}" size="40" readonly="readonly"><br/>
+				New password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="passor" type="password" name="passor" value="" size="40"><br/>
+				Repeat new password:&nbsp;&nbsp;<input id="passor2" type="password" name="passor" value="" size="40"><br/>
+				New e-mail address:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="email" type="text" name="email" value="" size="40"><br/>
+				<input type=hidden name="key" VALUE="{{ recKey }}">
+			</td></tr>
+	</table>
+	<br>
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+		<tr>
+			<td align="center">
+				{{ include('buttons.submit.html.twig') }}
+			</td>
+		</tr>
+</table>
+</form>
