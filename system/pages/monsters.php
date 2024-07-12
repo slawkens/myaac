@@ -44,6 +44,8 @@ $monster = Monster::where('hide', '!=', 1)->where('name', $monster_name)->first(
 if ($monster && isset($monster->name)) {
 	$monster = $monster->toArray();
 
+	/** @var array $monster */
+
 	function sort_by_chance($a, $b)
 	{
 		if ($a['chance'] == $b['chance']) {
