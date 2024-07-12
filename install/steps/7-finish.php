@@ -79,6 +79,8 @@ else {
 
 		$account_used->setCustomField('web_flags', FLAG_ADMIN + FLAG_SUPER_ADMIN);
 		$account_used->setCustomField('country', 'us');
+		$account_used->setCustomField('email_verified', 1);
+
 		if($db->hasColumn('accounts', 'group_id'))
 			$account_used->setCustomField('group_id', $groups->getHighestId());
 		if($db->hasColumn('accounts', 'type'))
