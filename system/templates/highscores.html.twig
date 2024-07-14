@@ -11,7 +11,7 @@
 						<select onchange="location = this.value;" aria-label="skillFilter" id="skillFilter">
 							{% set i = 0 %}
 							{% for link, name in types %}
-								<option value="{{ getLink('highscores') }}/{{ link }}{% if vocation is defined %}/{{ vocation }}{% endif %}" class="size_xs">{{ name }}</option>
+								<option value="{{ getLink('highscores') }}/{{ link }}{% if vocation is not null %}{{ vocation }}{% endif %}" class="size_xs">{{ name }}</option>
 							{% endfor %}
 						</select>
 					</td>
@@ -105,7 +105,7 @@
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>
 						{% for link, name in types %}
-						<a href="{{ getLink('highscores') }}/{{ link }}{% if vocation is defined %}/{{ vocation }}{% endif %}" class="size_xs">{{ name }}</a><br/>
+						<a href="{{ getLink('highscores') }}/{{ link }}{% if vocation is not null %}/{{ vocation }}{% endif %}" class="size_xs">{{ name }}</a><br/>
 						{% endfor %}
 					</td>
 				</tr>
