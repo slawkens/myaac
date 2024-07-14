@@ -14,7 +14,7 @@ use MyAAC\Models\Player;
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Change Comment';
-require __DIR__ . '/base.php';
+require PAGES . 'account/base.php';
 
 if(!$logged) {
 	return;
@@ -68,7 +68,7 @@ if($show_form) {
 	}
 
 	if(isset($player) && $player) {
-		$twig->display('account.change_comment.html.twig', array(
+		$twig->display('account.characters.change-comment.html.twig', array(
 			'player' => $player->toArray()
 		));
 	}

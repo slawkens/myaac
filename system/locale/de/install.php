@@ -36,6 +36,10 @@ $locale['step_requirements'] = 'Anforderungen';
 $locale['step_requirements_title'] = 'Anforderungen überprüfen';
 $locale['step_requirements_php_version'] = 'PHP Version';
 $locale['step_requirements_write_perms'] = 'Schreibberechtigungen';
+$locale['step_requirements_folder_exists'] = 'Ordner ist vorhanden';
+$locale['step_requirements_folder_not_exists_tools_ext'] = 'NPM Package Manager wird verwendet für externe JavaScript/CSS Bibliotheken.'
+	. ' Es sollte via Command Line installiert werden: <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">https://docs.npmjs.com/downloading-and-installing-node-js-and-npm</a>'
+	. ' Nachdem das Tool installiert wurde, folgende Befehl sollte ausgeführt in dem Hauptordner des MyAACs: "npm install".';
 $locale['step_requirements_failed'] = 'Die Installation wird deaktiviert, bis diese Anforderungen erfüllt sind.</b><br/>Für weitere Informationen siehe <b>README</b> Datei.';
 $locale['step_requirements_extension'] = '$EXTENSION$ PHP Erweiterung';
 

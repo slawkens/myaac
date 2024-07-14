@@ -24,7 +24,7 @@ if(!$logged) {
 		$extra_url = '?action=new_post&thread_id=' . $_GET['thread_id'];
 	}
 
-	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . BASE_URL . urlencode(getLink('forum') . $extra_url) . '">Log in</a> to post on the forum.<br /><br />';
+	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . urlencode(getLink('forum') . $extra_url) . '">Log in</a> to post on the forum.<br /><br />';
 	return;
 }
 

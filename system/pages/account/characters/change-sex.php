@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Change Sex';
-require __DIR__ . '/base.php';
+require PAGES . 'account/base.php';
 
 if(!$logged) {
 	return;
@@ -88,7 +88,7 @@ else
 		if(!empty($errors)) {
 			$twig->display('error_box.html.twig', array('errors' => $errors));
 		}
-		$twig->display('account.change_sex.html.twig', array(
+		$twig->display('account.characters.change-sex.html.twig', array(
 			'players' => $account_logged->getPlayersList(false),
 			'player_sex' => isset($player) ? $player->getSex() : -1,
 			'points' => $points

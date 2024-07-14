@@ -48,7 +48,7 @@ if (!is_array($settingsFile)) {
 
 $settingsKeyName = ($plugin == 'core' ? $plugin : $settingsFile['key']);
 
-$title = ($plugin == 'core' ? 'Settings' : 'Plugin Settings - ' . $plugin);
+$title = ($plugin == 'core' ? 'Settings' : 'Plugin Settings - ' . $settingsFile['name']);
 
 $settingsParsed = Settings::display($settingsKeyName, $settingsFile['settings']);
 

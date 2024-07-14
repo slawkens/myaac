@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Delete Character';
-require __DIR__ . '/base.php';
+require PAGES . 'account/base.php';
 
 if(!$logged) {
 	return;
@@ -93,5 +93,5 @@ if($show_form) {
 		$twig->display('error_box.html.twig', array('errors' => $errors));
 	}
 
-	$twig->display('account.delete_character.html.twig');
+	$twig->display('account.characters.delete.html.twig');
 }

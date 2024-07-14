@@ -15,11 +15,12 @@
         "illuminate/database": "^10.18",
         "peppeocchi/php-cron-scheduler": "4.*",
         "symfony/console": "^6.4",
-        "symfony/string": "^6.4"
+        "symfony/string": "^6.4",
+        "symfony/var-dumper": "^6.4",
+        "filp/whoops": "^2.15",
+        "maximebf/debugbar": "dev-master"
     },
     "require-dev": {
-        "filp/whoops": "^2.15",
-        "maximebf/debugbar": "dev-master",
         "phpstan/phpstan": "^1.10"
     },
     "autoload": {

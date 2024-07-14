@@ -22,6 +22,12 @@ if(isset($_REQUEST['redirect']))
 {
 	$redirect = urldecode($_REQUEST['redirect']);
 
+	// should never happen, unless hacker modify the URL
+	if (!str_contains($redirect, BASE_URL)) {
+		error('Fatal error: Cannot redirect outside the website.');
+		return;
+	}
+
 	$twig->display('account.redirect.html.twig', array(
 		'redirect' => $redirect
 	));
@@ -46,7 +52,7 @@ if(empty($recovery_key))
 else
 {
 	if(setting('core.account_generate_new_reckey') && setting('core.mail_enabled'))
-		$account_registered = '<b><span style="color: green">Yes ( <a href="' . getLink('account/register/new') . '"> Buy new Recovery Key </a> )</span></b>';
+		$account_registered = '<b><span style="color: green">Yes ( <a href="' . getLink('account/register-new') . '"> Buy new Recovery Key </a> )</span></b>';
 	else
 		$account_registered = '<b><span style="color: green">Yes</span></b>';
 }

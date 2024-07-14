@@ -38,7 +38,11 @@ if [ $1 = "prepare" ]; then
 	cd $dir || exit
 
 	# dependencies
-	composer install --prefer-dist --optimize-autoloader
+	composer install --no-dev --prefer-dist --optimize-autoloader
+	npm install
+
+	# node_modules is useless, we already have copy in tools/ext
+	rm -R node_modules
 
 	echo "Now you can make changes to $dir. When you are ready, type 'release.sh pack'"
 	exit

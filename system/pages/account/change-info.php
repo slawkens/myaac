@@ -26,12 +26,13 @@ if(setting('core.account_country'))
 $account = Account::find($account_logged->getId());
 
 $show_form = true;
-$new_rlname = isset($_POST['info_rlname']) ? htmlspecialchars(stripslashes($_POST['info_rlname'])) : NULL;
-$new_location = isset($_POST['info_location']) ? htmlspecialchars(stripslashes($_POST['info_location'])) : NULL;
-$new_country = isset($_POST['info_country']) ? htmlspecialchars(stripslashes($_POST['info_country'])) : NULL;
+$new_rlname = isset($_POST['info_rlname']) ? htmlspecialchars(stripslashes($_POST['info_rlname'])) : '';
+$new_location = isset($_POST['info_location']) ? htmlspecialchars(stripslashes($_POST['info_location'])) : '';
+$new_country = isset($_POST['info_country']) ? htmlspecialchars(stripslashes($_POST['info_country'])) : '';
 if(isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
-	if(!isset($config['countries'][$new_country]))
+	if(setting('core.account_country') && !isset($config['countries'][$new_country])) {
 		$errors[] = 'Country is not correct.';
+	}
 
 	if(empty($errors)) {
 		//save data from form
@@ -39,7 +40,14 @@ if(isset($_POST['changeinfosave']) && $_POST['changeinfosave'] == 1) {
 		$account->location = $new_location;
 		$account->country = $new_country;
 		$account->save();
-		$account_logged->logAction('Changed Real Name to <b>' . $new_rlname . '</b>, Location to <b>' . $new_location . '</b> and Country to <b>' . $config['countries'][$new_country] . '</b>.');
+
+		$log = 'Changed Real Name to <b>' . $new_rlname . '</b>, Location to <b>' . $new_location . '</b>';
+		if(setting('core.account_country')) {
+			$log .= ' and Country to <b>' . $config['countries'][$new_country] . '</b>';
+		}
+		$log .= '.';
+
+		$account_logged->logAction($log);
 		$twig->display('success.html.twig', array(
 			'title' => 'Public Information Changed',
 			'description' => 'Your public information has been changed.'
@@ -68,7 +76,7 @@ if($show_form) {
 			$countries[$code] = $country;
 	}
 
-	$twig->display('account.change_info.html.twig', array(
+	$twig->display('account.change-info.html.twig', array(
 		'countries' => $countries ?? [],
 		'account_rlname' => $account_rlname,
 		'account_location' => $account_location,

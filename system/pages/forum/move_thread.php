@@ -19,7 +19,7 @@ if ($ret === false) {
 }
 
 if(!$logged) {
-	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . BASE_URL . urlencode(getLink('forum')) . '">Log in</a> to post on the forum.<br /><br />';
+	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . urlencode(getLink('forum')) . '">Log in</a> to post on the forum.<br /><br />';
 	return;
 }
 

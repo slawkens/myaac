@@ -91,35 +91,67 @@ if($logged && $account_logged && $account_logged->isLoaded()) {
 $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) {
 	$routes = require SYSTEM . 'routes.php';
 
-	$isAlreadyDefined = [];
-
-	$routesTmp = [];
+	$routesFinal = [];
 	foreach(getDatabasePages() as $page) {
-		$isAlreadyDefined[$page] = true;
-		$routesTmp[] = ['*', $page, '__database__/' . $page, true];
+		$routesFinal[] = ['*', $page, '__database__/' . $page, 100];
 	}
 
 	Plugins::clearWarnings();
 	foreach (Plugins::getRoutes() as $route) {
-		if(!isset($isAlreadyDefined[$route[1]])) {
-			$isAlreadyDefined[$route[1]] = true;
-			$routesTmp[] = [$route[0], $route[1], $route[2]];
-		}
+		$routesFinal[] = [$route[0], $route[1], $route[2], $route[3] ?? 1000];
+/*
+		echo '<pre>';
+		var_dump($route[1], $route[3], $route[2]);
+		echo '/<pre>';
+*/
 	}
 
 	foreach ($routes as $route) {
-		if(!isset($isAlreadyDefined[$route[1]])) {
-			if (strpos($route[2], '__redirect__') === false && strpos($route[2], '__database__') === false) {
-				$routesTmp[] = [$route[0], $route[1], 'system/pages/' . $route[2]];
-			}
-			else {
-				$routesTmp[] = [$route[0], $route[1], $route[2]];
-			}
+		if (!str_contains($route[2], '__redirect__') && !str_contains($route[2], '__database__')) {
+			$routesFinal[] = [$route[0], $route[1], 'system/pages/' . $route[2], $route[3] ?? 10000];
+		}
+		else {
+			$routesFinal[] = [$route[0], $route[1], $route[2], $route[3] ?? 10000];
 		}
 	}
 
-	//var_dump($routesTmp);
-	foreach ($routesTmp as $route) {
+	// sort required for the next step (filter)
+	usort($routesFinal, function ($a, $b)
+	{
+		// key 3 is priority
+		if ($a[3] == $b[3]) {
+			return 0;
+		}
+
+		return ($a[3] < $b[3]) ? -1 : 1;
+	});
+
+	// remove duplicates
+	// if same route pattern, but different priority
+	$routesFinal = array_filter($routesFinal, function ($a) {
+		$aliases = [
+			[':int', ':string', ':alphanum'],
+			[':\d+', ':[A-Za-z0-9-_%+\' ]+', ':[A-Za-z0-9]+'],
+		];
+
+		// apply aliases
+		$a[1] = str_replace($aliases[0], $aliases[1], $a[1]);
+
+		static $duplicates = [];
+		if (isset($duplicates[$a[1]])) {
+			return false;
+		}
+
+		$duplicates[$a[1]] = true;
+		return true;
+	});
+/*
+	echo '<pre>';
+	var_dump($routesFinal);
+	echo '</pre>';
+	die;
+*/
+	foreach ($routesFinal as $route) {
 		if ($route[0] === '*') {
 			$route[0] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'];
 		}

@@ -20,13 +20,13 @@
  *
  * @package   MyAAC
  * @author    Slawkens <slawkens@gmail.com>
- * @copyright 2019 MyAAC
+ * @copyright 2024 MyAAC
  * @link      https://my-aac.org
  */
 if (version_compare(phpversion(), '8.1', '<')) die('PHP version 8.1 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '1.0-beta';
+const MYAAC_VERSION = '1.0-beta.2';
 const DATABASE_VERSION = 40;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
@@ -156,7 +156,7 @@ if (file_exists(BASE . 'config.local.php')) {
 
 /** @var array $config */
 ini_set('log_errors', 1);
-if(@$config['env'] === 'dev') {
+if(@$config['env'] === 'dev' || defined('MYAAC_INSTALL')) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);

@@ -31,6 +31,8 @@ if($dev_mode) {
 }
 unset($dev_mode);
 
+$twig->addExtension(new MyAAC\Twig\Extension\TypeCastingExtension());
+
 $filter = new TwigFilter('timeago', function ($datetime) {
 
 	$time = time() - strtotime($datetime);
@@ -71,8 +73,8 @@ $function = new TwigFunction('generateLink', function ($s, $n, $b = false) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getPlayerLink', function ($s, $p = true) {
-	return getPlayerLink($s, $p);
+$function = new TwigFunction('getPlayerLink', function ($s, $p = true, $colored = false) {
+	return getPlayerLink($s, $p, $colored);
 });
 $twig->addFunction($function);
 

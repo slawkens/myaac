@@ -21,7 +21,7 @@ $new_password = $_POST['newpassword'] ?? NULL;
 $new_password_confirm = $_POST['newpassword_confirm'] ?? NULL;
 $old_password = $_POST['oldpassword'] ?? NULL;
 if(empty($new_password) && empty($new_password_confirm) && empty($old_password)) {
-	$twig->display('account.change_password.html.twig');
+	$twig->display('account.change-password.html.twig');
 }
 else
 {
@@ -52,7 +52,7 @@ else
 		$twig->display('error_box.html.twig', array('errors' => $errors));
 
 		//show form
-		$twig->display('account.change_password.html.twig');
+		$twig->display('account.change-password.html.twig');
 	}
 	else {
 		$org_pass = $new_password;

@@ -25,7 +25,8 @@
 	"hooks": {
 		"Example Hook": {
 			"type": "BEFORE_PAGE",
-			"file": "plugins/example/before.php"
+			"file": "plugins/example/before.php",
+			"priority": 1000
 		}
 	},
 	"routes": {
@@ -33,12 +34,20 @@
 			"pattern": "/YourAwesomePage/{name:string}/{page:int}",
 			"file": "plugins/your-plugin/your-awesome-page.php",
 			"method": "GET",
-			"priority": "130"
+			"priority": 130
 		},
 		"Redirect Example": {
 			"redirect_from": "/redirectExample",
 			"redirect_to": "account/manage"
 		}
 	},
-	"settings": "plugins/your-plugin-folder/settings.php"
+	"routes-default-priority": 1000,
+	"pages-default-priority": 1000,
+	"settings": "plugins/your-plugin-folder/settings.php",
+	"autoload": {
+		"pages": true,
+		"pagesSubFolders": false,
+		"commands": true,
+		"themes": true
+	}
  }

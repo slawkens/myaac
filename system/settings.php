@@ -735,7 +735,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Name Min Length',
 			'type' => 'number',
 			'desc' => '',
-			'default' => 4,
+			'default' => 3,
 		],
 		'create_character_name_max_length' => [
 			'name' => 'Name Max Length',

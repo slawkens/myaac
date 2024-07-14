@@ -87,17 +87,28 @@ function getForumBoardLink($board_id, $page = NULL): string {
 	return BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'forum/board/' . (int)$board_id . (isset($page) ? '/' . $page : '');
 }
 
-function getPlayerLink($name, $generate = true): string
+function getPlayerLink($name, $generate = true, bool $colored = false): string
 {
-	if(is_numeric($name))
-	{
-		$player = new OTS_Player();
+	$player = new OTS_Player();
+
+	if(is_numeric($name)) {
 		$player->load((int)$name);
-		if($player->isLoaded())
-			$name = $player->getName();
+	}
+	else {
+		$player->find($name);
 	}
 
+	if (!$player->isLoaded()) {
+		return '(error)';
+	}
+
+	$name = $player->getName();
+
 	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'characters/' . urlencode($name);
+
+	if ($colored) {
+		$name = '<span style="color: ' . ($player->isOnline() ? 'green' : 'red') . ';">' . $name . '</span>';
+	}
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -1623,7 +1634,7 @@ function removeIfFirstSlash(&$text) {
 };
 
 function escapeHtml($html) {
-	return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	return htmlspecialchars($html);
 }
 
 function getGuildNameById($id)

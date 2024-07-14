@@ -9,6 +9,8 @@ class GuildRank extends Model {
 
 	public $timestamps = false;
 
+	protected $fillable = ['guild_id', 'name', 'level'];
+
 	public function guild()
 	{
 		return $this->belongsTo(Guild::class);

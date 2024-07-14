@@ -134,10 +134,6 @@ $ots = POT::getInstance();
 $eloquentConnection = null;
 require_once SYSTEM . 'database.php';
 
-if ($config_lua_reload) {
-	clearCache();
-}
-
 // verify myaac tables exists in database
 if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {
 	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting ' . BASE_URL . 'install');
@@ -163,8 +159,8 @@ date_default_timezone_set(setting('core.date_timezone'));
 
 setting(
 	[
-		'core.account_create_character_create',
-		setting('core.account_create_character_create') && (!setting('core.mail_enabled') || !setting('core.account_mail_verify'))
+		'core.account_mail_verify',
+		setting('core.account_mail_verify') && setting('core.mail_enabled')
 	]
 );
 

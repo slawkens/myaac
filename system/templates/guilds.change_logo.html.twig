@@ -1,20 +1,32 @@
-<div style="text-align:center"><h2>Change guild logo</h2></div>
-Here you can change logo of your guild.<br/>Actuall logo: <img src="{{ constant('GUILD_IMAGES_DIR') }}{{ guild_logo }}" height="64" width="64"><br/><br/>
-<form enctype="multipart/form-data" action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=change_logo" method="post" id="upload_form">
-	{{ csrf() }}
-	<input type="hidden" name="todo" value="save" />
-	<input type="hidden" name="MAX_FILE_SIZE" value="{{ max_image_size_b }}" />
-	Select new logo: <input name="newlogo" id="newlogo" type="file" />
-	<input type="submit" value="Send new logo" />
-</form>
-Only <b>jpg, gif, png, bmp</b> pictures. Max. size: <b>{{ setting('core.guild_image_size_kb') }} KB</b><br>
-<br/>
+{% set title = 'Change guild logo' %}
+{% set background = config('darkborder') %}
+{% set content %}
+<table style="width:100%;" >
+	<tr>
+		<td>
+			Here you can change logo of your guild.<br/>Actuall logo: <img src="{{ constant('GUILD_IMAGES_DIR') }}{{ guild_logo }}" height="64" width="64"><br/><br/>
+			<form enctype="multipart/form-data" action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=change_logo" method="post" id="upload_form">
+				{{ csrf() }}
+				<input type="hidden" name="todo" value="save" />
+				<input type="hidden" name="MAX_FILE_SIZE" value="{{ max_image_size_b }}" />
+				Select new logo: <input name="newlogo" id="newlogo" type="file" />
+				<input type="submit" value="Send new logo" />
+			</form>
+			Only <b>jpg, gif, png, bmp</b> pictures. Max. size: <b>{{ setting('core.guild_image_size_kb') }} KB</b><br>
+			<br/>
+		</td>
+	</tr>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+
 <div style="text-align:center">
 	<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=manager" method="post">
 		{{ csrf() }}
 		{{ include('buttons.back.html.twig') }}
 	</form>
 </div>
+
 <script type="text/javascript">
 	$(function() {
 		$('#upload_form').submit(function (event) {

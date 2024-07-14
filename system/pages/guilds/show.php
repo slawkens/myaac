@@ -142,9 +142,7 @@ if($logged && count($invited_list) > 0)
 	}
 }
 
-$useGuildNick = false;
-if($db->hasColumn('players', 'guildnick'))
-	$useGuildNick = true;
+$useGuildNick = $db->hasTable('guild_members') || $db->hasTable('guild_membership') || $db->hasColumn('players', 'guildnick');
 
 $twig->display('guilds.view.html.twig', array(
 	'logo' => $guild_logo,
@@ -160,7 +158,6 @@ $twig->display('guilds.view.html.twig', array(
 	'level_in_guild' => $level_in_guild,
 	'isLeader' => $guild_leader,
 	'isVice' => $guild_vice,
-	'logged' => $logged,
 	'invited_list' => $invited_list,
 	'show_accept_invite' => $show_accept_invite,
 	'useGuildNick' => $useGuildNick

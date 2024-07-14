@@ -3,10 +3,12 @@
 	var lastSend = 0;
 
 	$(function() {
-		updateFlag();
-		$('#account_country').change(function() {
+		{% if setting('core.account_country') %}
 			updateFlag();
-		});
+			$('#account_country').change(function() {
+				updateFlag();
+			});
+		{% endif %}
 
 		$('#account_input').blur(function() {
 			checkAccount();

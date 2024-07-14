@@ -36,6 +36,10 @@ $locale['step_requirements'] = 'Requirements';
 $locale['step_requirements_title'] = 'Requirements check';
 $locale['step_requirements_php_version'] = 'PHP Version';
 $locale['step_requirements_write_perms'] = 'Write permissions';
+$locale['step_requirements_folder_exists'] = 'Directory exists';
+$locale['step_requirements_folder_not_exists_tools_ext'] = 'NPM Package Manager is used for external JavaScript/CSS libraries.'
+	. ' You need to install it through Command Line: <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">https://docs.npmjs.com/downloading-and-installing-node-js-and-npm</a>'
+	. ' When you done with installing that tool, execute: "npm install" in the main MyAAC folder.';
 $locale['step_requirements_failed'] = 'Installation will be disabled until these requirements will be passed.</b><br/>For more informations see <b>README</b> file.';
 $locale['step_requirements_extension'] = '$EXTENSION$ PHP extension';
 $locale['step_requirements_warning_images_guilds'] = 'Guild logo upload will not work';

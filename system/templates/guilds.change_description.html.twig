@@ -1,14 +1,24 @@
-<div style="text-align:center"><h2>Change guild description</h2></div>
-Here you can change description of your guild.<br/>
-<form enctype="multipart/form-data" action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=change_description" method="post">
-	{{ csrf() }}
-	<input type="hidden" name="todo" value="save"/>
-	<textarea name="description" cols="60" rows="{{ setting('core.guild_description_lines_limit') - 1 }}">{{ guild.getCustomField('description')|raw }}</textarea><br>
-	(max. {{ setting('core.guild_description_lines_limit') }} lines, max. {{ setting('core.guild_description_chars_limit') }} chars) <input type="submit" value="Save description"/></form><br/>
-<br/>
-<div style="text-align:center">
-	<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=manager" method="post">
-		{{ csrf() }}
-		{{ include('buttons.back.html.twig') }}
-	</form>
-</div>
+{% set title = 'Change guild description' %}
+{% set background = config('darkborder') %}
+{% set content %}
+<table style="width:100%;" >
+	<tr>
+		<td>
+			Here you can change description of your guild.<br/>
+			<form enctype="multipart/form-data" action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=change_description" method="post">
+				{{ csrf() }}
+				<input type="hidden" name="todo" value="save"/>
+				<textarea name="description" cols="60" rows="{{ setting('core.guild_description_lines_limit') - 1 }}">{{ guild.getCustomField('description')|raw }}</textarea><br>
+				(max. {{ setting('core.guild_description_lines_limit') }} lines, max. {{ setting('core.guild_description_chars_limit') }} chars) <input type="submit" value="Save description"/></form><br/>
+			<br/>
+			<div style="text-align:center">
+				<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=manager" method="post">
+					{{ csrf() }}
+					{{ include('buttons.back.html.twig') }}
+				</form>
+			</div>
+		</td>
+	</tr>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}

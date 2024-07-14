@@ -227,7 +227,7 @@ if($save)
 			$hash = md5(generateRandomString(16, true, true) . $email);
 			$new_account->setCustomField('email_hash', $hash);
 
-			$verify_url = getLink('account/confirm_email/' . $hash);
+			$verify_url = getLink('account/confirm-email/' . $hash);
 			$body_html = $twig->render('mail.account.verify.html.twig', array(
 				'account' => $tmp_account,
 				'verify_url' => generateLink($verify_url, $verify_url, true)
@@ -236,6 +236,9 @@ if($save)
 			if(_mail($email, 'New account on ' . $config['lua']['serverName'], $body_html))
 			{
 				echo 'Your account has been created.<br/><br/>';
+
+				warning("Before you can login - you need to verify your E-Mail. The verification link has been sent to $email. If the message is not coming - remember to check the SPAM folder.");
+
 				$twig->display('success.html.twig', array(
 					'title' => 'Account Created',
 					'description' => 'Your account ' . $account_type . ' is <b>' . $tmp_account . '</b><br/>You will need the account ' . $account_type . ' and your password to play on ' . configLua('serverName') . '.
@@ -252,15 +255,6 @@ if($save)
 		}
 		else
 		{
-			if(setting('core.account_create_character_create')) {
-				// character creation
-				$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
-				if (!$character_created) {
-					error('There was an error creating your character. Please create your character later in account management page.');
-					error(implode(' ', $errors));
-				}
-			}
-
 			if(setting('core.account_create_auto_login')) {
 				if ($hasBeenCreatedByEMail) {
 					$_POST['account_login'] = $email;
@@ -308,6 +302,15 @@ if($save)
 				else {
 					error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
 				}
+			}
+		}
+
+		if(setting('core.account_create_character_create')) {
+			// character creation
+			$character_created = $createCharacter->doCreate($character_name, $character_sex, $character_vocation, $character_town, $new_account, $errors);
+			if (!$character_created) {
+				error('There was an error creating your character. Please create your character later in account management page.');
+				error(implode(' ', $errors));
 			}
 		}
 

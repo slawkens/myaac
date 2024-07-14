@@ -23,18 +23,15 @@ class Plugins {
 
 		$routes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
-			$pluginPages = glob(PLUGINS . $plugin['filename'] . '/pages/*.php');
-			foreach ($pluginPages as $file) {
-				$file = str_replace(PLUGINS, 'plugins/', $file);
-				$name = pathinfo($file, PATHINFO_FILENAME);
-
-				$routes[] = [['get', 'post'], $name, $file, 1000];
+			$routesDefaultPriority = 1000;
+			if (isset($plugin['routes-default-priority'])) {
+				$routesDefaultPriority = $plugin['routes-default-priority'];
 			}
 
 			$warningPreTitle = 'Plugin: ' . $plugin['name'] . ' - ';
 
 			if (isset($plugin['routes'])) {
-				foreach ($plugin['routes'] as $_name => $info) {
+				foreach ($plugin['routes'] as $info) {
 					// default method: get
 					$method = $info['method'] ?? ['GET'];
 					if ($method !== '*') {
@@ -51,7 +48,7 @@ class Plugins {
 					}
 
 					if (!isset($info['priority'])) {
-						$info['priority'] = 100; // default priority
+						$info['priority'] = $routesDefaultPriority; // default priority taken from plugin.json
 					}
 
 					if (isset($info['redirect_from'])) {
@@ -70,39 +67,75 @@ class Plugins {
 					// replace first occurrence of / in pattern if found (will be auto-added later)
 					removeIfFirstSlash($info['pattern']);
 
-					foreach ($routes as $id => &$route) {
-						if($route[1] == $info['pattern']) {
-							if($info['priority'] < $route[3]) {
-								self::$warnings[] = $warningPreTitle . "Duplicated route with lower priority: {$info['pattern']}. Disabling this route...";
-								continue 2;
-							}
-							else {
-								self::$warnings[] = $warningPreTitle . "Duplicated route with lower priority: {$route[1]} ({$route[3]}). Disabling this route...";
-								unset($routes[$id]);
-							}
-						}
-					}
-
 					$routes[] = [$methods, $info['pattern'], $info['file'], $info['priority']];
 				}
 			}
-		}
-		/*
-				usort($routes, function ($a, $b)
-				{
-					// key 3 is priority
-					if ($a[3] == $b[3]) {
-						return 0;
+
+			$pagesDefaultPriority = 1000;
+			if (isset($plugin['pages-default-priority'])) {
+				$pagesDefaultPriority = $plugin['pages-default-priority'];
+			}
+
+			if (self::getAutoLoadOption($plugin, 'pages', true)) {
+				//
+				// Get all plugins/*/pages/*.php pages
+				//
+				$pluginPages = glob(PLUGINS . $plugin['filename'] . '/pages/*.php');
+				foreach ($pluginPages as $file) {
+					$file = str_replace(PLUGINS, 'plugins/', $file);
+					$name = pathinfo($file, PATHINFO_FILENAME);
+
+					$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
+				}
+			}
+
+			if (self::getAutoLoadOption($plugin, 'pagesSubFolders', true)) {
+				//
+				// Get all plugins/*/pages/subFolder/*.php pages
+				//
+				$pluginPagesSubFolders = glob(PLUGINS . $plugin['filename'] . '/pages/*', GLOB_ONLYDIR);
+				foreach ($pluginPagesSubFolders as $folder) {
+					$folderName = pathinfo($folder, PATHINFO_FILENAME);
+
+					$subFiles = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*.php');
+					foreach ($subFiles as $file) {
+						$file = str_replace(PLUGINS, 'plugins/', $file);
+						$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
+
+						$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
 					}
 
-					return ($a[3] > $b[3]) ? -1 : 1;
-				});
-		*/
+					$subFolders = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/*', GLOB_ONLYDIR);
+					foreach ($subFolders as $subFolder) {
+						$subFolderName = pathinfo($subFolder, PATHINFO_FILENAME);
+						$subSubFiles = glob(PLUGINS . $plugin['filename'] . '/pages/' . $folderName . '/' . $subFolderName . '/*.php');
+
+						foreach ($subSubFiles as $subSubFile) {
+							$subSubFile = str_replace(PLUGINS, 'plugins/', $subSubFile);
+							$name = $folderName . '/' . $subFolderName . '/' . pathinfo($subSubFile, PATHINFO_FILENAME);
+
+							$routes[] = [['get', 'post'], $name, $subSubFile, $pagesDefaultPriority];
+						}
+					}
+				}
+			}
+		}
+
+		usort($routes, function ($a, $b)
+		{
+			// key 3 is priority
+			if ($a[3] == $b[3]) {
+				return 0;
+			}
+
+			return ($a[3] < $b[3]) ? -1 : 1;
+		});
+
 		// cleanup before passing back
 		// priority is not needed anymore
-		foreach ($routes as &$route) {
-			unset($route[3]);
-		}
+		//foreach ($routes as &$route) {
+		//	unset($route[3]);
+		//}
 
 		if ($cache->enabled()) {
 			$cache->set('plugins_routes', serialize($routes), 600);
@@ -123,6 +156,10 @@ class Plugins {
 
 		$themes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
+			if (!self::getAutoLoadOption($plugin, 'themes', true)) {
+				continue;
+			}
+
 			$pluginThemes = glob(PLUGINS . $plugin['filename'] . '/themes/*', GLOB_ONLYDIR);
 			foreach ($pluginThemes as $path) {
 				$path = str_replace(PLUGINS, 'plugins/', $path);
@@ -151,6 +188,10 @@ class Plugins {
 
 		$commands = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
+			if (!self::getAutoLoadOption($plugin, 'commands', true)) {
+				continue;
+			}
+
 			$pluginCommands = glob(PLUGINS . $plugin['filename'] . '/commands/*.php');
 			foreach ($pluginCommands as $path) {
 				$commands[] = $path;
@@ -178,19 +219,34 @@ class Plugins {
 		foreach(self::getAllPluginsJson() as $plugin) {
 			if (isset($plugin['hooks'])) {
 				foreach ($plugin['hooks'] as $_name => $info) {
+					$priority = 1000;
+
 					if (str_contains($info['type'], 'HOOK_')) {
 						$info['type'] = str_replace('HOOK_', '', $info['type']);
 					}
 
+					if (isset($info['priority'])) {
+						$priority = (int)$info['priority'];
+					}
+
 					if (defined('HOOK_'. $info['type'])) {
 						$hook = constant('HOOK_'. $info['type']);
-						$hooks[] = ['name' => $_name, 'type' => $hook, 'file' => $info['file']];
+						$hooks[] = ['name' => $_name, 'type' => $hook, 'file' => $info['file'], 'priority' => $priority];
 					} else {
 						self::$warnings[] = 'Plugin: ' . $plugin['name'] . '. Unknown event type: ' . $info['type'];
 					}
 				}
 			}
 		}
+
+		usort($hooks, function ($a, $b)
+		{
+			if ($a['priority'] == $b['priority']) {
+				return 0;
+			}
+
+			return ($a['priority'] < $b['priority']) ? -1 : 1;
+		});
 
 		if ($cache->enabled()) {
 			$cache->set('plugins_hooks', serialize($hooks), 600);
@@ -756,5 +812,22 @@ class Plugins {
 				Menu::create($insert_array);
 			}
 		}
+	}
+
+	private static function getAutoLoadOption(array $plugin, string $optionName, bool $default = true)
+	{
+		if (isset($plugin['autoload'])) {
+			$autoload = $plugin['autoload'];
+			if (is_array($autoload)) {
+				if (isset($autoload[$optionName])) {
+					return getBoolean($autoload[$optionName]);
+				}
+			}
+			else if (is_bool($autoload)) {
+				return $autoload;
+			}
+		}
+
+		return $default;
 	}
 }

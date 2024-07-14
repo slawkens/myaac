@@ -1,11 +1,22 @@
-<div style="text-align:center"><h2>Change guild MOTD</h2></div>
-Here you can change MOTD (Message of the Day, showed in game!) of your guild.<br/>
-<form enctype="multipart/form-data" action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=change_motd" method="post">
-	{{ csrf() }}
-	<input type="hidden" name="todo" value="save"/>
-	<textarea name="motd" cols="60" rows="3">{{ guild.getCustomField('motd')|raw }}</textarea><br/>
-	(max. {{ setting('core.guild_motd_chars_limit') }} chars) <input type="submit" value="Save MOTD" /></form><br/>
-<br/>
+{% set title = 'Change guild MOTD' %}
+{% set background = config('darkborder') %}
+{% set content %}
+<table style="width:100%;" >
+	<tr>
+		<td>
+			Here you can change MOTD (Message of the Day, showed in game!) of your guild.<br/>
+			<form enctype="multipart/form-data" action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=change_motd" method="post">
+				{{ csrf() }}
+				<input type="hidden" name="todo" value="save"/>
+				<textarea name="motd" cols="60" rows="3">{{ guild.getCustomField('motd')|raw }}</textarea><br/>
+				(max. {{ setting('core.guild_motd_chars_limit') }} chars) <input type="submit" value="Save MOTD" />
+			</form>
+		</td>
+	</tr>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+
 <div style="text-align:center">
 	<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=manager" method="post">
 		{{ csrf() }}

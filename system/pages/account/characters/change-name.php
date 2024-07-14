@@ -11,7 +11,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Change Name';
-require __DIR__ . '/base.php';
+require PAGES . 'account/base.php';
 
 if(!$logged) {
 	return;
@@ -109,7 +109,7 @@ else
 			$twig->display('error_box.html.twig', array('errors' => $errors));
 		}
 
-		$twig->display('account.change_name.html.twig', array(
+		$twig->display('account.characters.change-name.html.twig', array(
 			'points' => $points,
 			'errors' => $errors
 			//'account_players' => $account_logged->getPlayersList()

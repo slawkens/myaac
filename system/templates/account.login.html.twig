@@ -61,20 +61,19 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="{{
 							{{ include('buttons.submit.html.twig') }}
 						</td>
 					<tr>
-					</form>
 				</table>
 			</td>
 			<td>
 				<table border="0" cellspacing="0" cellpadding="0">
-					<form action="{{ getLink('account/lost') }}" method="post">
-						{{ csrf() }}
-						<tr>
-							<td style="border:0px;">
+					<tr>
+						<td style="border:0px;">
+							<a href="{{ getLink('account/lost') }}">
 								{{ include('buttons.account_lost.html.twig') }}
-							</td>
-						</tr>
-					</form>
+							</a>
+						</td>
+					</tr>
 				</table>
 			</td>
 		</tr>
 	</table>
+</form>
