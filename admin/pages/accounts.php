@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Models\Account as AccountModel;
 use MyAAC\Models\Player;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -51,9 +52,21 @@ $acc_type = setting('core.account_types');
 
 <?php
 $id = 0;
-$search_account = '';
+$search_account = $search_account_email = '';
 if (isset($_REQUEST['id']))
 	$id = (int)$_REQUEST['id'];
+else if (isset($_REQUEST['search_email'])) {
+	$search_account_email = $_REQUEST['search_email'];
+	$accountModel = AccountModel::where('email', $search_account_email)->get();
+	if ($accountModel->count() == 1) {
+		$id = (int)$accountModel[0]->id;
+	} else if ($accountModel->count() > 10) {
+		echo_error('Specified e-mail resulted with too many accounts.');
+	}
+	else {
+		echo_error('No entries found.');
+	}
+}
 else if (isset($_REQUEST['search'])) {
 	$search_account = $_REQUEST['search'];
 	if (strlen($search_account) < 3 && !Validator::number($search_account)) {
@@ -214,7 +227,7 @@ else if (isset($_REQUEST['search'])) {
 			}
 		}
 	} else if ($id == 0) {
-		$accounts_db = $db->query('SELECT `id`, `' . $nameOrNumberColumn . '`' . ($hasTypeColumn ? ',type' : ($hasGroupColumn ? ',group_id' : '')) . ' FROM `accounts` ORDER BY `id` ASC');
+		$accounts_db = $db->query('SELECT `id`, `' . $nameOrNumberColumn . '`' . ($hasTypeColumn ? ',type' : ($hasGroupColumn ? ',group_id' : '')) . ', email FROM `accounts` ORDER BY `id` ASC');
 		?>
 		<div class="col-12 col-sm-12 col-lg-10">
 			<div class="card card-info card-outline">
@@ -228,6 +241,7 @@ else if (isset($_REQUEST['search'])) {
 							<th>ID</th>
 							<th><?= ($nameOrNumberColumn == 'number' ? 'Number' : 'Name'); ?></th>
 							<?php if($hasTypeColumn || $hasGroupColumn): ?>
+							<th>E-Mail</th>
 							<th>Position</th>
 							<?php endif; ?>
 							<th style="width: 40px">Edit</th>
@@ -238,6 +252,7 @@ else if (isset($_REQUEST['search'])) {
 							<tr>
 								<th><?php echo $account_lst['id']; ?></th>
 								<td><?php echo $account_lst[$nameOrNumberColumn]; ?></a></td>
+								<td><?php echo $account_lst['email']; ?></td>
 								<?php if($hasTypeColumn || $hasGroupColumn): ?>
 								<td>
 									<?php if ($hasTypeColumn) {
@@ -585,6 +600,16 @@ else if (isset($_REQUEST['search'])) {
 			</div>
 			<div class="card-body">
 				<div class="row">
+					<div class="col-6 col-lg-12">
+						<form action="<?php echo $admin_base; ?>" method="post">
+							<?php csrf(); ?>
+							<label for="search">Account E-Mail:</label>
+							<div class="input-group input-group-sm">
+								<input type="email" class="form-control" id="search_email" name="search_email" value="<?= escapeHtml($search_account_email); ?>" maxlength="255" size="255">
+								<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
+							</div>
+						</form>
+					</div>
 					<div class="col-6 col-lg-12">
 						<form action="<?php echo $admin_base; ?>" method="post">
 							<?php csrf(); ?>
