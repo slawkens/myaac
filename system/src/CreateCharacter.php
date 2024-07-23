@@ -267,7 +267,7 @@ class CreateCharacter
 			[
 				'account' => $account,
 				'player' => $player,
-				'samplePlayer' => $playerSample,
+				'playerSample' => $playerSample,
 				'name' => $name,
 				'sex' => $sex,
 				'vocation' => $vocation,
