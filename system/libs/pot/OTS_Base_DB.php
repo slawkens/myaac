@@ -167,8 +167,14 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		$query = 'UPDATE '.$this->tableName($table).' SET ';
 
 		$count = count($fields);
-		for ($i = 0; $i < $count; $i++)
-			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).', ';
+		for ($i = 0; $i < $count; $i++) {
+			$value = 'NULL';
+			if ($values[$i] !== null) {
+				$value = $this->quote($values[$i]);
+			}
+
+			$query.= $this->fieldName($fields[$i]).' = '.$value.', ';
+		}
 
 		$query = substr($query, 0, -2);
 		$query.=' WHERE (';
