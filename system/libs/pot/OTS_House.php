@@ -60,12 +60,7 @@ class OTS_House extends OTS_Row_DAO
     private $tiles = array();
 
 	public function load($id) {
-		$this->data = $this->db->query('SELECT * FROM `houses` WHERE `id` = ' . $id )->fetch();
-		foreach($this->data as $key => $value) {
-			if(is_numeric($key)) {
-				unset($this->data[$key]);
-			}
-		}
+		$this->data = $this->db->query('SELECT * FROM `houses` WHERE `id` = ' . $id )->fetch(PDO::FETCH_ASSOC);
 	}
 
     public function find($name)
