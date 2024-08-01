@@ -1374,7 +1374,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Item Images URL',
 			'type' => 'text',
 			'desc' => 'Set to <strong>images/items</strong> if you host your own items in images folder',
-			'default' => 'http://item-images.ots.me/1092/',
+			'default' => 'https://item-images.ots.me/1092/',
 		],
 		'item_images_extension' => [
 			'name' => 'Item Images File Extension',
@@ -1390,7 +1390,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Outfit Images URL',
 			'type' => 'text',
 			'desc' => 'Set to animoutfit.php for animated outfit',
-			'default' => 'http://outfit-images.ots.me/outfit.php',
+			'default' => 'https://outfit-images.ots.me/outfit.php',
 		],
 		'outfit_images_wrong_looktypes' => [
 			'name' => 'Outfit Images Wrong Looktypes',
