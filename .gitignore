@@ -23,6 +23,7 @@ releases
 tmp
 
 config.local.php
+!docker/config.local.php
 
 # all custom templates
 templates/*
