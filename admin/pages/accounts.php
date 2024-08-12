@@ -157,7 +157,9 @@ else if (isset($_REQUEST['search'])) {
 			$rl_loca = $_POST['rl_loca'];
 
 			//country
-			$rl_country = $_POST['rl_country'];
+			if(setting('core.account_country')) {
+				$rl_country = $_POST['rl_country'];
+			}
 
 			$web_flags = $_POST['web_flags'];
 			verify_number($web_flags, 'Web Flags', 1);
@@ -204,7 +206,11 @@ else if (isset($_REQUEST['search'])) {
 				}
 				$account->setRLName($rl_name);
 				$account->setLocation($rl_loca);
-				$account->setCountry($rl_country);
+
+				if(setting('core.account_country')) {
+					$account->setCountry($rl_country);
+				}
+				
 				$account->setCustomField('created', $created);
 				$account->setWebFlags($web_flags);
 				$account->setCustomField('web_lastlogin', $web_lastlogin);
