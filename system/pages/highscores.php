@@ -180,7 +180,7 @@ if (empty($highscores)) {
 	} else if ($skill == SKILL_FRAGS) // frags
 	{
 		if ($db->hasTable('player_killers')) {
-			$query->addSelect(['value' => PlayerKillers::where('player_killers.player_id', 'players.id')->selectRaw('COUNT(*)')]);
+			$query->addSelect(['value' => PlayerKillers::whereColumn('player_killers.player_id', 'players.id')->selectRaw('COUNT(*)')]);
 		} else {
 			$query->addSelect(['value' => PlayerDeath::unjustified()->whereColumn('player_deaths.killed_by', 'players.name')->selectRaw('COUNT(*)')]);
 		}
