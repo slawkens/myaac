@@ -89,3 +89,100 @@ Many thanks to Jetbrains for kindly providing a license for me to work on this a
 
 This program and all associated files are released under the GNU Public License.  
 See [LICENSE](https://github.com/slawkens/myaac/blob/master/LICENSE) for details.
+
+```
+myaac
+├─ .editorconfig
+├─ .gitattributes
+├─ .github
+│  ├─ FUNDING.yml
+│  ├─ ISSUE_TEMPLATE.md
+│  └─ workflows
+│     └─ phplint.yml
+├─ .gitignore
+├─ .travis.yml
+├─ admin
+│  ├─ includes
+│  │  └─ functions.php
+│  ├─ index.php
+│  ├─ pages
+│  │  ├─ accounts.php
+│  │  ├─ changelog.php
+│  │  ├─ dashboard.php
+│  │  ├─ index.html
+│  │  ├─ items.php
+│  │  ├─ login.php
+│  │  ├─ logs.php
+│  │  ├─ mailer.php
+│  │  ├─ menus.php
+│  │  ├─ modules
+│  │  │  ├─ coins.php
+│  │  │  ├─ index.html
+│  │  │  ├─ lastlogin.php
+│  │  │  └─ points.php
+│  │  ├─ news.php
+│  │  ├─ notepad.php
+│  │  ├─ pages.php
+│  │  ├─ phpinfo.php
+│  │  ├─ players.php
+│  │  ├─ plugins.php
+│  │  ├─ reports.php
+│  │  ├─ statistics.php
+│  │  ├─ tools.php
+│  │  ├─ version.php
+│  │  └─ visitors.php
+│  ├─ template
+│  │  ├─ style.css
+│  │  └─ template.php
+│  └─ tools
+│     ├─ phpinfo.php
+│     └─ status.php
+├─ common.php
+├─ config.php
+├─ docker
+│  ├─ .dockerignore
+│  ├─ compose.sh
+│  ├─ Dockerfile
+│  └─ schema.sql
+├─ docker-compose.yaml
+├─ images
+│  └─ ...
+├─ index.php
+├─ install
+│  ├─ includes
+│  │  ├─ config.php
+│  │  ├─ database.php
+│  │  ├─ functions.php
+│  │  ├─ locale.php
+│  │  ├─ schema.sql
+│  │  └─ twig_error.html
+│  ├─ index.php
+│  ├─ ip.txt
+│  ├─ steps
+│  │  ├─ 1-welcome.php
+│  │  ├─ 2-license.php
+│  │  ├─ 3-requirements.php
+│  │  ├─ 4-config.php
+│  │  ├─ 5-database.php
+│  │  ├─ 6-admin.php
+│  │  └─ 7-finish.php
+│  ├─ template
+│  │  ├─ images
+│  │  │  └─ ...
+│  │  ├─ style.css
+│  │  └─ template.php
+│  └─ tools
+│     ├─ 5-database.php
+│     ├─ 7-finish.php
+│     └─ installer.js
+├─ LICENSE
+├─ login.php
+├─ nginx-sample.conf
+├─ README.md
+├─ release.sh
+├─ robots.txt
+├─ schema.sql
+├─ system
+└─ _config.yml
+
+```

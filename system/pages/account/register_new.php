@@ -32,7 +32,7 @@ else
 					'recovery_key' => $new_rec_key
 				));
 
-				if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - new recovery key", $mailBody))
+				if(_mail($account_logged->getEMail(), $config['serverName']." - new recovery key", $mailBody))
 				{
 					$account_logged->setCustomField("key", $new_rec_key);
 					$account_logged->setCustomField("premium_points", $account_logged->getCustomField("premium_points") - $config['generate_new_reckey_price']);

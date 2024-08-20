@@ -8,7 +8,7 @@
 					<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
 					<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
 					<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
-					<div class="Text" >Create {{ config.lua.serverName }} Account</div>
+					<div class="Text" >Create {{ config.serverName }} Account</div>
 					<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/content/box-frame-vertical.gif);" /></span>
 					<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/content/table-headline-border.gif);" ></span>
 					<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/content/box-frame-edge.gif);" /></span>
@@ -286,7 +286,7 @@
 												</tr>
 												<tr>
 													<td colspan="2" >
-														<span><input type="checkbox" id="accept_rules" name="accept_rules" value="true"{% if accept_rules %}checked{% endif %}/> <label for="accept_rules">I agree to the <a href="?subtopic=rules" target="_blank">{{ config.lua.serverName }} Rules</a>.</label></span>
+														<span><input type="checkbox" id="accept_rules" name="accept_rules" value="true"{% if accept_rules %}checked{% endif %}/> <label for="accept_rules">I agree to the <a href="?subtopic=rules" target="_blank">{{ config.serverName }} Rules</a>.</label></span>
 													</td>
 												</tr>
                                                 {% if errors.accept_rules is defined %}

@@ -382,7 +382,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		}
 
 		global $config;
-		if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
+		if(isset($config['freePremium']) && getBoolean($config['freePremium'])) return -1;
 
 		if($this->data['premdays'] == self::GRATIS_PREMIUM_DAYS){
 			return self::GRATIS_PREMIUM_DAYS;
@@ -405,7 +405,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
     public function isPremium()
     {
 		global $config;
-        if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return true;
+        if(isset($config['freePremium']) && getBoolean($config['freePremium'])) return true;
 
 	    if(isset($this->data['premium_ends_at'])) {
 		    return $this->data['premium_ends_at'] > time();

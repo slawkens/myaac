@@ -111,7 +111,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 				<div id="margins">
 					<table cellpadding="0" cellspacing="0" border="0" width="100%">
 						<tr>
-							<td><a href="<?php echo getLink('news'); ?>"><?php echo $config['lua']['serverName']; ?></a> &raquo; <?php echo $title; ?></td>
+							<td><a href="<?php echo getLink('news'); ?>"><?php echo $config['serverName']; ?></a> &raquo; <?php echo $title; ?></td>
 							<td>
 							<?php
 							if($status['online'])

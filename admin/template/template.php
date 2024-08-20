@@ -3,7 +3,7 @@
 <html>
 <head>
 	<?php echo template_header(true);
-	$title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
+	$title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['serverName'];
 	?>
 
 	<title><?php echo $title_full ?></title>
@@ -140,7 +140,7 @@
 			<h1><?php echo(isset($title) ? $title : ''); ?>
 				<small> - Admin Panel</small>
 				<div class="pull-right">
-					<span class="label label-<?php echo(($status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
+					<span class="label label-<?php echo(($status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['serverName'] ?></span>
 				</div>
 			</h1>
 		</section>

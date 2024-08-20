@@ -279,54 +279,11 @@ if(fetchDatabaseConfig('site_closed', $site_closed)) {
 }
 define('SITE_CLOSED', $site_closed);
 
-// backward support for gesior
-if($config['backward_support']) {
-	define('INITIALIZED', true);
-	$SQL = $db;
-	$layout_header = template_header();
-	$layout_name = $template_path;
-	$news_content = '';
-	$tickers_content = '';
-	$subtopic = PAGE;
-	$main_content = '';
-
-	$config['access_admin_panel'] = 2;
-	$group_id_of_acc_logged = 0;
-	if($logged && $account_logged)
-		$group_id_of_acc_logged = $account_logged->getGroupId();
-
-	$config['site'] = &$config;
-	$config['server'] = &$config['lua'];
-	$config['site']['shop_system'] = $config['gifts_system'];
-	$config['site']['gallery_page'] = true;
-
-	if(!isset($config['vdarkborder']))
-		$config['vdarkborder'] = '#505050';
-	if(!isset($config['darkborder']))
-		$config['darkborder'] = '#D4C0A1';
-	if(!isset($config['lightborder']))
-		$config['lightborder'] = '#F1E0C6';
-
-	$config['site']['download_page'] = true;
-	$config['site']['serverinfo_page'] = true;
-	$config['site']['screenshot_page'] = true;
-
-	if($config['forum'] != '')
-		$config['forum_link'] = (strtolower($config['forum']) === 'site' ? getLink('forum') : $config['forum']);
-
-	foreach($status as $key => $value)
-		$config['status']['serverStatus_' . $key] = $value;
-}
 
 if($load_it)
 {
 	if(SITE_CLOSED && admin())
 		$content .= '<p class="note">Site is under maintenance (closed mode). Only privileged users can see it.</p>';
-
-	if($config['backward_support']) {
-		require SYSTEM . 'compat/pages.php';
-		require SYSTEM . 'compat/classes.php';
-	}
 
 	$ignore = false;
 
@@ -362,23 +319,12 @@ if($load_it)
 			require $file;
 	}
 
-	if($config['backward_support'] && isset($main_content[0]))
-		$content .= $main_content;
-
 	$content .= ob_get_contents();
 	ob_end_clean();
 	$hooks->trigger(HOOK_AFTER_PAGE);
 }
 
-if($config['backward_support']) {
-	$main_content = $content;
-	if(!isset($title))
-		$title = ucfirst($page);
-
-	$topic = $title;
-}
-
-$title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['lua']['serverName'];
+$title_full =  (isset($title) ? $title . $config['title_separator'] : '') . $config['serverName'];
 require $template_path . '/' . $template_index;
 
 echo base64_decode('PCEtLSBQb3dlcmVkIGJ5IE15QUFDIDo6IGh0dHBzOi8vd3d3Lm15LWFhYy5vcmcvIC0tPg==') . PHP_EOL;

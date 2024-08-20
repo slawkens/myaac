@@ -92,22 +92,22 @@ switch ($action) {
 
 	case 'login':
 
-		$port = $config['lua']['gameProtocolPort'];
+		$port = $config['gameProtocolPort'];
 
 		// default world info
 		$world = [
 			'id' => 0,
-			'name' => $config['lua']['serverName'],
-			'externaladdress' => $config['lua']['ip'],
+			'name' => $config['serverName'],
+			'externaladdress' => $config['ip'],
 			'externalport' => $port,
-			'externaladdressprotected' => $config['lua']['ip'],
+			'externaladdressprotected' => $config['ip'],
 			'externalportprotected' => $port,
-			'externaladdressunprotected' => $config['lua']['ip'],
+			'externaladdressunprotected' => $config['ip'],
 			'externalportunprotected' => $port,
 			'previewstate' => 0,
 			'location' => 'BRA', // BRA, EUR, USA
 			'anticheatprotection' => false,
-			'pvptype' => array_search($config['lua']['worldType'], ['pvp', 'no-pvp', 'pvp-enforced']),
+			'pvptype' => array_search($config['worldType'], ['pvp', 'no-pvp', 'pvp-enforced']),
 			'istournamentworld' => false,
 			'restrictedstore' => false,
 			'currenttournamentphase' => 2
@@ -243,7 +243,7 @@ switch ($action) {
 		$session = [
 			'sessionkey' => $sessionKey,
 			'lastlogintime' => 0,
-			'ispremium' => $config['lua']['freePremium'] || $account->isPremium(),
+			'ispremium' => $config['freePremium'] || $account->isPremium(),
 			'premiumuntil' => ($account->getPremDays()) > 0 ? (time() + ($account->getPremDays() * 86400)) : 0,
 			'status' => 'active', // active, frozen or suspended
 			'returnernotification' => false,

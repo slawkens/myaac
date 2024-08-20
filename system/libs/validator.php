@@ -253,7 +253,7 @@ class Validator
 			return false;
 		}
 
-		if(strtolower($config['lua']['serverName']) == $name_lower) {
+		if(strtolower($config['serverName']) == $name_lower) {
 			self::$lastError = 'Your name cannot be same as server name.';
 			return false;
 		}

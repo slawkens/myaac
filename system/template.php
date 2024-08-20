@@ -55,7 +55,7 @@ elseif($config['backward_support'] && file_exists(BASE . $template_path . '/layo
 	$template_index = 'layout.php';
 }
 else {
-	$template_name = 'kathrine';
+	$template_name = 'tibiacom';
 	$template_path = 'templates/' . $template_name;
 	$template_index = 'template.php';
 	if(!file_exists(BASE . $template_path . '/' . $template_index)) {

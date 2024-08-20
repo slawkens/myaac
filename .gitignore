@@ -8,6 +8,7 @@ Thumbs.db
 # composer
 composer.lock
 vendor
+.env
 
 # npm
 node_modules

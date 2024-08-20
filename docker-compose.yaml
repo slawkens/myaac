@@ -1,0 +1,61 @@
+version: "1.0"
+services:
+
+  database:
+    container_name: database
+    image: mariadb:latest
+    restart: unless-stopped
+    env_file:
+      - '.env'
+    networks:
+      - canary-net
+    ports:
+      - "3306:3306"
+    volumes:
+      - 'db-volume:/var/lib/mysql'
+      - './docker/schema.sql:/docker-entrypoint-initdb.d/init.sql'
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  myaac:
+    container_name: myaac
+    ports:
+      - 8001:80
+    build:
+      args:
+        user: www-data
+        uid: 33
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - '.env'
+    networks:
+      - canary-net
+    depends_on:
+      - database
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin
+    restart: always
+    env_file:
+      - '.env'
+    networks:
+      - canary-net
+    ports:
+      - 8002:80
+    depends_on:
+      - database
+      - myaac
+
+volumes:
+  db-volume:
+
+networks:
+  canary-net:
+    driver: bridge

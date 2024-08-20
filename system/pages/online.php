@@ -102,7 +102,7 @@ if($players > 0)
 		if($db->hasTable('server_record')) {
 			$query =
 				$db->query(
-					'SELECT `record`, `timestamp` FROM `server_record` WHERE `world_id` = ' . (int)$config['lua']['worldId'] .
+					'SELECT `record`, `timestamp` FROM `server_record` WHERE `world_id` = ' . (int)$config['worldId'] .
 					' ORDER BY `record` DESC LIMIT 1');
 			$timestamp = true;
 		}

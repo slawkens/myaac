@@ -51,7 +51,7 @@
 	<div id="two">
 		<h1>My account</h1>
 		<p>Welcome to your account page, {{ account }}<br>
-			{% if config.lua.freePremium %}
+			{% if config.freePremium %}
 			You have unlimited Premium Account.
 			{% else %}
 				{% set premiumDays = account_logged.getPremDays() %}

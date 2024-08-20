@@ -62,7 +62,7 @@
                                                                 <br>
                                                             {% endif %}
 
-                                                            The guild was founded on {{ config.lua.serverName }} on {{ guild_creation_date|date("j F Y") }}.
+                                                            The guild was founded on {{ config.serverName }} on {{ guild_creation_date|date("j F Y") }}.
                                                             {% if isLeader %}
                                                                 <a href="?subtopic=guilds&action=manager&guild={{ guild_name }}" style="float: right;">
                                                                     <img src="{{ template_path }}/images/global/buttons/sbutton_manageguild.png" style="width: 120px; height: 20px;" alt="Manage Guild">

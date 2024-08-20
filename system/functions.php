@@ -313,7 +313,7 @@ function updateDatabaseConfig($name, $value)
 }
 
 /**
- * Encrypt text using method specified in config.lua (encryptionType or passwordType)
+ * Encrypt text using method specified in config lua (encryptionType or passwordType)
  */
 function encrypt($str)
 {
@@ -814,7 +814,7 @@ function getWorldName($id)
 	if(isset($config['worlds'][$id]))
 		return $config['worlds'][$id];
 
-	return $config['lua']['serverName'];
+	return $config['serverName'];
 }
 
 /**
@@ -868,7 +868,7 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	$mailer->From = $config['mail_address'];
 	$mailer->Sender = $config['mail_address'];
 	$mailer->CharSet = 'utf-8';
-	$mailer->FromName = $config['lua']['serverName'];
+	$mailer->FromName = $config['serverName'];
 	$mailer->Subject = $subject;
 	$mailer->addAddress($to);
 	$mailer->Body = $tmp_body;
@@ -914,80 +914,6 @@ function log_append($file, $str, array $params = [])
 	$f = fopen(LOGS . $file, 'ab');
 	fwrite($f, '[' . date(DateTime::RFC1123) . '] ' . $str . PHP_EOL);
 	fclose($f);
-}
-
-function load_config_lua($filename)
-{
-	global $config;
-
-	$config_file = $filename;
-	if(!@file_exists($config_file))
-	{
-		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $filename . ').');
-		throw new RuntimeException('ERROR: Cannot find ' . $filename . ' file.');
-	}
-
-	$result = array();
-	$config_string = str_replace(array("\r\n", "\r"), "\n", file_get_contents($filename));
-	$lines = explode("\n", $config_string);
-	if(count($lines) > 0) {
-		foreach($lines as $ln => $line)
-		{
-			$line = trim($line);
-			if(@$line[0] === '{' || @$line[0] === '}') {
-				// arrays are not supported yet
-				// just ignore the error
-				continue;
-			}
-			$tmp_exp = explode('=', $line, 2);
-			if(strpos($line, 'dofile') !== false)
-			{
-				$delimiter = '"';
-				if(strpos($line, $delimiter) === false)
-					$delimiter = "'";
-
-				$tmp = explode($delimiter, $line);
-				$result = array_merge($result, load_config_lua($config['server_path'] . $tmp[1]));
-			}
-			else if(count($tmp_exp) >= 2)
-			{
-				$key = trim($tmp_exp[0]);
-				if(0 !== strpos($key, '--'))
-				{
-					$value = trim($tmp_exp[1]);
-					if(strpos($value, '--') !== false) {// found some deep comment
-						$value = preg_replace('/--.*$/i', '', $value);
-					}
-
-					if(is_numeric($value))
-						$result[$key] = (float) $value;
-					elseif(in_array(@$value[0], array("'", '"')) && in_array(@$value[strlen($value) - 1], array("'", '"')))
-						$result[$key] = (string) substr(substr($value, 1), 0, -1);
-					elseif(in_array($value, array('true', 'false')))
-						$result[$key] = ($value === 'true') ? true : false;
-					elseif(@$value[0] === '{') {
-						// arrays are not supported yet
-						// just ignore the error
-						continue;
-					}
-					else
-					{
-						foreach($result as $tmp_key => $tmp_value) // load values definied by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
-							$value = str_replace($tmp_key, $tmp_value, $value);
-						$ret = @eval("return $value;");
-						if((string) $ret == '' && trim($value) !== '""') // = parser error
-						{
-							throw new RuntimeException('ERROR: Loading config.lua file. Line <b>' . ($ln + 1) . '</b> of LUA config file is not valid [key: <b>' . $key . '</b>]');
-						}
-						$result[$key] = $ret;
-					}
-				}
-			}
-		}
-	}
-
-	$result = array_merge($result, isset($config['lua']) ? $config['lua'] : array());
-	return $result;
 }
 
 function str_replace_first($search, $replace, $subject) {
@@ -1103,10 +1029,10 @@ function config($key) {
 function configLua($key) {
 	global $config;
 	if (is_array($key)) {
-		return $config['lua'][$key[0]] = $key[1];
+		return $config[$key[0]] = $key[1];
 	}
 
-	return @$config['lua'][$key];
+	return @$config[$key];
 }
 
 function clearCache()

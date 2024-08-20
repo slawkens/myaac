@@ -92,7 +92,7 @@ elseif($action == 'sendcode')
 				{
 					$newcode = generateRandomString(30, true, false, true);
 					$mailBody = '
-					You asked to reset your ' . $config['lua']['serverName'] . ' password.<br/>
+					You asked to reset your ' . $config['serverName'] . ' password.<br/>
 					<p>Account name: '.$account->getName().'</p>
 					<br />
 					To do so, please click this link:
@@ -102,7 +102,7 @@ elseif($action == 'sendcode')
 						<p>If you did not request a password change, you may ignore this message and your password will remain unchanged.';
 
 					$account_mail = $account->getCustomField('email');
-					if(_mail($account_mail, $config['lua']['serverName'].' - Recover your account', $mailBody))
+					if(_mail($account_mail, $config['serverName'].' - Recover your account', $mailBody))
 					{
 						$account->setCustomField('email_code', $newcode);
 						$account->setCustomField('email_next', (time() + $config['email_lai_sec_interval']));
@@ -317,14 +317,14 @@ elseif($action == 'step3')
 							{
 								$mailBody = '
 								<h3>Your account name and new password!</h3>
-								<p>Changed password and e-mail to your account in Lost Account Interface on server <a href="'.BASE_URL.'"><b>'.$config['lua']['serverName'].'</b></a></p>
+								<p>Changed password and e-mail to your account in Lost Account Interface on server <a href="'.BASE_URL.'"><b>'.$config['serverName'].'</b></a></p>
 								<p>Account name: <b>'.$account->getName().'</b></p>
 								<p>New password: <b>'.$new_pass.'</b></p>
 								<p>E-mail: <b>'.$new_email.'</b> (this e-mail)</p>
 								<br />
 								<p><u>It\'s automatic e-mail from OTS Lost Account System. Do not reply!</u></p>';
 
-								if(_mail($account->getCustomField('email'), $config['lua']['serverName']." - New password to your account", $mailBody))
+								if(_mail($account->getCustomField('email'), $config['serverName']." - New password to your account", $mailBody))
 								{
 									echo '<br /><small>Sent e-mail with your account name and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!</small>';
 								}
@@ -501,13 +501,13 @@ elseif($action == 'setnewpassword')
 
 					$mailBody = '
 					<h3>Your account name and password!</h3>
-					<p>Changed password to your account in Lost Account Interface on server <a href="'.BASE_URL.'"><b>'.$config['lua']['serverName'].'</b></a></p>
+					<p>Changed password to your account in Lost Account Interface on server <a href="'.BASE_URL.'"><b>'.$config['serverName'].'</b></a></p>
 					<p>Account name: <b>'.$account->getName().'</b></p>
 					<p>New password: <b>'.$newpassword.'</b></p>
 					<br />
 					<p><u>It\'s automatic e-mail from OTS Lost Account System. Do not reply!</u></p>';
 
-					if(_mail($account->getCustomField('email'), $config['lua']['serverName']." - Your new password", $mailBody))
+					if(_mail($account->getCustomField('email'), $config['serverName']." - Your new password", $mailBody))
 					{
 						echo '<br /><small>New password work! Sent e-mail with your password and account name. You should receive this e-mail in 15 minutes. You can login now with new password!';
 					}

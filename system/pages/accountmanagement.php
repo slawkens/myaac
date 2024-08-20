@@ -67,7 +67,7 @@ $errors = array();
 
 	if($action == '')
 	{
-		$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
+		$freePremium = isset($config['freePremium']) && getBoolean($config['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
 		$dayOrDays = $account_logged->getPremDays() == 1 ? 'day' : 'days';
 		/**
 		 * @var OTS_Account $account_logged

@@ -41,7 +41,7 @@ $locale['step_requirements_extension'] = '$EXTENSION$ PHP extension';
 $locale['step_config'] = 'Konfiguration';
 $locale['step_config_title'] = 'Grundläggande konfiguration';
 $locale['step_config_server_path'] = 'Server mapp';
-$locale['step_config_server_path_desc'] = 'Mappen som innhåller exe filen till The Forgotten Server, där du har din config.lua.';
+$locale['step_config_server_path_desc'] = 'Mappen som innhåller exe filen till The Forgotten Server, där du har din config lua.';
 
 $locale['step_config_mail_admin'] = 'Admin E-Post';
 $locale['step_config_mail_admin_desc'] = 'Adress där E-Post från kontaktförmolär kommer att leveraras, till exempel admin@gmail.com';
@@ -58,7 +58,7 @@ $locale['step_database_title'] = 'Importera MySQL schema';
 $locale['step_database_importing'] = 'Din databas är MySQL. Databasnamnet är: "$DATABASE_NAME$". Importerar schema nu...';
 $locale['step_database_error_path'] = 'Ange server mapp.';
 $locale['step_database_error_config'] = 'Kan inte hitta konfigurations fil. Är din server mapp korrekt? Gå tillbaka och kolla igen.';
-$locale['step_database_error_database_empty'] = 'Kan inte bestämma databas typ från config.lua. Din OTS stöds inte av MyAAC.';
+$locale['step_database_error_database_empty'] = 'Kan inte bestämma databas typ från config lua. Din OTS stöds inte av MyAAC.';
 $locale['step_database_error_only_mysql'] = 'Denna AAC stöder endast MySQL. Från din konfigurationsfil verkar det som att din OTS använder: $DATABASE_TYPE$ databastypen. Var vänligen ändra din databas till MySQL och följ instruktionerna i installationen igen.';
 $locale['step_database_error_table'] = 'Tabell $TABLE$ finns inte. Importera din OTS databas schema först.';
 $locale['step_database_error_table_exist'] = 'Tabell $TABLE$ finns redan. Ser ut som att din AAC redan är installerad. Hoppar över importering av MySQL schema.';

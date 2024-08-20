@@ -24,16 +24,16 @@ if(config('status_enabled') === false) {
 /**
  * @var array $config
  */
-$status_ip = $config['lua']['ip'];
-if(isset($config['lua']['statusProtocolPort'])) {
-	$config['lua']['loginPort'] = $config['lua']['statusProtocolPort'];
-	$config['lua']['statusPort'] = $config['lua']['statusProtocolPort'];
-	$status_port = $config['lua']['statusProtocolPort'];
+$status_ip = $config['ip'];
+if(isset($config['statusProtocolPort'])) {
+	$config['loginPort'] = $config['statusProtocolPort'];
+	$config['statusPort'] = $config['statusProtocolPort'];
+	$status_port = $config['statusProtocolPort'];
 }
-else if(isset($config['lua']['status_port'])) {
-	$config['lua']['loginPort'] = $config['lua']['status_port'];
-	$config['lua']['statusPort'] = $config['lua']['status_port'];
-	$status_port = $config['lua']['status_port'];
+else if(isset($config['status_port'])) {
+	$config['loginPort'] = $config['status_port'];
+	$config['statusPort'] = $config['status_port'];
+	$status_port = $config['status_port'];
 }
 
 // ip check
@@ -47,7 +47,7 @@ elseif(!isset($status_ip[0])) // try localhost if no ip specified
 }
 
 // port check
-$status_port = $config['lua']['statusPort'];
+$status_port = $config['statusPort'];
 if(isset($config['status_port'][0])) {
 	$status_port = $config['status_port'];
 }
@@ -89,11 +89,8 @@ if($fetch_from_db)
 	}
 }
 
-if(isset($config['lua']['statustimeout']))
-	$config['lua']['statusTimeout'] = $config['lua']['statustimeout'];
-
 // get status timeout from server config
-$status_timeout = eval('return ' . $config['lua']['statusTimeout'] . ';') / 1000 + 1;
+$status_timeout = eval('return ' . $config['statustimeout'] . ';') / 1000 + 1;
 $status_interval = @$config['status_interval'];
 if($status_interval && $status_timeout < $config['status_interval']) {
 	$status_timeout = $config['status_interval'];

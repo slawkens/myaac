@@ -79,17 +79,7 @@ if($step == 'database') {
 			break;
 		}
 		else if($key == 'server_path') {
-			$config['server_path'] = $value;
-
-			// take care of trailing slash at the end
-			if($config['server_path'][strlen($config['server_path']) - 1] != '/') {
-				$config['server_path'] .= '/';
-			}
-
-			if(!file_exists($config['server_path'] . 'config.lua')) {
-				$errors[] = $locale['step_database_error_config'];
-				break;
-			}
+			$config['server_path'];
 		}
 		else if($key == 'mail_admin' && !Validator::email($value)) {
 			$errors[] = $locale['step_config_mail_admin_error'];
@@ -186,40 +176,17 @@ if(empty($errors)) {
 $error = false;
 
 clearstatcache();
-if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
-	if(!file_exists(BASE . 'install/ip.txt')) {
-		$content = warning('AAC installation is disabled. To enable it make file <b>ip.txt</b> in install/ directory and put there your IP.<br/>
-		Your IP is:<br /><b>' . $_SERVER['REMOTE_ADDR'] . '</b>', true);
-	}
-	else {
-		$file_content = trim(file_get_contents(BASE . 'install/ip.txt'));
-		$allow = false;
-		$listIP = preg_split('/\s+/', $file_content);
-		foreach($listIP as $ip) {
-			if($_SERVER['REMOTE_ADDR'] == $ip) {
-				$allow = true;
-			}
-		}
-
-		if(!$allow)
-		{
-			$content = warning('In file <b>install/ip.txt</b> must be your IP!<br/>
-			In file is:<br /><b>' . nl2br($file_content) . '</b><br/>
-			Your IP is:<br /><b>' . $_SERVER['REMOTE_ADDR'] . '</b>', true);
-		}
-		else {
-			ob_start();
-
-			$step_id = array_search($step, $steps);
-			require 'steps/' . $step_id . '-' . $step . '.php';
-			$content = ob_get_contents();
-			ob_end_clean();
-		}
-	}
+if (is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
+    ob_start();
+    
+    $step_id = array_search($step, $steps);
+    require 'steps/' . $step_id . '-' . $step . '.php';
+    $content = ob_get_contents();
+    ob_end_clean();
+} else {
+    $content = error(file_get_contents(BASE . 'install/includes/twig_error.html'), true);
 }
-else {
-	$content = error(file_get_contents(BASE . 'install/includes/twig_error.html'), true);
-}
+
 
 // render
 require 'template/template.php';

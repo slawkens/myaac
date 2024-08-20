@@ -19,9 +19,6 @@ if(!isset($config['installed']) || !$config['installed']) {
 }
 
 date_default_timezone_set($config['date_timezone']);
-// take care of trailing slash at the end
-if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
-	$config['server_path'] .= '/';
 
 // enable gzip compression if supported by the browser
 if($config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && function_exists('ob_gzhandler'))
@@ -55,61 +52,14 @@ if(isset($_REQUEST))
 	}
 }
 
-// load otserv config file
-$config_lua_reload = true;
-if($cache->enabled()) {
-	$tmp = null;
-	if($cache->fetch('server_path', $tmp) && $tmp == $config['server_path']) {
-		$tmp = null;
-		if($cache->fetch('config_lua', $tmp) && $tmp) {
-			$config['lua'] = unserialize($tmp);
-			$config_lua_reload = false;
-		}
-	}
-}
+if(isset($config['servername']))
+	$config['serverName'] = $config['servername'];
 
-if($config_lua_reload) {
-	$config['lua'] = load_config_lua($config['server_path'] . 'config.lua');
-
-	// cache config
-	if($cache->enabled()) {
-		$cache->set('config_lua', serialize($config['lua']), 120);
-		$cache->set('server_path', $config['server_path']);
-	}
-}
-unset($tmp);
-
-if(isset($config['lua']['servername']))
-	$config['lua']['serverName'] = $config['lua']['servername'];
-
-if(isset($config['lua']['houserentperiod']))
-	$config['lua']['houseRentPeriod'] = $config['lua']['houserentperiod'];
+if(isset($config['houserentperiod']))
+	$config['houseRentPeriod'] = $config['houserentperiod'];
 
 if($config['item_images_url'][strlen($config['item_images_url']) - 1] !== '/')
 	$config['item_images_url'] .= '/';
-
-// localize data/ directory based on data directory set in config.lua
-foreach(array('dataDirectory', 'data_directory', 'datadir') as $key) {
-	if(!isset($config['lua'][$key][0])) {
-		break;
-	}
-
-	$foundValue = $config['lua'][$key];
-	if($foundValue[0] !== '/') {
-		$foundValue = $config['server_path'] . $foundValue;
-	}
-
-	if($foundValue[strlen($foundValue) - 1] !== '/') {// do not forget about trailing slash
-		$foundValue .= '/';
-	}
-}
-
-if(!isset($foundValue)) {
-	$foundValue = $config['server_path'] . 'data/';
-}
-
-$config['data_path'] = $foundValue;
-unset($foundValue);
 
 // new config values for compatibility
 if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hidden']) == 0) {
@@ -138,9 +88,8 @@ else {
 	}
 
 	$vocations = new DOMDocument();
+
 	$file = $config['data_path'] . 'XML/vocations.xml';
-	if(!@file_exists($file))
-		$file = $config['data_path'] . 'vocations.xml';
 
 	if(!$vocations->load($file))
 		throw new RuntimeException('ERROR: Cannot load <i>vocations.xml</i> - the file is malformed. Check the file with xml syntax validator.');
@@ -156,25 +105,6 @@ else {
 	}
 }
 unset($tmp, $id, $vocation);
-
-// load towns
-/* TODO: doesnt work
-ini_set('memory_limit', '-1');
-$tmp = '';
-
-if($cache->enabled() && $cache->fetch('towns', $tmp)) {
-	$config['towns'] = unserialize($tmp);
-}
-else {
-	$towns = new OTS_OTBMFile();
-	$towns->loadFile('D:/Projekty/opentibia/wodzislawski/data/world/wodzislawski.otbm');
-
-	$config['towns'] = $towns->getTownsList();
-	if($cache->enabled()) {
-		$cache->set('towns', serialize($config['towns']), 120);
-	}
-}
-*/
 
 ////////////////////////////////////////
 // load towns from database (TFS 1.3) //

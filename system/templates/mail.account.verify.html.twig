@@ -1,6 +1,6 @@
 Hello!<br/>
 <br/>
-Thank you for registering on {{ config.lua.serverName }}!<br/>
+Thank you for registering on {{ config.serverName }}!<br/>
 <br/>
 Here are the details of your account:<br/>
 Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}: {{ account }}<br/>
@@ -8,4 +8,4 @@ Password: ************ (hidden for security reasons)<br/>
 <br/>
 To verify your email address please click the link below:<br/>
 {{ verify_url|raw }}<br/>
-If you haven't registered on {{ config.lua.serverName }} please ignore this email.
+If you haven't registered on {{ config.serverName }} please ignore this email.

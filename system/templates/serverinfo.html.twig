@@ -1,5 +1,5 @@
 <div style="text-align:center">
-    <h1>{{ config.lua.serverName }}</h1>
+    <h1>{{ config.serverName }}</h1>
     <h3>
         {%  if experienceStages %}
         Experience stages: {{ experienceStages }}<br>
@@ -11,7 +11,7 @@
 
 <ul>
     <h2>Server Info:</h2>
-    <li>IP: <b>{{ serverIp }}</b> (Port: <b>{{ config.lua.loginPort }}</b>)</li>
+    <li>IP: <b>{{ serverIp }}</b> (Port: <b>{{ config.loginPort }}</b>)</li>
     {%  if clientVersion %}
     <li>Client: <b>{{ clientVersion }}</b></li>
     {%  endif %}
@@ -19,7 +19,7 @@
     {%  if globalSaveHour %}
     <li>Global save: <b>{{ globalSaveHour }}:00</b></li>
     {%  endif %}
-    <li>World type: <b>{{ config.lua.worldType|upper }} <i>(Protection level: {{ protectionLevel }})</i></b></li>
+    <li>World type: <b>{{ config.worldType|upper }} <i>(Protection level: {{ protectionLevel }})</i></b></li>
     <li>House rent: {{ houseRent }}.</li><br>
     {%  if houseOld %}
     <li>Houses with inactive owners are cleaned after 30 days.</li>
@@ -60,8 +60,8 @@
     <li>Black skull length: <b>{{ blackSkullLength / (24 * 60 * 60) }} days</b></li>
     {%  endif %}
 	{% if killsToRedSkull is defined %}
-    <li>Kills to red skull: <b>{{ config.lua.killsToRedSkull }}</b></li>
-    {%  elseif config.lua.dailyFragsToRedSkull is defined or config.lua.kills_per_day_red_skull is defined %}
+    <li>Kills to red skull: <b>{{ config.killsToRedSkull }}</b></li>
+    {%  elseif config.dailyFragsToRedSkull is defined or config.kills_per_day_red_skull is defined %}
     <li>
         <h3>Red skull</h3>
         <ul>
@@ -69,19 +69,19 @@
             <li>{{ weeklyFragsToRedSkull }} frags weekly</li>
             <li>{{ monthlyFragsToRedSkull }} frags monthly</li>
         </ul>
-        {% if blackSkull and config.lua.dailyFragsToBlackSkull is defined or config.lua.kills_per_day_black_skull is defined %}
+        {% if blackSkull and config.dailyFragsToBlackSkull is defined or config.kills_per_day_black_skull is defined %}
         <h3>Black skull</h3>
         <ul>
             <li>{{ dailyFragsToBlackSkull }} frags daily</li>
             <li>{{ weeklyFragsToBlackSkull }} frags weekly</li>
             <li>{{ monthlyFragsToBlackSkull }} frags monthly</li>
         </ul>
-        {% elseif config.lua.dailyFragsToBanishment is defined %}
+        {% elseif config.dailyFragsToBanishment is defined %}
         <h3>Banishment</h3>
         <ul>
-            <li>{{ config.lua.dailyFragsToBanishment }} frags daily</li>
-            <li>{{ config.lua.weeklyFragsToBanishment }} frags weekly</li>
-            <li>{{ config.lua.monthlyFragsToBanishment }} frags monthly</li>
+            <li>{{ config.dailyFragsToBanishment }} frags daily</li>
+            <li>{{ config.weeklyFragsToBanishment }} frags weekly</li>
+            <li>{{ config.monthlyFragsToBanishment }} frags monthly</li>
         </ul>
         {% endif %}
     </li>

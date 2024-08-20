@@ -29,7 +29,7 @@ if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1")
 				$mailBody = $twig->render('mail.account.register.html.twig', array(
 					'recovery_key' => $new_rec_key
 				));
-				if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - Recovery Key", $mailBody))
+				if(_mail($account_logged->getEMail(), $config['serverName']." - Recovery Key", $mailBody))
 					$message = '<br /><small>Your recovery key were send on email address <b>'.$account_logged->getEMail().'</b>.</small>';
 				else
 					$message = '<br /><p class="error">An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log</p>';

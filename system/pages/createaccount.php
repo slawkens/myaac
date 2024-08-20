@@ -119,7 +119,7 @@ if($save)
 	}
 
 	if(!isset($_POST['accept_rules']) || $_POST['accept_rules'] !== 'true')
-		$errors['accept_rules'] = 'You have to agree to the ' . $config['lua']['serverName'] . ' Rules in order to create an account!';
+		$errors['accept_rules'] = 'You have to agree to the ' . $config['serverName'] . ' Rules in order to create an account!';
 
 	$params = array(
 		'account' => $account_db,
@@ -208,7 +208,7 @@ if($save)
 				'verify_url' => generateLink($verify_url, $verify_url, true)
 			));
 
-			if(_mail($email, 'New account on ' . $config['lua']['serverName'], $body_html))
+			if(_mail($email, 'New account on ' . $config['serverName'], $body_html))
 			{
 				echo 'Your account has been created.<br/><br/>';
 
@@ -266,7 +266,7 @@ if($save)
 					'account' => $tmp_account
 				));
 
-				if(_mail($email, 'Your account on ' . $config['lua']['serverName'], $mailBody))
+				if(_mail($email, 'Your account on ' . $config['serverName'], $mailBody))
 					echo '<br /><small>These informations were send on email address <b>' . $email . '</b>.';
 				else {
 					error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');

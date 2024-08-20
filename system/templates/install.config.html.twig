@@ -1,11 +1,11 @@
 <form action="{{ constant('BASE_URL') }}install/" method="post" autocomplete="off">
 	<input type="hidden" name="step" id="step" value="database" />
 	<table>
-		{% for value in ['server_path', 'mail_admin', 'mail_address'] %}
+		{% for value in ['mail_admin', 'mail_address'] %}
 		<tr>
 			<td>
 				<label for="vars_{{ value }}">
-					<span>{{ locale['step_config_' ~ value]  }}</span>
+					<span>{{ locale['step_config_' ~ value] }}</span>
 				</label>
 				<br>
 				<input type="text" name="vars[{{ value }}]" id="vars_{{ value }}"{% if session['var_' ~ value] is not null %} value="{{ session['var_' ~ value] }}"{% endif %}/>

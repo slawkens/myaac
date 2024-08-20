@@ -67,7 +67,7 @@ else
 				'new_password' => $org_pass
 			));
 
-			if(_mail($account_logged->getEMail(), $config['lua']['serverName']." - Changed password", $mailBody))
+			if(_mail($account_logged->getEMail(), $config['serverName']." - Changed password", $mailBody))
 				$message = '<br/><small>Your new password were send on email address <b>'.$account_logged->getEMail().'</b>.</small>';
 			else
 				$message = '<br/><p class="error">An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log</p>';

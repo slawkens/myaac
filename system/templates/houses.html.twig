@@ -27,7 +27,7 @@
                         the search criteria and start a new search.
                         <br><br>
                         {% if cleanOldHouse is not empty or rentType != 'never' %}
-                            Every morning during global server save there is automatic house cleaning. Server delete house owners who have not logged in last {{ cleanOldHouse }} days{% if rentType != 'never' %} or have not paid {{ rentType }} house rent. Remember to leave money for a rent in {% if config.lua.bankSystem is not empty %}your house bank or {% else %}depo in same city where you have house!{% endif %}{% else %}.{% endif %}
+                            Every morning during global server save there is automatic house cleaning. Server delete house owners who have not logged in last {{ cleanOldHouse }} days{% if rentType != 'never' %} or have not paid {{ rentType }} house rent. Remember to leave money for a rent in {% if config.bankSystem is not empty %}your house bank or {% else %}depo in same city where you have house!{% endif %}{% else %}.{% endif %}
                             <br><br>
                         {% endif %}
 
@@ -35,7 +35,7 @@
                         <table border="0" cellspacing="1" cellpadding="4" width="100%">
                             <tbody>
                                 <tr bgcolor="{{ config.vdarkborder }}">
-                                    <td colspan="6" class="white"><b>Available {{ houseType }}{% if townName is not empty %} in {{ townName }}{% endif %} on <b>{{ config.lua.serverName }}</b></b></td>
+                                    <td colspan="6" class="white"><b>Available {{ houseType }}{% if townName is not empty %} in {{ townName }}{% endif %} on <b>{{ config.serverName }}</b></b></td>
                                 </tr>
 
                                 <tr bgcolor="{{ config.darkborder }}">

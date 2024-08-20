@@ -12,65 +12,65 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Server info';
 
-if(isset($config['lua']['experience_stages']))
-    $config['lua']['experienceStages'] = $config['lua']['experience_stages'];
+if(isset($config['experience_stages']))
+    $config['experienceStages'] = $config['experience_stages'];
 
-if(isset($config['lua']['min_pvp_level']))
-    $config['lua']['protectionLevel'] = $config['lua']['min_pvp_level'];
+if(isset($config['min_pvp_level']))
+    $config['protectionLevel'] = $config['min_pvp_level'];
 
-$rent = trim(strtolower($config['lua']['houseRentPeriod']));
+$rent = trim(strtolower($config['houseRentPeriod']));
 if($rent != 'yearly' && $rent != 'monthly' && $rent != 'weekly' && $rent != 'daily')
     $rent = 'never';
 
-if(isset($config['lua']['houseCleanOld']))
-    $cleanOld = (int)(eval('return ' . $config['lua']['houseCleanOld'] . ';') / (24 * 60 * 60));
+if(isset($config['houseCleanOld']))
+    $cleanOld = (int)(eval('return ' . $config['houseCleanOld'] . ';') / (24 * 60 * 60));
 
-if(isset($config['lua']['rate_exp']))
-    $config['lua']['rateExp'] = $config['lua']['rate_exp'];
-if(isset($config['lua']['rateExperience']))
-    $config['lua']['rateExp'] = $config['lua']['rateExperience'];
-if(isset($config['lua']['rate_mag']))
-    $config['lua']['rateMagic'] = $config['lua']['rate_mag'];
-if(isset($config['lua']['rate_skill']))
-    $config['lua']['rateSkill'] = $config['lua']['rate_skill'];
-if(isset($config['lua']['rate_loot']))
-    $config['lua']['rateLoot'] = $config['lua']['rate_loot'];
-if(isset($config['lua']['rate_spawn']))
-    $config['lua']['rateSpawn'] = $config['lua']['rate_spawn'];
+if(isset($config['rate_exp']))
+    $config['rateExp'] = $config['rate_exp'];
+if(isset($config['rateExperience']))
+    $config['rateExp'] = $config['rateExperience'];
+if(isset($config['rate_mag']))
+    $config['rateMagic'] = $config['rate_mag'];
+if(isset($config['rate_skill']))
+    $config['rateSkill'] = $config['rate_skill'];
+if(isset($config['rate_loot']))
+    $config['rateLoot'] = $config['rate_loot'];
+if(isset($config['rate_spawn']))
+    $config['rateSpawn'] = $config['rate_spawn'];
 
 $house_level = NULL;
-if(isset($config['lua']['levelToBuyHouse']))
-    $house_level = $config['lua']['levelToBuyHouse'];
-else if(isset($config['lua']['house_level']))
-    $house_level = $config['lua']['house_level'];
+if(isset($config['levelToBuyHouse']))
+    $house_level = $config['levelToBuyHouse'];
+else if(isset($config['house_level']))
+    $house_level = $config['house_level'];
 
-if(isset($config['lua']['in_fight_duration']))
-    $config['lua']['pzLocked'] = $config['lua']['in_fight_duration'];
+if(isset($config['in_fight_duration']))
+    $config['pzLocked'] = $config['in_fight_duration'];
 
-$pzLocked = eval('return ' . $config['lua']['pzLocked'] . ';');
-$whiteSkullTime = isset($config['lua']['whiteSkullTime']) ? $config['lua']['whiteSkullTime'] : NULL;
-if(!isset($whiteSkullTime) && isset($config['lua']['unjust_skull_duration']))
-    $whiteSkullTime = $config['lua']['unjust_skull_duration'];
+$pzLocked = eval('return ' . $config['pzLocked'] . ';');
+$whiteSkullTime = isset($config['whiteSkullTime']) ? $config['whiteSkullTime'] : NULL;
+if(!isset($whiteSkullTime) && isset($config['unjust_skull_duration']))
+    $whiteSkullTime = $config['unjust_skull_duration'];
 
 if(isset($whiteSkullTime))
     $whiteSkullTime = eval('return ' . $whiteSkullTime . ';');
 
-$redSkullLength = isset($config['lua']['redSkullLength']) ? $config['lua']['redSkullLength'] : NULL;
-if(!isset($redSkullLength) && isset($config['lua']['red_skull_duration']))
-    $redSkullLength = $config['lua']['red_skull_duration'];
+$redSkullLength = isset($config['redSkullLength']) ? $config['redSkullLength'] : NULL;
+if(!isset($redSkullLength) && isset($config['red_skull_duration']))
+    $redSkullLength = $config['red_skull_duration'];
 
 if(isset($redSkullLength))
     $redSkullLength = eval('return ' . $redSkullLength . ';');
 
 $blackSkull = false;
 $blackSkullLength = NULL;
-if(isset($config['lua']['useBlackSkull']) && getBoolean($config['lua']['useBlackSkull']))
+if(isset($config['useBlackSkull']) && getBoolean($config['useBlackSkull']))
 {
-    $blackSkullLength = $config['lua']['blackSkullLength'];
+    $blackSkullLength = $config['blackSkullLength'];
     $blackSkull = true;
 }
-else if(isset($config['lua']['black_skull_duration'])) {
-    $blackSkullLength = eval('return ' . $config['lua']['blackSkullLength'] . ';');
+else if(isset($config['black_skull_duration'])) {
+    $blackSkullLength = eval('return ' . $config['blackSkullLength'] . ';');
     $blackSkull = true;
 }
 
@@ -79,32 +79,32 @@ if(isset($status['online']))
     $clientVersion = isset($status['clientVersion']) ? $status['clientVersion'] : null;
 
 $twig->display('serverinfo.html.twig', array(
-    'experienceStages' => isset($config['lua']['experienceStages']) && getBoolean($config['lua']['experienceStages']) ? $config['lua']['experienceStages'] : null,
-    'serverIp' => str_replace('/', '', str_replace('http://', '', $config['lua']['url'])),
+    'experienceStages' => isset($config['experienceStages']) && getBoolean($config['experienceStages']) ? $config['experienceStages'] : null,
+    'serverIp' => str_replace('/', '', str_replace('http://', '', $config['url'])),
     'clientVersion' => $clientVersion,
-    'globalSaveHour' => isset($config['lua']['globalSaveEnabled']) && getBoolean($config['lua']['globalSaveEnabled']) ? $config['lua']['globalSaveHour'] : null,
-    'protectionLevel' => $config['lua']['protectionLevel'],
+    'globalSaveHour' => isset($config['globalSaveEnabled']) && getBoolean($config['globalSaveEnabled']) ? $config['globalSaveHour'] : null,
+    'protectionLevel' => $config['protectionLevel'],
     'houseRent' => $rent == 'never' ? 'disabled' : $rent,
     'houseOld' => isset($cleanOld) ? $cleanOld : null,
-    'rateExp' => $config['lua']['rateExp'],
-    'rateExpFromPlayers' => isset($config['lua']['rateExperienceFromPlayers']) ? $config['lua']['rateExperienceFromPlayers'] : null,
-    'rateMagic' => $config['lua']['rateMagic'],
-    'rateSkill' => $config['lua']['rateSkill'],
-    'rateLoot' => $config['lua']['rateLoot'],
-    'rateSpawn' => $config['lua']['rateSpawn'],
+    'rateExp' => $config['rateExp'],
+    'rateExpFromPlayers' => isset($config['rateExperienceFromPlayers']) ? $config['rateExperienceFromPlayers'] : null,
+    'rateMagic' => $config['rateMagic'],
+    'rateSkill' => $config['rateSkill'],
+    'rateLoot' => $config['rateLoot'],
+    'rateSpawn' => $config['rateSpawn'],
     'houseLevel' => $house_level,
     'pzLocked' => $pzLocked,
     'whiteSkullTime' => $whiteSkullTime,
     'redSkullLength' => $redSkullLength,
     'blackSkull' => $blackSkull,
     'blackSkullLength' => $blackSkullLength,
-    'dailyFragsToRedSkull' => isset($config['lua']['dailyFragsToRedSkull']) ? $config['lua']['dailyFragsToRedSkull'] : (isset($config['lua']['kills_per_day_red_skull']) ? $config['lua']['kills_per_day_red_skull'] : null),
-    'weeklyFragsToRedSkull' => isset($config['lua']['weeklyFragsToRedSkull']) ? $config['lua']['weeklyFragsToRedSkull'] : (isset($config['lua']['kills_per_week_red_skull']) ? $config['lua']['kills_per_week_red_skull'] : null),
-    'monthlyFragsToRedSkull' => isset($config['lua']['monthlyFragsToRedSkull']) ? $config['lua']['monthlyFragsToRedSkull'] : (isset($config['lua']['kills_per_month_red_skull']) ? $config['lua']['kills_per_month_red_skull'] : null),
-    'dailyFragsToBlackSkull' => isset($config['lua']['dailyFragsToBlackSkull']) ? $config['lua']['dailyFragsToBlackSkull'] : (isset($config['lua']['kills_per_day_black_skull']) ? $config['lua']['kills_per_day_black_skull'] : null),
-    'weeklyFragsToBlackSkull' => isset($config['lua']['weeklyFragsToBlackSkull']) ? $config['lua']['weeklyFragsToBlackSkull'] : (isset($config['lua']['kills_per_week_black_skull']) ? $config['lua']['kills_per_week_black_skull'] : null),
-    'monthlyFragsToBlackSkull' => isset($config['lua']['monthlyFragsToBlackSkull']) ? $config['lua']['monthlyFragsToBlackSkull'] : (isset($config['lua']['kills_per_month_black_skull']) ? $config['lua']['kills_per_month_black_skull'] : null),
-    'banishmentLength' => isset($config['lua']['banishment_length']) ? eval('return (' . $config['lua']['banishment_length'] . ') / (24 * 60 * 60);') : null,
-    'finalBanishmentLength' => isset($config['lua']['final_banishment_length']) ? eval('return (' . $config['lua']['final_banishment_length'] . ') / (24 * 60 * 60);') : null,
-    'ipBanishmentLength' => isset($config['lua']['ip_banishment_length']) ? eval('return (' . $config['lua']['ip_banishment_length'] . ') / (24 * 60 * 60);') : null,
+    'dailyFragsToRedSkull' => isset($config['dailyFragsToRedSkull']) ? $config['dailyFragsToRedSkull'] : (isset($config['kills_per_day_red_skull']) ? $config['kills_per_day_red_skull'] : null),
+    'weeklyFragsToRedSkull' => isset($config['weeklyFragsToRedSkull']) ? $config['weeklyFragsToRedSkull'] : (isset($config['kills_per_week_red_skull']) ? $config['kills_per_week_red_skull'] : null),
+    'monthlyFragsToRedSkull' => isset($config['monthlyFragsToRedSkull']) ? $config['monthlyFragsToRedSkull'] : (isset($config['kills_per_month_red_skull']) ? $config['kills_per_month_red_skull'] : null),
+    'dailyFragsToBlackSkull' => isset($config['dailyFragsToBlackSkull']) ? $config['dailyFragsToBlackSkull'] : (isset($config['kills_per_day_black_skull']) ? $config['kills_per_day_black_skull'] : null),
+    'weeklyFragsToBlackSkull' => isset($config['weeklyFragsToBlackSkull']) ? $config['weeklyFragsToBlackSkull'] : (isset($config['kills_per_week_black_skull']) ? $config['kills_per_week_black_skull'] : null),
+    'monthlyFragsToBlackSkull' => isset($config['monthlyFragsToBlackSkull']) ? $config['monthlyFragsToBlackSkull'] : (isset($config['kills_per_month_black_skull']) ? $config['kills_per_month_black_skull'] : null),
+    'banishmentLength' => isset($config['banishment_length']) ? eval('return (' . $config['banishment_length'] . ') / (24 * 60 * 60);') : null,
+    'finalBanishmentLength' => isset($config['final_banishment_length']) ? eval('return (' . $config['final_banishment_length'] . ') / (24 * 60 * 60);') : null,
+    'ipBanishmentLength' => isset($config['ip_banishment_length']) ? eval('return (' . $config['ip_banishment_length'] . ') / (24 * 60 * 60);') : null,
 ));

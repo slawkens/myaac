@@ -1,3 +1,4 @@
+<!-- config.php  -->
 <?php
 /**
  * This is MyAAC's Main Configuration file
@@ -17,8 +18,75 @@
  */
 
 $config = array(
+
+	// installation checks
+	'installed' => false,
+	'install_ignore_ip_check' => true,
+
 	// directories & files
+	'data_directory' => '/var/www/html',
 	'server_path' => '', // path to the server directory (same directory where config file is located)
+	'data_path' => '', // path to XMLs --- TODO: These can be deployed to s3 or something?
+
+	// Load environment variables with defaults (derived from config lua)
+    'statusPort' => getenv('STATUS_PROTOCOL_PORT') ?: 7171,
+    'statustimeout' => getenv('STATUS_TIMEOUT') ?: 2000,
+
+    // database details (leave blank for auto detect from config lua)
+    'database_host' => getenv('MYSQL_HOST') ?: 'database',
+    'database_user' => getenv('MYSQL_USER') ?: 'canary',
+    'database_password' => getenv('MYSQL_PASS') ?: 'canary',
+    'database_name' => getenv('MYSQL_DATABASE') ?: 'otservbr-global',
+    'database_port' => getenv('MYSQL_PORT') ?: 3306,
+    'database_socket' => getenv('MYSQL_SOCK') ?: '', // set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)
+    'database_log' => false, // should database queries be logged and and saved into system/logs/database.log?
+    'database_persistent' => false, // use database permanent connection (like server), may speed up your site
+    'passwordType' => getenv('PASSWORD_TYPE') ?: 'sha1',
+    'database_encryption' => 'md5',
+    'useMD5Passwords' => false,
+    'otserv_version' => TFS_02,
+
+    // Other dupes from server/conf lua
+    'ip' => getenv('SERVER_IP') ?: '192.168.176.1',
+    'gameProtocolPort' => getenv('STATUS_PROTOCOL_PORT') ?: 7171,
+    'serverName' => getenv('SERVER_NAME') ?: 'OTServBR-Global',
+    'pvptype' => getenv('WORLD_TYPE') ?: 'pvp',
+    'freePremium' => getenv('freePremium') ?: 'false',
+
+    // Experience and stages
+    'experienceStages' => false,
+    'rate_exp' => getenv('rate_exp') ?: 1,
+    'rateExperience' => getenv('rateExperience') ?: 1,
+    'rate_mag' => getenv('rate_mag') ?: 1,
+    'rate_loot' => getenv('rate_loot') ?: 1,
+    'rate_spawn' => getenv('rate_spawn') ?: 1,
+    'rate_skill' => getenv('rate_skill') ?: 1,
+
+    // Housing
+    'levelToBuyHouse' => getenv('levelToBuyHouse') ?: 1,
+    'house_level' => getenv('house_level') ?: 1,
+    'houseCleanOld' => getenv('houseCleanOld') ?: 1,
+    'min_pvp_level' => getenv('min_pvp_level') ?: 1,
+    'protectionLevel' => getenv('protectionLevel') ?: 1,
+    'houserentperiod' => getenv('houserentperiod') ?: 1,
+
+    // Skulls
+    'pzLocked' => getenv('pzLocked') ?: null,
+    'unjust_skull_duration' => getenv('unjust_skull_duration') ?: null,
+    'in_fight_duration' => getenv('in_fight_duration') ?: null,
+    'whiteSkullTime' => getenv('whiteSkullTime') ?: null,
+    'redSkullLength' => getenv('redSkullLength') ?: null,
+    'blackSkull' => getenv('blackSkull') ?: null,
+    'blackSkullLength' => getenv('blackSkullLength') ?: null,
+    'dailyFragsToRedSkull' => getenv('dailyFragsToRedSkull') ?: null,
+    'weeklyFragsToRedSkull' => getenv('weeklyFragsToRedSkull') ?: null,
+    'monthlyFragsToRedSkull' => getenv('monthlyFragsToRedSkull') ?: null,
+    'dailyFragsToBlackSkull' => getenv('dailyFragsToBlackSkull') ?: null,
+    'weeklyFragsToBlackSkull' => getenv('weeklyFragsToBlackSkull') ?: null,
+    'monthlyFragsToBlackSkull' => getenv('monthlyFragsToBlackSkull') ?: null,
+    'banishmentLength' => getenv('banishmentLength') ?: null,
+    'finalBanishmentLength' => getenv('finalBanishmentLength') ?: null,
+    'ipBanishmentLength' => getenv('ipBanishmentLength') ?: null,
 
 	/**
 	 * Environment Setting
@@ -31,8 +99,8 @@ $config = array(
 	 */
 	'env' => 'prod', // 'prod' for production and 'dev' for development
 
-	'template' => 'kathrine', // template used by website (kathrine, tibiacom)
-	'template_allow_change' => true, // allow users to choose their own template while browsing website?
+	'template' => 'tibiacom', // template used by website (kathrine, tibiacom)
+	'template_allow_change' => false, // allow users to choose their own template while browsing website?
 
 	'vocations_amount' => 4, // how much basic vocations your server got (without promotion)
 
@@ -47,7 +115,7 @@ $config = array(
 	// gesior backward support (templates & pages)
 	// allows using gesior templates and pages with myaac
 	// might bring some performance when disabled
-	'backward_support' => true,
+	'backward_support' => false,
 
 	// head options (html)
 	'meta_description' => 'Tibia is a free massive multiplayer online role playing game (MMORPG).', // description of the site
@@ -67,16 +135,6 @@ $config = array(
 	// cache system. by default file cache is used
 	'cache_engine' => 'auto', // apc, apcu, eaccelerator, xcache, file, auto, or blank to disable.
 	'cache_prefix' => 'myaac_', // have to be unique if running more MyAAC instances on the same server (except file system cache)
-
-	// database details (leave blank for auto detect from config.lua)
-	'database_host' => '',
-	'database_port' => '', // leave blank to default 3306
-	'database_user' => '',
-	'database_password' => '',
-	'database_name' => '',
-	'database_log' => false, // should database queries be logged and and saved into system/logs/database.log?
-	'database_socket' => '', // set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)
-	'database_persistent' => false, // use database permanent connection (like server), may speed up your site
 
 	// multiworld system (only TFS 0.3)
 	'multiworld' => false, // use multiworld system?
@@ -273,7 +331,7 @@ $config = array(
 	'status_timeout' => 1.0, // how long to wait for the initial response from the server (default: 1 second)
 
 	// how often to connect to server and update status (default: every minute)
-	// if your status timeout in config.lua is bigger, that it will be used instead
+	// if your status timeout in config lua is bigger, that it will be used instead
 	// when server is offline, it will be checked every time web refreshes, ignoring this variable
 	'status_interval' => 60,
 

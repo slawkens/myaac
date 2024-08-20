@@ -22,7 +22,7 @@ if(!$db->hasColumn('houses', 'name')) {
 	return;
 }
 
-$rentType = trim(strtolower($config['lua']['houseRentPeriod']));
+$rentType = trim(strtolower($config['houseRentPeriod']));
 if($rentType != 'yearly' && $rentType != 'monthly' && $rentType != 'weekly' && $rentType != 'daily')
     $rentType = 'never';
 
@@ -110,8 +110,8 @@ if(isset($_GET['page']) && $_GET['page'] == 'view' && isset($_REQUEST['house']))
 }
 
 $cleanOldHouse = null;
-if(isset($config['lua']['houseCleanOld'])) {
-    $cleanOldHouse = (int)(eval('return ' . $config['lua']['houseCleanOld'] . ';') / (24 * 60 * 60));
+if(isset($config['houseCleanOld'])) {
+    $cleanOldHouse = (int)(eval('return ' . $config['houseCleanOld'] . ';') / (24 * 60 * 60));
 }
 
 $housesSearch = false;
