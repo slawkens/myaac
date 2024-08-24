@@ -24,17 +24,10 @@ $freePremium = $config['lua']['freePremium'];
 
 function admin_give_points($points)
 {
-	global $db, $hasPointsColumn;
+	global $hasPointsColumn;
 
 	if (!$hasPointsColumn) {
 		displayMessage('Points not supported.');
-		return;
-	}
-
-
-	$statement = $db->prepare('UPDATE `accounts` SET `premium_points` = `premium_points` + :points');
-	if (!$statement) {
-		displayMessage('Failed to prepare query statement.');
 		return;
 	}
 
@@ -47,7 +40,7 @@ function admin_give_points($points)
 
 function admin_give_coins($coins)
 {
-	global $db, $hasCoinsColumn;
+	global $hasCoinsColumn;
 
 	if (!$hasCoinsColumn) {
 		displayMessage('Coins not supported.');
@@ -60,24 +53,6 @@ function admin_give_coins($coins)
 	}
 
 	displayMessage($coins . ' coins added to all accounts.', true);
-}
-
-function query_add_premium($column, $value_query, $condition_query = '1=1', $params = [])
-{
-	global $db;
-
-	$statement = $db->prepare("UPDATE `accounts` SET `{$column}` = $value_query WHERE $condition_query");
-	if (!$statement) {
-		displayMessage('Failed to prepare query statement.');
-		return false;
-	}
-
-	if (!$statement->execute($params)) {
-		displayMessage('Failed to add premium days.');
-		return false;
-	}
-
-	return true;
 }
 
 function admin_give_premdays($days)
@@ -94,9 +69,9 @@ function admin_give_premdays($days)
 	// othire
 	if ($db->hasColumn('accounts', 'premend')) {
 		// append premend
-		if (query_add_premium('premend', '`premend` + :value', '`premend` > :now', ['value' => $value, 'now' => $now])) {
+		if (Account::where('premend', '>', $now)->increment('premend', $value)) {
 			// set premend
-			if (query_add_premium('premend', ':value', '`premend` <= :now', ['value' => $now + $value, 'now' => $now])) {
+			if (Account::where('premend', '<', $now)->update(['premend' => $now + $value])) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 				return;
 			} else {
@@ -114,11 +89,11 @@ function admin_give_premdays($days)
 	// tfs 0.x
 	if ($db->hasColumn('accounts', 'premdays')) {
 		// append premdays
-		if (query_add_premium('premdays', '`premdays` + :value', '1=1', ['value' => $days])) {
+		if (Account::query()->update(['premdays' => $days])) {
 			// append lastday
-			if (query_add_premium('lastday', '`lastday` + :value', '`lastday` > :now', ['value' => $value, 'now' => $now])) {
+			if (Account::where('lastday', '>', $now)->increment('lastday', $value)) {
 				// set lastday
-				if (query_add_premium('lastday', ':value', '`lastday` <= :now', ['value' => $now + $value, 'now' => $now])) {
+				if (Account::where('lastday', '<=', $now)->update(['lastday' => $now + $value])) {
 					displayMessage($days . ' premium days added to all accounts.', true);
 					return;
 				} else {
@@ -142,9 +117,9 @@ function admin_give_premdays($days)
 	// tfs 1.x
 	if ($db->hasColumn('accounts', 'premium_ends_at')) {
 		// append premium_ends_at
-		if (query_add_premium('premium_ends_at', '`premium_ends_at` + :value', '`premium_ends_at` > :now', ['value' => $value, 'now' => $now])) {
+		if (Account::where('premium_ends_at', '>', $now)->increment('premium_ends_at', $value)) {
 			// set premium_ends_at
-			if (query_add_premium('premium_ends_at', ':value', '`premium_ends_at` <= :now', ['value' => $now + $value, 'now' => $now])) {
+			if (Account::where('premium_ends_at', '<', $now)->update(['premium_ends_at' => $now + $value])) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 				return;
 			} else {
