@@ -51,12 +51,11 @@ else if (isset($_REQUEST['search'])) {
 	if (strlen($search_player) < 3 && !Validator::number($search_player)) {
 		echo_error('Player name is too short.');
 	} else {
-		// $query = Player::where('name', $search_player)->first(['id']);
 		$query = Player::where('name', 'like', '%' . $search_player . '%')->orderBy('name')->limit(11)->get(['id', 'name']);
-		if (count($query) == 1) {
-			$id = $query->first()->getKey();
-		} else if (count($query) == 0) {
+		if (count($query) == 0) {
 			echo_error('No entries found.');
+		} else if (count($query) == 1) {
+			$id = $query->first()->getKey();
 		} else if (count($query) > 10) {
 			echo_error('Specified name resulted with too many players.');
 		} else {

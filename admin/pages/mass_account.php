@@ -71,7 +71,7 @@ function admin_give_premdays($days)
 		// append premend
 		if (Account::where('premend', '>', $now)->increment('premend', $value)) {
 			// set premend
-			if (Account::where('premend', '<', $now)->update(['premend' => $now + $value])) {
+			if (Account::where('premend', '<=', $now)->update(['premend' => $now + $value])) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 				return;
 			} else {
@@ -119,7 +119,7 @@ function admin_give_premdays($days)
 		// append premium_ends_at
 		if (Account::where('premium_ends_at', '>', $now)->increment('premium_ends_at', $value)) {
 			// set premium_ends_at
-			if (Account::where('premium_ends_at', '<', $now)->update(['premium_ends_at' => $now + $value])) {
+			if (Account::where('premium_ends_at', '<=', $now)->update(['premium_ends_at' => $now + $value])) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 				return;
 			} else {

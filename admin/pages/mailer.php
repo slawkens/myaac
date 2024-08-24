@@ -64,7 +64,7 @@ if (!empty($mail_content) && !empty($mail_subject) && empty($mail_to)) {
 		$add = ' AND `email_verified` = 1';
 	}
 
-	$query = Account::where('email', '<>', '')->get(['email']);
+	$query = Account::where('email', '!=', '')->get(['email']);
 	foreach ($query as $email) {
 		if (_mail($email->email, $mail_subject, $mail_content)) {
 			$success++;

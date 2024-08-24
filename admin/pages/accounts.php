@@ -57,14 +57,13 @@ if (isset($_REQUEST['id']))
 	$id = (int)$_REQUEST['id'];
 else if (isset($_REQUEST['search_email'])) {
 	$search_account_email = $_REQUEST['search_email'];
-	$accountModel = AccountModel::where('email', $search_account_email)->get();
-	if ($accountModel->count() == 1) {
-		$id = (int)$accountModel[0]->id;
-	} else if ($accountModel->count() > 10) {
-		echo_error('Specified e-mail resulted with too many accounts.');
-	}
-	else {
+	$accountModel = AccountModel::where('email', $search_account_email)->limit(11)->get(['email', 'id']);
+	if (count($accountModel) == 0) {
 		echo_error('No entries found.');
+	} else if (count($accountModel) == 1) {
+		$id = $accountModel->first()->getKey();
+	} else if (count($accountModel) > 10) {
+		echo_error('Specified e-mail resulted with too many accounts.');
 	}
 }
 else if (isset($_REQUEST['search'])) {
@@ -77,7 +76,7 @@ else if (isset($_REQUEST['search'])) {
 	if (strlen($search_account) < $min_size && !Validator::number($search_account)) {
 		echo_error('Account ' . $nameOrNumberColumn . ' is too short.');
 	} else {
-		$query = AccountModel::where($nameOrNumberColumn, '=', $search_account)->limit(11)->get(['id']);
+		$query = AccountModel::where($nameOrNumberColumn, '=', $search_account)->limit(11)->get(['id', $nameOrNumberColumn]);
 		if (count($query) == 0) {
 			echo_error('No entries found.');
 		} else if (count($query) == 1) {
