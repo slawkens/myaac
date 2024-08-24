@@ -160,7 +160,7 @@ switch ($action) {
 		}
 
 		// common columns
-		$columns = 'id, name, level, sex, vocation, looktype, lookhead, lookbody, looklegs, lookfeet, lookaddons';
+		$columns = 'id, name, level, sex, vocation, looktype, lookhead, lookbody, looklegs, lookfeet, lookaddons, email_verified';
 
 		if (fieldExist('isreward', 'accounts')) {
 			$columns .= ', isreward';
