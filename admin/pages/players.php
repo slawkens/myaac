@@ -51,22 +51,20 @@ else if (isset($_REQUEST['search'])) {
 	if (strlen($search_player) < 3 && !Validator::number($search_player)) {
 		echo_error('Player name is too short.');
 	} else {
-		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($search_player));
-		if ($query->rowCount() == 1) {
-			$query = $query->fetch();
-			$id = (int)$query['id'];
+		$query = Player::where('name', 'like', '%' . $search_player . '%')->orderBy('name')->limit(11)->get(['id', 'name']);
+		if (count($query) == 0) {
+			echo_error('No entries found.');
+		} else if (count($query) == 1) {
+			$id = $query->first()->getKey();
+		} else if (count($query) > 10) {
+			echo_error('Specified name resulted with too many players.');
 		} else {
-			$query = $db->query('SELECT `id`, `name` FROM `players` WHERE `name` LIKE ' . $db->quote('%' . $search_player . '%'));
-			if ($query->rowCount() > 0 && $query->rowCount() <= 10) {
-				$str_construct = 'Do you mean?<ul>';
-				foreach ($query as $row)
-					$str_construct .= '<li><a href="' . $player_base . '&id=' . $row['id'] . '">' . $row['name'] . '</a></li>';
-				$str_construct .= '</ul>';
-				echo_error($str_construct);
-			} else if ($query->rowCount() > 10)
-				echo_error('Specified name resulted with too many players.');
-			else
-				echo_error('No entries found.');
+			$str_construct = 'Do you mean?<ul>';
+			foreach ($query as $row) {
+				$str_construct .= '<li><a href="' . $player_base . '&id=' . $row->getKey() . '">' . $row->name . '</a></li>';
+			}
+			$str_construct .= '</ul>';
+			echo_error($str_construct);
 		}
 	}
 }
@@ -307,7 +305,7 @@ else if (isset($_REQUEST['search'])) {
 			}
 		}
 	} else if ($id == 0) {
-		$players_db = $db->query('SELECT `id`, `name`, `level` FROM `players` ORDER BY `id` asc');
+		$players_db = Player::orderBy('id')->get(['id','name', 'level']);
 		?>
 		<div class="col-12 col-sm-12 col-lg-10">
 			<div class="card card-info card-outline">
@@ -327,11 +325,11 @@ else if (isset($_REQUEST['search'])) {
 						<tbody>
 						<?php foreach ($players_db as $player_db): ?>
 							<tr>
-								<th><?php echo $player_db['id']; ?></th>
-								<td><?php echo $player_db['name']; ?></a></td>
-								<td><?php echo $player_db['level']; ?></a></td>
+								<th><?php echo $player_db->id; ?></th>
+								<td><?php echo $player_db->name; ?></a></td>
+								<td><?php echo $player_db->level; ?></a></td>
 
-								<td><a href="?p=players&id=<?php echo $player_db['id']; ?>" class="btn btn-success btn-sm" title="Edit">
+								<td><a href="?p=players&id=<?php echo $player_db->id; ?>" class="btn btn-success btn-sm" title="Edit">
 										<i class="fas fa-pencil-alt"></i>
 									</a>
 								</td>

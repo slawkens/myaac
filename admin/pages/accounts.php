@@ -57,37 +57,39 @@ if (isset($_REQUEST['id']))
 	$id = (int)$_REQUEST['id'];
 else if (isset($_REQUEST['search_email'])) {
 	$search_account_email = $_REQUEST['search_email'];
-	$accountModel = AccountModel::where('email', $search_account_email)->get();
-	if ($accountModel->count() == 1) {
-		$id = (int)$accountModel[0]->id;
-	} else if ($accountModel->count() > 10) {
-		echo_error('Specified e-mail resulted with too many accounts.');
-	}
-	else {
+	$accountModel = AccountModel::where('email', $search_account_email)->limit(11)->get(['email', 'id']);
+	if (count($accountModel) == 0) {
 		echo_error('No entries found.');
+	} else if (count($accountModel) == 1) {
+		$id = $accountModel->first()->getKey();
+	} else if (count($accountModel) > 10) {
+		echo_error('Specified e-mail resulted with too many accounts.');
 	}
 }
 else if (isset($_REQUEST['search'])) {
 	$search_account = $_REQUEST['search'];
-	if (strlen($search_account) < 3 && !Validator::number($search_account)) {
-		echo_error('Player name is too short.');
+	$min_size = 3;
+	if ($nameOrNumberColumn == 'number') {
+		$min_size = 1;
+	}
+
+	if (strlen($search_account) < $min_size && !Validator::number($search_account)) {
+		echo_error('Account ' . $nameOrNumberColumn . ' is too short.');
 	} else {
-		$query = $db->query('SELECT `id` FROM `accounts` WHERE `' . $nameOrNumberColumn . '` = ' . $db->quote($search_account));
-		if ($query->rowCount() == 1) {
-			$query = $query->fetch();
-			$id = (int)$query['id'];
+		$query = AccountModel::where($nameOrNumberColumn, '=', $search_account)->limit(11)->get(['id', $nameOrNumberColumn]);
+		if (count($query) == 0) {
+			echo_error('No entries found.');
+		} else if (count($query) == 1) {
+			$id = $query->first()->getKey();
+		} else if (count($query) > 10) {
+			echo_error('Specified name resulted with too many accounts.');
 		} else {
-			$query = $db->query('SELECT `id`, `' . $nameOrNumberColumn . '` FROM `accounts` WHERE `' . $nameOrNumberColumn . '` LIKE ' . $db->quote('%' . $search_account . '%'));
-			if ($query->rowCount() > 0 && $query->rowCount() <= 10) {
-				$str_construct = 'Do you mean?<ul class="mb-0">';
-				foreach ($query as $row)
-					$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row['id'] . '">' . $row[$nameOrNumberColumn] . '</a></li>';
-				$str_construct .= '</ul>';
-				echo_error($str_construct);
-			} else if ($query->rowCount() > 10)
-				echo_error('Specified name resulted with too many accounts.');
-			else
-				echo_error('No entries found.');
+			$str_construct = 'Do you mean?<ul class="mb-0">';
+			foreach ($query as $row) {
+				$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row->getKey() . '">' . $row->attributes[$nameOrNumberColumn] . '</a></li>';
+			}
+			$str_construct .= '</ul>';
+			echo_error($str_construct);
 		}
 	}
 }
