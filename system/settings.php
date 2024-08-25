@@ -1595,7 +1595,7 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
-			'title' => 'Login',
+			'title' => 'IP Ban Protection',
 		],
 		'account_login_ipban_protection' => [
 			'name' => 'IP Ban Protection',
@@ -1603,6 +1603,7 @@ Sent by MyAAC,<br/>
 			'desc' => 'Activate IP ban protection after exceeding incorrect login attempts',
 			'default' => true,
 		],
+
 		'account_login_attempts_limit' => [
 			'name' => 'Login Attempts Limit',
 			'type' => 'number',
