@@ -4,6 +4,7 @@ use MyAAC\Models\BoostedCreature;
 use MyAAC\Models\PlayerOnline;
 use MyAAC\Models\Account;
 use MyAAC\Models\Player;
+use MyAAC\RateLimit;
 
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';
@@ -130,12 +131,29 @@ switch ($action) {
 		}
 
 		$account = $account->first();
+
+		$ip = $_SERVER['REMOTE_ADDR']; // is this the best approach?
+		$limiter = new RateLimit('failed_logins', setting('core.account_login_attempts_limit'), setting('core.account_login_ban_time'));
+		$limiter->enabled = setting('core.account_login_ipban_protection');
+		$limiter->load();
+
+		$ban_msg = 'A wrong account, password or secret has been entered ' . setting('core.account_login_attempts_limit') . ' times in a row. You are unable to log into your account for the next ' . setting('core.account_login_ban_time') . ' minutes. Please wait.';
 		if (!$account) {
+			$limiter->increment($ip);
+			if ($limiter->exceeded($ip)) {
+				sendError($ban_msg);
+			}
+			
 			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');
 		}
 
 		$current_password = encrypt((USE_ACCOUNT_SALT ? $account->salt : '') . $request->password);
 		if (!$account || $account->password != $current_password) {
+			$limiter->increment($ip);
+			if ($limiter->exceeded($ip)) {
+				sendError($ban_msg);
+			}
+
 			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');
 		}
 
@@ -145,15 +163,26 @@ switch ($action) {
 			if ($accountSecret != null && $accountSecret != '') {
 				$accountHasSecret = true;
 				if ($inputToken === false) {
+					$limiter->increment($ip);
+					if ($limiter->exceeded($ip)) {
+						sendError($ban_msg);
+					}
 					sendError('Submit a valid two-factor authentication token.', 6);
 				} else {
 					require_once LIBS . 'rfc6238.php';
 					if (TokenAuth6238::verify($accountSecret, $inputToken) !== true) {
+						$limiter->increment($ip);
+						if ($limiter->exceeded($ip)) {
+							sendError($ban_msg);
+						}
+
 						sendError('Two-factor authentication failed, token is wrong.', 6);
 					}
 				}
 			}
 		}
+
+		$limiter->reset($ip);
 
 		// common columns
 		$columns = 'id, name, level, sex, vocation, looktype, lookhead, lookbody, looklegs, lookfeet, lookaddons';
