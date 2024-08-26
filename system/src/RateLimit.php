@@ -37,7 +37,7 @@ class RateLimit
 			return false;
 		}
 
-		return $this->attempts($ip) > $this->max_attempts;
+		return $this->attempts($ip) >= $this->max_attempts;
 	}
 
 	public function increment(string $ip): bool
