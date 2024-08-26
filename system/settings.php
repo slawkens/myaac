@@ -15,8 +15,7 @@ use MyAAC\Settings;
 
 return [
 	'name' => 'MyAAC',
-	'settings' =>
-	[
+	'settings' => [
 		[
 			'type' => 'category',
 			'title' => 'General'
@@ -1590,6 +1589,34 @@ Sent by MyAAC,<br/>
 				'account_change_character_sex', '=', 'true',
 			],
 		],
+		[
+			'type' => 'category',
+			'title' => 'Security',
+		],
+		[
+			'type' => 'section',
+			'title' => 'IP Ban Protection',
+		],
+		'account_login_ipban_protection' => [
+			'name' => 'IP Ban Protection',
+			'type' => 'boolean',
+			'desc' => 'Activate IP ban protection after exceeding incorrect login attempts',
+			'default' => true,
+		],
+
+		'account_login_attempts_limit' => [
+			'name' => 'Login Attempts Limit',
+			'type' => 'number',
+			'desc' => 'Number of incorrect login attempts before banning the IP',
+			'default' => 5, // Ajuste conforme necessário
+		],
+
+		'account_login_ban_time' => [
+			'name' => 'Ban Time (Minutes)',
+			'type' => 'number',
+			'desc' => 'Time in minutes the IP will be banned after exceeding login attempts',
+			'default' => 30, // Ajuste conforme necessário
+		],
 	],
 	'callbacks' => [
 		'beforeSave' => function(&$settings, &$values) {
@@ -1658,6 +1685,6 @@ Sent by MyAAC,<br/>
 
 			return $success;
 		},
-	],
+	]
 ];
 
