@@ -183,6 +183,9 @@ switch ($action) {
 		}
 
 		$limiter->reset($ip);
+		if (setting('core.account_mail_verify') && $account->email_verified !== 1) {
+			sendError('You need to verify your account, enter in our site and resend verify e-mail!');
+		}
 
 		// common columns
 		$columns = 'id, name, level, sex, vocation, looktype, lookhead, lookbody, looklegs, lookfeet, lookaddons';
