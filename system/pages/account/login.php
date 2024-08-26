@@ -21,7 +21,7 @@ if($logged || !isset($_POST['account_login']) || !isset($_POST['password_login']
 $login_account = $_POST['account_login'];
 $login_password = $_POST['password_login'];
 $remember_me = isset($_POST['remember_me']);
-$ip = $_SERVER['REMOTE_ADDR']; // is this the best approach?
+$ip = get_browser_real_ip();
 if(!empty($login_account) && !empty($login_password))
 {
 
