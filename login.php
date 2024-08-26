@@ -132,7 +132,7 @@ switch ($action) {
 
 		$account = $account->first();
 
-		$ip = $_SERVER['REMOTE_ADDR']; // is this the best approach?
+		$ip = get_browser_real_ip();
 		$limiter = new RateLimit('failed_logins', setting('core.account_login_attempts_limit'), setting('core.account_login_ban_time'));
 		$limiter->enabled = setting('core.account_login_ipban_protection');
 		$limiter->load();
