@@ -114,7 +114,7 @@ else if($step == 'finish') {
 	$email = $_SESSION['var_email'];
 	$password = $_SESSION['var_password'];
 	$password_confirm = $_SESSION['var_password_confirm'];
-	$player_name = $_SESSION['var_player_name'];
+	$player_name = $_SESSION['var_player_name'] ?? null;
 
 	// email check
 	if(empty($email)) {
@@ -159,12 +159,13 @@ else if($step == 'finish') {
 		$errors[] = $locale['step_admin_password_confirm_error_not_same'];
 	}
 
-	// player name check
-	if(empty($player_name)) {
-		$errors[] = $locale['step_admin_player_name_error_empty'];
-	}
-	else if(!Validator::characterName($player_name)) {
-		$errors[] = $locale['step_admin_player_name_error_format'];
+	if (isset($player_name)) {
+		// player name check
+		if (empty($player_name)) {
+			$errors[] = $locale['step_admin_player_name_error_empty'];
+		} else if (!Validator::characterName($player_name)) {
+			$errors[] = $locale['step_admin_player_name_error_format'];
+		}
 	}
 
 	if(!empty($errors)) {
