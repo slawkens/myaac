@@ -42,23 +42,25 @@ if(isset($account))
 else
 	$account_db->load($account_id);
 
-$player_name = $_SESSION['var_player_name'];
-$player_db = new OTS_Player();
-$player_db->find($player_name);
+if ($db->hasTable('players')) {
+	$player_name = $_SESSION['var_player_name'];
+	$player_db = new OTS_Player();
+	$player_db->find($player_name);
 
-if(!$player_db->isLoaded())
-{
-	$player = new OTS_Player();
-	$player->setName($player_name);
+	if(!$player_db->isLoaded())
+	{
+		$player = new OTS_Player();
+		$player->setName($player_name);
 
-	$player_used = &$player;
+		$player_used = &$player;
+	}
+	else {
+		$player_used = &$player_db;
+	}
+
+	$groups = new OTS_Groups_List();
+	$player_used->setGroupId($groups->getHighestId());
 }
-else {
-	$player_used = &$player_db;
-}
-
-$groups = new OTS_Groups_List();
-$player_used->setGroupId($groups->getHighestId());
 
 $email = $_SESSION['var_email'];
 if($account_db->isLoaded()) {
@@ -100,10 +102,16 @@ if($db->hasColumn('accounts', 'group_id'))
 if($db->hasColumn('accounts', 'type'))
 	$account_used->setCustomField('type', 6);
 
-if(!$player_db->isLoaded())
-	$player->setAccountId($account_used->getId());
-else
-	$player_db->setAccountId($account_used->getId());
+if ($db->hasTable('players')) {
+	if(!$player_db->isLoaded()) {
+		$player->setAccountId($account_used->getId());
+		$player->save();
+	}
+	else {
+		$player_db->setAccountId($account_used->getId());
+		$player_db->save();
+	}
+}
 
 success($locale['step_database_created_account']);
 
@@ -111,18 +119,14 @@ setSession('account', $account_used->getId());
 setSession('password', encrypt($password));
 setSession('remember_me', true);
 
-if($player_db->isLoaded()) {
-	$player_db->save();
-}
-else {
-	$player->save();
-}
-
 if(!News::all()->count()) {
 	$player_id = 0;
-	$tmpNewsPlayer = \MyAAC\Models\Player::where('name', $player_name)->first();
-	if($tmpNewsPlayer) {
-		$player_id = $tmpNewsPlayer->id;
+
+	if ($db->hasTable('players')) {
+		$tmpNewsPlayer = \MyAAC\Models\Player::where('name', $player_name)->first();
+		if($tmpNewsPlayer) {
+			$player_id = $tmpNewsPlayer->id;
+		}
 	}
 
 	News::create([
