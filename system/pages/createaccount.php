@@ -167,6 +167,8 @@ if($save)
 		$new_account->setEMail($email);
 		$new_account->save();
 
+		$hooks->trigger(HOOK_ACCOUNT_CREATE_AFTER_SAVED, ['account' => $new_account]);
+
 		if($config_salt_enabled)
 			$new_account->setCustomField('salt', $salt);
 
