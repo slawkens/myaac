@@ -189,14 +189,14 @@ clearstatcache();
 if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 	if(!file_exists(BASE . 'install/ip.txt')) {
 		$content = warning('AAC installation is disabled. To enable it make file <b>ip.txt</b> in install/ directory and put there your IP.<br/>
-		Your IP is:<br /><b>' . $_SERVER['REMOTE_ADDR'] . '</b>', true);
+		Your IP is:<br /><b>' . get_browser_real_ip() . '</b>', true);
 	}
 	else {
 		$file_content = trim(file_get_contents(BASE . 'install/ip.txt'));
 		$allow = false;
 		$listIP = preg_split('/\s+/', $file_content);
 		foreach($listIP as $ip) {
-			if($_SERVER['REMOTE_ADDR'] == $ip) {
+			if(get_browser_real_ip() == $ip) {
 				$allow = true;
 			}
 		}

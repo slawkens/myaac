@@ -33,7 +33,7 @@ class Visitors
 		$this->sessionTime = $sessionTime;
 		$this->cleanVisitors();
 
-		$ip = $_SERVER['REMOTE_ADDR'];
+		$ip = get_browser_real_ip();
 		if($this->visitorExists($ip))
 			$this->updateVisitor($ip, $_SERVER['REQUEST_URI']);
 		else

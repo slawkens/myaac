@@ -74,7 +74,7 @@ else
 				else
 					$tmp = array();
 
-				$ip = $_SERVER['REMOTE_ADDR'];
+				$ip = get_browser_real_ip();
 				$t = isset($tmp[$ip]) ? $tmp[$ip] : NULL;
 			}
 
