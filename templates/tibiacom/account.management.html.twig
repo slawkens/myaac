@@ -111,6 +111,7 @@
 </div>
 <br/><br/>
 {% endif %}
+{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_GENERAL_INFORMATION') }}
 <a name="General+Information" ></a>
 <div class="TopButtonContainer">
 	<div class="TopButton">
@@ -221,6 +222,7 @@
 {% endset %}
 {% include 'tables.headline.html.twig' %}
 <br/>
+{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_PUBLIC_INFORMATION') }}
 <a name="Public+Information"></a>
 <div class="TopButtonContainer">
 	<div class="TopButton">
@@ -280,6 +282,7 @@
 {% endset %}
 {% include 'tables.headline.html.twig' %}
 <br/>
+{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_ACCOUNT_LOGS') }}
 <a name="Account+Logs" ></a>
 <div class="TopButtonContainer">
 	<div class="TopButton">
@@ -333,6 +336,7 @@
 {% endset %}
 {% include 'tables.headline.html.twig' %}
 <br/>
+{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_CHARACTERS') }}
 <a name="Characters" ></a>
 <div class="TopButtonContainer">
 	<div class="TopButton" >
