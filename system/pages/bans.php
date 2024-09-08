@@ -167,37 +167,31 @@ function getBanType($typeId)
 
 function getPlayerNameByAccount($id)
 {
-	global $vowels, $ots, $db;
-	if(is_numeric($id))
-	{
-		$player = new OTS_Player();
-		$player->load($id);
-		if($player->isLoaded())
-			return $player->getName();
-		else
-		{
-			$playerQuery = $db->query('SELECT `id` FROM `players` WHERE `account_id` = ' . $id . ' ORDER BY `lastlogin` DESC LIMIT 1;')->fetch();
+	global $db;
+	if(!is_numeric($id)) {
+		return '';
+	}
 
-			$tmp = "*Error*";
-			/*
-			$acco = new OTS_Account();
-			$acco->load($id);
-			if(!$acco->isLoaded())
-				return "Unknown name";
+	$playerQuery = $db->query('SELECT `name` FROM `players` WHERE `account_id` = ' . $id . ' ORDER BY `lastlogin` DESC LIMIT 1;');
+	if ($playerQuery->rowCount() == 0) {
+		return "*Error*";
+	}
 
-			foreach($acco->getPlayersList() as $p)
-			{
-				$player= new OTS_Player();
-				$player->find($p);*/
-				$player->load($playerQuery['id']);
-				//echo 'id gracza = ' . $p . '<br/>';
-				if($player->isLoaded())
-					$tmp = $player->getName();
-			//	break;
-			//}
+	$playerQuery = $playerQuery->fetch();
+	return $playerQuery['name'];
+}
 
-			return $tmp;
-		}
+function getPlayerNameById($id)
+{
+	if (!is_numeric($id)) {
+		return '';
+	}
+
+	global $db;
+	$playerQuery = $db->query('SELECT `name` FROM `players` WHERE `id` = ' . $id);
+	if ($playerQuery->rowCount()) {
+		$player = $playerQuery->fetch(PDO::FETCH_ASSOC);
+		return $player['name'];
 	}
 
 	return '';
