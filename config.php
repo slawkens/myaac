@@ -77,6 +77,7 @@ $config = array(
 	'database_log' => false, // should database queries be logged and and saved into system/logs/database.log?
 	'database_socket' => '', // set if you want to connect to database through socket (example: /var/run/mysqld/mysqld.sock)
 	'database_persistent' => false, // use database permanent connection (like server), may speed up your site
+	'database_encryption' => 'sha1',
 
 	// multiworld system (only TFS 0.3)
 	'multiworld' => false, // use multiworld system?
