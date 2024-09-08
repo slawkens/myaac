@@ -137,7 +137,13 @@ if($save)
 		$params['account_id'] = $_POST['account'];
 	}
 
+	/**
+	 * two hooks for compatibility
+	 */
 	$hooks->trigger(HOOK_ACCOUNT_CREATE_AFTER_SUBMIT, $params);
+	if (!$hooks->trigger(HOOK_ACCOUNT_CREATE_POST, $params)) {
+		return;
+	}
 
 	if(config('account_create_character_create')) {
 		$character_name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : null;
