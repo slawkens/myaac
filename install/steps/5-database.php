@@ -64,18 +64,6 @@ if(!$error) {
 						$error = true;
 					}
 
-					if (!$db->hasTable('players')) {
-						$tmp = str_replace('$TABLE$', 'players', $locale['step_database_error_table']);
-						error($tmp);
-						$error = true;
-					}
-
-					if (!$db->hasTable('guilds')) {
-						$tmp = str_replace('$TABLE$', 'guilds', $locale['step_database_error_table']);
-						error($tmp);
-						$error = true;
-					}
-
 					if (!$error) {
 						$twig->display('install.installer.html.twig', array(
 							'url' => 'tools/5-database.php',

@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PlayerKillers extends Model {
 
-	protected $table = 'players_killers';
+	protected $table = 'player_killers';
 
 	public $timestamps = false;
 

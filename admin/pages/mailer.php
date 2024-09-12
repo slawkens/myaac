@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\Account;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Mailer';
 
@@ -61,15 +64,15 @@ if (!empty($mail_content) && !empty($mail_subject) && empty($mail_to)) {
 		$add = ' AND `email_verified` = 1';
 	}
 
-	$query = $db->query('SELECT `email` FROM `accounts` WHERE `email` != ""' . $add);
+	$query = Account::where('email', '!=', '')->get(['email']);
 	foreach ($query as $email) {
-		if (_mail($email['email'], $mail_subject, $mail_content)) {
+		if (_mail($email->email, $mail_subject, $mail_content)) {
 			$success++;
 		}
 		else {
 			$failed++;
 			echo '<br />';
-			error('An error occorred while sending email to <b>' . $email['email'] . '</b>. For Admin: More info can be found in system/logs/mailer-error.log');
+			error('An error occorred while sending email to <b>' . $email->email . '</b>. For Admin: More info can be found in system/logs/mailer-error.log');
 		}
 	}
 
