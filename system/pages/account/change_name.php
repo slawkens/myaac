@@ -33,6 +33,10 @@ else
 
 		if(empty($errors))
 		{
+			if(!Validator::characterName($name)) {
+				$errors[] = Validator::getLastError();
+			}
+
 			if(!admin() && !Validator::newCharacterName($name))
 				$errors[] = Validator::getLastError();
 		}
