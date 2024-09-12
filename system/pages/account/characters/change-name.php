@@ -40,8 +40,13 @@ else
 
 		if(empty($errors))
 		{
-			if(!admin() && !Validator::newCharacterName($name))
+			if(!Validator::characterName($name)) {
 				$errors[] = Validator::getLastError();
+			}
+
+			if(!admin() && !Validator::newCharacterName($name)) {
+				$errors[] = Validator::getLastError();
+			}
 		}
 
 		if(empty($errors)) {
