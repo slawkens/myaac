@@ -100,7 +100,7 @@ foreach($playersOnline as $player) {
 }
 
 $record = '';
-if($players > 0) {
+if(count($players_data) > 0) {
 	if( setting('core.online_record')) {
 		$result = null;
 		$timestamp = false;
@@ -114,7 +114,7 @@ if($players > 0) {
 			}
 		}
 
-		if($record) {
+		if($result) {
 			$record = 'The maximum on this game world was ' . $result['record'] . ' players' . ($timestamp ? ' on ' . date("M d Y, H:i:s", $result['timestamp']) . '.' : '.');
 		}
 	}
