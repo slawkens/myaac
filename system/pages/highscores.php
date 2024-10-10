@@ -30,10 +30,12 @@ if($config['highscores_vocation_box'] && isset($vocation))
 		if(strtolower($name) == $vocation) {
 			$add_vocs = array($id);
 
-			$i = $id + $config['vocations_amount'];
-			while(isset($config['vocations'][$i])) {
-				$add_vocs[] = $i;
-				$i += $config['vocations_amount'];
+			if ($id !== 0) {
+				$i = $id + $config['vocations_amount'];
+				while(isset($config['vocations'][$i])) {
+					$add_vocs[] = $i;
+					$i += $config['vocations_amount'];
+				}
 			}
 
 			$add_sql = 'AND `vocation` IN (' . implode(', ', $add_vocs) . ')';
@@ -355,7 +357,7 @@ if($config['highscores_vocation_box'])
 		<tr bgcolor="'.$config['lightborder'].'">
 			<td>
 				<a href="' . getLink('highscores') . '/' . $list . '" class="size_xs">[ALL]</A><BR>';
-				for($i = 1; $i <= $config['vocations_amount']; $i++) {
+				for($i = 0; $i <= $config['vocations_amount']; $i++) {
 					echo '<a href="' . getLink('highscores') . '/' . $list . '/' . strtolower($config_vocations[$i]) . '" class="size_xs">' . $config_vocations[$i] . '</a><br/>';
 				}
 		echo '
