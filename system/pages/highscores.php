@@ -175,7 +175,7 @@ if (empty($highscores)) {
 			$query
 				->join('player_skills', 'player_skills.player_id', '=', 'players.id')
 				->where('skillid', $skill)
-				->addSelect('player_skills.skillid as value');
+				->addSelect('player_skills.value as value');
 		}
 	} else if ($skill == SKILL_FRAGS) // frags
 	{
