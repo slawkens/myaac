@@ -1,6 +1,28 @@
 # Changelog
 
-## [1.0-RC -23.07.2024]
+## [1.0-RC.2 - 25.10.2024]
+
+Still waiting for your reports about bugs found in this release. We are very close to stable release.
+
+### Added
+* feat: rate limit settings for blocking accounts login attempts (@gpedro, #266)
+* search by email in accounts editor (https://github.com/slawkens/myaac/commit/c2ec46824621468f2a1cb4046805c485ed13fea5)
+* New hooks in account manage + create (https://github.com/slawkens/myaac/commit/93641fc68ac9a5f1479329e2bd41380c19534d5d)
+
+### Changed
+* chore: drop raw queries + accounts - search by email + accounts - required min size for search by account number (@gpedro, #266)
+* Use https for outfit & item images (https://github.com/slawkens/myaac/commit/71c00aa5e01fbdfd88802912e200dd1025976231)
+* Do not require players & guilds tables on install (https://github.com/slawkens/myaac/commit/779aa152fa940261c9b161533946f44e288597a2)
+* Do not create player if there is no players table in db (https://github.com/slawkens/myaac/commit/201f95caa8b70e88fa651eac8c3c3aa7cd765bd0)
+
+### Fixed
+* Highscore frags fixed for TFS 0.3 (@Scrollog, #263)
+* Missing groups variable #262. thanks, @Scrollog for reporting (https://github.com/slawkens/myaac/commit/8d8bdb6dac6df21672ac77288fff2f2f8d6eb665)
+* Verified email for login.php (@gpedro, #265)
+* Warning if core.account_country is disabled (https://github.com/slawkens/myaac/commit/ab73d60c61e14a1cacdb6cfbf7f89f4bf3be0833)
+
+
+## [1.0-RC.1 - 23.07.2024]
 
 Changes since 1.0-beta:
 
