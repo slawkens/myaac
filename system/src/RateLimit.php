@@ -10,7 +10,7 @@ class RateLimit
 	public int $max_attempts;
 	public int $ttl;
 	public $enabled = false;
-	protected array $data;
+	protected array $data = [];
 
 	public function __construct(string $key, int $max_attempts, int $ttl)
 	{
