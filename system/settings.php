@@ -232,7 +232,7 @@ return [
 			'name' => 'Client Version',
 			'type' => 'options',
 			'options' => '$clients',
-			'desc' => 'what client version are you using on this OT?<br/>used for the Downloads page and some templates aswell',
+			'desc' => 'what client version are you using on this OT?<br/>used for the Downloads page and some templates as well',
 			'default' => 710
 		],
 		'towns' => [
