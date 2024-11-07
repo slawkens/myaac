@@ -12,6 +12,7 @@ use DebugBar\StandardDebugBar;
 use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
 use MyAAC\Hooks;
+use MyAAC\Models\Town;
 use MyAAC\Settings;
 use MyAAC\Towns;
 
@@ -173,4 +174,17 @@ define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
 define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
 
-Towns::load();
+$towns = Cache::remember('towns', 10 * 60, function () use ($db) {
+	if ($db->hasTable('towns') && Town::count() > 0) {
+		return Town::orderBy('id', 'ASC')->pluck('name', 'id')->toArray();
+	}
+
+	return [];
+});
+
+if (count($towns) <= 0) {
+	$towns = setting('core.towns');
+}
+
+config(['towns', $towns]);
+unset($towns);
