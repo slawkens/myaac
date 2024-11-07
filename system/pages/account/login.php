@@ -42,7 +42,7 @@ if(!empty($login_account) && !empty($login_password))
 		}
 	}
 
-	if($account_logged->isLoaded() && encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $login_password) == $account_logged->getPassword() && ($limiter->enabled && !$limiter->exceeded($ip))
+	if($account_logged->isLoaded() && encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $login_password) == $account_logged->getPassword() && (!$limiter->enabled || !$limiter->exceeded($ip))
 	)
 	{
 		if (setting('core.account_mail_verify') && (int)$account_logged->getCustomField('email_verified') !== 1) {
@@ -82,10 +82,10 @@ if(!empty($login_account) && !empty($login_password))
 		$limiter->increment($ip);
 		if ($limiter->exceeded($ip)) {
 			$errorMessage = 'A wrong password has been entered ' . $limiter->max_attempts . ' times in a row. You are unable to log into your account for the next ' . $limiter->ttl . ' minutes. Please wait.';
-		}		
+		}
 
 		$errors[] = $errorMessage;
-		
+
 	}
 }
 else {

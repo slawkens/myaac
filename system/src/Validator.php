@@ -178,8 +178,7 @@ class Validator
 	 */
 	public static function characterName($name)
 	{
-		if(!isset($name[0]))
-		{
+		if(empty($name)) {
 			self::$lastError = 'Please enter character name.';
 			return false;
 		}
@@ -250,7 +249,7 @@ class Validator
 			}
 		}
 
-		if(substr($name_lower, -1) == "'" || substr($name_lower, -1) == "-") {
+		if(str_ends_with($name_lower, "'") || str_ends_with($name_lower, "-")) {
 			self::$lastError = 'Your name contains illegal characters.';
 			return false;
 		}
@@ -285,7 +284,7 @@ class Validator
 
 		$words_blocked = array_merge(['--', "''","' ", " '", '- ', ' -', "-'", "'-"], setting('core.create_character_name_blocked_words'));
 		foreach($words_blocked as $word) {
-			if(!(strpos($name_lower, $word) === false)) {
+			if(str_contains($name_lower, $word)) {
 				self::$lastError = 'Your name contains illegal words.';
 				return false;
 			}
@@ -335,7 +334,7 @@ class Validator
 			NPCs::load();
 			if(NPCs::$npcs) {
 				foreach (NPCs::$npcs as $npc) {
-					if(strpos($name_lower, $npc) !== false) {
+					if(str_contains($name_lower, $npc)) {
 						self::$lastError = 'Your name cannot contains NPC name.';
 						return false;
 					}

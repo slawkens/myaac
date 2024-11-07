@@ -10,7 +10,7 @@ class RateLimit
 	public int $max_attempts;
 	public int $ttl;
 	public $enabled = false;
-	protected array $data;
+	protected array $data = [];
 
 	public function __construct(string $key, int $max_attempts, int $ttl)
 	{
@@ -76,7 +76,7 @@ class RateLimit
 	public function save(): void
 	{
 		global $cache;
-		if (!$this->enabled) {
+		if (!$this->enabled || !$cache->enabled()) {
 			return;
 		}
 
@@ -92,7 +92,7 @@ class RateLimit
 		}
 
 		$data = [];
-		if ($this->enabled && $cache->enabled()) {
+		if ($cache->enabled()) {
 			$tmp = '';
 			if ($cache->fetch($this->key, $tmp)) {
 				$data = unserialize($tmp);
@@ -110,8 +110,6 @@ class RateLimit
 
 					$this->save();
 				}
-			} else {
-				$data = [];
 			}
 		}
 

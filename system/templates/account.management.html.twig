@@ -88,6 +88,7 @@
 			</div>
 		<br/><br/>
 		{% endif %}
+		{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_GENERAL_INFORMATION') }}
 		<a name="General+Information"></a>
 		<h2>General Information</h2>
 		<table width="100%">
@@ -127,6 +128,7 @@
 			{% endautoescape %}
 		</table>
 		<br/>
+		{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_PUBLIC_INFORMATION') }}
 		<a name="Public+Information"></a>
 		<h2>Public Information</h2>
 		<table width="100%">
@@ -145,6 +147,7 @@
 			{% include('buttons.base.html.twig') %}
 		</form>
 		<br/>
+		{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_ACCOUNT_LOGS') }}
 		<a name="Account+Logs" ></a>
 		<h2>Action Log</h2>
 		<table>
@@ -164,6 +167,7 @@
 			{% endautoescape %}
 		</table>
 		<br/>
+		{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_CHARACTERS') }}
 		<a name="Characters" ></a>
 		<h2>Character list: {{ players|length }} characters.</h2>
 		<table>

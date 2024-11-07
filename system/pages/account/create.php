@@ -148,6 +148,10 @@ if($save)
 		}
 	}
 
+	/**
+	 * two hooks for compatibility
+	 */
+	$hooks->trigger(HOOK_ACCOUNT_CREATE_AFTER_SUBMIT, $params);
 	if (!$hooks->trigger(HOOK_ACCOUNT_CREATE_POST, $params)) {
 		return;
 	}
@@ -186,6 +190,8 @@ if($save)
 		$new_account->setPassword(encrypt($password));
 		$new_account->setEMail($email);
 		$new_account->save();
+
+		$hooks->trigger(HOOK_ACCOUNT_CREATE_AFTER_SAVED, ['account' => $new_account]);
 
 		if(USE_ACCOUNT_SALT)
 			$new_account->setCustomField('salt', $salt);
