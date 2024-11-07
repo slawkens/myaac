@@ -93,7 +93,7 @@ $locale['step_database_loaded_npcs'] = 'Załadowano NPCs...';
 $locale['step_database_error_npcs'] = 'Wystąpił problem podczas ładowania NPCs';
 $locale['step_database_loaded_spells'] = 'Załadowano czary (spells)...';
 $locale['step_database_loaded_towns'] = 'Załadowano miasta (towns)...';
-$locale['step_database_error_towns'] = 'Wystąpił problem podczas ładowania miast. Trzeba będzie je skonfigurować manualnie.';
+$locale['step_database_error_towns'] = 'Wystąpił problem podczas ładowania miast. Trzeba będzie je skonfigurować manualnie w ustawieniach.';
 $locale['step_database_created_account'] = 'Utworzono konto admina...';
 $locale['step_database_created_news'] = 'Utworzono newsy...';
 

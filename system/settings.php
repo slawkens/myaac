@@ -238,9 +238,8 @@ return [
 		'towns' => [
 			'name' => 'Towns',
 			'type' => 'textarea',
-			'desc' => "if you use TFS 1.3 with support for 'towns' table in database, then you can ignore this - it will be configured automatically (from MySQL database - Table - towns)<br/>" .
-				"otherwise it will try to load from your .OTBM map file<br/>" .
-				"if you don't see towns on website, then you need to fill this out",
+			'desc' => "If you use TFS 1.3+ with support for 'towns' table in database, then you can ignore this - it will be automatically configured from there.<br/>" .
+				"If you don't see towns on website, then you need to fill this out",
 			'default' => "0=No Town\n1=Sample Town",
 			'callbacks' => [
 				'get' => function ($value) {

@@ -25,6 +25,9 @@
 
 namespace MyAAC;
 
+use MyAAC\Cache\Cache;
+use MyAAC\Models\Town;
+
 class DataLoader
 {
 	private static $locale;
@@ -78,7 +81,11 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		if (Towns::save()) {
+		$cache = Cache::getInstance();
+		$cache->delete('towns'); // will be reloaded after next page load
+
+		global $db;
+		if ($db->hasTable('towns') && Town::count() > 0) {
 			success(self::$locale['step_database_loaded_towns'] . self::getLoadedTime());
 		}
 		else {

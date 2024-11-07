@@ -94,7 +94,7 @@ $locale['step_database_loaded_npcs'] = 'NPCs has been loaded...';
 $locale['step_database_error_npcs'] = 'There were some problems loading your NPCs';
 $locale['step_database_loaded_spells'] = 'Spells has been loaded...';
 $locale['step_database_loaded_towns'] = 'Towns has been loaded...';
-$locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in config.';
+$locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in Settings.';
 $locale['step_database_created_account'] = 'Created admin account...';
 $locale['step_database_created_news'] = 'Newses has been created...';
 
