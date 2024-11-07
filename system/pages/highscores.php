@@ -35,11 +35,12 @@ $settingHighscoresVocationBox = setting('core.highscores_vocation_box');
 $configVocations = config('vocations');
 $configVocationsAmount = config('vocations_amount');
 
-if($settingHighscoresVocationBox && $vocation !== 'all')
-{
+$vocationId = null;
+if($settingHighscoresVocationBox && $vocation !== 'all') {
 	foreach($configVocations as $id => $name) {
 		if(strtolower($name) == $vocation) {
-			$add_vocs = array($id);
+			$vocationId = $id;
+			$add_vocs = [$id];
 
 			$i = $id + $configVocationsAmount;
 			while(isset($configVocations[$i])) {
@@ -287,6 +288,7 @@ $twig->display('highscores.html.twig', [
 	'skillName' => ($skill == SKILL_FRAGS ? 'Frags' : ($skill == SKILL_BALANCE ? 'Balance' : getSkillName($skill))),
 	'levelName' => ($skill != SKILL_FRAGS && $skill != SKILL_BALANCE ? 'Level' : ($skill == SKILL_BALANCE ? 'Balance' : 'Frags')),
 	'vocation' => $vocation !== 'all' ? $vocation :  null,
+	'vocationId' => $vocationId,
 	'types' => $types,
 	'linkPreviousPage' => $linkPreviousPage,
 	'linkNextPage' => $linkNextPage,

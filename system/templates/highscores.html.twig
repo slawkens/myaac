@@ -11,7 +11,7 @@
 						<select onchange="location = this.value;" aria-label="skillFilter" id="skillFilter">
 							{% set i = 0 %}
 							{% for link, name in types %}
-								<option value="{{ getLink('highscores') }}/{{ link }}{% if vocation is not null %}{{ vocation }}{% endif %}" class="size_xs">{{ name }}</option>
+								<option value="{{ getLink('highscores') }}/{{ link }}/{% if vocation is not null %}{{ vocation }}{% endif %}" class="size_xs" {% if list is not null and list == link %}selected{% endif %}>{{ name }}</option>
 							{% endfor %}
 						</select>
 					</td>
@@ -21,7 +21,7 @@
 							<option value="{{ getLink('highscores') }}/{{ list }}" class="size_xs">[ALL]</option>
 							{% set i = 0 %}
 							{% for i in 1..config.vocations_amount %}
-								<option value="{{ getLink('highscores') }}/{{ list }}/{{ config.vocations[i]|lower }}" class="size_xs">{{ config.vocations[i]}}</option>
+								<option value="{{ getLink('highscores') }}/{{ list }}/{{ config.vocations[i]|lower }}" class="size_xs" {% if vocationId is not null and vocationId == i %}selected{% endif %}>{{ config.vocations[i]}}</option>
 							{% endfor %}
 						</select>
 					</td>
