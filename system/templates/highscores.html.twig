@@ -8,7 +8,7 @@
 					<td>Filters</td>
 					<td>
 						<label for="vocationFilter">Choose a Skill</label>
-						<select onchange="location = this.value;" aria-label="skillFilter" id="skillFilter">
+						<select onchange="location = this.value;" id="skillFilter">
 							{% set i = 0 %}
 							{% for link, name in types %}
 								<option value="{{ getLink('highscores') }}/{{ link }}/{% if vocation is not null %}{{ vocation }}{% endif %}" class="size_xs" {% if list is not null and list == link %}selected{% endif %}>{{ name }}</option>
@@ -17,7 +17,7 @@
 					</td>
 					<td>
 						<label for="vocationFilter">Choose a vocation</label>
-						<select onchange="location = this.value;" aria-label="vocationFilter" id="vocationFilter">
+						<select onchange="location = this.value;" id="vocationFilter">
 							<option value="{{ getLink('highscores') }}/{{ list }}" class="size_xs">[ALL]</option>
 							{% set i = 0 %}
 							{% for i in 1..config.vocations_amount %}
