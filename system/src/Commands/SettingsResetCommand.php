@@ -19,6 +19,8 @@ class SettingsResetCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		require SYSTEM . 'init.php';
+
 		$io = new SymfonyStyle($input, $output);
 
 		if (!$io->confirm('Are you sure you want to reset all settings in database?', false)) {

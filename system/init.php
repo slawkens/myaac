@@ -14,10 +14,10 @@ use MyAAC\CsrfToken;
 use MyAAC\Hooks;
 use MyAAC\Models\Town;
 use MyAAC\Settings;
-use MyAAC\Towns;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
+global $config;
 if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
@@ -46,6 +46,7 @@ if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HT
 $cache = Cache::getInstance();
 
 // event system
+global $hooks;
 $hooks = new Hooks();
 $hooks->load();
 

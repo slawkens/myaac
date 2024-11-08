@@ -9,14 +9,13 @@ if(!IS_CLI) {
 }
 
 require_once SYSTEM . 'functions.php';
-require_once SYSTEM . 'init.php';
 
 define('SELF_NAME', basename(__FILE__));
 
 use MyAAC\Plugins;
 use Symfony\Component\Console\Application;
 
-$application = new Application();
+$application = new Application('MyAAC', MYAAC_VERSION);
 
 $commandsGlob = glob(SYSTEM . 'src/Commands/*.php');
 foreach ($commandsGlob as $item) {
@@ -33,8 +32,5 @@ $pluginCommands = Plugins::getCommands();
 foreach ($pluginCommands as $item) {
 	$application->add(require $item);
 }
-
-$application->setName('MyAAC');
-$application->setVersion(MYAAC_VERSION);
 
 $application->run();

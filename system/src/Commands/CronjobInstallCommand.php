@@ -17,6 +17,8 @@ class CronjobInstallCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		require SYSTEM . 'init.php';
+
 		$io = new SymfonyStyle($input, $output);
 
 		if (MYAAC_OS !== 'LINUX') {

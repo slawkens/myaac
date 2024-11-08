@@ -21,6 +21,8 @@ class MailSendCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		require SYSTEM . 'init.php';
+
 		$io = new SymfonyStyle($input, $output);
 
 		if (!setting('core.mail_enabled')) {
