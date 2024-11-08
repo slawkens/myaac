@@ -27,7 +27,7 @@ class MigrateToCommand extends Command
 
 		$versionDest = $input->getArgument('version');
 
-		if (!$versionDest || $versionDest > DATABASE_VERSION) {
+		if (!$versionDest || $versionDest > DATABASE_VERSION || $versionDest < 1) {
 			$io->error('Please enter a valid version number');
 			return Command::FAILURE;
 		}
