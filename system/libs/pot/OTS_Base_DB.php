@@ -237,7 +237,7 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 	}
 
 	public function addColumn($table, $column, $definition): void {
-		$this->exec('ALTER TABLE ' . $this->tableName($table) . ' ADD `access` ' . $this->fieldName($column) . ' ' . $definition . ';');
+		$this->exec('ALTER TABLE ' . $this->tableName($table) . ' ADD ' . $this->fieldName($column) . ' ' . $definition . ';');
 	}
 
 	public function modifyColumn($table, $column, $definition): void {

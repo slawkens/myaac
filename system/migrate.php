@@ -9,6 +9,10 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+if (!config('database_auto_migrate')) {
+	return;
+}
+
 // database migrations
 $tmp = '';
 if(fetchDatabaseConfig('database_version', $tmp)) { // we got version

@@ -392,6 +392,13 @@ return [
 			'default' => false,
 			'is_config' => true,
 		],
+		'database_auto_migrate' => [
+			'name' => 'Database Auto Migrate',
+			'desc' => 'Migrate database to latest version in myaac, automatically.',
+			'type' => 'boolean',
+			'default' => true,
+			'is_config' => true,
+		],
 		[
 			'type' => 'category',
 			'title' => 'Mailing',

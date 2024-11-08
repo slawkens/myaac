@@ -45,7 +45,7 @@ $up = function () use ($db) {
 	}
 
 	if(!$db->hasColumn(TABLE_PREFIX . 'monsters', 'rewardboss')) {
-		$db->addColumn(TABLE_PREFIX . 'monsters', 'rewardboss', "TINYINT(1) TINYINT(1) NOT NULL DEFAULT '0' AFTER `attackable`");
+		$db->addColumn(TABLE_PREFIX . 'monsters', 'rewardboss', "TINYINT(1) NOT NULL DEFAULT '0' AFTER `attackable`");
 	}
 
 	if(!$db->hasColumn(TABLE_PREFIX . 'monsters', 'defense')) {

@@ -13,6 +13,6 @@ $up = function () use ($db) {
 
 $down = function () use ($db) {
 	if ($db->hasColumn(TABLE_PREFIX . 'visitors', 'user_agent')) {
-		$db->dropColumn(TABLE_PREFIX . 'monsters', 'user_agent');
+		$db->dropColumn(TABLE_PREFIX . 'visitors', 'user_agent');
 	}
 };

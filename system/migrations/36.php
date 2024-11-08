@@ -11,7 +11,8 @@ $up = function () use ($db) {
 };
 
 $down = function () use ($db) {
-	if ($db->hasTable(TABLE_PREFIX . 'settings')) {
-		$db->dropTable(TABLE_PREFIX . 'settings');
-	}
+	// will break the aac
+	//if ($db->hasTable(TABLE_PREFIX . 'settings')) {
+	//	$db->dropTable(TABLE_PREFIX . 'settings');
+	//}
 };
