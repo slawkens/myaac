@@ -9,10 +9,6 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-if (!config('database_auto_migrate')) {
-	return;
-}
-
 // database migrations
 $tmp = '';
 if(fetchDatabaseConfig('database_version', $tmp)) { // we got version
@@ -21,6 +17,11 @@ if(fetchDatabaseConfig('database_version', $tmp)) { // we got version
 		$db->revalidateCache();
 		for($i = $tmp + 1; $i <= DATABASE_VERSION; $i++) {
 			require SYSTEM . 'migrations/' . $i . '.php';
+
+			if (isset($up)) {
+				$up();
+			}
+
 			updateDatabaseConfig('database_version', $i);
 		}
 	}
@@ -30,6 +31,11 @@ else { // register first version
 	$db->revalidateCache();
 	for($i = 1; $i <= DATABASE_VERSION; $i++) {
 		require SYSTEM . 'migrations/' . $i . '.php';
+
+		if (isset($up)) {
+			$up();
+		}
+
 		updateDatabaseConfig('database_version', $i);
 	}
 }

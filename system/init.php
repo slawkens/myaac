@@ -142,7 +142,10 @@ if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {
 }
 
 // execute migrations
-require SYSTEM . 'migrate.php';
+$configDatabaseAutoMigrate = config('database_auto_migrate');
+if (!isset($configDatabaseAutoMigrate) || $configDatabaseAutoMigrate) {
+	require SYSTEM . 'migrate.php';
+}
 
 // settings
 $settings = Settings::getInstance();
