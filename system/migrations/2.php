@@ -1,5 +1,11 @@
 <?php
-	$db->query("ALTER TABLE `" . TABLE_PREFIX . "faq` MODIFY `answer` VARCHAR(1020) NOT NULL DEFAULT '';");
-	$db->query("ALTER TABLE `" . TABLE_PREFIX . "movies` MODIFY `title` VARCHAR(100) NOT NULL DEFAULT '';");
-	$db->query("ALTER TABLE `" . TABLE_PREFIX . "news` MODIFY `title` VARCHAR(100) NOT NULL DEFAULT '';");
-	$db->query("ALTER TABLE `" . TABLE_PREFIX . "news` MODIFY `body` TEXT NOT NULL DEFAULT '';");
+/**
+ * @var OTS_DB_MySQL $db
+ */
+
+$up = function () use ($db) {
+	$db->modifyColumn(TABLE_PREFIX . 'faq', 'answer', "VARCHAR(1020) NOT NULL DEFAULT ''");
+	$db->modifyColumn(TABLE_PREFIX . 'movies', 'title', "VARCHAR(100) NOT NULL DEFAULT ''");
+	$db->modifyColumn(TABLE_PREFIX . 'news', 'title', "VARCHAR(100) NOT NULL DEFAULT ''");
+	$db->modifyColumn(TABLE_PREFIX . 'news', 'body', "TEXT NOT NULL");
+};

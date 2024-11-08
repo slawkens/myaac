@@ -1,10 +1,18 @@
 <?php
+/**
+ * @var OTS_DB_MySQL $db
+ */
+
 // add user_agent column into visitors
 
 $up = function () use ($db) {
-	$db->exec('ALTER TABLE `' . TABLE_PREFIX . "visitors` ADD `user_agent` VARCHAR(255) NOT NULL DEFAULT '';");
+	if (!$db->hasColumn(TABLE_PREFIX . 'visitors', 'user_agent')) {
+		$db->addColumn(TABLE_PREFIX . 'visitors', 'user_agent', "VARCHAR(255) NOT NULL DEFAULT ''");
+	}
 };
 
 $down = function () use ($db) {
-	$db->exec('ALTER TABLE `' . TABLE_PREFIX . "monsters` DROP COLUMN `user_agent`;");
+	if ($db->hasColumn(TABLE_PREFIX . 'visitors', 'user_agent')) {
+		$db->dropColumn(TABLE_PREFIX . 'monsters', 'user_agent');
+	}
 };

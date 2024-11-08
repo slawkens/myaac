@@ -1,8 +1,12 @@
 <?php
+/**
+ * @var OTS_DB_MySQL $db
+ */
+
 // Increase size of page in myaac_visitors table
 
 $up = function () use ($db) {
-	$db->exec('ALTER TABLE `' . TABLE_PREFIX . "visitors` MODIFY `page` VARCHAR(2048) NOT NULL;");
+	$db->modifyColumn(TABLE_PREFIX . 'visitors', 'page', 'VARCHAR(2048) NOT NULL');
 };
 
 $down = function () {
