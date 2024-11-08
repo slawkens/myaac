@@ -23,6 +23,11 @@ class MailSendCommand extends Command
 	{
 		$io = new SymfonyStyle($input, $output);
 
+		if (!setting('core.mail_enabled')) {
+			$io->error('Mailing is not enabled on this server');
+			return Command::FAILURE;
+		}
+
 		$email_account_name = $input->getArgument('recipient');
 		$subject = $input->getOption('subject');
 		if (!$subject) {
