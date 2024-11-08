@@ -16,7 +16,7 @@ class MigrateToCommand extends Command
 		$this->setName('migrate:to')
 			->setDescription('This command migrates to specific version of database')
 			->addArgument('version',
-				InputArgument::OPTIONAL,
+				InputArgument::REQUIRED,
 				'Version number'
 			);
 	}
