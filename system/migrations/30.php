@@ -6,7 +6,7 @@ $up = function () {
 	$rulesOnPage = Pages::where('name', 'rules_on_the_page')->first();
 	if (!$rulesOnPage) {
 		Pages::create([
-			'name' => 'downloads',
+			'name' => 'rules_on_the_page',
 			'title' => 'Rules',
 			'body' => file_get_contents(__DIR__ . '/30-rules.txt'),
 			'date' => time(),
@@ -14,7 +14,7 @@ $up = function () {
 			'php' => 0,
 			'enable_tinymce' => 0,
 			'access' => 0,
-			'hide' => 0,
+			'hidden' => 0,
 		]);
 	}
 };

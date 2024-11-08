@@ -38,7 +38,7 @@ $up = function () use ($db) {
 			$v = (int)$v;
 		}
 
-		Spell::where('id', $spell->id)->update('vocations', json_encode($tmp));
+		Spell::where('id', $spell->id)->update(['vocations' => json_encode($tmp)]);
 	}
 };
 
@@ -49,8 +49,8 @@ $down = function () use ($db) {
 	}
 
 	// change unique index from spell to name
-	$db->query("ALTER TABLE `" . TABLE_PREFIX . "spells` ADD INDEX `spell`;");
-	$db->query("ALTER TABLE `" . TABLE_PREFIX . "spells` DROP UNIQUE INDEX (`name`);");
+	$db->query("ALTER TABLE `" . TABLE_PREFIX . "spells` DROP INDEX `name`;");
+	$db->query("ALTER TABLE `" . TABLE_PREFIX . "spells` ADD INDEX (`spell`);");
 
 	$db->dropTable(TABLE_PREFIX . 'items');
 	$db->dropTable(TABLE_PREFIX . 'weapons');
@@ -60,6 +60,6 @@ $down = function () use ($db) {
 	foreach ($spells as $spell) {
 		$vocations = empty($spell->vocations) ? [] : json_decode($spell->vocations);
 
-		Spell::where('id', $spell->id)->update('vocations', implode(',', $vocations));
+		Spell::where('id', $spell->id)->update(['vocations' => implode(',', $vocations)]);
 	}
 };

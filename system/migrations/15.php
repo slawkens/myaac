@@ -5,7 +5,7 @@
 
 // add new forum.guild and forum.access fields
 
-$up = function ($db) {
+$up = function () use ($db) {
 	if (!$db->hasColumn(TABLE_PREFIX . 'forum_boards', 'guild')) {
 		$db->addColumn(TABLE_PREFIX . 'forum_boards', 'guild', 'TINYINT(1) NOT NULL DEFAULT 0 AFTER `closed`');
 	}
@@ -15,7 +15,7 @@ $up = function ($db) {
 	}
 };
 
-$down = function ($db) {
+$down = function () use ($db) {
 	if ($db->hasColumn(TABLE_PREFIX . 'forum_boards', 'guild')) {
 		$db->dropColumn(TABLE_PREFIX . 'forum_boards', 'guild');
 	}

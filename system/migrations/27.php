@@ -1,12 +1,14 @@
 <?php
-
+/**
+ * @var OTS_DB_MySQL $db
+ */
 
 use MyAAC\Models\Pages;
 
-$up = function () {
+$up = function () use ($db) {
 	$downloadsModel = Pages::where('name', 'downloads')->first();
 	if (!$downloadsModel) {
-		Pages::create([
+		$db->insert(TABLE_PREFIX . 'pages', [
 			'name' => 'downloads',
 			'title' => 'Downloads',
 			'body' => file_get_contents(__DIR__ . '/27-downloads.html'),
@@ -14,13 +16,13 @@ $up = function () {
 			'player_id' => 1,
 			'php' => 0,
 			'access' => 0,
-			'hide' => 0,
+			'hidden' => 0,
 		]);
 	}
 
 	$commandsModel = Pages::where('name', 'commands')->first();
 	if (!$commandsModel) {
-		Pages::create([
+		$db->insert(TABLE_PREFIX . 'pages', [
 			'name' => 'commands',
 			'title' => 'Commands',
 			'body' => file_get_contents(__DIR__ . '/27-commands.html'),
@@ -28,7 +30,7 @@ $up = function () {
 			'player_id' => 1,
 			'php' => 0,
 			'access' => 0,
-			'hide' => 0,
+			'hidden' => 0,
 		]);
 	}
 };

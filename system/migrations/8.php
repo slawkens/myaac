@@ -3,7 +3,7 @@
  * @var OTS_DB_MySQL $db
  */
 
-$up = function ($db) {
+$up = function () use ($db) {
 	if ($db->hasTable(TABLE_PREFIX . 'forum_sections')) {
 		$db->renameTable(TABLE_PREFIX . 'forum_sections', TABLE_PREFIX . 'forum_boards');
 	}
