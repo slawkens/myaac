@@ -9,7 +9,7 @@ $up = function () use ($db) {
 	}
 };
 
-$down = function () use ($db) {
+$down = function () {
 	// we don't want data loss
 	//$db->dropColumn(TABLE_PREFIX . 'account_actions', 'ipv6');
 };

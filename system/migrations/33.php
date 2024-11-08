@@ -11,6 +11,6 @@ $up = function () use ($db) {
 	$db->modifyColumn(TABLE_PREFIX . 'visitors', 'ip', 'VARCHAR(15) NOT NULL');
 };
 
-$down = function () use ($db) {
+$down = function () {
 	// nothing to be done, as we have just extended the size of a column
 };

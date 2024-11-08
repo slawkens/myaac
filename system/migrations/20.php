@@ -2,7 +2,10 @@
 
 use MyAAC\Settings;
 
-$up = function () use ($db) {
+function updateHighscoresIdsHidden(): void
+{
+	global $db;
+
 	if (!$db->hasTable('players')) {
 		return;
 	}
@@ -19,6 +22,10 @@ $up = function () use ($db) {
 
 	$settings = Settings::getInstance();
 	$settings->updateInDatabase('core', 'highscores_ids_hidden', implode(', ', $highscores_ignored_ids));
+}
+
+$up = function () {
+	updateHighscoresIdsHidden();
 };
 
 $down = function () {

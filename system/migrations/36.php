@@ -10,7 +10,7 @@ $up = function () use ($db) {
 	}
 };
 
-$down = function () use ($db) {
+$down = function () {
 	// will break the aac
 	//if ($db->hasTable(TABLE_PREFIX . 'settings')) {
 	//	$db->dropTable(TABLE_PREFIX . 'settings');
