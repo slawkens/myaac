@@ -48,6 +48,17 @@ class News
 			'article_text' => ($type == 3 ? $article_text : ''),
 			'article_image' => ($type == 3 ? $article_image : '')
 		]);
+
+		global $hooks;
+		$hooks->trigger(HOOK_ADMIN_NEWS_ADD,
+			[
+				'title' => $title, 'body' => $body,
+				'type' => $type, 'category' => $category,
+				'player_id' => $player_id, 'comments' => $comments,
+				'article_text' => $article_text, 'article_image' => $article_image,
+			]
+		);
+
 		self::clearCache();
 		return true;
 	}
