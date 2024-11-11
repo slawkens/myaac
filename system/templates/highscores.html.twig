@@ -11,7 +11,7 @@
 						<select onchange="location = this.value;" id="skillFilter">
 							{% set i = 0 %}
 							{% for link, name in types %}
-								<option value="{{ getLink('highscores') }}/{{ link }}/{% if vocation is not null %}{{ vocation }}{% endif %}" class="size_xs" {% if list is not null and list == link %}selected{% endif %}>{{ name }}</option>
+								<option value="{{ getLink('highscores') }}/{{ link }}{% if vocation is not null %}/{{ vocation }}{% endif %}" class="size_xs" {% if list is not null and list == link %}selected{% endif %}>{{ name }}</option>
 							{% endfor %}
 						</select>
 					</td>
