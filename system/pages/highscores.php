@@ -31,12 +31,11 @@ if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 
 $query = Player::query();
 
-$settingHighscoresVocationBox = setting('core.highscores_vocation_box');
 $configVocations = config('vocations');
 $configVocationsAmount = config('vocations_amount');
 
 $vocationId = null;
-if($settingHighscoresVocationBox && $vocation !== 'all') {
+if($vocation !== 'all') {
 	foreach($configVocations as $id => $name) {
 		if(strtolower($name) == $vocation) {
 			$vocationId = $id;
