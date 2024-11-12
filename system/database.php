@@ -106,6 +106,7 @@ try {
 		'persistent' => @$config['database_persistent']
 	));
 
+	global $db;
 	$db = POT::getInstance()->getDBHandle();
 	$capsule = new Capsule;
 	$capsule->addConnection([

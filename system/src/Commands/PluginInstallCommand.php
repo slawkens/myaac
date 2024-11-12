@@ -14,7 +14,7 @@ class PluginInstallCommand extends Command
 	{
 		$this->setName('plugin:install')
 			->setDescription('This command installs plugin')
-			->addArgument('plugin', InputArgument::REQUIRED, 'Path to zip file (plugin) that you want to install');
+			->addArgument('pathToPluginZip', InputArgument::REQUIRED, 'Path to zip file (plugin) that you want to install');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
@@ -23,7 +23,7 @@ class PluginInstallCommand extends Command
 
 		$io = new SymfonyStyle($input, $output);
 
-		$pathToFile = $input->getArgument('plugin');
+		$pathToFile = $input->getArgument('pathToPluginZip');
 
 		$ext = strtolower(pathinfo($pathToFile, PATHINFO_EXTENSION));
 		if($ext !== 'zip') {// check if it is zipped/compressed file

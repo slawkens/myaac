@@ -31,21 +31,22 @@ if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 
 $query = Player::query();
 
-$settingHighscoresVocationBox = setting('core.highscores_vocation_box');
 $configVocations = config('vocations');
 $configVocationsAmount = config('vocations_amount');
 
 $vocationId = null;
-if($settingHighscoresVocationBox && $vocation !== 'all') {
+if($vocation !== 'all') {
 	foreach($configVocations as $id => $name) {
 		if(strtolower($name) == $vocation) {
 			$vocationId = $id;
 			$add_vocs = [$id];
 
-			$i = $id + $configVocationsAmount;
-			while(isset($configVocations[$i])) {
-				$add_vocs[] = $i;
-				$i += $configVocationsAmount;
+			if ($id !== 0) {
+				$i = $id + $configVocationsAmount;
+				while (isset($configVocations[$i])) {
+					$add_vocs[] = $i;
+					$i += $configVocationsAmount;
+				}
 			}
 
 			$query->whereIn('players.vocation', $add_vocs);
