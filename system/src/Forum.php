@@ -72,7 +72,7 @@ class Forum
 			'post_smile' => 0, 'post_html' => 1,
 			'post_date' => time(),
 			'last_edit_aid' => 0, 'edit_date' => 0,
-			'post_ip' => $_SERVER['REMOTE_ADDR']
+			'post_ip' => get_browser_real_ip()
 		))) {
 			$thread_id = $db->lastInsertId();
 			$db->query("UPDATE `" . FORUM_TABLE_PREFIX . "forum` SET `first_post`=".(int) $thread_id." WHERE `id` = ".(int) $thread_id);
@@ -94,7 +94,7 @@ class Forum
 			'post_smile' => $smile,
 			'post_html' => $html,
 			'post_date' => time(),
-			'post_ip' => $_SERVER['REMOTE_ADDR']
+			'post_ip' => get_browser_real_ip()
 		));
 	}
 	public static function add_board($name, $description, $access, $guild, &$errors)
