@@ -43,9 +43,11 @@ if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HT
 	ob_start('ob_gzhandler');
 
 // cache
+global $cache;
 $cache = Cache::getInstance();
 
 // event system
+global $hooks;
 $hooks = new Hooks();
 $hooks->load();
 
