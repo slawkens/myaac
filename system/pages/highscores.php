@@ -41,10 +41,12 @@ if($vocation !== 'all') {
 			$vocationId = $id;
 			$add_vocs = [$id];
 
-			$i = $id + $configVocationsAmount;
-			while(isset($configVocations[$i])) {
-				$add_vocs[] = $i;
-				$i += $configVocationsAmount;
+			if ($id !== 0) {
+				$i = $id + $configVocationsAmount;
+				while (isset($configVocations[$i])) {
+					$add_vocs[] = $i;
+					$i += $configVocationsAmount;
+				}
 			}
 
 			$query->whereIn('players.vocation', $add_vocs);
