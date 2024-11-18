@@ -770,13 +770,12 @@ class Plugins {
 	 */
 	public static function installMenus($templateName, $categories, $clearOld = true)
 	{
-		global $db;
-		if (!$db->hasTable(TABLE_PREFIX . 'menu')) {
-			return;
-		}
-
 		if ($clearOld) {
 			Menu::where('template', $templateName)->delete();
+		}
+
+		if (Menu::count()) {
+			return;
 		}
 
 		foreach ($categories as $category => $menus) {
