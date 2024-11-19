@@ -774,7 +774,7 @@ class Plugins {
 			Menu::where('template', $templateName)->delete();
 		}
 
-		if (Menu::count()) {
+		if (Menu::where('template', $templateName)->count()) {
 			return;
 		}
 
