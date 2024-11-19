@@ -413,7 +413,7 @@ class Plugins {
 	 * @param string $templateName
 	 * @param array $categories
 	 */
-	public static function installMenus($templateName, $categories, $clearOld = true)
+	public static function installMenus($templateName, $categories, $clearOld = false)
 	{
 		global $db;
 
