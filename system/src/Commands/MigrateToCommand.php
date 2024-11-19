@@ -102,7 +102,7 @@ class MigrateToCommand extends Command
 		require_once SYSTEM . 'libs/pot/OTS.php';
 		$ots = POT::getInstance();
 		$eloquentConnection = null;
-		global $db;
+
 		require_once SYSTEM . 'database.php';
 	}
 }
