@@ -89,13 +89,18 @@ function getForumBoardLink($board_id, $page = NULL): string {
 
 function getPlayerLink($name, $generate = true, bool $colored = false): string
 {
-	$player = new OTS_Player();
-
-	if(is_numeric($name)) {
-		$player->load((int)$name);
+	if (is_object($name) and $name instanceof OTS_Player) {
+		$player = $name;
 	}
 	else {
-		$player->find($name);
+		$player = new OTS_Player();
+
+		if(is_numeric($name)) {
+			$player->load((int)$name);
+		}
+		else {
+			$player->find($name);
+		}
 	}
 
 	if (!$player->isLoaded()) {

@@ -766,22 +766,21 @@ class Plugins {
 	 * Helper function for plugins
 	 *
 	 * @param string $templateName
-	 * @param array $categories
+	 * @param array $menus
 	 */
-	public static function installMenus($templateName, $categories, $clearOld = true)
+	public static function installMenus($templateName, $menus, $clearOld = false)
 	{
-		global $db;
-		if (!$db->hasTable(TABLE_PREFIX . 'menu')) {
-			return;
-		}
-
 		if ($clearOld) {
 			Menu::where('template', $templateName)->delete();
 		}
 
-		foreach ($categories as $category => $menus) {
+		if (Menu::where('template', $templateName)->count()) {
+			return;
+		}
+
+		foreach ($menus as $category => $_menus) {
 			$i = 0;
-			foreach ($menus as $name => $link) {
+			foreach ($_menus as $name => $link) {
 				$color = '';
 				$blank = 0;
 
