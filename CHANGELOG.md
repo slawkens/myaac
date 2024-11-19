@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.8.19 - 19.11.2024]
+
+### Added
+* syntactic sugar for db structure changes (https://github.com/slawkens/myaac/commit/e0036a3e32e8c37c28665dd7ae18ac9b8fc167d9)
+* add "None" vocation to highscores (https://github.com/slawkens/myaac/commit/7f4737631dfcb6ec255c6d9301304d3bf222a033)
+* new hooks in account manage + create (https://github.com/slawkens/myaac/commit/d40178104b0f411b9672102c49a4b87ac16e1779)
+* new functions: getGuildNameById($id) + getGuildLogoById($id) + Plugins::installMenus($templateName, $menus, $clearOld = false) (https://github.com/slawkens/myaac/commit/de1bb37bcb6d111fbdf185ef9c2fec7e7f05053e + https://github.com/slawkens/myaac/commit/d1c5a189c3b182a36933ed507c6ae36b61fe1d45 + https://github.com/slawkens/myaac/commit/5a953ce901522d080aa16fcfcd268e9544bf6e1a)
+
+### Changed
+* set default encryption to sha1 (https://github.com/slawkens/myaac/commit/55b8645d3f38c47f4aafc1906625b676c429cdd5)
+* prefer get_browser_real_ip() over REMOTE_ADDR (cause of Cloudflare and similar services) (https://github.com/slawkens/myaac/commit/b5bbae62b09db50a73bfa3e288245ea718005aa9)
+* allow account_create_character_create even if account_mail_verify is activated (https://github.com/slawkens/myaac/commit/1edf8833c844b25372017e4affaf12aa02cdce7a)
+* better https detection (patched from develop) (https://github.com/slawkens/myaac/commit/d73aceb272d0615244fcfd0998d75e6c6c15d3fe)
+* require login before create new thread (#261, @anyeor)
+* better tables.headline.html.twig (patched from 1.0) (https://github.com/slawkens/myaac/commit/71ef30d35ecb2f876e9b861f211f737302bf408e)
+
+### Fixed
+* bans page fixed functions getPlayerNameByAccount + getPlayerNameById (https://github.com/slawkens/myaac/commit/d39386cfabfa13e5c916ead69e2f8f90fdc47f4f)
+* account verify - do not allow login without verified email (https://github.com/slawkens/myaac/commit/1edf8833c844b25372017e4affaf12aa02cdce7a, Thanks @anyeor)
+* if <flags> is not present in monster.xml (https://github.com/slawkens/myaac/commit/81b6652738a7b04be3980cbf55443a6fbe437b34)
+* $db->update when there is null value (https://github.com/slawkens/myaac/commit/1458b7a412ff6875cebba1b88d380f7f959ee6be)
+* error on $db __destruct saving current script name in CLI (https://github.com/slawkens/myaac/commit/01660bd2b4967315c0e16d2f83c6c39f0b78683d)
+
 ## [0.8.18 - 29.05.2024]
 
 ### Added
