@@ -770,6 +770,8 @@ class Plugins {
 	 */
 	public static function installMenus($templateName, $menus, $clearOld = false)
 	{
+		global $db;
+
 		if ($clearOld) {
 			Menu::where('template', $templateName)->delete();
 		}
@@ -804,9 +806,13 @@ class Plugins {
 					'link' => $link,
 					'category' => $category,
 					'ordering' => $i++,
-					'blank' => $blank,
-					'color' => $color,
 				];
+
+				// support for color and blank attributes
+				if($db->hasColumn(TABLE_PREFIX . 'menu', 'blank') && $db->hasColumn(TABLE_PREFIX . 'menu', 'color')) {
+					$insert_array['blank'] = $blank;
+					$insert_array['color'] = $color;
+				}
 
 				Menu::create($insert_array);
 			}
