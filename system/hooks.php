@@ -61,6 +61,8 @@ define('HOOK_FIRST', HOOK_STARTUP);
 define('HOOK_LAST', HOOK_EMAIL_CONFIRMED);
 
 require_once LIBS . 'plugins.php';
+require_once LIBS . 'src/plugins.php';
+
 class Hook
 {
 	private $_name, $_type, $_file;

@@ -10,8 +10,6 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Plugin manager';
 
-require_once LIBS . 'plugins.php';
-
 $twig->display('admin.plugins.form.html.twig');
 
 if (isset($_REQUEST['uninstall'])) {
