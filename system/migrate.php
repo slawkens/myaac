@@ -20,6 +20,7 @@ if(fetchDatabaseConfig('database_version', $tmp)) { // we got version
 
 			if (isset($up)) {
 				$up();
+				unset($up);
 			}
 
 			updateDatabaseConfig('database_version', $i);
@@ -34,6 +35,7 @@ else { // register first version
 
 		if (isset($up)) {
 			$up();
+			unset($up);
 		}
 
 		updateDatabaseConfig('database_version', $i);
