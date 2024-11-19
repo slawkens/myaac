@@ -28,7 +28,8 @@ if($config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($
 	ob_start('ob_gzhandler');
 
 // cache
-require_once SYSTEM . 'libs/cache.php';
+require_once LIBS . 'cache.php';
+require_once LIBS . 'src/Cache.php';
 $cache = Cache::getInstance();
 
 // trim values we receive
