@@ -22,7 +22,7 @@ class MigrateCommand extends Command
 		$io = new SymfonyStyle($input, $output);
 		require SYSTEM . 'migrate.php';
 
-		$io->success('Migrated to latest version');
+		$io->success('Migrated to latest version (' . DATABASE_VERSION . ')');
 		return Command::SUCCESS;
 	}
 }
