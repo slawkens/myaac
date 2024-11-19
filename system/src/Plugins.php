@@ -766,9 +766,9 @@ class Plugins {
 	 * Helper function for plugins
 	 *
 	 * @param string $templateName
-	 * @param array $categories
+	 * @param array $menus
 	 */
-	public static function installMenus($templateName, $categories, $clearOld = false)
+	public static function installMenus($templateName, $menus, $clearOld = false)
 	{
 		if ($clearOld) {
 			Menu::where('template', $templateName)->delete();
@@ -778,9 +778,9 @@ class Plugins {
 			return;
 		}
 
-		foreach ($categories as $category => $menus) {
+		foreach ($menus as $category => $_menus) {
 			$i = 0;
-			foreach ($menus as $name => $link) {
+			foreach ($_menus as $name => $link) {
 				$color = '';
 				$blank = 0;
 
