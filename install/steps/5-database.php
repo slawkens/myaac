@@ -40,6 +40,7 @@ if(!$error) {
 	$configToSave['gzip_output'] = false;
 	$configToSave['cache_engine'] = 'auto';
 	$configToSave['cache_prefix'] = 'myaac_' . generateRandomString(8, true, false, true);
+	$configToSave['database_auto_migrate'] = true;
 
 	if(!$error) {
 		$content = '';
