@@ -11,6 +11,6 @@ $up = function () use ($db) {
 
 $up = function () use ($db) {
 	if ($db->hasColumn(TABLE_PREFIX . 'spells', 'cities')) {
-		$db->addColumn(TABLE_PREFIX . 'spells', 'cities', 'VARCHAR(32) NOT NULL,');
+		$db->addColumn(TABLE_PREFIX . 'spells', 'cities', 'VARCHAR(32) NOT NULL');
 	}
 };
