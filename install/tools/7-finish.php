@@ -62,16 +62,21 @@ DataLoader::load();
 
 // update config.highscores_ids_hidden
 require_once SYSTEM . 'migrations/20.php';
+$up();
 
 // add z_polls tables
 require_once SYSTEM . 'migrations/22.php';
+$up();
 
 // add myaac_pages pages
 require_once SYSTEM . 'migrations/27.php';
+$up();
 require_once SYSTEM . 'migrations/30.php';
+$up();
 
 // new monster columns
 require_once SYSTEM . 'migrations/31.php';
+$up();
 
 if(ModelsFAQ::count() == 0) {
 	ModelsFAQ::create([
