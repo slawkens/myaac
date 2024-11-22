@@ -17,6 +17,7 @@ use MyAAC\Settings;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
+global $config;
 if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
@@ -142,7 +143,10 @@ if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {
 }
 
 // execute migrations
-require SYSTEM . 'migrate.php';
+$configDatabaseAutoMigrate = config('database_auto_migrate');
+if (!isset($configDatabaseAutoMigrate) || $configDatabaseAutoMigrate) {
+	require SYSTEM . 'migrate.php';
+}
 
 // settings
 $settings = Settings::getInstance();

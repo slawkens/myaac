@@ -1,3 +1,12 @@
 <?php
+/**
+ * @var OTS_DB_MySQL $db
+ */
 
-$db->exec('ALTER TABLE `' . TABLE_PREFIX . 'monsters` MODIFY `loot` text NOT NULL;');
+$up = function () use ($db) {
+	$db->modifyColumn(TABLE_PREFIX . 'monsters', 'loot', 'text NOT NULL');
+};
+
+$down = function () {
+	// nothing to do
+};
