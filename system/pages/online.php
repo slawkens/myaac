@@ -122,7 +122,8 @@ if(count($players_data) > 0) {
 
 $twig->display('online.html.twig', array(
 	'players' => $players_data,
-	'record' => $record
+	'record' => $record,
+	'vocs' => $vocs,
 ));
 
 //search bar
