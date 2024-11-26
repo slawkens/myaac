@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.8.20 - 26.11.2024]
+
+Small fix regarding the latest release and the linux system.
+
+Download this one, instead of the 0.8.19 if you are using linux.
+
+If you are using 0.8.19, make this update:
+
+The fix is to make this change in the system/libs/hooks.php
+
+Change
+```
+require_once LIBS . 'src/plugins.php';
+```
+
+Into:
+```
+require_once LIBS . 'src/Plugins.php';
+```
+
+Yeah, we just changed 'p' to 'P' - that's just case-sensitive nature of linux.
+
 ## [0.8.19 - 19.11.2024]
 
 ### Added
