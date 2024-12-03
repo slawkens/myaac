@@ -161,6 +161,9 @@ if (!isset($token) || !$token) {
 // deprecated config values
 require_once SYSTEM . 'compat/config.php';
 
+// deprecated classes
+require_once SYSTEM . 'compat/classes.php';
+
 date_default_timezone_set(setting('core.date_timezone'));
 
 setting(
