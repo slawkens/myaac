@@ -50,8 +50,8 @@ if (setting('core.online_outfit')) {
 	}
 }
 
+$vocs = [];
 if (setting('core.online_vocations')) {
-	$vocs = array();
 	foreach($config['vocations'] as $id => $name) {
 		$vocs[$id] = 0;
 	}
