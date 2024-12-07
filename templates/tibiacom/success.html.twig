@@ -32,13 +32,13 @@
 {% else %}
 <div style="text-align:center">
 	<table border="0" cellspacing="0" cellpadding="0">
-		<form action="{{ getLink('account/manage') }}" method="post">
-			<tr>
-				<td style="border:0px;">
+		<tr>
+			<td style="border:0;">
+				<form action="{{ getLink('account/manage') }}" method="post">
 					{{ include('buttons.back.html.twig') }}
-				</td>
-			</tr>
-		</form>
+				</form>
+			</td>
+		</tr>
 	</table>
 </div>
 {% endif %}
