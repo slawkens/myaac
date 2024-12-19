@@ -1684,6 +1684,18 @@ function isRequestMethod(string $method): bool {
 	return strtolower($_SERVER['REQUEST_METHOD']) == strtolower($method);
 }
 
+function getAccountIdentityColumn(): string
+{
+	if (USE_ACCOUNT_NAME) {
+		return 'name';
+	}
+	elseif (USE_ACCOUNT_NUMBER) {
+		return 'number';
+	}
+
+	return 'id';
+}
+
 // validator functions
 require_once SYSTEM . 'compat/base.php';
 

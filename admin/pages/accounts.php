@@ -23,10 +23,7 @@ $use_datatable = true;
 if (setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
-$nameOrNumberColumn = 'name';
-if (USE_ACCOUNT_NUMBER) {
-	$nameOrNumberColumn = 'number';
-}
+$nameOrNumberColumn = getAccountIdentityColumn();
 
 $hasSecretColumn = $db->hasColumn('accounts', 'secret');
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
@@ -69,7 +66,7 @@ else if (isset($_REQUEST['search_email'])) {
 else if (isset($_REQUEST['search'])) {
 	$search_account = $_REQUEST['search'];
 	$min_size = 3;
-	if ($nameOrNumberColumn == 'number') {
+	if (in_array($nameOrNumberColumn, ['id', 'number'])) {
 		$min_size = 1;
 	}
 
@@ -212,7 +209,7 @@ else if (isset($_REQUEST['search'])) {
 				if(setting('core.account_country')) {
 					$account->setCountry($rl_country);
 				}
-				
+
 				$account->setCustomField('created', $created);
 				$account->setWebFlags($web_flags);
 				$account->setCustomField('web_lastlogin', $web_lastlogin);
@@ -248,7 +245,7 @@ else if (isset($_REQUEST['search'])) {
 						<thead>
 						<tr>
 							<th>ID</th>
-							<th><?= ($nameOrNumberColumn == 'number' ? 'Number' : 'Name'); ?></th>
+							<th><?= ($nameOrNumberColumn == 'name' ? 'Name' : 'Number'); ?></th>
 							<?php if($hasTypeColumn || $hasGroupColumn): ?>
 							<th>E-Mail</th>
 							<th>Position</th>
