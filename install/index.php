@@ -125,18 +125,7 @@ else if($step == 'finish') {
 	}
 
 	// account check
-	if(isset($_SESSION['var_account'])) {
-		if(empty($_SESSION['var_account'])) {
-			$errors[] = $locale['step_admin_account_error_empty'];
-		}
-		else if(!Validator::accountName($_SESSION['var_account'])) {
-			$errors[] = $locale['step_admin_account_error_format'];
-		}
-		else if(strtoupper($_SESSION['var_account']) == strtoupper($password)) {
-			$errors[] = $locale['step_admin_account_error_same'];
-		}
-	}
-	else if(isset($_SESSION['var_account_id'])) {
+	if(isset($_SESSION['var_account_id'])) {
 		if(empty($_SESSION['var_account_id'])) {
 			$errors[] = $locale['step_admin_account_id_error_empty'];
 		}
@@ -145,6 +134,17 @@ else if($step == 'finish') {
 		}
 		else if($_SESSION['var_account_id'] == $password) {
 			$errors[] = $locale['step_admin_account_id_error_same'];
+		}
+	}
+	else if(isset($_SESSION['var_account'])) {
+		if(empty($_SESSION['var_account'])) {
+			$errors[] = $locale['step_admin_account_error_empty'];
+		}
+		else if(!Validator::accountName($_SESSION['var_account'])) {
+			$errors[] = $locale['step_admin_account_error_format'];
+		}
+		else if(strtoupper($_SESSION['var_account']) == strtoupper($password)) {
+			$errors[] = $locale['step_admin_account_error_same'];
 		}
 	}
 
