@@ -331,7 +331,9 @@ if(setting('core.account_country_recognize')) {
 		$country_recognized = $country_session;
 	}
 	else {
-		$info = json_decode(@file_get_contents('http://ipinfo.io/' . get_browser_real_ip() . '/geo'), true);
+		ini_set('default_socket_timeout', 5);
+
+		$info = json_decode(@file_get_contents('https://ipinfo.io/' . get_browser_real_ip() . '/geo'), true);
 		if(isset($info['country'])) {
 			$country_recognized = strtolower($info['country']);
 			setSession('country', $country_recognized);
