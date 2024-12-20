@@ -1,0 +1,65 @@
+Thumbs.db
+.DS_Store
+.idea
+
+#
+/.htaccess
+
+# composer
+composer.phar
+vendor
+
+# npm
+node_modules
+tools/ext
+
+# cypress
+cypress.env.json
+cypress/e2e/2-advanced-examples
+cypress/screenshots
+
+# created by release.sh
+releases
+tmp
+
+config.local.php
+!docker/config.local.php
+
+# all custom templates
+templates/*
+!templates/tibiacom
+!templates/kathrine
+
+# guild images
+images/guilds/*
+!images/guilds/default.gif
+
+# editor images
+images/editor/*
+!images/editor/index.html
+
+# gallery images
+images/gallery/*
+!images/gallery/index.html
+!images/gallery/demon.jpg
+!images/gallery/demon_thumb.gif
+
+# cache
+system/cache/*
+!system/cache/index.html
+!system/cache/twig/index.html
+!system/cache/signatures/index.html
+!system/cache/plugins/index.html
+!system/cache/persistent/index.html
+
+# logs
+system/logs/*
+!system/logs/index.html
+
+# data
+system/data/*
+!system/data/index.html
+
+# php sessions
+system/php_sessions/*
+!system/php_sessions/index.html

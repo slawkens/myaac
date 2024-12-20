@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
     nano \
     vim
 
+RUN apt-get install -y nodejs npm
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -51,3 +53,4 @@ WORKDIR /var/www/html
 
 COPY --chown=www-data:www-data . .
 RUN composer install
+RUN npm install
