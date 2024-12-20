@@ -1,0 +1,9 @@
+CREATE TABLE `myaac_items`
+(
+	`id` INT(11) NOT NULL,
+	`article` VARCHAR(5) NOT NULL DEFAULT '',
+	`name` VARCHAR(50) NOT NULL DEFAULT '',
+	`plural` VARCHAR(50) NOT NULL DEFAULT '',
+	`attributes` VARCHAR(500) NOT NULL DEFAULT '',
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

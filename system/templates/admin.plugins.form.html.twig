@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<button type="submit" class="btn btn-info">Upload</button>
+				<button type="submit" class="btn btn-info" {% if not pluginUploadEnabled %}disabled{% endif %}>Upload</button>
 			</div>
 		</form>
 	</div>

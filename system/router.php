@@ -279,7 +279,7 @@ else {
 					$uri = str_replace_first('/', '', $uri);
 				}
 
-				$page = $uri;
+				$page = str_replace('index.php/', '', $uri);
 				if (empty($page)) {
 					$page = 'news';
 				}

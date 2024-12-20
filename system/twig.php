@@ -16,6 +16,8 @@ use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+global $twig, $twig_loader;
+
 $dev_mode = (config('env') === 'dev');
 $twig_loader = new Twig_FilesystemLoader(SYSTEM . 'templates');
 $twig = new Twig_Environment($twig_loader, array(

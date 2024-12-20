@@ -50,8 +50,8 @@ if (setting('core.online_outfit')) {
 	}
 }
 
+$vocs = [];
 if (setting('core.online_vocations')) {
-	$vocs = array();
 	foreach($config['vocations'] as $id => $name) {
 		$vocs[$id] = 0;
 	}
@@ -100,7 +100,7 @@ foreach($playersOnline as $player) {
 }
 
 $record = '';
-if($players > 0) {
+if(count($players_data) > 0) {
 	if( setting('core.online_record')) {
 		$result = null;
 		$timestamp = false;
@@ -114,7 +114,7 @@ if($players > 0) {
 			}
 		}
 
-		if($record) {
+		if($result) {
 			$record = 'The maximum on this game world was ' . $result['record'] . ' players' . ($timestamp ? ' on ' . date("M d Y, H:i:s", $result['timestamp']) . '.' : '.');
 		}
 	}
@@ -122,7 +122,8 @@ if($players > 0) {
 
 $twig->display('online.html.twig', array(
 	'players' => $players_data,
-	'record' => $record
+	'record' => $record,
+	'vocs' => $vocs,
 ));
 
 //search bar

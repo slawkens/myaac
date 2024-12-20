@@ -23,6 +23,9 @@
 					Currently {{ players|length }} players are online.<br/>
 				{% endif %}
 			{% endif %}
+			{% if setting('core.online_record') %}
+				{{ record }}
+			{% endif %}
 		</td>
 	</tr>
 </table>

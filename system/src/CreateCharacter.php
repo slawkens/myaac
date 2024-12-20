@@ -23,32 +23,8 @@ class CreateCharacter
 	 */
 	public function checkName($name, &$errors)
 	{
-		$minLength = setting('core.create_character_name_min_length');
-		$maxLength = setting('core.create_character_name_max_length');
-
-		if(empty($name)) {
-			$errors['name'] = 'Please enter a name for your character!';
-			return false;
-		}
-
-		if(strlen($name) > $maxLength) {
-			$errors['name'] = 'Name is too long. Max. length <b>' . $maxLength . '</b> letters.';
-			return false;
-		}
-
-		if(strlen($name) < $minLength) {
-			$errors['name'] = 'Name is too short. Min. length <b>' . $minLength . '</b> letters.';
-			return false;
-		}
-
-		$name_length = strlen($name);
-		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- '") != $name_length) {
-			$errors['name'] = 'This name contains invalid letters, words or format. Please use only a-Z, - , \' and space.';
-			return false;
-		}
-
-		if(!preg_match("/[A-z ']/", $name)) {
-			$errors['name'] = 'Your name contains illegal characters.';
+		if (!\Validator::characterName($name)) {
+			$errors['name'] = \Validator::getLastError();
 			return false;
 		}
 
@@ -267,7 +243,7 @@ class CreateCharacter
 			[
 				'account' => $account,
 				'player' => $player,
-				'samplePlayer' => $playerSample,
+				'playerSample' => $playerSample,
 				'name' => $name,
 				'sex' => $sex,
 				'vocation' => $vocation,

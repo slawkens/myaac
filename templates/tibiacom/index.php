@@ -34,17 +34,7 @@ if(isset($config['boxes']))
 					}
 				}
 				else {
-					$tmp = str_replace('/', '', URI);
-					$exp = explode('/', URI);
-					if(URI !== 'account/create' && URI !== 'account/lost' && isset($exp[1])) {
-						if ($exp[0] === 'account') {
-							$tmp = 'accountmanage';
-						} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
-							$tmp = 'newsarchive';
-						}
-						else
-							$tmp = $exp[0];
-					}
+					$tmp = str_replace('/', '_', PAGE);
 				}
 			}
 			else {
@@ -353,12 +343,15 @@ foreach($config['menu_categories'] as $id => $cat) {
 		$default_menu_color = "ffffff";
 
 		foreach($menus[$id] as $category => $menu) {
+			if (empty($menu['link'])) {
+				$menu['link'] = 'news';
+			}
 			$link_color = '#' . (strlen($menu['color']) == 0 ? $default_menu_color : $menu['color']);
 			?>
 			<a href='<?php echo $menu['link_full']; ?>'<?php echo $menu['blank'] ? ' target="_blank"' : ''?>>
-				<div id='submenu_<?php echo str_replace('/', '', $menu['link']); ?>' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)' style="color: <?php echo $link_color; ?>;">
+				<div id='submenu_<?php echo str_replace('/', '_', $menu['link']); ?>' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)' style="color: <?php echo $link_color; ?>;">
 					<div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
-					<div id='ActiveSubmenuItemIcon_<?php echo str_replace('/', '', $menu['link']); ?>' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
+					<div id='ActiveSubmenuItemIcon_<?php echo str_replace('/', '_', $menu['link']); ?>' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
 					<div class='SubmenuitemLabel' style="color: <?php echo $link_color; ?>;"><?php echo $menu['name']; ?></div>
 					<div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 				</div>

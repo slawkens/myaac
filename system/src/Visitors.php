@@ -37,7 +37,7 @@ class Visitors
 		$this->sessionTime = $sessionTime;
 		$this->cleanVisitors();
 
-		$ip = $_SERVER['REMOTE_ADDR'];
+		$ip = get_browser_real_ip();
 		$userAgentShortened = substr($_SERVER['HTTP_USER_AGENT'] ?? 'unknown', 0, 255);
 
 		if($this->visitorExists($ip))

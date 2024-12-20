@@ -89,13 +89,18 @@ function getForumBoardLink($board_id, $page = NULL): string {
 
 function getPlayerLink($name, $generate = true, bool $colored = false): string
 {
-	$player = new OTS_Player();
-
-	if(is_numeric($name)) {
-		$player->load((int)$name);
+	if (is_object($name) and $name instanceof OTS_Player) {
+		$player = $name;
 	}
 	else {
-		$player->find($name);
+		$player = new OTS_Player();
+
+		if(is_numeric($name)) {
+			$player->load((int)$name);
+		}
+		else {
+			$player->find($name);
+		}
 	}
 
 	if (!$player->isLoaded()) {
@@ -1041,7 +1046,7 @@ function load_config_lua($filename)
 	return $result;
 }
 
-function str_replace_first($search, $replace, $subject) {
+function str_replace_first($search,$replace, $subject) {
 	$pos = strpos($subject, $search);
 	if ($pos !== false) {
 		return substr_replace($subject, $replace, $pos, strlen($search));
@@ -1677,6 +1682,18 @@ function makeLinksClickable($text, $blank = true) {
 
 function isRequestMethod(string $method): bool {
 	return strtolower($_SERVER['REQUEST_METHOD']) == strtolower($method);
+}
+
+function getAccountIdentityColumn(): string
+{
+	if (USE_ACCOUNT_NAME) {
+		return 'name';
+	}
+	elseif (USE_ACCOUNT_NUMBER) {
+		return 'number';
+	}
+
+	return 'id';
 }
 
 // validator functions

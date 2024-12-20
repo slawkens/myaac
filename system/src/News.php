@@ -37,17 +37,29 @@ class News
 		if(!self::verify($title, $body, $article_text, $article_image, $errors))
 			return false;
 
-		ModelsNews::create([
-			'title' => $title,
-			'body' => $body,
-			'type' => $type,
-			'date' => time(),
-			'category' => $category,
-			'player_id' => isset($player_id) ? $player_id : 0,
+		$currentTime = time();
+
+		$params = [
+			'title' => $title, 'body' => $body,
+			'type' => $type, 'category' => $category,
+			'date' => $currentTime,
+			'player_id' => $player_id ?? 0,
 			'comments' => $comments,
 			'article_text' => ($type == 3 ? $article_text : ''),
 			'article_image' => ($type == 3 ? $article_image : '')
-		]);
+		];
+
+		global $hooks;
+		if (!$hooks->trigger(HOOK_ADMIN_NEWS_ADD_PRE, $params)) {
+			return false;
+		}
+
+		$newsModel = ModelsNews::create($params);
+
+		$hooks->trigger(HOOK_ADMIN_NEWS_ADD,
+			$params + ['id' => $newsModel->id],
+		);
+
 		self::clearCache();
 		return true;
 	}
@@ -58,30 +70,55 @@ class News
 
 	static public function update($id, $title, $body, $type, $category, $player_id, $comments, $article_text, $article_image, &$errors)
 	{
-		if(!self::verify($title, $body, $article_text, $article_image, $errors))
+		if(!self::verify($title, $body, $article_text, $article_image, $errors)) {
 			return false;
+		}
 
-		ModelsNews::where('id', $id)->update([
-			'title' => $title,
-			'body' => $body,
-			'type' => $type,
-			'category' => $category,
-			'last_modified_by' => isset($player_id) ? $player_id : 0,
-			'last_modified_date' => time(),
+		$currentTime = time();
+
+		$params = [
+			'id' => $id,
+			'title' => $title, 'body' => $body,
+			'type' => $type, 'category' => $category,
+			'last_modified_by' => $player_id ?? 0, 'last_modified_date' => $currentTime,
 			'comments' => $comments,
-			'article_text' => $article_text,
-			'article_image' => $article_image
-		]);
+			'article_text' => ($type == 3 ? $article_text : ''),
+			'article_image' => ($type == 3 ? $article_image : ''),
+		];
+
+		global $hooks;
+		if (!$hooks->trigger(HOOK_ADMIN_NEWS_UPDATE_PRE, $params)) {
+			return false;
+		}
+
+		unset($params['id']);
+
+		ModelsNews::where('id', $id)->update($params);
+
+		$hooks->trigger(HOOK_ADMIN_NEWS_UPDATE,
+			$params + ['id' => $id]
+		);
+
 		self::clearCache();
 		return true;
 	}
 
 	static public function delete($id, &$errors)
 	{
+		global $hooks;
+
 		if(isset($id)) {
 			$row = ModelsNews::find($id);
 			if($row) {
-				if (!$row->delete()) {
+				$params = ['id' => $id];
+
+				if (!$hooks->trigger(HOOK_ADMIN_NEWS_DELETE_PRE, $params)) {
+					return false;
+				}
+
+				if ($row->delete()) {
+					$hooks->trigger(HOOK_ADMIN_NEWS_DELETE, $params);
+				} else {
 					$errors[] = 'Fail during delete News.';
 				}
 			}
@@ -103,22 +140,35 @@ class News
 
 	static public function toggleHide($id, &$errors, &$status)
 	{
-		if(isset($id))
-		{
+		global $hooks;
+
+		if(isset($id)) {
 			$row = ModelsNews::find($id);
-			if($row)
-			{
-				$row->hide = $row->hide == 1 ? 0 : 1;
-				if (!$row->save()) {
+			if($row) {
+				$row->hide = ($row->hide == 1 ? 0 : 1);
+
+				$params = ['hide' => $row->hide];
+
+				if (!$hooks->trigger(HOOK_ADMIN_NEWS_TOGGLE_HIDE_PRE, $params)) {
+					return false;
+				}
+
+				if ($row->save()) {
+					$hooks->trigger(HOOK_ADMIN_NEWS_TOGGLE_HIDE, $params);
+				}
+				else {
 					$errors[] = 'Fail during toggle hide News.';
 				}
+
 				$status = $row->hide;
 			}
-			else
+			else {
 				$errors[] = 'News with id ' . $id . ' does not exists.';
+			}
 		}
-		else
+		else {
 			$errors[] = 'News id not set.';
+		}
 
 		if(count($errors)) {
 			return false;

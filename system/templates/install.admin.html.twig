@@ -9,7 +9,13 @@
 <form action="{{ constant('BASE_URL') }}install/" method="post" autocomplete="off">
 	<input type="hidden" name="step" id="step" value="finish" />
 
-	{% for value in ['email', 'account', 'password', 'password_confirm', 'player_name'] %}
+	{% set values = ['email', account, 'password', 'password_confirm'] %}
+
+	{% if hasTablePlayers %}
+		{% set values = values|merge(['player_name']) %}
+	{% endif %}
+
+	{% for value in values %}
 
 	<div class="form-group mb-2">
 		<label for="vars_{{ value }}">{{ locale['step_admin_' ~ value] }}</label>

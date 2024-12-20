@@ -40,6 +40,7 @@ if(!$error) {
 	$configToSave['gzip_output'] = false;
 	$configToSave['cache_engine'] = 'auto';
 	$configToSave['cache_prefix'] = 'myaac_' . generateRandomString(8, true, false, true);
+	$configToSave['database_auto_migrate'] = true;
 	if (isset($config['install_ignore_ip_check'])) {
 		$configToSave['install_ignore_ip_check'] = $config['install_ignore_ip_check'];
 	}
@@ -63,18 +64,6 @@ if(!$error) {
 				else {
 					if (!$db->hasTable('accounts')) {
 						$tmp = str_replace('$TABLE$', 'accounts', $locale['step_database_error_table']);
-						error($tmp);
-						$error = true;
-					}
-
-					if (!$db->hasTable('players')) {
-						$tmp = str_replace('$TABLE$', 'players', $locale['step_database_error_table']);
-						error($tmp);
-						$error = true;
-					}
-
-					if (!$db->hasTable('guilds')) {
-						$tmp = str_replace('$TABLE$', 'guilds', $locale['step_database_error_table']);
 						error($tmp);
 						$error = true;
 					}
