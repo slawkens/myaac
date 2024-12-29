@@ -1752,11 +1752,6 @@ class OTS_Player extends OTS_Row_DAO
  */
     public function getConditions()
     {
-        if( !isset($this->data['conditions']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
-
         return $this->data['conditions'];
     }
 
