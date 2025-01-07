@@ -82,7 +82,9 @@ class DataLoader
 		self::$startTime = microtime(true);
 
 		$cache = Cache::getInstance();
-		$cache->delete('towns'); // will be reloaded after next page load
+		if ($cache->enabled()) {
+			$cache->delete('towns'); // will be reloaded after next page load
+		}
 
 		global $db;
 		if ($db->hasTable('towns') && Town::count() > 0) {
