@@ -11,7 +11,13 @@
  *  - for number: min, max, step
  */
 
+use MyAAC\Cache;
 use MyAAC\Settings;
+
+$templates = Cache::remember('templates', 5 * 60, function () {
+	return get_templates();
+});
+$defaultTemplate = in_array('kathrine', $templates) ? 'kathrine' : $templates[0];
 
 return [
 	'name' => 'MyAAC',
@@ -88,7 +94,7 @@ return [
 			'type' => 'options',
 			'options' => '$templates',
 			'desc' => 'Name of the template used by website',
-			'default' => 'kathrine',
+			'default' => $defaultTemplate,
 		],
 		'template_allow_change' => [
 			'name' => 'Template Allow Change',
