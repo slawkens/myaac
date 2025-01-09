@@ -348,7 +348,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 			}
 			$link_color = '#' . (strlen($menu['color']) == 0 ? $default_menu_color : $menu['color']);
 			?>
-			<a href='<?php echo $menu['link_full']; ?>'<?php echo $menu['blank'] ? ' target="_blank"' : ''?>>
+			<a href='<?php echo $menu['link_full']; ?>'<?= $menu['target_blank']?>>
 				<div id='submenu_<?php echo str_replace('/', '_', $menu['link']); ?>' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)' style="color: <?php echo $link_color; ?>;">
 					<div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 					<div id='ActiveSubmenuItemIcon_<?php echo str_replace('/', '_', $menu['link']); ?>' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
