@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $level
  * @property int $vocation
  * @property int $online
+ * @property int $looktype
+ * @property int $lookhead
+ * @property int $lookbody
+ * @property int $looklegs
+ * @property int $lookfeet
+ * @property int $lookaddons
+ * @property string $outfit_url
  * @property hasOne $onlineTable
  */
 class Player extends Model {
