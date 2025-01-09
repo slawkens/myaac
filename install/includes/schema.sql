@@ -1,4 +1,4 @@
-SET @myaac_database_version = 41;
+SET @myaac_database_version = 42;
 
 CREATE TABLE `myaac_account_actions`
 (
@@ -91,7 +91,7 @@ CREATE TABLE `myaac_forum`
 	`post_date` int(20) NOT NULL default '0',
 	`last_edit_aid` int(20) NOT NULL default '0',
 	`edit_date` int(20) NOT NULL default '0',
-	`post_ip` varchar(32) NOT NULL default '0.0.0.0',
+	`post_ip` varchar(45) NOT NULL default '0.0.0.0',
 	`sticked` tinyint(1) NOT NULL DEFAULT '0',
 	`closed` tinyint(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`),
