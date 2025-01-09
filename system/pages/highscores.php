@@ -207,7 +207,7 @@ if (empty($highscores)) {
 		$tmp = $row->toArray();
 		$tmp['online'] = $row->online_status;
 		$tmp['vocation'] = $row->vocation_name;
-		$tmp['outfit_url'] = $row->outfit_url;
+		$tmp['outfit_url'] = $row->outfit_url; // @phpstan-ignore-line
 		unset($tmp['online_table']);
 
 		return $tmp;
