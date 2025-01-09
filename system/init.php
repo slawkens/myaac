@@ -12,11 +12,12 @@ use DebugBar\StandardDebugBar;
 use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
 use MyAAC\Hooks;
+use MyAAC\Models\Town;
 use MyAAC\Settings;
-use MyAAC\Towns;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
+global $config;
 if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
@@ -38,13 +39,15 @@ if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
 	$config['server_path'] .= '/';
 
 // enable gzip compression if supported by the browser
-if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && function_exists('ob_gzhandler'))
+if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && str_contains($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('ob_gzhandler'))
 	ob_start('ob_gzhandler');
 
 // cache
+global $cache;
 $cache = Cache::getInstance();
 
 // event system
+global $hooks;
 $hooks = new Hooks();
 $hooks->load();
 
@@ -140,7 +143,10 @@ if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {
 }
 
 // execute migrations
-require SYSTEM . 'migrate.php';
+$configDatabaseAutoMigrate = config('database_auto_migrate');
+if (!isset($configDatabaseAutoMigrate) || $configDatabaseAutoMigrate) {
+	require SYSTEM . 'migrate.php';
+}
 
 // settings
 $settings = Settings::getInstance();
@@ -154,6 +160,9 @@ if (!isset($token) || !$token) {
 
 // deprecated config values
 require_once SYSTEM . 'compat/config.php';
+
+// deprecated classes
+require_once SYSTEM . 'compat/classes.php';
 
 date_default_timezone_set(setting('core.date_timezone'));
 
@@ -173,4 +182,17 @@ define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
 define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
 
-Towns::load();
+$towns = Cache::remember('towns', 10 * 60, function () use ($db) {
+	if ($db->hasTable('towns') && Town::count() > 0) {
+		return Town::orderBy('id', 'ASC')->pluck('name', 'id')->toArray();
+	}
+
+	return [];
+});
+
+if (count($towns) <= 0) {
+	$towns = setting('core.towns');
+}
+
+config(['towns', $towns]);
+unset($towns);

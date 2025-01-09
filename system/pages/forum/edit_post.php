@@ -35,7 +35,7 @@ if(Forum::canPost($account_logged))
 	$thread = $db->query("SELECT `author_guid`, `author_aid`, `first_post`, `post_topic`, `post_date`, `post_text`, `post_smile`, `post_html`, `id`, `section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `id` = ".$post_id." LIMIT 1")->fetch();
 	if(isset($thread['id'])) {
 		$first_post = $db->query("SELECT `" . FORUM_TABLE_PREFIX . "forum`.`author_guid`, `" . FORUM_TABLE_PREFIX . "forum`.`author_aid`, `" . FORUM_TABLE_PREFIX . "forum`.`first_post`, `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`post_text`, `" . FORUM_TABLE_PREFIX . "forum`.`post_smile`, `" . FORUM_TABLE_PREFIX . "forum`.`id`, `" . FORUM_TABLE_PREFIX . "forum`.`section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $thread['first_post']." LIMIT 1")->fetch();
-		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread['first_post']) . '">'.$first_post['post_topic'].'</a> >> <b>Edit post</b>';
+		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread['first_post']) . '">'.htmlspecialchars($first_post['post_topic']).'</a> >> <b>Edit post</b>';
 
 		if(Forum::hasAccess($thread['section'] && ($account_logged->getId() == $thread['author_aid'] || Forum::isModerator()))) {
 			$char_id = $post_topic = $text = $smile = $html = null;

@@ -5,4 +5,10 @@
 
 use MyAAC\Models\Pages;
 
-Pages::query()->where('access', 1)->update(['access' => 0]);
+$up = function () {
+	Pages::query()->where('access', 1)->update(['access' => 0]);
+};
+
+$down = function () {
+	Pages::query()->where('access', 0)->update(['access' => 1]);
+};

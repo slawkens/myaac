@@ -95,7 +95,23 @@ if(Forum::canPost($account_logged)) {
 				if (count($errors) == 0) {
 					$saved = true;
 
-					$db->query("INSERT INTO `" . FORUM_TABLE_PREFIX . "forum` (`first_post` ,`last_post` ,`section` ,`replies` ,`views` ,`author_aid` ,`author_guid` ,`post_text` ,`post_topic` ,`post_smile`, `post_html` ,`post_date` ,`last_edit_aid` ,`edit_date`, `post_ip`) VALUES ('0', '" . time() . "', '" . (int)$section_id . "', '0', '0', '" . $account_logged->getId() . "', '" . $char_id . "', " . $db->quote($text) . ", " . $db->quote($post_topic) . ", '" . $smile . "', '" . $html . "', '" . time() . "', '0', '0', '" . $_SERVER['REMOTE_ADDR'] . "')");
+					$db->insert(FORUM_TABLE_PREFIX . 'forum', [
+						'first_post' => 0,
+						'last_post' => time(),
+						'section' => $section_id,
+						'replies' => 0,
+						'views' => 0,
+						'author_aid' => $account_logged->getId(),
+						'author_guid' => $char_id,
+						'post_text' => $text,
+						'post_topic' => $post_topic,
+						'post_smile' => $smile,
+						'post_html' => $html,
+						'post_date' => time(),
+						'last_edit_aid' => 0,
+						'edit_date' => 0,
+						'post_ip' => get_browser_real_ip(),
+					]);
 
 					$thread_id = $db->lastInsertId();
 

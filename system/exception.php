@@ -9,16 +9,16 @@
  */
 
 use MyAAC\Exceptions\SensitiveException;
+use Whoops\Handler\PlainTextHandler;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
 
-if (class_exists(\Whoops\Run::class)) {
-	$whoops = new \Whoops\Run;
-	if(IS_CLI) {
-		$whoops->pushHandler(new \Whoops\Handler\PlainTextHandler);
-	}
-	else {
-		$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-	}
+if (class_exists(Run::class)) {
+	$whoops = new Run;
 
+	$whoopsHandler = IS_CLI ? (new PlainTextHandler()) : (new PrettyPageHandler());
+
+	$whoops->pushHandler($whoopsHandler);
 	$whoops->register();
 	return;
 }

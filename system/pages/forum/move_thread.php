@@ -25,6 +25,7 @@ if(!$logged) {
 
 if(!Forum::isModerator()) {
 	echo 'You are not logged in or you are not moderator.';
+	return;
 }
 
 $save = isset($_REQUEST['save']) && (int)$_REQUEST['save'] == 1;

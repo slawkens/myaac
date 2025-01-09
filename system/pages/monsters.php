@@ -62,7 +62,9 @@ if ($monsterModel && isset($monsterModel->name)) {
 	$elements = json_decode($monster['elements'], true);
 	$immunities = json_decode($monster['immunities'], true);
 	$loot = json_decode($monster['loot'], true);
-	usort($loot, 'sort_by_chance');
+	if (!empty($loot)) {
+		usort($loot, 'sort_by_chance');
+	}
 
 	foreach ($loot as &$item) {
 		$item['name'] = getItemNameById($item['id']);

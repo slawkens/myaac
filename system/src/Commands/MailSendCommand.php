@@ -21,7 +21,14 @@ class MailSendCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		require SYSTEM . 'init.php';
+
 		$io = new SymfonyStyle($input, $output);
+
+		if (!setting('core.mail_enabled')) {
+			$io->error('Mailing is not enabled on this server');
+			return Command::FAILURE;
+		}
 
 		$email_account_name = $input->getArgument('recipient');
 		$subject = $input->getOption('subject');

@@ -138,29 +138,19 @@ if($twig_loader) {
 	$twig_loader->prependPath(BASE . $template_path);
 }
 
-function get_template_menus() {
+function get_template_menus(): array
+{
 	global $template_name;
 
-	$cache = Cache::getInstance();
-	if ($cache->enabled()) {
-		$tmp = '';
-		if ($cache->fetch('template_menus', $tmp)) {
-			$result = unserialize($tmp);
-		}
-	}
-
-	if (!isset($result)) {
-
+	$result = Cache::remember('template_menus', 10 * 60, function () use ($template_name) {
 		$result = Menu::select(['name', 'link', 'blank', 'color', 'category'])
 			->where('template', $template_name)
 			->orderBy('category')
 			->orderBy('ordering')
 			->get();
 
-		if ($cache->enabled()) {
-			$cache->set('template_menus', serialize($result->toArray()), 600);
-		}
-	}
+		return $result->toArray();
+	});
 
 	$menus = array();
 	foreach($result as $menu) {

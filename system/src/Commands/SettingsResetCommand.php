@@ -14,23 +14,43 @@ class SettingsResetCommand extends Command
 	protected function configure(): void
 	{
 		$this->setName('settings:reset')
-			->setDescription('Removes all settings in database');
+			->setDescription('Removes settings in database')
+			->addArgument('name',
+				InputArgument::OPTIONAL,
+				'Name of the plugin'
+			);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		require SYSTEM . 'init.php';
+
 		$io = new SymfonyStyle($input, $output);
 
-		if (!$io->confirm('Are you sure you want to reset all settings in database?', false)) {
+		$name = $input->getArgument('name');
+
+		$all = !$name ? 'all' : $name;
+		if (!$io->confirm("Are you sure you want to reset {$all} settings in database?", false)) {
 			return Command::FAILURE;
 		}
 
-		SettingsModel::truncate();
+		if (!$name) {
+			SettingsModel::truncate();
+		}
+		else {
+			$settingsModel = SettingsModel::where('name', $name)->first();
+			if (!$settingsModel) {
+				$io->warning('No settings for this plugin saved in database');
+				return Command::SUCCESS;
+			}
+
+			SettingsModel::where('name', $name)->delete();
+		}
 
 		$settings = Settings::getInstance();
 		$settings->clearCache();
 
-		$io->success('Setting cleared successfully');
+		$io->success('Settings cleared successfully');
 		return Command::SUCCESS;
 	}
 }

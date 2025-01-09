@@ -89,13 +89,18 @@ function getForumBoardLink($board_id, $page = NULL): string {
 
 function getPlayerLink($name, $generate = true, bool $colored = false): string
 {
-	$player = new OTS_Player();
-
-	if(is_numeric($name)) {
-		$player->load((int)$name);
+	if (is_object($name) and $name instanceof OTS_Player) {
+		$player = $name;
 	}
 	else {
-		$player->find($name);
+		$player = new OTS_Player();
+
+		if(is_numeric($name)) {
+			$player->load((int)$name);
+		}
+		else {
+			$player->find($name);
+		}
 	}
 
 	if (!$player->isLoaded()) {
@@ -590,24 +595,12 @@ function template_form()
 {
 	global $template_name;
 
-	$cache = Cache::getInstance();
-	if($cache->enabled())
-	{
-		$tmp = '';
-		if($cache->fetch('templates', $tmp)) {
-			$templates = unserialize($tmp);
-		}
-		else
-		{
-			$templates = get_templates();
-			$cache->set('templates', serialize($templates), 30);
-		}
-	}
-	else
-		$templates = get_templates();
+	$templates = Cache::remember('templates', 5 * 60, function() {
+		return get_templates();
+	});
 
 	$options = '';
-	foreach($templates as $key => $value)
+	foreach($templates as $value)
 		$options .= '<option ' . ($template_name == $value ? 'SELECTED' : '') . '>' . $value . '</option>';
 
 	global $twig;
@@ -1047,7 +1040,7 @@ function load_config_lua($filename)
 	return $result;
 }
 
-function str_replace_first($search, $replace, $subject) {
+function str_replace_first($search,$replace, $subject) {
 	$pos = strpos($subject, $search);
 	if ($pos !== false) {
 		return substr_replace($subject, $replace, $pos, strlen($search));
@@ -1683,6 +1676,18 @@ function makeLinksClickable($text, $blank = true) {
 
 function isRequestMethod(string $method): bool {
 	return strtolower($_SERVER['REQUEST_METHOD']) == strtolower($method);
+}
+
+function getAccountIdentityColumn(): string
+{
+	if (USE_ACCOUNT_NAME) {
+		return 'name';
+	}
+	elseif (USE_ACCOUNT_NUMBER) {
+		return 'number';
+	}
+
+	return 'id';
 }
 
 // validator functions

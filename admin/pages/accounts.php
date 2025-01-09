@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Models\Account as AccountModel;
 use MyAAC\Models\Player;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -22,10 +23,7 @@ $use_datatable = true;
 if (setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
-$nameOrNumberColumn = 'name';
-if (USE_ACCOUNT_NUMBER) {
-	$nameOrNumberColumn = 'number';
-}
+$nameOrNumberColumn = getAccountIdentityColumn();
 
 $hasSecretColumn = $db->hasColumn('accounts', 'secret');
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
@@ -51,36 +49,51 @@ $acc_type = setting('core.account_types');
 
 <?php
 $id = 0;
-$search_account = '';
+$search_account = $search_account_email = '';
 if (isset($_REQUEST['id']))
 	$id = (int)$_REQUEST['id'];
+else if (isset($_REQUEST['search_email'])) {
+	$search_account_email = $_REQUEST['search_email'];
+	$accountModel = AccountModel::where('email', $search_account_email)->limit(11)->get(['email', 'id']);
+	if (count($accountModel) == 0) {
+		echo_error('No entries found.');
+	} else if (count($accountModel) == 1) {
+		$id = $accountModel->first()->getKey();
+	} else if (count($accountModel) > 10) {
+		echo_error('Specified e-mail resulted with too many accounts.');
+	}
+}
 else if (isset($_REQUEST['search'])) {
 	$search_account = $_REQUEST['search'];
-	if (strlen($search_account) < 3 && !Validator::number($search_account)) {
-		echo_error('Player name is too short.');
+	$min_size = 3;
+	if (in_array($nameOrNumberColumn, ['id', 'number'])) {
+		$min_size = 1;
+	}
+
+	if (strlen($search_account) < $min_size && !Validator::number($search_account)) {
+		echo_error('Account ' . $nameOrNumberColumn . ' is too short.');
 	} else {
-		$query = $db->query('SELECT `id` FROM `accounts` WHERE `' . $nameOrNumberColumn . '` = ' . $db->quote($search_account));
-		if ($query->rowCount() == 1) {
-			$query = $query->fetch();
-			$id = (int)$query['id'];
+		$query = AccountModel::where($nameOrNumberColumn, '=', $search_account)->limit(11)->get(['id', $nameOrNumberColumn]);
+		if (count($query) == 0) {
+			echo_error('No entries found.');
+		} else if (count($query) == 1) {
+			$id = $query->first()->getKey();
+		} else if (count($query) > 10) {
+			echo_error('Specified name resulted with too many accounts.');
 		} else {
-			$query = $db->query('SELECT `id`, `' . $nameOrNumberColumn . '` FROM `accounts` WHERE `' . $nameOrNumberColumn . '` LIKE ' . $db->quote('%' . $search_account . '%'));
-			if ($query->rowCount() > 0 && $query->rowCount() <= 10) {
-				$str_construct = 'Do you mean?<ul class="mb-0">';
-				foreach ($query as $row)
-					$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row['id'] . '">' . $row[$nameOrNumberColumn] . '</a></li>';
-				$str_construct .= '</ul>';
-				echo_error($str_construct);
-			} else if ($query->rowCount() > 10)
-				echo_error('Specified name resulted with too many accounts.');
-			else
-				echo_error('No entries found.');
+			$str_construct = 'Do you mean?<ul class="mb-0">';
+			foreach ($query as $row) {
+				$str_construct .= '<li><a href="' . $admin_base . '&id=' . $row->getKey() . '">' . $row->attributes[$nameOrNumberColumn] . '</a></li>';
+			}
+			$str_construct .= '</ul>';
+			echo_error($str_construct);
 		}
 	}
 }
 ?>
 <div class="row">
 	<?php
+	$groups = new OTS_Groups_List();
 	if ($id > 0) {
 		$account = new OTS_Account();
 		$account->load($id);
@@ -143,7 +156,9 @@ else if (isset($_REQUEST['search'])) {
 			$rl_loca = $_POST['rl_loca'];
 
 			//country
-			$rl_country = $_POST['rl_country'];
+			if(setting('core.account_country')) {
+				$rl_country = $_POST['rl_country'];
+			}
 
 			$web_flags = $_POST['web_flags'];
 			verify_number($web_flags, 'Web Flags', 1);
@@ -190,7 +205,11 @@ else if (isset($_REQUEST['search'])) {
 				}
 				$account->setRLName($rl_name);
 				$account->setLocation($rl_loca);
-				$account->setCountry($rl_country);
+
+				if(setting('core.account_country')) {
+					$account->setCountry($rl_country);
+				}
+
 				$account->setCustomField('created', $created);
 				$account->setWebFlags($web_flags);
 				$account->setCustomField('web_lastlogin', $web_lastlogin);
@@ -214,7 +233,7 @@ else if (isset($_REQUEST['search'])) {
 			}
 		}
 	} else if ($id == 0) {
-		$accounts_db = $db->query('SELECT `id`, `' . $nameOrNumberColumn . '`' . ($hasTypeColumn ? ',type' : ($hasGroupColumn ? ',group_id' : '')) . ' FROM `accounts` ORDER BY `id` ASC');
+		$accounts_db = $db->query('SELECT `id`, `' . $nameOrNumberColumn . '`' . ($hasTypeColumn ? ',type' : ($hasGroupColumn ? ',group_id' : '')) . ', email FROM `accounts` ORDER BY `id` ASC');
 		?>
 		<div class="col-12 col-sm-12 col-lg-10">
 			<div class="card card-info card-outline">
@@ -226,8 +245,9 @@ else if (isset($_REQUEST['search'])) {
 						<thead>
 						<tr>
 							<th>ID</th>
-							<th><?= ($nameOrNumberColumn == 'number' ? 'Number' : 'Name'); ?></th>
+							<th><?= ($nameOrNumberColumn == 'name' ? 'Name' : 'Number'); ?></th>
 							<?php if($hasTypeColumn || $hasGroupColumn): ?>
+							<th>E-Mail</th>
 							<th>Position</th>
 							<?php endif; ?>
 							<th style="width: 40px">Edit</th>
@@ -238,6 +258,7 @@ else if (isset($_REQUEST['search'])) {
 							<tr>
 								<th><?php echo $account_lst['id']; ?></th>
 								<td><?php echo $account_lst[$nameOrNumberColumn]; ?></a></td>
+								<td><?php echo $account_lst['email']; ?></td>
 								<?php if($hasTypeColumn || $hasGroupColumn): ?>
 								<td>
 									<?php if ($hasTypeColumn) {
@@ -585,6 +606,16 @@ else if (isset($_REQUEST['search'])) {
 			</div>
 			<div class="card-body">
 				<div class="row">
+					<div class="col-6 col-lg-12">
+						<form action="<?php echo $admin_base; ?>" method="post">
+							<?php csrf(); ?>
+							<label for="search">Account E-Mail:</label>
+							<div class="input-group input-group-sm">
+								<input type="email" class="form-control" id="search_email" name="search_email" value="<?= escapeHtml($search_account_email); ?>" maxlength="255" size="255">
+								<span class="input-group-append"><button type="submit" class="btn btn-info btn-flat">Search</button></span>
+							</div>
+						</form>
+					</div>
 					<div class="col-6 col-lg-12">
 						<form action="<?php echo $admin_base; ?>" method="post">
 							<?php csrf(); ?>

@@ -1,31 +1,35 @@
 <?php
+/**
+ * @var OTS_DB_MySQL $db
+ */
 
-if(!$db->hasTable('z_polls'))
-	$db->query('
-CREATE TABLE `z_polls` (
-  `id` int(11) NOT NULL auto_increment,
-  `question` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `end` int(11) NOT NULL DEFAULT 0,
-  `start` int(11) NOT NULL DEFAULT 0,
-  `answers` int(11) NOT NULL DEFAULT 0,
-  `votes_all` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-');
+$up = function () use ($db) {
+	if (!$db->hasTable('z_polls')) {
+		$db->exec(file_get_contents(__DIR__ . '/22-z_polls.sql'));
+	}
 
-if(!$db->hasTable('z_polls_answers'))
-$db->query('
-	CREATE TABLE `z_polls_answers` (
-  `poll_id` int(11) NOT NULL,
-  `answer_id` int(11) NOT NULL,
-  `answer` varchar(255) NOT NULL,
-  `votes` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-');
+	if (!$db->hasTable('z_polls_answers')) {
+		$db->exec(file_get_contents(__DIR__ . '/22-z_polls_answers.sql'));
+	}
 
-if(!$db->hasColumn('accounts', 'vote'))
-	$db->query('ALTER TABLE `accounts` ADD `vote` INT( 11 ) DEFAULT 0 NOT NULL ;');
-else {
-	$db->query('ALTER TABLE `accounts` MODIFY `vote` INT( 11 ) DEFAULT 0 NOT NULL ;');
-}
+	if (!$db->hasColumn('accounts', 'vote')) {
+		$db->addColumn('accounts', 'vote', 'int(11) NOT NULL DEFAULT 0');
+	}
+	else {
+		$db->modifyColumn('accounts', 'vote', 'int(11) NOT NULL DEFAULT 0');
+	}
+};
+
+$down = function () use ($db) {
+	if ($db->hasTable('z_polls')) {
+		$db->dropTable('z_polls;');
+	}
+
+	if ($db->hasTable('z_polls_answers')) {
+		$db->dropTable('z_polls_answers');
+	}
+
+	if ($db->hasColumn('accounts', 'vote')) {
+		$db->dropColumn('accounts', 'vote');
+	}
+};
