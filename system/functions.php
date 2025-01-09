@@ -589,24 +589,12 @@ function template_form()
 {
 	global $template_name;
 
-	$cache = Cache::getInstance();
-	if($cache->enabled())
-	{
-		$tmp = '';
-		if($cache->fetch('templates', $tmp)) {
-			$templates = unserialize($tmp);
-		}
-		else
-		{
-			$templates = get_templates();
-			$cache->set('templates', serialize($templates), 30);
-		}
-	}
-	else
-		$templates = get_templates();
+	$templates = Cache::remember('templates', 5 * 60, function() {
+		return get_templates();
+	});
 
 	$options = '';
-	foreach($templates as $key => $value)
+	foreach($templates as $value)
 		$options .= '<option ' . ($template_name == $value ? 'SELECTED' : '') . '>' . $value . '</option>';
 
 	global $twig;
