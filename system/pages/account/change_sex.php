@@ -59,7 +59,7 @@ else
 							$new_sex_str = $config['genders'][$new_sex];
 
 						$player->save();
-						$account_logged->setCustomField("premium_points", $points - $config['account_change_character_name_points']);
+						$account_logged->setCustomField('premium_points', $points - $config['account_change_character_sex_points']);
 						$account_logged->logAction('Changed sex on character <b>' . $player->getName() . '</b> from <b>' . $old_sex_str . '</b> to <b>' . $new_sex_str . '</b>.');
 						$twig->display('success.html.twig', array(
 							'title' => 'Character Sex Changed',
