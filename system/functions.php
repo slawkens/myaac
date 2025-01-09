@@ -1090,20 +1090,16 @@ function csrfProtect(): void
 	}
 }
 
-function getTopPlayers($limit = 5) {
+function getTopPlayers($limit = 5, $skill = 'level') {
 	global $db;
 
-	$cache = Cache::getInstance();
-	if($cache->enabled()) {
-		$tmp = '';
-		if($cache->fetch('top_' . $limit . '_level', $tmp)) {
-			$players = unserialize($tmp);
-		}
+	if ($skill === 'level') {
+		$skill = 'experience';
 	}
 
-	if (!isset($players)) {
+	return Cache::remember("top_{$limit}_{$skill}", 2 * 60, function () use ($db, $limit, $skill) {
 		$columns = [
-			'id', 'name', 'level', 'vocation', 'experience',
+			'id', 'name', 'level', 'vocation', 'experience', 'balance',
 			'looktype', 'lookhead', 'lookbody', 'looklegs', 'lookfeet'
 		];
 
@@ -1115,14 +1111,14 @@ function getTopPlayers($limit = 5) {
 			$columns[] = 'online';
 		}
 
-		$players = Player::query()
+		return Player::query()
 			->select($columns)
 			->withOnlineStatus()
 			->notDeleted()
 			->where('group_id', '<', setting('core.highscores_groups_hidden'))
 			->whereNotIn('id', setting('core.highscores_ids_hidden'))
 			->where('account_id', '!=', 1)
-			->orderByDesc('experience')
+			->orderByDesc($skill)
 			->limit($limit)
 			->get()
 			->map(function ($e, $i) {
@@ -1134,13 +1130,7 @@ function getTopPlayers($limit = 5) {
 
 				return $row;
 			})->toArray();
-
-		if($cache->enabled()) {
-			$cache->set('top_' . $limit . '_level', serialize($players), 120);
-		}
-	}
-
-	return $players;
+	});
 }
 
 function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
