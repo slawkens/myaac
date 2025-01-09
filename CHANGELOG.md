@@ -12,7 +12,7 @@
 * XSS in forum (https://github.com/slawkens/myaac/commit/580b888b1dd1317d7ccf5f888536159c3bfe4324)
 * move_thread by unauthorized user (https://github.com/slawkens/myaac/commit/19d3e15c114de65ef6c379e4da66d32138a0e7c4)
 * change sex wrong price deducted (https://github.com/slawkens/myaac/commit/39b19ed4c8724385ee80f7d02219e84f6b3f5d95)
-* fix for TFS 1.4.2 exception on creating character, where conditions column is NULL,  (https://github.com/slawkens/myaac/commit/5a68d204bb24392d424efde4133b0a3222e788bb)
+* fix for TFS 1.4.2 exception on creating character, where conditions column is NULL (https://github.com/slawkens/myaac/commit/5a68d204bb24392d424efde4133b0a3222e788bb)
 
 ## [0.8.20 - 26.11.2024]
 
