@@ -8,7 +8,7 @@
 // the size of ipv6 can be maximal 45 chars
 
 $up = function () use ($db) {
-	$db->modifyColumn(TABLE_PREFIX . 'visitors', 'ip', 'VARCHAR(15) NOT NULL');
+	$db->modifyColumn(TABLE_PREFIX . 'visitors', 'ip', 'VARCHAR(45) NOT NULL');
 };
 
 $down = function () {
