@@ -80,6 +80,10 @@ class Player extends Model {
 		});
 	}
 
+	public function getOutfitUrlAttribute() {
+		return setting('core.outfit_images_url') . '?id=' . $this->looktype . (!empty($this->lookaddons) ? '&addons=' . $this->lookaddons : '') . '&head=' . $this->lookhead . '&body=' . $this->lookbody . '&legs=' . $this->looklegs . '&feet=' . $this->lookfeet;
+	}
+
 	public function getOnlineStatusAttribute()
 	{
 		global $db;

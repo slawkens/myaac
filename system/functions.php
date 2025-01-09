@@ -1125,6 +1125,7 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 				$row = $e->toArray();
 				$row['online'] = $e->online_status;
 				$row['rank'] = $i + 1;
+				$row['outfit_url'] = $e->outfit_url;
 
 				unset($row['online_table']);
 
