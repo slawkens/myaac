@@ -95,7 +95,7 @@ else {
 		unset($file);
 
 		if ($cache->enabled()) {
-			$cache->set('template_ini_' . $template_name, serialize($template_ini));
+			$cache->set('template_ini_' . $template_name, serialize($template_ini), 10 * 60);
 		}
 	}
 }
