@@ -10,6 +10,7 @@
 
 use MyAAC\Cache\Cache;
 use MyAAC\Models\Menu;
+use MyAAC\Plugins;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Menus';
@@ -20,6 +21,8 @@ if (!hasFlag(FLAG_CONTENT_MENUS) && !superAdmin()) {
 	echo 'Access denied.';
 	return;
 }
+
+$pluginThemes = Plugins::getThemes();
 
 if (isset($_POST['template'])) {
 	$template = $_POST['template'];
@@ -64,9 +67,16 @@ if (isset($_POST['template'])) {
 		success('Saved at ' . date('H:i'));
 	}
 
-	$file = TEMPLATES . $template . '/config.php';
-	if (file_exists($file)) {
-		require_once $file;
+	$path = TEMPLATES . $template;
+
+	if (isset($pluginThemes[$template])) {
+		$path = BASE . $pluginThemes[$template];
+	}
+
+	$path .= '/config.php';
+
+	if (file_exists($path)) {
+		require_once $path;
 	} else {
 		echo 'Cannot find template config.php file.';
 		return;
@@ -169,8 +179,13 @@ if (isset($_POST['template'])) {
 } else {
 	$templates = Menu::select('template')->distinct()->get()->toArray();
 	foreach ($templates as $key => $value) {
-		$file = TEMPLATES . $value['template'] . '/config.php';
-		if (!file_exists($file)) {
+		$path = TEMPLATES . $value['template'];
+
+		if (isset($pluginThemes[$value['template']])) {
+			$path = BASE . $pluginThemes[$value['template']];
+		}
+
+		if (!file_exists($path . '/config.php')) {
 			unset($templates[$key]);
 		}
 	}
