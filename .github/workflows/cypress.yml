@@ -1,9 +1,9 @@
 name: Cypress
 on:
   pull_request:
-    branches: [develop]
+    branches: [master]
   push:
-    branches: [develop]
+    branches: [master]
 
 jobs:
   cypress:
@@ -35,7 +35,7 @@ jobs:
         - name: Checkout MyAAC
           uses: actions/checkout@v4
           with:
-            ref: develop
+            ref: master
 
         - uses: actions/setup-node@v4
           with:
