@@ -4,7 +4,7 @@ const YOU_ARE_NOT_LOGGEDIN = 'You are not logged in.';
 describe('Check Protected Pages', () => {
 
 	// character actions
-	it('Go to accouht character creation page', () => {
+	it('Go to account character creation page', () => {
 		cy.visit({
 			url: Cypress.env('URL') + '/account/character/create',
 			method: 'GET',
@@ -12,7 +12,7 @@ describe('Check Protected Pages', () => {
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
 	})
 
-	it('Go to accouht character deletion page', () => {
+	it('Go to account character deletion page', () => {
 		cy.visit({
 			url: Cypress.env('URL') + '/account/character/delete',
 			method: 'GET',
@@ -21,7 +21,7 @@ describe('Check Protected Pages', () => {
 	})
 
 	// account actions
-	it('Go to accouht email change page', () => {
+	it('Go to account email change page', () => {
 		cy.visit({
 			url: Cypress.env('URL') + '/account/email',
 			method: 'GET',
@@ -29,7 +29,7 @@ describe('Check Protected Pages', () => {
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
 	})
 
-	it('Go to accouht password change page', () => {
+	it('Go to account password change page', () => {
 		cy.visit({
 			url: Cypress.env('URL') + '/account/password',
 			method: 'GET',
@@ -37,7 +37,7 @@ describe('Check Protected Pages', () => {
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
 	})
 
-	it('Go to accouht info change page', () => {
+	it('Go to account info change page', () => {
 		cy.visit({
 			url: Cypress.env('URL') + '/account/info',
 			method: 'GET',
@@ -45,7 +45,7 @@ describe('Check Protected Pages', () => {
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
 	})
 
-	it('Go to accouht logout change page', () => {
+	it('Go to account logout change page', () => {
 		cy.visit({
 			url: Cypress.env('URL') + '/account/logout',
 			method: 'GET',
