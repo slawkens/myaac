@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.1 - 13.01.2025]
+## [1.0.1 - 14.01.2025]
 
 ### Fixed
 * tibiacom account & news menu links not auto expanding
