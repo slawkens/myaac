@@ -1,9 +1,9 @@
 name: PHP Linting
 on:
   pull_request:
-    branches: [develop]
+    branches: [master]
   push:
-    branches: [develop]
+    branches: [master]
 
 jobs:
   phplint:
