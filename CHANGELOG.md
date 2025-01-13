@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.1 - 13.01.2025]
+
+### Fixed
+* tibiacom account & news menu links not auto expanding
+
+### Updated (Thanks dependabot)
+* twig from ^2.0 to ^3.11
+* tinymce from ^6.8.3 to ^7.2.0
+* cypress from ^12.12.0 to ^13.17.0
+* nesbot/carbon from 2.72.5 to 2.72.6
+
 ## [1.0 - 12.01.2025]
 
 First stable release in the v1.0 series.
