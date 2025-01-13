@@ -88,7 +88,7 @@ if(isset($_GET['archive']))
 	foreach($news_DB as $news)
 	{
 		$newses[] = array(
-			'link' => getLink('news') . '/' . $news['id'],
+			'link' => getLink('news/archive') . '/' . $news['id'],
 			'icon_id' => $categories[$news['category']]['icon_id'],
 			'title' => stripslashes($news['title']),
 			'date' => $news['date']

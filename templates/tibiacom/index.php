@@ -35,6 +35,16 @@ if(isset($config['boxes']))
 				}
 				else {
 					$tmp = str_replace('/', '_', PAGE);
+					$exp = explode('/', PAGE);
+					if(PAGE !== 'account/create' && PAGE !== 'account/lost' && isset($exp[1])) {
+						if ($exp[0] === 'account') {
+							$tmp = 'account_manage';
+						} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
+							$tmp = 'news_archive';
+						}
+						else
+							$tmp = $exp[0];
+					}
 				}
 			}
 			else {
