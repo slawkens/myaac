@@ -49,7 +49,7 @@ function warning($message, $return = false) {
 	return message($message, 'warning', $return);
 }
 function note($message, $return = false) {
-	return info($message, $return);
+	return message($message, 'note', $return);
 }
 function info($message, $return = false) {
 	return message($message, 'info', $return);
