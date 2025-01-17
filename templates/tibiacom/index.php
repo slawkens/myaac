@@ -42,8 +42,6 @@ if(isset($config['boxes']))
 						} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
 							$tmp = 'news_archive';
 						}
-						else
-							$tmp = $exp[0];
 					}
 				}
 			}
