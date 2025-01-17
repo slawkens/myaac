@@ -326,14 +326,22 @@ if(isset($config['boxes']))
 <?php
 $menus = get_template_menus();
 
-$countElements = count($config['menu_categories']);
+$countElements = 0;
+foreach($config['menu_categories'] as $id => $cat) {
+	if (!isset($menus[$id]) || ($id == MENU_CATEGORY_SHOP && !setting('core.gifts_system'))) {
+		continue;
+	}
+
+	$countElements++;
+}
+
 $i = 0;
 foreach($config['menu_categories'] as $id => $cat) {
-	$i++;
-
 	if(!isset($menus[$id]) || ($id == MENU_CATEGORY_SHOP && !setting('core.gifts_system'))) {
 		continue;
 	}
+
+	$i++;
 	?>
 <div id='<?php echo $cat['id']; ?>' class='menuitem'>
 	<span onClick="MenuItemAction('<?php echo $cat['id']; ?>')">
@@ -373,7 +381,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 	?>
 	</div>
 	<?php
-	if($id == MENU_CATEGORY_SHOP || (!setting('core.gifts_system') && $i == $countElements - 1)) {
+	if($id == MENU_CATEGORY_SHOP || (!setting('core.gifts_system') && $i == $countElements)) {
 	?>
 		<div id='MenuBottom' style='background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);'></div>
 	<?php
