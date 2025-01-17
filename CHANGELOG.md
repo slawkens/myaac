@@ -140,7 +140,6 @@ Minimum PHP version for this release is 8.1.
 * support for login and create account only by email (configurable)
   * with no need for account name
 * Google ReCAPTCHA v3 support (available as plugin)
-* automatically load towns names from .OTBM file
 * support for Account Number
   * suggest account number option
 * many new functions, hooks and configurables
