@@ -108,6 +108,8 @@ class OTS_Player extends OTS_Row_DAO
 		POT::SKILL_SHIELD => array('value' => 0, 'tries' => 0),
 		POT::SKILL_FISH => array('value' => 0, 'tries' => 0)
 	);
+
+	private static array $playersOnline;
 /**
  * Magic PHP5 method.
  *
@@ -765,10 +767,18 @@ class OTS_Player extends OTS_Row_DAO
 
 	public function isOnline()
 	{
-		if($this->db->hasTable('players_online')) // tfs 1.0
-		{
-			$query = $this->db->query('SELECT `player_id` FROM `players_online` WHERE `player_id` = ' . $this->data['id']);
-			return $query->rowCount() > 0;
+		if($this->db->hasTable('players_online')) {// tfs 1.0
+			if (!isset(self::$playersOnline)) {
+				self::$playersOnline = [];
+
+				$query = $this->db->query('SELECT `player_id` FROM `players_online`');
+
+				foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $item) {
+					self::$playersOnline[$item['player_id']] = true;
+				}
+			}
+
+			return isset(self::$playersOnline[$this->data['id']]);
 		}
 
 		if( !isset($this->data['online']) )
