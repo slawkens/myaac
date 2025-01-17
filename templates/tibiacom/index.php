@@ -115,6 +115,15 @@ if(isset($config['boxes']))
 		menu[0] = {};
 		var unloadhelper = false;
 
+		<?php
+			$menuInitStr = '';
+			foreach ($config['menu_categories'] as $item) {
+				if ($item['id'] !== 'shops' || setting('core.gifts_system')) {
+					$menuInitStr .= $item['id'] . '=' . ($item['id'] === 'news' ? '1' : '0') . '&';
+				}
+			}
+		?>
+
 		// load the menu and set the active submenu item by using the variable 'activeSubmenuItem'
 		function LoadMenu()
 		{
@@ -122,7 +131,7 @@ if(isset($config['boxes']))
 		  document.getElementById("ActiveSubmenuItemIcon_"+activeSubmenuItem).style.visibility = "visible";
 		  menus = localStorage.getItem('menus');
 		  if(menus == null || menus.lastIndexOf("&") === -1) {
-			  menus = "news=1&account=0&community=0&library=0&forum=0<?php if (setting('core.gifts_system')) echo '&shops=0'; ?>&";
+			  menus = "<?= $menuInitStr ?>";
 		  }
 		  FillMenuArray();
 		  InitializeMenu();
