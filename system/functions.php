@@ -1679,4 +1679,7 @@ function getAccountIdentityColumn(): string
 require_once SYSTEM . 'compat/base.php';
 
 // custom functions
-require SYSTEM . 'functions_custom.php';
+$customFunctions = SYSTEM . 'functions_custom.php';
+if (is_file($customFunctions)) {
+	require $customFunctions;
+}
