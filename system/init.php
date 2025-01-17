@@ -74,8 +74,8 @@ if($config_lua_reload) {
 
 	// cache config
 	if($cache->enabled()) {
-		$cache->set('config_lua', serialize($config['lua']), 120);
-		$cache->set('server_path', $config['server_path']);
+		$cache->set('config_lua', serialize($config['lua']), 2 * 60);
+		$cache->set('server_path', $config['server_path'], 10 * 60);
 	}
 }
 unset($tmp);

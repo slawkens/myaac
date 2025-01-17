@@ -221,7 +221,7 @@ if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_stat
 		if(fetchDatabaseConfig('last_usage_report', $value)) {
 			$should_report = time() > (int)$value + $report_time;
 			if($cache->enabled()) {
-				$cache->set('last_usage_report', $value);
+				$cache->set('last_usage_report', $value, 60 * 60);
 			}
 		}
 		else {
@@ -236,7 +236,7 @@ if(isset($config['anonymous_usage_statistics']) && $config['anonymous_usage_stat
 
 		updateDatabaseConfig('last_usage_report', time());
 		if($cache->enabled()) {
-			$cache->set('last_usage_report', time());
+			$cache->set('last_usage_report', time(), 60 * 60);
 		}
 	}
 }
