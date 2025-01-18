@@ -42,7 +42,7 @@ if(isset($config['boxes']))
 						} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
 							$tmp = 'news_archive';
 						}
-						else if (in_array($exp[0], ['characters', 'highscores', 'guilds'])) {
+						else if (in_array($exp[0], ['characters', 'highscores', 'guilds', 'forum'])) {
 							$tmp = $exp[0];
 						}
 					}
