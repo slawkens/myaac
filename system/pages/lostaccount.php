@@ -93,7 +93,7 @@ elseif($action == 'sendcode')
 					$newcode = generateRandomString(30, true, false, true);
 					$mailBody = '
 					You asked to reset your ' . $config['lua']['serverName'] . ' password.<br/>
-					<p>Account name: '.$account->getName().'</p>
+					<p>Account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . ' ' .(USE_ACCOUNT_NAME ? $account->getName() : $account->getId()).'</p>
 					<br />
 					To do so, please click this link:
 					<p><a href="' . BASE_URL . '?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'">'.BASE_URL.'/?subtopic=lostaccount&action=checkcode&code='.$newcode.'&character='.urlencode($nick).'</a></p>
@@ -150,7 +150,7 @@ elseif($action == 'step1' && $action_type == 'reckey')
 			$account_key = $account->getCustomField('key');
 			if(!empty($account_key))
 			{
-						echo 'If you enter right recovery key you will see form to set new e-mail and password to account. To this e-mail will be send your new password and account name.<BR>
+						echo 'If you enter right recovery key you will see form to set new e-mail and password to account. To this e-mail will be send your new password and account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . '.<BR>
 						<FORM ACTION="?subtopic=lostaccount&action=step2" METHOD=post>
 						<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
 						<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Please enter your recovery key</B></TD></TR>
@@ -304,21 +304,22 @@ elseif($action == 'step3')
 							if($config_salt_enabled)
 								$account->setCustomField('salt', $salt);
 
-							echo 'Your account name, new password and new e-mail.<BR>
+							echo 'Your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ', new password and new e-mail.<BR>
 							<FORM ACTION="?subtopic=accountmanagement" onsubmit="return validate_form(this)" METHOD=post>
 							<INPUT TYPE=hidden NAME="character" VALUE="">
 							<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
-							<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Your account name, new password and new e-mail</B></TD></TR>
+							<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Your account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . ', new password and new e-mail</B></TD></TR>
 							<TR><TD BGCOLOR="'.$config['darkborder'].'">
-							Account name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>'.$account->getName().'</b><BR>
+							Account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . ':&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>'.(USE_ACCOUNT_NAME ? $account->getName() : $account->getId()).'</b><BR>
 							New password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>'.$new_pass.'</b><BR>
 							New e-mail address:&nbsp;<b>'.$new_email.'</b><BR>';
+
 							if($account->getCustomField('email_next') < time())
 							{
 								$mailBody = '
-								<h3>Your account name and new password!</h3>
+								<h3>Your account ' . (USE_ACCOUNT_NAME ? 'name' : 'number') . ' and new password!</h3>
 								<p>Changed password and e-mail to your account in Lost Account Interface on server <a href="'.BASE_URL.'"><b>'.$config['lua']['serverName'].'</b></a></p>
-								<p>Account name: <b>'.$account->getName().'</b></p>
+								<p>Account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . ': <b>'.(USE_ACCOUNT_NAME ? $account->getName() : $account->getId()).'</b></p>
 								<p>New password: <b>'.$new_pass.'</b></p>
 								<p>E-mail: <b>'.$new_email.'</b> (this e-mail)</p>
 								<br />
@@ -326,7 +327,7 @@ elseif($action == 'step3')
 
 								if(_mail($account->getCustomField('email'), $config['lua']['serverName']." - New password to your account", $mailBody))
 								{
-									echo '<br /><small>Sent e-mail with your account name and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!</small>';
+									echo '<br /><small>Sent e-mail with your account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . ' and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!</small>';
 								}
 								else
 								{
@@ -423,7 +424,7 @@ elseif($action == 'checkcode')
 				<INPUT TYPE=hidden NAME="character" VALUE="'.$character.'">
 				<INPUT TYPE=hidden NAME="code" VALUE="'.$code.'">
 				<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
-				<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Code & account name</B></TD></TR>
+				<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Code & account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . '</B></TD></TR>
 				<TR><TD BGCOLOR="'.$config['darkborder'].'">
 				New password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE=password ID="passor" NAME="passor" VALUE="" SIZE="40")><BR />
 				Repeat new password:&nbsp;<INPUT TYPE=password ID="passor2" NAME="passor2" VALUE="" SIZE="40")><BR />
@@ -497,19 +498,19 @@ elseif($action == 'setnewpassword')
 					<TR><TD BGCOLOR="'.$config['vdarkborder'].'" class="white"><B>Changed password</B></TD></TR>
 					<TR><TD BGCOLOR="'.$config['darkborder'].'">
 					New password:&nbsp;<b>'.$newpassword.'</b><BR />
-					Account name:&nbsp;&nbsp;&nbsp;<i>(Already on your e-mail)</i><BR />';
+					Account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . ':&nbsp;&nbsp;&nbsp;<i>(Already on your e-mail)</i><BR />';
 
 					$mailBody = '
-					<h3>Your account name and password!</h3>
+					<h3>Your account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . ' and password!</h3>
 					<p>Changed password to your account in Lost Account Interface on server <a href="'.BASE_URL.'"><b>'.$config['lua']['serverName'].'</b></a></p>
-					<p>Account name: <b>'.$account->getName().'</b></p>
+					<p>Account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . ': <b>'.(USE_ACCOUNT_NAME ? $account->getName() : $account->getId()).'</b></p>
 					<p>New password: <b>'.$newpassword.'</b></p>
 					<br />
 					<p><u>It\'s automatic e-mail from OTS Lost Account System. Do not reply!</u></p>';
 
 					if(_mail($account->getCustomField('email'), $config['lua']['serverName']." - Your new password", $mailBody))
 					{
-						echo '<br /><small>New password work! Sent e-mail with your password and account name. You should receive this e-mail in 15 minutes. You can login now with new password!';
+						echo '<br /><small>New password work! Sent e-mail with your password and account ' . (USE_ACCOUNT_NAME ? 'Name' : 'Number') . '. You should receive this e-mail in 15 minutes. You can login now with new password!';
 					}
 					else
 					{
