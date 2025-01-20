@@ -1057,14 +1057,14 @@ function get_browser_real_ip() {
 
 	return '0';
 }
-function setSession($key, $data) {
+function setSession($key, $data): void {
 	$_SESSION[setting('core.session_prefix') . $key] = $data;
 }
 function getSession($key) {
 	$key = setting('core.session_prefix') . $key;
-	return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
+	return $_SESSION[$key] ?? false;
 }
-function unsetSession($key) {
+function unsetSession($key): void {
 	unset($_SESSION[setting('core.session_prefix') . $key]);
 }
 
