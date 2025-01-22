@@ -156,8 +156,13 @@ if ($db->hasTable('guilds')) {
 	}
 
 	if (!$db->hasColumn('guilds', 'description')) {
-		if (query("ALTER TABLE `guilds` ADD `description` TEXT NOT NULL;"))
+		if (query("ALTER TABLE `guilds` ADD `description` VARCHAR(5000) NOT NULL DEFAULT '';"))
 			success($locale['step_database_adding_field'] . ' guilds.description...');
+	}
+	else {
+		if (query("ALTER TABLE `guilds` MODIFY `description` VARCHAR(5000) NOT NULL DEFAULT '';")) {
+			success($locale['step_database_modifying_field'] . ' guilds.description...');
+		}
 	}
 
 	if ($db->hasColumn('guilds', 'logo_gfx_name')) {
@@ -197,8 +202,13 @@ if ($db->hasTable('players')) {
 	}
 
 	if (!$db->hasColumn('players', 'comment')) {
-		if (query("ALTER TABLE `players` ADD `comment` TEXT NOT NULL;"))
+		if (query("ALTER TABLE `players` ADD `comment` VARCHAR(5000) NOT NULL DEFAULT '';"))
 			success($locale['step_database_adding_field'] . ' players.comment...');
+	}
+	else {
+		if (query("ALTER TABLE `players` MODIFY `comment` VARCHAR(5000) NOT NULL DEFAULT '';")) {
+			success($locale['step_database_modifying_field'] . ' players.comment...');
+		}
 	}
 
 	if ($db->hasColumn('players', 'rank_id')) {
