@@ -139,7 +139,7 @@ require_once SYSTEM . 'database.php';
 
 // verify myaac tables exists in database
 if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {
-	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting ' . BASE_URL . 'install');
+	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting ' . (IS_CLI ? 'http://your-ip.com/' : BASE_URL) . 'install');
 }
 
 // execute migrations
