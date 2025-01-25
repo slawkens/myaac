@@ -547,33 +547,39 @@ function template_header($is_admin = false): string
  */
 function template_footer(): string
 {
-	global $views_counter;
-	$ret = '';
+	$footer = [];
+
 	if(admin()) {
-		$ret .= generateLink(ADMIN_URL, 'Admin Panel', true);
+		$footer[] = generateLink(ADMIN_URL, 'Admin Panel', true);
 	}
 
 	if(setting('core.visitors_counter')) {
 		global $visitors;
 		$amount = $visitors->getAmountVisitors();
-		$ret .= '<br/>Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
+		$footer[] = 'Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
 	}
 
 	if(setting('core.views_counter')) {
-		$ret .= '<br/>Page has been viewed ' . $views_counter . ' times.';
+		global $views_counter;
+		$footer[] = 'Page has been viewed ' . $views_counter . ' times.';
 	}
 
 	if(setting('core.footer_load_time')) {
-		$ret .= '<br/>Load time: ' . round(microtime(true) - START_TIME, 4) . ' seconds.';
+		$footer[] = 'Load time: ' . round(microtime(true) - START_TIME, 4) . ' seconds.';
 	}
 
 	$settingFooter = setting('core.footer');
 	if(isset($settingFooter[0])) {
-		$ret .= '<br/>' . $settingFooter;
+		$footer[] = '' . $settingFooter;
 	}
 
 	// please respect my work and help spreading the word, thanks!
-	return $ret . '<br/>' . base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
+	$footer[] = base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
+
+	global $hooks;
+	$footer = $hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
+
+	return implode('<br/>', $footer);
 }
 
 function template_ga_code()
