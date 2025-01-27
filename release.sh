@@ -22,7 +22,7 @@ if [ $1 = "prepare" ]; then
 	mkdir -p tmp
 
 	# get myaac from git archive
-	git archive --format zip --output tmp/myaac.zip master
+	git archive --format zip --output tmp/myaac.zip 0.8
 
 	cd tmp/ || exit
 
