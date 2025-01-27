@@ -10,12 +10,12 @@ Official website: https://my-aac.org
 [![OpenTibia Discord](https://img.shields.io/discord/288399552581468162)](https://discord.gg/2J39Wus)
 [![Closed Issues](https://img.shields.io/github/issues-closed-raw/slawkens/myaac)](https://github.com/slawkens/myaac/issues?q=is%3Aissue+is%3Aclosed)
 
-| Version | Status                 | Branch  | Requirements   |
-|:--------|:-----------------------|:--------|:---------------|
-| **1.x** | **Active development** | develop | **PHP >= 8.1** |
-| 0.9.x   | Not developed anymore  | 0.9     | PHP >= 7.2.5   |
-| 0.8.x   | Active support         | master  | PHP >= 7.2.5   |
-| 0.7.x   | End Of Life            | 0.7     | PHP >= 5.3.3   |
+| Version | Status                 | Branch | Requirements   |
+|:--------|:-----------------------|:-------|:---------------|
+| **1.x** | **Active development** | master | **PHP >= 8.1** |
+| 0.9.x   | Not developed anymore  | 0.9    | PHP >= 7.2.5   |
+| 0.8.x   | Active support         | 0.8    | PHP >= 7.2.5   |
+| 0.7.x   | End Of Life            | 0.7    | PHP >= 5.3.3   |
 
 ### Requirements
 
