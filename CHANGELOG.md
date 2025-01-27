@@ -10,7 +10,7 @@
 
 ### Fixed
 * general fixes in the tibiacom template menus, better support for custom menus
-* make functions_custom.php optional
+* make functions_custom.php optional (https://github.com/slawkens/myaac/commit/dc2b5afd9980984e2b259c9fc99f2ade46f70a5a)
 * error in CLI, where BASE_URL is not defined (https://github.com/slawkens/myaac/commit/4d749b881582f64b5a46196dbbb5ee8097127f03)
 * hook ACCOUNT_LOGIN_BEFORE_ACCOUNT location (https://github.com/slawkens/myaac/commit/669c447fca8643ce56d9ef8c1374ec647c780998)
 
