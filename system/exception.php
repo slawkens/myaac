@@ -37,7 +37,7 @@ function exception_handler($exception) {
 	}
 
 	// display beautiful error message
-	// the file is .twig.html, but its not really parsed by Twig
+	// the file is .twig.html, but it's not really parsed by Twig
 	// we just replace some values manually
 	// cause in case Twig throws exception, we can show it too
 	$content = file_get_contents($template_file);
