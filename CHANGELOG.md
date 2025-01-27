@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.8.22 - 27.01.2025]
+
+### Changed
+* Better exception handler, which clears the whole html output, so the message is better visible + better style (https://github.com/slawkens/myaac/commit/c304a9ab43bf0bda41907db3e6f65293350640a2 + https://github.com/slawkens/myaac/commit/7abc3c78334d44fb64684b26d8a305d0fe676caa)
+* Optimize $player->isOnline() function, thanks @gesior (https://github.com/slawkens/myaac/commit/7c3ebf70fa4751af986be7b46ee3530d4875271e)
+* All $cache->set calls should have $ttl (https://github.com/slawkens/myaac/commit/37ba9c7366139778d09d1316d7cb49a255165778)
+
+### Fixed
+* exception in lostaccount.php - $account->getName() (https://github.com/slawkens/myaac/commit/d390ea325e2dbfd87a830cfe40991f58e07a87a1)
+
 ## [0.8.21 - 09.01.2025]
 
 ### Added
