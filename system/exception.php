@@ -43,6 +43,7 @@ function exception_handler($exception) {
 	$content = file_get_contents($template_file);
 	$content = str_replace(array('{{ BASE_URL }}', '{{ exceptionClass }}', '{{ message }}', '{{ backtrace }}', '{{ powered_by }}'), array(BASE_URL, get_class($exception), $message, $backtrace_formatted, base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=')), $content);
 
+	@ob_clean();
 	echo $content;
 }
 

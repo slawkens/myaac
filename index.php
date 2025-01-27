@@ -24,6 +24,7 @@
  * @link      https://my-aac.org
  */
 
+ob_start();
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';
 
