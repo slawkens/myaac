@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1 - 27.01.2025]
+
+### Changed
+* adjust mailer settings descriptions to latest gmail (https://github.com/slawkens/myaac/commit/c5d5bb80671db135e6b503f53684771c7272e05d)
+* optimize $player->isOnline() function, thanks @gesior (https://github.com/slawkens/myaac/commit/10dd818b139d5e1bb1ca9ec81edfb083ba9316b4)
+* make players.comment and guilds.description VARCHAR (https://github.com/slawkens/myaac/commit/a45ceab83a74bee2b89cdb72baceda75e577e3cf)
+* add lua/ folder to .gitignore (https://github.com/slawkens/myaac/commit/07012f786b1114cb6ab2f064f82c645b136a375a)
+
+### Fixed
+* general fixes in the tibiacom template menus, better support for custom menus
+* make functions_custom.php optional
+* error in CLI, where BASE_URL is not defined (https://github.com/slawkens/myaac/commit/4d749b881582f64b5a46196dbbb5ee8097127f03)
+* hook ACCOUNT_LOGIN_BEFORE_ACCOUNT location (https://github.com/slawkens/myaac/commit/669c447fca8643ce56d9ef8c1374ec647c780998)
+
 ## [1.0.1 - 14.01.2025]
 
 ### Fixed
