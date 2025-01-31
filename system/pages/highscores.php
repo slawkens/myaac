@@ -234,10 +234,6 @@ foreach($highscores as $id => &$player)
 			$player['experience'] = number_format($player['experience']);
 		}
 
-		if(!$settingHighscoresVocation) {
-			unset($player['vocation']);
-		}
-
 		$player['link'] = getPlayerLink($player['name'], false);
 		$player['flag'] = getFlagImage($player['country']);
 		if($settingHighscoresOutfit) {

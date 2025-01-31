@@ -1107,10 +1107,6 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 			$columns[] = 'lookaddons';
 		}
 
-		if ($db->hasColumn('players', 'online')) {
-			$columns[] = 'online';
-		}
-
 		return Player::query()
 			->select($columns)
 			->withOnlineStatus()

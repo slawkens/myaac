@@ -49,8 +49,8 @@ class Player extends Model {
 	public function getVocationNameAttribute()
 	{
 		$vocation = $this->vocation;
-		if (isset($this->promotion)) {
-			$vocation *= $this->promotion;
+		if (isset($this->promotion) && $this->promotion > 0) {
+			$vocation += ($this->promotion * setting('core.vocations_amount'));
 		}
 
 		return config('vocations')[$vocation] ?? 'Unknown';
@@ -80,11 +80,17 @@ class Player extends Model {
 		$query->where($column, 0);
 	}
 
-	public function scopeWithOnlineStatus($query) {
+	public function scopeWithOnlineStatus($query)
+	{
 		global $db;
-		$query->when($db->hasTable('players_online'), function ($query) {
-			$query->with('onlineTable');
-		});
+		if ($db->hasColumn('players', 'online')) {
+			$query->addSelect('online');
+		}
+		else {
+			$query->when($db->hasTable('players_online'), function ($query) {
+				$query->with('onlineTable');
+			});
+		}
 	}
 
 	public function getOutfitUrlAttribute() {
