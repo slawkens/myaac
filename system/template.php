@@ -41,7 +41,7 @@ if(setting('core.template_allow_change'))
 	}
 	else {
 		$template_session = getSession('template');
-		if ($template_session !== false) {
+		if ($template_session) {
 			if (!preg_match("/[^A-z0-9_\-]/", $template_session)) {
 				$template_name = $template_session;
 			}

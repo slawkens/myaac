@@ -1057,15 +1057,34 @@ function get_browser_real_ip() {
 
 	return '0';
 }
-function setSession($key, $data): void {
-	$_SESSION[setting('core.session_prefix') . $key] = $data;
+function setSession($key, $value = null): void {
+	if (!is_array($key)) {
+		$key = [$key => $value];
+	}
+
+	foreach ($key as $arrayKey => $arrayValue) {
+		if (is_null($arrayValue)) {
+			unsetSession($arrayKey);
+		}
+		else {
+			$_SESSION[setting('core.session_prefix') . $arrayKey] = $arrayValue;
+		}
+	}
 }
 function getSession($key) {
-	$key = setting('core.session_prefix') . $key;
-	return $_SESSION[$key] ?? false;
+	return $_SESSION[setting('core.session_prefix') . $key] ?? null;
 }
 function unsetSession($key): void {
 	unset($_SESSION[setting('core.session_prefix') . $key]);
+}
+
+function session($key): mixed {
+	if (is_array($key)) {
+		setSession($key);
+		return null;
+	}
+
+	return getSession($key);
 }
 
 function csrf(bool $return = false): string {

@@ -140,6 +140,11 @@ $function = new TwigFunction('csrfToken', function () {
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('session', function ($key) {
+	return session($key);
+});
+$twig->addFunction($function);
+
 $filter = new TwigFilter('urlencode', function ($s) {
 	return urlencode($s);
 });

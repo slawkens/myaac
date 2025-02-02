@@ -1,5 +1,10 @@
 # Changelog
 
+## [master - 02.02.2025]
+
+### Added
+* Twig session(key) function + reworked session functions to accept multi-array like in Laravel
+
 ## [1.1 - 27.01.2025]
 
 ### Changed
