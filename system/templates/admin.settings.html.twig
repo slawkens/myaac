@@ -109,3 +109,26 @@
 		});
 	});
 </script>
+<script>
+{% for key, value in settings %}
+	{% if value.type == 'password' %}
+			$(function () {
+				$('#show-hide-{{ key}} a').on('click', function(event) {
+					event.preventDefault();
+
+					const $showHideIcon = $('#show-hide-{{ key}} i');
+					const $showHideInput = $('#show-hide-{{ key }} input');
+					if($showHideInput.attr('type') === 'text'){
+						$showHideInput.attr('type', 'password');
+						$showHideIcon.addClass('fa-eye-slash');
+						$showHideIcon.removeClass('fa-eye');
+					}else if($showHideInput.attr("type") === 'password'){
+						$showHideInput.attr('type', 'text');
+						$showHideIcon.removeClass('fa-eye-slash');
+						$showHideIcon.addClass('fa-eye');
+					}
+				});
+			});
+	{% endif %}
+{% endfor %}
+</script>

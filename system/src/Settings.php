@@ -247,7 +247,15 @@ class Settings implements \ArrayAccess
 						$min = $max = $step = '';
 					}
 
+					if ($setting['type'] === 'password') {
+						echo '<div class="input-group" id="show-hide-' . $key . '">';
+					}
+
 					echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . ($settingsDb[$key] ?? ($setting['default'] ?? '')) . '" id="' . $key . '"' . $min . $max . $step . '/>';
+
+					if ($setting['type'] === 'password') {
+						echo '<div class="input-group-append input-group-text"><a href=""><i class="fas fa-eye-slash" ></i></a></div></div>';
+					}
 				}
 
 				else if($setting['type'] === 'textarea') {

@@ -348,7 +348,7 @@ return [
 		],
 		'database_password' => [
 			'name' => 'Database Password',
-			'type' => 'text',
+			'type' => 'password',
 			'default' => '',
 			'show_if' => [
 				'database_overwrite', '=', 'true'
