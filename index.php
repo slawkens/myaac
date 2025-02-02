@@ -76,6 +76,8 @@ require_once SYSTEM . 'status.php';
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
 
+$hooks->trigger(HOOK_STARTUP);
+
 // backward support for gesior
 if(setting('core.backward_support')) {
 	define('INITIALIZED', true);
@@ -116,8 +118,6 @@ if(setting('core.backward_support')) {
 }
 
 require_once SYSTEM . 'router.php';
-
-$hooks->trigger(HOOK_STARTUP);
 
 // anonymous usage statistics
 // sent only when user agrees
