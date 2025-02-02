@@ -5,6 +5,7 @@ const SKILL_BALANCE = -2;
 
 $i = 0;
 
+define('HOOK_INIT', ++$i);
 define('HOOK_STARTUP', ++$i);
 define('HOOK_BEFORE_PAGE', ++$i);
 define('HOOK_AFTER_PAGE', ++$i);
@@ -96,7 +97,7 @@ define('HOOK_CACHE_CLEAR', ++$i);
 define('HOOK_INSTALL_FINISH', ++$i);
 define('HOOK_INSTALL_FINISH_END', ++$i);
 
-const HOOK_FIRST = HOOK_STARTUP;
+const HOOK_FIRST = HOOK_INIT;
 define('HOOK_LAST', $i);
 
 function is_sub_dir($path = NULL, $parent_folder = BASE): bool|string

@@ -50,6 +50,7 @@ $cache = Cache::getInstance();
 global $hooks;
 $hooks = new Hooks();
 $hooks->load();
+$hooks->trigger(HOOK_INIT);
 
 // twig
 require_once SYSTEM . 'twig.php';
