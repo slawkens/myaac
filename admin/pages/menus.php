@@ -108,44 +108,18 @@ if (isset($_POST['template'])) {
 
 	$title = 'Menus - ' . $template;
 
-	$canChangeColor = isset($config['menu_default_color']);
+	$canResetColors = isset($config['menu_default_color']);
 	foreach ($config['menu_categories'] as $id => $options) {
 		if (isset($options['default_links_color'])) {
-			$canChangeColor = true;
+			$canResetColors = true;
 		}
 	}
+
+	$twig->display('admin.menus.header.html.twig', [
+		'template' => $template,
+		'canResetColors' => $canResetColors
+	]);
 	?>
-	<div align="center" class="text-center">
-		<p class="note">You are editing: <?= $template ?><br/><br/>
-			Hint: You can drag menu items.<br/>
-			Hint: Add links to external sites using: <b>http://</b> or <b>https://</b> prefix.<br/>
-			Not all templates support blank and colorful links.
-		</p>
-		<div class="row text-center">
-			<div class="col-md-2 col-sm-1"></div>
-			<div class="col-md-8 col-sm-10">
-				<div class="row justify-content-center">
-					<?php if (isset($config['menus'])) {?>
-						<form method="post" action="?p=menus&reset_menus" onsubmit="return confirm('Do you really want to reset menus?');">
-							<?php csrf(); ?>
-							<input type="hidden" name="template" value="<?php echo $template ?>"/>
-							<button type="submit" class="btn btn-danger">Reset Menus to default</button>
-						</form>
-						<br/>
-					<?php } ?>
-					<?php if ($canChangeColor) {?>
-						<form method="post" action="?p=menus&reset_colors" onsubmit="return confirm('Do you really want to reset colors?');">
-							<?php csrf(); ?>
-							<input type="hidden" name="template" value="<?php echo $template ?>"/>
-							<button type="submit" class="btn btn-warning" style="margin-left: 20px">Reset Colors to default</button>
-						</form>
-						<br/>
-					<?php } ?>
-				</div>
-			</div>
-			<div class="col-md-2 col-sm-1"></div>
-		</div>
-	</div>
 	<?php
 	$menus = Menu::query()
 		->select('name', 'link', 'blank', 'color', 'category', 'ordering')
