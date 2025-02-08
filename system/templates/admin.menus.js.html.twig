@@ -1,9 +1,16 @@
 <link type="text/css" rel="stylesheet" href="{{ constant('BASE_URL') }}tools/ext/jquery-ui/themes/base/jquery-ui.min.css">
 <script>
-	var last_id = [];
+	let last_id = [];
+	let colors = [];
+
 	{% for cat, menu in menus %}
 	last_id[{{ cat }}] = {{ last_id[cat] }};
 	{% endfor %}
+
+	{% for cat, options in config('menu_categories') %}
+	colors[{{ cat }}] = '{{ options['default_links_color'] ?? config('menu_default_color') }}';
+	{% endfor %}
+
 	$(function () {
 		$(".sortable").sortable();
 		$(".sortable").disableSelection();
@@ -17,7 +24,8 @@
 			var cat = $(this).attr("id").replace('add-button-', '');
 			var id = last_id[cat];
 			last_id[cat]++;
-			$('#sortable-' + cat).append('<li class="ui-state-default" id="list-' + cat + '-' + id + '"><label>Name:</label> <input type="text" name="menu[' + cat + '][]" value=""/> <label>Link:</label> <input type="text" name="menu_link[' + cat + '][]" value=""/><input type="hidden" name="menu_blank[' + cat + '][]" value="0" /> <label><input class="blank-checkbox" type="checkbox"/><span title="Open in New Window">New Window</span></label> <input class="color-picker" type="text" name="menu_color[' + cat + '][]" value="{{ menu_default_color }}" /><a class="remove-button" id="remove-button-' + cat + '-' + id + '"><i class="fas fa-trash"></i></a></li>'); //add input bo
+			const color = colors[cat];
+			$('#sortable-' + cat).append('<li class="ui-state-default" id="list-' + cat + '-' + id + '"><label>Name:</label> <input type="text" name="menu[' + cat + '][]" value=""/> <label>Link:</label> <input type="text" name="menu_link[' + cat + '][]" value=""/><input type="hidden" name="menu_blank[' + cat + '][]" value="0" /> <label><input class="blank-checkbox" type="checkbox"/><span title="Open in New Window">New Window</span></label> <input class="color-picker" type="text" name="menu_color[' + cat + '][]" value="#' + color + '" /><a class="remove-button" id="remove-button-' + cat + '-' + id + '"><i class="fas fa-trash"></i></a></li>'); //add input bo
 			$('#remove-button-' + cat + '-' + id).click(function () {
 				$('#list-' + $(this).attr("id").replace('remove-button-', '')).remove();
 			});

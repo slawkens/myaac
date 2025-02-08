@@ -82,19 +82,23 @@ if (isset($_POST['template'])) {
 		return;
 	}
 
-	if (isset($_GET['reset_colors'])) {
-		if (isset($config['menu_default_color'])) {
-			Menu::where('template', $template)->update(['color' => str_replace('#', '', $config['menu_default_color'])]);
-			success('Colors has been reset.');
-		}
-		else {
-			warning('There is no default color defined, cannot reset colors.');
-		}
-	}
-
 	if (!isset($config['menu_categories'])) {
 		echo "No menu categories set in template config.php.<br/>This template doesn't support dynamic menus.";
 		return;
+	}
+
+	if (isset($_GET['reset_colors'])) {
+		foreach ($config['menu_categories'] as $id => $options) {
+			$color = $options['default_links_color'] ?? $config['menu_default_color'] ?? '#ffffff';
+			Menu::where('template', $template)->where('category', $id)->update(['color' => str_replace('#', '', $color)]);
+		}
+
+		$cache = Cache::getInstance();
+		if ($cache->enabled()) {
+			$cache->delete('template_menus');
+		}
+
+		success('Colors has been reset.');
 	}
 
 	$title = 'Menus - ' . $template;
@@ -143,12 +147,13 @@ if (isset($_POST['template'])) {
 								if (isset($menus[$id])) {
 									$i = 0;
 									foreach ($menus[$id] as $menu):
+										$color = (empty($menu['color']) ? ($cat['default_links_color'] ?? ($config['menu_default_color'] ?? '#ffffff')) : '#' . $menu['color']);
 										?>
 										<li class="ui-state-default" id="list-<?php echo $id ?>-<?php echo $i ?>"><label>Name:</label> <input type="text" name="menu[<?php echo $id ?>][]" value="<?php echo escapeHtml($menu['name']); ?>"/>
 											<label>Link:</label> <input type="text" name="menu_link[<?php echo $id ?>][]" value="<?php echo $menu['link'] ?>"/>
 											<input type="hidden" name="menu_blank[<?php echo $id ?>][]" value="0"/>
 											<label><input class="blank-checkbox" type="checkbox" <?php echo($menu['blank'] == 1 ? 'checked' : '') ?>/><span title="Open in New Window">New Window</span></label>
-											<input class="color-picker" type="text" name="menu_color[<?php echo $id ?>][]" value="<?php echo (empty($menu['color']) ? ($config['menu_default_color'] ?? '#ffffff') : $menu['color']); ?>"/>
+											<input class="color-picker" type="text" name="menu_color[<?php echo $id ?>][]" value="<?php echo $color; ?>"/>
 											<a class="remove-button" id="remove-button-<?php echo $id ?>-<?php echo $i ?>"><i class="fas fa-trash"></a></i></li>
 										<?php $i++; $last_id[$id] = $i;
 									endforeach;
@@ -172,7 +177,6 @@ if (isset($_POST['template'])) {
 	$twig->display('admin.menus.js.html.twig', array(
 		'menus' => $menus,
 		'last_id' => $last_id,
-		'menu_default_color' => $config['menu_default_color'] ?? '#ffffff'
 	));
 	?>
 	<?php

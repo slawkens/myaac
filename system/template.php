@@ -153,17 +153,34 @@ function get_template_menus(): array
 		return $result->toArray();
 	});
 
-	$menus = array();
+	$configMenuCategories = config('menu_categories');
+	$configMenuDefaultColor = config('menu_default_color');
+
+	$menus = [];
 	foreach($result as $menu) {
-		$link_full = strpos(trim($menu['link']), 'http') === 0 ? $menu['link'] : getLink($menu['link']);
-		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'link_full' => $link_full, 'blank' => $menu['blank'] == 1, 'target_blank' => ($menu['blank'] == 1 ? ' target="blank"' : ''), 'color' => $menu['color']);
+		if (empty($menu['link'])) {
+			$menu['link'] = 'news';
+		}
+
+		$link_full = (str_starts_with(trim($menu['link']), 'http') ? $menu['link'] : getLink($menu['link']));
+		$target_blank = ($menu['blank'] == 1 ? ' target="blank"' : '');
+
+		$color = (empty($menu['color']) ? ($configMenuCategories[$menu['category']]['default_links_color'] ?? ($configMenuDefaultColor ?? '')) : $menu['color']);
+		$color = str_replace('#', '', $color);
+		$style_color = (empty($color) ? '' : 'style="color: #' . $color . '"');
+
+		$menus[$menu['category']][] = [
+			'name' => $menu['name'],
+			'link' => $menu['link'], 'link_full' => $link_full,
+			'blank' => $menu['blank'] == 1, 'target_blank' => $target_blank,
+			'color' => $color, 'style_color' => $style_color,
+		];
 	}
 
-	$new_menus = array();
+	$new_menus = [];
 	/**
 	 * @var array $configMenuCategories
 	 */
-	$configMenuCategories = config('menu_categories');
 	if($configMenuCategories === null) {
 		return [];
 	}
