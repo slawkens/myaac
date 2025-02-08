@@ -59,11 +59,7 @@ if (isset($_POST['template'])) {
 			}
 		}
 
-		$cache = Cache::getInstance();
-		if ($cache->enabled()) {
-			$cache->delete('template_menus');
-		}
-
+		onTemplateMenusChange();
 		success('Saved at ' . date('H:i'));
 	}
 
@@ -93,15 +89,31 @@ if (isset($_POST['template'])) {
 			Menu::where('template', $template)->where('category', $id)->update(['color' => str_replace('#', '', $color)]);
 		}
 
-		$cache = Cache::getInstance();
-		if ($cache->enabled()) {
-			$cache->delete('template_menus');
-		}
+		onTemplateMenusChange();
+		success('Colors has been reset at ' . date('H:i'));
+	}
 
-		success('Colors has been reset.');
+	if (isset($_GET['reset_menus'])) {
+		$configMenus = config('menus');
+		if (isset($configMenus)) {
+			Plugins::installMenus($template, config('menus'), true);
+
+			onTemplateMenusChange();
+			success('Menus has been reset at ' . date('H:i'));
+		}
+		else {
+			error("This template don't support reinstalling menus.");
+		}
 	}
 
 	$title = 'Menus - ' . $template;
+
+	$canChangeColor = isset($config['menu_default_color']);
+	foreach ($config['menu_categories'] as $id => $options) {
+		if (isset($options['default_links_color'])) {
+			$canChangeColor = true;
+		}
+	}
 	?>
 	<div align="center" class="text-center">
 		<p class="note">You are editing: <?= $template ?><br/><br/>
@@ -109,14 +121,30 @@ if (isset($_POST['template'])) {
 			Hint: Add links to external sites using: <b>http://</b> or <b>https://</b> prefix.<br/>
 			Not all templates support blank and colorful links.
 		</p>
-		<?php if (isset($config['menu_default_color'])) {?>
-		<form method="post" action="?p=menus&reset_colors" onsubmit="return confirm('Do you really want to reset colors?');">
-			<?php csrf(); ?>
-			<input type="hidden" name="template" value="<?php echo $template ?>"/>
-			<button type="submit" class="btn btn-danger">Reset Colors to default</button>
-		</form>
-		<br/>
-		<?php } ?>
+		<div class="row text-center">
+			<div class="col-md-2 col-sm-1"></div>
+			<div class="col-md-8 col-sm-10">
+				<div class="row justify-content-center">
+					<?php if (isset($config['menus'])) {?>
+						<form method="post" action="?p=menus&reset_menus" onsubmit="return confirm('Do you really want to reset menus?');">
+							<?php csrf(); ?>
+							<input type="hidden" name="template" value="<?php echo $template ?>"/>
+							<button type="submit" class="btn btn-danger">Reset Menus to default</button>
+						</form>
+						<br/>
+					<?php } ?>
+					<?php if ($canChangeColor) {?>
+						<form method="post" action="?p=menus&reset_colors" onsubmit="return confirm('Do you really want to reset colors?');">
+							<?php csrf(); ?>
+							<input type="hidden" name="template" value="<?php echo $template ?>"/>
+							<button type="submit" class="btn btn-warning" style="margin-left: 20px">Reset Colors to default</button>
+						</form>
+						<br/>
+					<?php } ?>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-1"></div>
+		</div>
 	</div>
 	<?php
 	$menus = Menu::query()
@@ -197,4 +225,12 @@ if (isset($_POST['template'])) {
 	$twig->display('admin.menus.form.html.twig', array(
 		'templates' => $templates
 	));
+}
+
+function onTemplateMenusChange(): void
+{
+	$cache = Cache::getInstance();
+	if ($cache->enabled()) {
+		$cache->delete('template_menus');
+	}
 }

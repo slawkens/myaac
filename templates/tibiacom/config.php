@@ -9,3 +9,5 @@ $config['menu_categories'] = array(
 	MENU_CATEGORY_LIBRARY => array('id' => 'library', 'name' => 'Library'),
 	MENU_CATEGORY_SHOP => array('id' => 'shops', 'name' => 'Shop')
 );
+
+$config['menus'] = require __DIR__ . '/menus.php';
