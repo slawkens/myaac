@@ -1,9 +1,25 @@
 # Changelog
 
-## [master - 02.02.2025]
+## [1.2 - 09.02.2025]
+
 
 ### Added
-* Twig session(key) function + reworked session functions to accept multi-array like in Laravel
+* Twig session(key) function + reworked session functions to accept multi-array like in Laravel (https://github.com/slawkens/myaac/commit/b46ddb43d03ef7e5fc34e555e92e856bdc905691)
+* add template_name to twig variables (https://github.com/slawkens/myaac/commit/ae1161d77050bda181802b4496c9de920a7bb1bc)
+* add HOOK_INIT, executed just after $hooks are loaded (https://github.com/slawkens/myaac/commit/19686725dc810f63a07f049f82c66cf336d90ca6)
+
+### Changed
+* settings: password input hide/show, enable Save button only if changes has been made, save settings in transaction (https://github.com/slawkens/myaac/commit/4fda4f643b60a151179e5dd4f04912fb2618d98f, https://github.com/slawkens/myaac/commit/28fef952f857b79d64bc7495ffa5e1999e68e192, https://github.com/slawkens/myaac/commit/4b6024dc451accadb6c469fa282a9a764c1c0a81)
+* rework menus: Different categories can have different colors + Option to reset menus (https://github.com/slawkens/myaac/commit/73de93a561f6b13111e019075724357d8a617249, https://github.com/slawkens/myaac/commit/3da3e62c5b12390d75de9b3320729bcca6e0b458)
+
+### Fixed
+* highscores: Fix online status + vocation for TFS 0.x (https://github.com/slawkens/myaac/commit/ea51ad27c38be88d86514cb979bb394fcfbef1f0)
+* clear cache button in admin bar needed to be clicked twice until it worked (https://github.com/slawkens/myaac/commit/ea51ad27c38be88d86514cb979bb394fcfbef1f0)
+* HOOK_STARTUP location (https://github.com/slawkens/myaac/commit/a73fb1003ee3f812cf182d1834d65f08e6f60d1f)
+* if vocation name has more words (https://github.com/slawkens/myaac/commit/9d7fc98e1e0a96b59ecc1a7c39800a64445db364)
+
+### Updated
+* Bump twig/twig from 3.18.0 to 3.19.0 (#284)
 
 ## [1.1 - 27.01.2025]
 
