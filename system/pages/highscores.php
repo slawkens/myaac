@@ -23,7 +23,7 @@ if(config('account_country') && $settingHighscoresCountryBox)
 
 $list = $_GET['list'] ?? 'experience';
 $page = $_GET['page'] ?? 1;
-$vocation = $_GET['vocation'] ?? 'all';
+$vocation = urldecode($_GET['vocation'] ?? 'all');
 
 if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 	$page = 1;

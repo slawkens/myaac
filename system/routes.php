@@ -39,10 +39,10 @@ return [
 
 	[['GET', 'POST'], 'guilds/{guild:string}', 'guilds/show.php'],
 
-	['GET', 'highscores/{list:alphanum}/{vocation:alphanum}/{page:int}', 'highscores.php'],
-	['GET', 'highscores/{list:alphanum}/{page:int}', 'highscores.php'],
-	['GET', 'highscores/{list:alphanum}/{vocation:alphanum}', 'highscores.php'],
-	['GET', 'highscores/{list:alphanum}', 'highscores.php'],
+	['GET', 'highscores/{list:string}/{vocation:string}/{page:int}', 'highscores.php'],
+	['GET', 'highscores/{list:string}/{page:int}', 'highscores.php'],
+	['GET', 'highscores/{list:string}/{vocation:string}', 'highscores.php'],
+	['GET', 'highscores/{list:string}', 'highscores.php'],
 /*
 	'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
 	'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2'),
