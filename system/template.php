@@ -166,8 +166,14 @@ function get_template_menus(): array
 		$target_blank = ($menu['blank'] == 1 ? ' target="blank"' : '');
 
 		$color = (empty($menu['color']) ? ($configMenuCategories[$menu['category']]['default_links_color'] ?? ($configMenuDefaultColor ?? '')) : $menu['color']);
+
 		$color = str_replace('#', '', $color);
-		$style_color = (empty($color) ? '' : 'style="color: #' . $color . '"');
+
+		if (in_array('#' . $color, [$configMenuCategories[$menu['category']]['default_links_color'] ?? '', $configMenuDefaultColor])) {
+			$color = '';
+		}
+
+		$style_color = (empty($color) ? '' : 'style="color: #' . $color . ' !important"');
 
 		$menus[$menu['category']][] = [
 			'name' => $menu['name'],
