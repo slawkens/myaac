@@ -21,7 +21,7 @@ $settingHighscoresCountryBox = setting('core.highscores_country_box');
 if(config('account_country') && $settingHighscoresCountryBox)
 	require SYSTEM . 'countries.conf.php';
 
-$list = $_GET['list'] ?? 'experience';
+$list = urldecode($_GET['list'] ?? 'experience');
 $page = $_GET['page'] ?? 1;
 $vocation = urldecode($_GET['vocation'] ?? 'all');
 
