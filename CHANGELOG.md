@@ -2,7 +2,6 @@
 
 ## [1.2 - 09.02.2025]
 
-
 ### Added
 * Twig session(key) function + reworked session functions to accept multi-array like in Laravel (https://github.com/slawkens/myaac/commit/b46ddb43d03ef7e5fc34e555e92e856bdc905691)
 * add template_name to twig variables (https://github.com/slawkens/myaac/commit/ae1161d77050bda181802b4496c9de920a7bb1bc)
