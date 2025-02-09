@@ -1,5 +1,5 @@
 <?php
-$config['menu_default_color'] = '#ffffff';
+$config['menu_default_links_color'] = '#ffffff';
 
 $config['menu_categories'] = array(
 	MENU_CATEGORY_NEWS => array('id' => 'news', 'name' => 'Latest News'),

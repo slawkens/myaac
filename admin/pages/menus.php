@@ -85,7 +85,7 @@ if (isset($_POST['template'])) {
 
 	if (isset($_GET['reset_colors'])) {
 		foreach ($config['menu_categories'] as $id => $options) {
-			$color = $options['default_links_color'] ?? $config['menu_default_color'] ?? '#ffffff';
+			$color = $options['default_links_color'] ?? ($config['menu_default_links_color'] ?? ($config['menu_default_color'] ?? '#ffffff'));
 			Menu::where('template', $template)->where('category', $id)->update(['color' => str_replace('#', '', $color)]);
 		}
 
@@ -108,7 +108,7 @@ if (isset($_POST['template'])) {
 
 	$title = 'Menus - ' . $template;
 
-	$canResetColors = isset($config['menu_default_color']);
+	$canResetColors = isset($config['menu_default_color']) || isset($config['menu_default_links_color']);
 	foreach ($config['menu_categories'] as $id => $options) {
 		if (isset($options['default_links_color'])) {
 			$canResetColors = true;
@@ -149,7 +149,7 @@ if (isset($_POST['template'])) {
 								if (isset($menus[$id])) {
 									$i = 0;
 									foreach ($menus[$id] as $menu):
-										$color = (empty($menu['color']) ? ($cat['default_links_color'] ?? ($config['menu_default_color'] ?? '#ffffff')) : '#' . $menu['color']);
+										$color = (empty($menu['color']) ? ($cat['default_links_color'] ?? ($config['menu_default_links_color'] ?? ($config['menu_default_color'] ?? '#ffffff'))) : '#' . $menu['color']);
 										?>
 										<li class="ui-state-default" id="list-<?php echo $id ?>-<?php echo $i ?>"><label>Name:</label> <input type="text" name="menu[<?php echo $id ?>][]" value="<?php echo escapeHtml($menu['name']); ?>"/>
 											<label>Link:</label> <input type="text" name="menu_link[<?php echo $id ?>][]" value="<?php echo $menu['link'] ?>"/>

@@ -154,7 +154,7 @@ function get_template_menus(): array
 	});
 
 	$configMenuCategories = config('menu_categories');
-	$configMenuDefaultColor = config('menu_default_color');
+	$configMenuDefaultColor = config('menu_default_links_color') ?? config('menu_default_color');
 
 	$menus = [];
 	foreach($result as $menu) {

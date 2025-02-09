@@ -7,8 +7,9 @@
 	last_id[{{ cat }}] = {{ last_id[cat] }};
 	{% endfor %}
 
+	{% set menuDefaultLinksColor = config('menu_default_links_color') %}
 	{% for cat, options in config('menu_categories') %}
-	colors[{{ cat }}] = '{{ options['default_links_color'] ?? config('menu_default_color') }}';
+	colors[{{ cat }}] = '{{ options['default_links_color'] ?? (menuDefaultLinksColor ?? config('menu_default_color')) }}';
 	{% endfor %}
 
 	$(function () {
