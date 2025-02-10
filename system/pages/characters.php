@@ -8,10 +8,11 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\PlayerDeath;
+
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Characters';
-
-require_once SYSTEM . 'item.php';
 
 $groups = new OTS_Groups_List();
 function generate_search_form($autofocus = false)
@@ -47,7 +48,7 @@ if(isset($_REQUEST['name']))
 if(empty($name))
 {
 	$tmp_link = getPlayerLink($name);
-	echo 'Here you can get detailed information about a certain player on ' . $config['lua']['serverName'] . '.<BR>';
+	echo 'Here you can get detailed information about a certain player on ' . $config['lua']['serverName'] . '.<br/>';
 	echo generate_search_form(true);
 	return;
 }
@@ -79,11 +80,12 @@ if($player->isLoaded() && !$player->isDeleted())
 	$rows = 0;
 
 	if($config['characters']['outfit'])
-		$outfit = $config['outfit_images_url'] . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
+		$outfit = setting('core.outfit_images_url') . '?id=' . $player->getLookType() . ($db->hasColumn('players', 'lookaddons') ? '&addons=' . $player->getLookAddons() : '') . '&head=' . $player->getLookHead() . '&body=' . $player->getLookBody() . '&legs=' . $player->getLookLegs() . '&feet=' . $player->getLookFeet();
 
 	$flag = '';
-	if($config['account_country'])
+	if(setting('core.account_country')) {
 		$flag = getFlagImage($account->getCountry());
+	}
 
 	$player_sex = 'Unknown';
 	if(isset($config['genders'][$player->getSex()]))
@@ -147,9 +149,10 @@ if($player->isLoaded() && !$player->isDeleted())
 	if($config['characters']['skills'])
 	{
 		if($db->hasColumn('players', 'skill_fist')) {// tfs 1.0+
-			$skills_db = $db->query('SELECT `skill_fist`, `skill_club`, `skill_sword`, `skill_axe`, `skill_dist`, `skill_shielding`, `skill_fishing` FROM `players` WHERE `id` = ' . $player->getId())->fetch();
+			$skills_db = $db->query('SELECT `maglevel`, `skill_fist`, `skill_club`, `skill_sword`, `skill_axe`, `skill_dist`, `skill_shielding`, `skill_fishing` FROM `players` WHERE `id` = ' . $player->getId())->fetch();
 
 			$skill_ids = array(
+				POT::SKILL_MAGIC => 'maglevel',
 				POT::SKILL_FIST => 'skill_fist',
 				POT::SKILL_CLUB => 'skill_club',
 				POT::SKILL_SWORD => 'skill_sword',
@@ -175,8 +178,7 @@ if($player->isLoaded() && !$player->isDeleted())
 	}
 
 	$quests_enabled = $config['characters']['quests'] && !empty($config['quests']);
-	if($quests_enabled)
-	{
+	if($quests_enabled) {
 		$quests = $config['quests'];
 		$sql_query_in = '';
 		$i = 0;
@@ -197,11 +199,10 @@ if($player->isLoaded() && !$player->isDeleted())
 		foreach($quests as &$storage) {
 			$storage = isset($player_storage[$storage]) && $player_storage[$storage] > 0;
 		}
+		unset($storage);
 	}
 
-	if($config['characters']['equipment'])
-	{
-		global $db;
+	if($db->hasTable('player_items') && $db->hasColumn('player_items', 'pid') && $db->hasColumn('player_items', 'sid') && $db->hasColumn('player_items', 'itemtype')) {
 		$eq_sql = $db->query('SELECT `pid`, `itemtype` FROM player_items WHERE player_id = '.$player->getId().' AND (`pid` >= 1 and `pid` <= 10)');
 		$equipment = array();
 		foreach($eq_sql as $eq)
@@ -284,8 +285,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				$deaths[] = array('time' => $death['date'], 'description' => $description . '.');
 			}
 		}
-	}
-	else {
+	} else if ($db->hasColumn('player_deaths', 'time') && $db->hasColumn('player_deaths', 'level') && $db->hasColumn('player_deaths', 'killed_by') && $db->hasColumn('player_deaths', 'is_player')) {
 		$mostdamage = '';
 		if($db->hasColumn('player_deaths', 'mostdamage_by'))
 			$mostdamage = ', `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`';
@@ -294,8 +294,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 				FROM `player_deaths`
 				WHERE `player_id` = ' . $player->getId() . ' ORDER BY `time` DESC LIMIT 10;')->fetchAll();
 
-		if(count($deaths_db))
-		{
+		if(count($deaths_db)) {
 			$number_of_rows = 0;
 			foreach($deaths_db as $death)
 			{
@@ -326,30 +325,47 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 
 	$frags = array();
 	$frag_add_content = '';
-	if($config['characters']['frags'] && $db->hasTable('killers'))
-	{
-		//frags list by Xampy
-		$i = 0;
+	if ($config['characters']['frags']) {
 		$frags_limit = 10; // frags limit to show? // default: 10
-		$player_frags = $db->query('SELECT `player_deaths`.*, `players`.`name`, `killers`.`unjustified` FROM `player_deaths` LEFT JOIN `killers` ON `killers`.`death_id` = `player_deaths`.`id` LEFT JOIN `player_killers` ON `player_killers`.`kill_id` = `killers`.`id` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `player_killers`.`player_id` = '.$player->getId().' ORDER BY `date` DESC LIMIT 0,'.$frags_limit.';')->fetchAll();
-		if(count($player_frags))
-		{
-			$row_count = 0;
-			foreach($player_frags as $frag)
-			{
-				$description = 'Fragged <a href="' . getPlayerLink($frag['name'], false) . '">' . $frag['name'] . '</a> at level ' . $frag['level'];
-				$frags[] = array('time' => $frag['date'], 'description' => $description, 'unjustified' => $frag['unjustified'] != 0);
+
+		if ($db->hasTable('killers')) {
+			//frags list by Xampy
+			$i = 0;
+			$player_frags = $db->query('SELECT `player_deaths`.*, `players`.`name`, `killers`.`unjustified` FROM `player_deaths` LEFT JOIN `killers` ON `killers`.`death_id` = `player_deaths`.`id` LEFT JOIN `player_killers` ON `player_killers`.`kill_id` = `killers`.`id` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `player_killers`.`player_id` = ' . $player->getId() . ' ORDER BY `date` DESC LIMIT 0,' . $frags_limit . ';')->fetchAll();
+			if (count($player_frags)) {
+				$row_count = 0;
+				foreach ($player_frags as $frag) {
+					$description = 'Fragged <a href="' . getPlayerLink($frag['name'], false) . '">' . $frag['name'] . '</a> at level ' . $frag['level'];
+					$frags[] = array('time' => $frag['date'], 'description' => $description, 'unjustified' => $frag['unjustified'] != 0);
+				}
+			}
+		}
+		else if($db->hasTable('player_deaths') && $db->hasColumn('player_deaths', 'killed_by')) {
+			$i = 0;
+			$player_frags = PlayerDeath::where('player_deaths.killed_by', $player->getName())
+				->join('players', 'players.id', '=', 'player_deaths.player_id')
+				->limit($frags_limit)
+				->selectRaw('players.name, player_deaths.*')
+				->orderBy('player_deaths.time', 'DESC')
+				->get();
+
+			if ($player_frags->count()) {
+				$row_count = 0;
+				foreach ($player_frags as $frag) {
+					$description = 'Fragged <a href="' . getPlayerLink($frag->name, false) . '">' . $frag->name . '</a> at level ' . $frag->level;
+					$frags[] = array('time' => $frag->time, 'description' => $description, 'unjustified' => $frag->unjustified != 0);
+				}
 			}
 		}
 	}
 
 	// signature
-	if($config['signature_enabled']) {
-		$signature_url = BASE_URL . ($config['friendly_urls'] ? '' : '?') . urlencode($player->getName()) . '.png';
+	if(setting('core.signature_enabled')) {
+		$signature_url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . urlencode($player->getName()) . '.png';
 	}
 
-	$hidden = $player->isHidden();
-	if(!$hidden) {
+	$hide = $player->isHidden();
+	if(!$hide) {
 		// check if account has been banned
 		$bannedUntil = '';
 		$banned = array();
@@ -369,7 +385,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		$query = $db->query('SELECT `id` FROM `players` WHERE `account_id` = ' . $account->getId() . ' ORDER BY `name`')->fetchAll();
 		foreach($query as $p) {
 			$_player = new OTS_Player();
-			$fields = array('id', 'name', 'vocation', 'level', 'online', 'deleted', 'hidden');
+			$fields = array('id', 'name', 'vocation', 'level', 'online', 'deleted', 'hide');
 			$_player->load($p['id'], $fields, false);
 			if($_player->isLoaded() && !$_player->isHidden()) {
 				$account_players[] = $_player;
@@ -400,7 +416,7 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 			'rank' => isset($guild_name) ? $rank_of_player->getName() : null,
 			'link' => isset($guild_name) ? getGuildLink($guild_name) : null
 		),
-		'comment' => !empty($comment) ? wordwrap(nl2br($comment), 60, "<br/>", true) : null,
+		'comment' => !empty($comment) ? nl2br($comment) : null,
 		'skills' => isset($skills) ? $skills : null,
 		'quests_enabled' => $quests_enabled,
 		'quests' => isset($quests) ? $quests : null,
@@ -410,15 +426,14 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 		'frags' => $frags,
 		'signature_url' => isset($signature_url) ? $signature_url : null,
 		'player_link' => getPlayerLink($player->getName(), false),
-		'hidden' => $hidden,
+		'hide' => $hide,
+		'hidden' => $hide,
 		'bannedUntil' => isset($bannedUntil) ? $bannedUntil : null,
 		'account_players' => isset($account_players) ? $account_players : null,
 		'search_form' => generate_search_form(),
 		'canEdit' => hasFlag(FLAG_CONTENT_PLAYERS) || superAdmin()
 	));
-}
-else
-{
+} else {
 	$search_errors[] = 'Character <b>' . $name . '</b> does not exist or has been deleted.';
 	$twig->display('error_box.html.twig', array('errors' => $search_errors));
 	$search_errors = array();
@@ -431,9 +446,8 @@ else
 	if($db->hasColumn('players', 'deletion'))
 		$deleted = 'deletion';
 
-	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . (int)config('characters_search_limit') . ';');
-	if($query->rowCount() > 0)
-	{
+	$query = $db->query('SELECT `name`, `level`, `vocation`' . $promotion . ' FROM `players` WHERE `name` LIKE  ' . $db->quote('%' . $name . '%') . ' AND ' . $deleted . ' != 1 LIMIT ' . (int)setting('core.characters_search_limit') . ';');
+	if($query->rowCount() > 0) {
 		echo 'Did you mean:<ul>';
 		foreach($query as $player) {
 			if(isset($player['promotion'])) {

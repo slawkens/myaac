@@ -6,6 +6,7 @@
 		<table class="table table-striped table-bordered table-responsive d-md-table" id="tb_plugins">
 			<thead>
 			<tr>
+				<th>Enabled</th>
 				<th>Name</th>
 				<th>Version</th>
 				<th>Author</th>
@@ -16,6 +17,21 @@
 			<tbody>
 			{% for plugin in plugins %}
 				<tr>
+					<td>
+						{% if plugin.enabled %}
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="disable" value="{{ plugin.file }}" />
+								<button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to disable plugin {{ plugin.name }}?');" title="Disable"><i class="fas fa-check"></i> Enabled</button>
+							</form>
+						{% else %}
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="enable" value="{{ plugin.file }}" />
+								<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to enable plugin {{ plugin.name }}?');" title="Enable"><i class="fas fa-ban"></i> Disabled</button>
+							</form>
+						{% endif %}
+					</td>
 					<td><b>{{ plugin.name }}</b><br>
 						<small>{{ plugin.description|raw }}</small>
 					</td>
@@ -26,10 +42,13 @@
 					<td>{{ plugin.file }}.json</td>
 					<td>
 						{% if plugin.uninstall %}
-							<a href="?p=plugins&uninstall={{ plugin.file }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');" title="Uninstall">
-								<i class="fas fa-trash"></i>
-							</a>
-						{% endif %}</td>
+							<form method="post">
+								{{ csrf() }}
+								<input type="hidden" name="uninstall" value="{{ plugin.file }}" />
+								<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to uninstall {{ plugin.name }}?');" title="Uninstall"><i class="fas fa-trash"></i></button>
+							</form>
+						{% endif %}
+					</td>
 				</tr>
 			{% endfor %}
 			</tbody>
@@ -39,6 +58,6 @@
 
 <script>
 	$(function () {
-		$('#tb_plugins').DataTable()
+		$('#tb_plugins').DataTable();
 	})
 </script>

@@ -7,6 +7,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Cache\Cache;
+
 defined('MYAAC') or die('Direct access not allowed!');
 define('COUNTER_SYNC', 10); // how often counter is synchronized with database (each x site refreshes)
 
@@ -51,4 +54,3 @@ else
 		updateDatabaseConfig('views_counter', $views_counter); // update counter
 	}
 }
-?>

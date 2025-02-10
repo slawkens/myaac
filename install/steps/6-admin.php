@@ -18,6 +18,7 @@ if(!$error) {
 		'locale' => $locale,
 		'session' => $_SESSION,
 		'account' => $account,
+		'hasTablePlayers' => $db->hasTable('players'),
 		'errors' => isset($errors) ? $errors : null,
 		'buttons' => next_buttons(true, $error ? false : true)
 	));

@@ -19,7 +19,7 @@ $locale['not_loaded'] = 'Não carregado';
 
 $locale['loading_spinner'] = 'Por favor aguarde, instalando...';
 $locale['importing_spinner'] = 'Por favor, aguarde, importando dados...';
-$locale['please_fill_all'] = 'or favor, preencha todas as entradas!';
+$locale['please_fill_all'] = 'Por favor, preencha todas as entradas!';
 $locale['already_installed'] = 'MyAAC já foi instalado. Por favor, apague o diretório <b> install/ <b/>. Se você quiser reinstalar o MyAAC - exclua o arquivo <strong> config.local.php </strong> do diretório principal e atualize a página.';
 
 // welcome
@@ -118,4 +118,3 @@ $locale['step_finish'] = 'Finalizar';
 $locale['step_finish_title'] = 'Instalação terminada!';
 $locale['step_finish_desc'] = 'Parabéns! <b>MyAAC</b> está pronto para uso!<br/>Agora você pode fazer login em $ADMIN_PANEL$ ou visitar $HOMEPAGE$.<br/><br/>
 <span style = "color: red">Por favor remova a pasta install/.</span><br/><br/>Postar bugs e sugestões em $LINK$, obrigado!';
-?>

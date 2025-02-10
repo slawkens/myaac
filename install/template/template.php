@@ -1,17 +1,18 @@
+<?php defined('MYAAC') or die('Direct access not allowed!'); ?>
 <!DOCTYPE html>
 <html dir="<?php echo $locale['direction']; ?>" lang="<?php echo $locale['lang']; ?>" xml:lang="<?php echo $locale['lang']; ?>">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $locale['encoding']; ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>MyAAC - <?php echo $locale['installation']; ?></title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="template/style.css" />
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>tools/js/jquery.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>tools/ext/jquery/jquery.min.js"></script>
 </head>
 <body>
 
 	<div id="body" class="container">
-	
+
 		<header id="header" class="pt-5 pb-4 pb-sm-5">
 			<h1>MyAAC <?php echo $locale['installation']; ?></h1>
 		</header>
@@ -28,10 +29,10 @@
 							if ($step == $value) {
 								$progress = ($i == 6) ? 100 : $i * 16;
 							}
-							
-							echo '<li' . ($step == $value ? ' class="list-group-item active"' : ' class="list-group-item"') . '>' . ++$i . '. ' . $locale['step_' . $value] . '</li>';
+
+							echo '<li class="list-group-item' . ($step == $value ? ' active' : '') . '">' . ++$i . '. ' . $locale['step_' . $value] . '</li>';
 						}
-							
+
 					?>
 				</ul>
 			</div>

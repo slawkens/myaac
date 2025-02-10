@@ -8,3 +8,8 @@
 .sidebar-mini.sidebar-collapse .menu-text {
 	display: none;
 }
+
+.myaac-table tbody tr:nth-child(even) {background: #FFF} /* light border */
+.myaac-table tbody tr:nth-child(odd) {background: #CCC} /* dark border */
+.myaac-table thead td {background: #000000; color: #ffffff !important;} /* vdark border */
+.myaac-table tfoot td {background: #000000; color: #ffffff !important;} /* vdark border */

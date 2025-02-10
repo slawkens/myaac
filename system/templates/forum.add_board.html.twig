@@ -1,4 +1,5 @@
 <form method="post" action="{{ link }}">
+	{{ csrf() }}
 	{% if action == 'edit_board' %}
 	<input type="hidden" name="id" value="{{ id }}" />
 	{% endif %}
@@ -21,7 +22,7 @@
 						<td>
 							<select name="access">
 								{% for id, group in groups %}
-									<option value="{{ group.getId() }}"{% if access == group.getId() %} selected{% endif %}>{{ group.getName() }}</option>
+									<option value="{{ group.id }}"{% if access == group.id %} selected{% endif %}>{{ group.name }}</option>
 								{% endfor %}
 							</select>
 						</td>
@@ -38,7 +39,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2" align="center"><input type="submit" value="Submit"/>
+						<td colspan="2" align="center">
+							{{ include('buttons.submit.html.twig') }}
+						</td>
 					</tr>
 				</table>
 			</td>

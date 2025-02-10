@@ -100,5 +100,3 @@ class OTS_Bans_List extends OTS_Base_List
         }
     }
 }
-
-?>

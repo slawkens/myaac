@@ -9,6 +9,9 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\CreateCharacter;
+use MyAAC\Models\Account;
+
 // we need some functions
 require '../common.php';
 require SYSTEM . 'functions.php';
@@ -20,34 +23,37 @@ if(isset($_GET['account']))
 {
 	$account = $_GET['account'];
 	if(USE_ACCOUNT_NAME) {
-		if(!Validator::accountName($account))
+		if(!Validator::accountName($account)) {
 			error_(Validator::getLastError());
+		}
 	}
-	else if(!Validator::accountId($account))
+	else if(!Validator::accountId($account)) {
 		error_(Validator::getLastError());
+	}
 
 	$_account = new OTS_Account();
-	if(USE_ACCOUNT_NAME)
+	if(USE_ACCOUNT_NAME || USE_ACCOUNT_NUMBER) {
 		$_account->find($account);
-	else
+	} else {
 		$_account->load($account);
+	}
 
-	if($_account->isLoaded())
-		error_('Account with this name already exist.');
+	$accountNameOrNumber = (USE_ACCOUNT_NAME ? ' name' : 'number');
+	if($_account->isLoaded()) {
+		error_("Account with this $accountNameOrNumber already exist.");
+	}
 
-	success_('Good account' . (USE_ACCOUNT_NAME ? ' name' : '') . ' ( ' . $account . ' ).');
+	success_("Good account $accountNameOrNumber ($account).");
 }
 else if(isset($_GET['email']))
 {
 	$email = $_GET['email'];
-	if(!Validator::email($email))
+	if(!Validator::email($email)) {
 		error_(Validator::getLastError());
+	}
 
-	if($config['account_mail_unique'])
-	{
-		$account = new OTS_Account();
-		$account->findByEMail($email);
-		if($account->isLoaded())
+	if(setting('core.account_mail_unique')) {
+		if(Account::where('email', '=', $email)->exists())
 			error_('Account with this e-mail already exist.');
 	}
 
@@ -60,13 +66,14 @@ else if(isset($_GET['name']))
 		$name = strtolower(stripslashes($name));
 	}
 
-	if(!Validator::characterName($name))
+	if(!Validator::characterName($name)) {
 		error_(Validator::getLastError());
+	}
 
-	if(!admin() && !Validator::newCharacterName($name))
+	if(!admin() && !Validator::newCharacterName($name)) {
 		error_(Validator::getLastError());
+	}
 
-	require_once LIBS . 'CreateCharacter.php';
 	$createCharacter = new CreateCharacter();
 	if (!$createCharacter->checkName($name, $errors)) {
 		error_($errors['name']);
@@ -74,24 +81,27 @@ else if(isset($_GET['name']))
 
 	success_('Good. Your name will be:<br /><b>' . (admin() ? $name : ucwords($name)) . '</b>');
 }
-else if(isset($_GET['password']) && isset($_GET['password2'])) {
+else if(isset($_GET['password']) && isset($_GET['password_confirm'])) {
 	$password = $_GET['password'];
-	$password2 = $_GET['password2'];
+	$password_confirm = $_GET['password_confirm'];
 
 	if(!isset($password[0])) {
 		error_('Please enter the password for your new account.');
 	}
 
-	if(!Validator::password($password))
+	if(!Validator::password($password)) {
 		error_(Validator::getLastError());
+	}
 
-	if($password != $password2)
+	if($password != $password_confirm) {
 		error_('Passwords are not the same.');
+	}
 
 	success_(1);
 }
-else
+else {
 	error_('Error: no input specified.');
+}
 
 /**
  * Output message & exit.

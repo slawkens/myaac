@@ -26,8 +26,8 @@
 	}
 </style>
 {% set menus = {
-	'Create Character': 'account/character/create','Delete Character': 'account/character/delete',
-	'Change Info': 'account/info', 'Change Password': 'account/password', 'Change Email': 'account/email'
+	'Create Character': 'account/characters/create','Delete Character': 'account/characters/delete',
+	'Change Info': 'account/change-info', 'Change Password': 'account/change-password', 'Change Email': 'account/change-email'
 } %}
 <div id="account-manage">
 	<div id="one">
@@ -39,11 +39,11 @@
 			{% for name, link in menus %}
 				<a href="{{ getLink(link) }}">{{ name }}</a>
 			{% endfor %}
-			{% if config.account_change_character_name %}
-				<a href="{{ getLink('account/character/name') }}">Change Name</a>
+			{% if setting('core.account_change_character_name') %}
+				<a href="{{ getLink('account/characters/change-name') }}">Change Name</a>
 			{% endif %}
-			{% if config.account_change_character_sex %}
-				<a href="{{ getLink('account/character/sex') }}">Change Sex</a>
+			{% if setting('core.account_change_character_sex') %}
+				<a href="{{ getLink('account/characters/change-sex') }}">Change Sex</a>
 			{% endif %}
 			<a href="{{ getLink('account/logout') }}">Logout</a>
 		</div>
@@ -68,6 +68,7 @@
 		<div style="text-align:center">
 			You can register your account for increased protection. Click on "Register Account" and get your free recovery key today!<br/>
 			<form action="{{ getLink('account/register') }}" method="post">
+				{{ csrf() }}
 				{% set button_name = 'Register Account' %}
 				{% include('buttons.base.html.twig') %}
 			</form>
@@ -79,24 +80,29 @@
 			<div style="text-align:center">
 				A request has been submitted to change the email address of this account to <b>{{ email_new }}</b>. After <b>{{ email_new_time|date("j F Y, G:i:s") }}</b> you can accept the new email address and finish the process. Please cancel the request if you do not want your email address to be changed! Also cancel the request if you have no access to the new email address!
 
-				<form action="{{ getLink('account/email') }}" method="post">
+				<form action="{{ getLink('account/change-email') }}" method="post">
+					{{ csrf() }}
 					{% set button_name = 'Edit' %}
 					{% include('buttons.base.html.twig') %}
 				</form>
 			</div>
 		<br/><br/>
 		{% endif %}
+		{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_GENERAL_INFORMATION') }}
 		<a name="General+Information"></a>
 		<h2>General Information</h2>
 		<table width="100%">
+			{% if not config.account_login_by_email or config.account_login_by_email_fallback %}
 			<tr style="background-color: {{ config.lightborder }};" >
 				<td style="width: 90px;">Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</td>
 				<td>{{ account }}</td>
 			</tr>
+			{% endif %}
 			<tr style="background-color: {{ config.darkborder }};" >
 				<td style="width: 90px;">Email Address:</td>
-				<td>{{ account_email ~ email_change }}
-					<form action="{{ getLink('account/email') }}" method="post">
+				<td>{{ account_email }}{{ email_change|raw }}
+					<form action="{{ getLink('account/change-email') }}" method="post">
+						{{ csrf() }}
 						{% set button_name = 'Change Email' %}
 						{% include('buttons.base.html.twig') %}
 					</form>
@@ -122,6 +128,7 @@
 			{% endautoescape %}
 		</table>
 		<br/>
+		{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_PUBLIC_INFORMATION') }}
 		<a name="Public+Information"></a>
 		<h2>Public Information</h2>
 		<table width="100%">
@@ -134,13 +141,15 @@
 				<td >{{ account_location }}</td>
 			</tr>
 		</table>
-		<form action="{{ getLink('account/info') }}" method="post">
+		<form action="{{ getLink('account/change-info') }}" method="post">
+			{{ csrf() }}
 			{% set button_name = 'Change Info' %}
 			{% include('buttons.base.html.twig') %}
 		</form>
 		<br/>
+		{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_ACCOUNT_LOGS') }}
 		<a name="Account+Logs" ></a>
-		<h2>Action Log</h2>
+		<h2>Account Logs</h2>
 		<table>
 			<tr bgcolor="{{ config.vdarkborder }}" class="white">
 				<th>Action</th><th>Date</th><th>IP</th>
@@ -158,6 +167,7 @@
 			{% endautoescape %}
 		</table>
 		<br/>
+		{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_CHARACTERS') }}
 		<a name="Characters" ></a>
 		<h2>Character list: {{ players|length }} characters.</h2>
 		<table>
@@ -168,7 +178,16 @@
 			{% for player in players %}
 				{% set i = i + 1 %}
 				<tr bgcolor="{{ getStyle(i) }}">
-					<td><a href="{{ getLink('characters/' ~ player.getName()|urlencode) }}">{{ player.getName() }}</a></td><td>{{ player.getLevel() }}</td><td>{{ player.getVocationName() }}</td><td>{{ config.towns[player.getTownId()] }}</td><td>{% if player.getLastLogin() > 0 %}{{ player.getLastLogin|date('d F Y (H:i)') }}{% else %}Never.{% endif %}</td><td>{%  if player.isOnline() %}<span style="color: green">ONLINE</span>{% else %}<span style="color: red">Offline</span>{% endif %}</td><td>{% if player.isHidden() %}Hidden{% else %}Visible{% endif %}</td><td>[<a href="{{ getLink('account/character/comment/' ~ player.getName|urlencode) }}" >Edit</a>]</td>
+					<td>
+						<a href="{{ getLink('characters/' ~ player.getName()|urlencode) }}">{{ player.getName() }}</a>
+					</td>
+					<td>{{ player.getLevel() }}</td>
+					<td>{{ player.getVocationName() }}</td>
+					<td>{{ config.towns[player.getTownId()] }}</td>
+					<td>{% if player.getLastLogin() > 0 %}{{ player.getLastLogin|date('d F Y (H:i)') }}{% else %}Never.{% endif %}</td>
+					<td>{% if player.isOnline() %}<span style="color: green">ONLINE</span>{% else %}<span style="color: red">Offline</span>{% endif %}</td>
+					<td>{% if player.isHidden() %}Hidden{% else %}Visible{% endif %}</td>
+					<td>{% if not player.isDeleted() %}[<a href="{{ getLink('account/characters/change-comment?name=' ~ player.getName()|urlencode) }}" >Edit</a>]{% endif %}</td>
 				</tr>
 			{% endfor %}
 		</table>
@@ -176,29 +195,33 @@
 		<table>
 			<tr>
 				<td>
-					<form action="{{ getLink('account/character/create') }}" method="post" >
+					<form action="{{ getLink('account/characters/create') }}" method="post" >
+						{{ csrf() }}
 						{% set button_name = 'Create Character' %}
 						{% include('buttons.base.html.twig') %}
 					</form>
 				</td>
-				{% if config.account_change_character_name %}
+				{% if setting('core.account_change_character_name') %}
 				<td>
-					<form action="{{ getLink('account/character/name') }}" method="post" >
+					<form action="{{ getLink('account/characters/change-name') }}" method="post" >
+						{{ csrf() }}
 						{% set button_name = 'Change Name' %}
 						{% include('buttons.base.html.twig') %}
 					</form>
 				</td>
 				{% endif %}
-				{% if config.account_change_character_sex %}
+				{% if setting('core.account_change_character_sex') %}
 				<td>
-					<form action="{{ getLink('account/character/sex') }}" method="post" >
+					<form action="{{ getLink('account/characters/change-sex') }}" method="post" >
+						{{ csrf() }}
 						{% set button_name = 'Change Sex' %}
 						{% include('buttons.base.html.twig') %}
 					</form>
 				</td>
 				{% endif %}
 				<td>
-					<form action="{{ getLink('account/character/delete') }}" method="post">
+					<form action="{{ getLink('account/characters/delete') }}" method="post">
+						{{ csrf() }}
 						{% set button_name = 'Delete Character' %}
 						{% include('buttons.base.html.twig') %}
 					</form>

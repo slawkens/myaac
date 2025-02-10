@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 if(!Validator::guildName($guild_name)) {
 	$errors[] = Validator::getLastError();
@@ -41,7 +43,7 @@ if(empty($errors)) {
 		$saved = false;
 		if($guild_leader) {
 			if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-				$description = htmlspecialchars(stripslashes(substr(trim($_REQUEST['description']),0,$config['guild_description_chars_limit'])));
+				$description = htmlspecialchars(stripslashes(substr(trim($_REQUEST['description']),0, setting('core.guild_description_chars_limit'))));
 				$guild->setCustomField('description', $description);
 				$saved = true;
 			}
@@ -67,8 +69,6 @@ if(!empty($errors)) {
 
 	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
-		'action' => '?subtopic=guilds'
+		'action' => getLink('guilds')
 	));
 }
-
-?>

@@ -92,25 +92,38 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		return $ret;
     }
 
-	public function select($table, $where, $limit = null)
+	public function select($table, $where = [], $limit = null)
 	{
 		$fields = array_keys($where);
 		$values = array_values($where);
-		$query = 'SELECT * FROM ' . $this->tableName($table) . ' WHERE (';
+		$query = 'SELECT * FROM ' . $this->tableName($table);
 
-		$count = count($fields);
-		for ($i = 0; $i < $count; $i++)
-			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).' AND ';
+		if (!empty($where)) {
+			$query .= ' WHERE (';
 
-		$query = substr($query, 0, -4);
+			$count = count($fields);
+			for ($i = 0; $i < $count; $i++) {
+				$query .= $this->fieldName($fields[$i]) . ' = ' . $this->quote($values[$i]) . ' AND ';
+			}
+
+			$query = substr($query, 0, -4);
+			$query .= ')';
+		}
+
 		if (isset($limit))
-			$query .=') LIMIT '.$limit.';';
+			$query .=' LIMIT '.$limit.';';
 		else
-			$query .=');';
+			$query .=';';
 
 		$query = $this->query($query);
-		if($query->rowCount() != 1) return false;
-		return $query->fetch();
+		$rowCount = $query->rowCount();
+		if ($rowCount <= 0) return false;
+		else if ($rowCount == 1) {
+			return $query->fetch();
+		}
+
+		return $query->fetchAll();
+
 	}
 
 	public function insert($table, $data)
@@ -171,8 +184,14 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		$query = 'UPDATE '.$this->tableName($table).' SET ';
 
 		$count = count($fields);
-		for ($i = 0; $i < $count; $i++)
-			$query.= $this->fieldName($fields[$i]).' = '.$this->quote($values[$i]).', ';
+		for ($i = 0; $i < $count; $i++) {
+			$value = 'NULL';
+			if ($values[$i] !== null) {
+				$value = $this->quote($values[$i]);
+			}
+
+			$query.= $this->fieldName($fields[$i]).' = '.$value.', ';
+		}
 
 		$query = substr($query, 0, -2);
 		$query.=' WHERE (';
@@ -216,6 +235,30 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 		$this->exec($query);
 		return true;
 	}
+
+	public function addColumn($table, $column, $definition): void {
+		$this->exec('ALTER TABLE ' . $this->tableName($table) . ' ADD ' . $this->fieldName($column) . ' ' . $definition . ';');
+	}
+
+	public function modifyColumn($table, $column, $definition): void {
+		$this->exec('ALTER TABLE ' . $this->tableName($table) . ' MODIFY ' . $this->fieldName($column) . ' ' . $definition . ';');
+	}
+
+	public function changeColumn($table, $from, $to, $definition): void {
+		$this->exec('ALTER TABLE ' . $this->tableName($table) . ' CHANGE ' . $this->fieldName($from) . ' ' . $this->fieldName($to) . ' ' . $definition . ';');
+	}
+
+	public function dropColumn($table, $column): void {
+		$this->exec('ALTER TABLE ' . $this->tableName($table) . ' DROP COLUMN ' . $this->fieldName($column) . ';');
+	}
+
+	public function renameTable($from, $to): void {
+		$this->exec('RENAME TABLE ' . $this->tableName($from) . ' TO ' . $this->tableName($to) . ';');
+	}
+
+	public function dropTable($table, $ifExists = true): void {
+		$this->exec('DROP TABLE ' . ($ifExists ? 'IF EXISTS' : '') . ' ' . $this->tableName($table) . ';');
+	}
 /**
  * LIMIT/OFFSET clause for queries.
  *
@@ -252,5 +295,3 @@ abstract class OTS_Base_DB extends PDO implements IOTS_DB
 }
 
 /**#@-*/
-
-?>

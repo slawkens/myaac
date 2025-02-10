@@ -146,5 +146,3 @@ class OTS_BinaryTools
 }
 
 /**#@-*/
-
-?>

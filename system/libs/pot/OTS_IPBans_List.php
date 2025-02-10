@@ -34,5 +34,3 @@ class OTS_IPBans_List extends OTS_Bans_List
         $this->setFilter($filter);
     }
 }
-
-?>

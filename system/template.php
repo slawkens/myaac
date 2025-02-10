@@ -7,11 +7,16 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Cache\Cache;
+use MyAAC\Models\Menu;
+use MyAAC\Plugins;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 // template
-$template_name = $config['template'];
-if($config['template_allow_change'])
+$template_name = setting('core.template');
+if(setting('core.template_allow_change'))
 {
 	if(isset($_GET['template']))
 	{
@@ -36,14 +41,21 @@ if($config['template_allow_change'])
 	}
 	else {
 		$template_session = getSession('template');
-		if ($template_session !== false) {
+		if ($template_session) {
 			if (!preg_match("/[^A-z0-9_\-]/", $template_session)) {
 				$template_name = $template_session;
 			}
 		}
 	}
 }
-$template_path = 'templates/' . $template_name;
+
+$themes = Plugins::getThemes();
+if (isset($themes[$template_name])) {
+	$template_path = $themes[$template_name];
+}
+else {
+	$template_path = 'templates/' . $template_name;
+}
 
 if(file_exists(BASE . $template_path . '/index.php')) {
 	$template_index = 'index.php';
@@ -51,7 +63,7 @@ if(file_exists(BASE . $template_path . '/index.php')) {
 elseif(file_exists(BASE . $template_path . '/template.php')) {
 	$template_index = 'template.php';
 }
-elseif($config['backward_support'] && file_exists(BASE . $template_path . '/layout.php')) {
+elseif(setting('core.backward_support') && file_exists(BASE . $template_path . '/layout.php')) {
 	$template_index = 'layout.php';
 }
 else {
@@ -74,7 +86,7 @@ if ($cache->enabled() && $cache->fetch('template_ini_' . $template_name, $tmp)) 
 else {
 	$file = BASE . $template_path . '/config.ini';
 	$exists = file_exists($file);
-	if ($exists || ($config['backward_support'] && file_exists(BASE . $template_path . '/layout_config.ini'))) {
+	if ($exists || (setting('core.backward_support') && file_exists(BASE . $template_path . '/layout_config.ini'))) {
 		if (!$exists) {
 			$file = BASE . $template_path . '/layout_config.ini';
 		}
@@ -83,7 +95,7 @@ else {
 		unset($file);
 
 		if ($cache->enabled()) {
-			$cache->set('template_ini_' . $template_name, serialize($template_ini));
+			$cache->set('template_ini_' . $template_name, serialize($template_ini), 10 * 60);
 		}
 	}
 }
@@ -102,61 +114,79 @@ $template['link_account_logout'] = getLink('account/logout');
 
 $template['link_news_archive'] = getLink('news/archive');
 
-$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures', 'spells', 'commands', 'experienceStages', 'freeHouses', 'serverInfo', 'experienceTable', 'faq', 'points', 'gifts', 'bugtracker', 'gallery');
-foreach($links as $link) {
-	$template['link_' . $link] = getLink($link);
+$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills' => 'last-kills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures' => 'monsters', 'monsters', 'spells', 'commands', 'exp-stages', 'freeHouses', 'serverInfo', 'exp-table', 'faq', 'points', 'gifts', 'bugtracker', 'gallery');
+foreach($links as $key => $value) {
+	$key = is_string($key) ? $key : $value;
+	$template['link_' . $key] = getLink($value);
 }
 
 $template['link_screenshots'] = getLink('gallery');
 $template['link_movies'] = getLink('videos');
 
 $template['link_gifts_history'] = getLink('gifts', 'history');
-if($config['forum'] != '')
+$forumSetting = setting('core.forum');
+if($forumSetting != '')
 {
-	if(strtolower($config['forum']) == 'site')
+	if(strtolower($forumSetting) == 'site')
 		$template['link_forum'] = "<a href='" . getLink('forum') . "'>";
 	else
-		$template['link_forum'] = "<a href='" . $config['forum'] . "' target='_blank'>";
+		$template['link_forum'] = "<a href='" . $forumSetting . "' target='_blank'>";
 }
 
+$twig->addGlobal('template_name', $template_name);
 $twig->addGlobal('template_path', $template_path);
 if($twig_loader) {
 	$twig_loader->prependPath(BASE . $template_path);
 }
 
-function get_template_menus() {
-	global $db, $template_name;
+function get_template_menus(): array
+{
+	global $template_name;
 
-	$cache = Cache::getInstance();
-	if ($cache->enabled()) {
-		$tmp = '';
-		if ($cache->fetch('template_menus', $tmp)) {
-			$result = unserialize($tmp);
-		}
-	}
+	$result = Cache::remember('template_menus', 10 * 60, function () use ($template_name) {
+		$result = Menu::select(['name', 'link', 'blank', 'color', 'category'])
+			->where('template', $template_name)
+			->orderBy('category')
+			->orderBy('ordering')
+			->get();
 
-	if (!isset($result)) {
-		$query = $db->query('SELECT `name`, `link`, `blank`, `color`, `category` FROM `' . TABLE_PREFIX . 'menu` WHERE `template` = ' . $db->quote($template_name) . ' ORDER BY `category`, `ordering` ASC');
-		$result = $query->fetchAll();
+		return $result->toArray();
+	});
 
-		if ($cache->enabled()) {
-			$cache->set('template_menus', serialize($result), 600);
-		}
-	}
+	$configMenuCategories = config('menu_categories');
+	$configMenuDefaultColor = config('menu_default_links_color') ?? config('menu_default_color');
 
-	$menus = array();
+	$menus = [];
 	foreach($result as $menu) {
-		$link_full = strpos(trim($menu['link']), 'http') === 0 ? $menu['link'] : getLink($menu['link']);
-		$menus[$menu['category']][] = array('name' => $menu['name'], 'link' => $menu['link'], 'link_full' => $link_full, 'blank' => $menu['blank'] == 1, 'color' => $menu['color']);
+		if (empty($menu['link'])) {
+			$menu['link'] = 'news';
+		}
+
+		$link_full = (str_starts_with(trim($menu['link']), 'http') ? $menu['link'] : getLink($menu['link']));
+		$target_blank = ($menu['blank'] == 1 ? ' target="blank"' : '');
+
+		$color = (empty($menu['color']) ? ($configMenuCategories[$menu['category']]['default_links_color'] ?? ($configMenuDefaultColor ?? '')) : $menu['color']);
+
+		$color = str_replace('#', '', $color);
+
+		if (in_array('#' . $color, [$configMenuCategories[$menu['category']]['default_links_color'] ?? '', $configMenuDefaultColor])) {
+			$color = '';
+		}
+
+		$style_color = (empty($color) ? '' : 'style="color: #' . $color . ' !important"');
+
+		$menus[$menu['category']][] = [
+			'name' => $menu['name'],
+			'link' => $menu['link'], 'link_full' => $link_full,
+			'blank' => $menu['blank'] == 1, 'target_blank' => $target_blank,
+			'color' => $color, 'style_color' => $style_color,
+		];
 	}
 
-	$new_menus = array();
+	$new_menus = [];
 	/**
 	 * @var array $configMenuCategories
-	 * @var int $id
-	 * @var array $options
 	 */
-	$configMenuCategories = config('menu_categories');
 	if($configMenuCategories === null) {
 		return [];
 	}

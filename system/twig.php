@@ -1,10 +1,22 @@
 <?php
+/**
+ * Twig Loader
+ *
+ * @package   MyAAC
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2021 MyAAC
+ * @link      https://my-aac.org
+ */
+defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\CsrfToken;
 use Twig\Environment as Twig_Environment;
 use Twig\Extension\DebugExtension as Twig_DebugExtension;
 use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+
+global $twig, $twig_loader;
 
 $dev_mode = (config('env') === 'dev');
 $twig_loader = new Twig_FilesystemLoader(SYSTEM . 'templates');
@@ -14,12 +26,16 @@ $twig = new Twig_Environment($twig_loader, array(
 	'debug' => $dev_mode
 ));
 
+$twig_loader->addPath(PLUGINS);
+
 if($dev_mode) {
 	$twig->addExtension(new Twig_DebugExtension());
 }
 unset($dev_mode);
 
-$filter = new Twig_SimpleFilter('timeago', function ($datetime) {
+$twig->addExtension(new MyAAC\Twig\Extension\TypeCastingExtension());
+
+$filter = new TwigFilter('timeago', function ($datetime) {
 
 	$time = time() - strtotime($datetime);
 
@@ -59,17 +75,17 @@ $function = new TwigFunction('generateLink', function ($s, $n, $b = false) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getPlayerLink', function ($s, $p) {
-	return getPlayerLink($s, $p);
+$function = new TwigFunction('getPlayerLink', function ($s, $p = true, $colored = false) {
+	return getPlayerLink($s, $p, $colored);
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getMonsterLink', function ($s, $p) {
+$function = new TwigFunction('getMonsterLink', function ($s, $p = true) {
 	return getMonsterLink($s, $p);
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getGuildLink', function ($s, $p) {
+$function = new TwigFunction('getGuildLink', function ($s, $p = true) {
     return getGuildLink($s, $p);
 });
 $twig->addFunction($function);
@@ -79,19 +95,32 @@ $function = new TwigFunction('truncate', function ($s, $n) {
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('hook', function ($hook) {
+$function = new TwigFunction('hook', function ($context, $hook, array $params = []) {
 	global $hooks;
 
 	if(is_string($hook)) {
-		$hook = constant($hook);
+		if (defined($hook)) {
+			$hook = constant($hook);
+		}
+		else {
+			// plugin/template has a hook that this version of myaac does not support
+			// just silently return
+			return;
+		}
 	}
 
-	$hooks->trigger($hook);
-});
+	$params['context'] = $context;
+	$hooks->trigger($hook, $params);
+}, ['needs_context' => true]);
 $twig->addFunction($function);
 
 $function = new TwigFunction('config', function ($key) {
 	return config($key);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('setting', function ($key) {
+	return setting($key);
 });
 $twig->addFunction($function);
 
@@ -101,9 +130,26 @@ $function = new TwigFunction('getCustomPage', function ($name) {
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('csrf', function ($return = false) {
+	return csrf($return);
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('csrfToken', function () {
+	return csrfToken();
+});
+$twig->addFunction($function);
+
+$function = new TwigFunction('session', function ($key) {
+	return session($key);
+});
+$twig->addFunction($function);
+
 $filter = new TwigFilter('urlencode', function ($s) {
 	return urlencode($s);
 });
 
 $twig->addFilter($filter);
 unset($function, $filter);
+
+$hooks->trigger(HOOK_TWIG, ['twig' => $twig, 'twig_loader' => $twig_loader]);

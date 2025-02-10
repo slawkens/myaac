@@ -3,18 +3,15 @@
 use Twig\Environment as Twig_Environment;
 use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
 
-require '../common.php';
+const MYAAC_INSTALL = true;
 
-define('MYAAC_INSTALL', true);
+require '../common.php';
 
 // includes
 require SYSTEM . 'functions.php';
 require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 require SYSTEM . 'clients.conf.php';
-
-if(file_exists(BASE . 'config.local.php'))
-	require BASE . 'config.local.php';
 
 // ignore undefined index from Twig autoloader
 $config['env'] = 'prod';
@@ -26,13 +23,13 @@ $twig = new Twig_Environment($twig_loader, array(
 ));
 
 // load installation status
-$step = isset($_POST['step']) ? $_POST['step'] : 'welcome';
+$step = $_REQUEST['step'] ?? 'welcome';
 
 $install_status = array();
 if(file_exists(CACHE . 'install.txt')) {
 	$install_status = unserialize(file_get_contents(CACHE . 'install.txt'));
 
-	if(!isset($_POST['step'])) {
+	if(!isset($_REQUEST['step'])) {
 		$step = isset($install_status['step']) ? $install_status['step'] : '';
 	}
 }
@@ -70,7 +67,7 @@ if($step == 'database') {
 
 		$key = str_replace('var_', '', $key);
 
-		if(in_array($key, array('account', 'password', 'email', 'player_name'))) {
+		if(in_array($key, array('account', 'account_id', 'password', 'password_confirm', 'email', 'player_name'))) {
 			continue;
 		}
 
@@ -91,10 +88,6 @@ if($step == 'database') {
 				break;
 			}
 		}
-		else if($key == 'mail_admin' && !Validator::email($value)) {
-			$errors[] = $locale['step_config_mail_admin_error'];
-			break;
-		}
 		else if($key == 'timezone' && !in_array($value, DateTimeZone::listIdentifiers())) {
 			$errors[] = $locale['step_config_timezone_error'];
 			break;
@@ -110,19 +103,18 @@ if($step == 'database') {
 	}
 }
 else if($step == 'admin') {
-	$config_failed = true;
-	if(file_exists(BASE . 'config.local.php') && isset($config['installed']) && $config['installed'] && isset($_SESSION['saved'])) {
-		$config_failed = false;
-	}
-
-	if($config_failed) {
+	if(!file_exists(BASE . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
 		$step = 'database';
+	}
+	else {
+		$_SESSION['saved'] = true;
 	}
 }
 else if($step == 'finish') {
 	$email = $_SESSION['var_email'];
 	$password = $_SESSION['var_password'];
-	$player_name = $_SESSION['var_player_name'];
+	$password_confirm = $_SESSION['var_password_confirm'];
+	$player_name = $_SESSION['var_player_name'] ?? null;
 
 	// email check
 	if(empty($email)) {
@@ -133,18 +125,7 @@ else if($step == 'finish') {
 	}
 
 	// account check
-	if(isset($_SESSION['var_account'])) {
-		if(empty($_SESSION['var_account'])) {
-			$errors[] = $locale['step_admin_account_error_empty'];
-		}
-		else if(!Validator::accountName($_SESSION['var_account'])) {
-			$errors[] = $locale['step_admin_account_error_format'];
-		}
-		else if(strtoupper($_SESSION['var_account']) == strtoupper($password)) {
-			$errors[] = $locale['step_admin_account_error_same'];
-		}
-	}
-	else if(isset($_SESSION['var_account_id'])) {
+	if(isset($_SESSION['var_account_id'])) {
 		if(empty($_SESSION['var_account_id'])) {
 			$errors[] = $locale['step_admin_account_id_error_empty'];
 		}
@@ -155,6 +136,17 @@ else if($step == 'finish') {
 			$errors[] = $locale['step_admin_account_id_error_same'];
 		}
 	}
+	else if(isset($_SESSION['var_account'])) {
+		if(empty($_SESSION['var_account'])) {
+			$errors[] = $locale['step_admin_account_error_empty'];
+		}
+		else if(!Validator::accountName($_SESSION['var_account'])) {
+			$errors[] = $locale['step_admin_account_error_format'];
+		}
+		else if(strtoupper($_SESSION['var_account']) == strtoupper($password)) {
+			$errors[] = $locale['step_admin_account_error_same'];
+		}
+	}
 
 	// password check
 	if(empty($password)) {
@@ -163,13 +155,17 @@ else if($step == 'finish') {
 	else if(!Validator::password($password)) {
 		$errors[] = $locale['step_admin_password_error_format'];
 	}
-
-	// player name check
-	if(empty($player_name)) {
-		$errors[] = $locale['step_admin_player_name_error_empty'];
+	else if($password != $password_confirm) {
+		$errors[] = $locale['step_admin_password_confirm_error_not_same'];
 	}
-	else if(!Validator::characterName($player_name)) {
-		$errors[] = $locale['step_admin_player_name_error_format'];
+
+	if (isset($player_name)) {
+		// player name check
+		if (empty($player_name)) {
+			$errors[] = $locale['step_admin_player_name_error_empty'];
+		} else if (!Validator::characterName($player_name)) {
+			$errors[] = $locale['step_admin_player_name_error_format'];
+		}
 	}
 
 	if(!empty($errors)) {
@@ -187,14 +183,14 @@ clearstatcache();
 if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 	if(!file_exists(BASE . 'install/ip.txt')) {
 		$content = warning('AAC installation is disabled. To enable it make file <b>ip.txt</b> in install/ directory and put there your IP.<br/>
-		Your IP is:<br /><b>' . $_SERVER['REMOTE_ADDR'] . '</b>', true);
+		Your IP is:<br /><b>' . get_browser_real_ip() . '</b>', true);
 	}
 	else {
 		$file_content = trim(file_get_contents(BASE . 'install/ip.txt'));
 		$allow = false;
 		$listIP = preg_split('/\s+/', $file_content);
 		foreach($listIP as $ip) {
-			if($_SERVER['REMOTE_ADDR'] == $ip) {
+			if(get_browser_real_ip() == $ip) {
 				$allow = true;
 			}
 		}
@@ -203,7 +199,7 @@ if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 		{
 			$content = warning('In file <b>install/ip.txt</b> must be your IP!<br/>
 			In file is:<br /><b>' . nl2br($file_content) . '</b><br/>
-			Your IP is:<br /><b>' . $_SERVER['REMOTE_ADDR'] . '</b>', true);
+			Your IP is:<br /><b>' . get_browser_real_ip() . '</b>', true);
 		}
 		else {
 			ob_start();

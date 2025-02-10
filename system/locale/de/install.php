@@ -20,7 +20,7 @@ $locale['not_loaded'] = 'Nicht geladen';
 $locale['loading_spinner'] = 'Bitte warten, installieren...';
 $locale['importing_spinner'] = 'Bitte warte, Daten werden importiert...';
 $locale['please_fill_all'] = 'Bitte füllen Sie alle Felder aus!';
-$locale['already_installed'] = 'MyAAC wurde bereits installiert. Bitte löschen <b>install/<b/> Verzeichnis. Wenn Sie MyAAC neu installieren möchten, löschen Sie die Datei <strong>config.local.php</strong> aus dem Hauptverzeichnis und aktualisieren Sie die Seite.';
+$locale['already_installed'] = 'MyAAC wurde bereits installiert. Bitte löschen <b>install/</b> Verzeichnis. Wenn Sie MyAAC neu installieren möchten, löschen Sie die Datei <strong>config.local.php</strong> aus dem Hauptverzeichnis und aktualisieren Sie die Seite.';
 
 // welcome
 $locale['step_welcome'] = 'Willkommen';
@@ -36,6 +36,10 @@ $locale['step_requirements'] = 'Anforderungen';
 $locale['step_requirements_title'] = 'Anforderungen überprüfen';
 $locale['step_requirements_php_version'] = 'PHP Version';
 $locale['step_requirements_write_perms'] = 'Schreibberechtigungen';
+$locale['step_requirements_folder_exists'] = 'Ordner ist vorhanden';
+$locale['step_requirements_folder_not_exists_tools_ext'] = 'NPM Package Manager wird verwendet für externe JavaScript/CSS Bibliotheken.'
+	. ' Es sollte via Command Line installiert werden: <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">https://docs.npmjs.com/downloading-and-installing-node-js-and-npm</a>'
+	. ' Nachdem das Tool installiert wurde, folgende Befehl sollte ausgeführt in dem Hauptordner des MyAACs: "npm install".';
 $locale['step_requirements_failed'] = 'Die Installation wird deaktiviert, bis diese Anforderungen erfüllt sind.</b><br/>Für weitere Informationen siehe <b>README</b> Datei.';
 $locale['step_requirements_extension'] = '$EXTENSION$ PHP Erweiterung';
 
@@ -99,7 +103,10 @@ $locale['step_admin_account_id_error_same'] = 'Das Passwort darf nicht mit der K
 $locale['step_admin_password'] = 'Administrator Konto Passwort';
 $locale['step_admin_password_desc'] = 'Passwort für Ihr Administratorkonto.';
 $locale['step_admin_password_error_empty'] = 'Bitte geben Sie das Passwort für Ihr neues Konto ein.';
-$locale['step_admin_password_error_format'] = 'Ungültiges Passwortformat. Verwenden Sie nur a-Z und Ziffern 0-9. Mindestens 8, maximal 30 Zeichen.';
+$locale['step_admin_password_error_format'] = 'Ungültiges Passwortformat. Mindestens eine Buchstabe und eine Ziffer. Mindestens 8, maximal 30 Zeichen.';
+$locale['step_admin_password_confirm'] = 'Password wiederholen';
+$locale['step_admin_password_confirm_desc'] = 'Passwort für dein Konto wiederholen.';
+$locale['step_admin_password_confirm_error_not_same'] = 'Passwörter sind nicht gleich.';
 
 // finish
 $locale['step_finish_admin_panel'] = 'Admin Bereich';

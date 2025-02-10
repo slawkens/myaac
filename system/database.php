@@ -7,9 +7,16 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
-if(!isset($config['database_user'][0], $config['database_password'][0], $config['database_name'][0]))
+if (!isset($config['database_overwrite'])) {
+	$config['database_overwrite'] = false;
+}
+
+if(!$config['database_overwrite'] && !isset($config['database_user'][0], $config['database_password'][0], $config['database_name'][0]))
 {
 	if(isset($config['lua']['sqlType'])) {// tfs 0.3
 		if(isset($config['lua']['mysqlHost'])) {// tfs 0.2
@@ -87,26 +94,41 @@ if(!isset($config['database_socket'])) {
 	$config['database_socket'] = '';
 }
 
+
 try {
 	$ots->connect(array(
-			'host' => $config['database_host'],
-			'user' => $config['database_user'],
-			'password' => $config['database_password'],
-			'database' => $config['database_name'],
-			'log' => $config['database_log'],
-			'socket' => @$config['database_socket'],
-			'persistent' => @$config['database_persistent']
-		)
-	);
+		'host' => $config['database_host'],
+		'user' => $config['database_user'],
+		'password' => $config['database_password'],
+		'database' => $config['database_name'],
+		'log' => $config['database_log'],
+		'socket' => @$config['database_socket'],
+		'persistent' => @$config['database_persistent']
+	));
 
+	global $db;
 	$db = POT::getInstance()->getDBHandle();
-}
-catch(PDOException $error) {
+	$capsule = new Capsule;
+	$capsule->addConnection([
+		'driver' => 'mysql',
+		'database' => $config['database_name'],
+	]);
+
+	$capsule->getConnection()->setPdo($db);
+	$capsule->getConnection()->setReadPdo($db);
+
+	$capsule->setAsGlobal();
+	$capsule->bootEloquent();
+
+	$eloquentConnection = $capsule->getConnection();
+
+} catch (Exception $e) {
 	if(isset($cache) && $cache->enabled()) {
 		$cache->delete('config_lua');
 	}
 
 	if(defined('MYAAC_INSTALL')) {
+		$error = $e->getMessage();
 		return; // installer will take care of this
 	}
 
@@ -115,5 +137,5 @@ catch(PDOException $error) {
 		'<ul>' .
 			'<li>MySQL is not configured propertly in <i>config.lua</i>.</li>' .
 			'<li>MySQL server is not running.</li>' .
-		'</ul>' . $error->getMessage());
+		'</ul>' . $e->getMessage());
 }

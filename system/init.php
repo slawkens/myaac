@@ -7,55 +7,76 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use DebugBar\StandardDebugBar;
+use MyAAC\Cache\Cache;
+use MyAAC\CsrfToken;
+use MyAAC\Hooks;
+use MyAAC\Models\Town;
+use MyAAC\Settings;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
-// load configuration
-require_once BASE . 'config.php';
-if(file_exists(BASE . 'config.local.php')) // user customizations
-	require BASE . 'config.local.php';
-
+global $config;
 if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
 
-date_default_timezone_set($config['date_timezone']);
+if(config('env') === 'dev') {
+	require SYSTEM . 'exception.php';
+}
+
+if (config('env') === 'dev' || getBoolean(config('enable_debugbar'))) {
+	$debugBar = new StandardDebugBar();
+}
+
+if(empty($config['server_path'])) {
+	throw new RuntimeException('Server Path has been not set. Go to config.php and set it.');
+}
+
 // take care of trailing slash at the end
 if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
 	$config['server_path'] .= '/';
 
 // enable gzip compression if supported by the browser
-if($config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && function_exists('ob_gzhandler'))
+if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && str_contains($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('ob_gzhandler'))
 	ob_start('ob_gzhandler');
 
 // cache
-require_once SYSTEM . 'libs/cache.php';
+global $cache;
 $cache = Cache::getInstance();
+
+// event system
+global $hooks;
+$hooks = new Hooks();
+$hooks->load();
+$hooks->trigger(HOOK_INIT);
 
 // twig
 require_once SYSTEM . 'twig.php';
 
+// action, used by many pages
+$action = $_REQUEST['action'] ?? '';
+define('ACTION', $action);
+
+// errors, is also often used
+$errors = [];
+
 // trim values we receive
-if(isset($_POST))
-{
-	foreach($_POST as $var => $value) {
-		if(is_string($value)) {
-			$_POST[$var] = trim($value);
-		}
+foreach($_POST as $var => $value) {
+	if(is_string($value)) {
+		$_POST[$var] = trim($value);
 	}
 }
-if(isset($_GET))
-{
-	foreach($_GET as $var => $value) {
-		if(is_string($value))
-			$_GET[$var] = trim($value);
-	}
+
+foreach($_GET as $var => $value) {
+	if(is_string($value))
+		$_GET[$var] = trim($value);
 }
-if(isset($_REQUEST))
-{
-	foreach($_REQUEST as $var => $value) {
-		if(is_string($value))
-			$_REQUEST[$var] = trim($value);
-	}
+
+foreach($_REQUEST as $var => $value) {
+	if(is_string($value))
+		$_REQUEST[$var] = trim($value);
 }
 
 // load otserv config file
@@ -76,8 +97,8 @@ if($config_lua_reload) {
 
 	// cache config
 	if($cache->enabled()) {
-		$cache->set('config_lua', serialize($config['lua']), 120);
-		$cache->set('server_path', $config['server_path']);
+		$cache->set('config_lua', serialize($config['lua']), 2 * 60);
+		$cache->set('server_path', $config['server_path'], 10 * 60);
 	}
 }
 unset($tmp);
@@ -87,9 +108,6 @@ if(isset($config['lua']['servername']))
 
 if(isset($config['lua']['houserentperiod']))
 	$config['lua']['houseRentPeriod'] = $config['lua']['houserentperiod'];
-
-if($config['item_images_url'][strlen($config['item_images_url']) - 1] !== '/')
-	$config['item_images_url'] .= '/';
 
 // localize data/ directory based on data directory set in config.lua
 foreach(array('dataDirectory', 'data_directory', 'datadir') as $key) {
@@ -114,48 +132,68 @@ if(!isset($foundValue)) {
 $config['data_path'] = $foundValue;
 unset($foundValue);
 
-// new config values for compability
-if(!isset($config['highscores_ids_hidden']) || count($config['highscores_ids_hidden']) == 0) {
-	$config['highscores_ids_hidden'] = array(0);
-}
-
-$config['account_create_character_create'] = config('account_create_character_create') && (!config('mail_enabled') || !config('account_mail_verify'));
-
 // POT
 require_once SYSTEM . 'libs/pot/OTS.php';
 $ots = POT::getInstance();
+$eloquentConnection = null;
 require_once SYSTEM . 'database.php';
 
+// verify myaac tables exists in database
+if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {
+	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting ' . (IS_CLI ? 'http://your-ip.com/' : BASE_URL) . 'install');
+}
+
+// execute migrations
+$configDatabaseAutoMigrate = config('database_auto_migrate');
+if (!isset($configDatabaseAutoMigrate) || $configDatabaseAutoMigrate) {
+	require SYSTEM . 'migrate.php';
+}
+
+// settings
+$settings = Settings::getInstance();
+$settings->load();
+
+// csrf protection
+$token = getSession('csrf_token');
+if (!isset($token) || !$token) {
+	CsrfToken::generate();
+}
+
+// deprecated config values
+require_once SYSTEM . 'compat/config.php';
+
+// deprecated classes
+require_once SYSTEM . 'compat/classes.php';
+
+date_default_timezone_set(setting('core.date_timezone'));
+
+setting(
+	[
+		'core.account_mail_verify',
+		setting('core.account_mail_verify') && setting('core.mail_enabled')
+	]
+);
+
+$settingsItemImagesURL = setting('core.item_images_url');
+if($settingsItemImagesURL[strlen($settingsItemImagesURL) - 1] !== '/') {
+	setting(['core.item_images_url', $settingsItemImagesURL . '/']);
+}
+
 define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
-// load vocation names
-$tmp = '';
-if($cache->enabled() && $cache->fetch('vocations', $tmp)) {
-	$config['vocations'] = unserialize($tmp);
+define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
+define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
+
+$towns = Cache::remember('towns', 10 * 60, function () use ($db) {
+	if ($db->hasTable('towns') && Town::count() > 0) {
+		return Town::orderBy('id', 'ASC')->pluck('name', 'id')->toArray();
+	}
+
+	return [];
+});
+
+if (count($towns) <= 0) {
+	$towns = setting('core.towns');
 }
-else {
-	if(!class_exists('DOMDocument')) {
-		throw new RuntimeException('Please install PHP xml extension. MyAAC will not work without it.');
-	}
 
-	$vocations = new DOMDocument();
-	$file = $config['data_path'] . 'XML/vocations.xml';
-	if(!@file_exists($file))
-		$file = $config['data_path'] . 'vocations.xml';
-
-	if(!$vocations->load($file))
-		throw new RuntimeException('ERROR: Cannot load <i>vocations.xml</i> - the file is malformed. Check the file with xml syntax validator.');
-
-	$config['vocations'] = array();
-	foreach($vocations->getElementsByTagName('vocation') as $vocation) {
-		$id = $vocation->getAttribute('id');
-		$config['vocations'][$id] = $vocation->getAttribute('name');
-	}
-
-	if($cache->enabled()) {
-		$cache->set('vocations', serialize($config['vocations']), 120);
-	}
-}
-unset($tmp, $id, $vocation);
-
-require LIBS . 'Towns.php';
-Towns::load();
+config(['towns', $towns]);
+unset($towns);

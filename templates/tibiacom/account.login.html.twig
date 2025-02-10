@@ -1,3 +1,4 @@
+{{ hook('HOOK_ACCOUNT_LOGIN_BEFORE_PAGE') }}
 <form action="{{ getLink('account/manage') }}" method="post" style="margin: 0px; padding: 0px;">
 	{% if redirect is not null %}
 		<input type="hidden" name="redirect" value="{{ redirect }}" />
@@ -32,19 +33,25 @@
 												<tr>
 													<td>
 														<table style="float: left; width: 370px;" cellpadding="0" cellspacing="0" >
+															{{ hook('HOOK_ACCOUNT_LOGIN_BEFORE_ACCOUNT') }}
 															<tr>
-																<td class="LabelV" ><span{% if error is not null %} class="red"{% endif %}>Account {{ account }}:</span></td>
-																<td><input type="text" name="account_login" size="35" maxlength="30" autofocus /></td>
+																<td class="LabelV">
+																	<span{% if error is not null %} class="red"{% endif %}>{{ account_login_by }}:</span>
+																</td>
+																<td><input type="text" name="account_login" size="35" maxlength="{{ setting('core.account_login_by_email') ? '255' : '30' }}" autofocus /></td>
 															</tr>
+															{{ hook('HOOK_ACCOUNT_LOGIN_AFTER_ACCOUNT') }}
 															<tr>
 																<td class="LabelV" ><span{% if error is not null %} class="red"{% endif %}>Password:</span></td>
 																<td><input type="password" name="password_login" size="35" maxlength="29" /></td>
 															</tr>
+															{{ hook('HOOK_ACCOUNT_LOGIN_AFTER_PASSWORD') }}
 															<tr>
 																<td class="LabelV" ></td>
 																<td><input type="checkbox" id="remember_me" name="remember_me" value="true" />
 																	<label for="remember_me"> Remember me</label></td>
 															</tr>
+															{{ hook('HOOK_ACCOUNT_LOGIN_AFTER_REMEMBER_ME') }}
 														</table>
 														<div style="float: right; font-size: 1px;" >
 															<input type="hidden" name="page" value="overview" >
@@ -108,14 +115,14 @@
 											<tr>
 												<td >
 													<div style="float: right; margin-top: 20px;" >
-														{% spaceless %}
+														{% apply spaceless %}
 														<form class="MediumButtonForm" action="{{ getLink('account/create') }}" method="post" >
 															<div class="MediumButtonBackground" style="background-image:url({{ template_path }}/images/global/buttons/mediumbutton.gif)" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);">
 																<div class="MediumButtonOver" style="background-image:url({{ template_path }}/images/global/buttons/mediumbutton-over.gif)" onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);"></div>
 																<input class="MediumButtonText" type="image" name="Create Account" alt="Create Account" src="{{ template_path }}/images/global/buttons/mediumbutton_createaccount.png" />
 															</div>
 														</form>
-														{% endspaceless %}
+														{% endapply %}
 													</div>
 													<div id="LoginCreateAccountBox" >
 														<p><b>{{ config.lua.serverName }}...</b></p>
@@ -142,3 +149,4 @@
 		</tr>
 	</table>
 </div>
+{{ hook('HOOK_ACCOUNT_LOGIN_AFTER_PAGE') }}

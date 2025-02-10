@@ -1,0 +1,61 @@
+To change a sex of character select player and choose a new sex.<br/>
+<span style="color: red">Change sex cost {{ setting('core.account_change_character_sex_price') }} {{ setting('core.donate_column') == 'coins' ? 'coins' : 'premium points' }}. You have {{ points }} {{ setting('core.donate_column') == 'coins' ? 'coins' : 'premium points' }}.</span>
+<br/><br/>
+{% set title = 'Change sex' %}
+{% set background = config('darkborder') %}
+{% set content %}
+<table style="width:100%;" >
+	<tr>
+		<td class="LabelV" ><span>Character:</span></td>
+		<td style="width:90%;" >
+			<select form="form" name="player_id">
+				{% for player in players %}
+				<option value="{{ player.getId() }}">{{ player.getName() }}</option>
+				{% endfor %}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td class="LabelV" ><span>New Sex:</span></td>
+		<td>
+			<select form="form" name="new_sex">
+				{% for id, gender in config.genders %}
+				<option value="{{ id }}"{% if player_sex == id %} selected{% endif %}>{{ gender }}</option>
+				{% endfor %}
+			</select>
+		</td>
+	</tr>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+
+<br/>
+<table style="width:100%">
+	<tr align="center">
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0" >
+				<tr>
+					<td style="border:0px;">
+						<form id="form" action="{{ getLink('account/characters/change-sex') }}" method="post">
+							{{ csrf() }}
+							<input type="hidden" name="changesexsave" value="1"/>
+							{{ include('buttons.submit.html.twig') }}
+						</form>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td style="border:0px;">
+						<form action="{{ getLink('account/manage') }}" method="post">
+							{{ csrf() }}
+							{{ include('buttons.back.html.twig') }}
+						</form>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

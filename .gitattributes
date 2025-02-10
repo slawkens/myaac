@@ -3,8 +3,11 @@
 .gitignore export-ignore
 .github export-ignore
 .editorconfig export-ignore
-.travis.yml export-ignore
 _config.yml export-ignore
 release.sh export-ignore
+
+# cypress
+cypress export-ignore
+cypress.config.js export-ignore
 
 *.sh text eol=lf

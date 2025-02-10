@@ -18,22 +18,22 @@
 			<div class="card-body">
 				<p class="login-box-msg">Please login.</p>
 
-				<form method="post">
+				<form method="post" action="{{ constant('ADMIN_URL') }}">
+					{{ csrf() }}
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fa fa-lock"></i></span>
 						</div>
-						<input type="text" class="form-control" id="account-name-input" name="account_login"
-							   placeholder="Account {{ account }}" required autofocus>
+						<input type="text" class="form-control" id="account-name-input" name="account_login" maxlength="{{ setting('core.account_login_by_email') ? '255' : '30' }}" placeholder="{{ account_login_by }}" required autofocus>
 					</div>
-
+					{{ hook('HOOK_ADMIN_LOGIN_AFTER_ACCOUNT') }}
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fa fa-key"></i></span>
 						</div>
-						<input type="password" class="form-control" placeholder="Password" name="password_login"
-							   placeholder="Password" required>
+						<input type="password" class="form-control" placeholder="Password" name="password_login" required>
 					</div>
+					{{ hook('HOOK_ADMIN_LOGIN_AFTER_PASSWORD') }}
 					<div class="row">
 						<div class="col-8">
 							<div class="icheck-primary">
@@ -46,6 +46,7 @@
 							<button type="submit" class="btn btn-info btn-block">Sign In</button>
 						</div>
 					</div>
+					{{ hook('HOOK_ADMIN_LOGIN_AFTER_SIGN_IN') }}
 				</form>
 			</div>
 		</div>

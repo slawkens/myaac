@@ -10,15 +10,16 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Changelog';
 
-$_page = isset($_GET['page']) ? $_GET['page'] : 0;
-$id = isset($_GET['id']) ? $_GET['id'] : 0;
+use MyAAC\Models\Changelog;
+
+$_page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
 $limit = 30;
 $offset = $_page * $limit;
 $next_page = false;
 
 $canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 
-$changelogs = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'changelog` ' . ($canEdit ? '' : 'WHERE `hidden` = 0').' ORDER BY `id` DESC LIMIT ' . ($limit + 1) . ' OFFSET ' . $offset)->fetchAll();
+$changelogs = Changelog::isPublic()->orderByDesc('date')->limit($limit + 1)->offset($offset)->get()->toArray();
 
 $i = 0;
 foreach($changelogs as $key => &$log)
@@ -43,4 +44,3 @@ $twig->display('changelog.html.twig', array(
 	'next_page' => $next_page,
 	'canEdit' => $canEdit,
 ));
-?>

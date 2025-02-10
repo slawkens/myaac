@@ -308,7 +308,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
  * @since 0.1.5
  * @return AppendIterator Iterator for all spells.
  */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         $iterator = new AppendIterator();
         $iterator->append( new ArrayIterator($this->runes) );
@@ -324,7 +324,7 @@ class OTS_SpellsList implements IteratorAggregate, Countable
  * @since 0.1.5
  * @return int Amount of all spells.
  */
-    public function count()
+    public function count(): int
     {
         return count($this->runes) + count($this->instants) + count($this->conjures);
     }

@@ -8,18 +8,33 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Forum;
+
 defined('MYAAC') or die('Direct access not allowed!');
+
+$ret = require __DIR__ . '/base.php';
+if ($ret === false) {
+	return;
+}
+
+if(!$logged) {
+	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . urlencode(getLink('forum')) . '">Log in</a> to post on the forum.<br /><br />';
+	return;
+}
 
 if(!Forum::isModerator()) {
 	echo 'You are not logged in or you are not moderator.';
+	return;
 }
 
-$save = isset($_REQUEST['save']) ? (int)$_REQUEST['save'] == 1 : false;
+$save = isset($_REQUEST['save']) && (int)$_REQUEST['save'] == 1;
 if($save) {
 	$post_id = (int)$_REQUEST['id'];
 	$board = (int)$_REQUEST['section'];
 	if(!Forum::hasAccess($board)) {
-		echo "You don't have access to this board.";
+		$errors[] = "You don't have access to this board.";
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
 		return;
 	}
 
@@ -31,8 +46,10 @@ if($save) {
 			header('Location: ' . getForumBoardLink($nPost['section']));
 		}
 	}
-	else
-		echo 'Post with ID ' . $post_id . ' does not exist.';
+	else {
+		$errors[] = 'Post with ID ' . $post_id . ' does not exist.';
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
 else {
 	$post_id = (int)$_REQUEST['id'];
@@ -58,7 +75,8 @@ else {
 			));
 		}
 	}
-	else
-		echo 'Post with ID ' . $post_id . ' does not exist.';
+	else {
+		$errors[] = 'Post with ID ' . $post_id . ' does not exist.';
+		displayErrorBoxWithBackButton($errors, getLink('forum'));
+	}
 }
-?>

@@ -90,7 +90,7 @@ class OTS_Player extends OTS_Row_DAO
  * @version 0.1.2
  * @var array
  */
-    private $data = array('sex' => 0, 'vocation' => 0, 'experience' => 0, 'level' => 1, 'maglevel' => 0, 'health' => 100, 'healthmax' => 100, 'mana' => 100, 'manamax' => 100, 'manaspent' => 0, 'soul' => 0, 'lookbody' => 10, 'lookfeet' => 10, 'lookhead' => 10, 'looklegs' => 10, 'looktype' => 136, 'lookaddons' => 0, 'posx' => 0, 'posy' => 0, 'posz' => 0, 'cap' => 0, 'lastlogin' => 0, 'lastip' => 0, 'save' => true, 'skulltime' => 0, 'skull' => 0, 'balance' => 0, 'lastlogout' => 0, 'blessings' => 0, 'stamina' => 0, 'online' => 0, 'comment' => '', 'created' => 0, 'hidden' => 0);
+	private $data = array('group_id' => 1, 'sex' => 0, 'vocation' => 0, 'experience' => 0, 'level' => 1, 'maglevel' => 0, 'health' => 100, 'healthmax' => 100, 'mana' => 100, 'manamax' => 100, 'manaspent' => 0, 'soul' => 0, 'lookbody' => 10, 'lookfeet' => 10, 'lookhead' => 10, 'looklegs' => 10, 'looktype' => 136, 'lookaddons' => 0, 'posx' => 0, 'posy' => 0, 'posz' => 0, 'cap' => 0, 'lastlogin' => 0, 'lastip' => 0, 'save' => true, 'skulltime' => 0, 'skull' => 0, 'balance' => 0, 'lastlogout' => 0, 'blessings' => 0, 'stamina' => 0, 'online' => 0, 'comment' => '', 'created' => 0, 'hide' => 0);
 
 /**
  * Player skills.
@@ -99,7 +99,7 @@ class OTS_Player extends OTS_Row_DAO
  * @since 0.0.2
  * @var array
  */
-    private $skills = array(
+	private $skills = array(
 		POT::SKILL_FIST => array('value' => 0, 'tries' => 0),
 		POT::SKILL_CLUB => array('value' => 0, 'tries' => 0),
 		POT::SKILL_SWORD => array('value' => 0, 'tries' => 0),
@@ -108,6 +108,8 @@ class OTS_Player extends OTS_Row_DAO
 		POT::SKILL_SHIELD => array('value' => 0, 'tries' => 0),
 		POT::SKILL_FISH => array('value' => 0, 'tries' => 0)
 	);
+
+	private static array $playersOnline;
 /**
  * Magic PHP5 method.
  *
@@ -117,10 +119,10 @@ class OTS_Player extends OTS_Row_DAO
  * @version 0.0.4
  * @since 0.0.4
  */
-    public function __sleep()
-    {
-        return array('data', 'skills');
-    }
+	public function __sleep()
+	{
+		return array('data', 'skills');
+	}
 
 /**
  * Loads player with given id.
@@ -129,8 +131,8 @@ class OTS_Player extends OTS_Row_DAO
  * @param int $id Player's ID.
  * @throws PDOException On PDO operation error.
  */
-    public function load($id, $fields = null, $load_skills = true)
-    {
+	public function load($id, $fields = null, $load_skills = true)
+	{
 		global $__load;
 
 		if(!isset($__load['loss_experience']))
@@ -231,12 +233,12 @@ class OTS_Player extends OTS_Row_DAO
 		}
 		else {
 			// SELECT query on database
-			$this->data = $this->db->query('SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . ($this->db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $__load['skull_time'] . '` as `skulltime`, `' . $__load['skull_type'] . '` as `skull`' . $__load['guild_info'] . ', `town_id`' . $__load['loss_experience'] . $__load['loss_items'] . ', `balance`' . ($__load['blessings'] ? ', `blessings`' : '') . ($__load['direction'] ? ', `direction`' : '') . ($__load['stamina'] ? ', `stamina`' : '') . ($__load['world_id'] ? ', `world_id`' : '') . ($__load['online'] ? ', `online`' : '') . ', `' . ($__load['deletion'] ? 'deletion' : 'deleted') . '`' . ($__load['promotion'] ? ', `promotion`' : '') . ($__load['marriage'] ? ', `marriage`' : '') . ', `comment`, `created`, `hidden` FROM `players` WHERE `id` = ' . (int)$id)->fetch();
+			$this->data = $this->db->query('SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . ($this->db->hasColumn('players', 'lookaddons') ? ', `lookaddons`' : '') . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $__load['skull_time'] . '` as `skulltime`, `' . $__load['skull_type'] . '` as `skull`' . $__load['guild_info'] . ', `town_id`' . $__load['loss_experience'] . $__load['loss_items'] . ', `balance`' . ($__load['blessings'] ? ', `blessings`' : '') . ($__load['direction'] ? ', `direction`' : '') . ($__load['stamina'] ? ', `stamina`' : '') . ($__load['world_id'] ? ', `world_id`' : '') . ($__load['online'] ? ', `online`' : '') . ', `' . ($__load['deletion'] ? 'deletion' : 'deleted') . '`' . ($__load['promotion'] ? ', `promotion`' : '') . ($__load['marriage'] ? ', `marriage`' : '') . ', `comment`, `created`, `hide` FROM `players` WHERE `id` = ' . (int)$id)->fetch();
 		}
 
-        // loads skills
-        if( $this->isLoaded() && $load_skills)
-        {
+		// loads skills
+		if( $this->isLoaded() && $load_skills)
+		{
 			if($this->db->hasColumn('players', 'skill_fist')) {
 
 				$skill_ids = array(
@@ -271,8 +273,8 @@ class OTS_Player extends OTS_Row_DAO
 					$this->skills[ $skill['skillid'] ] = array('value' => $skill['value'], 'tries' => $skill['count']);
 				}
 			}
-        }
-    }
+		}
+	}
 
 /**
  * Loads player by it's name.
@@ -282,27 +284,27 @@ class OTS_Player extends OTS_Row_DAO
  * @param string $name Player's name.
  * @throws PDOException On PDO operation error.
  */
-    public function find($name)
-    {
-        // finds player's ID
-        $id = $this->db->query('SELECT `id` FROM `players` WHERE `name` = ' . $this->db->quote($name) )->fetch();
+	public function find($name)
+	{
+		// finds player's ID
+		$id = $this->db->query('SELECT `id` FROM `players` WHERE `name` = ' . $this->db->quote($name) )->fetch();
 
-        // if anything was found
-        if( isset($id['id']) )
-        {
-            $this->load($id['id']);
-        }
-    }
+		// if anything was found
+		if( isset($id['id']) )
+		{
+			$this->load($id['id']);
+		}
+	}
 
 /**
  * Checks if object is loaded.
  *
  * @return bool Load state.
  */
-    public function isLoaded()
-    {
-        return isset($this->data['id']);
-    }
+	public function isLoaded()
+	{
+		return isset($this->data['id']);
+	}
 
 /**
  * Saves player in database.
@@ -314,8 +316,8 @@ class OTS_Player extends OTS_Row_DAO
  * @version 0.1.2
  * @throws PDOException On PDO operation error.
  */
-    public function save()
-    {
+	public function save()
+	{
 		$skull_type = 'skull';
 		if($this->db->hasColumn('players', 'skull_type')) {
 			$skull_type = 'skull_type';
@@ -359,9 +361,9 @@ class OTS_Player extends OTS_Row_DAO
 		if(!isset($this->data['town_id']))
 			$this->data['town_id'] = 1;
 
-        // updates existing player
-        if( isset($this->data['id']) )
-        {
+		// updates existing player
+		if( isset($this->data['id']) )
+		{
 			$loss = '';
 			if($this->db->hasColumn('players', 'loss_experience')) {
 				$loss = ', `loss_experience` = ' . $this->data['loss_experience'] . ', `loss_mana` = ' . $this->data['loss_mana'] . ', `loss_skills` = ' . $this->data['loss_skills'];
@@ -397,12 +399,12 @@ class OTS_Player extends OTS_Row_DAO
 				$lookaddons = ', `lookaddons` = ' . $this->db->quote($this->data['lookaddons']);
 			}
 
-            // UPDATE query on database
-            $this->db->query('UPDATE ' . $this->db->tableName('players') . ' SET ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($this->data['name']) . ', ' . $this->db->fieldName('account_id') . ' = ' . $this->data['account_id'] . ', ' . $this->db->fieldName('group_id') . ' = ' . $this->data['group_id'] . ', ' . $this->db->fieldName('sex') . ' = ' . $this->data['sex'] . ', ' . $this->db->fieldName('vocation') . ' = ' . $this->data['vocation'] . ', ' . $this->db->fieldName('experience') . ' = ' . $this->data['experience'] . ', ' . $this->db->fieldName('level') . ' = ' . $this->data['level'] . ', ' . $this->db->fieldName('maglevel') . ' = ' . $this->data['maglevel'] . ', ' . $this->db->fieldName('health') . ' = ' . $this->data['health'] . ', ' . $this->db->fieldName('healthmax') . ' = ' . $this->data['healthmax'] . ', ' . $this->db->fieldName('mana') . ' = ' . $this->data['mana'] . ', ' . $this->db->fieldName('manamax') . ' = ' . $this->data['manamax'] . ', ' . $this->db->fieldName('manaspent') . ' = ' . $this->data['manaspent'] . ', ' . $this->db->fieldName('soul') . ' = ' . $this->data['soul'] . ', ' . $this->db->fieldName('lookbody') . ' = ' . $this->data['lookbody'] . ', ' . $this->db->fieldName('lookfeet') . ' = ' . $this->data['lookfeet'] . ', ' . $this->db->fieldName('lookhead') . ' = ' . $this->data['lookhead'] . ', ' . $this->db->fieldName('looklegs') . ' = ' . $this->data['looklegs'] . ', ' . $this->db->fieldName('looktype') . ' = ' . $this->data['looktype'] . $lookaddons . ', ' . $this->db->fieldName('posx') . ' = ' . $this->data['posx'] . ', ' . $this->db->fieldName('posy') . ' = ' . $this->data['posy'] . ', ' . $this->db->fieldName('posz') . ' = ' . $this->data['posz'] . ', ' . $this->db->fieldName('cap') . ' = ' . $this->data['cap'] . ', ' . $this->db->fieldName('lastlogin') . ' = ' . $this->data['lastlogin'] . ', ' . $this->db->fieldName('lastlogout') . ' = ' . $this->data['lastlogout'] . ', ' . $this->db->fieldName('lastip') . ' = ' . $this->data['lastip'] . ', ' . $this->db->fieldName('save') . ' = ' . (int) $this->data['save'] . ', ' . $this->db->fieldName('conditions') . ' = ' . $this->db->quote($this->data['conditions']) . ', `' . $skull_time . '` = ' . $this->data['skulltime'] . ', `' . $skull_type . '` = ' . (int) $this->data['skull'] . $guild_info . ', ' . $this->db->fieldName('town_id') . ' = ' . $this->data['town_id'] . $loss . $loss_items . ', ' . $this->db->fieldName('balance') . ' = ' . $this->data['balance'] . $blessings . $stamina . $direction . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
-        }
-        // creates new player
-        else
-        {
+			// UPDATE query on database
+			$this->db->query('UPDATE ' . $this->db->tableName('players') . ' SET ' . $this->db->fieldName('name') . ' = ' . $this->db->quote($this->data['name']) . ', ' . $this->db->fieldName('account_id') . ' = ' . $this->data['account_id'] . ', ' . $this->db->fieldName('group_id') . ' = ' . $this->data['group_id'] . ', ' . $this->db->fieldName('sex') . ' = ' . $this->data['sex'] . ', ' . $this->db->fieldName('vocation') . ' = ' . $this->data['vocation'] . ', ' . $this->db->fieldName('experience') . ' = ' . $this->data['experience'] . ', ' . $this->db->fieldName('level') . ' = ' . $this->data['level'] . ', ' . $this->db->fieldName('maglevel') . ' = ' . $this->data['maglevel'] . ', ' . $this->db->fieldName('health') . ' = ' . $this->data['health'] . ', ' . $this->db->fieldName('healthmax') . ' = ' . $this->data['healthmax'] . ', ' . $this->db->fieldName('mana') . ' = ' . $this->data['mana'] . ', ' . $this->db->fieldName('manamax') . ' = ' . $this->data['manamax'] . ', ' . $this->db->fieldName('manaspent') . ' = ' . $this->data['manaspent'] . ', ' . $this->db->fieldName('soul') . ' = ' . $this->data['soul'] . ', ' . $this->db->fieldName('lookbody') . ' = ' . $this->data['lookbody'] . ', ' . $this->db->fieldName('lookfeet') . ' = ' . $this->data['lookfeet'] . ', ' . $this->db->fieldName('lookhead') . ' = ' . $this->data['lookhead'] . ', ' . $this->db->fieldName('looklegs') . ' = ' . $this->data['looklegs'] . ', ' . $this->db->fieldName('looktype') . ' = ' . $this->data['looktype'] . $lookaddons . ', ' . $this->db->fieldName('posx') . ' = ' . $this->data['posx'] . ', ' . $this->db->fieldName('posy') . ' = ' . $this->data['posy'] . ', ' . $this->db->fieldName('posz') . ' = ' . $this->data['posz'] . ', ' . $this->db->fieldName('cap') . ' = ' . $this->data['cap'] . ', ' . $this->db->fieldName('lastlogin') . ' = ' . $this->data['lastlogin'] . ', ' . $this->db->fieldName('lastlogout') . ' = ' . $this->data['lastlogout'] . ', ' . $this->db->fieldName('lastip') . ' = ' . $this->db->quote($this->data['lastip']) . ', ' . $this->db->fieldName('save') . ' = ' . (int) $this->data['save'] . ', ' . $this->db->fieldName('conditions') . ' = ' . $this->db->quote($this->data['conditions']) . ', `' . $skull_time . '` = ' . $this->data['skulltime'] . ', `' . $skull_type . '` = ' . (int) $this->data['skull'] . $guild_info . ', ' . $this->db->fieldName('town_id') . ' = ' . $this->data['town_id'] . $loss . $loss_items . ', ' . $this->db->fieldName('balance') . ' = ' . $this->data['balance'] . $blessings . $stamina . $direction . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+		}
+		// creates new player
+		else
+		{
 			$loss = '';
 			$loss_data = '';
 			if($this->db->hasColumn('players', 'loss_experience')) {
@@ -459,13 +461,13 @@ class OTS_Player extends OTS_Row_DAO
 				$lookaddons_data = ', ' . $this->data['lookaddons'];
 			}
 
-            // INSERT query on database
-            $this->db->query('INSERT INTO `players` (`name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . $lookaddons . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $skull_time . '`, `' . $skull_type . '`' . $guild_info . ', `town_id`' . $loss . $loss_items . ', `balance`' . $blessings . $stamina . $direction . ', `created`' . $promotion . ', `comment`) VALUES (' . $this->db->quote($this->data['name']) . ', ' . $this->data['account_id'] . ', ' . $this->data['group_id'] . ', ' . $this->data['sex'] . ', ' . $this->data['vocation'] . ', ' . $this->data['experience'] . ', ' . $this->data['level'] . ', ' . $this->data['maglevel'] . ', ' . $this->data['health'] . ', ' . $this->data['healthmax'] . ', ' . $this->data['mana'] . ', ' . $this->data['manamax'] . ', ' . $this->data['manaspent'] . ', ' . $this->data['soul'] . ', ' . $this->data['lookbody'] . ', ' . $this->data['lookfeet'] . ', ' . $this->data['lookhead'] . ', ' . $this->data['looklegs'] . ', ' . $this->data['looktype'] . $lookaddons_data . ', ' . $this->data['posx'] . ', ' . $this->data['posy'] . ', ' . $this->data['posz'] . ', ' . $this->data['cap'] . ', ' . $this->data['lastlogin'] . ', ' . $this->data['lastlogout'] . ', ' . $this->data['lastip'] . ', ' . (int) $this->data['save'] . ', ' . $this->db->quote($this->data['conditions']) . ', ' . $this->data['skulltime'] . ', ' . (int) $this->data['skull'] . $guild_info_data . ', ' . $this->data['town_id'] . $loss_data . $loss_items_data . ', ' . $this->data['balance'] . $blessings_data . $stamina_data . $direction_data . ', ' . time() . $promotion_data . ', "")');
-            // ID of new group
-            $this->data['id'] = $this->db->lastInsertId();
-        }
+			// INSERT query on database
+			$this->db->query('INSERT INTO `players` (`name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`' . $lookaddons . ', `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `' . $skull_time . '`, `' . $skull_type . '`' . $guild_info . ', `town_id`' . $loss . $loss_items . ', `balance`' . $blessings . $stamina . $direction . ', `created`' . $promotion . ', `comment`) VALUES (' . $this->db->quote($this->data['name']) . ', ' . $this->data['account_id'] . ', ' . $this->data['group_id'] . ', ' . $this->data['sex'] . ', ' . $this->data['vocation'] . ', ' . $this->data['experience'] . ', ' . $this->data['level'] . ', ' . $this->data['maglevel'] . ', ' . $this->data['health'] . ', ' . $this->data['healthmax'] . ', ' . $this->data['mana'] . ', ' . $this->data['manamax'] . ', ' . $this->data['manaspent'] . ', ' . $this->data['soul'] . ', ' . $this->data['lookbody'] . ', ' . $this->data['lookfeet'] . ', ' . $this->data['lookhead'] . ', ' . $this->data['looklegs'] . ', ' . $this->data['looktype'] . $lookaddons_data . ', ' . $this->data['posx'] . ', ' . $this->data['posy'] . ', ' . $this->data['posz'] . ', ' . $this->data['cap'] . ', ' . $this->data['lastlogin'] . ', ' . $this->data['lastlogout'] . ', ' . $this->data['lastip'] . ', ' . (int) $this->data['save'] . ', ' . $this->db->quote($this->data['conditions']) . ', ' . $this->data['skulltime'] . ', ' . (int) $this->data['skull'] . $guild_info_data . ', ' . $this->data['town_id'] . $loss_data . $loss_items_data . ', ' . $this->data['balance'] . $blessings_data . $stamina_data . $direction_data . ', ' . time() . $promotion_data . ', "")');
+			// ID of new group
+			$this->data['id'] = $this->db->lastInsertId();
+		}
 
-        // updates skills - doesn't matter if we have just created character - trigger inserts new skills
+		// updates skills - doesn't matter if we have just created character - trigger inserts new skills
 		if($this->db->hasColumn('players', 'skill_fist')) { // tfs 1.0
 			$set = '';
 
@@ -496,7 +498,7 @@ class OTS_Player extends OTS_Row_DAO
 				$this->db->query('UPDATE ' . $this->db->tableName('player_skills') . ' SET ' . $this->db->fieldName('value') . ' = ' . $skill['value'] . ', ' . $this->db->fieldName('count') . ' = ' . $skill['tries'] . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('skillid') . ' = ' . $id);
 			}
 		}
-    }
+	}
 
 /**
  * Player ID.
@@ -509,43 +511,43 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Player ID.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getId()
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getId()
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['id'];
-    }
+		return $this->data['id'];
+	}
 
-    public function isHidden()
-    {
-        if( !isset($this->data['hidden']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function isHidden()
+	{
+		if( !isset($this->data['hide']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['hidden'] == 1;
-    }
+		return $this->data['hide'] == 1;
+	}
 
-    public function setHidden($hidden)
-    {
-        $this->data['hidden'] = (int) $hidden;
-    }
+	public function setHidden($hidden)
+	{
+		$this->data['hide'] = (int) $hidden;
+	}
 
-    public function getMarriage()
-    {
+	public function getMarriage()
+	{
 		if(!$this->db->hasColumn('players', 'marriage'))
 			return '';
 
-        if( !isset($this->data['marriage']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+		if( !isset($this->data['marriage']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['marriage'];
-    }
+		return $this->data['marriage'];
+	}
 
 /**
  * Player name.
@@ -558,15 +560,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return string Player's name.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getName()
-    {
-        if( !isset($this->data['name']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getName()
+	{
+		if( !isset($this->data['name']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['name'];
-    }
+		return $this->data['name'];
+	}
 
 /**
  * Sets players's name.
@@ -577,10 +579,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param string $name Name.
  */
-    public function setName($name)
-    {
-        $this->data['name'] = (string) $name;
-    }
+	public function setName($name)
+	{
+		$this->data['name'] = (string) $name;
+	}
 
 /**
  * Returns account of this player.
@@ -594,27 +596,27 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function getAccount()
-    {
-        if( !isset($this->data['account_id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getAccount()
+	{
+		if( !isset($this->data['account_id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $account = new OTS_Account();
-        $account->load($this->data['account_id']);
-        return $account;
-    }
+		$account = new OTS_Account();
+		$account->load($this->data['account_id']);
+		return $account;
+	}
 
-    public function getAccountId()
-    {
-        if( !isset($this->data['account_id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getAccountId()
+	{
+		if( !isset($this->data['account_id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
 		return $this->data['account_id'];
-    }
+	}
 /**
  * Assigns character to account.
  *
@@ -625,15 +627,15 @@ class OTS_Player extends OTS_Row_DAO
  * @param OTS_Account $account Owning account.
  * @throws E_OTS_NotLoaded If passed <var>$account</var> parameter is not loaded.
  */
-    public function setAccount(OTS_Account $account)
-    {
-        $this->data['account_id'] = $account->getId();
-    }
+	public function setAccount(OTS_Account $account)
+	{
+		$this->data['account_id'] = $account->getId();
+	}
 
 	public function setAccountId($account_id)
-    {
-        $this->data['account_id'] = (int)$account_id;
-    }
+	{
+		$this->data['account_id'] = (int)$account_id;
+	}
 
 /**
  * Returns group of this player.
@@ -647,19 +649,19 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function getGroup()
-    {
+	public function getGroup()
+	{
 		//global $config;
 		//if($path == '')
 		//	$path = $config['data_path'].'XML/groups.xml';
 
-        if( !isset($this->data['group_id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+		if( !isset($this->data['group_id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        //$groups = new DOMDocument();
-        //$groups->load($path);
+		//$groups = new DOMDocument();
+		//$groups->load($path);
 
 		global $groups;
 		$tmp = $groups->getGroup($this->data['group_id']);
@@ -671,18 +673,18 @@ class OTS_Player extends OTS_Row_DAO
 /*
 		$_id = $this->data['group_id'];
 		$tmpGroup = new OTS_Group;
-        foreach($groups->getElementsByTagName('group') as $group)
-        {
+		foreach($groups->getElementsByTagName('group') as $group)
+		{
 			if($group->getAttribute('id') == $_id)
 			{
 				$tmpGroup->load($group);
 				return $tmpGroup;
 			}
-        }*/
+		}*/
   //      $group = new OTS_Group();
   //      $group->load($this->data['group_id']);
   //      return $group;
-    }
+	}
 
 /**
  * Assigns character to group.
@@ -694,15 +696,15 @@ class OTS_Player extends OTS_Row_DAO
  * @param OTS_Group $group Group to be a member.
  * @throws E_OTS_NotLoaded If passed <var>$group</var> parameter is not loaded.
  */
-    public function setGroup(OTS_Group $group)
-    {
-        $this->data['group_id'] = $group->getId();
-    }
+	public function setGroup(OTS_Group $group)
+	{
+		$this->data['group_id'] = $group->getId();
+	}
 
-    public function setGroupId($group_id)
-    {
-        $this->data['group_id'] = $group_id;
-    }
+	public function setGroupId($group_id)
+	{
+		$this->data['group_id'] = $group_id;
+	}
 
 /**
  * Player's Premium Account expiration timestamp.
@@ -713,15 +715,15 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @deprecated 0.1.5 Use OTS_Account->getPremiumEnd().
  */
-    public function getPremiumEnd()
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getPremiumEnd()
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->getAccount()->getPremiumEnd();
-    }
+		return $this->getAccount()->getPremiumEnd();
+	}
 
 /**
  * Player gender.
@@ -734,80 +736,88 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Player gender.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getSex()
-    {
-        if( !isset($this->data['sex']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getSex()
+	{
+		if( !isset($this->data['sex']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['sex'];
-    }
+		return $this->data['sex'];
+	}
 
 	public function isDeleted()
-    {
+	{
 		$field = 'deleted';
 		if($this->db->hasColumn('players', 'deletion'))
 			$field = 'deletion';
 
-        if( !isset($this->data[$field]) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
-
-        return $this->data[$field] > 0;
-    }
-
-    public function setDeleted($deleted)
-    {
-        $this->data['deleted'] = (int) $deleted;
-    }
-
-    public function isOnline()
-    {
-		if($this->db->hasTable('players_online')) // tfs 1.0
+		if( !isset($this->data[$field]) )
 		{
-			$query = $this->db->query('SELECT `player_id` FROM `players_online` WHERE `player_id` = ' . $this->data['id']);
-			return $query->rowCount() > 0;
+			throw new E_OTS_NotLoaded();
 		}
 
-        if( !isset($this->data['online']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+		return $this->data[$field] > 0;
+	}
 
-        return $this->data['online'] == 1;
-    }
+	public function setDeleted($deleted)
+	{
+		$this->data['deleted'] = (int) $deleted;
+	}
 
-    public function getCreated()
-    {
-        if( !isset($this->data['created']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function isOnline()
+	{
+		if($this->db->hasTable('players_online')) {// tfs 1.0
+			if (!isset(self::$playersOnline)) {
+				self::$playersOnline = [];
 
-        return $this->data['created'];
-    }
+				$query = $this->db->query('SELECT `player_id` FROM `players_online`');
 
-    public function setCreated($created)
-    {
-        $this->data['created'] = (bool) $created;
-    }
+				foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $item) {
+					self::$playersOnline[$item['player_id']] = true;
+				}
+			}
 
-    public function getComment()
-    {
-        if( !isset($this->data['comment']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+			return isset(self::$playersOnline[$this->data['id']]);
+		}
 
-        return $this->data['comment'];
-    }
+		if( !isset($this->data['online']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-    public function setComment($comment)
-    {
-        $this->data['comment'] = (string) $comment;
-    }
+		return $this->data['online'] == 1;
+	}
+
+	public function getCreated()
+	{
+		if( !isset($this->data['created']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
+
+		return $this->data['created'];
+	}
+
+	public function setCreated($created)
+	{
+		$this->data['created'] = (bool) $created;
+	}
+
+	public function getComment()
+	{
+		if( !isset($this->data['comment']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
+
+		return $this->data['comment'];
+	}
+
+	public function setComment($comment)
+	{
+		$this->data['comment'] = (string) $comment;
+	}
 
 
 /**
@@ -819,10 +829,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $sex Player gender.
  */
-    public function setSex($sex)
-    {
-        $this->data['sex'] = (int) $sex;
-    }
+	public function setSex($sex)
+	{
+		$this->data['sex'] = (int) $sex;
+	}
 
 /**
  * Player proffesion.
@@ -835,12 +845,12 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Player proffesion.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getVocation()
-    {
-        if( !isset($this->data['vocation']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getVocation()
+	{
+		if( !isset($this->data['vocation']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
 		if(isset($this->data['promotion'])) {
 			global $config;
@@ -848,19 +858,19 @@ class OTS_Player extends OTS_Row_DAO
 				return ($this->data['vocation'] + ($this->data['promotion'] * $config['vocations_amount']));
 		}
 
-        return $this->data['vocation'];
-    }
+		return $this->data['vocation'];
+	}
 
 
-    public function getPromotion()
-    {
-        if( !isset($this->data['promotion']) )
-        {
-            return false;
-        }
+	public function getPromotion()
+	{
+		if( !isset($this->data['promotion']) )
+		{
+			return false;
+		}
 
-        return $this->data['promotion'];
-    }
+		return $this->data['promotion'];
+	}
 /**
  * Sets player proffesion.
  *
@@ -870,15 +880,15 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $vocation Player proffesion.
  */
-    public function setVocation($vocation)
-    {
-        $this->data['vocation'] = (int) $vocation;
-    }
+	public function setVocation($vocation)
+	{
+		$this->data['vocation'] = (int) $vocation;
+	}
 
-    public function setPromotion($promotion)
-    {
-        $this->data['promotion'] = (int) $promotion;
-    }
+	public function setPromotion($promotion)
+	{
+		$this->data['promotion'] = (int) $promotion;
+	}
 /**
  * Experience points.
  *
@@ -890,15 +900,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Experience points.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getExperience()
-    {
-        if( !isset($this->data['experience']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getExperience()
+	{
+		if( !isset($this->data['experience']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['experience'];
-    }
+		return $this->data['experience'];
+	}
 
 /**
  * Sets experience points.
@@ -909,10 +919,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $experience Experience points.
  */
-    public function setExperience($experience)
-    {
-        $this->data['experience'] = (int) $experience;
-    }
+	public function setExperience($experience)
+	{
+		$this->data['experience'] = (int) $experience;
+	}
 
 /**
  * Experience level.
@@ -925,15 +935,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Experience level.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLevel()
-    {
-        if( !isset($this->data['level']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLevel()
+	{
+		if( !isset($this->data['level']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['level'];
-    }
+		return $this->data['level'];
+	}
 
 /**
  * Sets experience level.
@@ -944,10 +954,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $level Experience level.
  */
-    public function setLevel($level)
-    {
-        $this->data['level'] = (int) $level;
-    }
+	public function setLevel($level)
+	{
+		$this->data['level'] = (int) $level;
+	}
 
 /**
  * Magic level.
@@ -960,15 +970,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Magic level.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getMagLevel()
-    {
-        if( !isset($this->data['maglevel']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getMagLevel()
+	{
+		if( !isset($this->data['maglevel']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['maglevel'];
-    }
+		return $this->data['maglevel'];
+	}
 
 /**
  * Sets magic level.
@@ -979,10 +989,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $maglevel Magic level.
  */
-    public function setMagLevel($maglevel)
-    {
-        $this->data['maglevel'] = (int) $maglevel;
-    }
+	public function setMagLevel($maglevel)
+	{
+		$this->data['maglevel'] = (int) $maglevel;
+	}
 
 /**
  * Current HP.
@@ -995,15 +1005,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Current HP.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getHealth()
-    {
-        if( !isset($this->data['health']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getHealth()
+	{
+		if( !isset($this->data['health']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['health'];
-    }
+		return $this->data['health'];
+	}
 
 /**
  * Sets current HP.
@@ -1014,10 +1024,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $health Current HP.
  */
-    public function setHealth($health)
-    {
-        $this->data['health'] = (int) $health;
-    }
+	public function setHealth($health)
+	{
+		$this->data['health'] = (int) $health;
+	}
 
 /**
  * Maximum HP.
@@ -1030,15 +1040,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Maximum HP.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getHealthMax()
-    {
-        if( !isset($this->data['healthmax']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getHealthMax()
+	{
+		if( !isset($this->data['healthmax']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['healthmax'];
-    }
+		return $this->data['healthmax'];
+	}
 
 /**
  * Sets maximum HP.
@@ -1049,10 +1059,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $healthmax Maximum HP.
  */
-    public function setHealthMax($healthmax)
-    {
-        $this->data['healthmax'] = (int) $healthmax;
-    }
+	public function setHealthMax($healthmax)
+	{
+		$this->data['healthmax'] = (int) $healthmax;
+	}
 
 /**
  * Current mana.
@@ -1065,15 +1075,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Current mana.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getMana()
-    {
-        if( !isset($this->data['mana']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getMana()
+	{
+		if( !isset($this->data['mana']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['mana'];
-    }
+		return $this->data['mana'];
+	}
 
 /**
  * Sets current mana.
@@ -1084,10 +1094,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $mana Current mana.
  */
-    public function setMana($mana)
-    {
-        $this->data['mana'] = (int) $mana;
-    }
+	public function setMana($mana)
+	{
+		$this->data['mana'] = (int) $mana;
+	}
 
 /**
  * Maximum mana.
@@ -1100,15 +1110,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Maximum mana.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getManaMax()
-    {
-        if( !isset($this->data['manamax']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getManaMax()
+	{
+		if( !isset($this->data['manamax']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['manamax'];
-    }
+		return $this->data['manamax'];
+	}
 
 /**
  * Sets maximum mana.
@@ -1119,10 +1129,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $manamax Maximum mana.
  */
-    public function setManaMax($manamax)
-    {
-        $this->data['manamax'] = (int) $manamax;
-    }
+	public function setManaMax($manamax)
+	{
+		$this->data['manamax'] = (int) $manamax;
+	}
 
 /**
  * Mana spent.
@@ -1135,15 +1145,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Mana spent.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getManaSpent()
-    {
-        if( !isset($this->data['manaspent']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getManaSpent()
+	{
+		if( !isset($this->data['manaspent']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['manaspent'];
-    }
+		return $this->data['manaspent'];
+	}
 
 /**
  * Sets mana spent.
@@ -1154,10 +1164,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $manaspent Mana spent.
  */
-    public function setManaSpent($manaspent)
-    {
-        $this->data['manaspent'] = (int) $manaspent;
-    }
+	public function setManaSpent($manaspent)
+	{
+		$this->data['manaspent'] = (int) $manaspent;
+	}
 
 /**
  * Soul points.
@@ -1170,15 +1180,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Soul points.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getSoul()
-    {
-        if( !isset($this->data['soul']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getSoul()
+	{
+		if( !isset($this->data['soul']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['soul'];
-    }
+		return $this->data['soul'];
+	}
 
 /**
  * Sets soul points.
@@ -1189,10 +1199,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $soul Soul points.
  */
-    public function setSoul($soul)
-    {
-        $this->data['soul'] = (int) $soul;
-    }
+	public function setSoul($soul)
+	{
+		$this->data['soul'] = (int) $soul;
+	}
 
 /**
  * Looking direction.
@@ -1205,15 +1215,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Looking direction.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getDirection()
-    {
-        if( !isset($this->data['direction']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getDirection()
+	{
+		if( !isset($this->data['direction']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['direction'];
-    }
+		return $this->data['direction'];
+	}
 
 /**
  * Sets looking direction.
@@ -1224,10 +1234,17 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $direction Looking direction.
  */
-    public function setDirection($direction)
-    {
-        $this->data['direction'] = (int) $direction;
-    }
+	public function setDirection($direction)
+	{
+		$this->data['direction'] = (int) $direction;
+	}
+
+	public function getOutfit(): string
+	{
+		$hasLookAddons = $this->db->hasColumn('players', 'lookaddons');
+
+		return setting('core.outfit_images_url') . '?id=' . $this->getLookType() . ($hasLookAddons ? '&addons=' . $this->getLookAddons() : '') . '&head=' . $this->getLookHead() . '&body=' . $this->getLookBody() . '&legs=' . $this->getLookLegs() . '&feet=' . $this->getLookFeet();
+	}
 
 /**
  * Body color.
@@ -1240,15 +1257,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Body color.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLookBody()
-    {
-        if( !isset($this->data['lookbody']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLookBody()
+	{
+		if( !isset($this->data['lookbody']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['lookbody'];
-    }
+		return $this->data['lookbody'];
+	}
 
 /**
  * Sets body color.
@@ -1259,10 +1276,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $lookbody Body color.
  */
-    public function setLookBody($lookbody)
-    {
-        $this->data['lookbody'] = (int) $lookbody;
-    }
+	public function setLookBody($lookbody)
+	{
+		$this->data['lookbody'] = (int) $lookbody;
+	}
 
 /**
  * Boots color.
@@ -1275,15 +1292,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Boots color.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLookFeet()
-    {
-        if( !isset($this->data['lookfeet']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLookFeet()
+	{
+		if( !isset($this->data['lookfeet']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['lookfeet'];
-    }
+		return $this->data['lookfeet'];
+	}
 
 /**
  * Sets boots color.
@@ -1294,10 +1311,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $lookfeet Boots color.
  */
-    public function setLookFeet($lookfeet)
-    {
-        $this->data['lookfeet'] = (int) $lookfeet;
-    }
+	public function setLookFeet($lookfeet)
+	{
+		$this->data['lookfeet'] = (int) $lookfeet;
+	}
 
 /**
  * Hair color.
@@ -1310,15 +1327,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Hair color.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLookHead()
-    {
-        if( !isset($this->data['lookhead']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLookHead()
+	{
+		if( !isset($this->data['lookhead']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['lookhead'];
-    }
+		return $this->data['lookhead'];
+	}
 
 /**
  * Sets hair color.
@@ -1329,10 +1346,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $lookhead Hair color.
  */
-    public function setLookHead($lookhead)
-    {
-        $this->data['lookhead'] = (int) $lookhead;
-    }
+	public function setLookHead($lookhead)
+	{
+		$this->data['lookhead'] = (int) $lookhead;
+	}
 
 /**
  * Legs color.
@@ -1345,15 +1362,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Legs color.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLookLegs()
-    {
-        if( !isset($this->data['looklegs']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLookLegs()
+	{
+		if( !isset($this->data['looklegs']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['looklegs'];
-    }
+		return $this->data['looklegs'];
+	}
 
 /**
  * Sets legs color.
@@ -1364,10 +1381,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $looklegs Legs color.
  */
-    public function setLookLegs($looklegs)
-    {
-        $this->data['looklegs'] = (int) $looklegs;
-    }
+	public function setLookLegs($looklegs)
+	{
+		$this->data['looklegs'] = (int) $looklegs;
+	}
 
 /**
  * Outfit.
@@ -1380,15 +1397,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Outfit.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLookType()
-    {
-        if( !isset($this->data['looktype']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLookType()
+	{
+		if( !isset($this->data['looktype']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['looktype'];
-    }
+		return $this->data['looktype'];
+	}
 
 /**
  * Sets outfit.
@@ -1399,10 +1416,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $looktype Outfit.
  */
-    public function setLookType($looktype)
-    {
-        $this->data['looktype'] = (int) $looktype;
-    }
+	public function setLookType($looktype)
+	{
+		$this->data['looktype'] = (int) $looktype;
+	}
 
 /**
  * Addons.
@@ -1415,15 +1432,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Addons.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLookAddons()
-    {
-        if( !isset($this->data['lookaddons']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLookAddons()
+	{
+		if( !isset($this->data['lookaddons']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['lookaddons'];
-    }
+		return $this->data['lookaddons'];
+	}
 
 /**
  * Sets addons.
@@ -1434,10 +1451,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $lookaddons Addons.
  */
-    public function setLookAddons($lookaddons)
-    {
-        $this->data['lookaddons'] = (int) $lookaddons;
-    }
+	public function setLookAddons($lookaddons)
+	{
+		$this->data['lookaddons'] = (int) $lookaddons;
+	}
 
 /**
  * X map coordinate.
@@ -1450,15 +1467,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int X map coordinate.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getPosX()
-    {
-        if( !isset($this->data['posx']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getPosX()
+	{
+		if( !isset($this->data['posx']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['posx'];
-    }
+		return $this->data['posx'];
+	}
 
 /**
  * Sets X map coordinate.
@@ -1469,10 +1486,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $posx X map coordinate.
  */
-    public function setPosX($posx)
-    {
-        $this->data['posx'] = (int) $posx;
-    }
+	public function setPosX($posx)
+	{
+		$this->data['posx'] = (int) $posx;
+	}
 
 /**
  * Y map coordinate.
@@ -1485,15 +1502,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Y map coordinate.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getPosY()
-    {
-        if( !isset($this->data['posy']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getPosY()
+	{
+		if( !isset($this->data['posy']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['posy'];
-    }
+		return $this->data['posy'];
+	}
 
 /**
  * Sets Y map coordinate.
@@ -1504,10 +1521,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $posy Y map coordinate.
  */
-    public function setPosY($posy)
-    {
-        $this->data['posy'] = (int) $posy;
-    }
+	public function setPosY($posy)
+	{
+		$this->data['posy'] = (int) $posy;
+	}
 
 /**
  * Z map coordinate.
@@ -1520,15 +1537,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Z map coordinate.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getPosZ()
-    {
-        if( !isset($this->data['posz']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getPosZ()
+	{
+		if( !isset($this->data['posz']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['posz'];
-    }
+		return $this->data['posz'];
+	}
 
 /**
  * Sets Z map coordinate.
@@ -1539,10 +1556,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $posz Z map coordinate.
  */
-    public function setPosZ($posz)
-    {
-        $this->data['posz'] = (int) $posz;
-    }
+	public function setPosZ($posz)
+	{
+		$this->data['posz'] = (int) $posz;
+	}
 
 /**
  * Capacity.
@@ -1555,15 +1572,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Capacity.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getCap()
-    {
-        if( !isset($this->data['cap']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getCap()
+	{
+		if( !isset($this->data['cap']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['cap'];
-    }
+		return $this->data['cap'];
+	}
 
 /**
  * Sets capacity.
@@ -1574,10 +1591,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $cap Capacity.
  */
-    public function setCap($cap)
-    {
-        $this->data['cap'] = (int) $cap;
-    }
+	public function setCap($cap)
+	{
+		$this->data['cap'] = (int) $cap;
+	}
 
 /**
  * Last login timestamp.
@@ -1590,25 +1607,25 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Last login timestamp.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLastLogin()
-    {
-        if( !isset($this->data['lastlogin']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLastLogin()
+	{
+		if( !isset($this->data['lastlogin']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['lastlogin'];
-    }
+		return $this->data['lastlogin'];
+	}
 
-    public function getLastLogout()
-    {
-        if( !isset($this->data['lastlogout']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLastLogout()
+	{
+		if( !isset($this->data['lastlogout']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['lastlogout'];
-    }
+		return $this->data['lastlogout'];
+	}
 
 
 /**
@@ -1620,15 +1637,15 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $lastlogin Last login timestamp.
  */
-    public function setLastLogin($lastlogin)
-    {
-        $this->data['lastlogin'] = (int) $lastlogin;
-    }
+	public function setLastLogin($lastlogin)
+	{
+		$this->data['lastlogin'] = (int) $lastlogin;
+	}
 
-    public function setLastLogout($lastlogout)
-    {
-        $this->data['lastlogout'] = (int) $lastlogout;
-    }
+	public function setLastLogout($lastlogout)
+	{
+		$this->data['lastlogout'] = (int) $lastlogout;
+	}
 
 /**
  * Last login IP.
@@ -1641,15 +1658,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Last login IP.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLastIP()
-    {
-        if( !isset($this->data['lastip']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLastIP()
+	{
+		if( !isset($this->data['lastip']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['lastip'];
-    }
+		return $this->data['lastip'];
+	}
 
 /**
  * Sets last login IP.
@@ -1660,10 +1677,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $lastip Last login IP.
  */
-    public function setLastIP($lastip)
-    {
-        $this->data['lastip'] = (int) $lastip;
-    }
+	public function setLastIP($lastip)
+	{
+		$this->data['lastip'] = (int) $lastip;
+	}
 
 /**
  * Checks if save flag is set.
@@ -1676,15 +1693,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return bool PACC days.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function isSaveSet()
-    {
-        if( !isset($this->data['save']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function isSaveSet()
+	{
+		if( !isset($this->data['save']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['save'];
-    }
+		return $this->data['save'];
+	}
 
 /**
  * Unsets save flag.
@@ -1695,10 +1712,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @version 0.0.7
  */
-    public function unsetSave()
-    {
-        $this->data['save'] = false;
-    }
+	public function unsetSave()
+	{
+		$this->data['save'] = false;
+	}
 
 /**
  * @version 0.0.7
@@ -1707,15 +1724,15 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @deprecated 0.0.7 Save field is back as flag not a counter.
  */
-    public function getSave()
-    {
-        if( !isset($this->data['save']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getSave()
+	{
+		if( !isset($this->data['save']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['save'];
-    }
+		return $this->data['save'];
+	}
 
 /**
  * Sets save flag.
@@ -1727,10 +1744,10 @@ class OTS_Player extends OTS_Row_DAO
  * @version 0.0.7
  * @param int $save Deprecated, unused, optional.
  */
-    public function setSave($save = 1)
-    {
-        $this->data['save'] = true;
-    }
+	public function setSave($save = 1)
+	{
+		$this->data['save'] = true;
+	}
 
 /**
  * Conditions.
@@ -1743,15 +1760,10 @@ class OTS_Player extends OTS_Row_DAO
  * @return string Conditions binary string.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getConditions()
-    {
-        if( !isset($this->data['conditions']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
-
-        return $this->data['conditions'];
-    }
+	public function getConditions()
+	{
+		return $this->data['conditions'];
+	}
 
 /**
  * Sets conditions.
@@ -1762,10 +1774,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param string $conditions Condition binary string.
  */
-    public function setConditions($conditions)
-    {
-        $this->data['conditions'] = $conditions;
-    }
+	public function setConditions($conditions)
+	{
+		$this->data['conditions'] = $conditions;
+	}
 
 /**
  * Red skulled time remained.
@@ -1778,15 +1790,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Red skulled time remained.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getSkullTime()
-    {
-        if( !isset($this->data['skulltime']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getSkullTime()
+	{
+		if( !isset($this->data['skulltime']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['skulltime'];
-    }
+		return $this->data['skulltime'];
+	}
 
 /**
  * Sets red skulled time remained.
@@ -1797,10 +1809,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $redskulltime Red skulled time remained.
  */
-    public function setSkullTime($skulltime)
-    {
-        $this->data['skulltime'] = (int) $skulltime;
-    }
+	public function setSkullTime($skulltime)
+	{
+		$this->data['skulltime'] = (int) $skulltime;
+	}
 
 /**
  * Checks if player has red skull.
@@ -1813,15 +1825,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return bool Red skull state.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getSkull()
-    {
-        if( !isset($this->data['skull']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getSkull()
+	{
+		if( !isset($this->data['skull']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['skull'];
-    }
+		return $this->data['skull'];
+	}
 
 /**
  * Unsets red skull flag.
@@ -1830,10 +1842,10 @@ class OTS_Player extends OTS_Row_DAO
  * This method only updates object state. To save changes in database you need to use {@link OTS_Player::save() save() method} to flush changed to database.
  * </p>
  */
-    public function unsetRedSkull()
-    {
-        $this->data['skull'] = false;
-    }
+	public function unsetRedSkull()
+	{
+		$this->data['skull'] = false;
+	}
 
 /**
  * Sets red skull flag.
@@ -1842,10 +1854,10 @@ class OTS_Player extends OTS_Row_DAO
  * This method only updates object state. To save changes in database you need to use {@link OTS_Player::save() save() method} to flush changed to database.
  * </p>
  */
-    public function setSkull($value)
-    {
-        $this->data['skull'] = $value;
-    }
+	public function setSkull($value)
+	{
+		$this->data['skull'] = $value;
+	}
 
 /**
  * Guild nick.
@@ -1858,7 +1870,7 @@ class OTS_Player extends OTS_Row_DAO
  * @return string Guild title.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
- 	public function loadRank()
+	public function loadRank()
 	{
 		$table = 'guild_membership';
 		if($this->db->hasTable('guild_members'))
@@ -1877,13 +1889,13 @@ class OTS_Player extends OTS_Row_DAO
 		}
 	}
 
-    public function getGuildNick()
-    {
+	public function getGuildNick()
+	{
 		if(!isset($this->data['guildnick']) || !isset($this->data['rank_id']))
 			$this->loadRank();
 
 		return $this->data['guildnick'];
-    }
+	}
 
 /**
  * Sets guild nick.
@@ -1894,9 +1906,9 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param string $guildnick Name.
  */
-    public function setGuildNick($guildnick)
-    {
-        $this->data['guildnick'] = (string) $guildnick;
+	public function setGuildNick($guildnick)
+	{
+		$this->data['guildnick'] = (string) $guildnick;
 		if($this->db->hasTable('guild_members'))
 			$this->db->query('UPDATE `guild_members` SET `nick` = ' . $this->db->quote($this->data['guildnick']) . ' WHERE `player_id` = ' . $this->getId());
 		else if($this->db->hasTable('guild_membership'))
@@ -1930,8 +1942,8 @@ class OTS_Player extends OTS_Row_DAO
  * @return OTS_GuildRank|null Guild rank (null if not member of any).
  * @throws PDOException On PDO operation error.
  */
-    public function getRank()
-    {
+	public function getRank()
+	{
 		$rank_id = 0;
 		if($this->db->hasTable('guild_members')) {
 			$query = $this->db->query('SELECT `rank_id` FROM `guild_members` WHERE `player_id`= ' . $this->data['id'] . ' LIMIT 1;');
@@ -1952,20 +1964,20 @@ class OTS_Player extends OTS_Row_DAO
 			$rank_id = (int)$query['rank_id'];
 		}
 
-	    $guildRank = new OTS_GuildRank();
+		$guildRank = new OTS_GuildRank();
 		if($rank_id !== 0) {
 			$guildRank->load($rank_id);
 		}
 
-        return $guildRank;
-    }
+		return $guildRank;
+	}
 
 /**
  * @param int $rank_id Guild rank ID.
  * @deprecated 0.0.4 Use setRank().
  */
-    public function setRankId($rank_id, $guild)
-    {
+	public function setRankId($rank_id, $guild)
+	{
 		if( isset($rank_id) && isset($guild)) {
 			if($rank_id == 0) {
 				if($this->db->hasTable('guild_membership')) {
@@ -2002,7 +2014,7 @@ class OTS_Player extends OTS_Row_DAO
 				}
 			}
 		}
-    }
+	}
 
 /**
  * Assigns guild rank.
@@ -2014,13 +2026,13 @@ class OTS_Player extends OTS_Row_DAO
  * @param OTS_GuildRank|null Guild rank (null to clear assign).
  * @throws E_OTS_NotLoaded If passed <var>$guildRank</var> parameter is not loaded.
  */
-    public function setRank(OTS_GuildRank $guildRank = null)
-    {
+	public function setRank(OTS_GuildRank $guildRank = null)
+	{
 		if(isset($guildRank))
 			$this->setRankId($guildRank->getId(), $guildRank->getGuild()->getId());
 		else
 			$this->setRankId(0, 0);
-    }
+	}
 
 /**
  * Residence town's ID.
@@ -2033,15 +2045,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Residence town's ID.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getTownId()
-    {
-        if( !isset($this->data['town_id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getTownId()
+	{
+		if( !isset($this->data['town_id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['town_id'];
-    }
+		return $this->data['town_id'];
+	}
 
 /**
  * Sets residence town's ID.
@@ -2052,10 +2064,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $town_id Residence town's ID.
  */
-    public function setTownId($town_id)
-    {
-        $this->data['town_id'] = (int) $town_id;
-    }
+	public function setTownId($town_id)
+	{
+		$this->data['town_id'] = (int) $town_id;
+	}
 
 /**
  * Percentage of experience lost after dead.
@@ -2068,15 +2080,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Percentage of experience lost after dead.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLossExperience()
-    {
-        if( !isset($this->data['loss_experience']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLossExperience()
+	{
+		if( !isset($this->data['loss_experience']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['loss_experience'];
-    }
+		return $this->data['loss_experience'];
+	}
 
 /**
  * Sets percentage of experience lost after dead.
@@ -2087,10 +2099,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $loss_experience Percentage of experience lost after dead.
  */
-    public function setLossExperience($loss_experience)
-    {
-        $this->data['loss_experience'] = (int) $loss_experience;
-    }
+	public function setLossExperience($loss_experience)
+	{
+		$this->data['loss_experience'] = (int) $loss_experience;
+	}
 
 /**
  * Percentage of used mana lost after dead.
@@ -2103,15 +2115,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Percentage of used mana lost after dead.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLossMana()
-    {
-        if( !isset($this->data['loss_mana']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLossMana()
+	{
+		if( !isset($this->data['loss_mana']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['loss_mana'];
-    }
+		return $this->data['loss_mana'];
+	}
 
 /**
  * Sets percentage of used mana lost after dead.
@@ -2122,10 +2134,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $loss_mana Percentage of used mana lost after dead.
  */
-    public function setLossMana($loss_mana)
-    {
-        $this->data['loss_mana'] = (int) $loss_mana;
-    }
+	public function setLossMana($loss_mana)
+	{
+		$this->data['loss_mana'] = (int) $loss_mana;
+	}
 
 /**
  * Percentage of skills lost after dead.
@@ -2138,15 +2150,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Percentage of skills lost after dead.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLossSkills()
-    {
-        if( !isset($this->data['loss_skills']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLossSkills()
+	{
+		if( !isset($this->data['loss_skills']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['loss_skills'];
-    }
+		return $this->data['loss_skills'];
+	}
 
 /**
  * Sets percentage of skills lost after dead.
@@ -2157,10 +2169,10 @@ class OTS_Player extends OTS_Row_DAO
  *
  * @param int $loss_skills Percentage of skills lost after dead.
  */
-    public function setLossSkills($loss_skills)
-    {
-        $this->data['loss_skills'] = (int) $loss_skills;
-    }
+	public function setLossSkills($loss_skills)
+	{
+		$this->data['loss_skills'] = (int) $loss_skills;
+	}
 
 /**
  * Percentage of items lost after dead.
@@ -2170,15 +2182,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Percentage of items lost after dead.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getLossItems()
-    {
-        if( !isset($this->data['loss_items']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLossItems()
+	{
+		if( !isset($this->data['loss_items']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['loss_items'];
-    }
+		return $this->data['loss_items'];
+	}
 
 /**
  * Sets percentage of items lost after dead.
@@ -2187,39 +2199,39 @@ class OTS_Player extends OTS_Row_DAO
  * @since 0.1.4
  * @param int $loss_items Percentage of items lost after dead.
  */
-    public function setLossItems($loss_items)
-    {
-        $this->data['loss_items'] = (int) $loss_items;
-    }
+	public function setLossItems($loss_items)
+	{
+		$this->data['loss_items'] = (int) $loss_items;
+	}
 
-    public function getLossContainers()
-    {
-        if( !isset($this->data['loss_containers']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getLossContainers()
+	{
+		if( !isset($this->data['loss_containers']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['loss_containers'];
-    }
-    public function setLossContainers($loss_containers)
-    {
-        $this->data['loss_containers'] = (int) $loss_containers;
-    }
+		return $this->data['loss_containers'];
+	}
+	public function setLossContainers($loss_containers)
+	{
+		$this->data['loss_containers'] = (int) $loss_containers;
+	}
 
-    public function getBlessings()
-    {
-        if( !isset($this->data['blessings']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getBlessings()
+	{
+		if( !isset($this->data['blessings']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['blessings'];
-    }
+		return $this->data['blessings'];
+	}
 
-    public function setBlessings($blessings)
-    {
-        $this->data['blessings'] = (int) $blessings;
-    }
+	public function setBlessings($blessings)
+	{
+		$this->data['blessings'] = (int) $blessings;
+	}
 
 	public function countBlessings()
 	{
@@ -2251,20 +2263,20 @@ class OTS_Player extends OTS_Row_DAO
 		return $value;
 	}
 
-    public function getStamina()
-    {
-        if( !isset($this->data['stamina']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getStamina()
+	{
+		if( !isset($this->data['stamina']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['stamina'];
-    }
+		return $this->data['stamina'];
+	}
 
-    public function setStamina($stamina)
-    {
-        $this->data['stamina'] = (int) $stamina;
-    }
+	public function setStamina($stamina)
+	{
+		$this->data['stamina'] = (int) $stamina;
+	}
 /**
  * Bank balance.
  *
@@ -2273,15 +2285,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Amount of money stored in bank.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getBalance()
-    {
-        if( !isset($this->data['balance']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getBalance()
+	{
+		if( !isset($this->data['balance']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['balance'];
-    }
+		return $this->data['balance'];
+	}
 
 /**
  * Sets bank balance value.
@@ -2294,24 +2306,24 @@ class OTS_Player extends OTS_Row_DAO
  * @since 0.1.2
  * @param int $balance Amount of money to be set in bank.
  */
-    public function setBalance($balance)
-    {
-        $this->data['balance'] = (int) $balance;
-    }
+	public function setBalance($balance)
+	{
+		$this->data['balance'] = (int) $balance;
+	}
 
-    public function getWorldId()
-    {
-        if( !isset($this->data['world_id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getWorldId()
+	{
+		if( !isset($this->data['world_id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->data['world_id'];
-    }
-    public function setWorldId($worldId)
-    {
-        $this->data['world_id'] = (int) $worldId;
-    }
+		return $this->data['world_id'];
+	}
+	public function setWorldId($worldId)
+	{
+		$this->data['world_id'] = (int) $worldId;
+	}
 /**
  * Reads custom field.
  *
@@ -2330,16 +2342,16 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function getCustomField($field)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getCustomField($field)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $value = $this->db->query('SELECT ' . $this->db->fieldName($field) . ' FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id'])->fetch();
-        return $value[$field];
-    }
+		$value = $this->db->query('SELECT ' . $this->db->fieldName($field) . ' FROM ' . $this->db->tableName('players') . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id'])->fetch();
+		return $value[$field];
+	}
 
 /**
  * Writes custom field.
@@ -2363,21 +2375,21 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function setCustomField($field, $value)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function setCustomField($field, $value)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        // quotes value for SQL query
-        if(!( is_int($value) || is_float($value) ))
-        {
-            $value = $this->db->quote($value);
-        }
+		// quotes value for SQL query
+		if(!( is_int($value) || is_float($value) ))
+		{
+			$value = $this->db->quote($value);
+		}
 
-        $this->db->query('UPDATE `players` SET `' . $field . '` = ' . $value . ' WHERE `id` = ' . $this->data['id']);
-    }
+		$this->db->query('UPDATE `players` SET `' . $field . '` = ' . $value . ' WHERE `id` = ' . $this->data['id']);
+	}
 
 /**
  * Returns player's skill.
@@ -2388,15 +2400,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Skill value.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getSkill($skill)
-    {
-        if( !isset($this->skills[$skill]) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getSkill($skill)
+	{
+		if( !isset($this->skills[$skill]) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->skills[$skill]['value'];
-    }
+		return $this->skills[$skill]['value'];
+	}
 
 /**
  * Sets skill value.
@@ -2406,8 +2418,8 @@ class OTS_Player extends OTS_Row_DAO
  * @param int $skill Skill ID.
  * @param int $value Skill value.
  */
-    public function setSkill($skill, $value)
-    {
+	public function setSkill($skill, $value)
+	{
 		$skill_ids = array(
 			'skill_fist' => POT::SKILL_FIST,
 			'skill_club' => POT::SKILL_CLUB,
@@ -2422,7 +2434,7 @@ class OTS_Player extends OTS_Row_DAO
 		else {
 			$this->skills[ (int) $skill_ids[$skill]]['value'] = (int) $value;
 		}
-    }
+	}
 
 /**
  * Returns player's skill's tries for next level.
@@ -2433,15 +2445,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return int Skill tries.
  * @throws E_OTS_NotLoaded If player is not loaded.
  */
-    public function getSkillTries($skill)
-    {
-        if( !isset($this->skills[$skill]) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getSkillTries($skill)
+	{
+		if( !isset($this->skills[$skill]) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->skills[$skill]['tries'];
-    }
+		return $this->skills[$skill]['tries'];
+	}
 
 /**
  * Sets skill's tries for next level.
@@ -2451,8 +2463,8 @@ class OTS_Player extends OTS_Row_DAO
  * @param int $skill Skill ID.
  * @param int $tries Skill tries.
  */
-    public function setSkillTries($skill, $tries)
-    {
+	public function setSkillTries($skill, $tries)
+	{
 		$skill_ids = array(
 			'skill_fist' => POT::SKILL_FIST,
 			'skill_club' => POT::SKILL_CLUB,
@@ -2468,7 +2480,7 @@ class OTS_Player extends OTS_Row_DAO
 		else {
 			$this->skills[ (int) $skill_ids[$skill]]['tries'] = (int) $tries;
 		}
-    }
+	}
 
 /**
  * Returns value of storage record.
@@ -2480,22 +2492,22 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function getStorage($key)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getStorage($key)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $value = $this->db->query('SELECT ' . $this->db->fieldName('value') . ' FROM ' . $this->db->tableName('player_storage') . ' WHERE ' . $this->db->fieldName('key') . ' = ' . (int) $key . ' AND ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'])->fetch();
+		$value = $this->db->query('SELECT ' . $this->db->fieldName('value') . ' FROM ' . $this->db->tableName('player_storage') . ' WHERE ' . $this->db->fieldName('key') . ' = ' . (int) $key . ' AND ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'])->fetch();
 
-        if($value !== false)
-        {
-            return null;
-        }
+		if($value === false)
+		{
+			return null;
+		}
 
-        return $value['value'];
-    }
+		return $value['value'];
+	}
 
 /**
  * Sets value of storage record.
@@ -2507,26 +2519,26 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function setStorage($key, $value)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function setStorage($key, $value)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $current = $this->getStorage($key);
+		$current = $this->getStorage($key);
 
-        // checks if there is any row to be updates
-        if( isset($current) )
-        {
-            $this->db->query('UPDATE ' . $this->db->tableName('player_storage') . ' SET ' . $this->db->fieldName('value') . ' = ' . (int) $value . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('key') . ' = ' . (int) $key);
-        }
-        // inserts new storage record
-        else
-        {
-            $this->db->query('INSERT INTO ' . $this->db->tableName('player_storage') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('key') . ', ' . $this->db->fieldName('value') . ') VALUES (' . $this->data['id'] . ', ' . (int) $key . ', ' . (int) $value . ')');
-        }
-    }
+		// checks if there is any row to be updates
+		if( isset($current) )
+		{
+			$this->db->query('UPDATE ' . $this->db->tableName('player_storage') . ' SET ' . $this->db->fieldName('value') . ' = ' . (int) $value . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('key') . ' = ' . (int) $key);
+		}
+		// inserts new storage record
+		else
+		{
+			$this->db->query('INSERT INTO ' . $this->db->tableName('player_storage') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('key') . ', ' . $this->db->fieldName('value') . ') VALUES (' . $this->data['id'] . ', ' . (int) $key . ', ' . (int) $value . ')');
+		}
+	}
 
 /**
  * Deletes item with contained items.
@@ -2536,17 +2548,17 @@ class OTS_Player extends OTS_Row_DAO
  * @param int $sid Item unique player's ID.
  * @throws PDOException On PDO operation error.
  */
-    private function deleteItem($sid)
-    {
-        // deletes all sub-items
-        foreach( $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . $sid)->fetchAll() as $item)
-        {
-            $this->deleteItem($item['sid']);
-        }
+	private function deleteItem($sid)
+	{
+		// deletes all sub-items
+		foreach( $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . $sid)->fetchAll() as $item)
+		{
+			$this->deleteItem($item['sid']);
+		}
 
-        // deletes item
-        $this->db->query('DELETE FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('sid') . ' = ' . $sid);
-    }
+		// deletes item
+		$this->db->query('DELETE FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('sid') . ' = ' . $sid);
+	}
 
 /**
  * Returns items tree from given slot.
@@ -2563,51 +2575,51 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotAContainer If item which is not of type container contains sub items.
  * @throws PDOException On PDO operation error.
  */
-    public function getSlot($slot)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getSlot($slot)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        // loads current item
-        $item = $this->db->query('SELECT ' . $this->db->fieldName('itemtype') . ', ' . $this->db->fieldName('sid') . ', ' . $this->db->fieldName('count') . ', ' . $this->db->fieldName('attributes') . ' FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName($slot > POT::SLOT_AMMO ? 'sid' : 'pid') . ' = ' . (int) $slot)->fetch();
+		// loads current item
+		$item = $this->db->query('SELECT ' . $this->db->fieldName('itemtype') . ', ' . $this->db->fieldName('sid') . ', ' . $this->db->fieldName('count') . ', ' . $this->db->fieldName('attributes') . ' FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName($slot > POT::SLOT_AMMO ? 'sid' : 'pid') . ' = ' . (int) $slot)->fetch();
 
-        if( empty($item) )
-        {
-            return null;
-        }
+		if( empty($item) )
+		{
+			return null;
+		}
 
-        // checks if there are any items under current one
-        $items = array();
-        foreach( $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . $item['sid'])->fetchAll() as $sub)
-        {
-            $items[] = $this->getSlot($sub['sid']);
-        }
+		// checks if there are any items under current one
+		$items = array();
+		foreach( $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . $item['sid'])->fetchAll() as $sub)
+		{
+			$items[] = $this->getSlot($sub['sid']);
+		}
 
-        // item type
-        $slot = POT::getInstance()->getItemsList()->getItemType($item['itemtype'])->createItem();
-        $slot->setCount($item['count']);
-        $slot->setAttributes($item['attributes']);
+		// item type
+		$slot = POT::getInstance()->getItemsList()->getItemType($item['itemtype'])->createItem();
+		$slot->setCount($item['count']);
+		$slot->setAttributes($item['attributes']);
 
-        // checks if current item has any contained items
-        if( !empty($items) )
-        {
-            // checks if item is realy a container
-            if(!$slot instanceof OTS_Container)
-            {
-                throw new E_OTS_NotAContainer();
-            }
+		// checks if current item has any contained items
+		if( !empty($items) )
+		{
+			// checks if item is realy a container
+			if(!$slot instanceof OTS_Container)
+			{
+				throw new E_OTS_NotAContainer();
+			}
 
-            // puts items into container
-            foreach($items as $sub)
-            {
-                $slot->addItem($sub);
-            }
-        }
+			// puts items into container
+			foreach($items as $sub)
+			{
+				$slot->addItem($sub);
+			}
+		}
 
-        return $slot;
-    }
+		return $slot;
+	}
 
 /**
  * Sets slot content.
@@ -2620,56 +2632,56 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function setSlot($slot, OTS_Item $item = null, $pid = 0)
-    {
-        static $sid;
+	public function setSlot($slot, OTS_Item $item = null, $pid = 0)
+	{
+		static $sid;
 
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        // clears current slot
-        if($slot <= POT::SLOT_AMMO)
-        {
-            $id = $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . (int) $slot)->fetch();
-            $this->deleteItem( (int) $id['sid']);
-        }
+		// clears current slot
+		if($slot <= POT::SLOT_AMMO)
+		{
+			$id = $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . (int) $slot)->fetch();
+			$this->deleteItem( (int) $id['sid']);
+		}
 
-        // checks if there is any item to insert
-        if( isset($item) )
-        {
-            // current maximum sid (over slot sids)
-            if( !isset($sid) )
-            {
-                $sid = $this->db->query('SELECT MAX(' . $this->db->fieldName('sid') . ') AS `sid` FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'])->fetch();
-                $sid = $sid['sid'] > POT::SLOT_AMMO ? $sid['sid'] : POT::SLOT_AMMO;
-            }
+		// checks if there is any item to insert
+		if( isset($item) )
+		{
+			// current maximum sid (over slot sids)
+			if( !isset($sid) )
+			{
+				$sid = $this->db->query('SELECT MAX(' . $this->db->fieldName('sid') . ') AS `sid` FROM ' . $this->db->tableName('player_items') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'])->fetch();
+				$sid = $sid['sid'] > POT::SLOT_AMMO ? $sid['sid'] : POT::SLOT_AMMO;
+			}
 
-            $sid++;
+			$sid++;
 
-            // inserts given item
-            $this->db->query('INSERT INTO ' . $this->db->tableName('player_items') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('sid') . ', ' . $this->db->fieldName('pid') . ', ' . $this->db->fieldName('itemtype') . ', ' . $this->db->fieldName('count') . ', ' . $this->db->fieldName('attributes') . ') VALUES (' . $this->data['id'] . ', ' . $sid . ', ' . (int) $slot . ', ' . $item->getId() . ', ' . $item->getCount() . ', ' . $this->db->quote( $item->getAttributes() ) . ')');
+			// inserts given item
+			$this->db->query('INSERT INTO ' . $this->db->tableName('player_items') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('sid') . ', ' . $this->db->fieldName('pid') . ', ' . $this->db->fieldName('itemtype') . ', ' . $this->db->fieldName('count') . ', ' . $this->db->fieldName('attributes') . ') VALUES (' . $this->data['id'] . ', ' . $sid . ', ' . (int) $slot . ', ' . $item->getId() . ', ' . $item->getCount() . ', ' . $this->db->quote( $item->getAttributes() ) . ')');
 
-            // checks if this is container
-            if($item instanceof OTS_Container)
-            {
-                $pid = $sid;
+			// checks if this is container
+			if($item instanceof OTS_Container)
+			{
+				$pid = $sid;
 
-                // inserts all contained items
-                foreach($item as $sub)
-                {
-                    $this->setSlot($pid, $sub);
-                }
-            }
-        }
+				// inserts all contained items
+				foreach($item as $sub)
+				{
+					$this->setSlot($pid, $sub);
+				}
+			}
+		}
 
-        // clears $sid for next public call
-        if($slot <= POT::SLOT_AMMO)
-        {
-            $sid = null;
-        }
-    }
+		// clears $sid for next public call
+		if($slot <= POT::SLOT_AMMO)
+		{
+			$sid = null;
+		}
+	}
 
 /**
  * Deletes depot item with contained items.
@@ -2679,17 +2691,17 @@ class OTS_Player extends OTS_Row_DAO
  * @param int $sid Depot item unique player's ID.
  * @throws PDOException On PDO operation error.
  */
-    private function deleteDepot($sid)
-    {
-        // deletes all sub-items
-        foreach( $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . $sid)->fetchAll() as $item)
-        {
-            $this->deleteDepot($item['sid']);
-        }
+	private function deleteDepot($sid)
+	{
+		// deletes all sub-items
+		foreach( $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . $sid)->fetchAll() as $item)
+		{
+			$this->deleteDepot($item['sid']);
+		}
 
-        // deletes item
-        $this->db->query('DELETE FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('sid') . ' = ' . $sid);
-    }
+		// deletes item
+		$this->db->query('DELETE FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('sid') . ' = ' . $sid);
+	}
 
 /**
  * Returns items tree from given depot.
@@ -2706,51 +2718,51 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotAContainer If item which is not of type container contains sub items.
  * @throws PDOException On PDO operation error.
  */
-    public function getDepot($depot)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getDepot($depot)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        // loads current item
-        $item = $this->db->query('SELECT ' . $this->db->fieldName('itemtype') . ', ' . $this->db->fieldName('sid') . ', ' . $this->db->fieldName('count') . ', ' . $this->db->fieldName('attributes') . ' FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName($depot > POT::DEPOT_SID_FIRST ? 'sid' : 'pid') . ' = ' . (int) $depot)->fetch();
+		// loads current item
+		$item = $this->db->query('SELECT ' . $this->db->fieldName('itemtype') . ', ' . $this->db->fieldName('sid') . ', ' . $this->db->fieldName('count') . ', ' . $this->db->fieldName('attributes') . ' FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName($depot > POT::DEPOT_SID_FIRST ? 'sid' : 'pid') . ' = ' . (int) $depot)->fetch();
 
-        if( empty($item) )
-        {
-            return null;
-        }
+		if( empty($item) )
+		{
+			return null;
+		}
 
-        // checks if there are any items under current one
-        $items = array();
-        foreach( $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . $item['sid'])->fetchAll() as $sub)
-        {
-            $items[] = $this->getDepot($sub['sid']);
-        }
+		// checks if there are any items under current one
+		$items = array();
+		foreach( $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . $item['sid'])->fetchAll() as $sub)
+		{
+			$items[] = $this->getDepot($sub['sid']);
+		}
 
-        // item type
-        $depot = POT::getInstance()->getItemsList()->getItemType($item['itemtype'])->createItem();
-        $depot->setCount($item['count']);
-        $depot->setAttributes($item['attributes']);
+		// item type
+		$depot = POT::getInstance()->getItemsList()->getItemType($item['itemtype'])->createItem();
+		$depot->setCount($item['count']);
+		$depot->setAttributes($item['attributes']);
 
-        // checks if current item has any contained items
-        if( !empty($items) )
-        {
-            // checks if item is realy a container
-            if(!$depot instanceof OTS_Container)
-            {
-                throw new E_OTS_NotAContainer();
-            }
+		// checks if current item has any contained items
+		if( !empty($items) )
+		{
+			// checks if item is realy a container
+			if(!$depot instanceof OTS_Container)
+			{
+				throw new E_OTS_NotAContainer();
+			}
 
-            // puts items into container
-            foreach($items as $sub)
-            {
-                $depot->addItem($sub);
-            }
-        }
+			// puts items into container
+			foreach($items as $sub)
+			{
+				$depot->addItem($sub);
+			}
+		}
 
-        return $depot;
-    }
+		return $depot;
+	}
 
 /**
  * Sets depot content.
@@ -2764,62 +2776,62 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function setDepot($depot, OTS_Item $item = null, $pid = 0, $depot_id = 0)
-    {
-        static $sid;
+	public function setDepot($depot, OTS_Item $item = null, $pid = 0, $depot_id = 0)
+	{
+		static $sid;
 
-        // if no depot_id is specified then it is same as depot slot
-        if($depot_id == 0)
-        {
-            $depot_id = $depot;
-        }
+		// if no depot_id is specified then it is same as depot slot
+		if($depot_id == 0)
+		{
+			$depot_id = $depot;
+		}
 
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        // clears current depot
-        if($depot <= POT::DEPOT_SID_FIRST)
-        {
-            $id = $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . (int) $depot)->fetch();
-            $this->deleteDepot( (int) $id['sid']);
-        }
+		// clears current depot
+		if($depot <= POT::DEPOT_SID_FIRST)
+		{
+			$id = $this->db->query('SELECT ' . $this->db->fieldName('sid') . ' FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('pid') . ' = ' . (int) $depot)->fetch();
+			$this->deleteDepot( (int) $id['sid']);
+		}
 
-        // checks if there is any item to insert
-        if( isset($item) )
-        {
-            // current maximum sid (over depot sids)
-            if( !isset($sid) )
-            {
-                $sid = $this->db->query('SELECT MAX(' . $this->db->fieldName('sid') . ') AS `sid` FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'])->fetch();
-                $sid = $sid['sid'] > POT::DEPOT_SID_FIRST ? $sid['sid'] : POT::DEPOT_SID_FIRST;
-            }
+		// checks if there is any item to insert
+		if( isset($item) )
+		{
+			// current maximum sid (over depot sids)
+			if( !isset($sid) )
+			{
+				$sid = $this->db->query('SELECT MAX(' . $this->db->fieldName('sid') . ') AS `sid` FROM ' . $this->db->tableName('player_depotitems') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'])->fetch();
+				$sid = $sid['sid'] > POT::DEPOT_SID_FIRST ? $sid['sid'] : POT::DEPOT_SID_FIRST;
+			}
 
-            $sid++;
+			$sid++;
 
-            // inserts given item
-            $this->db->query('INSERT INTO ' . $this->db->tableName('player_depotitems') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('depot_id') . ', ' . $this->db->fieldName('sid') . ', ' . $this->db->fieldName('pid') . ', ' . $this->db->fieldName('itemtype') . ', ' . $this->db->fieldName('count') . ', ' . $this->db->fieldName('attributes') . ') VALUES (' . $this->data['id'] . ', ' . $depot_id . ', ' . $sid . ', ' . (int) $depot . ', ' . $item->getId() . ', ' . $item->getCount() . ', ' . $this->db->quote( $item->getAttributes() ) . ')');
+			// inserts given item
+			$this->db->query('INSERT INTO ' . $this->db->tableName('player_depotitems') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('depot_id') . ', ' . $this->db->fieldName('sid') . ', ' . $this->db->fieldName('pid') . ', ' . $this->db->fieldName('itemtype') . ', ' . $this->db->fieldName('count') . ', ' . $this->db->fieldName('attributes') . ') VALUES (' . $this->data['id'] . ', ' . $depot_id . ', ' . $sid . ', ' . (int) $depot . ', ' . $item->getId() . ', ' . $item->getCount() . ', ' . $this->db->quote( $item->getAttributes() ) . ')');
 
-            // checks if this is container
-            if($item instanceof OTS_Container)
-            {
-                $pid = $sid;
+			// checks if this is container
+			if($item instanceof OTS_Container)
+			{
+				$pid = $sid;
 
-                // inserts all contained items
-                foreach($item as $sub)
-                {
-                    $this->setDepot($pid, $sub, 0, $depot_id);
-                }
-            }
-        }
+				// inserts all contained items
+				foreach($item as $sub)
+				{
+					$this->setDepot($pid, $sub, 0, $depot_id);
+				}
+			}
+		}
 
-        // clears $sid for next public call
-        if($depot <= POT::DEPOT_SID_FIRST)
-        {
-            $sid = null;
-        }
-    }
+		// clears $sid for next public call
+		if($depot <= POT::DEPOT_SID_FIRST)
+		{
+			$sid = null;
+		}
+	}
 
 /**
  * @version 0.1.5
@@ -2828,22 +2840,22 @@ class OTS_Player extends OTS_Row_DAO
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_PlayerBan class.
  */
-    public function ban($time = 0)
-    {
-        // can't ban nothing
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function ban($time = 0)
+	{
+		// can't ban nothing
+		if( !$this->isLoaded() )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        // creates ban entry
-        $ban = new OTS_PlayerBan();
-        $ban->setValue($this->data['id']);
-        $ban->setExpires($time);
-        $ban->setAdded( time() );
-        $ban->activate();
-        $ban->save();
-    }
+		// creates ban entry
+		$ban = new OTS_PlayerBan();
+		$ban->setValue($this->data['id']);
+		$ban->setExpires($time);
+		$ban->setAdded( time() );
+		$ban->activate();
+		$ban->save();
+	}
 
 /**
  * @version 0.1.5
@@ -2851,19 +2863,19 @@ class OTS_Player extends OTS_Row_DAO
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_PlayerBan class.
  */
-    public function unban()
-    {
-        // can't unban nothing
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function unban()
+	{
+		// can't unban nothing
+		if( !$this->isLoaded() )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        // deletes ban entry
-        $ban = new OTS_PlayerBan();
-        $ban->find($this->data['id']);
-        $ban->delete();
-    }
+		// deletes ban entry
+		$ban = new OTS_PlayerBan();
+		$ban->find($this->data['id']);
+		$ban->delete();
+	}
 
 /**
  * @version 0.1.5
@@ -2872,41 +2884,41 @@ class OTS_Player extends OTS_Row_DAO
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_PlayerBan class.
  */
-    public function isBanned()
-    {
-        // nothing can't be banned
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function isBanned()
+	{
+		// nothing can't be banned
+		if( !$this->isLoaded() )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 		if( !isset($this->data['banned']) )
 			$this->loadBan();
-        return ($this->data['banned'] == 1);
-    }
+		return ($this->data['banned'] == 1);
+	}
 
-    public function getBanTime()
-    {
-        // nothing can't be banned
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getBanTime()
+	{
+		// nothing can't be banned
+		if( !$this->isLoaded() )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 		if( !isset($this->data['banned_time']) )
 			$this->loadBan();
-        return $this->data['banned_time'];
-    }
+		return $this->data['banned_time'];
+	}
 
-    public function loadBan()
-    {
-        // nothing can't be banned
-        if( !$this->isLoaded() )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function loadBan()
+	{
+		// nothing can't be banned
+		if( !$this->isLoaded() )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 		$ban = $this->db->query('SELECT ' . $this->db->fieldName('active') . ', ' . $this->db->fieldName('expires') . ' FROM ' . $this->db->tableName('bans') . ' WHERE (' . $this->db->fieldName('type') . ' = 3 OR ' . $this->db->fieldName('type') . ' = 5) AND ' . $this->db->fieldName('active') . ' = 1 AND ' . $this->db->fieldName('value') . ' = ' . $this->data['account_id'] . ' AND (' . $this->db->fieldName('expires') . ' > ' . time() .' OR ' . $this->db->fieldName('expires') . ' = -1)')->fetch();
 		$this->data['banned'] = $ban['active'];
 		$this->data['banned_time'] = $ban['expires'];
-    }
+	}
 /**
  * Deletes player.
  *
@@ -2915,19 +2927,19 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function delete()
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function delete()
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        // deletes row from database
-        $this->db->query('UPDATE ' . $this->db->tableName('players') . ' SET ' . $this->db->fieldName('deleted') . ' = 1 WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+		// deletes row from database
+		$this->db->query('UPDATE ' . $this->db->tableName('players') . ' SET ' . $this->db->fieldName('deleted') . ' = 1 WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
 
-        // resets object handle
-        unset($this->data['id']);
-    }
+		// resets object handle
+		unset($this->data['id']);
+	}
 
 /**
  * Player proffesion name.
@@ -2941,12 +2953,12 @@ class OTS_Player extends OTS_Row_DAO
  * @return string Player proffesion name.
  * @throws E_OTS_NotLoaded If player is not loaded or global vocations list is not loaded.
  */
-    public function getVocationName()
-    {
-        if( !isset($this->data['vocation']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getVocationName()
+	{
+		if( !isset($this->data['vocation']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
 		global $config;
 		$voc = $this->getVocation();
@@ -2955,8 +2967,8 @@ class OTS_Player extends OTS_Row_DAO
 		}
 
 		return $config['vocations'][$voc];
-        //return POT::getInstance()->getVocationsList()->getVocationName($this->data['vocation']);
-    }
+		//return POT::getInstance()->getVocationsList()->getVocationName($this->data['vocation']);
+	}
 
 /**
  * Player residence town name.
@@ -2970,15 +2982,15 @@ class OTS_Player extends OTS_Row_DAO
  * @return string Player town name.
  * @throws E_OTS_NotLoaded If player is not loaded or global map is not loaded.
  */
-    public function getTownName()
-    {
-        if( !isset($this->data['town_id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getTownName()
+	{
+		if( !isset($this->data['town_id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return POT::getInstance()->getMap()->getTownName($this->data['town_id']);
-    }
+		return POT::getInstance()->getMap()->getTownName($this->data['town_id']);
+	}
 
 /**
  * Returns house rented by this player.
@@ -2993,23 +3005,23 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded or global houses list is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function getHouse()
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getHouse()
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        // SELECT query on database
-        $house = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('houses') . ' WHERE ' . $this->db->fieldName('owner') . ' = ' . $this->data['id'])->fetch();
+		// SELECT query on database
+		$house = $this->db->query('SELECT ' . $this->db->fieldName('id') . ' FROM ' . $this->db->tableName('houses') . ' WHERE ' . $this->db->fieldName('owner') . ' = ' . $this->data['id'])->fetch();
 
-        if( !empty($house) )
-        {
-            return POT::getInstance()->getHousesList()->getHouse($house['id']);
-        }
+		if( !empty($house) )
+		{
+			return POT::getInstance()->getHousesList()->getHouse($house['id']);
+		}
 
-        return null;
-    }
+		return null;
+	}
 
 /**
  * Returns list of VIPs.
@@ -3024,29 +3036,29 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function getVIPsList()
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getVIPsList()
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $list = new OTS_Players_List();
+		$list = new OTS_Players_List();
 
-        // foreign table fields identifiers
-        $field1 = new OTS_SQLField('player_id', 'player_viplist');
-        $field2 = new OTS_SQLField('vip_id', 'player_viplist');
+		// foreign table fields identifiers
+		$field1 = new OTS_SQLField('player_id', 'player_viplist');
+		$field2 = new OTS_SQLField('vip_id', 'player_viplist');
 
-        // creates filter
-        $filter = new OTS_SQLFilter();
-        $filter->addFilter($field1, $this->data['id']);
-        $filter->compareField('id', $field2);
+		// creates filter
+		$filter = new OTS_SQLFilter();
+		$filter->addFilter($field1, $this->data['id']);
+		$filter->compareField('id', $field2);
 
-        // puts filter onto list
-        $list->setFilter($filter);
+		// puts filter onto list
+		$list->setFilter($filter);
 
-        return $list;
-    }
+		return $list;
+	}
 
 /**
  * Adds player to VIP list.
@@ -3057,15 +3069,15 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function addVIP(OTS_Player $player)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function addVIP(OTS_Player $player)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $this->db->query('INSERT INTO ' . $this->db->tableName('player_viplist') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('vip_id') . ') VALUES (' . $this->data['id'] . ', ' . $player->getId() . ')');
-    }
+		$this->db->query('INSERT INTO ' . $this->db->tableName('player_viplist') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('vip_id') . ') VALUES (' . $this->data['id'] . ', ' . $player->getId() . ')');
+	}
 
 /**
  * Checks if given player is a VIP for current one.
@@ -3077,15 +3089,15 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function isVIP(OTS_Player $player)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function isVIP(OTS_Player $player)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->db->query('SELECT COUNT(' . $this->db->fieldName('vip_id') . ') FROM ' . $this->db->tableName('player_viplist') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('vip_id') . ' = ' . $player->getId() )->fetchColumn() > 0;
-    }
+		return $this->db->query('SELECT COUNT(' . $this->db->fieldName('vip_id') . ') FROM ' . $this->db->tableName('player_viplist') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('vip_id') . ' = ' . $player->getId() )->fetchColumn() > 0;
+	}
 
 /**
  * Deletes player from VIP list.
@@ -3096,15 +3108,15 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function deleteVIP(OTS_Player $player)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function deleteVIP(OTS_Player $player)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $this->db->query('DELETE FROM ' . $this->db->tableName('player_viplist') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('vip_id') . ' = ' . $player->getId() );
-    }
+		$this->db->query('DELETE FROM ' . $this->db->tableName('player_viplist') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('vip_id') . ' = ' . $player->getId() );
+	}
 
 /**
  * Returns list of known spells.
@@ -3119,39 +3131,39 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function getSpellsList()
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function getSpellsList()
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $spells = array();
-        $list = POT::getInstance()->getSpellsList();
+		$spells = array();
+		$list = POT::getInstance()->getSpellsList();
 
-        // reads all known spells
-        foreach( $this->db->query('SELECT ' . $this->db->fieldName('name') . ' FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id']) as $spell)
-        {
-            // checks if there is rune, instant or conjure spell with given name
+		// reads all known spells
+		foreach( $this->db->query('SELECT ' . $this->db->fieldName('name') . ' FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id']) as $spell)
+		{
+			// checks if there is rune, instant or conjure spell with given name
 
-            if( $list->hasRune($spell['name']) )
-            {
-                $spells[] = $list->getRune($spell['name']);
-            }
+			if( $list->hasRune($spell['name']) )
+			{
+				$spells[] = $list->getRune($spell['name']);
+			}
 
-            if( $list->hasInstance($spell['name']) )
-            {
-                $spells[] = $list->getInstance($spell['name']);
-            }
+			if( $list->hasInstance($spell['name']) )
+			{
+				$spells[] = $list->getInstance($spell['name']);
+			}
 
-            if( $list->hasConjure($spell['name']) )
-            {
-                $spells[] = $list->getConjure($spell['name']);
-            }
-        }
+			if( $list->hasConjure($spell['name']) )
+			{
+				$spells[] = $list->getConjure($spell['name']);
+			}
+		}
 
-        return $spells;
-    }
+		return $spells;
+	}
 
 /**
  * Checks if player knows given spell.
@@ -3163,15 +3175,15 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function hasSpell(OTS_Spell $spell)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function hasSpell(OTS_Spell $spell)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        return $this->db->query('SELECT COUNT(' . $this->db->fieldName('name') . ') FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('name') . ' = ' . $this->db->quote( $spell->getName() ) )->fetchColumn() > 0;
-    }
+		return $this->db->query('SELECT COUNT(' . $this->db->fieldName('name') . ') FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('name') . ' = ' . $this->db->quote( $spell->getName() ) )->fetchColumn() > 0;
+	}
 
 /**
  * Adds given spell to player's spell book (makes him knowing it).
@@ -3182,15 +3194,15 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function addSpell(OTS_Spell $spell)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function addSpell(OTS_Spell $spell)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $this->db->query('INSERT INTO ' . $this->db->tableName('player_spells') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('name') . ') VALUES (' . $this->data['id'] . ', ' . $this->db->quote( $spell->getName() ) . ')');
-    }
+		$this->db->query('INSERT INTO ' . $this->db->tableName('player_spells') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('name') . ') VALUES (' . $this->data['id'] . ', ' . $this->db->quote( $spell->getName() ) . ')');
+	}
 
 /**
  * Removes given spell from player's spell book.
@@ -3201,15 +3213,15 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-    public function deleteSpell(OTS_Spell $spell)
-    {
-        if( !isset($this->data['id']) )
-        {
-            throw new E_OTS_NotLoaded();
-        }
+	public function deleteSpell(OTS_Spell $spell)
+	{
+		if( !isset($this->data['id']) )
+		{
+			throw new E_OTS_NotLoaded();
+		}
 
-        $this->db->query('DELETE FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('name') . ' = ' . $this->db->quote( $spell->getName() ) );
-    }
+		$this->db->query('DELETE FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('name') . ' = ' . $this->db->quote( $spell->getName() ) );
+	}
 
 	public static function getPercentLevel($count, $nextLevelCount)
 	{
@@ -3230,168 +3242,168 @@ class OTS_Player extends OTS_Row_DAO
  * @throws OutOfBoundsException For non-supported properties.
  * @throws PDOException On PDO operation error.
  */
-    public function __get($name)
-    {
-        switch($name)
-        {
-            case 'id':
-                return $this->getId();
+	public function __get($name)
+	{
+		switch($name)
+		{
+			case 'id':
+				return $this->getId();
 
-            case 'name':
-                return $this->getName();
+			case 'name':
+				return $this->getName();
 
-            case 'account':
-                return $this->getAccount();
+			case 'account':
+				return $this->getAccount();
 
-            case 'group':
-                return $this->getGroup();
+			case 'group':
+				return $this->getGroup();
 
-            case 'sex':
-                return $this->getSex();
+			case 'sex':
+				return $this->getSex();
 
-            case 'vocation':
-                return $this->getVocation();
+			case 'vocation':
+				return $this->getVocation();
 
-            case 'experience':
-                return $this->getExperience();
+			case 'experience':
+				return $this->getExperience();
 
-            case 'level':
-                return $this->getLevel();
+			case 'level':
+				return $this->getLevel();
 
-            case 'magLevel':
-                return $this->getMagLevel();
+			case 'magLevel':
+				return $this->getMagLevel();
 
-            case 'health':
-                return $this->getHealth();
+			case 'health':
+				return $this->getHealth();
 
-            case 'healthMax':
-                return $this->getHealthMax();
+			case 'healthMax':
+				return $this->getHealthMax();
 
-            case 'mana':
-                return $this->getMana();
+			case 'mana':
+				return $this->getMana();
 
-            case 'manaMax':
-                return $this->getManaMax();
+			case 'manaMax':
+				return $this->getManaMax();
 
-            case 'manaSpent':
-                return $this->getManaSpent();
+			case 'manaSpent':
+				return $this->getManaSpent();
 
-            case 'soul':
-                return $this->getSoul();
+			case 'soul':
+				return $this->getSoul();
 
-            case 'direction':
-                return $this->getDirection();
+			case 'direction':
+				return $this->getDirection();
 
-            case 'lookBody':
-                return $this->getLookBody();
+			case 'lookBody':
+				return $this->getLookBody();
 
-            case 'lookFeet':
-                return $this->getLookFeet();
+			case 'lookFeet':
+				return $this->getLookFeet();
 
-            case 'lookHead':
-                return $this->getLookHead();
+			case 'lookHead':
+				return $this->getLookHead();
 
-            case 'lookLegs':
-                return $this->getLookLegs();
+			case 'lookLegs':
+				return $this->getLookLegs();
 
-            case 'lookType':
-                return $this->getLookType();
+			case 'lookType':
+				return $this->getLookType();
 
-            case 'lookAddons':
-                return $this->getLookAddons();
+			case 'lookAddons':
+				return $this->getLookAddons();
 
-            case 'posX':
-                return $this->getPosX();
+			case 'posX':
+				return $this->getPosX();
 
-            case 'posY':
-                return $this->getPosY();
+			case 'posY':
+				return $this->getPosY();
 
-            case 'posZ':
-                return $this->getPosZ();
+			case 'posZ':
+				return $this->getPosZ();
 
-            case 'cap':
-                return $this->getCap();
+			case 'cap':
+				return $this->getCap();
 
-            case 'lastLogin':
-                return $this->getLastLogin();
+			case 'lastLogin':
+				return $this->getLastLogin();
 
-            case 'lastLogout':
-                return $this->getLastLogout();
+			case 'lastLogout':
+				return $this->getLastLogout();
 
-            case 'lastIP':
-                return $this->getLastIP();
+			case 'lastIP':
+				return $this->getLastIP();
 
-            case 'save':
-                return $this->isSaveSet();
+			case 'save':
+				return $this->isSaveSet();
 
-            case 'conditions':
-                return $this->getConditions();
+			case 'conditions':
+				return $this->getConditions();
 
-            case 'skullTime':
-                return $this->getRedSkullTime();
+			case 'skullTime':
+				return $this->getRedSkullTime();
 
-            case 'skull':
-                return $this->getSkull();
+			case 'skull':
+				return $this->getSkull();
 
-            case 'guildNick':
-                return $this->getGuildNick();
+			case 'guildNick':
+				return $this->getGuildNick();
 
-            case 'rank':
-                return $this->getRank();
+			case 'rank':
+				return $this->getRank();
 
-            case 'townId':
-                return $this->getTownId();
+			case 'townId':
+				return $this->getTownId();
 
-            case 'townName':
-                return $this->getTownName();
+			case 'townName':
+				return $this->getTownName();
 
-            case 'house':
-                return $this->getHouse();
+			case 'house':
+				return $this->getHouse();
 
-            case 'lossExperience':
-                return $this->getLossExperience();
+			case 'lossExperience':
+				return $this->getLossExperience();
 
-            case 'lossMana':
-                return $this->getLossMana();
+			case 'lossMana':
+				return $this->getLossMana();
 
-            case 'lossSkills':
-                return $this->getLossSkills();
+			case 'lossSkills':
+				return $this->getLossSkills();
 
-            case 'lossItems':
-                return $this->getLossItems();
+			case 'lossItems':
+				return $this->getLossItems();
 
-            case 'lossContainers':
-                return $this->getLossContainers();
+			case 'lossContainers':
+				return $this->getLossContainers();
 
-            case 'balance':
-                return $this->getBalance();
+			case 'balance':
+				return $this->getBalance();
 
-            case 'loaded':
-                return $this->isLoaded();
+			case 'loaded':
+				return $this->isLoaded();
 
-            case 'banned':
-                return $this->isBanned();
+			case 'banned':
+				return $this->isBanned();
 
-            case 'online':
-                return $this->isOnline();
+			case 'online':
+				return $this->isOnline();
 
-            case 'worldId':
-                return $this->getWorldId();
+			case 'worldId':
+				return $this->getWorldId();
 
 
-            case 'vipsList':
-                return $this->getVIPsList();
+			case 'vipsList':
+				return $this->getVIPsList();
 
-            case 'vocationName':
-                return $this->getVocationName();
+			case 'vocationName':
+				return $this->getVocationName();
 
-            case 'spellsList':
-                return $this->getSpellsList();
+			case 'spellsList':
+				return $this->getSpellsList();
 
-            default:
-                throw new OutOfBoundsException();
-        }
-    }
+			default:
+				throw new OutOfBoundsException();
+		}
+	}
 
 /**
  * Magic PHP5 method.
@@ -3403,203 +3415,203 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded When passing object value which represents not-initialised instance.
  * @throws OutOfBoundsException For non-supported properties.
  */
-    public function __set($name, $value)
-    {
-        switch($name)
-        {
-            case 'name':
-                $this->setName($value);
-                break;
+	public function __set($name, $value)
+	{
+		switch($name)
+		{
+			case 'name':
+				$this->setName($value);
+				break;
 
-            case 'account':
-                $this->setAccount($value);
-                break;
+			case 'account':
+				$this->setAccount($value);
+				break;
 
-            case 'group':
-                $this->setGroup($value);
-                break;
+			case 'group':
+				$this->setGroup($value);
+				break;
 
-            case 'sex':
-                $this->setSex($value);
-                break;
+			case 'sex':
+				$this->setSex($value);
+				break;
 
-            case 'vocation':
-                $this->setVocation($value);
-                break;
+			case 'vocation':
+				$this->setVocation($value);
+				break;
 
-            case 'experience':
-                $this->setExperience($value);
-                break;
+			case 'experience':
+				$this->setExperience($value);
+				break;
 
-            case 'level':
-                $this->setLevel($value);
-                break;
+			case 'level':
+				$this->setLevel($value);
+				break;
 
-            case 'magLevel':
-                $this->setMagLevel($value);
-                break;
+			case 'magLevel':
+				$this->setMagLevel($value);
+				break;
 
-            case 'health':
-                $this->setHealth($value);
-                break;
+			case 'health':
+				$this->setHealth($value);
+				break;
 
-            case 'healthMax':
-                $this->setHealthMax($value);
-                break;
+			case 'healthMax':
+				$this->setHealthMax($value);
+				break;
 
-            case 'mana':
-                $this->setMana($value);
-                break;
+			case 'mana':
+				$this->setMana($value);
+				break;
 
-            case 'manaMax':
-                $this->setManaMax($value);
-                break;
+			case 'manaMax':
+				$this->setManaMax($value);
+				break;
 
-            case 'manaSpent':
-                $this->setManaSpent($value);
-                break;
+			case 'manaSpent':
+				$this->setManaSpent($value);
+				break;
 
-            case 'soul':
-                $this->setSoul($value);
-                break;
+			case 'soul':
+				$this->setSoul($value);
+				break;
 
-            case 'direction':
-                $this->setDirection($value);
-                break;
+			case 'direction':
+				$this->setDirection($value);
+				break;
 
-            case 'lookBody':
-                $this->setLookBody($value);
-                break;
+			case 'lookBody':
+				$this->setLookBody($value);
+				break;
 
-            case 'lookFeet':
-                $this->setLookFeet($value);
-                break;
+			case 'lookFeet':
+				$this->setLookFeet($value);
+				break;
 
-            case 'lookHead':
-                $this->setLookHead($value);
-                break;
+			case 'lookHead':
+				$this->setLookHead($value);
+				break;
 
-            case 'lookLegs':
-                $this->setLookLegs($value);
-                break;
+			case 'lookLegs':
+				$this->setLookLegs($value);
+				break;
 
-            case 'lookType':
-                $this->setLookType($value);
-                break;
+			case 'lookType':
+				$this->setLookType($value);
+				break;
 
-            case 'lookAddons':
-                $this->setLookAddons($value);
-                break;
+			case 'lookAddons':
+				$this->setLookAddons($value);
+				break;
 
-            case 'posX':
-                $this->setPosX($value);
-                break;
+			case 'posX':
+				$this->setPosX($value);
+				break;
 
-            case 'posY':
-                $this->setPosY($value);
-                break;
+			case 'posY':
+				$this->setPosY($value);
+				break;
 
-            case 'posZ':
-                $this->setPosZ($value);
-                break;
+			case 'posZ':
+				$this->setPosZ($value);
+				break;
 
-            case 'cap':
-                $this->setCap($value);
-                break;
+			case 'cap':
+				$this->setCap($value);
+				break;
 
-            case 'lastLogin':
-                $this->setLastLogin($value);
-                break;
+			case 'lastLogin':
+				$this->setLastLogin($value);
+				break;
 
-            case 'lastLogout':
-                $this->setLastLogout($value);
-                break;
+			case 'lastLogout':
+				$this->setLastLogout($value);
+				break;
 
-            case 'lastIP':
-                $this->setLastIP($value);
-                break;
+			case 'lastIP':
+				$this->setLastIP($value);
+				break;
 
-            case 'conditions':
-                $this->setConditions($value);
-                break;
+			case 'conditions':
+				$this->setConditions($value);
+				break;
 
-            case 'skull':
-                $this->setSkull($value);
-                break;
+			case 'skull':
+				$this->setSkull($value);
+				break;
 
-            case 'skullTime':
-                $this->setSkullTime($value);
-                break;
+			case 'skullTime':
+				$this->setSkullTime($value);
+				break;
 
-            case 'guildNick':
-                $this->setGuildNick($value);
-                break;
+			case 'guildNick':
+				$this->setGuildNick($value);
+				break;
 
-            case 'rank':
-                $this->setRank($value);
-                break;
+			case 'rank':
+				$this->setRank($value);
+				break;
 
-            case 'townId':
-                $this->setTownId($value);
-                break;
+			case 'townId':
+				$this->setTownId($value);
+				break;
 
-            case 'lossExperience':
-                $this->setLossExperience($value);
-                break;
+			case 'lossExperience':
+				$this->setLossExperience($value);
+				break;
 
-            case 'lossMana':
-                $this->setLossMana($value);
-                break;
+			case 'lossMana':
+				$this->setLossMana($value);
+				break;
 
-            case 'lossSkills':
-                $this->setLossSkills($value);
-                break;
+			case 'lossSkills':
+				$this->setLossSkills($value);
+				break;
 
-            case 'lossItems':
-                $this->setLossItems($value);
-                break;
+			case 'lossItems':
+				$this->setLossItems($value);
+				break;
 
-            case 'balance':
-                $this->setBalance($value);
-                break;
+			case 'balance':
+				$this->setBalance($value);
+				break;
 
-            case 'skull':
-                if($value)
-                {
-                    $this->setRedSkull();
-                }
-                else
-                {
-                    $this->unsetRedSkull();
-                }
-                break;
+			case 'skull':
+				if($value)
+				{
+					$this->setRedSkull();
+				}
+				else
+				{
+					$this->unsetRedSkull();
+				}
+				break;
 
-            case 'save':
-                if($value)
-                {
-                    $this->setSave();
-                }
-                else
-                {
-                    $this->unsetSave();
-                }
-                break;
+			case 'save':
+				if($value)
+				{
+					$this->setSave();
+				}
+				else
+				{
+					$this->unsetSave();
+				}
+				break;
 
-            case 'banned':
-                if($value)
-                {
-                    $this->ban();
-                }
-                else
-                {
-                    $this->unban();
-                }
-                break;
+			case 'banned':
+				if($value)
+				{
+					$this->ban();
+				}
+				else
+				{
+					$this->unban();
+				}
+				break;
 
-            default:
-                throw new OutOfBoundsException();
-        }
-    }
+			default:
+				throw new OutOfBoundsException();
+		}
+	}
 
 /**
  * Returns string representation of object.
@@ -3612,20 +3624,18 @@ class OTS_Player extends OTS_Row_DAO
  * @since 0.1.0
  * @return string String representation of object.
  */
-    public function __toString()
-    {
-        $ots = POT::getInstance();
+	public function __toString()
+	{
+		$ots = POT::getInstance();
 
-        // checks if display driver is loaded
-        if( $ots->isDisplayDriverLoaded() )
-        {
-            return $ots->getDisplayDriver()->displayPlayer($this);
-        }
+		// checks if display driver is loaded
+		if( $ots->isDisplayDriverLoaded() )
+		{
+			return $ots->getDisplayDriver()->displayPlayer($this);
+		}
 
-        return $this->getName();
-    }
+		return $this->getName();
+	}
 }
 
 /**#@-*/
-
-?>

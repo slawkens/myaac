@@ -1,0 +1,70 @@
+<div class="row">
+	{% if hasPointsColumn %}
+	<div class="col-md-4">
+		<div class="card card-info card-outline">
+			<div class="card-header">
+				<h5 class="m-0">Give Premium Points</h5>
+			</div>
+			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_account">
+				{{ csrf() }}
+				<div class="card-body">
+					<div class="form-group">
+						<label>Premium Points</label>
+						<input type="number" name="value" value="" class="form-control">
+					</div>
+				</div>
+				<div class="card-footer">
+					<input type="hidden" name="action" value="give-points">
+					<button type="submit" class="btn btn-info">Add Points</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	{% endif %}
+
+	{% if hasCoinsColumn %}
+	<div class="col-md-4">
+		<div class="card card-info card-outline">
+			<div class="card-header">
+				<h5 class="m-0">Give Coins</h5>
+			</div>
+			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_account">
+				{{ csrf() }}
+				<div class="card-body">
+					<div class="form-group">
+						<label>Coins</label>
+						<input type="number" name="value" value="" class="form-control">
+					</div>
+				</div>
+				<div class="card-footer">
+					<input type="hidden" name="action" value="give-coins">
+					<button type="submit" class="btn btn-info">Add Coins</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	{% endif %}
+
+	{% if not freePremium %}
+	<div class="col-md-4">
+		<div class="card card-info card-outline">
+			<div class="card-header">
+				<h5 class="m-0">Give Premium Days</h5>
+			</div>
+			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_account">
+				{{ csrf() }}
+				<div class="card-body">
+					<div class="form-group">
+						<label>Premium Days</label>
+						<input type="number" name="value" value="" class="form-control">
+					</div>
+				</div>
+				<div class="card-footer">
+					<input type="hidden" name="action" value="give-premdays">
+					<button type="submit" class="btn btn-info">Add Days</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	{% endif %}
+</div>

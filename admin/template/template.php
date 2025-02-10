@@ -2,6 +2,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+	<?php $hooks->trigger(HOOK_ADMIN_HEAD_START); ?>
 	<?php echo template_header(true); ?>
 	<title><?php echo (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,8 +17,10 @@
 	<script src="<?php echo BASE_URL; ?>tools/js/respond.min.js"></script>
 	<![endif]-->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<?php $hooks->trigger(HOOK_ADMIN_HEAD_END); ?>
 </head>
 <body class="sidebar-mini ">
+<?php $hooks->trigger(HOOK_ADMIN_BODY_START); ?>
 <?php if ($logged && admin()) { ?>
 	<div class="wrapper">
 		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -65,7 +68,7 @@
 							if (!$has_child) { ?>
 								<li class="nav-item">
 									<a class="nav-link<?php echo(strpos($menu['link'], $page) !== false ? ' active' : '') ?>" href="?p=<?php echo $menu['link'] ?>">
-										<i class="nav-icon fas fa-<?php echo(isset($menu['icon']) ? $menu['icon'] : 'link') ?>"></i>
+										<i class="nav-icon fas fa-<?php echo($menu['icon'] ?? 'link') ?>"></i>
 										<p><?php echo $menu['name'] ?></p>
 									</a>
 								</li>
@@ -73,18 +76,18 @@
 							} else if ($has_child) {
 								$used_menu = null;
 								$nav_construct = '';
-								foreach ($menu['link'] as $category => $sub_menu) {
+								foreach ($menu['link'] as $sub_category => $sub_menu) {
 									$nav_construct .= '<li class="nav-item"><a href="?p=' . $sub_menu['link'] . '" class="nav-link';
-									if ($page == $sub_menu['link']) {
+									if ($_SERVER['QUERY_STRING'] == 'p=' . $sub_menu['link']) {
 										$nav_construct .= ' active';
 										$used_menu = true;
 									}
-									$nav_construct .= '"><i class="far fa-' . (isset($sub_menu['icon']) ? $sub_menu['icon'] : 'circle') . ' nav-icon"></i><p>' . $sub_menu['name'] . '</p></a></li>';
+									$nav_construct .= '"><i class="fas fa-' . ($sub_menu['icon'] ?? 'circle') . ' nav-icon"></i><p>' . $sub_menu['name'] . '</p></a></li>';
 								}
 								?>
 								<li class="nav-item has-treeview<?php echo($used_menu ? ' menu-open' : '') ?>">
 									<a href="#" class="nav-link<?php echo($used_menu ? ' active' : '') ?>">
-										<i class="nav-icon fas fa-<?php echo(isset($menu['icon']) ? $menu['icon'] : 'link') ?>"></i>
+										<i class="nav-icon fas fa-<?php echo($menu['icon'] ?? 'link') ?>"></i>
 										<p><?php echo $menu['name'] ?></p><i class="right fas fa-angle-left"></i>
 									</a>
 									<ul class="nav nav-treeview">
@@ -159,6 +162,9 @@
 
 				<p><h5><a href="http://my-aac.org/" target="_blank"><i class="fas fa-shoe-prints"></i> MyAAC Official</a></h5>
 				<small>Goto MyAAC Official Website</small></p>
+
+				<p><h5><a href="?p=open_source"><i class="fas fa-wrench"></i> Open Source</a></h5>
+				<small>View Open Source Software MyAAC is using</small></p>
 			</div>
 		</aside>
 
@@ -185,12 +191,13 @@ if ($logged && admin()) {
 	]);
 }
 ?>
-<script src="<?php echo BASE_URL; ?>tools/js/bootstrap.min.js"></script>
-<script src="<?php echo BASE_URL; ?>tools/js/jquery-ui.min.js"></script>
+<script src="<?php echo BASE_URL; ?>tools/ext/bootstrap/js/bootstrap.min.js"></script>
+<script src="<?php echo BASE_URL; ?>tools/ext/jquery-ui/jquery-ui.min.js"></script>
 <?php if (isset($use_datatable))  { ?>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.bs.min.js"></script>
 <?php } ?>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
+<?php $hooks->trigger(HOOK_ADMIN_BODY_END); ?>
 </body>
 </html>

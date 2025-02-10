@@ -1,0 +1,161 @@
+<div class="card card-primary card-outline card-outline-tabs">
+	<div class="card-header">
+		<h5 class="m-0">Settings</h5>
+	</div>
+	<div class="card-body">
+		<form id="settings" method="post">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="box">
+						<div class="box-body">
+							<button name="save" type="submit" class="btn btn-primary">Save</button>
+						</div>
+						<br/>
+						{{ settingsParsed|raw }}
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<style>
+	.setting-default {
+		white-space: pre-wrap;
+	}
+</style>
+<script>
+	function doShowHide(el, show)
+	{
+		if (show) {
+			$(el).show()
+		}
+		else {
+			$(el).hide()
+		}
+	}
+
+{% for key, value in settings %}
+	{% if value.show_if is defined %}
+		$(function () {
+			$('input[name="settings[{{ value.show_if[0] }}]"]').change(function () {
+				performChecks_{{ key }}(this);
+			});
+
+			{% if settings[value.show_if[0]]['type'] == 'boolean' %}
+			performChecks_{{ key }}('input[name="settings[{{ value.show_if[0] }}]"]:checked');
+			{% else %}
+			performChecks_{{ key }}('input[name="settings[{{ value.show_if[0] }}]"]');
+			{% endif %}
+		});
+
+		function performChecks_{{ key }}(el)
+		{
+			let success = false;
+			let thisVal = $(el).val();
+
+			let operator = '{{ value.show_if[1]|raw }}';
+			if (operator === '>') {
+				success = thisVal > Number('{{ value.show_if[2] }}');
+			}
+			else if (operator === '<') {
+				success = thisVal < Number('{{ value.show_if[2] }}');
+			}
+			else if (operator === '==' || operator === '=') {
+				success = thisVal == '{{ value.show_if[2] }}';
+			}
+
+			doShowHide('#row_{{ key }}', success);
+		}
+	{% endif %}
+{% endfor %}
+</script>
+{{ script|raw }}
+<!-- jQuery Form Submit No Refresh + Toastify -->
+<link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/toastify.min.css">
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/toastify.min.js"></script>
+<script>
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+
+	const noChangesText = "No changes has been made";
+
+	$('form')
+		.each(function(){
+			$(this).data('serialized', $(this).serialize())
+		})
+		.on('change input', function(){
+			const disable = $(this).serialize() === $(this).data('serialized');
+			$(this)
+				.find('input:submit, button:submit')
+				.prop('disabled', disable)
+				.prop('title', disable ? noChangesText : '')
+			;
+		})
+		.find('input:submit, button:submit')
+		.prop('disabled', true)
+		.prop('title', noChangesText)
+	;
+
+	$('#settings').on('submit', function(e) {
+		e.preventDefault();
+
+		$.ajax({
+			type: 'POST',
+			url: '{{ constant('ADMIN_URL') }}tools/settings_save.php?plugin={{ settingsKeyName }}',
+			data : $(this).serialize(),
+			success : function(response) {
+				Toastify({
+					position: 'center',
+					text: response,
+					duration: 3000,
+					escapeMarkup: false,
+				}).showToast();
+
+				let $settings = $('#settings');
+				$settings.data('serialized', $settings.serialize());
+				$settings
+					.find('input:submit, button:submit')
+					.prop('disabled', true)
+					.prop('title', noChangesText);
+			},
+			error : function(response) {
+				Toastify({
+					position: 'center',
+					text: response.responseText,
+					duration: 3000,
+					style: {
+						background: 'red',
+					},
+					escapeMarkup: false,
+				}).showToast();
+			}
+		});
+	});
+</script>
+
+<script>
+{% for key, value in settings %}
+	{% if value.type == 'password' %}
+			$(function () {
+				$('#show-hide-{{ key}} a').on('click', function(event) {
+					event.preventDefault();
+
+					const $showHideIcon = $('#show-hide-{{ key}} i');
+					const $showHideInput = $('#show-hide-{{ key }} input');
+					if($showHideInput.attr('type') === 'text'){
+						$showHideInput.attr('type', 'password');
+						$showHideIcon.addClass('fa-eye-slash');
+						$showHideIcon.removeClass('fa-eye');
+					}else if($showHideInput.attr("type") === 'password'){
+						$showHideInput.attr('type', 'text');
+						$showHideIcon.removeClass('fa-eye-slash');
+						$showHideIcon.addClass('fa-eye');
+					}
+				});
+			});
+	{% endif %}
+{% endfor %}
+</script>

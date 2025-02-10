@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 if(!Validator::guildName($guild_name)) {
 	$errors[] = Validator::getLastError();
@@ -40,11 +42,11 @@ if(empty($errors)) {
 
 		if($guild_leader)
 		{
-			$max_image_size_b = $config['guild_image_size_kb'] * 1024;
+			$max_image_size_b = setting('core.guild_image_size_kb') * 1024;
 			$allowed_ext = array('image/gif', 'image/jpg', 'image/pjpeg', 'image/jpeg', 'image/bmp', 'image/png', 'image/x-png');
 			$ext_name = array('image/gif' => 'gif', 'image/jpg' => 'jpg', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/bmp' => 'bmp', 'image/png' => 'png', 'image/x-png' => 'png');
 			$save_file_name = str_replace(' ', '_', strtolower($guild->getName()));
-			$save_path = 'images/guilds/' . $save_file_name;
+			$save_path = GUILD_IMAGES_DIR . $save_file_name;
 			if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save')
 			{
 				$file = $_FILES['newlogo'];
@@ -60,7 +62,7 @@ if(empty($errors)) {
 					}
 				}
 				else {
-					$upload_errors[] = 'You didn\'t send file or file is too big. Limit: <b>'.$config['guild_image_size_kb'].' KB</b>.';
+					$upload_errors[] = 'You didn\'t send file or file is too big. Limit: <b>'.setting('core.guild_image_size_kb').' KB</b>.';
 				}
 
 				if(empty($upload_errors)) {
@@ -74,12 +76,12 @@ if(empty($errors)) {
 				{
 					$guild_logo = $guild->getCustomField('logo_name');
 					$guild_logo = str_replace(array('..', '/', '\\'), array('','',''), $guild->getCustomField('logo_name'));
-					if(empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo)) {
+					if(empty($guild_logo) || !file_exists(GUILD_IMAGES_DIR . $guild_logo)) {
 						$guild_logo = "default.gif";
 					}
 
 					if($guild_logo != "default.gif" && $guild_logo != $save_file_name.'.'.$extension) {
-						unlink('images/guilds/' . $guild_logo);
+						unlink(GUILD_IMAGES_DIR . $guild_logo);
 					}
 				}
 
@@ -94,7 +96,7 @@ if(empty($errors)) {
 			}
 
 			$guild_logo = $guild->getCustomField('logo_name');
-			if(empty($guild_logo) || !file_exists('images/guilds/' . $guild_logo)) {
+			if(empty($guild_logo) || !file_exists(GUILD_IMAGES_DIR . $guild_logo)) {
 				$guild_logo = "default.gif";
 			}
 
@@ -119,7 +121,7 @@ if(!empty($errors)) {
 
 	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
-		'action' => '?subtopic=guilds'
+		'action' => getLink('guilds')
 	));
 }
 ?>

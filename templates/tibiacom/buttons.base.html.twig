@@ -1,8 +1,19 @@
-{% spaceless %}
-<div class="BigButton" style="background-image:url({{ template_path }}/images/global/buttons/sbutton.gif)">
-	<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);">
-		<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/global/buttons/sbutton_over.gif);" ></div>
-		<input class="ButtonText" type="image" name="{{ button_name }}" alt="{{ button_name }}" src="{{ template_path }}/images/global/buttons/{{ button_image }}.gif" />
+{% apply spaceless %}
+
+	{% set tmp_image = 'sbutton' %}
+
+	{% if button_color is defined %}
+		{% if button_color == 'green' %}
+			{% set tmp_image = 'sbutton_green' %}
+		{% elseif button_color == 'red' %}
+			{% set tmp_image = 'sbutton_red' %}
+		{% endif %}
+	{% endif %}
+
+	<div class="BigButton" style="background-image:url({{ template_path }}/images/global/buttons/{{ tmp_image }}.gif)">
+		<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);">
+			<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/global/buttons/{{ tmp_image }}_over.gif);" ></div>
+			<input class="BigButtonText" type="submit" value="{{ button_name }}">
+		</div>
 	</div>
-</div>
-{% endspaceless %}
+{% endapply %}

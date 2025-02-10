@@ -15,11 +15,11 @@
 
 /**
  * Single item representation.
- * 
+ *
  * <p>
  * This class represents item that player has. It has no information about item feature, just it's handle in database. To get information about item type and it's features you have to use {@link OTS_ItemType OTS_ItemType class} - you can get it's object by calling {@link OTS_Item::getItemType() getItemType() method}, however you need to have global item types list loaded.
  * </p>
- * 
+ *
  * @package POT
  * @version 0.1.0
  * @property int $count Amount of item.
@@ -31,28 +31,28 @@ class OTS_Item implements Countable
 {
 /**
  * Item ID.
- * 
+ *
  * @var int
  */
     private $id;
 
 /**
  * Item count.
- * 
+ *
  * @var int
  */
     private $count = 0;
 
 /**
  * Additional attributes.
- * 
+ *
  * @var string
  */
     private $attributes;
 
 /**
  * Creates item of given ID.
- * 
+ *
  * @param int $id Item ID.
  */
     public function __construct($id)
@@ -62,7 +62,7 @@ class OTS_Item implements Countable
 
 /**
  * Returns item type.
- * 
+ *
  * @return int Item ID.
  */
     public function getId()
@@ -72,7 +72,7 @@ class OTS_Item implements Countable
 
 /**
  * Returns count of item.
- * 
+ *
  * @return int Count of item.
  */
     public function getCount()
@@ -82,7 +82,7 @@ class OTS_Item implements Countable
 
 /**
  * Sets count of item.
- * 
+ *
  * @param int $count Count.
  */
     public function setCount($count)
@@ -92,7 +92,7 @@ class OTS_Item implements Countable
 
 /**
  * Returns item custom attributes.
- * 
+ *
  * @return string Attributes.
  */
     public function getAttributes()
@@ -102,7 +102,7 @@ class OTS_Item implements Countable
 
 /**
  * Sets item attributes.
- * 
+ *
  * @param string $attributes Item Attributes.
  */
     public function setAttributes($attributes)
@@ -112,7 +112,7 @@ class OTS_Item implements Countable
 
 /**
  * Returns type of item.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return OTS_ItemType Returns item type of item (null if not exists).
@@ -125,17 +125,17 @@ class OTS_Item implements Countable
 
 /**
  * Count value for current item.
- * 
+ *
  * @return int Count of item.
  */
-    public function count()
+    public function count(): int
     {
         return $this->count;
     }
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $name Property name.
@@ -166,7 +166,7 @@ class OTS_Item implements Countable
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $name Property name.

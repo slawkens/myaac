@@ -24,7 +24,8 @@
 							</select>
 							<input type="submit" value="Move Thread">
 						</form>
-						<form action="{{ section_link }}" method="post">
+						<form action="{{ section_link }}">
+							{{ csrf() }}
 							<input type="submit" value="Cancel">
 						</form>
 					</td>

@@ -18,8 +18,8 @@ Click on the image to enlarge.<br/><br/>
 				<a id="delete" href="?subtopic=gallery&action=delete&id={{ image.id }}" onclick="return confirm('Are you sure?');" title="Delete">
 					<img src="images/del.png"/>Delete
 				</a>
-				<a href="?subtopic=gallery&action=hide&id={{ image.id }}" title="{% if image.hidden != 1 %}Hide{% else %}Show{% endif %}">
-					<img src="images/{% if image.hidden != 1 %}success{% else %}error{% endif %}.png"/>{% if image.hidden != 1 %}Hide{% else %}Show{% endif %}
+				<a href="?subtopic=gallery&action=hide&id={{ image.id }}" title="{% if image.hide != 1 %}Hide{% else %}Show{% endif %}">
+					<img src="images/{% if image.hide != 1 %}success{% else %}error{% endif %}.png"/>{% if image.hide != 1 %}Hide{% else %}Show{% endif %}
 				</a>
 				{% if i != 1 %}
 				<a href="?subtopic=gallery&action=moveup&id={{ image.id }}" title="Move up">

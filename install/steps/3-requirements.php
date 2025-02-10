@@ -2,13 +2,18 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 // configuration
-$dirs_required = [
+$dirs_required_writable = [
 	'system/logs',
 	'system/cache',
 ];
+
+$dirs_required = [
+	'tools/ext' => $locale['step_requirements_folder_not_exists_tools_ext'],
+];
+
 $dirs_optional = [
-	'images/guilds' => $locale['step_requirements_warning_images_guilds'],
-	'images/gallery' => $locale['step_requirements_warning_images_gallery'],
+	GUILD_IMAGES_DIR => $locale['step_requirements_warning_images_guilds'],
+	GALLERY_DIR => $locale['step_requirements_warning_images_gallery'],
 ];
 
 $extensions_required = [
@@ -18,6 +23,7 @@ $extensions_optional = [
 	'gd' => $locale['step_requirements_warning_player_signatures'],
 	'zip' => $locale['step_requirements_warning_install_plugins'],
 ];
+
 /*
  *
  * @param string $name
@@ -41,7 +47,7 @@ $failed = false;
 // start validating
 version_check($locale['step_requirements_php_version'], (PHP_VERSION_ID >= 50500), PHP_VERSION);
 
-foreach ($dirs_required as $value)
+foreach ($dirs_required_writable as $value)
 {
 	$is_writable = is_writable(BASE . $value) && (MYAAC_OS != 'WINDOWS' || win_is_writable(BASE . $value));
 	version_check($locale['step_requirements_write_perms'] . ': ' . $value, $is_writable);
@@ -50,6 +56,12 @@ foreach ($dirs_required as $value)
 foreach ($dirs_optional as $dir => $errorMsg) {
 	$is_writable = is_writable(BASE . $dir) && (MYAAC_OS != 'WINDOWS' || win_is_writable(BASE . $dir));
 	version_check($locale['step_requirements_write_perms'] . ': ' . $dir, $is_writable, $is_writable ? '' : $errorMsg, true);
+}
+
+foreach ($dirs_required as $dir => $errorMsg)
+{
+	$exists = is_dir(BASE . $dir);
+	version_check($locale['step_requirements_folder_exists'] . ': ' . $dir, $exists, $exists ? '' : $errorMsg);
 }
 
 $ini_register_globals = ini_get_bool('register_globals');
@@ -78,4 +90,3 @@ if($failed) {
 }
 
 echo '</div>';
-?>

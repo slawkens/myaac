@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "cypress:open": "cypress open",
+    "postinstall": "node ./npm-post-install.js"
+  },
+  "devDependencies": {
+    "cypress": "^13.17.0"
+  },
+  "dependencies": {
+    "@tinymce/tinymce-jquery": "^2.1.0",
+    "bootstrap": "^4.6.2",
+    "fs-extra": "^11.2.0",
+    "jquery": "^3.7.1",
+    "jquery-ui": "^1.13.2",
+    "tinymce": "^7.2.0"
+  }
+}

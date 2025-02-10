@@ -72,5 +72,3 @@ class OTS_GuildRanks_List extends OTS_Base_List
 }
 
 /**#@-*/
-
-?>

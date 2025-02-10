@@ -36,6 +36,10 @@ $locale['step_requirements'] = 'Requirements';
 $locale['step_requirements_title'] = 'Requirements check';
 $locale['step_requirements_php_version'] = 'PHP Version';
 $locale['step_requirements_write_perms'] = 'Write permissions';
+$locale['step_requirements_folder_exists'] = 'Directory exists';
+$locale['step_requirements_folder_not_exists_tools_ext'] = 'NPM Package Manager is used for external JavaScript/CSS libraries.'
+	. ' You need to install it through Command Line: <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">https://docs.npmjs.com/downloading-and-installing-node-js-and-npm</a>'
+	. ' When you done with installing that tool, execute: "npm install" in the main MyAAC folder.';
 $locale['step_requirements_failed'] = 'Installation will be disabled until these requirements will be passed.</b><br/>For more informations see <b>README</b> file.';
 $locale['step_requirements_extension'] = '$EXTENSION$ PHP extension';
 $locale['step_requirements_warning_images_guilds'] = 'Guild logo upload will not work';
@@ -90,7 +94,7 @@ $locale['step_database_loaded_npcs'] = 'NPCs has been loaded...';
 $locale['step_database_error_npcs'] = 'There were some problems loading your NPCs';
 $locale['step_database_loaded_spells'] = 'Spells has been loaded...';
 $locale['step_database_loaded_towns'] = 'Towns has been loaded...';
-$locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in config.';
+$locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in Settings.';
 $locale['step_database_created_account'] = 'Created admin account...';
 $locale['step_database_created_news'] = 'Newses has been created...';
 
@@ -114,7 +118,10 @@ $locale['step_admin_account_id_error_same'] = 'Password may not be the same as a
 $locale['step_admin_password'] = 'Admin account password';
 $locale['step_admin_password_desc'] = 'Password to your admin account.';
 $locale['step_admin_password_error_empty'] = 'Please enter the password for your new account.';
-$locale['step_admin_password_error_format'] = 'Invalid password format. Use only a-Z and numbers 0-9. Minimum 8, maximum 30 characters.';
+$locale['step_admin_password_error_format'] = 'Invalid password format. Minimum one letter and one number. Minimum 8, maximum 30 characters.';
+$locale['step_admin_password_confirm'] = 'Password confirm';
+$locale['step_admin_password_confirm_desc'] = 'Repeat password to your account.';
+$locale['step_admin_password_confirm_error_not_same'] = 'Passwords are not same.';
 $locale['step_admin_player_name'] = 'Admin player name';
 $locale['step_admin_player_name_desc'] = 'Name of your admin character.';
 $locale['step_admin_player_name_error_empty'] = 'Please enter the name of your character.';
@@ -128,4 +135,3 @@ $locale['step_finish_title'] = 'Installation finished!';
 $locale['step_finish_desc'] = 'Congratulations! <b>MyAAC</b> is ready to use!<br/>You can now login to $ADMIN_PANEL$, or visit $HOMEPAGE$.<br/><br/>
 <span style="color: red">Please delete install/ directory.</span><br/><br/>
 Post bugs and suggestions at $LINK$, thanks!';
-?>

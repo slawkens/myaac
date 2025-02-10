@@ -8,9 +8,17 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Models\ServerRecord;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = "Players Online Records";
+
+if(!$db->hasTable('server_record')) {
+	echo 'Record History is not supported in your distribution.';
+	return;
+}
 
 echo '
 <b><div style="text-align:center">Players online records on '.$config['lua']['serverName'].'</div></b>
@@ -21,7 +29,7 @@ echo '
 	</TR>';
 
 	$i = 0;
-	$records_query = $db->query('SELECT * FROM `server_record` ORDER BY `record` DESC LIMIT 50;');
+	$records_query = ServerRecord::limit(50)->orderByDesc('record')->get();
 	foreach($records_query as $data)
 	{
 		echo '<TR BGCOLOR=' . getStyle(++$i) . '>

@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 $name = stripslashes($_REQUEST['name']);
 
@@ -94,7 +96,7 @@ if(!empty($errors))
 {
 	$twig->display('error_box.html.twig', array('errors' => $errors));
 
-	$twig->display('guilds.back_button.html.twig', array('action' => '?subtopic=guilds&action=show&guild=' . $guild_name));
+	$twig->display('guilds.back_button.html.twig', array('action' => getLink('guilds') . '?action=show&guild=' . $guild_name));
 }
 else
 {
@@ -104,7 +106,7 @@ else
 		$twig->display('success.html.twig', array(
 			'title' => 'Deleted player invitation',
 			'description' => 'Player with name <b>' . $player->getName() . '</b> has been deleted from invites list.',
-			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array('action' => '?subtopic=guilds&action=show&guild=' . $guild_name))
+			'custom_buttons' => $twig->render('guilds.back_button.html.twig', array('action' => getLink('guilds') . '?action=show&guild=' . $guild_name))
 		));
 	}
 	else {

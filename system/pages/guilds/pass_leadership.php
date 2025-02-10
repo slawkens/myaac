@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : NULL;
 $pass_to = isset($_REQUEST['player']) ? stripslashes($_REQUEST['player']) : NULL;
 if(!Validator::guildName($guild_name)) {
@@ -34,6 +36,8 @@ if(empty($guild_errors)) {
 			$to_player->find($pass_to);
 			if(!$to_player->isLoaded()) {
 				$guild_errors2[] = 'Player with name <b>'.$pass_to.'</b> doesn\'t exist.';
+			} else if ($to_player->isDeleted()) {
+				$guild_errors2[] = "Character with name <b>$pass_to</b> has been deleted.";
 			}
 
 			if(empty($guild_errors2)) {
@@ -105,7 +109,7 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 if(empty($guild_errors) && !empty($guild_errors2)) {
 	$twig->display('error_box.html.twig', array('errors' => $guild_errors2));
 
-	echo '<br/><div style="text-align:center"><form action="?subtopic=guilds&guild='.$guild->getName().'&action=pass_leadership" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
+	echo '<br/><div style="text-align:center"><form action="' . getLink('guilds') . '?guild='.$guild->getName().'&action=pass_leadership" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }
 if(!empty($guild_errors)) {
 	if(!empty($guild_errors2)) {
@@ -113,7 +117,5 @@ if(!empty($guild_errors)) {
 	}
 	$twig->display('error_box.html.twig', array('errors' => $guild_errors));
 
-	echo '<br/><div style="text-align:center"><form action="?subtopic=guilds" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
+	echo '<br/><div style="text-align:center"><form action="' . getLink('guilds') . '" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }
-
-?>

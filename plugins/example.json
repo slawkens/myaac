@@ -6,31 +6,48 @@
 	"author": "nobody",
 	"contact": "nobody@example.org",
 	"require": {
-		"myaac": "0.4.3",
-		"myaac_": ">=0.7,<1.0", // support for defining versions like in composer (since 0.8)
-		"php": "5.2.0",
-		"php_": ">5.4,<7.0", // support for defining versions like in composer (since 0.8)
+		"myaac": "0.9.0",
+		"myaac_": ">=0.9,<1.0",
+		"php": "7.4",
+		"php_": ">7.4,<8.0",
 		"database": "21",
-		"php-ext": "curl", // php extension needs to be installed (since 0.8)
-		"ext-curl": ">5.0", // php extension with version specifiec (since 0.8)
-		"table": "accounts", // table need to exist in database (since 0.8)
-		"column": "players.online" // column need to exist in database (since 0.8)
+		"php-ext": "curl",
+		"ext-curl": ">5.0",
+		"table": "accounts",
+		"column": "players.online"
 	},
 	"install": "plugins/example/install.php",
 	"uninstall": [
 		"plugins/example.json",
 		"plugins/example-directory",
 		"templates/other-directory"
-		/***
-		 this is example of multi line comment
-		 	1. list example
-		 	2. something
-		 ****/
 	],
 	"hooks": {
 		"Example Hook": {
 			"type": "BEFORE_PAGE",
-			"file": "plugins/example/before.php"
+			"file": "plugins/example/before.php",
+			"priority": 1000
 		}
-	 }
+	},
+	"routes": {
+		"First Route": {
+			"pattern": "/YourAwesomePage/{name:string}/{page:int}",
+			"file": "plugins/your-plugin/your-awesome-page.php",
+			"method": "GET",
+			"priority": 130
+		},
+		"Redirect Example": {
+			"redirect_from": "/redirectExample",
+			"redirect_to": "account/manage"
+		}
+	},
+	"routes-default-priority": 1000,
+	"pages-default-priority": 1000,
+	"settings": "plugins/your-plugin-folder/settings.php",
+	"autoload": {
+		"pages": true,
+		"pagesSubFolders": false,
+		"commands": true,
+		"themes": true
+	}
  }

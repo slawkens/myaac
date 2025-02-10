@@ -1,0 +1,54 @@
+Please enter your password and the new email address. Make sure that you enter a valid email address which you have access to. <br/><b>For security reasons, the actual change will be finalised after a waiting period of {{ setting('core.account_mail_change') }} days.</b><br/><br/>
+{% set title = 'Change Email Address' %}
+{% set background = config('darkborder') %}
+{% set content %}
+	<table style="width:100%;">
+		<tr>
+			<td class="LabelV" >
+				<span>New Email Address:</span>
+			</td>
+			<td style="width:90%;">
+				<input form="form" name="new_email" value="{% if new_email is defined %}{{ new_email }}{% endif %}" size="30" maxlength="50" autofocus/>
+			</td>
+		</tr>
+		<tr>
+			<td class="LabelV">
+				<span >Password:</span>
+			</td>
+			<td>
+				<input form="form" type="password" name="password" size="30" maxlength="29">
+			</td>
+		</tr>
+	</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+<br/>
+<table style="width:100%;">
+	<tr align="center">
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td style="border:0px;">
+						<form id="form" action="{{ getLink('account/change-email') }}" method="post">
+							{{ csrf() }}
+							<input type="hidden" name="changeemailsave" value="1"/>
+							{{ include('buttons.submit.html.twig') }}
+						</form>
+					</td>
+				<tr>
+			</table>
+		</td>
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<form action="{{ getLink('account/manage') }}" method="post">
+					{{ csrf() }}
+					<tr>
+						<td style="border:0px;">
+							{{ include('buttons.back.html.twig') }}
+						</td>
+					</tr>
+				</form>
+			</table>
+		</td>
+	</tr>
+</table>

@@ -6,4 +6,3 @@
  * @author Slawkens <slawkens@gmail.com>
  */
 $locale['title'] = 'MyAAC Admin';
-?>

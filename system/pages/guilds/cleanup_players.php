@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 if(!$logged)
 {
 	echo "You are not logged in.";
@@ -38,7 +40,7 @@ if(count($players_list) > 0)
 				if(!$rank_guild->isLoaded())
 				{
 					$player->setRank();
-					$player->setGuildNick();
+					$player->setGuildNick('');
 					$changed_ranks_of[] = $player->getName();
 					$deleted_ranks[] = 'ID: '.$player_rank->getId().' - '.$player_rank->getName();
 					$player_rank->delete();
@@ -66,4 +68,3 @@ else
 	echo "0 players found.";
 
 $twig->display('guilds.back_button.html.twig');
-?>

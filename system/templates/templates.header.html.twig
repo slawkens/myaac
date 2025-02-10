@@ -1,21 +1,23 @@
 <meta charset="{{ charset }}">
 <meta http-equiv="content-language" content="{{ config.language }}" />
 <meta http-equiv="content-type" content="text/html; charset={{ charset }}" />
+<!-- CSRF Token -->
+<meta name="csrf-token" content="{{ csrfToken() }}">
 {% if not is_admin %}
 <base href="{{ constant('BASE_URL') }}" />
 <title>{{ title }}</title>
 {% endif %}
-<meta name="description" content="{{ config.meta_description }}" />
-<meta name="keywords" content="{{ config.meta_keywords }}, myaac, wodzaac" />
+<meta name="description" content="{{ setting('core.meta_description') }}" />
+<meta name="keywords" content="{{ setting('core.meta_keywords') }}, myaac, wodzaac" />
 <meta name="generator" content="MyAAC" />
 <link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/messages.css" />
-<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/jquery.min.js"></script>
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/ext/jquery/jquery.min.js"></script>
 <noscript>
 	<div class="warning" style="text-align: center; font-size: 14px;">
 		Your browser does not support JavaScript or its disabled!<br/>
 		Please turn it on, or be aware that some features on this website will not work correctly.
 	</div>
 </noscript>
-{% if config.recaptcha_enabled %}
-<script src="https://www.google.com/recaptcha/api.js"></script>
+{% if constant('MYAAC_ADMIN') is not defined %}
+	{{ include('tables.style.html.twig') }}
 {% endif %}

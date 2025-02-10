@@ -2,12 +2,22 @@ Thumbs.db
 .DS_Store
 .idea
 
+#
+/.htaccess
+lua
+
 # composer
-composer.lock
+composer.phar
 vendor
 
 # npm
 node_modules
+tools/ext
+
+# cypress
+cypress.env.json
+cypress/e2e/2-advanced-examples
+cypress/screenshots
 
 # created by release.sh
 releases
@@ -24,12 +34,23 @@ templates/*
 images/guilds/*
 !images/guilds/default.gif
 
+# editor images
+images/editor/*
+!images/editor/index.html
+
+# gallery images
+images/gallery/*
+!images/gallery/index.html
+!images/gallery/demon.jpg
+!images/gallery/demon_thumb.gif
+
 # cache
 system/cache/*
 !system/cache/index.html
 !system/cache/twig/index.html
 !system/cache/signatures/index.html
 !system/cache/plugins/index.html
+!system/cache/persistent/index.html
 
 # logs
 system/logs/*
@@ -49,10 +70,9 @@ plugins/*
 !plugins/example.json
 !plugins/account-create-hint.json
 !plugins/account-create-hint
+!plugins/email-confirmed-reward.json
+!plugins/email-confirmed-reward
 landing
 
 # system
 system/functions_custom.php
-
-# others/rest
-system/pages/downloads.php

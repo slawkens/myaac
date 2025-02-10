@@ -1,5 +1,14 @@
 <?php
+/**
+ * @var OTS_DB_MySQL $db
+ */
 
 // change size of spells.vocations
-$db->query("ALTER TABLE `" . TABLE_PREFIX . "spells` MODIFY `vocations` VARCHAR(300) NOT NULL DEFAULT '';");
-?>
+
+$up = function () use ($db) {
+	$db->modifyColumn(TABLE_PREFIX . 'spells', 'vocations', "VARCHAR(300) NOT NULL DEFAULT ''");
+};
+
+$down = function () {
+	// nothing to do here
+};

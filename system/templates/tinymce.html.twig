@@ -1,0 +1,55 @@
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/ext/tinymce/tinymce.min.js"></script>
+<script type="text/javascript">
+	let unsaved = false;
+	let lastContent = '';
+
+	function tinymceInit() {
+		tinymce.init({
+			selector: "#editor",
+			content_css: '{{ constant('ADMIN_URL') }}template/style.css',
+			theme: "silver",
+			plugins: 'preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help code emoticons',
+			toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | emoticons link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
+			resize: 'both',
+			image_advtab: true,
+			images_upload_url: '{{ constant('ADMIN_URL') }}tools/upload_image.php',
+			images_upload_credentials: true,
+
+			relative_urls: true,
+			document_base_url: "{{ constant('BASE_URL') }}",
+
+			table_class_list: [
+				{title: 'None', value: ''},
+				{title: 'Colored Table', value: 'myaac-table'},
+			],
+
+			setup: function (ed) {
+				ed.on('NodeChange', function (e) {
+					if (ed.getContent() !== lastContent) {
+						unsaved = true;
+					}
+				});
+			}
+		});
+	}
+
+	$(document).ready(function () {
+		$(":input").change(function () { //triggers change in all input fields including text type
+			unsaved = true;
+		});
+
+		$("#form").submit(function (event) {
+			unsaved = false;
+		});
+
+		lastContent = $("#editor").val();
+	});
+
+	function unloadPage() {
+		if (unsaved) {
+			return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
+		}
+	}
+
+	window.onbeforeunload = unloadPage;
+</script>

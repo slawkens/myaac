@@ -1,0 +1,16 @@
+name: PHP Linting
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  phplint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: overtrue/phplint@8.2
+        with:
+          path: .
+          options: --exclude=*.log

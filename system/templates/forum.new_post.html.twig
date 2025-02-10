@@ -1,4 +1,5 @@
 <form action="?" method="post">
+	{{ csrf() }}
 	<input type="hidden" name="action" value="new_post" />
 	<input type="hidden" name="thread_id" value=" {{ thread_id }}" />
 	<input type="hidden" name="subtopic" value="forum" />
@@ -49,12 +50,12 @@
 <table width="100%">
 	<tr bgcolor="{{ config.vdarkborder }}">
 		<td colspan="2">
-			<span style="color: white"><b>Last 5 posts from thread: {{ topic|raw }}</b></span>
+			<span style="color: white"><b>Last 5 posts from thread: {{ topic }}</b></span>
 		</td>
 	</tr>
 	{% set i = 0 %}
 	{% for thread in threads %}
-	<tr bgcolor="{{ getStyle(i) }}"><td>{{ thread.name }}</td><td>{{ thread.post|raw }}</td></tr>
+	<tr bgcolor="{{ getStyle(i) }}"><td>{{ thread.name }}</td><td style="word-break: break-all">{{ thread.post|raw }}</td></tr>
 	{% set i = i + 1 %}
 	{% endfor %}
 </table>

@@ -1,34 +1,29 @@
-<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/tinymce/tinymce.min.js"></script>
+{{ include('tinymce.html.twig') }}
 <script type="text/javascript">
-	tinymce.init({
-		selector: "textarea",
-		theme: "modern",
-		plugins: 'print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount spellchecker imagetools contextmenu colorpicker textpattern help code emoticons',
-		toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | emoticons link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat code',
-		image_advtab: true,
-		relative_urls: false,
-		remove_script_host: false,
-		document_base_url: "{{ constant('BASE_URL') }}"
-	});
+	tinymceInit();
 </script>
+
 <div align="center" class="text-center"><p class="note">Sending mails may take some time if there are many users in db.</p></div>
 <div class="card card-info card-outline">
 	<div class="card-header">
 		<h5 class="m-0">Mailer</h5>
 	</div>
-	<form method="post">
+	<form id="form" method="post">
+		{{ csrf() }}
 		<div class="card-body">
 			<div class="form-group row">
 				<label for="mail_to">To: (enter email, or leave empty to all)</label>
 				<input class="form-control" type="text" id="mail_to" name="mail_to" value="{{ mail_to }}"/>
 			</div>
+
 			<div class="form-group row">
 				<label for="mail_subject">Subject:</label>
 				<input class="form-control" type="text" id="mail_subject" name="mail_subject" value="{{ mail_subject }}" maxlength="30"/>
 			</div>
+
+			<label for="editor" class="control-label">Content:</label>
 			<div class="form-group row">
-				<label for="mail_content" class="control-label">Content:</label>
-				<textarea id="mail_content" name="mail_content" style="width: 100%" class="tinymce">{{ mail_content }}</textarea>
+				<textarea id="editor" name="mail_content" style="width: 100%" class="tinymce">{{ mail_content }}</textarea>
 			</div>
 		</div>
 		<div class="card-footer">

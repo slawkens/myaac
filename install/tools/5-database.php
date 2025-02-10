@@ -11,8 +11,10 @@ $error = false;
 require BASE . 'install/includes/config.php';
 
 ini_set('max_execution_time', 300);
+
+@ob_end_flush();
 ob_implicit_flush();
-ob_end_flush();
+
 header('X-Accel-Buffering: no');
 
 if(!$error) {
@@ -23,24 +25,6 @@ if(!$error) {
 	}
 }
 
-if(!$db->hasTable('accounts')) {
-	$locale['step_database_error_table'] = str_replace('$TABLE$', 'accounts', $locale['step_database_error_table']);
-	error($locale['step_database_error_table']);
-	return;
-}
-
-if(!$db->hasTable('players')) {
-	$locale['step_database_error_table'] = str_replace('$TABLE$', 'players', $locale['step_database_error_table']);
-	error($locale['step_database_error_table']);
-	return;
-}
-
-if(!$db->hasTable('guilds')) {
-	$locale['step_database_error_table'] = str_replace('$TABLE$', 'guilds', $locale['step_database_error_table']);
-	error($locale['step_database_error_table']);
-	return;
-}
-
 if($db->hasTable(TABLE_PREFIX . 'account_actions')) {
 	$locale['step_database_error_table_exist'] = str_replace('$TABLE$', TABLE_PREFIX . 'account_actions', $locale['step_database_error_table_exist']);
 	warning($locale['step_database_error_table_exist']);
@@ -48,6 +32,9 @@ if($db->hasTable(TABLE_PREFIX . 'account_actions')) {
 else {
 	// import schema
 	try {
+		$locale['step_database_importing'] = str_replace('$DATABASE_NAME$', config('database_name'), $locale['step_database_importing']);
+		success($locale['step_database_importing']);
+
 		$db->query(file_get_contents(BASE . 'install/includes/schema.sql'));
 
 		$locale['step_database_success_schema'] = str_replace('$PREFIX$', TABLE_PREFIX, $locale['step_database_success_schema']);
@@ -73,13 +60,8 @@ else {
 		success($locale['step_database_adding_field'] . ' accounts.key...');
 }
 
-if(!$db->hasColumn('accounts', 'blocked')) {
-	if(query("ALTER TABLE `accounts` ADD `blocked` TINYINT(1) NOT NULL DEFAULT FALSE COMMENT 'internal usage' AFTER `key`;"))
-		success($locale['step_database_adding_field'] . ' accounts.blocked...');
-}
-
 if(!$db->hasColumn('accounts', 'created')) {
-	if(query("ALTER TABLE `accounts` ADD `created` INT(11) NOT NULL DEFAULT 0 AFTER `" . ($db->hasColumn('accounts', 'group_id') ? 'group_id' : 'blocked') . "`;"))
+	if(query("ALTER TABLE `accounts` ADD `created` INT(11) NOT NULL DEFAULT 0 AFTER `" . ($db->hasColumn('accounts', 'group_id') ? 'group_id' : 'key') . "`;"))
 		success($locale['step_database_adding_field'] . ' accounts.created...');
 }
 
@@ -159,73 +141,84 @@ if(!$db->hasColumn('accounts', 'premium_points')) {
 		success($locale['step_database_adding_field'] . ' accounts.premium_points...');
 }
 
-if($db->hasColumn('guilds', 'checkdata')) {
-	if(query("ALTER TABLE `guilds` MODIFY `checkdata` INT NOT NULL DEFAULT 0;"))
-		success($locale['step_database_modifying_field'] . ' guilds.checkdata...');
-}
-
-if(!$db->hasColumn('guilds', 'motd')) {
-	if(query("ALTER TABLE `guilds` ADD `motd` VARCHAR(255) NOT NULL DEFAULT '';"))
-		success($locale['step_database_adding_field'] . ' guilds.motd...');
-}
-else {
-	if(query("ALTER TABLE `guilds` MODIFY `motd` VARCHAR(255) NOT NULL DEFAULT '';"))
-		success($locale['step_database_modifying_field'] . ' guilds.motd...');
-}
-
-if(!$db->hasColumn('guilds', 'description')) {
-	if(query("ALTER TABLE `guilds` ADD `description` TEXT NOT NULL;"))
-		success($locale['step_database_adding_field'] . ' guilds.description...');
-}
-
-if($db->hasColumn('guilds', 'logo_gfx_name')) {
-	if(query("ALTER TABLE `guilds` CHANGE `logo_gfx_name` `logo_name` VARCHAR( 255 ) NOT NULL DEFAULT 'default.gif';")) {
-		$tmp = str_replace('$FIELD$', 'guilds.logo_gfx_name', $locale['step_database_changing_field']);
-		$tmp = str_replace('$FIELD_NEW$', 'guilds.logo_name', $tmp);
-		success($tmp);
+if ($db->hasTable('guilds')) {
+	if ($db->hasColumn('guilds', 'checkdata')) {
+		if (query("ALTER TABLE `guilds` MODIFY `checkdata` INT NOT NULL DEFAULT 0;"))
+			success($locale['step_database_modifying_field'] . ' guilds.checkdata...');
 	}
-}
-else if(!$db->hasColumn('guilds', 'logo_name')) {
-	if(query("ALTER TABLE `guilds` ADD `logo_name` VARCHAR( 255 ) NOT NULL DEFAULT 'default.gif';"))
-		success($locale['step_database_adding_field'] . ' guilds.logo_name...');
-}
 
-if(!$db->hasColumn('players', 'created')) {
-	if(query("ALTER TABLE `players` ADD `created` INT(11) NOT NULL DEFAULT 0;"))
-		success($locale['step_database_adding_field'] . ' players.created...');
-}
+	if (!$db->hasColumn('guilds', 'motd')) {
+		if (query("ALTER TABLE `guilds` ADD `motd` VARCHAR(255) NOT NULL DEFAULT '';"))
+			success($locale['step_database_adding_field'] . ' guilds.motd...');
+	} else {
+		if (query("ALTER TABLE `guilds` MODIFY `motd` VARCHAR(255) NOT NULL DEFAULT '';"))
+			success($locale['step_database_modifying_field'] . ' guilds.motd...');
+	}
 
-if(!$db->hasColumn('players', 'deleted') && !$db->hasColumn('players', 'deletion')) {
-	if(query("ALTER TABLE `players` ADD `deleted` TINYINT(1) NOT NULL DEFAULT 0;"))
-		success($locale['step_database_adding_field'] . ' players.deleted...');
-}
-
-if($db->hasColumn('players', 'hide_char')) {
-	if(!$db->hasColumn('players', 'hidden')) {
-		if(query("ALTER TABLE `players` CHANGE `hide_char` `hidden` TINYINT(1) NOT NULL DEFAULT 0;")) {
-			$tmp = str_replace('$FIELD$', 'players.hide_char', $locale['step_database_changing_field']);
-			$tmp = str_replace('$FIELD_NEW$', 'players.hidden', $tmp);
-			success($tmp);
+	if (!$db->hasColumn('guilds', 'description')) {
+		if (query("ALTER TABLE `guilds` ADD `description` VARCHAR(5000) NOT NULL DEFAULT '';"))
+			success($locale['step_database_adding_field'] . ' guilds.description...');
+	}
+	else {
+		if (query("ALTER TABLE `guilds` MODIFY `description` VARCHAR(5000) NOT NULL DEFAULT '';")) {
+			success($locale['step_database_modifying_field'] . ' guilds.description...');
 		}
 	}
-}
-else if(!$db->hasColumn('players', 'hidden')) {
-	if(query("ALTER TABLE `players` ADD `hidden` TINYINT(1) NOT NULL DEFAULT 0;"))
-		success($locale['step_database_adding_field'] . ' players.hidden...');
+
+	if ($db->hasColumn('guilds', 'logo_gfx_name')) {
+		if (query("ALTER TABLE `guilds` CHANGE `logo_gfx_name` `logo_name` VARCHAR( 255 ) NOT NULL DEFAULT 'default.gif';")) {
+			$tmp = str_replace('$FIELD$', 'guilds.logo_gfx_name', $locale['step_database_changing_field']);
+			$tmp = str_replace('$FIELD_NEW$', 'guilds.logo_name', $tmp);
+			success($tmp);
+		}
+	} else if (!$db->hasColumn('guilds', 'logo_name')) {
+		if (query("ALTER TABLE `guilds` ADD `logo_name` VARCHAR( 255 ) NOT NULL DEFAULT 'default.gif';"))
+			success($locale['step_database_adding_field'] . ' guilds.logo_name...');
+	}
 }
 
-if(!$db->hasColumn('players', 'comment')) {
-	if(query("ALTER TABLE `players` ADD `comment` TEXT NOT NULL;"))
-		success($locale['step_database_adding_field'] . ' players.comment...');
-}
+if ($db->hasTable('players')) {
+	if (!$db->hasColumn('players', 'created')) {
+		if (query("ALTER TABLE `players` ADD `created` INT(11) NOT NULL DEFAULT 0;"))
+			success($locale['step_database_adding_field'] . ' players.created...');
+	}
 
-if($db->hasColumn('players', 'rank_id')) {
-	if(query("ALTER TABLE players MODIFY `rank_id` INT(11) NOT NULL DEFAULT 0;"))
-		success($locale['step_database_modifying_field'] . ' players.rank_id...');
+	if (!$db->hasColumn('players', 'deleted') && !$db->hasColumn('players', 'deletion')) {
+		if (query("ALTER TABLE `players` ADD `deleted` TINYINT(1) NOT NULL DEFAULT 0;"))
+			success($locale['step_database_adding_field'] . ' players.deleted...');
+	}
 
-	if($db->hasColumn('players', 'guildnick')) {
-		if(query("ALTER TABLE players MODIFY `guildnick` VARCHAR(255) NOT NULL DEFAULT '';")) {
-			success($locale['step_database_modifying_field'] . ' players.guildnick...');
+	if ($db->hasColumn('players', 'hide_char')) {
+		if (!$db->hasColumn('players', 'hide')) {
+			if (query("ALTER TABLE `players` CHANGE `hide_char` `hide` TINYINT(1) NOT NULL DEFAULT 0;")) {
+				$tmp = str_replace('$FIELD$', 'players.hide_char', $locale['step_database_changing_field']);
+				$tmp = str_replace('$FIELD_NEW$', 'players.hide', $tmp);
+				success($tmp);
+			}
+		}
+	} else if (!$db->hasColumn('players', 'hide')) {
+		if (query("ALTER TABLE `players` ADD `hide` TINYINT(1) NOT NULL DEFAULT 0;"))
+			success($locale['step_database_adding_field'] . ' players.hide...');
+	}
+
+	if (!$db->hasColumn('players', 'comment')) {
+		if (query("ALTER TABLE `players` ADD `comment` VARCHAR(5000) NOT NULL DEFAULT '';"))
+			success($locale['step_database_adding_field'] . ' players.comment...');
+	}
+	else {
+		if (query("ALTER TABLE `players` MODIFY `comment` VARCHAR(5000) NOT NULL DEFAULT '';")) {
+			success($locale['step_database_modifying_field'] . ' players.comment...');
+		}
+	}
+
+	if ($db->hasColumn('players', 'rank_id')) {
+		if (query("ALTER TABLE players MODIFY `rank_id` INT(11) NOT NULL DEFAULT 0;"))
+			success($locale['step_database_modifying_field'] . ' players.rank_id...');
+
+		if ($db->hasColumn('players', 'guildnick')) {
+			if (query("ALTER TABLE players MODIFY `guildnick` VARCHAR(255) NOT NULL DEFAULT '';")) {
+				success($locale['step_database_modifying_field'] . ' players.guildnick...');
+			}
 		}
 	}
 }

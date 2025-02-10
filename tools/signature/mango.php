@@ -15,11 +15,6 @@
 		return ( 50 / 3 ) * pow( $level, 3 ) - ( 100 * pow( $level, 2 ) ) + ( ( 850 / 3 ) * $level ) - 200;
 	}
 
-	/** Sprite settings **/
-	$spr_path = SIGNATURES_DATA.'Tibia.spr';
-	$dat_path = SIGNATURES_DATA.'Tibia.dat';
-	$otb_path = SIGNATURES_DATA.'items.otb';
-
 	$background = 'default.png';
 	if ( !file_exists( SIGNATURES_BACKGROUNDS.$background ) )
 	{
@@ -146,7 +141,7 @@
 	foreach ( $slots as $pid => $position )
 	{
 		$item = $db->query( 'SELECT `itemtype`, `attributes` FROM `player_items` WHERE `player_items`.`player_id` = '.$player->getId().' AND `player_items`.`pid` = '.$pid.';' )->fetch();
-		if ( $item['itemtype'] != null )
+		if ( $item && $item['itemtype'] != null )
 		{
 			$count = unpack( 'C*', $item['attributes'] );
 			if ( isset( $count[2] ) ) {
@@ -168,4 +163,3 @@
 	}
 
 	$MadGD->save($player->getID());
-?>

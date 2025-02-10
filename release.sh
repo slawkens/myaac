@@ -13,7 +13,7 @@ fi
 
 if [ $1 = "prepare" ]; then
 	# define release version
-	version=`cat VERSION`
+	version=`php system/get_version_for_release.php`
 
 	echo "Preparing to release version $version of the MyAAC Project!"
 
@@ -22,9 +22,9 @@ if [ $1 = "prepare" ]; then
 	mkdir -p tmp
 
 	# get myaac from git archive
-	git archive --format zip --output tmp/myaac.zip master
+	git archive --format zip --output tmp/myaac.zip main
 
-	cd tmp/
+	cd tmp/ || exit
 
 	dir="myaac-$version"
 	if [ -d "$dir" ] ; then
@@ -35,15 +35,24 @@ if [ $1 = "prepare" ]; then
 	unzip -q myaac.zip -d $dir
 	rm myaac.zip
 
+	cd $dir || exit
+
+	# dependencies
+	composer install --no-dev --prefer-dist --optimize-autoloader
+	npm install
+
+	# node_modules is useless, we already have copy in tools/ext
+	rm -R node_modules
+
 	echo "Now you can make changes to $dir. When you are ready, type 'release.sh pack'"
 	exit
 fi
 
 if [ $1 = "pack" ]; then
 	# define release version
-	version=`cat VERSION`
+	version=`php system/get_version_for_release.php`
 
-	cd tmp
+	cd tmp || exit
 
 	# tar.gz
 	echo "Creating .tar.gz package.."

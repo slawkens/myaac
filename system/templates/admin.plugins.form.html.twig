@@ -1,9 +1,10 @@
-<div class="collapse" id="install_plugin">
+<div id="install_plugin">
 	<div class="card card-info card-outline">
 		<div class="card-header">
 			<h5 class="m-0">Install plugin</h5>
 		</div>
 		<form enctype="multipart/form-data" method="post" action="{{ constant('ADMIN_URL') }}?p=plugins">
+			{{ csrf() }}
 			<div class="card-body">
 				<input type="hidden" name="upload_plugin"/>
 
@@ -13,7 +14,7 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<button type="submit" class="btn btn-info">Upload</button>
+				<button type="submit" class="btn btn-info" {% if not pluginUploadEnabled %}disabled{% endif %}>Upload</button>
 			</div>
 		</form>
 	</div>

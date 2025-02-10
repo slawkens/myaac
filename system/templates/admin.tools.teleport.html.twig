@@ -1,0 +1,84 @@
+<div class="row">
+	<div class="col-md-4">
+		<div class="card card-info card-outline">
+			<div class="card-header">
+				<h5 class="m-0">Set Town</h5>
+			</div>
+			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_teleport">
+				{{ csrf() }}
+				<div class="card-body">
+					<div class="form-group">
+						<label>Town</label>
+						<select name="town_id" class="form-control">
+						{% if config.towns|length > 0 %}
+							{% for town_id, town_name in config.towns %}
+							<option value="{{ town_id }}">{{ town_name }}</option>
+							{% endfor %}
+						{% else %}
+							<option disabled>No towns</option>
+						{% endif %}
+						</select>
+					</div>
+				</div>
+				<div class="card-footer">
+					<input type="hidden" name="action" value="set-town">
+					<button type="submit" class="btn btn-info">Set Town</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card card-info card-outline">
+			<div class="card-header">
+				<h5 class="m-0">Set Position</h5>
+			</div>
+			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_teleport">
+				{{ csrf() }}
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Position X</label>
+								<input type="number" min="0" max="65535" required name="posx" value="" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Position Y</label>
+								<input type="number" min="0" max="65535" required name="posy" value="" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Position Z</label>
+								<input type="number" min="0" max="16" required name="posz" value="" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-footer">
+					<input type="hidden" name="action" value="set-position">
+					<button type="submit" class="btn btn-info">Set Position</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card card-info card-outline">
+			<div class="card-header">
+				<h5 class="m-0">Teleport to Temple</h5>
+			</div>
+			<form method="post" action="{{ constant('ADMIN_URL') }}?p=mass_teleport">
+				{{ csrf() }}
+				<div class="card-footer">
+					<input type="hidden" name="action" value="set-position">
+					<input type="hidden" name="posx" value="0">
+					<input type="hidden" name="posy" value="0">
+					<input type="hidden" name="posz" value="0">
+					<input type="hidden" name="to_temple" value="yes">
+					<button type="submit" class="btn btn-info">Teleport to Temple</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

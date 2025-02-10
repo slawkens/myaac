@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 $rank_to_delete = isset($_REQUEST['rankid']) ? (int) $_REQUEST['rankid'] : null;
 
@@ -102,7 +104,7 @@ if(empty($guild_errors)) {
 
 			$twig->display('guilds.back_button.html.twig', array(
 				'new_line' => true,
-				'action' => '?subtopic=guilds&guild='.$guild->getName().'&action=manager'
+				'action' => getLink('guilds') . '?guild='.$guild->getName().'&action=manager'
 			));
 		}
 		else
@@ -120,8 +122,6 @@ if(!empty($guild_errors)) {
 
 	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
-		'action' => '?subtopic=guilds'
+		'action' => getLink('guilds')
 	));
 }
-
-?>

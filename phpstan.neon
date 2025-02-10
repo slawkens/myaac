@@ -1,0 +1,39 @@
+parameters:
+	level: 3
+	paths:
+		- .
+		- templates/tibiacom
+		- templates/kathrine
+	excludePaths:
+		- system/cache/*
+		- vendor/*
+		- plugins/*
+		- system/libs
+		- tools/signature/mango.php
+		- tools/signature/gd.class.php
+	bootstrapFiles:
+		- phpstan-bootstrap.php
+	ignoreErrors:
+		- '#Variable \$db might not be defined#'
+		- '#Variable \$twig might not be defined#'
+		- '#Variable \$hooks might not be defined#'
+		- '#Variable \$account_logged might not be defined#'
+		- '#Variable \$logged might not be defined#'
+		- '#Variable \$config might not be defined#'
+		- '#Variable \$action might not be defined#'
+		- '#Variable \$errors might not be defined#'
+		- '#Variable \$cache might not be defined#'
+		- '#Variable \$status might not be defined#'
+		- '#Variable \$player might not be defined#'
+		- '#Variable \$guild might not be defined#'
+		- '#Variable \$[a-zA-Z0-9\\_]+ might not be defined#'
+		# Eloquent models
+		- '#Call to an undefined static method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\)#'
+		- '#Call to an undefined method object::toArray\(\)#'
+		# system/pages/highscores.php
+		- '#Call to an undefined method Illuminate\\Database\\Query\\Builder::withOnlineStatus\(\)#'
+		- '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$online_status#'
+		- '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$vocation_name#'
+		-
+			message: '#Variable \$tmp in empty\(\) always exists and is always falsy#'
+			path: templates\kathrine\javascript.php

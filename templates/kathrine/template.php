@@ -42,8 +42,6 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 			<div id="mainsubmenu">
 				<?php
-				$default_menu_color = "ffffff";
-
 				foreach($menus as $category => $menu) {
 					if(!isset($menus[$category])) {
 						continue;
@@ -54,8 +52,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 					$size = count($menus[$category]);
 					$i = 0;
 
-					foreach($menus[$category] as $menu) {
-						echo '<a href="' . $menu['link_full'] . '"' . ($menu['blank'] ? ' target="_blank"' : '') . ' style="color: #' . (strlen($menu['color']) == 0 ? $default_menu_color : $menu['color']) . ';">' . $menu['name'] . '</a>';
+					foreach($menus[$category] as $link) {
+						echo '<a href="' . $link['link_full'] . '" ' . $link['target_blank'] . ' ' . $link['style_color'] . '>' . $link['name'] . '</a>';
 
 						if(++$i != $size) {
 							echo '<span class="separator"></span>';

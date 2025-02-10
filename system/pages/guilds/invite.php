@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 //set rights in guild
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : NULL;
 $name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
@@ -70,6 +72,8 @@ if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
 		$player->find($name);
 		if(!$player->isLoaded()) {
 			$errors[] = 'Player with name <b>' . $name . '</b> doesn\'t exist.';
+		} else if ($player->isDeleted()) {
+			$errors[] = "Character with name <b>$name</b> has been deleted.";
 		}
 		else
 		{

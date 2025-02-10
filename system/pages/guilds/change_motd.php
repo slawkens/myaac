@@ -10,6 +10,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/base.php';
+
 if(!MOTD_EXISTS)
 	return;
 
@@ -44,7 +46,7 @@ if(empty($errors)) {
 		$saved = false;
 		if($guild_leader) {
 			if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-				$motd = htmlspecialchars(stripslashes(substr($_REQUEST['motd'],0, $config['guild_motd_chars_limit'])));
+				$motd = htmlspecialchars(stripslashes(substr($_REQUEST['motd'],0, setting('core.guild_motd_chars_limit'))));
 				$guild->setCustomField('motd', $motd);
 				$saved = true;
 			}
@@ -70,8 +72,6 @@ if(!empty($errors)) {
 
 	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,
-		'action' => '?subtopic=guilds'
+		'action' => getLink('guilds')
 	));
 }
-
-?>

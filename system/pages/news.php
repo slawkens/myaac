@@ -8,17 +8,19 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\Cache\Cache;
+use MyAAC\News;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
-require_once LIBS . 'forum.php';
-require_once LIBS . 'news.php';
-
+$canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 if(isset($_GET['archive']))
 {
 	$title = 'News Archive';
 
 	$categories = array();
-	foreach($db->query('SELECT id, name, icon_id FROM ' . TABLE_PREFIX . 'news_categories WHERE hidden != 1') as $cat)
+	foreach($db->query('SELECT id, name, icon_id FROM ' . TABLE_PREFIX . 'news_categories WHERE hide != 1') as $cat)
 	{
 		$categories[$cat['id']] = array(
 			'name' => $cat['name'],
@@ -35,7 +37,7 @@ if(isset($_GET['archive']))
 		if($id < 100000)
 			$field_name = 'id';
 
-		$news = $db->query('SELECT * FROM `'.TABLE_PREFIX . 'news` WHERE `hidden` != 1 AND `' . $field_name . '` = ' . $id  . '');
+		$news = $db->query('SELECT * FROM `'.TABLE_PREFIX . 'news` WHERE `hide` != 1 AND `' . $field_name . '` = ' . $id  . '');
 		if($news->rowCount() == 1)
 		{
 			$news = $news->fetch();
@@ -57,14 +59,18 @@ if(isset($_GET['archive']))
 				}
 			}
 
+			$admin_options = '';
+			if($canEdit) {
+				$admin_options = '<br/><br/>' . $twig->render('admin.links.html.twig', ['page' => 'news', 'id' => $news['id'], 'hide' => $news['hide']]);
+			}
+
 			$twig->display('news.html.twig', array(
 				'title' => stripslashes($news['title']),
-				'content' => $content_,
+				'content' => $content_ . $admin_options,
 				'date' => $news['date'],
 				'icon' => $categories[$news['category']]['icon_id'],
-				'author' => $config['news_author'] ? $author : '',
+				'author' => setting('core.news_author') ? $author : '',
 				'comments' => $news['comments'] != 0 ? getForumThreadLink($news['comments']) : null,
-				'news_date_format' => $config['news_date_format']
 			));
 		}
 		else
@@ -78,11 +84,11 @@ if(isset($_GET['archive']))
 	<?php
 
 	$newses = array();
-	$news_DB = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'news').' WHERE `type` = 1 AND `hidden` != 1 ORDER BY `date` DESC');
+	$news_DB = $db->query('SELECT * FROM '.$db->tableName(TABLE_PREFIX . 'news').' WHERE `type` = 1 AND `hide` != 1 ORDER BY `date` DESC');
 	foreach($news_DB as $news)
 	{
 		$newses[] = array(
-			'link' => getLink('news') . '/archive/' . $news['id'],
+			'link' => getLink('news/archive') . '/' . $news['id'],
 			'icon_id' => $categories[$news['category']]['icon_id'],
 			'title' => stripslashes($news['title']),
 			'date' => $news['date']
@@ -100,7 +106,6 @@ header('X-XSS-Protection: 0');
 $title = 'Latest News';
 
 $cache = Cache::getInstance();
-$canEdit = hasFlag(FLAG_CONTENT_NEWS) || superAdmin();
 
 $news_cached = false;
 if($cache->enabled())
@@ -109,7 +114,7 @@ if($cache->enabled())
 if(!$news_cached)
 {
 	$categories = array();
-	foreach($db->query('SELECT `id`, `name`, `icon_id` FROM `' . TABLE_PREFIX . 'news_categories` WHERE `hidden` != 1') as $cat)
+	foreach($db->query('SELECT `id`, `name`, `icon_id` FROM `' . TABLE_PREFIX . 'news_categories` WHERE `hide` != 1') as $cat)
 	{
 		$categories[$cat['id']] = array(
 			'name' => $cat['name'],
@@ -117,7 +122,7 @@ if(!$news_cached)
 		);
 	}
 
-	$tickers_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . TICKER .($canEdit ? '' : ' AND `hidden` != 1') .' ORDER BY `date` DESC LIMIT ' . $config['news_ticker_limit']);
+	$tickers_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . TICKER .($canEdit ? '' : ' AND `hide` != 1') .' ORDER BY `date` DESC LIMIT ' . setting('core.news_ticker_limit'));
 	$tickers_content = '';
 	if($tickers_db->rowCount() > 0)
 	{
@@ -125,6 +130,7 @@ if(!$news_cached)
 		foreach($tickers as &$ticker) {
 			$ticker['icon'] = $categories[$ticker['category']]['icon_id'];
 			$ticker['body_short'] = short_text(strip_tags($ticker['body']), 100);
+			$ticker['hidden'] = $ticker['hide'];
 		}
 
 		$tickers_content = $twig->render('news.tickers.html.twig', array(
@@ -136,7 +142,7 @@ if(!$news_cached)
 	if($cache->enabled() && !$canEdit)
 		$cache->set('news_' . $template_name . '_' . TICKER, $tickers_content, 60 * 60);
 
-	$featured_article_db =$db->query('SELECT `id`, `title`, `article_text`, `article_image`, `hidden` FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . ARTICLE . ($canEdit ? '' : ' AND `hidden` != 1') .' ORDER BY `date` DESC LIMIT 1');
+	$featured_article_db =$db->query('SELECT `id`, `title`, `article_text`, `article_image`, `hide` FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . ARTICLE . ($canEdit ? '' : ' AND `hide` != 1') .' ORDER BY `date` DESC LIMIT 1');
 	$article = '';
 	if($featured_article_db->rowCount() > 0) {
 		$article = $featured_article_db->fetch();
@@ -149,7 +155,8 @@ if(!$news_cached)
 					'title' => $article['title'],
 					'text' => $article['article_text'],
 					'image' => $article['article_image'],
-					'hidden' => $article['hidden'],
+					'hide' => $article['hide'],
+					'hidden' => $article['hide'],
 					'read_more'=> getLink('news/archive/') . $article['id']
 				),
 				'canEdit' => $canEdit
@@ -168,7 +175,7 @@ else {
 if(!$news_cached)
 {
 	ob_start();
-	$newses = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news') . ' WHERE type = ' . NEWS . ($canEdit ? '' : ' AND hidden != 1') . ' ORDER BY date' . ' DESC LIMIT ' . $config['news_limit']);
+	$newses = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news') . ' WHERE type = ' . NEWS . ($canEdit ? '' : ' AND hide != 1') . ' ORDER BY date' . ' DESC LIMIT ' . setting('core.news_limit'));
 	if($newses->rowCount() > 0)
 	{
 		foreach($newses as $news)
@@ -181,18 +188,8 @@ if(!$news_cached)
 			}
 
 			$admin_options = '';
-			if($canEdit)
-			{
-				$admin_options = '<br/><br/><a target="_blank" rel="noopener noreferrer" href="/admin/?p=news&action=edit&id=' . $news['id'] . '" title="Edit">
-					<img src="images/edit.png"/>Edit
-				</a>
-				<a id="delete" target="_blank" rel="noopener noreferrer" href="/admin/?p=news&action=delete&id=' . $news['id'] . '" onclick="return confirm(\'Are you sure?\');" title="Delete">
-					<img src="images/del.png"/>Delete
-				</a>
-				<a target="_blank" rel="noopener noreferrer" href="/admin/?p=news&action=hide&id=' . $news['id'] . '" title="' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '">
-					<img src="images/' . ($news['hidden'] != 1 ? 'success' : 'error') . '.png"/>
-					' . ($news['hidden'] != 1 ? 'Hide' : 'Show') . '
-				</a>';
+			if($canEdit) {
+				$admin_options = '<br/><br/>' . $twig->render('admin.links.html.twig', ['page' => 'news', 'id' => $news['id'], 'hide' => $news['hide']]);
 			}
 
 			$content_ = $news['body'];
@@ -212,10 +209,9 @@ if(!$news_cached)
 				'content' => $content_ . $admin_options,
 				'date' => $news['date'],
 				'icon' => $categories[$news['category']]['icon_id'],
-				'author' => $config['news_author'] ? $author : '',
+				'author' => setting('core.news_author') ? $author : '',
 				'comments' => $news['comments'] != 0 ? getForumThreadLink($news['comments']) : null,
-				'news_date_format' => $config['news_date_format'],
-				'hidden'=> $news['hidden']
+				'hide'=> $news['hide']
 			));
 		}
 	}

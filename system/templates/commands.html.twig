@@ -20,8 +20,8 @@
 			<a id="delete" href="?subtopic=commands&action=delete&id={{ command.id }}" onclick="return confirm('Are you sure?');" title="Delete">
 				<img src="images/del.png"/>Delete
 			</a>
-			<a href="?subtopic=commands&action=hide&id={{ command.id }}" title="{% if command.hidden != 1 %}Hide{% else %}Show{% endif %}">
-				<img src="images/{% if command.hidden != 1 %}success{% else %}error{% endif %}.png"/>{% if command.hidden != 1 %}Hide{% else %}Show{% endif %}
+			<a href="?subtopic=commands&action=hide&id={{ command.id }}" title="{% if command.hide != 1 %}Hide{% else %}Show{% endif %}">
+				<img src="images/{% if command.hide != 1 %}success{% else %}error{% endif %}.png"/>{% if command.hide != 1 %}Hide{% else %}Show{% endif %}
 			</a>
 			{% if i != 1 %}
 			<a href="?subtopic=commands&action=moveup&id={{ command.id }}" title="Move up">
