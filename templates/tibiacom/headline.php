@@ -7,7 +7,7 @@ if(strlen($text) > 100) // max limit
 putenv('GDFONTPATH=' . __DIR__);
 
 // create image
-$image = imagecreatetruecolor(250, 28);
+$image = imagecreatetruecolor(600, 28);
 
 // make the background transparent
 imagecolortransparent($image, imagecolorallocate($image, 0, 0, 0));
