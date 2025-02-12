@@ -49,16 +49,17 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		if(Monsters::loadFromXML()) {
+		require LIBS . 'creatures.php';
+		if(Creatures::reload()) {
 			success(self::$locale['step_database_loaded_monsters'] . self::getLoadedTime());
 
-			if(Monsters::getMonstersList()->hasErrors()) {
+			/*if(Creatures::getMonstersList()->hasErrors()) {
 				self::$locale['step_database_error_monsters'] = str_replace('$LOG$', 'system/logs/error.log', self::$locale['step_database_error_monsters']);
 				warning(self::$locale['step_database_error_monsters']);
-			}
+			}*/
 		}
 		else {
-			error(Monsters::getLastError());
+			error(Creatures::getLastError());
 		}
 
 		self::$startTime = microtime(true);
