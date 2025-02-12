@@ -1403,7 +1403,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Outfit Images URL',
 			'type' => 'text',
 			'desc' => 'Set to animoutfit.php for animated outfit',
-			'default' => 'https://outfit-images.ots.me/outfit.php',
+			'default' => 'https://outfit-images.ots.me/latest/outfit.php',
 		],
 		'outfit_images_wrong_looktypes' => [
 			'name' => 'Outfit Images Wrong Looktypes',
