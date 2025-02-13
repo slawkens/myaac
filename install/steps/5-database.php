@@ -41,6 +41,9 @@ if(!$error) {
 	$configToSave['cache_engine'] = 'auto';
 	$configToSave['cache_prefix'] = 'myaac_' . generateRandomString(8, true, false, true);
 	$configToSave['database_auto_migrate'] = true;
+	if (isset($config['install_ignore_ip_check'])) {
+		$configToSave['install_ignore_ip_check'] = $config['install_ignore_ip_check'];
+	}
 
 	if(!$error) {
 		$content = '';
@@ -77,7 +80,7 @@ if(!$error) {
 			$_SESSION['config_content'] = $content;
 			unset($_SESSION['saved']);
 
-			$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.php</b>', $locale['step_database_error_file']);
+					$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
 			error($locale['step_database_error_file'] . '<br/>
 				<textarea cols="70" rows="10">' . $content . '</textarea>');
 		}
