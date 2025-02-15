@@ -30,11 +30,11 @@ $state = '';
 $order = '';
 $type = '';
 
-if(isset($_GET['page']) && $_GET['page'] == 'view' && isset($_REQUEST['house']))
+if(isset($_REQUEST['name']))
 {
 	$beds = array("", "one", "two", "three", "fourth", "fifth");
-	$houseName = $_REQUEST['house'];
-	$houseId = (Validator::number($_REQUEST['house']) ? $_REQUEST['house'] : -1);
+	$houseName = urldecode($_REQUEST['name']);
+	$houseId = (Validator::number($_REQUEST['name']) ? $_REQUEST['name'] : -1);
 	$selectHouse = $db->query('SELECT * FROM ' . $db->tableName('houses') . ' WHERE ' . $db->fieldName('name') . ' LIKE ' . $db->quote($houseName) . ' OR `id` = ' . $db->quote($houseId));
 
 	$house = array();
@@ -187,7 +187,7 @@ if(isset($_POST['town']) && isset($_POST['state']) && isset($_POST['order']) && 
 				$houseRent = 'Free';
 		}
 
-		$houses[] = array('owner' => $owner, 'name' => $house['name'], 'size' => ($hasTilesColumn ? $house['tiles'] : $house['size']), 'rent' => $house['rent'], 'rentedBy' => $houseRent);
+		$houses[] = array('owner' => $owner, 'name' => $house['name'], 'size' => ($hasTilesColumn ? $house['tiles'] : $house['size']), 'rent' => $house['rent'], 'rentedBy' => $houseRent, 'link' => getHouseLink($house['name'], false));
 	}
 
 	$housesSearch = true;

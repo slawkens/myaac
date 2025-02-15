@@ -129,16 +129,14 @@ function getMonsterLink($name, $generate = true): string
 
 function getHouseLink($name, $generate = true): string
 {
-	if(is_numeric($name))
-	{
+	if(is_numeric($name)) {
 		$house = House::find(intval($name), ['name']);
 		if ($house) {
 			$name = $house->name;
 		}
 	}
 
-
-	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'houses/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'houses?name=' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
