@@ -121,7 +121,7 @@ function getPlayerLink($name, $generate = true, bool $colored = false): string
 
 function getMonsterLink($name, $generate = true): string
 {
-	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'monsters/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'monsters?name=' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
