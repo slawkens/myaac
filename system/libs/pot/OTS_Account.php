@@ -1011,7 +1011,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 	public function logAction($action)
 	{
 		$ip = get_browser_real_ip();
-		if(strpos($ip, ":") === false) {
+		if(!str_contains($ip, ":")) {
 			$ipv6 = '0';
 		}
 		else {
