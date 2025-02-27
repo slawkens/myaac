@@ -195,7 +195,7 @@ if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 			}
 		}
 
-		if(!$allow)
+		if(!$allow && !config('install_ignore_ip_check'))
 		{
 			$content = warning('In file <b>install/ip.txt</b> must be your IP!<br/>
 			In file is:<br /><b>' . nl2br($file_content) . '</b><br/>

@@ -10,9 +10,13 @@
 	<input type="hidden" name="step" id="step" value="database" />
 
 	{% for value in ['server_path'] %}
+		{% if value == 'server_path' and config.server_path is not null %}
+			{% set server_path = { 'var_server_path': config.server_path } %}
+			{% set session = session | merge (server_path) %}
+		{% endif %}
 	<div class="form-group mb-2">
 		<label for="vars_{{ value }}">{{ locale['step_config_' ~ value]  }}</label>
-		<input class="form-control" type="{% if value == 'mail_admin' %}email{% else %}text{% endif %}" name="vars[{{ value }}]" id="vars_{{ value }}"{% if session['var_' ~ value] is not null %} value="{{ session['var_' ~ value] }}"{% endif %}/>
+		<input class="form-control" type="text" name="vars[{{ value }}]" id="vars_{{ value }}"{% if session['var_' ~ value] is not null %} value="{{ session['var_' ~ value] }}"{% endif %}/>
 		<small class="form-text text-muted">{{ locale['step_config_' ~ value ~ '_desc'] }}</small>
 	</div>
 	{% endfor %}
