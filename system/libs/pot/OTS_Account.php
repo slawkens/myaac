@@ -12,6 +12,8 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
+use MyAAC\Models\AccountAction;
+
 /**
  * OTServ account abstraction.
  *
@@ -1010,26 +1012,16 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
 	public function logAction($action)
 	{
-		$ip = get_browser_real_ip();
-		if(!str_contains($ip, ":")) {
-			$ipv6 = '0';
-		}
-		else {
-			$ipv6 = $ip;
-			$ip = '';
-		}
-
-		return $this->db->exec('INSERT INTO `' . TABLE_PREFIX . 'account_actions` (`account_id`, `ip`, `ipv6`, `date`, `action`) VALUES (' . $this->db->quote($this->getId()).', ' . ($ip == '' ? '0' : $this->db->quote(ip2long($ip))) . ', (' . ($ipv6 == '0' ? $this->db->quote('') : $this->db->quote(inet_pton($ipv6))) . '), UNIX_TIMESTAMP(NOW()), ' . $this->db->quote($action).')');
+		AccountAction::create([
+			'account_id' => $this->getId(),
+			'ip' => get_browser_real_ip(),
+			'date' => time(),
+			'action' => $action,
+		]);
 	}
 
-	public function getActionsLog($limit1, $limit2)
-	{
-		$actions = array();
-
-		foreach($this->db->query('SELECT `ip`, `ipv6`, `date`, `action` FROM `' . TABLE_PREFIX . 'account_actions` WHERE `account_id` = ' . $this->data['id'] . ' ORDER by `date` DESC LIMIT ' . $limit1 . ', ' . $limit2 . '')->fetchAll() as $a)
-			$actions[] = array('ip' => $a['ip'], 'ipv6' => $a['ipv6'], 'date' => $a['date'], 'action' => $a['action']);
-
-		return $actions;
+	public function getActionsLog($limit) {
+		return AccountAction::where('account_id', $this->data['id'])->orderByDesc('date')->limit($limit)->get()->toArray();
 	}
 /**
  * Returns players iterator.

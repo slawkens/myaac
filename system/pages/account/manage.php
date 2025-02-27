@@ -86,8 +86,8 @@ if($email_new_time > 1)
 }
 
 $actions = array();
-foreach($account_logged->getActionsLog(0, 1000) as $action) {
-	$actions[] = array('action' => $action['action'], 'date' => $action['date'], 'ip' => $action['ip'] != 0 ? long2ip($action['ip']) : inet_ntop($action['ipv6']));
+foreach($account_logged->getActionsLog(1000) as $action) {
+	$actions[] = array('action' => $action['action'], 'date' => $action['date'], 'ip' => $action['ip']);
 }
 
 $players = array();

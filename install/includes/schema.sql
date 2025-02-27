@@ -2,12 +2,12 @@ SET @myaac_database_version = 43;
 
 CREATE TABLE `myaac_account_actions`
 (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`account_id` INT(11) NOT NULL,
-	`ip` INT(10) UNSIGNED NOT NULL DEFAULT 0,
-	`ipv6` BINARY(16) NOT NULL DEFAULT 0,
+	`ip` VARCHAR(45) NOT NULL DEFAULT '',
 	`date` INT(11) NOT NULL DEFAULT 0,
 	`action` VARCHAR(255) NOT NULL DEFAULT '',
-	KEY (`account_id`)
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
 CREATE TABLE `myaac_admin_menu`
