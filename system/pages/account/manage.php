@@ -85,12 +85,8 @@ if($email_new_time > 1)
 	}
 }
 
-$actions = array();
-foreach($account_logged->getActionsLog(1000) as $action) {
-	$actions[] = array('action' => $action['action'], 'date' => $action['date'], 'ip' => $action['ip']);
-}
+$actions = $account_logged->getActionsLog(1000);
 
-$players = array();
 /** @var OTS_Players_List $account_players */
 $account_players = $account_logged->getPlayersList();
 $account_players->orderBy('id');
