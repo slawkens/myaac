@@ -982,31 +982,29 @@ function load_config_lua($filename)
 				continue;
 			}
 			$tmp_exp = explode('=', $line, 2);
-			if(strpos($line, 'dofile') !== false)
-			{
+			if(str_contains($line, 'dofile')) {
 				$delimiter = '"';
-				if(strpos($line, $delimiter) === false)
+				if(!str_contains($line, $delimiter)) {
 					$delimiter = "'";
+				}
 
 				$tmp = explode($delimiter, $line);
 				$result = array_merge($result, load_config_lua($config['server_path'] . $tmp[1]));
 			}
-			else if(count($tmp_exp) >= 2)
-			{
+			else if(count($tmp_exp) >= 2) {
 				$key = trim($tmp_exp[0]);
-				if(0 !== strpos($key, '--'))
-				{
+				if(!str_starts_with($key, '--')) {
 					$value = trim($tmp_exp[1]);
-					if(strpos($value, '--') !== false) {// found some deep comment
+					if(str_contains($value, '--')) {// found some deep comment
 						$value = preg_replace('/--.*$/i', '', $value);
 					}
 
 					if(is_numeric($value))
 						$result[$key] = (float) $value;
 					elseif(in_array(@$value[0], array("'", '"')) && in_array(@$value[strlen($value) - 1], array("'", '"')))
-						$result[$key] = (string) substr(substr($value, 1), 0, -1);
+						$result[$key] = substr(substr($value, 1), 0, -1);
 					elseif(in_array($value, array('true', 'false')))
-						$result[$key] = ($value === 'true') ? true : false;
+						$result[$key] = $value === 'true';
 					elseif(@$value[0] === '{') {
 						// arrays are not supported yet
 						// just ignore the error
@@ -1014,7 +1012,7 @@ function load_config_lua($filename)
 					}
 					else
 					{
-						foreach($result as $tmp_key => $tmp_value) // load values definied by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
+						foreach($result as $tmp_key => $tmp_value) // load values defined by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
 							$value = str_replace($tmp_key, $tmp_value, $value);
 						$ret = @eval("return $value;");
 						if((string) $ret == '' && trim($value) !== '""') // = parser error
@@ -1028,8 +1026,7 @@ function load_config_lua($filename)
 		}
 	}
 
-	$result = array_merge($result, isset($config['lua']) ? $config['lua'] : array());
-	return $result;
+	return array_merge($result, $config['lua'] ?? []);
 }
 
 function str_replace_first($search,$replace, $subject) {
