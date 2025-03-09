@@ -4,22 +4,23 @@ namespace MyAAC;
 
 class Hooks
 {
-	private static $_hooks = array();
+	private static array $_hooks = [];
 
-	public function register($hook, $type = '', $file = null) {
+	public function register($hook, $type = '', $file = null): void
+	{
 		if(!($hook instanceof Hook))
 			$hook = new Hook($hook, $type, $file);
 
 		self::$_hooks[$hook->type()][] = $hook;
 	}
 
-	public function trigger($type, $params = array())
+	public function trigger($type, $params = []): bool
 	{
 		$ret = true;
-		if(isset(self::$_hooks[$type]))
-		{
+
+		if(isset(self::$_hooks[$type])) {
 			foreach(self::$_hooks[$type] as $name => $hook) {
-				/** @var $hook Hook */
+				/** @var Hook $hook */
 				if (!$hook->execute($params)) {
 					$ret = false;
 				}
@@ -29,11 +30,23 @@ class Hooks
 		return $ret;
 	}
 
-	public function exist($type) {
+	public function triggerFilter($type, $args = [])
+	{
+		if(isset(self::$_hooks[$type])) {
+			foreach(self::$_hooks[$type] as $hook) {
+				/** @var Hook $hook */
+				$args = $hook->executeFilter(...$args);
+			}
+		}
+
+		return $args;
+	}
+
+	public function exist($type): bool {
 		return isset(self::$_hooks[$type]);
 	}
 
-	public function load()
+	public function load(): void
 	{
 		foreach(Plugins::getHooks() as $hook) {
 			$this->register($hook['name'], $hook['type'], $hook['file']);
