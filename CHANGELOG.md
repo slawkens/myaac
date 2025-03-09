@@ -1,5 +1,92 @@
 # Changelog
 
+## [1.2 - 09.02.2025]
+
+### Added
+* Twig session(key) function + reworked session functions to accept multi-array like in Laravel (https://github.com/slawkens/myaac/commit/b46ddb43d03ef7e5fc34e555e92e856bdc905691)
+* add template_name to twig variables (https://github.com/slawkens/myaac/commit/ae1161d77050bda181802b4496c9de920a7bb1bc)
+* add HOOK_INIT, executed just after $hooks are loaded (https://github.com/slawkens/myaac/commit/19686725dc810f63a07f049f82c66cf336d90ca6)
+
+### Changed
+* settings: password input hide/show, enable Save button only if changes has been made, save settings in transaction (https://github.com/slawkens/myaac/commit/4fda4f643b60a151179e5dd4f04912fb2618d98f, https://github.com/slawkens/myaac/commit/28fef952f857b79d64bc7495ffa5e1999e68e192, https://github.com/slawkens/myaac/commit/4b6024dc451accadb6c469fa282a9a764c1c0a81)
+* rework menus: Different categories can have different colors + Option to reset menus (https://github.com/slawkens/myaac/commit/73de93a561f6b13111e019075724357d8a617249, https://github.com/slawkens/myaac/commit/3da3e62c5b12390d75de9b3320729bcca6e0b458)
+
+### Fixed
+* highscores: Fix online status + vocation for TFS 0.x (https://github.com/slawkens/myaac/commit/ea51ad27c38be88d86514cb979bb394fcfbef1f0)
+* clear cache button in admin bar needed to be clicked twice until it worked (https://github.com/slawkens/myaac/commit/ea51ad27c38be88d86514cb979bb394fcfbef1f0)
+* HOOK_STARTUP location (https://github.com/slawkens/myaac/commit/a73fb1003ee3f812cf182d1834d65f08e6f60d1f)
+* if vocation name has more words (https://github.com/slawkens/myaac/commit/9d7fc98e1e0a96b59ecc1a7c39800a64445db364)
+
+### Updated
+* Bump twig/twig from 3.18.0 to 3.19.0 (#284)
+
+## [1.1 - 27.01.2025]
+
+### Changed
+* adjust mailer settings descriptions to latest gmail (https://github.com/slawkens/myaac/commit/c5d5bb80671db135e6b503f53684771c7272e05d)
+* optimize $player->isOnline() function, thanks @gesior (https://github.com/slawkens/myaac/commit/10dd818b139d5e1bb1ca9ec81edfb083ba9316b4)
+* make players.comment and guilds.description VARCHAR (https://github.com/slawkens/myaac/commit/a45ceab83a74bee2b89cdb72baceda75e577e3cf)
+* add lua/ folder to .gitignore (https://github.com/slawkens/myaac/commit/07012f786b1114cb6ab2f064f82c645b136a375a)
+
+### Fixed
+* general fixes in the tibiacom template menus, better support for custom menus
+* make functions_custom.php optional (https://github.com/slawkens/myaac/commit/dc2b5afd9980984e2b259c9fc99f2ade46f70a5a)
+* error in CLI, where BASE_URL is not defined (https://github.com/slawkens/myaac/commit/4d749b881582f64b5a46196dbbb5ee8097127f03)
+* hook ACCOUNT_LOGIN_BEFORE_ACCOUNT location (https://github.com/slawkens/myaac/commit/669c447fca8643ce56d9ef8c1374ec647c780998)
+
+## [1.0.1 - 14.01.2025]
+
+### Fixed
+* tibiacom account & news menu links not auto expanding
+
+### Updated (Thanks dependabot)
+* twig from ^2.0 to ^3.11
+* tinymce from ^6.8.3 to ^7.2.0
+* cypress from ^12.12.0 to ^13.17.0
+* nesbot/carbon from 2.72.5 to 2.72.6
+
+## [1.0 - 12.01.2025]
+
+First stable release in the v1.0 series.
+
+Minimum PHP 8.1 is required.
+
+Changes since RC.2:
+
+### Added
+* feature: migrations up/down. Allows to downgrade/upgrade database to specified version (https://github.com/slawkens/myaac/commit/3f6ff3a3326b0475d28d11ffd7fff51f362d799f)
+* new hooks for news management (https://github.com/slawkens/myaac/commit/011a85d8ae34283ded6999882833f9d4797028ec, https://github.com/slawkens/myaac/commit/36bd3eb846e829b45313e10f7568dc4e95841143)
+* None Vocation to highscores (can be changed to RookStayer in Admin Panel) (https://github.com/slawkens/myaac/commit/a4a248099521bb5b8b2aa5bd592138debd2f19d5)
+* support for button_color (green, red, blue) (https://github.com/slawkens/myaac/commit/d8b6b749ee62e88b6af4a05d3d7557f90b94d94e)
+* add $whoopsHandler as variable, can be used by plugins (https://github.com/slawkens/myaac/commit/b0c8cf2ecda23045d725aaf43cfb3852ed766a4b)
+* PlayerModel->outfit_url attribute (https://github.com/slawkens/myaac/commit/3b5be1a8db5dceecaa388e2925a5536d13b38881)
+* support for selecting plugin themes in Admin menus.php (https://github.com/slawkens/myaac/commit/77a2c1cec343ffe4be5c2c2503ee81bc32a14ca1)
+
+### Changed
+* schema: Change character set to utf8mb4 (support for Emojis in Menus/Pages/News/Forum etc.) (https://github.com/slawkens/myaac/commit/27c44f1bdfb6234cf0c9d5b4b491123bb205b08f)
+* prefer get_browser_real_ip() over REMOTE_ADDR (https://github.com/slawkens/myaac/commit/941846605c00cee83168d2f916410b8ba8d4b7b9)
+* automatically set selected current one on highscores filters (https://github.com/slawkens/myaac/commit/e96227fbe41ae281783b2d49edb169a603601813)
+* rewrite towns loading code, removed OTBM loader (was too slow) (https://github.com/slawkens/myaac/commit/c980a0914632e7b27f718464f669a200707d217e)
+* allow OTS_Player to be passed as object to getPlayerLink (https://github.com/slawkens/myaac/commit/84d37c5a8f2c4535a41c8aa8264752969d3f3a3d)
+* do not clear menus by default on install (https://github.com/slawkens/myaac/commit/12d8faa3eda5e798f97b71e941c035187daad96e)
+* display warning in admin panel - plugins - if zip extension is not installed (https://github.com/slawkens/myaac/commit/e3ffe5d9e11d78ab064a370d8541bac351c9bcd9)
+* set default_socket_timeout for ipinfo.io checkup to 5 seconds (https://github.com/slawkens/myaac/commit/783d96fc6568a607d3198b832fed3a0dd06c4ebb)
+* refactor getTopPlayers function (support for balance) (https://github.com/slawkens/myaac/commit/c769962e39fe8dfb72ecd5be1864e145696be794)
+
+### Fixed
+* XSS in forum (https://github.com/slawkens/myaac/commit/c2b7286d20d4b579171540f7a774e8a0995d5e8f, https://github.com/slawkens/myaac/commit/8fb643596f9586005976e7bdb484a541a9d8715e)
+* price deducted when changing sex (https://github.com/slawkens/myaac/commit/16671ea40b72dcf74037c359ad572f9eb825edf9)
+* move_thread by unauthorized user (https://github.com/slawkens/myaac/commit/d6c40c836a53cb1710f911f77f45f28b54ea1b54, thanks @anyeor)
+* TFS 1.4.2 where conditions is NULL (https://github.com/slawkens/myaac/commit/b8396d4c8482e951da538b13f2296123732c4545)
+* do not show forum new thread show button if not logged in (https://github.com/slawkens/myaac/commit/507402171ba3b6e7ee184bd7fa73e0d55e0cad7a, @anyeor)
+* login if limiter is disabled (https://github.com/slawkens/myaac/commit/a0f1971583f0f790013e2145fb5ac573c59fbdef)
+* fixes to installMenus function (https://github.com/slawkens/myaac/commit/a2fadc5945fe0a5e39f740827f6ffbda1bb501e2)
+* many PHP exceptions in different places
+* fixes to tibiacom menus ActiveSubmenuItem
+
+### Removed
+* bugtracker SQL table code as the page has been removed/moved to plugins (https://github.com/slawkens/myaac/commit/5782772b901b05fb814bc718d062f6e2cd71df8c)
+
 ## [1.0-RC.2 - 25.10.2024]
 
 Still waiting for your reports about bugs found in this release. We are very close to stable release.
@@ -87,7 +174,6 @@ Minimum PHP version for this release is 8.1.
 * support for login and create account only by email (configurable)
   * with no need for account name
 * Google ReCAPTCHA v3 support (available as plugin)
-* automatically load towns names from .OTBM file
 * support for Account Number
   * suggest account number option
 * many new functions, hooks and configurables
@@ -116,4 +202,4 @@ Minimum PHP version for this release is 8.1.
 * change_password email to be more informal
 
 ### Fixed
-* hundrets of bug fixes, mostly patched from 0.8, so it makes no sense writing them again here
+* hundreds of bug fixes, mostly patched from 0.8, so it makes no sense writing them again here

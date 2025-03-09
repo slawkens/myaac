@@ -21,9 +21,9 @@ $settingHighscoresCountryBox = setting('core.highscores_country_box');
 if(config('account_country') && $settingHighscoresCountryBox)
 	require SYSTEM . 'countries.conf.php';
 
-$list = $_GET['list'] ?? 'experience';
+$list = urldecode($_GET['list'] ?? 'experience');
 $page = $_GET['page'] ?? 1;
-$vocation = $_GET['vocation'] ?? 'all';
+$vocation = urldecode($_GET['vocation'] ?? 'all');
 
 if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 	$page = 1;
@@ -207,6 +207,7 @@ if (empty($highscores)) {
 		$tmp = $row->toArray();
 		$tmp['online'] = $row->online_status;
 		$tmp['vocation'] = $row->vocation_name;
+		$tmp['outfit_url'] = $row->outfit_url; // @phpstan-ignore-line
 		unset($tmp['online_table']);
 
 		return $tmp;
@@ -233,14 +234,10 @@ foreach($highscores as $id => &$player)
 			$player['experience'] = number_format($player['experience']);
 		}
 
-		if(!$settingHighscoresVocation) {
-			unset($player['vocation']);
-		}
-
 		$player['link'] = getPlayerLink($player['name'], false);
 		$player['flag'] = getFlagImage($player['country']);
 		if($settingHighscoresOutfit) {
-			$player['outfit'] = '<img style="position:absolute;margin-top:' . (in_array($player['looktype'], setting('core.outfit_images_wrong_looktypes')) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . setting('core.outfit_images_url') . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" />';
+			$player['outfit'] = '<img style="position:absolute;margin-top:' . (in_array($player['looktype'], setting('core.outfit_images_wrong_looktypes')) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . $player['outfit_url'] . '" alt="" />';
 		}
 		$player['rank'] = $offset + $i;
 	}

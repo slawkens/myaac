@@ -49,7 +49,7 @@ function warning($message, $return = false) {
 	return message($message, 'warning', $return);
 }
 function note($message, $return = false) {
-	return info($message, $return);
+	return message($message, 'note', $return);
 }
 function info($message, $return = false) {
 	return message($message, 'info', $return);
@@ -121,7 +121,7 @@ function getPlayerLink($name, $generate = true, bool $colored = false): string
 
 function getMonsterLink($name, $generate = true): string
 {
-	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'monsters/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'monsters?name=' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -129,16 +129,14 @@ function getMonsterLink($name, $generate = true): string
 
 function getHouseLink($name, $generate = true): string
 {
-	if(is_numeric($name))
-	{
+	if(is_numeric($name)) {
 		$house = House::find(intval($name), ['name']);
 		if ($house) {
 			$name = $house->name;
 		}
 	}
 
-
-	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'houses/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'houses?name=' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -990,31 +988,29 @@ function load_config_lua($filename)
 				continue;
 			}
 			$tmp_exp = explode('=', $line, 2);
-			if(strpos($line, 'dofile') !== false)
-			{
+			if(str_contains($line, 'dofile')) {
 				$delimiter = '"';
-				if(strpos($line, $delimiter) === false)
+				if(!str_contains($line, $delimiter)) {
 					$delimiter = "'";
+				}
 
 				$tmp = explode($delimiter, $line);
 				$result = array_merge($result, load_config_lua($config['server_path'] . $tmp[1]));
 			}
-			else if(count($tmp_exp) >= 2)
-			{
+			else if(count($tmp_exp) >= 2) {
 				$key = trim($tmp_exp[0]);
-				if(0 !== strpos($key, '--'))
-				{
+				if(!str_starts_with($key, '--')) {
 					$value = trim($tmp_exp[1]);
-					if(strpos($value, '--') !== false) {// found some deep comment
+					if(str_contains($value, '--')) {// found some deep comment
 						$value = preg_replace('/--.*$/i', '', $value);
 					}
 
 					if(is_numeric($value))
 						$result[$key] = (float) $value;
 					elseif(in_array(@$value[0], array("'", '"')) && in_array(@$value[strlen($value) - 1], array("'", '"')))
-						$result[$key] = (string) substr(substr($value, 1), 0, -1);
+						$result[$key] = substr(substr($value, 1), 0, -1);
 					elseif(in_array($value, array('true', 'false')))
-						$result[$key] = ($value === 'true') ? true : false;
+						$result[$key] = $value === 'true';
 					elseif(@$value[0] === '{') {
 						// arrays are not supported yet
 						// just ignore the error
@@ -1022,7 +1018,7 @@ function load_config_lua($filename)
 					}
 					else
 					{
-						foreach($result as $tmp_key => $tmp_value) // load values definied by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
+						foreach($result as $tmp_key => $tmp_value) // load values defined by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
 							$value = str_replace($tmp_key, $tmp_value, $value);
 						$ret = @eval("return $value;");
 						if((string) $ret == '' && trim($value) !== '""') // = parser error
@@ -1036,8 +1032,7 @@ function load_config_lua($filename)
 		}
 	}
 
-	$result = array_merge($result, isset($config['lua']) ? $config['lua'] : array());
-	return $result;
+	return array_merge($result, $config['lua'] ?? []);
 }
 
 function str_replace_first($search,$replace, $subject) {
@@ -1063,15 +1058,34 @@ function get_browser_real_ip() {
 
 	return '0';
 }
-function setSession($key, $data) {
-	$_SESSION[setting('core.session_prefix') . $key] = $data;
+function setSession($key, $value = null): void {
+	if (!is_array($key)) {
+		$key = [$key => $value];
+	}
+
+	foreach ($key as $arrayKey => $arrayValue) {
+		if (is_null($arrayValue)) {
+			unsetSession($arrayKey);
+		}
+		else {
+			$_SESSION[setting('core.session_prefix') . $arrayKey] = $arrayValue;
+		}
+	}
 }
 function getSession($key) {
-	$key = setting('core.session_prefix') . $key;
-	return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
+	return $_SESSION[setting('core.session_prefix') . $key] ?? null;
 }
-function unsetSession($key) {
+function unsetSession($key): void {
 	unset($_SESSION[setting('core.session_prefix') . $key]);
+}
+
+function session($key): mixed {
+	if (is_array($key)) {
+		setSession($key);
+		return null;
+	}
+
+	return getSession($key);
 }
 
 function csrf(bool $return = false): string {
@@ -1096,20 +1110,16 @@ function csrfProtect(): void
 	}
 }
 
-function getTopPlayers($limit = 5) {
+function getTopPlayers($limit = 5, $skill = 'level') {
 	global $db;
 
-	$cache = Cache::getInstance();
-	if($cache->enabled()) {
-		$tmp = '';
-		if($cache->fetch('top_' . $limit . '_level', $tmp)) {
-			$players = unserialize($tmp);
-		}
+	if ($skill === 'level') {
+		$skill = 'experience';
 	}
 
-	if (!isset($players)) {
+	return Cache::remember("top_{$limit}_{$skill}", 2 * 60, function () use ($db, $limit, $skill) {
 		$columns = [
-			'id', 'name', 'level', 'vocation', 'experience',
+			'id', 'name', 'level', 'vocation', 'experience', 'balance',
 			'looktype', 'lookhead', 'lookbody', 'looklegs', 'lookfeet'
 		];
 
@@ -1117,36 +1127,27 @@ function getTopPlayers($limit = 5) {
 			$columns[] = 'lookaddons';
 		}
 
-		if ($db->hasColumn('players', 'online')) {
-			$columns[] = 'online';
-		}
-
-		$players = Player::query()
+		return Player::query()
 			->select($columns)
 			->withOnlineStatus()
 			->notDeleted()
 			->where('group_id', '<', setting('core.highscores_groups_hidden'))
 			->whereNotIn('id', setting('core.highscores_ids_hidden'))
 			->where('account_id', '!=', 1)
-			->orderByDesc('experience')
+			->orderByDesc($skill)
 			->limit($limit)
 			->get()
 			->map(function ($e, $i) {
 				$row = $e->toArray();
 				$row['online'] = $e->online_status;
 				$row['rank'] = $i + 1;
+				$row['outfit_url'] = $e->outfit_url;
 
 				unset($row['online_table']);
 
 				return $row;
 			})->toArray();
-
-		if($cache->enabled()) {
-			$cache->set('top_' . $limit . '_level', serialize($players), 120);
-		}
-	}
-
-	return $players;
+	});
 }
 
 function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
@@ -1694,4 +1695,7 @@ function getAccountIdentityColumn(): string
 require_once SYSTEM . 'compat/base.php';
 
 // custom functions
-require SYSTEM . 'functions_custom.php';
+$customFunctions = SYSTEM . 'functions_custom.php';
+if (is_file($customFunctions)) {
+	require $customFunctions;
+}

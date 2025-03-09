@@ -50,6 +50,7 @@ $cache = Cache::getInstance();
 global $hooks;
 $hooks = new Hooks();
 $hooks->load();
+$hooks->trigger(HOOK_INIT);
 
 // twig
 require_once SYSTEM . 'twig.php';
@@ -96,8 +97,8 @@ if($config_lua_reload) {
 
 	// cache config
 	if($cache->enabled()) {
-		$cache->set('config_lua', serialize($config['lua']), 120);
-		$cache->set('server_path', $config['server_path']);
+		$cache->set('config_lua', serialize($config['lua']), 2 * 60);
+		$cache->set('server_path', $config['server_path'], 10 * 60);
 	}
 }
 unset($tmp);
@@ -139,7 +140,7 @@ require_once SYSTEM . 'database.php';
 
 // verify myaac tables exists in database
 if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {
-	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting ' . BASE_URL . 'install');
+	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting ' . (IS_CLI ? 'http://your-ip.com/' : BASE_URL) . 'install');
 }
 
 // execute migrations

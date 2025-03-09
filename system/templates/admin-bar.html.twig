@@ -110,7 +110,7 @@ html { margin-top: 32px !important; }
 			<form method="post" action="{{ constant('ADMIN_URL') }}?p=dashboard">
 				{{ csrf() }}
 				<input type="hidden" name="clear_cache" value="1" />
-				<a class="ab-item" href="#" onclick="confirm('Are you sure that you want to clear cache?') && $(this).closest('form').submit()" title="Clear Cache">Clear Cache</a>
+				<a class="ab-item" href="javascript:void(0);" onclick="confirm('Are you sure that you want to clear cache?') && $(this).closest('form').submit()" title="Clear Cache">Clear Cache</a>
 			</form>
 		</li>
 	</ul>

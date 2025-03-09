@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $level
  * @property int $vocation
  * @property int $online
+ * @property int $looktype
+ * @property int $lookhead
+ * @property int $lookbody
+ * @property int $looklegs
+ * @property int $lookfeet
+ * @property int $lookaddons
+ * @property string $outfit_url
  * @property hasOne $onlineTable
  */
 class Player extends Model {
@@ -42,8 +49,8 @@ class Player extends Model {
 	public function getVocationNameAttribute()
 	{
 		$vocation = $this->vocation;
-		if (isset($this->promotion)) {
-			$vocation *= $this->promotion;
+		if (isset($this->promotion) && $this->promotion > 0) {
+			$vocation += ($this->promotion * setting('core.vocations_amount'));
 		}
 
 		return config('vocations')[$vocation] ?? 'Unknown';
@@ -73,11 +80,21 @@ class Player extends Model {
 		$query->where($column, 0);
 	}
 
-	public function scopeWithOnlineStatus($query) {
+	public function scopeWithOnlineStatus($query)
+	{
 		global $db;
-		$query->when($db->hasTable('players_online'), function ($query) {
-			$query->with('onlineTable');
-		});
+		if ($db->hasColumn('players', 'online')) {
+			$query->addSelect('online');
+		}
+		else {
+			$query->when($db->hasTable('players_online'), function ($query) {
+				$query->with('onlineTable');
+			});
+		}
+	}
+
+	public function getOutfitUrlAttribute() {
+		return setting('core.outfit_images_url') . '?id=' . $this->looktype . (!empty($this->lookaddons) ? '&addons=' . $this->lookaddons : '') . '&head=' . $this->lookhead . '&body=' . $this->lookbody . '&legs=' . $this->looklegs . '&feet=' . $this->lookfeet;
 	}
 
 	public function getOnlineStatusAttribute()

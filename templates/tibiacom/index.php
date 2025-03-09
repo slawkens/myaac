@@ -35,6 +35,17 @@ if(isset($config['boxes']))
 				}
 				else {
 					$tmp = str_replace('/', '_', PAGE);
+					$exp = explode('/', PAGE);
+					if(PAGE !== 'account/create' && PAGE !== 'account/lost' && isset($exp[1])) {
+						if ($exp[0] === 'account') {
+							$tmp = 'account_manage';
+						} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
+							$tmp = 'news_archive';
+						}
+						else if (in_array($exp[0], ['characters', 'highscores', 'guilds', 'forum'])) {
+							$tmp = $exp[0];
+						}
+					}
 				}
 			}
 			else {
@@ -107,6 +118,15 @@ if(isset($config['boxes']))
 		menu[0] = {};
 		var unloadhelper = false;
 
+		<?php
+			$menuInitStr = '';
+			foreach ($config['menu_categories'] as $item) {
+				if ($item['id'] !== 'shops' || setting('core.gifts_system')) {
+					$menuInitStr .= $item['id'] . '=' . ($item['id'] === 'news' ? '1' : '0') . '&';
+				}
+			}
+		?>
+
 		// load the menu and set the active submenu item by using the variable 'activeSubmenuItem'
 		function LoadMenu()
 		{
@@ -114,7 +134,7 @@ if(isset($config['boxes']))
 		  document.getElementById("ActiveSubmenuItemIcon_"+activeSubmenuItem).style.visibility = "visible";
 		  menus = localStorage.getItem('menus');
 		  if(menus == null || menus.lastIndexOf("&") === -1) {
-			  menus = "news=1&account=0&community=0&library=0&forum=0<?php if (setting('core.gifts_system')) echo '&shops=0'; ?>&";
+			  menus = "<?= $menuInitStr ?>";
 		  }
 		  FillMenuArray();
 		  InitializeMenu();
@@ -318,10 +338,22 @@ if(isset($config['boxes']))
 <?php
 $menus = get_template_menus();
 
+$countElements = 0;
+foreach($config['menu_categories'] as $id => $cat) {
+	if (!isset($menus[$id]) || ($id == MENU_CATEGORY_SHOP && !setting('core.gifts_system'))) {
+		continue;
+	}
+
+	$countElements++;
+}
+
+$i = 0;
 foreach($config['menu_categories'] as $id => $cat) {
 	if(!isset($menus[$id]) || ($id == MENU_CATEGORY_SHOP && !setting('core.gifts_system'))) {
 		continue;
 	}
+
+	$i++;
 	?>
 <div id='<?php echo $cat['id']; ?>' class='menuitem'>
 	<span onClick="MenuItemAction('<?php echo $cat['id']; ?>')">
@@ -340,19 +372,13 @@ foreach($config['menu_categories'] as $id => $cat) {
 	</span>
 	<div id='<?php echo $cat['id']; ?>_Submenu' class='Submenu'>
 	<?php
-		$default_menu_color = "ffffff";
-
 		foreach($menus[$id] as $category => $menu) {
-			if (empty($menu['link'])) {
-				$menu['link'] = 'news';
-			}
-			$link_color = '#' . (strlen($menu['color']) == 0 ? $default_menu_color : $menu['color']);
 			?>
-			<a href='<?php echo $menu['link_full']; ?>'<?php echo $menu['blank'] ? ' target="_blank"' : ''?>>
-				<div id='submenu_<?php echo str_replace('/', '_', $menu['link']); ?>' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)' style="color: <?php echo $link_color; ?>;">
+			<a href='<?php echo $menu['link_full']; ?>'<?= $menu['target_blank']?>>
+				<div id='submenu_<?php echo str_replace('/', '_', $menu['link']); ?>' class='Submenuitem' onMouseOver='MouseOverSubmenuItem(this)' onMouseOut='MouseOutSubmenuItem(this)' >
 					<div class='LeftChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 					<div id='ActiveSubmenuItemIcon_<?php echo str_replace('/', '_', $menu['link']); ?>' class='ActiveSubmenuItemIcon' style='background-image:url(<?php echo $template_path; ?>/images/menu/icon-activesubmenu.gif);'></div>
-					<div class='SubmenuitemLabel' style="color: <?php echo $link_color; ?>;"><?php echo $menu['name']; ?></div>
+					<div class='SubmenuitemLabel' <?php echo $menu['style_color']; ?>><?php echo $menu['name']; ?></div>
 					<div class='RightChain' style='background-image:url(<?php echo $template_path; ?>/images/general/chain.gif);'></div>
 				</div>
 			</a>
@@ -361,7 +387,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 	?>
 	</div>
 	<?php
-	if($id == MENU_CATEGORY_SHOP || (!setting('core.gifts_system') && $id == MENU_CATEGORY_SHOP - 1)) {
+	if($id == MENU_CATEGORY_SHOP || (!setting('core.gifts_system') && $i == $countElements)) {
 	?>
 		<div id='MenuBottom' style='background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);'></div>
 	<?php

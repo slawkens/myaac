@@ -72,24 +72,32 @@ class Settings implements \ArrayAccess
 			}
 		}
 
-		$this->errors = [];
-		ModelsSettings::where('name', $pluginName)->delete();
-		foreach ($values as $key => $value) {
-			$errorMessage = '';
-			if (isset($settings['settings'][$key]['callbacks']['beforeSave']) && !$settings['settings'][$key]['callbacks']['beforeSave']($key, $value, $errorMessage)) {
-				$this->errors[] = $errorMessage;
-				continue;
-			}
+		global $db;
 
-			try {
+		try {
+			$db->beginTransaction();
+
+			$this->errors = [];
+			ModelsSettings::where('name', $pluginName)->delete();
+			foreach ($values as $key => $value) {
+				$errorMessage = '';
+				if (isset($settings['settings'][$key]['callbacks']['beforeSave']) && !$settings['settings'][$key]['callbacks']['beforeSave']($key, $value, $errorMessage)) {
+					$this->errors[] = $errorMessage;
+					continue;
+				}
+
 				ModelsSettings::create([
 					'name' => $pluginName,
 					'key' => $key,
 					'value' => $value
 				]);
-			} catch (\PDOException $error) {
-				$this->errors[] = 'Error while saving setting (' . $pluginName . ' - ' . $key . '): ' . $error->getMessage();
 			}
+
+			$db->commit();
+		} catch (\Exception $error) {
+			$db->rollBack();
+			$this->errors[] = 'Error while saving settings (' . $pluginName . ')<br/>' . $error->getMessage();
+			return false;
 		}
 
 		$this->clearCache();
@@ -247,7 +255,15 @@ class Settings implements \ArrayAccess
 						$min = $max = $step = '';
 					}
 
+					if ($setting['type'] === 'password') {
+						echo '<div class="input-group" id="show-hide-' . $key . '">';
+					}
+
 					echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . ($settingsDb[$key] ?? ($setting['default'] ?? '')) . '" id="' . $key . '"' . $min . $max . $step . '/>';
+
+					if ($setting['type'] === 'password') {
+						echo '<div class="input-group-append input-group-text"><a href=""><i class="fas fa-eye-slash" ></i></a></div></div>';
+					}
 				}
 
 				else if($setting['type'] === 'textarea') {

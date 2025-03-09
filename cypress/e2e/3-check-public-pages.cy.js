@@ -116,9 +116,9 @@ describe('Check Public Pages', () => {
 	})
 
 	// library
-	it('Go to creatures page', () => {
+	it('Go to monsters page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/creatures',
+			url: Cypress.env('URL') + '/monsters',
 			method: 'GET',
 		})
 	})

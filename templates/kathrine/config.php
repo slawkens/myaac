@@ -1,5 +1,5 @@
 <?php
-$config['menu_default_color'] = '#ffffff';
+$config['menu_default_links_color'] = '#ffffff';
 
 $config['menu_categories'] = array(
 	MENU_CATEGORY_NEWS => array('id' => 'news', 'name' => 'Latest News'),
@@ -8,3 +8,5 @@ $config['menu_categories'] = array(
 	MENU_CATEGORY_LIBRARY => array('id' => 'library', 'name' => 'Library'),
 	MENU_CATEGORY_SHOP => array('id' => 'shops', 'name' => 'Shop')
 );
+
+$config['menus'] = require __DIR__ . '/menus.php';

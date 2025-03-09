@@ -1,0 +1,31 @@
+<div align="center" class="text-center">
+	<p class="note">You are editing: {{ template }}<br/><br/>
+		Hint: You can drag menu items.<br/>
+		Hint: Add links to external sites using: <b>http://</b> or <b>https://</b> prefix.<br/>
+		Not all templates support blank and colorful links.
+	</p>
+	<div class="row text-center">
+		<div class="col-md-2 col-sm-1"></div>
+		<div class="col-md-8 col-sm-10">
+			<div class="row justify-content-center">
+				{% if config('menus') is not null %}
+				<form method="post" action="?p=menus&reset_menus" onsubmit="return confirm('Do you really want to reset menus?');">
+					{{ csrf() }}
+					<input type="hidden" name="template" value="{{ template }}"/>
+					<button type="submit" class="btn btn-danger">Reset Menus to default</button>
+				</form>
+				<br/>
+				{% endif %}
+				{% if canResetColors %}
+				<form method="post" action="?p=menus&reset_colors" onsubmit="return confirm('Do you really want to reset colors?');">
+					{{ csrf() }}
+					<input type="hidden" name="template" value="{{ template }}"/>
+					<button type="submit" class="btn btn-warning" style="margin-left: 20px">Reset Colors to default</button>
+				</form>
+				<br/>
+				{% endif %}
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-1"></div>
+	</div>
+</div>

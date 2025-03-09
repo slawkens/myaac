@@ -9,19 +9,17 @@
 					<td>
 						<label for="skillFilter">Choose a Skill</label>
 						<select onchange="location = this.value;" id="skillFilter">
-							{% set i = 0 %}
 							{% for link, name in types %}
-								<option value="{{ getLink('highscores') }}/{{ link }}{% if vocation is not null %}/{{ vocation }}{% endif %}" class="size_xs" {% if list is not null and list == link %}selected{% endif %}>{{ name }}</option>
+								<option value="{{ getLink('highscores') }}/{{ link|urlencode }}{% if vocation is not null %}/{{ vocation|lower|urlencode }}{% endif %}" class="size_xs" {% if list is not null and list == link %}selected{% endif %}>{{ name }}</option>
 							{% endfor %}
 						</select>
 					</td>
 					<td>
 						<label for="vocationFilter">Choose a vocation</label>
 						<select onchange="location = this.value;" id="vocationFilter">
-							<option value="{{ getLink('highscores') }}/{{ list }}" class="size_xs">[ALL]</option>
-							{% set i = 0 %}
+							<option value="{{ getLink('highscores') }}/{{ list|urlencode }}" class="size_xs">[ALL]</option>
 							{% for i in 0..config.vocations_amount %}
-								<option value="{{ getLink('highscores') }}/{{ list }}/{{ config.vocations[i]|lower }}" class="size_xs" {% if vocationId is not null and vocationId == i %}selected{% endif %}>{{ config.vocations[i]}}</option>
+								<option value="{{ getLink('highscores') }}/{{ list|urlencode }}/{{ config.vocations[i]|lower|urlencode }}" class="size_xs" {% if vocationId is not null and vocationId == i %}selected{% endif %}>{{ config.vocations[i]}}</option>
 							{% endfor %}
 						</select>
 					</td>
@@ -105,7 +103,7 @@
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>
 						{% for link, name in types %}
-						<a href="{{ getLink('highscores') }}/{{ link }}{% if vocation is not null %}/{{ vocation }}{% endif %}" class="size_xs">{{ name }}</a><br/>
+							<a href="{{ getLink('highscores') }}/{{ link|urlencode }}{% if vocation is not null %}/{{ vocation|urlencode }}{% endif %}" class="size_xs">{{ name }}</a><br/>
 						{% endfor %}
 					</td>
 				</tr>
@@ -118,9 +116,9 @@
 				</tr>
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>
-						<a href="{{ getLink('highscores') }}/{{ list }}" class="size_xs">[ALL]</a><br/>
+						<a href="{{ getLink('highscores') }}/{{ list|urlencode }}" class="size_xs">[ALL]</a><br/>
 						{% for i in 0..config.vocations_amount %}
-						<a href="{{ getLink('highscores') }}/{{ list }}/{{ config.vocations[i]|lower }}" class="size_xs">{{ config.vocations[i]}}</a><br/>
+							<a href="{{ getLink('highscores') }}/{{ list|urlencode }}/{{ config.vocations[i]|lower|urlencode }}" class="size_xs">{{ config.vocations[i]}}</a><br/>
 						{% endfor %}
 					</td>
 				</tr>

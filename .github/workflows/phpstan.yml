@@ -2,9 +2,9 @@ name: "PHPStan"
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
   push:
-    branches: [develop]
+    branches: [main]
 
 jobs:
   tests:

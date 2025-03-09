@@ -4,6 +4,7 @@ Thumbs.db
 
 #
 /.htaccess
+lua
 
 # composer
 composer.phar
@@ -75,6 +76,3 @@ landing
 
 # system
 system/functions_custom.php
-
-# others/rest
-system/pages/downloads.php

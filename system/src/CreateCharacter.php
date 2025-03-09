@@ -105,9 +105,6 @@ class CreateCharacter
 	 * @param array $errors
 	 * @return bool
 	 * @throws \E_OTS_NotLoaded
-	 * @throws \Twig_Error_Loader
-	 * @throws \Twig_Error_Runtime
-	 * @throws \Twig_Error_Syntax
 	 */
 	public function doCreate($name, $sex, $vocation, $town, $account, &$errors)
 	{

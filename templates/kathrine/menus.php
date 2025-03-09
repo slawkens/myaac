@@ -26,7 +26,7 @@ return [
 		'Team' => 'team',
 	],
 	MENU_CATEGORY_LIBRARY => [
-		'Monsters' => 'creatures',
+		'Monsters' => 'monsters',
 		'Spells' => 'spells',
 		'Server Info' => 'server-info',
 		'Commands' => 'commands',

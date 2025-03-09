@@ -348,7 +348,7 @@ return [
 		],
 		'database_password' => [
 			'name' => 'Database Password',
-			'type' => 'text',
+			'type' => 'password',
 			'default' => '',
 			'show_if' => [
 				'database_overwrite', '=', 'true'
@@ -509,7 +509,7 @@ Sent by MyAAC,<br/>
 		'smtp_port' => [
 			'name' => 'SMTP Host',
 			'type' => 'number',
-			'desc' => '25 (default) / 465 (ssl, GMail) / 587 (tls, Microsoft Outlook)',
+			'desc' => '25 (default) / 587 (tls - GMail, Microsoft Outlook)',
 			'default' => 25,
 			'show_if' => [
 				'mail_enabled', '=', 'true'
@@ -536,7 +536,8 @@ Sent by MyAAC,<br/>
 		'smtp_pass' => [
 			'name' => 'SMTP Password',
 			'type' => 'password',
-			'desc' => 'Here your email password to authenticate with SMTP',
+			'desc' => 'Here your email password to authenticate with SMTP.' . PHP_EOL
+				. 'For GMail use generated App password - https://myaccount.google.com/apppasswords.',
 			'default' => '',
 			'show_if' => [
 				'mail_enabled', '=', 'true'
@@ -546,7 +547,8 @@ Sent by MyAAC,<br/>
 			'name' => 'SMTP Security',
 			'type' => 'options',
 			'options' => ['None', 'SSL', 'TLS'],
-			'desc' => 'What kind of encryption to use on the SMTP connection',
+			'desc' => 'What kind of encryption to use on the SMTP connection.' . PHP_EOL
+				. '(Gmail, Outlook - tls).',
 			'default' => 0,
 			'show_if' => [
 				'mail_enabled', '=', 'true'
@@ -1401,7 +1403,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Outfit Images URL',
 			'type' => 'text',
 			'desc' => 'Set to animoutfit.php for animated outfit',
-			'default' => 'https://outfit-images.ots.me/outfit.php',
+			'default' => 'https://outfit-images.ots.me/latest/outfit.php',
 		],
 		'outfit_images_wrong_looktypes' => [
 			'name' => 'Outfit Images Wrong Looktypes',

@@ -1,31 +1,41 @@
 <link type="text/css" rel="stylesheet" href="{{ constant('BASE_URL') }}tools/ext/jquery-ui/themes/base/jquery-ui.min.css">
 <script>
-	var last_id = [];
+	let last_id = [];
+	let colors = [];
+
 	{% for cat, menu in menus %}
 	last_id[{{ cat }}] = {{ last_id[cat] }};
 	{% endfor %}
-	$(function () {
-		$(".sortable").sortable();
-		$(".sortable").disableSelection();
 
-		$(".remove-button").click(function () {
+	{% set menuDefaultLinksColor = config('menu_default_links_color') %}
+	{% for cat, options in config('menu_categories') %}
+	colors[{{ cat }}] = '{{ options['default_links_color'] ?? (menuDefaultLinksColor ?? config('menu_default_color')) }}';
+	{% endfor %}
+
+	$(function () {
+		const $sortable = $(".sortable");
+		$sortable.sortable();
+		$sortable.disableSelection();
+
+		$(".remove-button").on('click', function () {
 			var id = $(this).attr("id");
 			$('#list-' + id.replace('remove-button-', '')).remove();
 		});
 
-		$(".add-button").click(function () {
+		$(".add-button").on('click', function () {
 			var cat = $(this).attr("id").replace('add-button-', '');
 			var id = last_id[cat];
 			last_id[cat]++;
-			$('#sortable-' + cat).append('<li class="ui-state-default" id="list-' + cat + '-' + id + '"><label>Name:</label> <input type="text" name="menu[' + cat + '][]" value=""/> <label>Link:</label> <input type="text" name="menu_link[' + cat + '][]" value=""/><input type="hidden" name="menu_blank[' + cat + '][]" value="0" /> <label><input class="blank-checkbox" type="checkbox"/><span title="Open in New Window">New Window</span></label> <input class="color-picker" type="text" name="menu_color[' + cat + '][]" value="{{ menu_default_color }}" /><a class="remove-button" id="remove-button-' + cat + '-' + id + '"><i class="fas fa-trash"></i></a></li>'); //add input bo
-			$('#remove-button-' + cat + '-' + id).click(function () {
+			const color = colors[cat];
+			$('#sortable-' + cat).append('<li class="ui-state-default" id="list-' + cat + '-' + id + '"><label>Name:</label> <input type="text" name="menu[' + cat + '][]" value=""/> <label>Link:</label> <input type="text" name="menu_link[' + cat + '][]" value=""/><input type="hidden" name="menu_blank[' + cat + '][]" value="0" /> <label><input class="blank-checkbox" type="checkbox"/><span title="Open in New Window">New Window</span></label> <input class="color-picker" type="text" name="menu_color[' + cat + '][]" value="#' + color + '" /> <a class="remove-button" id="remove-button-' + cat + '-' + id + '"><i class="fas fa-trash"></i></a></li>'); //add input bo
+			$('#remove-button-' + cat + '-' + id).on('click', function () {
 				$('#list-' + $(this).attr("id").replace('remove-button-', '')).remove();
 			});
 
-			initialiceSpectrum();
+			initializeSpectrum();
 		});
 
-		$("#menus-form").submit(function (e) {
+		$("#menus-form").on('submit', function (e) {
 			$('.blank-checkbox:not(:checked)').each(function (i, obj) {
 				$(obj).parent().prev().val("off");
 			});
@@ -52,11 +62,11 @@
 <script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/spectrum.js"></script>
 <link type="text/css" rel="stylesheet" href="{{ constant('BASE_URL') }}tools/css/spectrum.css"/>
 <script type="text/javascript">
-	$(document).ready(function () {
-		initialiceSpectrum();
+	$(function () {
+		initializeSpectrum();
 	});
 
-	function initialiceSpectrum() {
+	function initializeSpectrum() {
 		$(".color-picker").spectrum({
 			preferredFormat: "hex",
 			showInput: true,
