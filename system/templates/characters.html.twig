@@ -9,7 +9,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
 	<td><img src="{{ template_path }}/images/general/blank.gif" width="10" height="1" border="0"></td>
 	<td>
-        {{ hook(constant('HOOK_CHARACTERS_BEFORE_INFORMATIONS')) }}
+		{{ hook(constant('HOOK_CHARACTERS_BEFORE_INFORMATIONS')) }}
 		{% if canEdit %}
 			<a href="{{ constant('ADMIN_URL') }}?p=players&id={{ player.getId() }}" title="Edit in Admin Panel" target="_blank">
 				<img src="images/edit.png"/>Edit

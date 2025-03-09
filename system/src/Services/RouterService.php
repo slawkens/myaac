@@ -40,7 +40,6 @@ class RouterService
 
 		$uri = $_SERVER['REQUEST_URI'];
 		if(str_contains($uri, 'index.php')) {
-			/** @var TYPE_NAME $uri */
 			$uri = str_replace_first('/index.php', '', $uri);
 		}
 
@@ -92,6 +91,7 @@ class RouterService
 		/** @var \OTS_Account $account_logged */
 		global $logged_access;
 		$logged_access = 0;
+		$account_logged = app()->getAccountLogged();
 		if($logged && $account_logged && $account_logged->isLoaded()) {
 			$logged_access = $account_logged->getAccess();
 		}
@@ -309,6 +309,8 @@ class RouterService
 		ob_start();
 
 		global $config;
+
+		$cache = app()->get('cache');
 		$hooks = app()->get('hooks');
 
 		if($hooks->trigger(HOOK_BEFORE_PAGE)) {

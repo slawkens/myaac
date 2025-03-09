@@ -15,6 +15,7 @@ use MyAAC\Plugins;
 defined('MYAAC') or die('Direct access not allowed!');
 
 // template
+global $template_name;
 $template_name = setting('core.template');
 if(setting('core.template_allow_change'))
 {
@@ -69,6 +70,7 @@ else {
 	}
 }
 
+global $config;
 if(file_exists(BASE . $template_path . '/config.php')) {
 	require BASE . $template_path . '/config.php';
 }

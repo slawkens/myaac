@@ -16,6 +16,7 @@ use Twig\Loader\FilesystemLoader;
 class App
 {
 	private bool $isLoggedIn = false;
+	private ?\OTS_Account $accountLogged = null;
 	private array $instances = [];
 
 	public function run(): void
@@ -29,11 +30,12 @@ class App
 		$template_place_holders = [];
 
 		require_once SYSTEM . 'init.php';
-
 		require_once SYSTEM . 'template.php';
 
 		$loginService = new LoginService();
-		$this->isLoggedIn = $loginService->checkLogin();
+		$checkLogin = $loginService->checkLogin();
+		$logged = $checkLogin['logged'];
+		$account_logged = $checkLogin['account'];
 
 		$statusService = new StatusService();
 		$status = $statusService->checkStatus();
@@ -53,8 +55,8 @@ class App
 		$title = $handleRouting['title'];
 		$content = $handleRouting['content'];
 
-		$anonymouseStatisticsService = new AnonymousStatisticsService();
-		$anonymouseStatisticsService->checkReport();
+		$anonymousStatisticsService = new AnonymousStatisticsService();
+		$anonymousStatisticsService->checkReport();
 
 		if(setting('core.views_counter')) {
 			require_once SYSTEM . 'counter.php';
@@ -71,12 +73,16 @@ class App
 		 */
 		if ($this->isLoggedIn && admin()) {
 			$content .= $twig->render('admin-bar.html.twig', [
-				'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+				'username' => USE_ACCOUNT_NAME ? $this->accountLogged->getName() : $this->accountLogged->getId()
 			]);
 		}
 
 		global $template_path, $template_index;
 		$title_full =  (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];
+
+		$logged = $this->isLoggedIn;
+		$accountLogged = $this->accountLogged;
+
 		require $template_path . '/' . $template_index;
 
 		echo base64_decode('PCEtLSBQb3dlcmVkIGJ5IE15QUFDIDo6IGh0dHBzOi8vd3d3Lm15LWFhYy5vcmcvIC0tPg==') . PHP_EOL;
@@ -89,6 +95,14 @@ class App
 		}
 
 		$hooks->trigger(HOOK_FINISH);
+	}
+
+	public function setAccountLogged(\OTS_Account $accountLogged): void {
+		$this->accountLogged = $accountLogged;
+	}
+
+	public function getAccountLogged(): ?\OTS_Account {
+		return $this->accountLogged;
 	}
 
 	public function setLoggedIn($loggedIn): void {
@@ -114,6 +128,10 @@ class App
 				case 'database':
 					$databaseService = new DatabaseService();
 					$this->instances[$what] =  $databaseService->getConnectionHandle();
+					break;
+
+				case 'groups':
+					$this->instances[$what] = new \OTS_Groups_List();
 					break;
 
 				case 'hooks':

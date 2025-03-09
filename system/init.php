@@ -78,6 +78,7 @@ foreach($_REQUEST as $var => $value) {
 
 // load otserv config file
 $config_lua_reload = true;
+global $cache;
 $cache = app()->get('cache');
 if($cache->enabled()) {
 	$tmp = null;
@@ -129,7 +130,7 @@ if(!isset($foundValue)) {
 	$foundValue = config('server_path') . 'data/';
 }
 
-$config['data_path'] = $foundValue;
+config(['data_path', $foundValue]);
 unset($foundValue);
 
 // POT

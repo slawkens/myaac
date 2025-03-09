@@ -4,9 +4,9 @@ namespace MyAAC\Services;
 
 class LoginService
 {
-	public function checkLogin(): bool
+	public function checkLogin(): array
 	{
-		global $logged, $logged_flags, $account_logged;
+		global $logged_flags;
 
 		$logged = false;
 		$logged_flags = 0;
@@ -41,7 +41,9 @@ class LoginService
 		}
 		setSession('last_uri', $_SERVER['REQUEST_URI']);
 
-		app()->setLoggedIn($logged);
-		return $logged;
+		return [
+			'logged' => $logged,
+			'account' => $account_logged,
+		];
 	}
 }

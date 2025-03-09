@@ -14,7 +14,7 @@ use MyAAC\Models\PlayerDeath;
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Characters';
 
-$groups = new OTS_Groups_List();
+$groups = app()->get('groups');
 function generate_search_form($autofocus = false): string
 {
 	$twig = app()->get('twig');

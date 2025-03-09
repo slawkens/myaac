@@ -575,7 +575,7 @@ function template_footer(): string
 	// please respect my work and help spreading the word, thanks!
 	$footer[] = base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
 
-	global $hooks;
+	$hooks = app()->get('hooks');
 	$footer = $hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
 
 	return implode('<br/>', $footer);
@@ -1688,12 +1688,12 @@ function getAccountIdentityColumn(): string
 }
 
 function app() {
-	static $_app;
-	if (!isset($_app)) {
-		$_app = new App();
+	static $__app;
+	if (!isset($__app)) {
+		$__app = new App();
 	}
 
-	return $_app;
+	return $__app;
 }
 
 // validator functions

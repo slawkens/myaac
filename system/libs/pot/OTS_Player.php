@@ -662,8 +662,9 @@ class OTS_Player extends OTS_Row_DAO
 		//$groups = new DOMDocument();
 		//$groups->load($path);
 
-		global $groups;
+		$groups = app()->get('groups');
 		$tmp = $groups->getGroup($this->data['group_id']);
+
 		if($tmp) {
 			return $tmp;
 		}
