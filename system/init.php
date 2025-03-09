@@ -17,8 +17,8 @@ use MyAAC\Settings;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
-global $config;
-if(!isset($config['installed']) || !$config['installed']) {
+$configInstalled = config('installed');
+if(!isset($configInstalled) || !$configInstalled) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
 
@@ -30,25 +30,22 @@ if (config('env') === 'dev' || getBoolean(config('enable_debugbar'))) {
 	$debugBar = new StandardDebugBar();
 }
 
-if(empty($config['server_path'])) {
+$configServerPath = config('server_path');
+if(empty($configServerPath)) {
 	throw new RuntimeException('Server Path has been not set. Go to config.php and set it.');
 }
 
 // take care of trailing slash at the end
-if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
-	$config['server_path'] .= '/';
+if($configServerPath[strlen($configServerPath) - 1] !== '/') {
+	config(['server_path', $configServerPath . '/']);
+}
 
 // enable gzip compression if supported by the browser
 if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && str_contains($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('ob_gzhandler'))
 	ob_start('ob_gzhandler');
 
-// cache
-global $cache;
-$cache = Cache::getInstance();
-
 // event system
-global $hooks;
-$hooks = new Hooks();
+$hooks = app()->get('hooks');
 $hooks->load();
 $hooks->trigger(HOOK_INIT);
 
@@ -81,9 +78,10 @@ foreach($_REQUEST as $var => $value) {
 
 // load otserv config file
 $config_lua_reload = true;
+$cache = app()->get('cache');
 if($cache->enabled()) {
 	$tmp = null;
-	if($cache->fetch('server_path', $tmp) && $tmp == $config['server_path']) {
+	if($cache->fetch('server_path', $tmp) && $tmp == config('server_path')) {
 		$tmp = null;
 		if($cache->fetch('config_lua', $tmp) && $tmp) {
 			$config['lua'] = unserialize($tmp);
@@ -93,31 +91,33 @@ if($cache->enabled()) {
 }
 
 if($config_lua_reload) {
-	$config['lua'] = load_config_lua($config['server_path'] . 'config.lua');
+	config(['lua', load_config_lua(config('server_path') . 'config.lua')]);
 
 	// cache config
 	if($cache->enabled()) {
-		$cache->set('config_lua', serialize($config['lua']), 2 * 60);
-		$cache->set('server_path', $config['server_path'], 10 * 60);
+		$cache->set('config_lua', serialize(config('lua')), 2 * 60);
+		$cache->set('server_path', config('server_path'), 10 * 60);
 	}
 }
 unset($tmp);
 
-if(isset($config['lua']['servername']))
-	$config['lua']['serverName'] = $config['lua']['servername'];
+if(configLua('servername') !== null) {
+	$config['lua']['serverName'] = configLua('servername');
+}
 
-if(isset($config['lua']['houserentperiod']))
-	$config['lua']['houseRentPeriod'] = $config['lua']['houserentperiod'];
+if(configLua('houserentperiod') !== null) {
+	$config['lua']['houseRentPeriod'] = configLua('houserentperiod');
+}
 
 // localize data/ directory based on data directory set in config.lua
 foreach(array('dataDirectory', 'data_directory', 'datadir') as $key) {
-	if(!isset($config['lua'][$key][0])) {
+	if(!isset(configLua($key)[0])) {
 		break;
 	}
 
-	$foundValue = $config['lua'][$key];
+	$foundValue = configLua('lua')[$key];
 	if($foundValue[0] !== '/') {
-		$foundValue = $config['server_path'] . $foundValue;
+		$foundValue = config('server_path') . $foundValue;
 	}
 
 	if($foundValue[strlen($foundValue) - 1] !== '/') {// do not forget about trailing slash
@@ -126,7 +126,7 @@ foreach(array('dataDirectory', 'data_directory', 'datadir') as $key) {
 }
 
 if(!isset($foundValue)) {
-	$foundValue = $config['server_path'] . 'data/';
+	$foundValue = config('server_path') . 'data/';
 }
 
 $config['data_path'] = $foundValue;
@@ -134,9 +134,9 @@ unset($foundValue);
 
 // POT
 require_once SYSTEM . 'libs/pot/OTS.php';
-$ots = POT::getInstance();
 $eloquentConnection = null;
-require_once SYSTEM . 'database.php';
+global $db;
+$db = app()->get('db');
 
 // verify myaac tables exists in database
 if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {

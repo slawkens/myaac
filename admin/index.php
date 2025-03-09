@@ -1,5 +1,8 @@
 <?php
 
+use MyAAC\Services\LoginService;
+use MyAAC\Services\StatusService;
+
 // few things we'll need
 require '../common.php';
 
@@ -9,7 +12,7 @@ const MYAAC_ADMIN = true;
 if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed']))
 {
 	header('Location: ' . BASE_URL . 'install/');
-	throw new RuntimeException('Setup detected that <b>install/</b> directory exists. Please visit <a href="' . BASE_URL . 'install">this</a> url to start MyAAC Installation.<br/>Delete <b>install/</b> directory if you already installed MyAAC.<br/>Remember to REFRESH this page when you\'re done!');
+	exit;
 }
 
 $content = '';
@@ -26,8 +29,13 @@ require SYSTEM . 'functions.php';
 require SYSTEM . 'init.php';
 
 require __DIR__ . '/includes/debugbar.php';
-require SYSTEM . 'status.php';
-require SYSTEM . 'login.php';
+
+$loginService = new LoginService();
+$logged = $loginService->checkLogin();
+
+$statusService = new StatusService();
+$status = $statusService->checkStatus();
+
 require __DIR__ . '/includes/functions.php';
 
 $twig->addGlobal('config', $config);

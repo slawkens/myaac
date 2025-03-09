@@ -9,22 +9,15 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-use MyAAC\CsrfToken;
-use Twig\Environment as Twig_Environment;
 use Twig\Extension\DebugExtension as Twig_DebugExtension;
-use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 global $twig, $twig_loader;
 
 $dev_mode = (config('env') === 'dev');
-$twig_loader = new Twig_FilesystemLoader(SYSTEM . 'templates');
-$twig = new Twig_Environment($twig_loader, array(
-	'cache' => CACHE . 'twig/',
-	'auto_reload' => $dev_mode,
-	'debug' => $dev_mode
-));
+$twig_loader = app()->get('twig-loader');
+$twig = app()->get('twig');
 
 $twig_loader->addPath(PLUGINS);
 
@@ -86,7 +79,7 @@ $function = new TwigFunction('getMonsterLink', function ($s, $p = true) {
 $twig->addFunction($function);
 
 $function = new TwigFunction('getGuildLink', function ($s, $p = true) {
-    return getGuildLink($s, $p);
+	return getGuildLink($s, $p);
 });
 $twig->addFunction($function);
 
@@ -96,8 +89,6 @@ $function = new TwigFunction('truncate', function ($s, $n) {
 $twig->addFunction($function);
 
 $function = new TwigFunction('hook', function ($context, $hook, array $params = []) {
-	global $hooks;
-
 	if(is_string($hook)) {
 		if (defined($hook)) {
 			$hook = constant($hook);
@@ -109,7 +100,9 @@ $function = new TwigFunction('hook', function ($context, $hook, array $params = 
 		}
 	}
 
-	$params['context'] = $context;
+	$params['context'] = $context;#
+
+	$hooks = app()->get('hooks');
 	$hooks->trigger($hook, $params);
 }, ['needs_context' => true]);
 $twig->addFunction($function);
@@ -152,4 +145,5 @@ $filter = new TwigFilter('urlencode', function ($s) {
 $twig->addFilter($filter);
 unset($function, $filter);
 
+$hooks = app()->get('hooks');
 $hooks->trigger(HOOK_TWIG, ['twig' => $twig, 'twig_loader' => $twig_loader]);

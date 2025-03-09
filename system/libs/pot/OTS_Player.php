@@ -655,8 +655,7 @@ class OTS_Player extends OTS_Row_DAO
 		//if($path == '')
 		//	$path = $config['data_path'].'XML/groups.xml';
 
-		if( !isset($this->data['group_id']) )
-		{
+		if(!isset($this->data['group_id'])) {
 			throw new E_OTS_NotLoaded();
 		}
 
@@ -665,8 +664,9 @@ class OTS_Player extends OTS_Row_DAO
 
 		global $groups;
 		$tmp = $groups->getGroup($this->data['group_id']);
-		if($tmp)
+		if($tmp) {
 			return $tmp;
+		}
 
 		return new OTS_Group();
 			// echo 'error while loading group..';

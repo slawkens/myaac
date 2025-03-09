@@ -213,11 +213,9 @@ return [
 			'default' => 'myaac_',
 		],
 		'backward_support' => [
+			'hidden' => true,
 			'name' => 'Gesior Backward Support',
 			'type' => 'boolean',
-			'desc' => 'gesior backward support (templates & pages)<br/>' .
-						'allows using gesior templates and pages with myaac<br/>' .
-						'might bring some performance when disabled',
 			'default' => true,
 		],
 		'anonymous_usage_statistics' => [
