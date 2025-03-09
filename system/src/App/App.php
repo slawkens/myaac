@@ -10,7 +10,7 @@ use MyAAC\Services\RouterService;
 use MyAAC\Services\StatusService;
 use MyAAC\Settings;
 use MyAAC\Visitors;
-use Twig\Environment;
+use MyAAC\Twig\EnvironmentBridge as MyAAC_Twig_EnvironmentBridge;
 use Twig\Loader\FilesystemLoader;
 
 class App
@@ -126,7 +126,7 @@ class App
 
 				case 'twig':
 					$dev_mode = (config('env') === 'dev');
-					$this->instances[$what] = new Environment($this->get('twig-loader'), array(
+					$this->instances[$what] = new MyAAC_Twig_EnvironmentBridge($this->get('twig-loader'), array(
 						'cache' => CACHE . 'twig/',
 						'auto_reload' => $dev_mode,
 						'debug' => $dev_mode

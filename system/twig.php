@@ -9,7 +9,6 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-use MyAAC\Twig\EnvironmentBridge as MyAAC_Twig_EnvironmentBridge;
 use Twig\Extension\DebugExtension as Twig_DebugExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
