@@ -37,6 +37,11 @@ class Hook
 		return !isset($ret) || $ret == 1 || $ret;
 	}
 
+	public function executeFilter(...$args) {
+		return include BASE . $this->_file;
+	}
+
 	public function name() {return $this->_name;}
 	public function type() {return $this->_type;}
+	public function file() {return $this->_file;}
 }
