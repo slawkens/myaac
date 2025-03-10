@@ -27,11 +27,11 @@ $pluginThemes = Plugins::getThemes();
 if (isset($_POST['template'])) {
 	$template = $_POST['template'];
 
-	if (isset($_POST['menu'])) {
-		$post_menu = $_POST['menu'];
-		$post_menu_link = $_POST['menu_link'];
-		$post_menu_blank = $_POST['menu_blank'];
-		$post_menu_color = $_POST['menu_color'];
+	if (isset($_POST['save'])) {
+		$post_menu = $_POST['menu'] ?? [];
+		$post_menu_link = $_POST['menu_link'] ?? [];
+		$post_menu_blank = $_POST['menu_blank'] ?? [];
+		$post_menu_color = $_POST['menu_color'] ?? [];
 		if (count($post_menu) != count($post_menu_link)) {
 			echo 'Menu count is not equal menu links. Something went wrong when sending form.';
 			return;
@@ -135,7 +135,7 @@ if (isset($_POST['template'])) {
 	<form method="post" id="menus-form" action="?p=menus">
 		<?php csrf(); ?>
 		<input type="hidden" name="template" value="<?php echo $template ?>"/>
-		<button type="submit" class="btn btn-info">Save</button><br/><br/>
+		<button type="submit" name="save" class="btn btn-info">Save</button><br/><br/>
 		<div class="row">
 			<?php foreach ($config['menu_categories'] as $id => $cat): ?>
 				<div class="col-md-12 col-lg-6">
