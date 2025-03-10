@@ -235,7 +235,7 @@ class CreateCharacter
 			}
 		}
 
-		global $hooks;
+		$hooks = app()->get('hooks');
 		if (!$hooks->trigger(HOOK_ACCOUNT_CREATE_CHARACTER_AFTER,
 			[
 				'account' => $account,

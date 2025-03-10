@@ -57,7 +57,7 @@ class Settings implements \ArrayAccess
 
 		$settings = $this->settingsFile[$pluginName];
 
-		global $hooks;
+		$hooks = app()->get('hooks');
 		if (!$hooks->trigger(HOOK_ADMIN_SETTINGS_BEFORE_SAVE, [
 			'name' => $pluginName,
 			'values' => $values,

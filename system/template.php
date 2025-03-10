@@ -15,6 +15,7 @@ use MyAAC\Plugins;
 defined('MYAAC') or die('Direct access not allowed!');
 
 // template
+global $template_name;
 $template_name = setting('core.template');
 if(setting('core.template_allow_change'))
 {
@@ -24,7 +25,7 @@ if(setting('core.template_allow_change'))
 			//setcookie('template', $template_name, 0, BASE_DIR . '/', $_SERVER["SERVER_NAME"]);
 			$template_name = $_GET['template'];
 
-			$cache = Cache::getInstance();
+			$cache = app()->get('cache');
 			if($cache->enabled()) {
 				$cache->delete('template_menus');
 			}
@@ -49,22 +50,16 @@ if(setting('core.template_allow_change'))
 	}
 }
 
+global $template_path, $template_index;
+
 $themes = Plugins::getThemes();
-if (isset($themes[$template_name])) {
-	$template_path = $themes[$template_name];
-}
-else {
-	$template_path = 'templates/' . $template_name;
-}
+$template_path = $themes[$template_name] ?? 'templates/' . $template_name;
 
 if(file_exists(BASE . $template_path . '/index.php')) {
 	$template_index = 'index.php';
 }
 elseif(file_exists(BASE . $template_path . '/template.php')) {
 	$template_index = 'template.php';
-}
-elseif(setting('core.backward_support') && file_exists(BASE . $template_path . '/layout.php')) {
-	$template_index = 'layout.php';
 }
 else {
 	$template_name = 'kathrine';
@@ -75,62 +70,22 @@ else {
 	}
 }
 
+global $config;
 if(file_exists(BASE . $template_path . '/config.php')) {
 	require BASE . $template_path . '/config.php';
 }
 
-$tmp = '';
-if ($cache->enabled() && $cache->fetch('template_ini_' . $template_name, $tmp)) {
-	$template_ini = unserialize($tmp);
-}
-else {
+$template_ini = Cache::remember('template_ini_' . $template_name, 10 * 60, function() use ($template_path) {
 	$file = BASE . $template_path . '/config.ini';
-	$exists = file_exists($file);
-	if ($exists || (setting('core.backward_support') && file_exists(BASE . $template_path . '/layout_config.ini'))) {
-		if (!$exists) {
-			$file = BASE . $template_path . '/layout_config.ini';
-		}
-
-		$template_ini = parse_ini_file($file);
-		unset($file);
-
-		if ($cache->enabled()) {
-			$cache->set('template_ini_' . $template_name, serialize($template_ini), 10 * 60);
-		}
+	if (!file_exists($file)) {
+		return [];
 	}
-}
 
-if (isset($template_ini)) {
-	foreach ($template_ini as $key => $value) {
-		$config[$key] = $value;
-	}
-}
+	return parse_ini_file($file);
+});
 
-$template = array();
-$template['link_account_manage'] = getLink('account/manage');
-$template['link_account_create'] = getLink('account/create');
-$template['link_account_lost'] = getLink('account/lost');
-$template['link_account_logout'] = getLink('account/logout');
-
-$template['link_news_archive'] = getLink('news/archive');
-
-$links = array('news', 'changelog', 'rules', 'downloads', 'characters', 'online', 'highscores', 'powergamers', 'lastkills' => 'last-kills', 'houses', 'guilds', 'wars', 'polls', 'bans', 'team', 'creatures' => 'monsters', 'monsters', 'spells', 'commands', 'exp-stages', 'freeHouses', 'serverInfo', 'exp-table', 'faq', 'points', 'gifts', 'bugtracker', 'gallery');
-foreach($links as $key => $value) {
-	$key = is_string($key) ? $key : $value;
-	$template['link_' . $key] = getLink($value);
-}
-
-$template['link_screenshots'] = getLink('gallery');
-$template['link_movies'] = getLink('videos');
-
-$template['link_gifts_history'] = getLink('gifts', 'history');
-$forumSetting = setting('core.forum');
-if($forumSetting != '')
-{
-	if(strtolower($forumSetting) == 'site')
-		$template['link_forum'] = "<a href='" . getLink('forum') . "'>";
-	else
-		$template['link_forum'] = "<a href='" . $forumSetting . "' target='_blank'>";
+foreach ($template_ini as $key => $value) {
+	$config[$key] = $value;
 }
 
 $twig->addGlobal('template_name', $template_name);

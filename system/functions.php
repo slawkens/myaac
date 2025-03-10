@@ -9,6 +9,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\App\App;
 use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
 use MyAAC\Items;
@@ -574,7 +575,7 @@ function template_footer(): string
 	// please respect my work and help spreading the word, thanks!
 	$footer[] = base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
 
-	global $hooks;
+	$hooks = app()->get('hooks');
 	$footer = $hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
 
 	return implode('<br/>', $footer);
@@ -605,10 +606,8 @@ function template_form()
 	return $twig->render('forms.change_template.html.twig', ['options' => $options]);
 }
 
-function getStyle($i)
-{
-	global $config;
-	return is_int($i / 2) ? $config['darkborder'] : $config['lightborder'];
+function getStyle($i) {
+	return is_int($i / 2) ? config('darkborder') : config('lightborder');
 }
 
 $vowels = array('e', 'y', 'u', 'i', 'o', 'a');
@@ -1216,7 +1215,7 @@ function clearCache()
 {
 	News::clearCache();
 
-	$cache = Cache::getInstance();
+	$cache = app()->get('cache');
 	if($cache->enabled()) {
 		$keysToClear = [
 			'status', 'templates',
@@ -1266,7 +1265,7 @@ function clearCache()
 	// routes cache
 	clearRouteCache();
 
-	global $hooks;
+	$hooks = app()->get('hooks');
 	$hooks->trigger(HOOK_CACHE_CLEAR, ['cache' => Cache::getInstance()]);
 
 	return true;
@@ -1320,9 +1319,6 @@ function getCustomPage($name, &$success): string
 				$tmp = $page['body'];
 
 			global $config;
-			if(setting('core.backward_support')) {
-				global $SQL, $main_content, $subtopic;
-			}
 
 			ob_start();
 			eval($tmp);
@@ -1689,6 +1685,15 @@ function getAccountIdentityColumn(): string
 	}
 
 	return 'id';
+}
+
+function app() {
+	static $__app;
+	if (!isset($__app)) {
+		$__app = new App();
+	}
+
+	return $__app;
 }
 
 // validator functions
