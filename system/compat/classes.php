@@ -38,3 +38,4 @@ class GuildRank extends OTS_GuildRank {}
 class House extends OTS_House {}
 
 class Cache extends \MyAAC\Cache\Cache {}
+class Validator extends \MyAAC\Validator {}

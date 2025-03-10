@@ -716,7 +716,7 @@ class Plugins {
 				}
 			}
 
-			$cache = Cache::getInstance();
+			$cache = app()->get('cache');
 			if($cache->enabled()) {
 				$cache->delete('templates');
 				$cache->delete('hooks');
