@@ -168,7 +168,7 @@ if (isset($_POST['template'])) {
 		</div>
 		<div class="row pb-2">
 			<div class="col-md-12">
-				<button type="submit" class="btn btn-info">Save</button>
+				<button type="submit" name="save" class="btn btn-info">Save</button>
 				<?php
 				echo '<button type="button" class="btn btn-danger float-right" value="Cancel" onclick="window.location = \'' . ADMIN_URL . '?p=menus\';"><i class="fas fa-cancel"></i> Cancel</button>';
 				?>
