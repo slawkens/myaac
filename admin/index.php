@@ -31,7 +31,10 @@ require SYSTEM . 'init.php';
 require __DIR__ . '/includes/debugbar.php';
 
 $loginService = new LoginService();
-$logged = $loginService->checkLogin();
+$checkLogin = $loginService->checkLogin();
+$logged = $checkLogin['logged'];
+$account_logged = $checkLogin['account'];
+app()->setAccountLogged($account_logged);
 
 $statusService = new StatusService();
 $status = $statusService->checkStatus();

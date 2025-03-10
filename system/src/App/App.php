@@ -36,6 +36,7 @@ class App
 		$checkLogin = $loginService->checkLogin();
 		$logged = $checkLogin['logged'];
 		$account_logged = $checkLogin['account'];
+		$this->accountLogged = $account_logged;
 
 		$statusService = new StatusService();
 		$status = $statusService->checkStatus();
