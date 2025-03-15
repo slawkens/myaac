@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3 - 10.03.2025]
+
+### Changed
+* Use latest outfit-images host from @gesior (https://github.com/slawkens/myaac/commit/529bdcf016dd0f9dffbc34d81f99a046a9ddb70d)
+* Change monster link to $_GET ?name= (https://github.com/slawkens/myaac/commit/4c5cc8b573b2b3e7ec00a22b7ede30a68083a924)
+
+### Fixed
+* Fixed house links (https://github.com/slawkens/myaac/commit/887b5068ad11c4cdab614afd34525caba785ce13)
+* Fixed long title on headline.php (https://github.com/slawkens/myaac/commit/3e3f4bb5a514158ec8777684ca6c7f1c2a37bed5)
+* Fixed menu colors once again, plus add !important tag (https://github.com/slawkens/myaac/commit/aa52df6e2ec92cafc25b655ae907bf2e1746d9cc)
+* Fix: add possibility to remove all menu items in admin panel (https://github.com/slawkens/myaac/commit/00fe1adc15ea7646596d755f6e6e1f7854ffc1d5, https://github.com/slawkens/myaac/commit/9239a4f4198c3ad260802ac3b47e9c41b80b754e)
+
 ## [1.2 - 09.02.2025]
 
 ### Added
