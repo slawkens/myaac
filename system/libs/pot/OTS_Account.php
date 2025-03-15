@@ -443,18 +443,18 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			throw new E_OTS_NotLoaded();
 		}
 
+		$configFreePremium = configLua('freePremium');
+		if(isset($configFreePremium) && getBoolean($configFreePremium)) {return -1;}
+
 		if(isset($this->data['premium_ends_at']) || isset($this->data['premend'])) {
 			$col = isset($this->data['premium_ends_at']) ? 'premium_ends_at' : 'premend';
 			$ret = ceil(($this->data[$col] - time()) / (24 * 60 * 60));
-			return $ret > 0 ? $ret : 0;
+			return max($ret, 0);
 		}
 
 		if($this->data['premdays'] == 0) {
 			return 0;
 		}
-
-		global $config;
-		if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
 
 		if($this->data['premdays'] == self::GRATIS_PREMIUM_DAYS){
 			return self::GRATIS_PREMIUM_DAYS;
