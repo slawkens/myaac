@@ -19,13 +19,15 @@ class DatabaseService
 
 	public function connect(): void
 	{
-		global $config;
+		$configDatabaseOverwrite = config('database_overwrite');
 
-		if (!isset($config['database_overwrite'])) {
-			$config['database_overwrite'] = false;
+		if (!isset($configDatabaseOverwrite)) {
+			$configDatabaseOverwrite = false;
+			config(['database_overwrite', false]);
 		}
 
-		if(!$config['database_overwrite'] && !isset($config['database_user'][0], $config['database_password'][0], $config['database_name'][0])) {
+		global $config;
+		if(!$configDatabaseOverwrite) {
 			if(isset($config['lua']['sqlType'])) {// tfs 0.3
 				if(isset($config['lua']['mysqlHost'])) {// tfs 0.2
 					$config['otserv_version'] = TFS_02;
@@ -103,7 +105,6 @@ class DatabaseService
 		}
 
 		$ots = \POT::getInstance();
-		$cache = app()->get('cache');
 
 		try {
 			$ots->connect([
@@ -133,7 +134,8 @@ class DatabaseService
 
 			$eloquentConnection = $capsule->getConnection();
 		} catch (\Exception $e) {
-			if(isset($cache) && $cache->enabled()) {
+			$cache = app()->get('cache');
+			if($cache->enabled()) {
 				$cache->delete('config_lua');
 			}
 
