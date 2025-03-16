@@ -29,7 +29,8 @@ if(strtolower($forumSetting) != 'site') {
 
 $canEdit = Forum::isModerator();
 
-$sections = array();
+global $sections;
+$sections = [];
 foreach(getForumBoards() as $section) {
 	$sections[$section['id']] = array(
 		'id' => $section['id'],
