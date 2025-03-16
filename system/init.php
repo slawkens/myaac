@@ -46,8 +46,6 @@ if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HT
 
 // event system
 $hooks = app()->get('hooks');
-$hooks->load();
-$hooks->trigger(HOOK_INIT);
 
 // twig
 require_once SYSTEM . 'twig.php';
@@ -151,8 +149,7 @@ if (!isset($configDatabaseAutoMigrate) || $configDatabaseAutoMigrate) {
 }
 
 // settings
-$settings = Settings::getInstance();
-$settings->load();
+$settings = app()->get('settings');
 
 // csrf protection
 $token = getSession('csrf_token');

@@ -34,9 +34,7 @@ class App
 
 		$loginService = new LoginService();
 		$checkLogin = $loginService->checkLogin();
-		$logged = $checkLogin['logged'];
-		$account_logged = $checkLogin['account'];
-		$this->accountLogged = $account_logged;
+		$this->accountLogged = $checkLogin['account'];
 
 		$statusService = new StatusService();
 		$status = $statusService->checkStatus();
@@ -81,8 +79,9 @@ class App
 		global $template_path, $template_index;
 		$title_full =  (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];
 
-		$logged = $this->isLoggedIn;
-		$accountLogged = $this->accountLogged;
+		global $logged, $account_logged;
+		$logged = $checkLogin['logged'];
+		$account_logged = $checkLogin['account'];
 
 		require $template_path . '/' . $template_index;
 
@@ -136,11 +135,16 @@ class App
 					break;
 
 				case 'hooks':
-					$this->instances[$what] = new Hooks();
+					$this->instances[$what] = $hooks = new Hooks();
+					$hooks->load();
+					$hooks->trigger(HOOK_INIT);
+
 					break;
 
 				case 'settings':
-					$this->instances[$what] = Settings::getInstance();
+					$this->instances[$what] = $settings = Settings::getInstance();
+					$settings->load();
+
 					break;
 
 				case 'twig':
@@ -150,6 +154,7 @@ class App
 						'auto_reload' => $dev_mode,
 						'debug' => $dev_mode
 					));
+
 					break;
 
 				case 'twig-loader':

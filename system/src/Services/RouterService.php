@@ -9,7 +9,12 @@ class RouterService
 {
 	public function handleRouting(): array
 	{
-		global $content, $logged, $db, $twig, $template_path, $template;
+		global $content, $template_path, $template;
+
+		$db = app()->get('database');
+		$twig = app()->get('twig');
+		$logged = app()->isLoggedIn();
+		$account_logged = app()->getAccountLogged();
 
 		if(!isset($content[0])) {
 			$content = '';

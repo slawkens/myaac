@@ -3,8 +3,6 @@
  * @var OTS_DB_MySQL $db
  */
 
-use MyAAC\Cache\Cache;
-
 $up = function () use ($db) {
 	$db->dropTable(TABLE_PREFIX . 'hooks');
 
