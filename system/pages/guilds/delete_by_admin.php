@@ -26,7 +26,7 @@ if(empty($errors)) {
 }
 
 if(empty($errors)) {
-	if($logged) {
+	if(logged()) {
 		if(admin()) {
 			$saved = false;
 			if(isset($_POST['todo']) && $_POST['todo'] == 'save') {

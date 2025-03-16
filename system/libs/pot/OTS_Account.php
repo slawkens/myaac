@@ -478,12 +478,12 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
     public function isPremium()
     {
-		global $config;
-        if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return true;
+		$configFreePremium = configLua('freePremium');
+		if(isset($configFreePremium) && getBoolean($configFreePremium)) return true;
 
-	    if(isset($this->data['premium_ends_at'])) {
-		    return $this->data['premium_ends_at'] > time();
-	    }
+		if(isset($this->data['premium_ends_at'])) {
+			return $this->data['premium_ends_at'] > time();
+		}
 
 		if(isset($this->data['premend'])) {
 			return $this->data['premend'] > time();
@@ -772,7 +772,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
         $filter->compareField('account_id', (int) $this->data['id']);
 
 		if(!$withDeleted) {
-			global $db;
+			$db = app()->get('database');
 			if($db->hasColumn('players', 'deletion')) {
 				$filter->compareField('deletion', 0);
 			} else {
@@ -936,7 +936,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			return $this->data['group_id'];
 		}
 
-		global $db;
+		$db = app()->get('database');
 		if($db->hasColumn('accounts', 'group_id')) {
 			$query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
 			// if anything was found
@@ -963,7 +963,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			return $this->data['group_id'];
 		}
 
-		global $db;
+		$db = app()->get('database');
 		if($db->hasColumn('accounts', 'group_id')) {
 			$query = $this->db->query('SELECT `group_id` FROM `accounts` WHERE `id` = ' . (int) $this->getId())->fetch();
 			// if anything was found

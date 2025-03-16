@@ -132,7 +132,7 @@ class CreateCharacter
 			return false;
 		}
 
-		global $db;
+		$db = app()->get('database');
 
 		if($sex == "0")
 			$playerSample->setLookType(136);
@@ -250,7 +250,7 @@ class CreateCharacter
 			return false;
 		}
 
-		global $twig;
+		$twig = app()->get('twig');
 		$twig->display('success.html.twig', array(
 			'title' => 'Character Created',
 			'description' => 'The character <b>' . $name . '</b> has been created.<br/>

@@ -16,7 +16,7 @@ use Twig\Loader\FilesystemLoader;
 class App
 {
 	private bool $isLoggedIn = false;
-	private ?\OTS_Account $accountLogged = null;
+	private ?\OTS_Account $accountLogged;
 	private array $instances = [];
 
 	public function run(): void
@@ -37,9 +37,10 @@ class App
 		$this->accountLogged = $checkLogin['account'];
 		$this->isLoggedIn = $checkLogin['logged'];
 
-		global $logged, $account_logged;
+		global $logged, $account_logged, $logged_flags;
 		$logged = $this->isLoggedIn;
 		$account_logged = $this->accountLogged;
+		$logged_flags = $checkLogin['flags'];
 
 		$statusService = new StatusService();
 		$status = $statusService->checkStatus();

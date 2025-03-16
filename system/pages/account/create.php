@@ -17,8 +17,7 @@ $title = 'Create Account';
 if (setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
-if($logged)
-{
+if(logged()) {
 	echo 'Please logout before attempting to create a new account.';
 	return;
 }

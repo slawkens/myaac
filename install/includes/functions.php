@@ -2,7 +2,9 @@
 defined('MYAAC') or die('Direct access not allowed!');
 function query($query)
 {
-	global $db, $error;
+	global $error;
+
+	$db = app()->get('database');
 
 	try {
 		$db->query($query);

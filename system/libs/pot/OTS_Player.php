@@ -854,9 +854,8 @@ class OTS_Player extends OTS_Row_DAO
 		}
 
 		if(isset($this->data['promotion'])) {
-			global $config;
 			if((int)$this->data['promotion'] > 0)
-				return ($this->data['vocation'] + ($this->data['promotion'] * $config['vocations_amount']));
+				return ($this->data['vocation'] + ($this->data['promotion'] * config('vocations_amount')));
 		}
 
 		return $this->data['vocation'];

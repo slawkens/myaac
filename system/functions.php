@@ -275,7 +275,10 @@ function generateRandomString($length, $lowCase = true, $upCase = false, $numeri
  */
 function getForumBoards()
 {
-	global $db, $canEdit;
+	global $canEdit;
+
+	$db = app()->get('database');
+
 	$sections = $db->query('SELECT `id`, `name`, `description`, `closed`, `guild`, `access`' . ($canEdit ? ', `hide`, `ordering`' : '') . ' FROM `' . TABLE_PREFIX . 'forum_boards` ' . (!$canEdit ? ' WHERE `hide` != 1' : '') .
 		' ORDER BY `ordering`;');
 	if($sections)
@@ -351,13 +354,12 @@ function updateDatabaseConfig($name, $value)
  */
 function encrypt($str)
 {
-	global $config;
-	if(isset($config['database_salt'])) // otserv
-		$str .= $config['database_salt'];
+	$configDatabaseSalt = config('database_salt');
+	if(isset($configDatabaseSalt)) // otserv
+		$str .= $configDatabaseSalt;
 
-	$encryptionType = $config['database_encryption'];
-	if(isset($encryptionType) && strtolower($encryptionType) !== 'plain')
-	{
+	$encryptionType = config('database_encryption');
+	if(isset($encryptionType) && strtolower($encryptionType) !== 'plain') {
 		if($encryptionType === 'vahash')
 			return base64_encode(hash('sha256', $str));
 
@@ -433,7 +435,7 @@ function delete_guild($id)
 	if(count($rank_list) > 0) {
 		$rank_list->orderBy('level');
 
-		global $db;
+		$db = app()->get('database');
 		/**
 		 * @var OTS_GuildRank $rank_in_guild
 		 */
@@ -495,8 +497,10 @@ function tickers()
  */
 function template_place_holder($type): string
 {
-	global $twig, $template_place_holders, $debugBar;
+	global $template_place_holders, $debugBar;
 	$ret = '';
+
+	$twig = app()->get('twig');
 
 	if (isset($debugBar)) {
 		$debugBarRenderer = $debugBar->getJavascriptRenderer();
@@ -529,8 +533,10 @@ function template_place_holder($type): string
  */
 function template_header($is_admin = false): string
 {
-	global $title_full, $twig;
+	global $title_full;
 	$charset = setting('core.charset') ?? 'utf-8';
+
+	$twig = app()->get('twig');
 
 	return $twig->render('templates.header.html.twig',
 		[
@@ -583,7 +589,7 @@ function template_footer(): string
 
 function template_ga_code()
 {
-	global $twig;
+	$twig = app()->get('twig');
 	if(!isset(setting('core.google_analytics_id')[0]))
 		return '';
 
@@ -602,7 +608,7 @@ function template_form()
 	foreach($templates as $value)
 		$options .= '<option ' . ($template_name == $value ? 'SELECTED' : '') . '>' . $value . '</option>';
 
-	global $twig;
+	$twig = app()->get('twig');
 	return $twig->render('forms.change_template.html.twig', ['options' => $options]);
 }
 
@@ -717,13 +723,20 @@ function getSkillName($skillId, $suffix = true)
 	return 'unknown';
 }
 
+function logged(): bool {
+	return app()->isLoggedIn();
+}
+
+function accountLogged(): OTS_Account {
+	$loggedAccount = app()->getAccountLogged();
+	return $loggedAccount ?? new OTS_Account();
+}
 /**
  * Performs flag check on the current logged in user.
  * Table in database: accounts, field: website_flags
  */
 function hasFlag(int $flag): bool {
-	global $logged, $logged_flags;
-	return ($logged && ($logged_flags & $flag) == $flag);
+	return (logged() && (accountLogged()->getWebFlags() & $flag) == $flag);
 }
 /**
  * Check if current logged user have got admin flag set.
@@ -866,7 +879,7 @@ function getWorldName($id)
  */
 function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 {
-	global $mailer, $config;
+	global $mailer;
 
 	if (!setting('core.mail_enabled')) {
 		log_append('mailer-error.log', '_mail() function has been used, but Mail Support is disabled.');
@@ -918,7 +931,7 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	$mailer->From = setting('core.mail_address');
 	$mailer->Sender = setting('core.mail_address');
 	$mailer->CharSet = 'utf-8';
-	$mailer->FromName = $config['lua']['serverName'];
+	$mailer->FromName = configLua('serverName');
 	$mailer->Subject = $subject;
 	$mailer->addAddress($to);
 	$mailer->Body = $tmp_body;
@@ -1110,7 +1123,7 @@ function csrfProtect(): void
 }
 
 function getTopPlayers($limit = 5, $skill = 'level') {
-	global $db;
+	$db = app()->get('database');
 
 	if ($skill === 'level') {
 		$skill = 'experience';
@@ -1253,7 +1266,7 @@ function clearCache()
 			}
 		}
 
-		global $db;
+		$db = app()->get('database');
 		$db->setClearCacheAfter(true);
 	}
 
@@ -1281,7 +1294,8 @@ function clearRouteCache(): void
 
 function getCustomPageInfo($name)
 {
-	global $logged_access;
+	$logged_access = logged() ? accountLogged()->getAccess() : 0;
+
 	$page = Pages::isPublic()
 		->where('name', 'LIKE', $name)
 		->where('access', '<=', $logged_access)
@@ -1295,7 +1309,9 @@ function getCustomPageInfo($name)
 }
 function getCustomPage($name, &$success): string
 {
-	global $twig, $title, $ignore;
+	global $title, $ignore;
+
+	$twig = app()->get('twig');
 
 	$success = false;
 	$content = '';
@@ -1509,8 +1525,7 @@ function verify_number($number, $name, $max_length)
 
 function Outfits_loadfromXML()
 {
-	global $config;
-	$file_path = $config['data_path'] . 'XML/outfits.xml';
+	$file_path = config('data_path') . 'XML/outfits.xml';
 	if (!file_exists($file_path)) {	return null; }
 
 	$xml = new DOMDocument;
@@ -1535,8 +1550,7 @@ function Outfits_loadfromXML()
 
 function Mounts_loadfromXML()
 {
-	global $config;
-	$file_path = $config['data_path'] . 'XML/mounts.xml';
+	$file_path = config('data_path') . 'XML/mounts.xml';
 	if (!file_exists($file_path)) {	return null; }
 
 	$xml = new DOMDocument;
@@ -1659,8 +1673,10 @@ function getGuildLogoById($id)
 	return BASE_URL . GUILD_IMAGES_DIR . $logo;
 }
 
-function displayErrorBoxWithBackButton($errors, $action = null) {
-	global $twig;
+function displayErrorBoxWithBackButton($errors, $action = null)
+{
+	$twig = app()->get('twig');
+
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
 	$twig->display('account.back_button.html.twig', [
 		'action' => $action ?: getLink('')

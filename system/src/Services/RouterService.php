@@ -13,8 +13,8 @@ class RouterService
 
 		$db = app()->get('database');
 		$twig = app()->get('twig');
-		$logged = app()->isLoggedIn();
-		$account_logged = app()->getAccountLogged();
+		$logged = logged();
+		$account_logged = accountLogged();
 
 		if(!isset($content[0])) {
 			$content = '';
@@ -32,7 +32,7 @@ class RouterService
 					$load_it = false;
 				}
 
-				if(!$logged) {
+				if(!logged()) {
 					ob_start();
 					require SYSTEM . 'pages/account/manage.php';
 					$content .= ob_get_contents();

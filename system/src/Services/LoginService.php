@@ -6,8 +6,6 @@ class LoginService
 {
 	public function checkLogin(): array
 	{
-		global $logged_flags;
-
 		$logged = false;
 		$logged_flags = 0;
 		$account_logged = new \OTS_Account();
@@ -23,7 +21,7 @@ class LoginService
 			}
 			else {
 				unsetSession('account');
-				unset($account_logged);
+				$account_logged = new \OTS_Account();
 			}
 		}
 
@@ -44,6 +42,7 @@ class LoginService
 		return [
 			'logged' => $logged,
 			'account' => $account_logged,
+			'flags' => $logged_flags,
 		];
 	}
 }

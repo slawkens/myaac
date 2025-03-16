@@ -37,13 +37,15 @@ class Forum
 	 */
 	public static function canPost($account)
 	{
-		global $db, $config;
-
-		if(!$account->isLoaded() || $account->isBanned())
+		if(!$account->isLoaded() || $account->isBanned()) {
 			return false;
+		}
 
-		if(self::isModerator())
+		if(self::isModerator()) {
 			return true;
+		}
+
+		$db = app()->get('database');
 
 		return
 			$db->query(
@@ -58,7 +60,7 @@ class Forum
 
 	public static function add_thread($title, $body, $section_id, $player_id, $account_id, &$errors)
 	{
-		global $db;
+		$db = app()->get('database');
 		$thread_id = 0;
 		if($db->insert(FORUM_TABLE_PREFIX . 'forum', array(
 			'first_post' => 0,
@@ -83,7 +85,7 @@ class Forum
 
 	public static function add_post($thread_id, $section, $author_aid, $author_guid, $post_text, $post_topic, $smile, $html)
 	{
-		global $db;
+		$db = app()->get('database');
 		$db->insert(FORUM_TABLE_PREFIX . 'forum', array(
 			'first_post' => $thread_id,
 			'section' => $section,
@@ -99,7 +101,7 @@ class Forum
 	}
 	public static function add_board($name, $description, $access, $guild, &$errors)
 	{
-		global $db;
+		$db = app()->get('database');
 		if(isset($name[0]) && isset($description[0]))
 		{
 			$query = $db->select(TABLE_PREFIX . 'forum_boards', array('name' => $name));
@@ -129,19 +131,21 @@ class Forum
 		return !count($errors);
 	}
 
-	public static function get_board($id) {
-		global $db;
+	public static function get_board($id)
+	{
+		$db = app()->get('database');
 		return $db->select(TABLE_PREFIX . 'forum_boards', array('id' => $id));
 	}
 
-	public static function update_board($id, $name, $access, $guild, $description) {
-		global $db;
+	public static function update_board($id, $name, $access, $guild, $description)
+	{
+		$db = app()->get('database');
 		$db->update(TABLE_PREFIX . 'forum_boards', array('name' => $name, 'description' => $description, 'access' => $access, 'guild' => $guild), array('id' => $id));
 	}
 
 	public static function delete_board($id, &$errors)
 	{
-		global $db;
+		$db = app()->get('database');
 		if(isset($id))
 		{
 			if(self::get_board($id) !== false)
@@ -157,7 +161,7 @@ class Forum
 
 	public static function toggleHide_board($id, &$errors)
 	{
-		global $db;
+		$db = app()->get('database');
 		if(isset($id))
 		{
 			$query = self::get_board($id);
@@ -174,7 +178,7 @@ class Forum
 
 	public static function move_board($id, $i, &$errors)
 	{
-		global $db;
+		$db = app()->get('database');
 		$query = self::get_board($id);
 		if($query !== false)
 		{
@@ -295,12 +299,12 @@ class Forum
 		$hasAccess = true;
 		$section = $sections[$board_id];
 		if($section['guild'] > 0) {
-			if(app()->isLoggedIn()) {
+			if(logged()) {
 				$guild = new \OTS_Guild();
 				$guild->load($section['guild']);
 				$status = false;
 				if($guild->isLoaded()) {
-					$account_players = app()->getAccountLogged()->getPlayersList();
+					$account_players = accountLogged()->getPlayersList();
 					foreach ($account_players as $player) {
 						if($guild->hasMember($player)) {
 							$status = true;
@@ -316,7 +320,7 @@ class Forum
 		}
 
 		if($section['access'] > 0) {
-			$logged_access = app()->isLoggedIn() ? app()->getAccountLogged()->getAccess() : 0;
+			$logged_access = logged() ? accountLogged()->getAccess() : 0;
 			if($logged_access < $section['access']) {
 				$hasAccess = false;
 			}

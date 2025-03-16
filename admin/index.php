@@ -6,11 +6,9 @@ use MyAAC\Services\StatusService;
 // few things we'll need
 require '../common.php';
 
-const ADMIN_PANEL = true;
 const MYAAC_ADMIN = true;
 
-if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed']))
-{
+if(file_exists(BASE . 'install') && (!isset($config['installed']) || !$config['installed'])) {
 	header('Location: ' . BASE_URL . 'install/');
 	exit;
 }
@@ -32,8 +30,11 @@ require __DIR__ . '/includes/debugbar.php';
 
 $loginService = new LoginService();
 $checkLogin = $loginService->checkLogin();
+
 $logged = $checkLogin['logged'];
 $account_logged = $checkLogin['account'];
+
+app()->setLoggedIn($logged);
 app()->setAccountLogged($account_logged);
 
 $statusService = new StatusService();
@@ -49,7 +50,7 @@ if (ACTION == 'logout') {
 }
 
 // if we're not logged in - show login box
-if(!$logged || !admin()) {
+if(!logged() || !admin()) {
 	$page = 'login';
 }
 

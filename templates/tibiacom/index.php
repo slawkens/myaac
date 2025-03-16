@@ -24,7 +24,7 @@ if(isset($config['boxes']))
 
 	<script type="text/javascript">
 		var menus = '';
-		var loginStatus="<?php echo (app()->isLoggedIn() ? 'true' : 'false'); ?>";
+		var loginStatus="<?php echo (logged() ? 'true' : 'false'); ?>";
 		<?php
 			if(PAGE !== 'news') {
 				if(isset($_REQUEST['subtopic'])) {
@@ -472,8 +472,6 @@ foreach(config('menu_categories') as $id => $cat) {
 </body>
 </html>
 <?php
-function logo_monster()
-{
-	global $config;
-	return str_replace(" ", "", trim(strtolower($config['logo_monster'])));
+function logo_monster() {
+	return str_replace(" ", "", trim(strtolower(config('logo_monster'))));
 }

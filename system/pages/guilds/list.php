@@ -39,6 +39,6 @@ if(count($guilds_list) > 0)
 
 $twig->display('guilds.list.html.twig', array(
 	'guilds' => $guilds,
-	'logged' => isset($logged) ? $logged : false,
+	'logged' => logged(),
 	'isAdmin' => admin(),
 ));

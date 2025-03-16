@@ -20,25 +20,25 @@ class Data
 
 	public function get($where)
 	{
-		global $db;
+		$db = app()->get('database');
 		return $db->select($this->table, $where);
 	}
 
 	public function add($data)
 	{
-		global $db;
+		$db = app()->get('database');
 		return $db->insert($this->table, $data);
 	}
 
 	public function delete($data, $where)
 	{
-		global $db;
+		$db = app()->get('database');
 		return $db->delete($this->table, $data, $where);
 	}
 
 	public function update($data, $where)
 	{
-		global $db;
+		$db = app()->get('database');
 		return $db->update($this->table, $data, $where);
 	}
 }

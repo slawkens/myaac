@@ -18,7 +18,7 @@ if ($ret === false) {
 	return;
 }
 
-if(!$logged) {
+if(!logged()) {
 	$extra_url = '';
 	if(isset($_GET['thread_id'])) {
 		$extra_url = '?action=new_post&thread_id=' . $_GET['thread_id'];

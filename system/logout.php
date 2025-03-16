@@ -12,7 +12,10 @@ use MyAAC\CsrfToken;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
-if(isset($account_logged) && $account_logged->isLoaded()) {
+$account_logged = accountLogged();
+$hooks = app()->get('hooks');
+
+if($account_logged !== null && $account_logged->isLoaded()) {
 	if($hooks->trigger(HOOK_LOGOUT, ['account_id' => $account_logged->getId()])) {
 		unsetSession('account');
 		unsetSession('password');
@@ -20,7 +23,11 @@ if(isset($account_logged) && $account_logged->isLoaded()) {
 
 		CsrfToken::generate();
 
+		global $logged, $account_logged;
 		$logged = false;
-		unset($account_logged);
+		$account_logged = new OTS_Account();
+
+		app()->setLoggedIn($logged);
+		app()->setAccountLogged($account_logged);
 	}
 }

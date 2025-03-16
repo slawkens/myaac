@@ -21,7 +21,7 @@
 </head>
 <body class="sidebar-mini ">
 <?php $hooks->trigger(HOOK_ADMIN_BODY_START); ?>
-<?php if ($logged && admin()) { ?>
+<?php if (logged() && admin()) { ?>
 	<div class="wrapper">
 		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
 			<ul class="navbar-nav">
@@ -177,7 +177,7 @@
 		<div id="sidebar-overlay"></div>
 	</div>
 
-<?php } else if (!$logged && !admin()) {
+<?php } else if (!logged() && !admin()) {
 	echo $content;
 }
 ?>
@@ -185,7 +185,7 @@
 /**
  * @var OTS_Account $account_logged
  */
-if ($logged && admin()) {
+if (logged() && admin()) {
 	$twig->display('admin-bar.html.twig', [
 		'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
 	]);

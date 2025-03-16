@@ -490,7 +490,9 @@ class OTS_Group extends OTS_Row_DAO implements IteratorAggregate, Countable
         // creates filter
         $filter = new OTS_SQLFilter();
         $filter->compareField('group_id', (int) $this->data['id']);
-		global $db;
+
+	    $db = app()->get('database');
+
 		if($db->hasColumn('players', 'deletion'))
 			$filter->compareField('deletion', 0);
 		else

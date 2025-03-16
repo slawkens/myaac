@@ -29,7 +29,7 @@ if(empty($errors)) {
 }
 
 if(empty($errors)) {
-	if($logged) {
+	if(logged()) {
 		$guild_leader_char = $guild->getOwner();
 		$rank_list = $guild->getGuildRanksList();
 		$rank_list->orderBy('level', POT::ORDER_DESC);

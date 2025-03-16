@@ -13,7 +13,7 @@ class Plugins {
 
 	public static function getRoutes()
 	{
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if ($cache->enabled()) {
 			$tmp = '';
 			if ($cache->fetch('plugins_routes', $tmp)) {
@@ -146,7 +146,7 @@ class Plugins {
 
 	public static function getThemes()
 	{
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if ($cache->enabled()) {
 			$tmp = '';
 			if ($cache->fetch('plugins_themes', $tmp)) {
@@ -178,7 +178,7 @@ class Plugins {
 
 	public static function getCommands()
 	{
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if ($cache->enabled()) {
 			$tmp = '';
 			if ($cache->fetch('plugins_commands', $tmp)) {
@@ -207,7 +207,7 @@ class Plugins {
 
 	public static function getHooks()
 	{
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if ($cache->enabled()) {
 			$tmp = '';
 			if ($cache->fetch('plugins_hooks', $tmp)) {
@@ -257,7 +257,7 @@ class Plugins {
 
 	public static function getAllPluginsSettings()
 	{
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if ($cache->enabled()) {
 			$tmp = '';
 			if ($cache->fetch('plugins_settings', $tmp)) {
@@ -287,7 +287,7 @@ class Plugins {
 
 	public static function getAllPluginsJson($disabled = false)
 	{
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if ($cache->enabled()) {
 			$tmp = '';
 			if ($cache->fetch('plugins', $tmp)) {
@@ -357,7 +357,7 @@ class Plugins {
 
 	public static function install($file): bool
 	{
-		global $db;
+		$db = app()->get('database');
 
 		if(!\class_exists('\ZipArchive')) {
 			throw new \RuntimeException('Please install PHP zip extension. Plugins upload disabled until then.');
@@ -660,7 +660,7 @@ class Plugins {
 			return false;
 		}
 
-		global $db;
+		$db = app()->get('database');
 		if (file_exists(BASE . $plugin_json['install'])) {
 			$db->revalidateCache();
 			require BASE . $plugin_json['install'];
@@ -770,7 +770,7 @@ class Plugins {
 	 */
 	public static function installMenus($templateName, $menus, $clearOld = false)
 	{
-		global $db;
+		$db = app()->get('database');
 
 		if ($clearOld) {
 			Menu::where('template', $templateName)->delete();
