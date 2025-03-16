@@ -114,7 +114,7 @@
 						{% else %}
 						<b>Before you can create a guild you must login.</b>
 						<br/>
-						<form action="?subtopic=accountmanagement&redirect={{ getLink('guilds') }}" method="post">
+						<form action="{{ getLink('account/manage') }}?redirect={{ getLink('guilds') }}" method="post">
 							{{ csrf() }}
 							{% include('buttons.login.html.twig') %}
 						</form>
