@@ -46,12 +46,13 @@ class StatusService
 			}
 		}
 
-		if(isset($config['lua']['statustimeout'])) {
-			$config['lua']['statusTimeout'] = $config['lua']['statustimeout'];
+		$configStatustimeout = configLua('statustimeout');
+		if(isset($configStatustimeout)) {
+			configLua(['statusTimeout', $configStatustimeout]);
 		}
 
 		// get status timeout from server config
-		$status_timeout = eval('return ' . $config['lua']['statusTimeout'] . ';') / 1000 + 1;
+		$status_timeout = eval('return ' . configLua('statusTimeout') . ';') / 1000 + 1;
 		$status_interval = setting('core.status_interval');
 		if($status_interval && $status_timeout < $status_interval) {
 			$status_timeout = $status_interval;
@@ -60,8 +61,6 @@ class StatusService
 		if($status['lastCheck'] + $status_timeout < time()) {
 			return $this->updateStatus();
 		}
-
-		$cache = app()->get('cache');
 	}
 
 	public function updateStatus(): array
@@ -130,5 +129,7 @@ class StatusService
 				registerDatabaseConfig('status_' . $key, $value);
 			}
 		}
+
+		return $status;
 	}
 }
