@@ -21,7 +21,7 @@
 </head>
 <body class="sidebar-mini ">
 <?php $hooks->trigger(HOOK_ADMIN_BODY_START); ?>
-<?php if (logged() && admin()) { ?>
+<?php if (admin()) { ?>
 	<div class="wrapper">
 		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
 			<ul class="navbar-nav">
@@ -40,7 +40,7 @@
 		</nav>
 		<aside class="main-sidebar sidebar-dark-info elevation-4">
 			<a href="<?php echo ADMIN_URL; ?>" class="brand-link navbar-info">
-				<img src="<?php echo ADMIN_URL; ?>images/logo.png" class="brand-image img-circle elevation-3" style="opacity: .8">
+				<img src="<?php echo ADMIN_URL; ?>images/logo.png" class="brand-image img-circle elevation-3" style="opacity: .8" alt="MyAAC">
 				<span class="brand-text"><b>My</b>AAC</span>
 			</a>
 			<div class="sidebar">
@@ -97,20 +97,6 @@
 								<?php
 							}
 						}
-
-						$query = $db->query('SELECT `name`, `page`, `flags` FROM `' . TABLE_PREFIX . 'admin_menu` ORDER BY `ordering`');
-						$menu_db = $query->fetchAll();
-						foreach ($menu_db as $item) {
-							if ($item['flags'] == 0 || hasFlag($item['flags'])) { ?>
-								<li class="nav-item">
-									<a class="nav-link<?php echo($page == $item['page'] ? ' active' : '') ?>" href="?p=<?php echo $item['page'] ?>">
-										<i class="nav-icon fas fa-link"></i>
-										<p><?php echo $item['name'] ?></p>
-									</a>
-								</li>
-								<?php
-							}
-						}
 						?>
 					</ul>
 				</nav>
@@ -122,7 +108,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h3 class="m-0 text-dark"><?php echo(isset($title) ? $title : ''); ?><small> - Admin Panel</small></h3>
+							<h3 class="m-0 text-dark"><?php echo($title ?? ''); ?><small> - Admin Panel</small></h3>
 						</div>
 						<div class="col-sm-6">
 							<div class="float-sm-right d-none d-sm-inline">
@@ -182,12 +168,9 @@
 }
 ?>
 <?php
-/**
- * @var OTS_Account $account_logged
- */
-if (logged() && admin()) {
+if (admin()) {
 	$twig->display('admin-bar.html.twig', [
-		'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+		'username' => USE_ACCOUNT_NAME ? accountLogged()->getName() : accountLogged()->getId()
 	]);
 }
 ?>

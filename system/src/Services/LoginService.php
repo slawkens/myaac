@@ -39,6 +39,9 @@ class LoginService
 		}
 		setSession('last_uri', $_SERVER['REQUEST_URI']);
 
+		app()->setLoggedIn($logged);
+		app()->setAccountLogged($account_logged);
+
 		return [
 			'logged' => $logged,
 			'account' => $account_logged,

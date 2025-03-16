@@ -21,11 +21,7 @@ class App
 
 	public function run(): void
 	{
-		$configInstalled = config('installed');
-		if((!isset($configInstalled) || !$configInstalled) && file_exists(BASE . 'install')) {
-			header('Location: ' . BASE_URL . 'install/');
-			exit();
-		}
+		self::preInstallCheck();
 
 		$template_place_holders = [];
 
@@ -34,9 +30,8 @@ class App
 
 		$loginService = new LoginService();
 		$checkLogin = $loginService->checkLogin();
-		$this->accountLogged = $checkLogin['account'];
-		$this->isLoggedIn = $checkLogin['logged'];
 
+		// TODO: Remove those globals, once plugins migrated
 		global $logged, $account_logged, $logged_flags;
 		$logged = $this->isLoggedIn;
 		$account_logged = $this->accountLogged;
@@ -167,5 +162,14 @@ class App
 		}
 
 		return $this->instances[$what];
+	}
+
+	public static function preInstallCheck(): void
+	{
+		$configInstalled = config('installed');
+		if((!isset($configInstalled) || !$configInstalled) && file_exists(BASE . 'install')) {
+			header('Location: ' . BASE_URL . 'install/');
+			exit();
+		}
 	}
 }
