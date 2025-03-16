@@ -47,8 +47,7 @@ $level_in_guild = 0;
 
 $players_from_account_in_guild = array();
 $players_from_account_ids = array();
-if($logged)
-{
+if(logged()) {
 	$account_players = $account_logged->getPlayers();
 	foreach($account_players as $player)
 	{
@@ -127,7 +126,7 @@ include(SYSTEM . 'libs/pot/InvitesDriver.php');
 new InvitesDriver($guild);
 $invited_list = $guild->listInvites();
 $show_accept_invite = 0;
-if($logged && count($invited_list) > 0)
+if(logged() && count($invited_list) > 0)
 {
 	foreach($invited_list as $invited_player)
 	{

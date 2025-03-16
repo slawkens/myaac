@@ -13,7 +13,7 @@ $title = 'Login';
 csrfProtect();
 
 require PAGES . 'account/login.php';
-if ($logged) {
+if (logged()) {
 	header('Location: ' . (admin() ? ADMIN_URL : BASE_URL));
 	return;
 }

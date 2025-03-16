@@ -15,7 +15,7 @@ require __DIR__ . '/base.php';
 //set rights in guild
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : NULL;
 $name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
-if(!$logged) {
+if(!logged()) {
 	$errors[] = "You are not logged in. You can't invite players.";
 }
 

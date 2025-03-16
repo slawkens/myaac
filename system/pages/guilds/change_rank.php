@@ -12,7 +12,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 require __DIR__ . '/base.php';
 
-if(!$logged) {
+if(!logged()) {
 	$errors[] = "You are not logged in. You can't change rank.";
 }
 else {

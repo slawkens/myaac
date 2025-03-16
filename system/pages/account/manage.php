@@ -14,7 +14,7 @@ $title = 'Account Management';
 require __DIR__ . '/login.php';
 require __DIR__ . '/base.php';
 
-if(!$logged) {
+if(!logged()) {
 	return;
 }
 
@@ -34,7 +34,7 @@ if(isset($_REQUEST['redirect']))
 	return;
 }
 
-$groups = new OTS_Groups_List();
+$groups = app()->get('groups');
 
 $freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
 $dayOrDays = $account_logged->getPremDays() == 1 ? 'day' : 'days';

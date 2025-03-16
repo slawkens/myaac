@@ -12,7 +12,7 @@ if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['save
 	return;
 }
 
-$cache = Cache::getInstance();
+$cache = app()->get('cache');
 if ($cache->enabled()) {
 	// clear plugin_hooks to have fresh hooks
 	$cache->delete('plugins_hooks');
@@ -58,7 +58,7 @@ if ($db->hasTable('players')) {
 		$player_used = &$player_db;
 	}
 
-	$groups = new OTS_Groups_List();
+	$groups = app()->get('groups');
 	$player_used->setGroupId($groups->getHighestId());
 }
 

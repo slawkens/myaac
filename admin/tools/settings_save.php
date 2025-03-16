@@ -1,6 +1,6 @@
 <?php
 
-use MyAAC\Hooks;
+use MyAAC\Services\LoginService;
 use MyAAC\Settings;
 
 const MYAAC_ADMIN = true;
@@ -8,7 +8,9 @@ const MYAAC_ADMIN = true;
 require '../../common.php';
 require SYSTEM . 'functions.php';
 require SYSTEM . 'init.php';
-require SYSTEM . 'login.php';
+
+$loginService = new LoginService();
+$loginService->checkLogin();
 
 if(!admin()) {
 	http_response_code(500);
@@ -27,7 +29,7 @@ if (!isset($_POST['settings'])) {
 	die('Please enter settings.');
 }
 
-$settings = Settings::getInstance();
+$settings = app()->get('settings');
 
 $success = $settings->save($_REQUEST['plugin'], $_POST['settings']);
 

@@ -57,13 +57,14 @@ function admin_give_coins($coins)
 
 function admin_give_premdays($days)
 {
-	global $db, $freePremium;
+	global $freePremium;
 
 	if ($freePremium) {
 		displayMessage('Premium days not supported. Free Premium enabled.');
 		return;
 	}
 
+	$db = app()->get('database');
 	$value = $days * 86400;
 	$now = time();
 	// othire
@@ -174,9 +175,11 @@ else {
 }
 
 function displayMessage($message, $success = false) {
-	global $twig, $hasCoinsColumn, $hasPointsColumn, $freePremium;
+	global $hasCoinsColumn, $hasPointsColumn, $freePremium;
 
 	$success ? success($message): error($message);
+
+	$twig = app()->get('twig');
 
 	$twig->display('admin.tools.account.html.twig', array(
 		'hasCoinsColumn' => $hasCoinsColumn,

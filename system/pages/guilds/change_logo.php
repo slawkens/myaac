@@ -27,7 +27,7 @@ if(empty($errors)) {
 }
 
 if(empty($errors)) {
-	if($logged) {
+	if(logged()) {
 		$guild_leader_char = $guild->getOwner();
 		$guild_leader = false;
 		$account_players = $account_logged->getPlayers();

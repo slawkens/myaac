@@ -284,8 +284,6 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
     }
 
     public function hasMember(OTS_Player $player) {
-        global $db;
-
         if(!$player || !$player->isLoaded()) {
             return false;
         }

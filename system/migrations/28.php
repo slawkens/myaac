@@ -3,12 +3,10 @@
  * @var OTS_DB_MySQL $db
  */
 
-use MyAAC\Cache\Cache;
-
 $up = function () use ($db) {
 	$db->dropTable(TABLE_PREFIX . 'hooks');
 
-	$cache = Cache::getInstance();
+	$cache = app()->get('cache');
 	if($cache->enabled()) {
 		$cache->delete('hooks');
 	}
@@ -17,7 +15,7 @@ $up = function () use ($db) {
 $down = function () use ($db) {
 	$db->exec(file_get_contents(__DIR__ . '/28-hooks.sql'));
 
-	$cache = Cache::getInstance();
+	$cache = app()->get('cache');
 	if($cache->enabled()) {
 		$cache->delete('hooks');
 	}

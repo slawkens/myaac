@@ -1,5 +1,7 @@
 <?php
 
+global $menus;
+
 $menus = [
 	['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'order' => 10, 'link' => 'dashboard'],
 	['name' => 'Settings', 'icon' => 'edit', 'order' => 19, 'link' =>

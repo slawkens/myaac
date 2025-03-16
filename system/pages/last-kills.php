@@ -15,6 +15,7 @@ $last_kills = array();
 $players_deaths_count = 0;
 
 $tmp = null;
+$cache = app()->get('cache');
 if($cache->enabled() && $cache->fetch('last_kills', $tmp)) {
 	$last_kills = unserialize($tmp);
 }

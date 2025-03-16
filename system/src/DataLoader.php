@@ -81,12 +81,12 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if ($cache->enabled()) {
 			$cache->delete('towns'); // will be reloaded after next page load
 		}
 
-		global $db;
+		$db = app()->get('database');
 		if ($db->hasTable('towns') && Town::count() > 0) {
 			success(self::$locale['step_database_loaded_towns'] . self::getLoadedTime());
 		}

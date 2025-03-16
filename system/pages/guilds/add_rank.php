@@ -22,7 +22,7 @@ if(empty($errors)) {
 	if(!Validator::rankName($rank_name)) {
 		$errors[] = 'Invalid rank name format.';
 	}
-	if(!$logged) {
+	if(!logged()) {
 		$errors[] = 'You are not logged.';
 	}
 	$guild = new OTS_Guild();

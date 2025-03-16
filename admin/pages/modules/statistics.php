@@ -7,6 +7,8 @@ use MyAAC\Models\Monster;
 use MyAAC\Models\Player;
 
 defined('MYAAC') or die('Direct access not allowed!');
+
+global $eloquentConnection;
 $count = $eloquentConnection->query()
 	->select([
 		'total_accounts' => Account::selectRaw('COUNT(id)'),

@@ -24,7 +24,7 @@ if(isset($config['boxes']))
 
 	<script type="text/javascript">
 		var menus = '';
-		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
+		var loginStatus="<?php echo (logged() ? 'true' : 'false'); ?>";
 		<?php
 			if(PAGE !== 'news') {
 				if(isset($_REQUEST['subtopic'])) {
@@ -120,7 +120,7 @@ if(isset($config['boxes']))
 
 		<?php
 			$menuInitStr = '';
-			foreach ($config['menu_categories'] as $item) {
+			foreach (config('menu_categories') as $item) {
 				if ($item['id'] !== 'shops' || setting('core.gifts_system')) {
 					$menuInitStr .= $item['id'] . '=' . ($item['id'] === 'news' ? '1' : '0') . '&';
 				}
@@ -332,7 +332,6 @@ if(isset($config['boxes']))
     <div id="LoginBottom" class="Loginstatus" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif)" ></div>
   </div>
 
-<div-- id='Menu'>
 <div id='MenuTop' style='background-image:url(<?php echo $template_path; ?>/images/general/box-top.gif);'></div>
 
 <?php
@@ -348,7 +347,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 }
 
 $i = 0;
-foreach($config['menu_categories'] as $id => $cat) {
+foreach(config('menu_categories') as $id => $cat) {
 	if(!isset($menus[$id]) || ($id == MENU_CATEGORY_SHOP && !setting('core.gifts_system'))) {
 		continue;
 	}
@@ -473,8 +472,6 @@ foreach($config['menu_categories'] as $id => $cat) {
 </body>
 </html>
 <?php
-function logo_monster()
-{
-	global $config;
-	return str_replace(" ", "", trim(strtolower($config['logo_monster'])));
+function logo_monster() {
+	return str_replace(" ", "", trim(strtolower(config('logo_monster'))));
 }

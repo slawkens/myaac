@@ -50,7 +50,7 @@ if(!empty($action))
 	if (isRequestMethod('post')) {
 		if ($action == 'new') {
 			if (isset($forum_section) && $forum_section != '-1') {
-				$forum_add = Forum::add_thread($p_title, $body, $forum_section, $player_id, $account_logged->getId(), $errors);
+				$forum_add = Forum::add_thread($p_title, $body, $forum_section, $player_id, accountLogged()->getId(), $errors);
 			}
 
 			if (isset($p_title) && News::add($p_title, $body, $type, $category, $player_id, isset($forum_add) && $forum_add != 0 ? $forum_add : 0, $article_text, $article_image, $errors)) {
@@ -113,7 +113,7 @@ if($action == 'edit' || $action == 'new') {
 		$player->load($player_id);
 	}
 
-	$account_players = $account_logged->getPlayersList();
+	$account_players = accountLogged()->getPlayersList();
 	$account_players->orderBy('group_id', POT::ORDER_DESC);
 	$twig->display('admin.news.form.html.twig', array(
 		'action' => $action,

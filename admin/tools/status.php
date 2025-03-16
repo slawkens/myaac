@@ -1,14 +1,20 @@
 <?php
+
+use MyAAC\Services\LoginService;
+
 define('MYAAC_ADMIN', true);
 
 require '../../common.php';
 require SYSTEM . 'init.php';
 require SYSTEM . 'functions.php';
 require SYSTEM . 'status.php';
-require SYSTEM . 'login.php';
 
-if(!admin())
+$loginService = new LoginService();
+$loginService->checkLogin();
+
+if(!admin()) {
 	die('Access denied.');
+}
 
 if(!$status['online'])
 	die('Offline');

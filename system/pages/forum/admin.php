@@ -17,7 +17,7 @@ if(!$canEdit) {
 	return;
 }
 
-$groupsList = new OTS_Groups_List();
+$groupsList = app()->get('groups');
 $groups = [
 	['id' => 0, 'name' => 'Guest'],
 ];

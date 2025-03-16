@@ -71,7 +71,7 @@ else if (isset($_REQUEST['search'])) {
 ?>
 <div class="row">
 	<?php
-	$groups = new OTS_Groups_List();
+	$groups = app()->get('groups');
 	if ($id > 0) {
 		$player = new OTS_Player();
 		$player->load($id);

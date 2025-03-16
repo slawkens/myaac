@@ -11,7 +11,7 @@ class Guild extends Model {
 
 	public function owner()
 	{
-		global $db;
+		$db = app()->get('database');
 		$column = 'ownerid';
 		if($db->hasColumn('guilds', 'owner_id')) {
 			$column = 'owner_id';

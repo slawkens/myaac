@@ -139,7 +139,7 @@ $highscores = [];
 $needReCache = true;
 $cacheKey = 'highscores_' . $skill . '_' . $vocation . '_' . $page . '_' . $configHighscoresPerPage;
 
-$cache = Cache::getInstance();
+$cache = app()->get('cache');
 if ($cache->enabled()) {
 	$tmp = '';
 	if ($cache->fetch($cacheKey, $tmp)) {

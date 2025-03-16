@@ -99,9 +99,9 @@ else {
 }
 
 
-function displayMessage($message, $success = false) {
-	global $twig;
-
+function displayMessage($message, $success = false)
+{
+	$twig = app()->get('twig');
 	$success ? success($message): error($message);
 	$twig->display('admin.tools.teleport.html.twig', array());
 }

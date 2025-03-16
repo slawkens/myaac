@@ -33,7 +33,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
  */
     public function __construct($file = '')
     {
-		global $db;
+		$db = app()->get('db');
 		if($db->hasTable('groups')) { // read groups from database
 			foreach($db->query('SELECT `id`, `name`, `access` FROM `groups`;') as $group)
 			{
@@ -47,10 +47,8 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			return;
 		}
 
-		if(!isset($file[0]))
-		{
-			global $config;
-			$file = $config['data_path'] . 'XML/groups.xml';
+		if(!isset($file[0])) {
+			$file = config('data_path') . 'XML/groups.xml';
 		}
 
 		if(!@file_exists($file)) {
@@ -59,7 +57,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			return;
 		}
 
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 
 		$data = array();
 		if($cache->enabled())

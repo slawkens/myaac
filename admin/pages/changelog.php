@@ -110,7 +110,7 @@ if($action == 'edit' || $action == 'new') {
 		$player->load($player_id);
 	}
 
-	$account_players = $account_logged->getPlayersList();
+	$account_players = accountLogged()->getPlayersList();
 	$account_players->orderBy('group_id', POT::ORDER_DESC);
 	$twig->display('admin.changelog.form.html.twig', array(
 		'action' => $action,

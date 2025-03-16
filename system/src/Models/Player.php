@@ -40,7 +40,7 @@ class Player extends Model {
 
 	public function scopeOrderBySkill($query, $value)
 	{
-		global $db;
+		$db = app()->get('database');
 		$query->when($db->hasColumn('players', 'skill_fist'), function ($query) {
 
 		});
@@ -69,8 +69,9 @@ class Player extends Model {
 		return false;
 	}
 
-	public function scopeNotDeleted($query) {
-		global $db;
+	public function scopeNotDeleted($query)
+	{
+		$db = app()->get('database');
 
 		$column =  'deleted';
 		if($db->hasColumn('players', 'deletion')) {
@@ -82,7 +83,7 @@ class Player extends Model {
 
 	public function scopeWithOnlineStatus($query)
 	{
-		global $db;
+		$db = app()->get('database');
 		if ($db->hasColumn('players', 'online')) {
 			$query->addSelect('online');
 		}
@@ -99,7 +100,7 @@ class Player extends Model {
 
 	public function getOnlineStatusAttribute()
 	{
-		global $db;
+		$db = app()->get('database');
 		if ($db->hasColumn('players', 'online')) {
 			return $this->online;
 		}

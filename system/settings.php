@@ -213,11 +213,9 @@ return [
 			'default' => 'myaac_',
 		],
 		'backward_support' => [
+			'hidden' => true,
 			'name' => 'Gesior Backward Support',
 			'type' => 'boolean',
-			'desc' => 'gesior backward support (templates & pages)<br/>' .
-						'allows using gesior templates and pages with myaac<br/>' .
-						'might bring some performance when disabled',
 			'default' => true,
 		],
 		'anonymous_usage_statistics' => [
@@ -1546,7 +1544,8 @@ Sent by MyAAC,<br/>
 			'default' => 'premium_points',
 			'callbacks' => [
 				'beforeSave' => function($key, $value, &$errorMessage) {
-					global $db;
+					$db = app()->get('database');
+
 					if ($value == 'coins' && !$db->hasColumn('accounts', 'coins')) {
 						$errorMessage = "Shop: Donate Column: Cannot set column to coins, because it doesn't exist in database.";
 						return false;

@@ -56,7 +56,7 @@ if(empty($guild_errors)) {
 	}
 }
 if(empty($guild_errors) && empty($guild_errors2)) {
-	if($logged) {
+	if(logged()) {
 		$guild_leader_char = $guild->getOwner();
 		$guild_leader = false;
 		$account_players = $account_logged->getPlayers();

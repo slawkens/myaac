@@ -203,7 +203,7 @@ if (isset($_POST['template'])) {
 
 function onTemplateMenusChange(): void
 {
-	$cache = Cache::getInstance();
+	$cache = app()->get('cache');
 	if ($cache->enabled()) {
 		$cache->delete('template_menus');
 	}

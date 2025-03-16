@@ -15,21 +15,18 @@ $title = 'Notepad';
 
 csrfProtect();
 
-/**
- * @var OTS_Account $account_logged
- */
 $_content = '';
-$notepad = ModelsNotepad::where('account_id', $account_logged->getId())->first();
+$notepad = ModelsNotepad::where('account_id', accountLogged()->getId())->first();
 if (isset($_POST['content'])) {
 	$_content = html_entity_decode(stripslashes($_POST['content']));
 	if (!$notepad) {
 		ModelsNotepad::create([
-			'account_id' => $account_logged->getId(),
+			'account_id' => accountLogged()->getId(),
 			'content' => $_content
 		]);
 	}
 	else {
-		ModelsNotepad::where('account_id', $account_logged->getId())->update(['content' => $_content]);
+		ModelsNotepad::where('account_id', accountLogged()->getId())->update(['content' => $_content]);
 	}
 
 	success('Saved at ' . date('H:i'));

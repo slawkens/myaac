@@ -33,7 +33,9 @@ if ($db->hasTable('players')) {
 	$time = time();
 	function insert_sample_if_not_exist($p)
 	{
-		global $db, $success, $deleted, $time;
+		global $success, $deleted, $time;
+
+		$db = app()->get('database');
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($p['name']));
 		if ($query->rowCount() == 0) {

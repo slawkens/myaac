@@ -16,7 +16,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Change Comment';
 require PAGES . 'account/base.php';
 
-if(!$logged) {
+if(!logged()) {
 	return;
 }
 

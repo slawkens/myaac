@@ -33,7 +33,9 @@ class UsageStatistics {
 	}
 
 	public static function getStats() {
-		global $config, $db;
+		global $config;
+
+		$db = app()->get('database');
 
 		$ret = array();
 

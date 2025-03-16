@@ -655,18 +655,19 @@ class OTS_Player extends OTS_Row_DAO
 		//if($path == '')
 		//	$path = $config['data_path'].'XML/groups.xml';
 
-		if( !isset($this->data['group_id']) )
-		{
+		if(!isset($this->data['group_id'])) {
 			throw new E_OTS_NotLoaded();
 		}
 
 		//$groups = new DOMDocument();
 		//$groups->load($path);
 
-		global $groups;
+		$groups = app()->get('groups');
 		$tmp = $groups->getGroup($this->data['group_id']);
-		if($tmp)
+
+		if($tmp) {
 			return $tmp;
+		}
 
 		return new OTS_Group();
 			// echo 'error while loading group..';
@@ -853,9 +854,8 @@ class OTS_Player extends OTS_Row_DAO
 		}
 
 		if(isset($this->data['promotion'])) {
-			global $config;
 			if((int)$this->data['promotion'] > 0)
-				return ($this->data['vocation'] + ($this->data['promotion'] * $config['vocations_amount']));
+				return ($this->data['vocation'] + ($this->data['promotion'] * config('vocations_amount')));
 		}
 
 		return $this->data['vocation'];

@@ -48,7 +48,7 @@ function getColorByPercent($percent)
 			<tr BGCOLOR="'.$bgcolor.'">
 				<td>
 					<a href="';
-					if($logged)
+					if(logged())
 						echo $link.'?id='.$poll['id'];
 					else
 						echo getLink('account/manage') . '?redirect=' . urlencode($link.'?id='.$poll['id']);
@@ -77,7 +77,7 @@ function getColorByPercent($percent)
 			<tr BGCOLOR="'.$bgcolor.'">
 				<td>
 					<a href="';
-					if($logged)
+					if(logged())
 						echo $link.'?id='.$poll['id'];
 					else
 						echo getLink('account/manage') . '?redirect=' . urlencode($link.'?id='.$poll['id']);
@@ -98,8 +98,7 @@ function getColorByPercent($percent)
 		$showed=true;
 	}
 
-	if(!$logged)
-	{
+	if(!logged()) {
 		echo  'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . BASE_URL . urlencode('?subtopic=polls') . '">Log in</a> to vote in polls.<br /><br />';
 		return;
 	}

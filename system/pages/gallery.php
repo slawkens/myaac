@@ -132,7 +132,7 @@ class Gallery
 {
 	static public function add($comment, $image, $author, &$errors)
 	{
-		global $db;
+		$db = app()->get('database');
 		if(isset($comment[0]) && isset($image[0]) && isset($author[0]))
 		{
 			$query =
@@ -225,7 +225,7 @@ class Gallery
 
 	static public function move($id, $i, &$errors)
 	{
-		global $db;
+		$db = app()->get('database');
 		$query = self::get($id);
 		if($query !== false)
 		{

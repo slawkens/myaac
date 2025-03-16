@@ -168,10 +168,8 @@ class FAQ
 
 	static public function move($id, $i, &$errors)
 	{
-		global $db;
 		$row = ModelsFAQ::find($id);
-		if($row)
-		{
+		if($row) {
 			$ordering = $row->ordering + $i;
 			$old_record = ModelsFAQ::where('ordering', $ordering)->first();
 			if($old_record) {
@@ -182,8 +180,9 @@ class FAQ
 			$row->ordering = $ordering;
 			$row->save();
 		}
-		else
+		else {
 			$errors[] = 'FAQ with id ' . $id . ' does not exists.';
+		}
 
 		return !count($errors);
 	}

@@ -13,7 +13,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Register Account';
 require __DIR__ . '/base.php';
 
-if(!$logged) {
+if(!logged()) {
 	return;
 }
 

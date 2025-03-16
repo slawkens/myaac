@@ -15,7 +15,7 @@ require __DIR__ . '/base.php';
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 $name = stripslashes($_REQUEST['name']);
 
-if(!$logged)
+if(!logged())
 	$errors[] = 'You are not logged in. You can\'t delete invitations.';
 
 if(!Validator::guildName($guild_name))

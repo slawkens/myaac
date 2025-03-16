@@ -105,7 +105,7 @@ if(isset($_GET['archive']))
 header('X-XSS-Protection: 0');
 $title = 'Latest News';
 
-$cache = Cache::getInstance();
+$cache = app()->get('cache');
 
 $news_cached = false;
 if($cache->enabled())
