@@ -9,7 +9,7 @@ class RouterService
 {
 	public function handleRouting(): array
 	{
-		global $content, $template_path, $template;
+		global $content, $template_path, $template, $canEdit, $action;
 
 		$db = app()->get('database');
 		$twig = app()->get('twig');

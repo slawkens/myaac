@@ -51,6 +51,7 @@ $hooks = app()->get('hooks');
 require_once SYSTEM . 'twig.php';
 
 // action, used by many pages
+global $action;
 $action = $_REQUEST['action'] ?? '';
 define('ACTION', $action);
 
