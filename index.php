@@ -27,5 +27,4 @@
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';
 
-$app = new \MyAAC\App\App();
-$app->run();
+app()->run();

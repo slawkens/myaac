@@ -35,6 +35,11 @@ class App
 		$loginService = new LoginService();
 		$checkLogin = $loginService->checkLogin();
 		$this->accountLogged = $checkLogin['account'];
+		$this->isLoggedIn = $checkLogin['logged'];
+
+		global $logged, $account_logged;
+		$logged = $this->isLoggedIn;
+		$account_logged = $this->accountLogged;
 
 		$statusService = new StatusService();
 		$status = $statusService->checkStatus();
@@ -76,12 +81,9 @@ class App
 			]);
 		}
 
-		global $template_path, $template_index;
+		global $template_path, $template_index, $menus;
 		$title_full =  (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];
-
-		global $logged, $account_logged;
-		$logged = $checkLogin['logged'];
-		$account_logged = $checkLogin['account'];
+		$menus = get_template_menus();
 
 		require $template_path . '/' . $template_index;
 

@@ -92,11 +92,8 @@ class RouterService
 
 		$ignore = false;
 
-		/** @var boolean $logged */
-		/** @var \OTS_Account $account_logged */
 		global $logged_access;
 		$logged_access = 0;
-		$account_logged = app()->getAccountLogged();
 		if($logged && $account_logged && $account_logged->isLoaded()) {
 			$logged_access = $account_logged->getAccess();
 		}
