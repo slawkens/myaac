@@ -25,7 +25,7 @@ if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 header('X-XSS-Protection:0');
 
 $name = $p_title = null;
-$groups = new OTS_Groups_List();
+$groups = app()->get('groups');
 
 $php = false;
 $enable_tinymce = true;

@@ -58,7 +58,7 @@ if ($db->hasTable('players')) {
 		$player_used = &$player_db;
 	}
 
-	$groups = new OTS_Groups_List();
+	$groups = app()->get('groups');
 	$player_used->setGroupId($groups->getHighestId());
 }
 
