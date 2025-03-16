@@ -98,8 +98,8 @@ function getColorByPercent($percent)
 		$showed=true;
 	}
 
-		echo  'You are not logged in. <a href="?subtopic=accountmanagement&redirect=' . BASE_URL . urlencode('?subtopic=polls') . '">Log in</a> to vote in polls.<br /><br />';
 	if(!logged()) {
+		echo  'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . BASE_URL . urlencode('?subtopic=polls') . '">Log in</a> to vote in polls.<br /><br />';
 		return;
 	}
 
