@@ -287,19 +287,20 @@ class Forum
 	}
 
 	public static function hasAccess($board_id) {
-		global $sections, $logged, $account_logged, $logged_access;
-		if(!isset($sections[$board_id]))
+		global $sections;
+		if(!isset($sections[$board_id])) {
 			return false;
+		}
 
 		$hasAccess = true;
 		$section = $sections[$board_id];
 		if($section['guild'] > 0) {
-			if($logged) {
+			if(app()->isLoggedIn()) {
 				$guild = new \OTS_Guild();
 				$guild->load($section['guild']);
 				$status = false;
 				if($guild->isLoaded()) {
-					$account_players = $account_logged->getPlayers();
+					$account_players = app()->getAccountLogged()->getPlayersList();
 					foreach ($account_players as $player) {
 						if($guild->hasMember($player)) {
 							$status = true;
@@ -315,6 +316,7 @@ class Forum
 		}
 
 		if($section['access'] > 0) {
+			$logged_access = app()->isLoggedIn() ? app()->getAccountLogged()->getAccess() : 0;
 			if($logged_access < $section['access']) {
 				$hasAccess = false;
 			}
