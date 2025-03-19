@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1 - 19.03.2025]
+
+### Fixed
+* Fixed migrate:run command (https://github.com/slawkens/myaac/commit/1a5771ad51e595fe13368a0721b059c4ecefb17d)
+
+### Changed
+* Small adjustments (https://github.com/slawkens/myaac/commit/6fac883659f581baac1361826d046410156f1e58, https://github.com/slawkens/myaac/commit/4a6896b4469968b9904292734cf6c14ba5eeef14)
+
 ## [1.3 - 10.03.2025]
 
 ### Changed
