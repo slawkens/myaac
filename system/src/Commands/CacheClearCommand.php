@@ -2,6 +2,7 @@
 
 namespace MyAAC\Commands;
 
+use MyAAC\Hooks;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -16,7 +17,10 @@ class CacheClearCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		require SYSTEM . 'init.php';
+		global $hooks;
+		$hooks = new Hooks();
+		$hooks->load();
+		$hooks->trigger(HOOK_INIT);
 
 		$io = new SymfonyStyle($input, $output);
 

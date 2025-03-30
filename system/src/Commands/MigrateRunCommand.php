@@ -4,6 +4,7 @@ namespace MyAAC\Commands;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -16,7 +17,8 @@ class MigrateRunCommand extends Command
 			->addArgument('id',
 				InputArgument::IS_ARRAY | InputArgument::REQUIRED,
 				'Id or ids of migration(s)'
-			);
+			)
+			->addOption('down', 'd', InputOption::VALUE_NONE, 'Down');;
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
@@ -41,8 +43,10 @@ class MigrateRunCommand extends Command
 			}
 		}
 
+		$down = $input->getOption('down') ?? false;
+
 		foreach ($ids as $id) {
-			$this->executeMigration($id, $io);
+			$this->executeMigration($id, $io, !$down);
 		}
 
 		return Command::SUCCESS;
@@ -52,13 +56,24 @@ class MigrateRunCommand extends Command
 		return file_exists(SYSTEM . 'migrations/' . $id . '.php');
 	}
 
-	private function executeMigration($id, $io): void
+	private function executeMigration($id, $io, $_up = true): void
 	{
 		$db = app()->get('database');
 
 		$db->revalidateCache();
 
 		require SYSTEM . 'migrations/' . $id . '.php';
-		$io->success('Migration ' . $id . ' successfully executed');
+		if ($_up) {
+			if (isset($up)) {
+				$up();
+			}
+		}
+		else {
+			if (isset($down)) {
+				$down();
+			}
+		}
+
+		$io->success('Migration ' . $id . ' successfully executed' . ($_up ? '' : ' (downgrade)'));
 	}
 }
