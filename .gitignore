@@ -4,6 +4,7 @@ Thumbs.db
 
 #
 /.htaccess
+lua
 
 # composer
 composer.lock
