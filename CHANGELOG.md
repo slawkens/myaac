@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.2 - 01.04.2025]
+
+### Fixed
+* Fix debugBar/admin panel menu when using custom base_dir
+
+### Changed
+* Settings: Show/hide IP Ban Protection options depending on the value (enabled/disabled)
+* Do not require init.php in cache:clear command
+
 ## [1.3.1 - 19.03.2025]
 
 ### Fixed
