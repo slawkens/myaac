@@ -14,6 +14,8 @@ return [
 	['GET', 'news/archive/{id:int}', 'news/archive.php'],
 	['GET', 'news/{id:int}', 'news/archive.php'],
 
+	['GET', '{name:string}.png', 'signature.php'],
+
 	// block access to some files
 	['*', 'account/base', '404.php', 10], // this is to block account/base.php
 	['*', 'forum/base', '404.php', 10],

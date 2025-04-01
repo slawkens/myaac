@@ -97,14 +97,13 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			$params['persistent'] = false;
 		}
 
-		global $config;
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if($cache->enabled()) {
 			$tmp = null;
 			$need_revalidation = true;
 			if($cache->fetch('database_checksum', $tmp) && $tmp) {
 				$tmp = unserialize($tmp);
-				if(sha1($config['database_host'] . '.' . $config['database_name']) === $tmp) {
+				if(sha1(config('database_host') . '.' . config('database_name')) === $tmp) {
 					$need_revalidation = false;
 				}
 			}
@@ -148,9 +147,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
 	public function __destruct()
 	{
-		global $config;
-
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if($cache->enabled()) {
 			if ($this->clearCacheAfter) {
 				$cache->delete('database_tables');
@@ -160,7 +157,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			else {
 				$cache->set('database_tables', serialize($this->has_table_cache), 3600);
 				$cache->set('database_columns', serialize($this->has_column_cache), 3600);
-				$cache->set('database_checksum', serialize(sha1($config['database_host'] . '.' . $config['database_name'])), 3600);
+				$cache->set('database_checksum', serialize(sha1(config('database_host') . '.' . config('database_name'))), 3600);
 			}
 		}
 
@@ -218,8 +215,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 	}
 
 	private function hasTableInternal($name) {
-		global $config;
-		return ($this->has_table_cache[$name] = $this->query('SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = ' . $this->quote($config['database_name']) . ' AND `TABLE_NAME` = ' . $this->quote($name) . ' LIMIT 1;')->rowCount() > 0);
+		return ($this->has_table_cache[$name] = $this->query('SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = ' . $this->quote(config('database_name')) . ' AND `TABLE_NAME` = ' . $this->quote($name) . ' LIMIT 1;')->rowCount() > 0);
 	}
 
 	public function hasColumn($table, $column) {

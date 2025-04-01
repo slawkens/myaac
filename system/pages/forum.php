@@ -39,9 +39,10 @@ if(!empty($action))
 
 $info = $db->query("SELECT `section`, COUNT(`id`) AS 'threads', SUM(`replies`) AS 'replies' FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `first_post` = `id` GROUP BY `section`")->fetchAll();
 
-$boards = array();
-foreach($info as $data)
+$boards = [];
+foreach($info as $data) {
 	$counters[$data['section']] = array('threads' => $data['threads'], 'posts' => $data['replies'] + $data['threads']);
+}
 
 foreach($sections as $id => $section)
 {

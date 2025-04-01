@@ -8,9 +8,9 @@ class EnvironmentBridge extends Environment
 {
 	public function display($name, array $context = []): void
 	{
-		global $hooks;
-
 		$context['viewName'] = $name;
+
+		$hooks = app()->get('hooks');
 		$context = $hooks->triggerFilter(HOOK_FILTER_TWIG_DISPLAY, $context);
 
 		parent::display($name, $context);
@@ -18,9 +18,9 @@ class EnvironmentBridge extends Environment
 
 	public function render($name, array $context = []): string
 	{
-		global $hooks;
-
 		$context['viewName'] = $name;
+
+		$hooks = app()->get('hooks');
 		$context = $hooks->triggerFilter(HOOK_FILTER_TWIG_RENDER, $context);
 
 		return parent::render($name, $context);

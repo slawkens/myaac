@@ -49,7 +49,7 @@ class News
 			'article_image' => ($type == 3 ? $article_image : '')
 		];
 
-		global $hooks;
+		$hooks = app()->get('hooks');
 		if (!$hooks->trigger(HOOK_ADMIN_NEWS_ADD_PRE, $params)) {
 			return false;
 		}
@@ -86,7 +86,7 @@ class News
 			'article_image' => ($type == 3 ? $article_image : ''),
 		];
 
-		global $hooks;
+		$hooks = app()->get('hooks');
 		if (!$hooks->trigger(HOOK_ADMIN_NEWS_UPDATE_PRE, $params)) {
 			return false;
 		}
@@ -105,7 +105,7 @@ class News
 
 	static public function delete($id, &$errors)
 	{
-		global $hooks;
+		$hooks = app()->get('hooks');
 
 		if(isset($id)) {
 			$row = ModelsNews::find($id);
@@ -140,7 +140,7 @@ class News
 
 	static public function toggleHide($id, &$errors, &$status)
 	{
-		global $hooks;
+		$hooks = app()->get('hooks');
 
 		if(isset($id)) {
 			$row = ModelsNews::find($id);
@@ -182,7 +182,7 @@ class News
 	{
 		global $template_name;
 
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if ($cache->enabled())
 		{
 			$tmp = '';
@@ -196,7 +196,7 @@ class News
 
 	static public function clearCache()
 	{
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if (!$cache->enabled()) {
 			return;
 		}

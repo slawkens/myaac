@@ -237,7 +237,9 @@ class Validator
 	 */
 	public static function newCharacterName($name)
 	{
-		global $db, $config;
+		global $config;
+
+		$db = app()->get('database');
 
 		$name_lower = strtolower($name);
 

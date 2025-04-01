@@ -4,7 +4,7 @@ use MyAAC\Settings;
 
 function updateHighscoresIdsHidden(): void
 {
-	global $db;
+	$db = app()->get('database');
 
 	if (!$db->hasTable('players')) {
 		return;

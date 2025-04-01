@@ -50,7 +50,7 @@ if(isset($posts[0]['player_id'])) {
 }
 
 $lookaddons = $db->hasColumn('players', 'lookaddons');
-$groups = new OTS_Groups_List();
+$groups = app()->get('groups');
 foreach($posts as &$post) {
 	$post['player'] = new OTS_Player();
 	$player = $post['player'];

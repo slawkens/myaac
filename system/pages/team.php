@@ -14,7 +14,7 @@ $title = 'Support in game';
 if(setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
-$groups = new OTS_Groups_List();
+$groups = app()->get('groups');
 if(!$groups->count())
 {
 	echo 'Error while reading groups.xml';

@@ -15,7 +15,7 @@ define('COUNTER_SYNC', 10); // how often counter is synchronized with database (
 
 $views_counter = 1; // default value, must be here!
 
-$cache = Cache::getInstance();
+$cache = app()->get('cache');
 if($cache->enabled())
 {
 	$value = 0;

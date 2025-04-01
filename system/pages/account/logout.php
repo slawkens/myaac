@@ -13,7 +13,7 @@ $title = 'Logout';
 
 require __DIR__ . '/base.php';
 
-if(!$logged) {
+if(!logged()) {
 	return;
 }
 

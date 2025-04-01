@@ -58,7 +58,7 @@ class MigrateRunCommand extends Command
 
 	private function executeMigration($id, $io, $_up = true): void
 	{
-		global $db;
+		$db = app()->get('database');
 
 		$db->revalidateCache();
 

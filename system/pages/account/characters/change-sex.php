@@ -13,7 +13,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Change Sex';
 require PAGES . 'account/base.php';
 
-if(!$logged) {
+if(!logged()) {
 	return;
 }
 

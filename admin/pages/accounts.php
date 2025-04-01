@@ -94,7 +94,7 @@ else if (isset($_REQUEST['search'])) {
 ?>
 <div class="row">
 	<?php
-	$groups = new OTS_Groups_List();
+	$groups = app()->get('groups');
 	if ($id > 0) {
 		$account = new OTS_Account();
 		$account->load($id);

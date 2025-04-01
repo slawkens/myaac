@@ -1,13 +1,19 @@
 <?php
+
+use MyAAC\Services\LoginService;
+
 define('MYAAC_ADMIN', true);
 
 require '../../common.php';
 require SYSTEM . 'functions.php';
 require SYSTEM . 'init.php';
-require SYSTEM . 'login.php';
 
-if(!admin())
+$loginService = new LoginService();
+$loginService->checkLogin();
+
+if(!admin()) {
 	die('Access denied.');
+}
 
 // Don't attempt to process the upload on an OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {

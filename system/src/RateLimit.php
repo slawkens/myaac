@@ -42,7 +42,7 @@ class RateLimit
 
 	public function increment(string $ip): bool
 	{
-		global $cache;
+		$cache = app()->get('cache');
 		if ($this->enabled && $cache->enabled()) {
 			if (isset($this->data[$ip]['attempts']) && isset($this->data[$ip]['last'])) {
 				$this->data[$ip]['attempts']++;
@@ -75,7 +75,7 @@ class RateLimit
 
 	public function save(): void
 	{
-		global $cache;
+		$cache = app()->get('cache');
 		if (!$this->enabled || !$cache->enabled()) {
 			return;
 		}
@@ -86,7 +86,7 @@ class RateLimit
 
 	public function load(): void
 	{
-		global $cache;
+		$cache = app()->get('cache');
 		if (!$this->enabled) {
 			return;
 		}

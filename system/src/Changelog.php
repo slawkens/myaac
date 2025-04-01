@@ -119,7 +119,7 @@ class Changelog
 	{
 		global $template_name;
 
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if ($cache->enabled())
 		{
 			$tmp = '';
@@ -134,7 +134,7 @@ class Changelog
 	static public function clearCache()
 	{
 		global $template_name;
-		$cache = Cache::getInstance();
+		$cache = app()->get('cache');
 		if (!$cache->enabled()) {
 			return;
 		}

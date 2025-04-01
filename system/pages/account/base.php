@@ -10,7 +10,7 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-if(!$logged)
+if(!logged())
 {
 	$title = 'Login';
 

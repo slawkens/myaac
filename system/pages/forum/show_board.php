@@ -44,7 +44,7 @@ for($i = 0; $i < $threads_count['threads_count'] / setting('core.forum_threads_p
 
 echo '<a href="' . getLink('forum') . '">Boards</a> >> <b>'.$sections[$section_id]['name'].'</b>';
 
-if($logged && (!$sections[$section_id]['closed'] || Forum::isModerator())) {
+if(logged() && (!$sections[$section_id]['closed'] || Forum::isModerator())) {
 	echo '<br /><br />
 		<a href="' . getLink('forum') . '?action=new_thread&section_id='.$section_id.'"><img src="images/forum/topic.gif" border="0" /></a>';
 }
@@ -94,7 +94,7 @@ if(isset($last_threads[0])) {
 	}
 
 	echo '</table>';
-	if($logged && (!$sections[$section_id]['closed'] || Forum::isModerator())) {
+	if(logged() && (!$sections[$section_id]['closed'] || Forum::isModerator())) {
 		echo '<br /><a href="' . getLink('forum') . '?action=new_thread&section_id=' . $section_id . '"><img src="images/forum/topic.gif" border="0" /></a>';
 	}
 }

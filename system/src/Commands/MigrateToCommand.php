@@ -34,6 +34,8 @@ class MigrateToCommand extends Command
 
 		$this->initEnv();
 
+		app()->get('database');
+
 		$currentVersion = Config::where('name', 'database_version')->first()->value;
 		if ($currentVersion > $versionDest) {
 			// downgrade
@@ -62,7 +64,7 @@ class MigrateToCommand extends Command
 
 	private function executeMigration($id, $_up): void
 	{
-		global $db;
+		$db = app()->get('database');
 
 		$db->revalidateCache();
 
@@ -98,11 +100,6 @@ class MigrateToCommand extends Command
 
 		$config['lua'] = load_config_lua($config['server_path'] . 'config.lua');
 
-		// POT
 		require_once SYSTEM . 'libs/pot/OTS.php';
-		$ots = POT::getInstance();
-		$eloquentConnection = null;
-
-		require_once SYSTEM . 'database.php';
 	}
 }

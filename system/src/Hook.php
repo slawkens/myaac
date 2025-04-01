@@ -14,10 +14,14 @@ class Hook
 
 	public function execute($params)
 	{
-		global $db, $config, $template_path, $ots, $content, $twig;
+		global $config, $template_path, $ots, $content;
 
-		if(is_callable($this->_file))
-		{
+		$db = app()->get('db');
+		$cache = app()->get('cache');
+		$hooks = app()->get('hooks');
+		$twig = app()->get('twig');
+
+		if(is_callable($this->_file)) {
 			$params['db'] = $db;
 			$params['config'] = $config;
 			$params['template_path'] = $template_path;

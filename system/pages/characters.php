@@ -14,10 +14,10 @@ use MyAAC\Models\PlayerDeath;
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Characters';
 
-$groups = new OTS_Groups_List();
-function generate_search_form($autofocus = false)
+$groups = app()->get('groups');
+function generate_search_form($autofocus = false): string
 {
-	global $config, $twig;
+	$twig = app()->get('twig');
 	return $twig->render('characters.form.html.twig', array(
 		'link' => getLink('characters'),
 		'autofocus' => $autofocus
@@ -26,7 +26,9 @@ function generate_search_form($autofocus = false)
 
 function retrieve_former_name($name)
 {
-	global $oldName, $db;
+	global $oldName;
+
+	$db = app()->get('db');
 
 	if($db->hasTable('player_namelocks') && $db->hasColumn('player_namelocks', 'name')) {
 		$newNameSql = $db->query('SELECT `name`, `new_name` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));
@@ -42,8 +44,9 @@ function retrieve_former_name($name)
 }
 
 $name = '';
-if(isset($_REQUEST['name']))
+if(isset($_REQUEST['name'])) {
 	$name = urldecode(stripslashes(ucwords(strtolower($_REQUEST['name']))));
+}
 
 if(empty($name))
 {
@@ -63,14 +66,14 @@ if(!$player->isLoaded())
 {
 	$tmp_zmienna = "";
 	$tmp_name = retrieve_former_name($name);
-	while(!empty($tmp_name))
-	{
+	while(!empty($tmp_name)) {
 		$tmp_zmienna = $tmp_name;
 		$tmp_name = retrieve_former_name($tmp_zmienna);
 	}
 
-	if(!empty($tmp_zmienna))
+	if(!empty($tmp_zmienna)) {
 		$player->find($tmp_zmienna);
+	}
 }
 
 if($player->isLoaded() && !$player->isDeleted())

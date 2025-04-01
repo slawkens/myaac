@@ -29,6 +29,7 @@ if(!empty($login_account) && !empty($login_password))
 	$limiter->enabled = setting('core.account_login_ipban_protection');
 	$limiter->load();
 
+	global $logged, $account_logged, $logged_flags;
 	$account_logged = new OTS_Account();
 	if (config('account_login_by_email')) {
 		$account_logged->findByEMail($login_account);
@@ -68,6 +69,9 @@ if(!empty($login_account) && !empty($login_password))
 			else {
 				$account_logged->setCustomField('web_lastlogin', time());
 			}
+
+			app()->setLoggedIn($logged);
+			app()->setAccountLogged($account_logged);
 
 			$hooks->trigger(HOOK_LOGIN, array('account' => $account_logged, 'password' => $login_password, 'remember_me' => $remember_me));
 		}
