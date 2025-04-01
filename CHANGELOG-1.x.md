@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.2 - 01.04.2025]
+
+### Fixed
+* Fix debugBar/admin panel menu when using custom base_dir (https://github.com/slawkens/myaac/commit/65696f63e3aac02ff952ea81279e7cb2fa7570fb)
+
+### Changed
+* Settings: Show/hide IP Ban Protection options depending on the value (enabled/disabled) (https://github.com/slawkens/myaac/commit/dbf73d0b61b45601ae95e51b23c051c2704169c5)
+* Do not require init.php in cache:clear command (https://github.com/slawkens/myaac/commit/d25c71857f767834239bbffacd00fdc671adb157)
+
 ## [1.3.1 - 19.03.2025]
 
 ### Fixed
