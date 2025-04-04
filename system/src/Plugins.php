@@ -675,26 +675,41 @@ class Plugins {
 
 	public static function uninstall($plugin_name): bool
 	{
+		$isDisabled = self::existDisabled($plugin_name);
+		if($isDisabled) {
+			self::enable($plugin_name);
+		}
+
+		$revertEnable = function() use ($isDisabled, $plugin_name) {
+			if($isDisabled) {
+				self::disable($plugin_name);
+			}
+		};
+
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
 			self::$error = 'Plugin ' . $plugin_name . ' does not exist.';
+			$revertEnable();
 			return false;
 		}
+
 		$string = file_get_contents($filename);
 		$plugin_info = json_decode($string, true);
 		if(!$plugin_info) {
 			self::$error = 'Cannot load plugin info ' . $plugin_name . '.json';
+			$revertEnable();
 			return false;
 		}
 
 		if(!isset($plugin_info['uninstall'])) {
 			self::$error = "Plugin doesn't have uninstall options defined. Skipping...";
+			$revertEnable();
 			return false;
 		}
 
 		$success = true;
 		foreach($plugin_info['uninstall'] as $file) {
-			if(strpos($file, '/') === 0) {
+			if(str_starts_with($file, '/')) {
 				$success = false;
 				self::$error = "You cannot use absolute paths (starting with slash - '/'): " . $file;
 				break;
@@ -726,6 +741,7 @@ class Plugins {
 			return true;
 		}
 
+		$revertEnable();
 		return false;
 	}
 
