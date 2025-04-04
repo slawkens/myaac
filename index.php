@@ -31,11 +31,11 @@ require_once 'common.php';
 require_once SYSTEM . 'functions.php';
 
 $uri = $_SERVER['REQUEST_URI'];
-if(false !== strpos($uri, 'index.php')) {
+if(str_contains($uri, 'index.php')) {
 	$uri = str_replace_first('/index.php', '', $uri);
 }
 
-if(0 === strpos($uri, '/')) {
+if(str_starts_with($uri, '/')) {
 	$uri = str_replace_first('/', '', $uri);
 }
 
