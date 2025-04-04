@@ -1012,12 +1012,19 @@ function load_config_lua($filename)
 					}
 					else
 					{
-						foreach($result as $tmp_key => $tmp_value) // load values defined by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
+						foreach($result as $tmp_key => $tmp_value) { // load values defined by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
 							$value = str_replace($tmp_key, $tmp_value, $value);
-						$ret = @eval("return $value;");
-						if((string) $ret == '' && trim($value) !== '""') // = parser error
-						{
-							throw new RuntimeException('ERROR: Loading config.lua file. Line <b>' . ($ln + 1) . '</b> of LUA config file is not valid [key: <b>' . $key . '</b>]');
+						}
+
+						try {
+							$ret = eval("return $value;");
+						}
+						catch (Throwable $e) {
+							throw new RuntimeException('ERROR: Loading config.lua file. Line: ' . ($ln + 1) . ' - Unable to parse value "' . $value . '" - ' . $e->getMessage());
+						}
+
+						if((string) $ret == '' && trim($value) !== '""') {
+							throw new RuntimeException('ERROR: Loading config.lua file. Line ' . ($ln + 1) . ' is not valid [key: ' . $key . ']');
 						}
 						$result[$key] = $ret;
 					}
