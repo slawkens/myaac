@@ -36,6 +36,12 @@ img {
   width: expression(document.body.clientWidth > 1200? "1200px": "100%" );
 }
 
+#LoginFormButtonCell {
+  width: 145px;
+  vertical-align: top;
+  padding-right: 10px;
+}
+
 #ContentRow {
   position: relative;
   top: 155px;
