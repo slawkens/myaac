@@ -343,16 +343,16 @@ function getDatabasePages($withHidden = false): array
 
 function loadPageFromFileSystem($page, &$found): string
 {
-	$file = SYSTEM . 'pages/' . $page . '.php';
+	// feature: load pages from templates/ dir
+	global $template_path;
+	$file = $template_path . '/pages/' . $page . '.php';
 	if (!is_file($file)) {
-		// feature: convert camelCase to snake_case
-		// so instead of forum/move_thread
-		// we can write: forum/moveThread
-		$file = SYSTEM . 'pages/' . camelCaseToUnderscore($page) . '.php';
+		$file = SYSTEM . 'pages/' . $page . '.php';
 		if (!is_file($file)) {
-			// feature: load pages from templates/ dir
-			global $template_path;
-			$file = $template_path . '/pages/' . $page . '.php';
+			// feature: convert camelCase to snake_case
+			// so instead of forum/move_thread
+			// we can write: forum/moveThread
+			$file = SYSTEM . 'pages/' . camelCaseToUnderscore($page) . '.php';
 			if (!is_file($file)) {
 				$found = false;
 			}
