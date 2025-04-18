@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.3 - 04.04.2025]
+
+### Fixed
+* Fix uninstall plugin when plugin is disabled (https://github.com/slawkens/myaac/commit/6c568fd36a271270684fc412ccd556b230273a6d)
+
+### Changed
+* Display more useful info when error parsing config.lua (https://github.com/slawkens/myaac/commit/fa6b6aa153ffc131e0d1631a4dcd9012a5850c2e)
+
+### Other
+* Small adjustments (https://github.com/slawkens/myaac/commit/35e2483de86e295bdf089cceffa25842eeb2e34c, https://github.com/slawkens/myaac/commit/ae639d65b0bfa491e747e907e2ebc77f83f47981)
+
 ## [1.3.2 - 01.04.2025]
 
 ### Fixed

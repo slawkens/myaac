@@ -13,7 +13,7 @@
 	<div class="BigButton" style="background-image:url({{ template_path }}/images/global/buttons/{{ tmp_image }}.gif)">
 		<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);">
 			<div class="BigButtonOver" style="background-image:url({{ template_path }}/images/global/buttons/{{ tmp_image }}_over.gif);" ></div>
-			<input class="BigButtonText" type="submit" value="{{ button_name }}">
+			<input class="BigButtonText" {% if noSubmit is not defined %}type="submit"{% endif %} value="{{ button_name }}">
 		</div>
 	</div>
 {% endapply %}

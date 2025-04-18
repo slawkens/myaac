@@ -1,6 +1,8 @@
 <?php
 
 // few things we'll need
+use MyAAC\Plugins;
+
 require '../common.php';
 
 const ADMIN_PANEL = true;
@@ -42,15 +44,21 @@ if(!$logged || !admin()) {
 	$page = 'login';
 }
 
-// include our page
-$file = __DIR__ . '/pages/' . $page . '.php';
-if(!@file_exists($file)) {
-	if (str_contains($page, 'plugins/')) {
-		$file = BASE . $page;
-	}
-	else {
-		$page = '404';
-		$file = SYSTEM . 'pages/404.php';
+$pluginsAdminPages = Plugins::getAdminPages();
+if(isset($pluginsAdminPages[$page]) && file_exists(BASE . $pluginsAdminPages[$page])) {
+	$file = BASE . $pluginsAdminPages[$page];
+}
+else {
+	// include our page
+	$file = __DIR__ . '/pages/' . $page . '.php';
+	if(!@file_exists($file)) {
+		if (str_contains($page, 'plugins/')) {
+			$file = BASE . $page;
+		}
+		else {
+			$page = '404';
+			$file = SYSTEM . 'pages/404.php';
+		}
 	}
 }
 
