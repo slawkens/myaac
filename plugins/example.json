@@ -48,6 +48,8 @@
 		"pages": true,
 		"pagesSubFolders": false,
 		"commands": true,
-		"themes": true
+		"themes": true,
+		"admin-pages": true,
+		"admin-pages-sub-folders": true,
 	}
  }

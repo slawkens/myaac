@@ -11,6 +11,81 @@ class Plugins {
 	private static $error = null;
 	private static $plugin_json = [];
 
+	public static function getAdminPages()
+	{
+		return Cache::remember('plugins_admin_pages', 10 * 60, function () {
+			$adminPages = [];
+			foreach(self::getAllPluginsJson() as $plugin) {
+				if (!self::getAutoLoadOption($plugin, 'admin-pages', true)) {
+					continue;
+				}
+
+				$adminPagesDefaultPriority = 1000;
+				if (isset($plugin['admin-pages-default-priority'])) {
+					$adminPagesDefaultPriority = $plugin['admin-pages-default-priority'];
+				}
+
+				//
+				// Get all plugins/*/admin-pages/*.php pages
+				//
+				$pluginAdminPages = glob(PLUGINS . $plugin['filename'] . '/admin-pages/*.php');
+				foreach ($pluginAdminPages as $file) {
+					$file = str_replace(PLUGINS, 'plugins/', $file);
+					$name = pathinfo($file, PATHINFO_FILENAME);
+
+					$adminPages[] = ['name' => $name, 'file' => $file, 'priority' => $adminPagesDefaultPriority];
+				}
+
+				if (self::getAutoLoadOption($plugin, 'admin-pages-sub-folders', true)) {
+					//
+					// Get all plugins/*/admin-pages/subFolder/*.php pages
+					//
+					$pluginAdminPagesSubFolders = glob(PLUGINS . $plugin['filename'] . '/admin-pages/*', GLOB_ONLYDIR);
+					foreach ($pluginAdminPagesSubFolders as $folder) {
+						$folderName = pathinfo($folder, PATHINFO_FILENAME);
+
+						$subFiles = glob(PLUGINS . $plugin['filename'] . '/admin-pages/' . $folderName . '/*.php');
+						foreach ($subFiles as $file) {
+							$file = str_replace(PLUGINS, 'plugins/', $file);
+							$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
+
+							$adminPages[] = ['name' => $name, 'file' => $file, 'priority' => $adminPagesDefaultPriority];
+						}
+
+						$subFolders = glob(PLUGINS . $plugin['filename'] . '/admin-pages/' . $folderName . '/*', GLOB_ONLYDIR);
+						foreach ($subFolders as $subFolder) {
+							$subFolderName = pathinfo($subFolder, PATHINFO_FILENAME);
+							$subSubFiles = glob(PLUGINS . $plugin['filename'] . '/admin-pages/' . $folderName . '/' . $subFolderName . '/*.php');
+
+							foreach ($subSubFiles as $subSubFile) {
+								$subSubFile = str_replace(PLUGINS, 'plugins/', $subSubFile);
+								$name = $folderName . '/' . $subFolderName . '/' . pathinfo($subSubFile, PATHINFO_FILENAME);
+
+								$adminPages[] =  ['name' => $name, 'file' => $subSubFile, 'priority' => $adminPagesDefaultPriority];;
+							}
+						}
+					}
+				}
+			}
+
+			usort($adminPages, function ($a, $b)
+			{
+				if ($a['priority'] == $b['priority']) {
+					return 0;
+				}
+
+				return ($a['priority'] > $b['priority']) ? -1 : 1;
+			});
+
+			$ret = [];
+			foreach ($adminPages as $value) {
+				$ret[$value['name']] = $value['file'];
+			}
+
+			return $ret;
+		});
+	}
+
 	public static function getRoutes()
 	{
 		$cache = Cache::getInstance();
