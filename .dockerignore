@@ -4,7 +4,6 @@ Thumbs.db
 
 #
 /.htaccess
-lua
 
 # composer
 composer.phar
@@ -64,16 +63,3 @@ system/data/*
 # php sessions
 system/php_sessions/*
 !system/php_sessions/index.html
-
-# plugins
-plugins/*
-!plugins/.htaccess
-!plugins/example.json
-!plugins/account-create-hint.json
-!plugins/account-create-hint
-!plugins/email-confirmed-reward.json
-!plugins/email-confirmed-reward
-landing
-
-# system
-system/functions_custom.php
