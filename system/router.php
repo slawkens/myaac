@@ -108,6 +108,10 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 
 	foreach ($routes as $route) {
 		if (!str_contains($route[2], '__redirect__') && !str_contains($route[2], '__database__')) {
+			if (!is_file(BASE . 'system/pages/' . $route[2])) {
+				continue;
+			}
+
 			$routesFinal[] = [$route[0], $route[1], 'system/pages/' . $route[2], $route[3] ?? 10000];
 		}
 		else {
