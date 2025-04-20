@@ -793,25 +793,19 @@ class Plugins {
 			}
 		}
 
-		if($success) {
-			foreach($plugin_info['uninstall'] as $file) {
-				if(!deleteDirectory(BASE . $file)) {
-					self::$warnings[] = 'Cannot delete: ' . $file;
-				}
-			}
-
-			$cache = Cache::getInstance();
-			if($cache->enabled()) {
-				$cache->delete('templates');
-				$cache->delete('hooks');
-				$cache->delete('template_menus');
-			}
-
-			return true;
+		if(!$success) {
+			$revertEnable();
+			return false;
 		}
 
-		$revertEnable();
-		return false;
+		foreach($plugin_info['uninstall'] as $file) {
+			if(!deleteDirectory(BASE . $file)) {
+				self::$warnings[] = 'Cannot delete: ' . $file;
+			}
+		}
+
+		clearCache();
+		return true;
 	}
 
 	public static function is_installed($plugin_name, $version): bool
