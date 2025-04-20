@@ -699,6 +699,7 @@ class Plugins {
 			return false;
 		}
 
+		clearCache();
 		return true;
 	}
 
