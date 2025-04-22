@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.8.23 - 22.04.2025]
+
+### Added
+* Add db->hasTableAndColumns(table, columns), credits to @opentibiabr Team (https://github.com/slawkens/myaac/commit/9c15c2fa6848d966457972fce0d04347ecbd4f2c)
+* Add noSubmit option to buttons.base (https://github.com/slawkens/myaac/commit/4b9a7eaf859f9d3dbc90deb03564fcddde2f90d3)
+
+### Changed
+* Display more info when error parsing config.lua value (https://github.com/slawkens/myaac/commit/29a198bfcedeb5d22e0d34c5c53098142acdf477)
+* Change logout button color to red in tibiacom template (https://github.com/slawkens/myaac/commit/1708a48186294e3eea0a79344fdf56ba93327c6d)
+
+### Fixed
+* Fix headline.php: change image format to .png cause of black background (https://github.com/slawkens/myaac/commit/68170e42cd8fac43c55654ba595f09425618f26e)
+* Fix long title on headline.php (https://github.com/slawkens/myaac/commit/727da8b0cc968d0cafc502dd9c8cebf17e46bf76)
+* getPremDays: returns -1 if freePremium (https://github.com/slawkens/myaac/commit/89f537c8c2646c748a14ee46539a6103fda88ec1)
+
 ## [0.8.22 - 27.01.2025]
 
 ### Changed
