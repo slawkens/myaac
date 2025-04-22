@@ -144,19 +144,12 @@ class Plugins {
 			$continue = true;
 
 			if(!isset($plugin_json['name']) || empty(trim($plugin_json['name']))) {
-				self::$warnings[] = 'Plugin "name" tag is not set.';
+				self::$error = 'Plugin "name" tag is not set.';
+				return false;
 			}
-			if(!isset($plugin_json['description']) || empty(trim($plugin_json['description']))) {
-				self::$warnings[] = 'Plugin "description" tag is not set.';
-			}
+
 			if(!isset($plugin_json['version']) || empty(trim($plugin_json['version']))) {
 				self::$warnings[] = 'Plugin "version" tag is not set.';
-			}
-			if(!isset($plugin_json['author']) || empty(trim($plugin_json['author']))) {
-				self::$warnings[] = 'Plugin "author" tag is not set.';
-			}
-			if(!isset($plugin_json['contact']) || empty(trim($plugin_json['contact']))) {
-				self::$warnings[] = 'Plugin "contact" tag is not set.';
 			}
 
 			if(isset($plugin_json['require'])) {
