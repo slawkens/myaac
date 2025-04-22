@@ -220,6 +220,19 @@ class OTS_DB_MySQL extends OTS_Base_DB
 		return $this->hasTable($table) && ($this->has_column_cache[$table . '.' . $column] = count($this->query('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $column . "'")->fetchAll()) > 0);
 	}
 
+	public function hasTableAndColumns(string $table, array $columns = []): bool
+	{
+		if (!$this->hasTable($table)) return false;
+
+		foreach ($columns as $column) {
+			if (!$this->hasColumn($table, $column)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	public function revalidateCache() {
 		foreach($this->has_table_cache as $key => $value) {
 			$this->hasTableInternal($key);
