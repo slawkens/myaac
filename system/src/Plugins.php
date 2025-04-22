@@ -151,7 +151,8 @@ class Plugins {
 				$pagesDefaultPriority = $plugin['pages-default-priority'];
 			}
 
-			if (self::getAutoLoadOption($plugin, 'pages', true)) {
+			$autoLoadPages = self::getAutoLoadOption($plugin, 'pages', true);
+			if ($autoLoadPages) {
 				//
 				// Get all plugins/*/pages/*.php pages
 				//
@@ -164,7 +165,8 @@ class Plugins {
 				}
 			}
 
-			if (self::getAutoLoadOption($plugin, 'pagesSubFolders', true)) {
+			if ($autoLoadPages && self::getAutoLoadOption($plugin, 'pagesSubFolders', true) &&
+				self::getAutoLoadOption($plugin, 'pages-sub-folders', true)) {
 				//
 				// Get all plugins/*/pages/subFolder/*.php pages
 				//
