@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.4 - 22.04.2025]
+
+### Added
+* feat: admin-pages (can add admin pages through plugins) (https://github.com/slawkens/myaac/commit/ceaa0639e66d31e8177ff90791463470367aa45d)
+	* just place the page in admin-pages folder in the plugin
+	* Also, possibility to overwrite default myaac admin pages
+* Add db->hasTableAndColumns(table, columns), credits to @opentibiabr Team (https://github.com/slawkens/myaac/commit/82a533d88c8a342076891d132b4b409ed9a1fe72)
+* Add noSubmit option to buttons.base (https://github.com/slawkens/myaac/commit/64f6d3abcada3bf9fd7599f50d2fac0a1367f383)
+
+### Fixed
+* Fix: display 404 error instead of 500 when page has been removed from filesystem (https://github.com/slawkens/myaac/commit/c2bf94fb2370d2009a2eb907f818955132cf8611)
+* Fix headline.php: change image format to .png cause of black background (https://github.com/slawkens/myaac/commit/b618084d50918539d9a70abd97e764137b966067)
+* Clear cache on plugin enable/disable, fixes some issues with plugin pages being cached (https://github.com/slawkens/myaac/commit/1d0c173e7d000aecbd432800941fc3e38a0e50f2)
+* Do not autoload sub-folders if autoload pages is disabled (https://github.com/slawkens/myaac/commit/d47195a7878095336f9c9edc6f96244257f67eec)
+
+### Changed
+* SQL Syntax Standardization (by @JoaozinhoBrasil, #298)
+* Pages in theme/template folder will now have precedence over normal pages (https://github.com/slawkens/myaac/commit/6d8f4718a1d349fba8f0ebc39cfd3a1a84d104b0)
+* Small changes in account.login.html.twig (https://github.com/slawkens/myaac/commit/f40b986b59d4c8fa89ab4745731bf366f8619976)
+* Plugin name is required, version is optional (https://github.com/slawkens/myaac/commit/e6f05a2731c61d931be49e121c068e49c0ad5e01)
+
 ## [1.3.3 - 04.04.2025]
 
 ### Fixed
