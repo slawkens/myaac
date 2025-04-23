@@ -86,7 +86,7 @@ switch ($action) {
 		die(json_encode(['eventlist' => $eventlist, 'lastupdatetimestamp' => time()]));
 
 	case 'boostedcreature':
-		$boostedCreature = BoostedCreature::latest();
+		$boostedCreature = BoostedCreature::first();
 		die(json_encode([
 			'boostedcreature' => true,
 			'raceid' => $boostedCreature->raceid
