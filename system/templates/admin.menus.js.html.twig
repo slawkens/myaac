@@ -4,7 +4,9 @@
 	let colors = [];
 
 	{% for cat, menu in menus %}
-	last_id[{{ cat }}] = {{ last_id[cat] }};
+		{% if config('menu_categories')[cat] is not empty %}
+			last_id[{{ cat }}] = {{ last_id[cat] }};
+		{% endif %}
 	{% endfor %}
 
 	{% set menuDefaultLinksColor = config('menu_default_links_color') %}
