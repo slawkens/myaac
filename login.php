@@ -143,7 +143,7 @@ switch ($action) {
 			if ($limiter->exceeded($ip)) {
 				sendError($ban_msg);
 			}
-			
+
 			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');
 		}
 
