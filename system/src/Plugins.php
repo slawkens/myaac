@@ -151,7 +151,8 @@ class Plugins {
 				$pagesDefaultPriority = $plugin['pages-default-priority'];
 			}
 
-			if (self::getAutoLoadOption($plugin, 'pages', true)) {
+			$autoLoadPages = self::getAutoLoadOption($plugin, 'pages', true);
+			if ($autoLoadPages) {
 				//
 				// Get all plugins/*/pages/*.php pages
 				//
@@ -164,7 +165,8 @@ class Plugins {
 				}
 			}
 
-			if (self::getAutoLoadOption($plugin, 'pagesSubFolders', true)) {
+			if ($autoLoadPages && self::getAutoLoadOption($plugin, 'pagesSubFolders', true) &&
+				self::getAutoLoadOption($plugin, 'pages-sub-folders', true)) {
 				//
 				// Get all plugins/*/pages/subFolder/*.php pages
 				//
@@ -699,6 +701,7 @@ class Plugins {
 			return false;
 		}
 
+		clearCache();
 		return true;
 	}
 
@@ -792,25 +795,19 @@ class Plugins {
 			}
 		}
 
-		if($success) {
-			foreach($plugin_info['uninstall'] as $file) {
-				if(!deleteDirectory(BASE . $file)) {
-					self::$warnings[] = 'Cannot delete: ' . $file;
-				}
-			}
-
-			$cache = Cache::getInstance();
-			if($cache->enabled()) {
-				$cache->delete('templates');
-				$cache->delete('hooks');
-				$cache->delete('template_menus');
-			}
-
-			return true;
+		if(!$success) {
+			$revertEnable();
+			return false;
 		}
 
-		$revertEnable();
-		return false;
+		foreach($plugin_info['uninstall'] as $file) {
+			if(!deleteDirectory(BASE . $file)) {
+				self::$warnings[] = 'Cannot delete: ' . $file;
+			}
+		}
+
+		clearCache();
+		return true;
 	}
 
 	public static function is_installed($plugin_name, $version): bool

@@ -46,7 +46,7 @@
 	"settings": "plugins/your-plugin-folder/settings.php",
 	"autoload": {
 		"pages": true,
-		"pagesSubFolders": false,
+		"pages-sub-folders": false,
 		"commands": true,
 		"themes": true,
 		"admin-pages": true,

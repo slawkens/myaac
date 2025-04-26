@@ -17,7 +17,7 @@ $font = getenv('GDFONTPATH') . DIRECTORY_SEPARATOR . 'martel.ttf';
 imagettftext($image, 18, 0, 4, 20, imagecolorallocate($image, 240, 209, 164), $font, $text);
 
 // header mime type
-header('Content-type: image/gif');
+header('Content-type: image/png');
 
 // output image to browser
-imagegif($image);
+imagepng($image);

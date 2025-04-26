@@ -10,12 +10,19 @@ Official website: https://my-aac.org
 [![OpenTibia Discord](https://img.shields.io/discord/288399552581468162)](https://discord.gg/2J39Wus)
 [![Closed Issues](https://img.shields.io/github/issues-closed-raw/slawkens/myaac)](https://github.com/slawkens/myaac/issues?q=is%3Aissue+is%3Aclosed)
 
-| Version | Status                 | Branch | Requirements   |
-|:--------|:-----------------------|:-------|:---------------|
-| **1.x** | **Active development** | master | **PHP >= 8.1** |
-| 0.9.x   | Not developed anymore  | 0.9    | PHP >= 7.2.5   |
-| 0.8.x   | Active support         | 0.8    | PHP >= 7.2.5   |
-| 0.7.x   | End Of Life            | 0.7    | PHP >= 5.3.3   |
+| Version | Status                 | Branch  | Requirements   |
+|:--------|:-----------------------|:--------|:---------------|
+| 2.x     | Experimental features  | develop | PHP >= 8.1     |
+| **1.x** | **Active development** | main    | **PHP >= 8.1** |
+| 0.9.x   | Not developed anymore  | 0.9     | PHP >= 7.2.5   |
+| 0.8.x   | Active support         | 0.8     | PHP >= 7.2.5   |
+| 0.7.x   | End Of Life            | 0.7     | PHP >= 5.3.3   |
+
+The recommended version to install is 1.x, which can be found at releases page - [https://github.com/slawkens/myaac/releases](https://github.com/slawkens/myaac/releases).
+
+### Documentation
+* [docs.my-aac.org](https://docs.my-aac.org)
+* [my-aac.org - FAQ](https://my-aac.org/faqs/)
 
 ### Requirements
 
@@ -47,23 +54,23 @@ Official website: https://my-aac.org
 
 ### Configuration
 
-Check *config.php* to get more informations. (Notice: MyAAC 1.0+ doesn't use config.php anymore, it has been moved to Admin Panel - Settings page).
+Check *config.php* to get more information. (Notice: MyAAC 1.0+ doesn't use config.php anymore, it has been moved to Admin Panel - Settings page).
 
 Use *config.local.php* for your local configuration changes.
 
 ### Branches
 
 This repository follows the Git Flow Workflow.
-Cheatsheet: [Git-Flow-Cheetsheet](https://danielkummer.github.io/git-flow-cheatsheet)
+Cheatsheet: [Git-Flow-Cheatsheet](https://danielkummer.github.io/git-flow-cheatsheet)
 
 That means, we use:
-* master branch, for current stable release
+* main branch, for current stable release
 * develop branch, for development version (next release)
 * feature branches, for features etc.
 
 ### Known Problems
 
-- Some compatibility issues with some exotical distibutions.
+- Some compatibility issues with some exotic distributions.
 
 ### Contributing
 
@@ -77,7 +84,7 @@ Look: [Contributing](https://github.com/otsoft/myaac/wiki/Contributing) in our w
 
 ### Other Notes
 
-If you have a great idea or want contribute to the project - visit our website at https://www.my-aac.org
+If you have a great idea or want to contribute to the project - visit our website at https://www.my-aac.org
 
 ## Project supported by JetBrains
 

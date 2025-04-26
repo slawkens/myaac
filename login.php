@@ -86,7 +86,7 @@ switch ($action) {
 		die(json_encode(['eventlist' => $eventlist, 'lastupdatetimestamp' => time()]));
 
 	case 'boostedcreature':
-		$boostedCreature = BoostedCreature::latest();
+		$boostedCreature = BoostedCreature::first();
 		die(json_encode([
 			'boostedcreature' => true,
 			'raceid' => $boostedCreature->raceid
@@ -143,7 +143,7 @@ switch ($action) {
 			if ($limiter->exceeded($ip)) {
 				sendError($ban_msg);
 			}
-			
+
 			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');
 		}
 
