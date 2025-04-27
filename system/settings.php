@@ -1622,14 +1622,20 @@ Sent by MyAAC,<br/>
 			'name' => 'Login Attempts Limit',
 			'type' => 'number',
 			'desc' => 'Number of incorrect login attempts before banning the IP',
-			'default' => 5, // Ajuste conforme necessário
+			'default' => 5,
+			'show_if' => [
+				'account_login_ipban_protection', '=', 'true'
+			]
 		],
 
 		'account_login_ban_time' => [
 			'name' => 'Ban Time (Minutes)',
 			'type' => 'number',
 			'desc' => 'Time in minutes the IP will be banned after exceeding login attempts',
-			'default' => 30, // Ajuste conforme necessário
+			'default' => 30,
+			'show_if' => [
+				'account_login_ipban_protection', '=', 'true'
+			]
 		],
 	],
 	'callbacks' => [

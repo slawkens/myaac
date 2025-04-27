@@ -89,8 +89,6 @@ if($logged && $account_logged && $account_logged->isLoaded()) {
  * Routes loading
  */
 $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) {
-	$routes = require SYSTEM . 'routes.php';
-
 	$routesFinal = [];
 	foreach(getDatabasePages() as $page) {
 		$routesFinal[] = ['*', $page, '__database__/' . $page, 100];
@@ -106,8 +104,13 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 */
 	}
 
+	$routes = require SYSTEM . 'routes.php';
 	foreach ($routes as $route) {
 		if (!str_contains($route[2], '__redirect__') && !str_contains($route[2], '__database__')) {
+			if (!is_file(BASE . 'system/pages/' . $route[2])) {
+				continue;
+			}
+
 			$routesFinal[] = [$route[0], $route[1], 'system/pages/' . $route[2], $route[3] ?? 10000];
 		}
 		else {
@@ -343,16 +346,16 @@ function getDatabasePages($withHidden = false): array
 
 function loadPageFromFileSystem($page, &$found): string
 {
-	$file = SYSTEM . 'pages/' . $page . '.php';
+	// feature: load pages from templates/ dir
+	global $template_path;
+	$file = $template_path . '/pages/' . $page . '.php';
 	if (!is_file($file)) {
-		// feature: convert camelCase to snake_case
-		// so instead of forum/move_thread
-		// we can write: forum/moveThread
-		$file = SYSTEM . 'pages/' . camelCaseToUnderscore($page) . '.php';
+		$file = SYSTEM . 'pages/' . $page . '.php';
 		if (!is_file($file)) {
-			// feature: load pages from templates/ dir
-			global $template_path;
-			$file = $template_path . '/pages/' . $page . '.php';
+			// feature: convert camelCase to snake_case
+			// so instead of forum/move_thread
+			// we can write: forum/moveThread
+			$file = SYSTEM . 'pages/' . camelCaseToUnderscore($page) . '.php';
 			if (!is_file($file)) {
 				$found = false;
 			}

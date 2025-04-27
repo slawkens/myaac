@@ -215,7 +215,7 @@
 													<tbody>
 													<tr>
 														{% if not logged %}
-															<form action="?subtopic=accountmanagement&redirect={{ getGuildLink(guild_name|url_encode, false) }}" method="post">
+															<form action="{{ getLink('account/manage') }}?redirect={{ getGuildLink(guild_name|url_encode, false) }}" method="post">
 																{{ csrf() }}
 																<td>
 																	{{ include('buttons.login.html.twig') }}

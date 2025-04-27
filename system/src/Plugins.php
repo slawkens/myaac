@@ -11,6 +11,81 @@ class Plugins {
 	private static $error = null;
 	private static $plugin_json = [];
 
+	public static function getAdminPages()
+	{
+		return Cache::remember('plugins_admin_pages', 10 * 60, function () {
+			$adminPages = [];
+			foreach(self::getAllPluginsJson() as $plugin) {
+				if (!self::getAutoLoadOption($plugin, 'admin-pages', true)) {
+					continue;
+				}
+
+				$adminPagesDefaultPriority = 1000;
+				if (isset($plugin['admin-pages-default-priority'])) {
+					$adminPagesDefaultPriority = $plugin['admin-pages-default-priority'];
+				}
+
+				//
+				// Get all plugins/*/admin-pages/*.php pages
+				//
+				$pluginAdminPages = glob(PLUGINS . $plugin['filename'] . '/admin-pages/*.php');
+				foreach ($pluginAdminPages as $file) {
+					$file = str_replace(PLUGINS, 'plugins/', $file);
+					$name = pathinfo($file, PATHINFO_FILENAME);
+
+					$adminPages[] = ['name' => $name, 'file' => $file, 'priority' => $adminPagesDefaultPriority];
+				}
+
+				if (self::getAutoLoadOption($plugin, 'admin-pages-sub-folders', true)) {
+					//
+					// Get all plugins/*/admin-pages/subFolder/*.php pages
+					//
+					$pluginAdminPagesSubFolders = glob(PLUGINS . $plugin['filename'] . '/admin-pages/*', GLOB_ONLYDIR);
+					foreach ($pluginAdminPagesSubFolders as $folder) {
+						$folderName = pathinfo($folder, PATHINFO_FILENAME);
+
+						$subFiles = glob(PLUGINS . $plugin['filename'] . '/admin-pages/' . $folderName . '/*.php');
+						foreach ($subFiles as $file) {
+							$file = str_replace(PLUGINS, 'plugins/', $file);
+							$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
+
+							$adminPages[] = ['name' => $name, 'file' => $file, 'priority' => $adminPagesDefaultPriority];
+						}
+
+						$subFolders = glob(PLUGINS . $plugin['filename'] . '/admin-pages/' . $folderName . '/*', GLOB_ONLYDIR);
+						foreach ($subFolders as $subFolder) {
+							$subFolderName = pathinfo($subFolder, PATHINFO_FILENAME);
+							$subSubFiles = glob(PLUGINS . $plugin['filename'] . '/admin-pages/' . $folderName . '/' . $subFolderName . '/*.php');
+
+							foreach ($subSubFiles as $subSubFile) {
+								$subSubFile = str_replace(PLUGINS, 'plugins/', $subSubFile);
+								$name = $folderName . '/' . $subFolderName . '/' . pathinfo($subSubFile, PATHINFO_FILENAME);
+
+								$adminPages[] =  ['name' => $name, 'file' => $subSubFile, 'priority' => $adminPagesDefaultPriority];;
+							}
+						}
+					}
+				}
+			}
+
+			usort($adminPages, function ($a, $b)
+			{
+				if ($a['priority'] == $b['priority']) {
+					return 0;
+				}
+
+				return ($a['priority'] > $b['priority']) ? -1 : 1;
+			});
+
+			$ret = [];
+			foreach ($adminPages as $value) {
+				$ret[$value['name']] = $value['file'];
+			}
+
+			return $ret;
+		});
+	}
+
 	public static function getRoutes()
 	{
 		$cache = Cache::getInstance();
@@ -76,7 +151,8 @@ class Plugins {
 				$pagesDefaultPriority = $plugin['pages-default-priority'];
 			}
 
-			if (self::getAutoLoadOption($plugin, 'pages', true)) {
+			$autoLoadPages = self::getAutoLoadOption($plugin, 'pages', true);
+			if ($autoLoadPages) {
 				//
 				// Get all plugins/*/pages/*.php pages
 				//
@@ -89,7 +165,8 @@ class Plugins {
 				}
 			}
 
-			if (self::getAutoLoadOption($plugin, 'pagesSubFolders', true)) {
+			if ($autoLoadPages && self::getAutoLoadOption($plugin, 'pagesSubFolders', true) &&
+				self::getAutoLoadOption($plugin, 'pages-sub-folders', true)) {
 				//
 				// Get all plugins/*/pages/subFolder/*.php pages
 				//
@@ -411,19 +488,12 @@ class Plugins {
 			$continue = true;
 
 			if(!isset($plugin_json['name']) || empty(trim($plugin_json['name']))) {
-				self::$warnings[] = 'Plugin "name" tag is not set.';
+				self::$error = 'Plugin "name" tag is not set.';
+				return false;
 			}
-			if(!isset($plugin_json['description']) || empty(trim($plugin_json['description']))) {
-				self::$warnings[] = 'Plugin "description" tag is not set.';
-			}
+
 			if(!isset($plugin_json['version']) || empty(trim($plugin_json['version']))) {
 				self::$warnings[] = 'Plugin "version" tag is not set.';
-			}
-			if(!isset($plugin_json['author']) || empty(trim($plugin_json['author']))) {
-				self::$warnings[] = 'Plugin "author" tag is not set.';
-			}
-			if(!isset($plugin_json['contact']) || empty(trim($plugin_json['contact']))) {
-				self::$warnings[] = 'Plugin "contact" tag is not set.';
 			}
 
 			if(isset($plugin_json['require'])) {
@@ -631,6 +701,7 @@ class Plugins {
 			return false;
 		}
 
+		clearCache();
 		return true;
 	}
 
@@ -675,26 +746,41 @@ class Plugins {
 
 	public static function uninstall($plugin_name): bool
 	{
+		$isDisabled = self::existDisabled($plugin_name);
+		if($isDisabled) {
+			self::enable($plugin_name);
+		}
+
+		$revertEnable = function() use ($isDisabled, $plugin_name) {
+			if($isDisabled) {
+				self::disable($plugin_name);
+			}
+		};
+
 		$filename = BASE . 'plugins/' . $plugin_name . '.json';
 		if(!file_exists($filename)) {
 			self::$error = 'Plugin ' . $plugin_name . ' does not exist.';
+			$revertEnable();
 			return false;
 		}
+
 		$string = file_get_contents($filename);
 		$plugin_info = json_decode($string, true);
 		if(!$plugin_info) {
 			self::$error = 'Cannot load plugin info ' . $plugin_name . '.json';
+			$revertEnable();
 			return false;
 		}
 
 		if(!isset($plugin_info['uninstall'])) {
 			self::$error = "Plugin doesn't have uninstall options defined. Skipping...";
+			$revertEnable();
 			return false;
 		}
 
 		$success = true;
 		foreach($plugin_info['uninstall'] as $file) {
-			if(strpos($file, '/') === 0) {
+			if(str_starts_with($file, '/')) {
 				$success = false;
 				self::$error = "You cannot use absolute paths (starting with slash - '/'): " . $file;
 				break;
@@ -709,24 +795,19 @@ class Plugins {
 			}
 		}
 
-		if($success) {
-			foreach($plugin_info['uninstall'] as $file) {
-				if(!deleteDirectory(BASE . $file)) {
-					self::$warnings[] = 'Cannot delete: ' . $file;
-				}
-			}
-
-			$cache = Cache::getInstance();
-			if($cache->enabled()) {
-				$cache->delete('templates');
-				$cache->delete('hooks');
-				$cache->delete('template_menus');
-			}
-
-			return true;
+		if(!$success) {
+			$revertEnable();
+			return false;
 		}
 
-		return false;
+		foreach($plugin_info['uninstall'] as $file) {
+			if(!deleteDirectory(BASE . $file)) {
+				self::$warnings[] = 'Cannot delete: ' . $file;
+			}
+		}
+
+		clearCache();
+		return true;
 	}
 
 	public static function is_installed($plugin_name, $version): bool

@@ -17,7 +17,7 @@ csrfProtect();
 
 $use_datatable = true;
 
-if (!getBoolean(setting('core.admin_plugins_manage_enable'))) {
+if (!setting('core.admin_plugins_manage_enable')) {
 	warning('Plugin installation and management is disabled in Settings.<br/>If you wish to enable, go to Settings and enable <strong>Enable Plugins Manage</strong>.');
 }
 else {

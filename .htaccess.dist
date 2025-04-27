@@ -6,7 +6,7 @@
 	Options -MultiViews
 </IfModule>
 
-<FilesMatch "^(CHANGELOG\.md|README\.md|composer\.json|composer\.lock|package\.json|package-lock\.json|cypress\.env\.json)$">
+<FilesMatch "^(.*\.md|.*\.json|.*\.dist|.*\.sql|CHANGELOG|README|composer\.lock)$">
 	Require all denied
 </FilesMatch>
 

@@ -1,5 +1,66 @@
 # Changelog
 
+## [1.4 - 22.04.2025]
+
+### Added
+* feat: admin-pages (can add admin pages through plugins) (https://github.com/slawkens/myaac/commit/ceaa0639e66d31e8177ff90791463470367aa45d)
+	* just place the page in admin-pages folder in the plugin
+	* Also, possibility to overwrite default myaac admin pages
+* Add db->hasTableAndColumns(table, columns), credits to @opentibiabr Team (https://github.com/slawkens/myaac/commit/82a533d88c8a342076891d132b4b409ed9a1fe72)
+* Add noSubmit option to buttons.base (https://github.com/slawkens/myaac/commit/64f6d3abcada3bf9fd7599f50d2fac0a1367f383)
+
+### Fixed
+* Fix: display 404 error instead of 500 when page has been removed from filesystem (https://github.com/slawkens/myaac/commit/c2bf94fb2370d2009a2eb907f818955132cf8611)
+* Fix headline.php: change image format to .png cause of black background (https://github.com/slawkens/myaac/commit/b618084d50918539d9a70abd97e764137b966067)
+* Clear cache on plugin enable/disable, fixes some issues with plugin pages being cached (https://github.com/slawkens/myaac/commit/1d0c173e7d000aecbd432800941fc3e38a0e50f2)
+* Do not autoload sub-folders if autoload pages is disabled (https://github.com/slawkens/myaac/commit/d47195a7878095336f9c9edc6f96244257f67eec)
+
+### Changed
+* SQL Syntax Standardization (by @JoaozinhoBrasil, #298)
+* Pages in theme/template folder will now have precedence over normal pages (https://github.com/slawkens/myaac/commit/6d8f4718a1d349fba8f0ebc39cfd3a1a84d104b0)
+* Small changes in account.login.html.twig (https://github.com/slawkens/myaac/commit/f40b986b59d4c8fa89ab4745731bf366f8619976)
+* Plugin name is required, version is optional (https://github.com/slawkens/myaac/commit/e6f05a2731c61d931be49e121c068e49c0ad5e01)
+
+## [1.3.3 - 04.04.2025]
+
+### Fixed
+* Fix uninstall plugin when plugin is disabled (https://github.com/slawkens/myaac/commit/6c568fd36a271270684fc412ccd556b230273a6d)
+
+### Changed
+* Display more useful info when error parsing config.lua (https://github.com/slawkens/myaac/commit/fa6b6aa153ffc131e0d1631a4dcd9012a5850c2e)
+
+### Other
+* Small adjustments (https://github.com/slawkens/myaac/commit/35e2483de86e295bdf089cceffa25842eeb2e34c, https://github.com/slawkens/myaac/commit/ae639d65b0bfa491e747e907e2ebc77f83f47981)
+
+## [1.3.2 - 01.04.2025]
+
+### Fixed
+* Fix debugBar/admin panel menu when using custom base_dir (https://github.com/slawkens/myaac/commit/65696f63e3aac02ff952ea81279e7cb2fa7570fb)
+
+### Changed
+* Settings: Show/hide IP Ban Protection options depending on the value (enabled/disabled) (https://github.com/slawkens/myaac/commit/dbf73d0b61b45601ae95e51b23c051c2704169c5)
+* Do not require init.php in cache:clear command (https://github.com/slawkens/myaac/commit/d25c71857f767834239bbffacd00fdc671adb157)
+
+## [1.3.1 - 19.03.2025]
+
+### Fixed
+* Fixed migrate:run command (https://github.com/slawkens/myaac/commit/1a5771ad51e595fe13368a0721b059c4ecefb17d)
+
+### Changed
+* Small adjustments (https://github.com/slawkens/myaac/commit/6fac883659f581baac1361826d046410156f1e58, https://github.com/slawkens/myaac/commit/4a6896b4469968b9904292734cf6c14ba5eeef14)
+
+## [1.3 - 10.03.2025]
+
+### Changed
+* Use latest outfit-images host from @gesior (https://github.com/slawkens/myaac/commit/529bdcf016dd0f9dffbc34d81f99a046a9ddb70d)
+* Change monster link to $_GET ?name= (https://github.com/slawkens/myaac/commit/4c5cc8b573b2b3e7ec00a22b7ede30a68083a924)
+
+### Fixed
+* Fixed house links (https://github.com/slawkens/myaac/commit/887b5068ad11c4cdab614afd34525caba785ce13)
+* Fixed long title on headline.php (https://github.com/slawkens/myaac/commit/3e3f4bb5a514158ec8777684ca6c7f1c2a37bed5)
+* Fixed menu colors once again, plus add !important tag (https://github.com/slawkens/myaac/commit/aa52df6e2ec92cafc25b655ae907bf2e1746d9cc)
+* Fix: add possibility to remove all menu items in admin panel (https://github.com/slawkens/myaac/commit/00fe1adc15ea7646596d755f6e6e1f7854ffc1d5, https://github.com/slawkens/myaac/commit/9239a4f4198c3ad260802ac3b47e9c41b80b754e)
+
 ## [1.2 - 09.02.2025]
 
 ### Added
