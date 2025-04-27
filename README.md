@@ -1,6 +1,6 @@
 # [MyAAC](https://my-aac.org)
 
-MyAAC is a free and open-source Automatic Account Creator (AAC) written in PHP. It is a fork of the [Gesior](https://github.com/gesior/Gesior2012) project. It supports only MySQL databases.
+MyAAC is a free and open-source Automatic Account Creator (AAC) for Open Tibia Servers written in PHP. It is a fork of the [Gesior](https://github.com/gesior/Gesior2012) project. It supports only MySQL databases.
 
 Official website: https://my-aac.org
 
