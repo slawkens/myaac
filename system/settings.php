@@ -1473,7 +1473,7 @@ Sent by MyAAC,<br/>
 		],
 		'status_timeout' => [
 			'name' => 'Status Timeout',
-			'type' => 'number',
+			'type' => 'double',
 			'min' => 0,
 			'max' => 10, // more than 10 seconds waiting makes no sense
 			'step' => 0.1,

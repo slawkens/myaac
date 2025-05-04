@@ -219,7 +219,7 @@ class Settings implements \ArrayAccess
 					if ($setting['type'] === 'boolean') {
 						$value = ($setting['default'] ? 'true' : 'false');
 					}
-					else if (in_array($setting['type'], ['text', 'number', 'email', 'password', 'textarea'])) {
+					else if (in_array($setting['type'], ['text', 'number', 'float', 'double', 'email', 'password', 'textarea'])) {
 						$value = $setting['default'];
 					}
 					else if ($setting['type'] === 'options') {
@@ -245,7 +245,11 @@ class Settings implements \ArrayAccess
 					$checkbox($key, false, $value);
 				}
 
-				else if (in_array($setting['type'], ['text', 'number', 'email', 'password'])) {
+				else if (in_array($setting['type'], ['text', 'number', 'float', 'double', 'email', 'password'])) {
+					if (in_array($setting['type'], ['float', 'double'])) {
+						$setting['type'] = 'number';
+					}
+
 					if ($setting['type'] === 'number') {
 						$min = (isset($setting['min']) ? ' min="' . $setting['min'] . '"' : '');
 						$max = (isset($setting['max']) ? ' max="' . $setting['max'] . '"' : '');
@@ -351,7 +355,7 @@ class Settings implements \ArrayAccess
 								if ($setting['type'] === 'boolean') {
 									echo ($setting['default'] ? 'Yes' : 'No');
 								}
-								else if (in_array($setting['type'], ['text', 'number', 'email', 'password', 'textarea'])) {
+								else if (in_array($setting['type'], ['text', 'number', 'float', 'double', 'email', 'password', 'textarea'])) {
 									echo $setting['default'];
 								}
 								else if ($setting['type'] === 'options') {
@@ -498,9 +502,12 @@ class Settings implements \ArrayAccess
 					break;
 
 				case 'number':
-					if (!isset($ret['step']) || (int)$ret['step'] == 1) {
-						$ret['value'] = (int)$ret['value'];
-					}
+					$ret['value'] = (int)$ret['value'];
+					break;
+
+				case 'double':
+				case 'float':
+					$ret['value'] = (double)($ret['value']);
 					break;
 
 				default:
