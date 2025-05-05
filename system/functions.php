@@ -1572,22 +1572,6 @@ function right($str, $length) {
 	return substr($str, -$length);
 }
 
-function getMonsterImgPath($monster): string
-{
-	$monster_path = setting('core.monsters_images_url');
-	$monster_gfx_name = trim(strtolower($monster)) . setting('core.monsters_images_extension');
-	if (!file_exists($monster_path . $monster_gfx_name)) {
-		$monster_gfx_name = str_replace(" ", "", $monster_gfx_name);
-		if (file_exists($monster_path . $monster_gfx_name)) {
-			return $monster_path . $monster_gfx_name;
-		} else {
-			return $monster_path . 'nophoto.png';
-		}
-	} else {
-		return $monster_path . $monster_gfx_name;
-	}
-}
-
 function between($x, $lim1, $lim2) {
 	if ($lim1 < $lim2) {
 		$lower = $lim1; $upper = $lim2;
