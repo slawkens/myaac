@@ -575,7 +575,7 @@ function template_footer(): string
 	$footer[] = base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
 
 	global $hooks;
-	$footer = $hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
+	$hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
 
 	return implode('<br/>', $footer);
 }

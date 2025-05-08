@@ -11,7 +11,7 @@ class EnvironmentBridge extends Environment
 		global $hooks;
 
 		$context['viewName'] = $name;
-		$context = $hooks->triggerFilter(HOOK_FILTER_TWIG_DISPLAY, $context);
+		$hooks->triggerFilter(HOOK_FILTER_TWIG_DISPLAY, $context);
 
 		parent::display($name, $context);
 	}
@@ -21,7 +21,7 @@ class EnvironmentBridge extends Environment
 		global $hooks;
 
 		$context['viewName'] = $name;
-		$context = $hooks->triggerFilter(HOOK_FILTER_TWIG_RENDER, $context);
+		$hooks->triggerFilter(HOOK_FILTER_TWIG_RENDER, $context);
 
 		return parent::render($name, $context);
 	}
