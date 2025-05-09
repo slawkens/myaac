@@ -136,6 +136,11 @@ if($forumSetting != '')
 $twig->addGlobal('template_name', $template_name);
 $twig->addGlobal('template_path', $template_path);
 if($twig_loader) {
+	$viewsPath = BASE . $template_path . '/views';
+	if (is_dir($viewsPath)) {
+		$twig_loader->prependPath($viewsPath);
+	}
+
 	$twig_loader->prependPath(BASE . $template_path);
 }
 
