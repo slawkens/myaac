@@ -54,11 +54,12 @@ if ($db->hasTable('players')) {
 	}
 }
 
-Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
-Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
-
 DataLoader::setLocale($locale);
 DataLoader::load();
+
+// add menus entries
+require_once SYSTEM . 'migrations/17.php';
+$up();
 
 // update config.highscores_ids_hidden
 require_once SYSTEM . 'migrations/20.php';

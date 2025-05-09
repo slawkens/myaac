@@ -10,8 +10,13 @@ $up = function () use ($db) {
 		$db->exec(file_get_contents(__DIR__ . '/17-menu.sql'));
 	}
 
-	Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
-	Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
+	$themes = ['kathrine', 'tibiacom',];
+	foreach ($themes as $theme) {
+		$file = TEMPLATES . $theme . '/menus.php';
+		if (is_file($file)) {
+			Plugins::installMenus($theme, require $file);
+		}
+	}
 };
 
 $down = function () use ($db) {
