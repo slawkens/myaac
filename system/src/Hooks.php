@@ -30,16 +30,14 @@ class Hooks
 		return $ret;
 	}
 
-	public function triggerFilter($type, $args = [])
+	public function triggerFilter($type, &$args): void
 	{
 		if(isset(self::$_hooks[$type])) {
 			foreach(self::$_hooks[$type] as $hook) {
 				/** @var Hook $hook */
-				$args = $hook->executeFilter(...$args);
+				$hook->executeFilter($args);
 			}
 		}
-
-		return $args;
 	}
 
 	public function exist($type): bool {

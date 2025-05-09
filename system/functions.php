@@ -575,7 +575,7 @@ function template_footer(): string
 	$footer[] = base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
 
 	global $hooks;
-	$footer = $hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
+	$hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
 
 	return implode('<br/>', $footer);
 }
@@ -1576,22 +1576,6 @@ function left($str, $length) {
 
 function right($str, $length) {
 	return substr($str, -$length);
-}
-
-function getMonsterImgPath($monster): string
-{
-	$monster_path = setting('core.monsters_images_url');
-	$monster_gfx_name = trim(strtolower($monster)) . setting('core.monsters_images_extension');
-	if (!file_exists($monster_path . $monster_gfx_name)) {
-		$monster_gfx_name = str_replace(" ", "", $monster_gfx_name);
-		if (file_exists($monster_path . $monster_gfx_name)) {
-			return $monster_path . $monster_gfx_name;
-		} else {
-			return $monster_path . 'nophoto.png';
-		}
-	} else {
-		return $monster_path . $monster_gfx_name;
-	}
 }
 
 function between($x, $lim1, $lim2) {

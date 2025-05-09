@@ -317,6 +317,11 @@ $content .= ob_get_contents();
 ob_end_clean();
 $hooks->trigger(HOOK_AFTER_PAGE);
 
+if (isset($_REQUEST['_page_only'])) {
+	echo $content;
+	die;
+}
+
 if(!isset($title)) {
 	$title = str_replace('index.php/', '', $page);
 	$title = ucfirst($title);

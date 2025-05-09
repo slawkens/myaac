@@ -198,6 +198,9 @@ class Plugins {
 			}
 		}
 
+		global $hooks;
+		$hooks->triggerFilter(HOOK_FILTER_ROUTES, $routes);
+
 		usort($routes, function ($a, $b)
 		{
 			// key 3 is priority

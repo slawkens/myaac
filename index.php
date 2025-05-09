@@ -168,6 +168,7 @@ if ($logged && admin()) {
 		'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
 	]);
 }
+
 $title_full =  (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];
 require $template_path . '/' . $template_index;
 
