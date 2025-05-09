@@ -97,7 +97,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  *
  * @param IOTS_GuildAction $invites Invites driver (don't pass it to clear driver).
  */
-    public function setInvitesDriver(IOTS_GuildAction $invites = null)
+    public function setInvitesDriver(?IOTS_GuildAction $invites = null)
     {
         $this->invites = $invites;
     }
@@ -107,7 +107,7 @@ class OTS_Guild extends OTS_Row_DAO implements IteratorAggregate, Countable
  *
  * @param IOTS_GuildAction $requests Membership requests driver (don't pass it to clear driver).
  */
-    public function setRequestsDriver(IOTS_GuildAction $requests = null)
+    public function setRequestsDriver(?IOTS_GuildAction $requests = null)
     {
         $this->requests = $requests;
     }

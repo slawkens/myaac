@@ -2026,7 +2026,7 @@ class OTS_Player extends OTS_Row_DAO
  * @param OTS_GuildRank|null Guild rank (null to clear assign).
  * @throws E_OTS_NotLoaded If passed <var>$guildRank</var> parameter is not loaded.
  */
-	public function setRank(OTS_GuildRank $guildRank = null)
+	public function setRank(?OTS_GuildRank $guildRank = null)
 	{
 		if(isset($guildRank))
 			$this->setRankId($guildRank->getId(), $guildRank->getGuild()->getId());
@@ -2632,7 +2632,7 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-	public function setSlot($slot, OTS_Item $item = null, $pid = 0)
+	public function setSlot($slot, ?OTS_Item $item = null, $pid = 0)
 	{
 		static $sid;
 
@@ -2776,7 +2776,7 @@ class OTS_Player extends OTS_Row_DAO
  * @throws E_OTS_NotLoaded If player is not loaded.
  * @throws PDOException On PDO operation error.
  */
-	public function setDepot($depot, OTS_Item $item = null, $pid = 0, $depot_id = 0)
+	public function setDepot($depot, ?OTS_Item $item = null, $pid = 0, $depot_id = 0)
 	{
 		static $sid;
 
