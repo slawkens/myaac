@@ -4,7 +4,7 @@
     "postinstall": "node ./npm-post-install.js"
   },
   "devDependencies": {
-    "cypress": "^13.17.0"
+    "cypress": "^14.3.3"
   },
   "dependencies": {
     "@tinymce/tinymce-jquery": "^2.1.0",
