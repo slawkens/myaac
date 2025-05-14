@@ -1115,7 +1115,7 @@ class POT
  *
  * @param IOTS_FileCache $cache Cache handler (skip this parameter to reset cache handler to null).
  */
-    public function setItemsCache(IOTS_FileCache $cache = null)
+    public function setItemsCache(?IOTS_FileCache $cache = null)
     {
         $this->itemsCache = $cache;
     }
@@ -1253,7 +1253,7 @@ class POT
  *
  * @param IOTS_FileCache $cache Cache handler (skip this parameter to reset cache handler to null).
  */
-    public function setMapCache(IOTS_FileCache $cache = null)
+    public function setMapCache(?IOTS_FileCache $cache = null)
     {
         $this->mapCache = $cache;
     }
