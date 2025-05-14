@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.5 - 14.05.2025]
+
+### Added
+* Feature/twig hooks filters (#258)
+* Add latest client versions (14.00 - 15.01) (https://github.com/slawkens/myaac/commit/5367df23812c6182863353c9a39fd7fb0b743f4b)
+* db variable to twig (https://github.com/slawkens/myaac/commit/5ed1aec28e146b871a75597411d12e42a067f4e6)
+* New filter: HOOK_FILTER_ROUTES (https://github.com/slawkens/myaac/commit/9b75011224f385db8b27e109bfeb28e75b9d779c)
+* Allow optionally separate folder for views (thanks @Scrollog for idea) (https://github.com/slawkens/myaac/commit/03e275213901a89edb0ebb8974b776a992ab391f)
+* Add float & double types to the Settings (https://github.com/slawkens/myaac/commit/67ab425bb9796d9d123296e3fda542fa8f7f05ee)
+* Add optional param _page_only for single-page apps etc. (https://github.com/slawkens/myaac/commit/113473f2560aab6d364c301cc14a8b5ba8f309f4)
+
+### Changed
+* Change OTS_Account->getPremDays to not return -1 in case of freePremium (https://github.com/slawkens/myaac/commit/3befde2a1e4d24a011311e785f15185db57e19b8)
+* Add note about highscores being updated x minutes + allow ttl 0 to disable cache (https://github.com/slawkens/myaac/commit/a161cff00329da6f970f3a70967fe8346fe92bbc)
+* Better monster images (no image not found anymore) + use cache (https://github.com/slawkens/myaac/commit/73a5829974ceca3f02d7925d5cfbd5fa50b1bbd2)
+* Rename server-info -> ots-info, changelog -> change-log (Due to conflict with apache2 server-info mod) (https://github.com/slawkens/myaac/commit/3949d84e5d7631f332111b6d00278bddbd0ad10a)
+* Move rules page to admin panel (https://github.com/slawkens/myaac/commit/3949d84e5d7631f332111b6d00278bddbd0ad10a)
+
+### Fixed
+* php 8.4 warnings
+* Visitors counter not working properly on dev mode (https://github.com/slawkens/myaac/commit/da151051186c913dd0dd091aabe893649c2b9ee7)
+* Fix login.php boosted creature & boss (not sure exact version, but should be 14.12 or around) (https://github.com/slawkens/myaac/commit/c48b8006319f6c3b5f082befd16785420bb98110)
+* Fix installMenus when theme/template was removed from disc (https://github.com/slawkens/myaac/commit/c24c580796bccd54bf9e95b864763f4642684d55)
+* Fix if user removes the menu category (https://github.com/slawkens/myaac/commit/dbea69f31478391dacfbbc02c8353c39b4245daf)
+
+### Updated:
+* Update cypress from version ^13.17.0 to ^14.3.3 (https://github.com/slawkens/myaac/commit/629fd18ea166860d5898a822f44f9277da6ce43d)
+
 ## [1.4 - 22.04.2025]
 
 ### Added
