@@ -122,7 +122,9 @@ try {
 
 	$eloquentConnection = $capsule->getConnection();
 
-	$twig->addGlobal('db', $db);
+	if (isset($twig)) {
+		$twig->addGlobal('db', $db);
+	}
 
 } catch (Exception $e) {
 	if(isset($cache) && $cache->enabled()) {
