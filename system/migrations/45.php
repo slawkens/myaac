@@ -19,7 +19,7 @@ $up = function() {
 			'date' => time(),
 			'player_id' => 1,
 			'php' => 0,
-			'enable_tinymce' => 0,
+			'enable_tinymce' => 1,
 			'access' => 0,
 			'hide' => 0,
 		]);
