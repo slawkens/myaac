@@ -79,6 +79,10 @@ $up();
 require_once SYSTEM . 'migrations/31.php';
 $up();
 
+// rules page
+require_once SYSTEM . 'migrations/45.php';
+$up();
+
 if(ModelsFAQ::count() == 0) {
 	ModelsFAQ::create([
 		'question' => 'What is this?',

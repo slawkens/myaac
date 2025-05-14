@@ -1,4 +1,4 @@
-SET @myaac_database_version = 44;
+SET @myaac_database_version = 45;
 
 CREATE TABLE `myaac_account_actions`
 (
