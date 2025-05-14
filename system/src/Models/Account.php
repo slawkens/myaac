@@ -43,9 +43,6 @@ class Account extends Model {
 			return 0;
 		}
 
-		global $config;
-		if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
-
 		if($this->premdays == 65535){
 			return 65535;
 		}
