@@ -1035,8 +1035,8 @@ Sent by MyAAC,<br/>
 		'highscores_cache_ttl' => [
 			'name' => 'Highscores Cache TTL (in minutes)',
 			'type' => 'number',
-			'min' => 1,
-			'desc' => 'How often to update highscores from database in minutes (default 15 minutes). Too low may cause lags on website.',
+			'min' => 0,
+			'desc' => 'How often to update highscores from database in minutes. Too low may slow down your website.<br/>0 to disable.',
 			'default' => 15,
 		],
 		'highscores_vocation_box' => [

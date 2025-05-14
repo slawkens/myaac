@@ -18,8 +18,11 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Highscores';
 
 $settingHighscoresCountryBox = setting('core.highscores_country_box');
-if(config('account_country') && $settingHighscoresCountryBox)
+if(config('account_country') && $settingHighscoresCountryBox) {
 	require SYSTEM . 'countries.conf.php';
+}
+
+$highscoresTTL = setting('core.highscores_cache_ttl');
 
 $list = urldecode($_GET['list'] ?? 'experience');
 $page = $_GET['page'] ?? 1;
@@ -140,7 +143,7 @@ $needReCache = true;
 $cacheKey = 'highscores_' . $skill . '_' . $vocation . '_' . $page . '_' . $configHighscoresPerPage;
 
 $cache = Cache::getInstance();
-if ($cache->enabled()) {
+if ($cache->enabled() && $highscoresTTL > 0) {
 	$tmp = '';
 	if ($cache->fetch($cacheKey, $tmp)) {
 		$highscores = unserialize($tmp);
@@ -214,8 +217,8 @@ if (empty($highscores)) {
 	})->toArray();
 }
 
-if ($cache->enabled() && $needReCache) {
-	$cache->set($cacheKey, serialize($highscores), setting('core.highscores_cache_ttl') * 60);
+if ($highscoresTTL > 0 && $cache->enabled() && $needReCache) {
+	$cache->set($cacheKey, serialize($highscores), $highscoresTTL * 60);
 }
 
 $show_link_to_next_page = false;
@@ -277,6 +280,10 @@ if(setting('core.highscores_frags')) {
 }
 if(setting('core.highscores_balance'))
 	$types['balance'] = 'Balance';
+
+if ($highscoresTTL > 0 && $cache->enabled()) {
+	echo '<small>*Note: Highscores are updated every' . ($highscoresTTL > 1 ? ' ' . $highscoresTTL : '') . ' minute' . ($highscoresTTL > 1 ? 's' : '') . '.</small><br/><br/>';
+}
 
 /** @var Twig\Environment $twig */
 $twig->display('highscores.html.twig', [
