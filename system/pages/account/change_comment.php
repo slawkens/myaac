@@ -36,6 +36,8 @@ if($player_name != null) {
 							'description' => 'The character information has been changed.'
 						));
 						$show_form = false;
+
+						$hooks->trigger(HOOK_ACCOUNT_CHARACTERS_CHANGE_COMMENT_AFTER_SUCCESS, ['player' => $player]);
 					}
 				}
 			} else {
