@@ -95,3 +95,8 @@ else {
 }
 
 $hooks->trigger(HOOK_ACCOUNT_LOGIN_POST);
+
+if($logged) {
+	$twig->addGlobal('logged', true);
+	$twig->addGlobal('account_logged', $account_logged);
+}
