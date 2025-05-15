@@ -62,7 +62,7 @@ define('HOOK_ACCOUNT_MANAGE_BEFORE_CHARACTERS', ++$i);
 define('HOOK_EMAIL_CONFIRMED', ++$i);
 define('HOOK_GUILDS_AFTER_INVITED_CHARACTERS', ++$i);
 define('HOOK_FIRST', HOOK_STARTUP);
-define('HOOK_LAST', HOOK_EMAIL_CONFIRMED);
+define('HOOK_LAST', $i);
 
 require_once LIBS . 'plugins.php';
 require_once LIBS . 'src/Plugins.php';
