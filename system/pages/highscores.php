@@ -58,64 +58,79 @@ if($vocation !== 'all') {
 	}
 }
 
-$skill = POT::SKILL__LEVEL;
-if(is_numeric($list))
-{
-	$list = (int) $list;
-	if($list >= POT::SKILL_FIRST && $list <= POT::SKILL__LAST)
-		$skill = $list;
+$categories = [
+	'experience' => 'Experience',
+	'magic' => 'Magic',
+	'shield' => 'Shielding',
+	'distance' => 'Distance',
+	'club' => 'Club',
+	'sword' => 'Sword',
+	'axe' => 'Axe',
+	'fist' => 'Fist',
+	'fishing' => 'Fishing',
+];
+
+if(setting('core.highscores_frags')) {
+	$categories['frags'] = 'Frags';
 }
-else
+if(setting('core.highscores_balance'))
+	$categories['balance'] = 'Balance';
+
+$skill = POT::SKILL__LEVEL;
+switch($list)
 {
-	switch($list)
-	{
-		case 'fist':
-			$skill = POT::SKILL_FIST;
-			break;
+	case 'fist':
+		$skill = POT::SKILL_FIST;
+		break;
 
-		case 'club':
-			$skill = POT::SKILL_CLUB;
-			break;
+	case 'club':
+		$skill = POT::SKILL_CLUB;
+		break;
 
-		case 'sword':
-			$skill = POT::SKILL_SWORD;
-			break;
+	case 'sword':
+		$skill = POT::SKILL_SWORD;
+		break;
 
-		case 'axe':
-			$skill = POT::SKILL_AXE;
-			break;
+	case 'axe':
+		$skill = POT::SKILL_AXE;
+		break;
 
-		case 'distance':
-			$skill = POT::SKILL_DIST;
-			break;
+	case 'distance':
+		$skill = POT::SKILL_DIST;
+		break;
 
-		case 'shield':
-			$skill = POT::SKILL_SHIELD;
-			break;
+	case 'shield':
+		$skill = POT::SKILL_SHIELD;
+		break;
 
-		case 'fishing':
-			$skill = POT::SKILL_FISH;
-			break;
+	case 'fishing':
+		$skill = POT::SKILL_FISH;
+		break;
 
-		case 'level':
-		case 'experience':
-			$skill = POT::SKILL_LEVEL;
-			break;
+	case 'magic':
+		$skill = POT::SKILL__MAGLEVEL;
+		break;
 
-		case 'magic':
-			$skill = POT::SKILL__MAGLEVEL;
-			break;
+	case 'frags':
+		if(setting('core.highscores_frags'))
+			$skill = SKILL_FRAGS;
+		break;
 
-		case 'frags':
-			if(setting('core.highscores_frags'))
-				$skill = SKILL_FRAGS;
-			break;
+	case 'balance':
+		if(setting('core.highscores_balance'))
+			$skill = SKILL_BALANCE;
+		break;
+}
 
-		case 'balance':
-			if(setting('core.highscores_balance'))
-				$skill = SKILL_BALANCE;
-			break;
-	}
+$args = ['list' => $list, 'skill' => $skill, 'categories' => $categories];
+$hooks->triggerFilter(HOOK_FILTER_HIGHSCORES_LIST, $args);
+
+$list = $args['list'];
+$skill = $args['skill'];
+$categories = $args['categories'];
+
+if (!isset($categories[$list])) {
+	$skill = null;
 }
 
 $promotion = '';
@@ -162,8 +177,18 @@ $query->join('accounts', 'accounts.id', '=', 'players.account_id')
 	->selectRaw('accounts.country, players.id, players.name, players.account_id, players.level, players.vocation' . $outfit . $promotion)
 	->orderByDesc('value');
 
+if ($skill == SKILL_FRAGS) {
+	$skillName = 'Frags';
+}
+else if($skill == SKILL_BALANCE) {
+	$skillName = 'Balance';
+}
+else {
+	$skillName = getSkillName($skill);
+}
+
 if (empty($highscores)) {
-	if ($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
+	if ($skill && $skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
 		if ($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
 			$skill_ids = array(
 				POT::SKILL_FIST => 'skill_fist',
@@ -193,20 +218,37 @@ if (empty($highscores)) {
 	{
 		$query
 			->addSelect('players.balance as value');
-	} else {
-		if ($skill == POT::SKILL__MAGLEVEL) {
-			$query
-				->addSelect('players.maglevel as value', 'players.maglevel')
-				->orderBy('manaspent');
-		} else { // level
-			$query
-				->addSelect('players.level as value', 'players.experience')
-				->orderBy('experience');
-			$list = 'experience';
-		}
+	}
+	else if ($skill == POT::SKILL__MAGLEVEL) {
+		$query
+			->addSelect('players.maglevel as value', 'players.maglevel')
+			->orderBy('manaspent');
+	} else if ($skill == POT::SKILL__LEVEL) {
+		$query
+			->addSelect('players.level as value', 'players.experience')
+			->orderBy('experience', 'desc');
+		$list = 'experience';
+	}
+	else if ($skill) {
+		$args = [
+			'list' => $list,
+			'skill' => $skill,
+			'skillName' => $skillName,
+			'query' => $query
+		];
+
+		$hooks->triggerFilter(HOOK_FILTER_HIGHSCORES, $args);
+
+		$list = $args['list'];
+		$skill = $args['skill'];
+		$skillName = $args['skillName'];
+		$query = $args['query'];
+	}
+	else {
+		$query = null;
 	}
 
-	$highscores = $query->get()->map(function($row) {
+	$highscores = ($query ? $query->get()->map(function($row) {
 		$tmp = $row->toArray();
 		$tmp['online'] = $row->online_status;
 		$tmp['vocation'] = $row->vocation_name;
@@ -214,7 +256,7 @@ if (empty($highscores)) {
 		unset($tmp['online_table']);
 
 		return $tmp;
-	})->toArray();
+	})->toArray() : []);
 }
 
 if ($highscoresTTL > 0 && $cache->enabled() && $needReCache) {
@@ -239,9 +281,11 @@ foreach($highscores as $id => &$player)
 
 		$player['link'] = getPlayerLink($player['name'], false);
 		$player['flag'] = getFlagImage($player['country']);
+
 		if($settingHighscoresOutfit) {
 			$player['outfit'] = '<img style="position:absolute;margin-top:' . (in_array($player['looktype'], setting('core.outfit_images_wrong_looktypes')) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . $player['outfit_url'] . '" alt="" />';
 		}
+
 		$player['rank'] = $offset + $i;
 	}
 	else {
@@ -263,24 +307,6 @@ if($show_link_to_next_page) {
 	$linkNextPage = getLink('highscores') . '/' . $list . ($vocation !== 'all' ? '/' . $vocation : '') . '/' . ($page + 1);
 }
 
-$types = array(
-	'experience' => 'Experience',
-	'magic' => 'Magic',
-	'shield' => 'Shielding',
-	'distance' => 'Distance',
-	'club' => 'Club',
-	'sword' => 'Sword',
-	'axe' => 'Axe',
-	'fist' => 'Fist',
-	'fishing' => 'Fishing',
-);
-
-if(setting('core.highscores_frags')) {
-	$types['frags'] = 'Frags';
-}
-if(setting('core.highscores_balance'))
-	$types['balance'] = 'Balance';
-
 if ($highscoresTTL > 0 && $cache->enabled()) {
 	echo '<small>*Note: Highscores are updated every' . ($highscoresTTL > 1 ? ' ' . $highscoresTTL : '') . ' minute' . ($highscoresTTL > 1 ? 's' : '') . '.</small><br/><br/>';
 }
@@ -290,11 +316,12 @@ $twig->display('highscores.html.twig', [
 	'highscores' => $highscores,
 	'list' => $list,
 	'skill' => $skill,
-	'skillName' => ($skill == SKILL_FRAGS ? 'Frags' : ($skill == SKILL_BALANCE ? 'Balance' : getSkillName($skill))),
+	'skillName' => $skillName,
 	'levelName' => ($skill != SKILL_FRAGS && $skill != SKILL_BALANCE ? 'Level' : ($skill == SKILL_BALANCE ? 'Balance' : 'Frags')),
 	'vocation' => $vocation !== 'all' ? $vocation :  null,
 	'vocationId' => $vocationId,
-	'types' => $types,
+	'categories' => $categories,
+	'types' => $categories, // leave for compatibility with outdated twigs
 	'linkPreviousPage' => $linkPreviousPage,
 	'linkNextPage' => $linkNextPage,
 ]);
