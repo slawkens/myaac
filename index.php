@@ -193,10 +193,6 @@ define('PAGE', $page);
 
 $template_place_holders = array();
 
-// event system
-require_once SYSTEM . 'hooks.php';
-$hooks = new Hooks();
-$hooks->load();
 require_once SYSTEM . 'login.php';
 require_once SYSTEM . 'status.php';
 

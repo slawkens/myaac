@@ -34,11 +34,6 @@ if(config('env') === 'dev') {
 	error_reporting(E_ALL);
 }
 
-// event system
-require_once SYSTEM . 'hooks.php';
-$hooks = new Hooks();
-$hooks->load();
-
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
 require SYSTEM . 'migrate.php';

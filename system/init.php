@@ -124,6 +124,12 @@ require_once SYSTEM . 'libs/pot/OTS.php';
 $ots = POT::getInstance();
 require_once SYSTEM . 'database.php';
 
+// event system
+require_once SYSTEM . 'hooks.php';
+$hooks = new Hooks();
+$hooks->load();
+$hooks->trigger(HOOK_INIT);
+
 // twig
 require_once SYSTEM . 'twig.php';
 

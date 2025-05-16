@@ -8,7 +8,6 @@ if(PHP_SAPI !== 'cli') {
 require_once __DIR__ . '/../../common.php';
 require_once SYSTEM . 'functions.php';
 require_once SYSTEM . 'init.php';
-require_once SYSTEM . 'hooks.php';
 
 if($argc !== 2) {
 	echo 'This command expects one parameter: zip file name (plugin)' . PHP_EOL;

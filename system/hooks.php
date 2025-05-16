@@ -10,6 +10,7 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 $i = 0;
+define('HOOK_INIT', ++$i);
 define('HOOK_STARTUP', ++$i);
 define('HOOK_BEFORE_PAGE', ++$i);
 define('HOOK_AFTER_PAGE', ++$i);
@@ -61,6 +62,7 @@ define('HOOK_ACCOUNT_MANAGE_BEFORE_ACCOUNT_LOGS', ++$i);
 define('HOOK_ACCOUNT_MANAGE_BEFORE_CHARACTERS', ++$i);
 define('HOOK_EMAIL_CONFIRMED', ++$i);
 define('HOOK_GUILDS_AFTER_INVITED_CHARACTERS', ++$i);
+define('HOOK_TWIG', ++$i);
 define('HOOK_FIRST', HOOK_STARTUP);
 define('HOOK_LAST', $i);
 
