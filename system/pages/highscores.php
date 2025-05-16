@@ -73,54 +73,32 @@ $categories = [
 if(setting('core.highscores_frags')) {
 	$categories['frags'] = 'Frags';
 }
+
 if(setting('core.highscores_balance'))
 	$categories['balance'] = 'Balance';
 
 $skill = POT::SKILL__LEVEL;
-switch($list)
-{
-	case 'fist':
-		$skill = POT::SKILL_FIST;
-		break;
 
-	case 'club':
-		$skill = POT::SKILL_CLUB;
-		break;
+$skillNameToId = [
+	'fist' => POT::SKILL_FIST,
+	'club' => POT::SKILL_CLUB,
+	'sword' => POT::SKILL_SWORD,
+	'axe' => POT::SKILL_AXE,
+	'distance' => POT::SKILL_DIST,
+	'shield' => POT::SKILL_SHIELD,
+	'fishing' => POT::SKILL_FISH,
+	'magic' => POT::SKILL__MAGLEVEL,
+];
 
-	case 'sword':
-		$skill = POT::SKILL_SWORD;
-		break;
-
-	case 'axe':
-		$skill = POT::SKILL_AXE;
-		break;
-
-	case 'distance':
-		$skill = POT::SKILL_DIST;
-		break;
-
-	case 'shield':
-		$skill = POT::SKILL_SHIELD;
-		break;
-
-	case 'fishing':
-		$skill = POT::SKILL_FISH;
-		break;
-
-	case 'magic':
-		$skill = POT::SKILL__MAGLEVEL;
-		break;
-
-	case 'frags':
-		if(setting('core.highscores_frags'))
-			$skill = SKILL_FRAGS;
-		break;
-
-	case 'balance':
-		if(setting('core.highscores_balance'))
-			$skill = SKILL_BALANCE;
-		break;
+if(setting('core.highscores_frags')) {
+	$skillNameToId['frags'] = SKILL_FRAGS;
 }
+
+if(setting('core.highscores_balance')) {
+	$skillNameToId['balance'] = SKILL_BALANCE;
+}
+
+$skill = $skillNameToId[$list];
 
 $args = ['list' => $list, 'skill' => $skill, 'categories' => $categories];
 $hooks->triggerFilter(HOOK_FILTER_HIGHSCORES_LIST, $args);
