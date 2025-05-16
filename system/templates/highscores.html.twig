@@ -9,7 +9,7 @@
 					<td>
 						<label for="skillFilter">Choose a Skill</label>
 						<select onchange="location = this.value;" id="skillFilter">
-							{% for link, name in types %}
+							{% for link, name in categories %}
 								<option value="{{ getLink('highscores') }}/{{ link|urlencode }}{% if vocation is not null %}/{{ vocation|lower|urlencode }}{% endif %}" class="size_xs" {% if list is not null and list == link %}selected{% endif %}>{{ name }}</option>
 							{% endfor %}
 						</select>
@@ -102,7 +102,7 @@
 				</tr>
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>
-						{% for link, name in types %}
+						{% for link, name in categories %}
 							<a href="{{ getLink('highscores') }}/{{ link|urlencode }}{% if vocation is not null %}/{{ vocation|urlencode }}{% endif %}" class="size_xs">{{ name }}</a><br/>
 						{% endfor %}
 					</td>
