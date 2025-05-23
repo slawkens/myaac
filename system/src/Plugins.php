@@ -677,10 +677,15 @@ class Plugins {
 					return false;
 				}
 
-				if (isset($plugin_json['install'])) {
-					if (file_exists(BASE . $plugin_json['install'])) {
+				$install = $plugin_json['install'] ?? '';
+				if (self::getAutoLoadOption($plugin_json, 'install', true) && is_file(PLUGINS . $pluginFilename . '/install.php')) {
+					$install = 'plugins/' . $pluginFilename . '/install.php';
+				}
+
+				if (!empty($install)) {
+					if (file_exists(BASE . $install)) {
 						$db->revalidateCache();
-						require BASE . $plugin_json['install'];
+						require BASE . $install;
 						$db->revalidateCache();
 					}
 					else
