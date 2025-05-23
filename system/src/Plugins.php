@@ -347,6 +347,25 @@ class Plugins {
 
 		$settings = [];
 		foreach (self::getAllPluginsJson() as $plugin) {
+			if (!self::getAutoLoadOption($plugin, 'settings', true)) {
+				continue;
+			}
+
+			$settingsFileName = PLUGINS . $plugin['filename'] . '/settings.php';
+			if (!is_file($settingsFileName)) {
+				continue;
+			}
+
+			$settingsFile = require $settingsFileName;
+			if (!isset($settingsFile['key'])) {
+				warning("Settings file for plugin - {$plugin['name']} does not contain 'key' field");
+				continue;
+			}
+
+			$settings[$settingsFile['key']] = ['pluginFilename' => $plugin['filename'], 'settingsFilename' => 'plugins/' . $plugin['filename'] . '/settings.php'];
+		}
+
+		foreach (self::getAllPluginsJson() as $plugin) {
 			if (isset($plugin['settings'])) {
 				$settingsFile = require BASE . $plugin['settings'];
 				if (!isset($settingsFile['key'])) {
@@ -401,8 +420,14 @@ class Plugins {
 			return false;
 		}
 
-		if (!isset($plugin_json['settings']) || !file_exists(BASE . $plugin_json['settings'])) {
-			return false;
+		$settingsFileName = PLUGINS . $plugin_json['filename'] . '/settings.php';
+		if (!is_file($settingsFileName)) {
+			if (!isset($plugin_json['settings']) || !is_file(BASE . $plugin_json['settings'])) {
+				return false;
+			}
+		}
+		else {
+			return 'plugins/' . $plugin_json['filename'] . '/settings.php';
 		}
 
 		return $plugin_json['settings'];
@@ -431,6 +456,8 @@ class Plugins {
 			self::$warnings[] = 'Skipping ' . $filename . '... The plugin is disabled.';
 			return false;
 		}
+
+		$plugin_json['filename'] = $filename;
 
 		return $plugin_json;
 	}

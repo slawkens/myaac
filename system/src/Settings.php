@@ -560,8 +560,8 @@ class Settings implements \ArrayAccess
 				$settingsFilePath = BASE . $settings[$pluginKeyName]['settingsFilename'];
 			}
 
-			if (!file_exists($settingsFilePath)) {
-				throw new \RuntimeException('Failed to load settings file for plugin: ' . $pluginKeyName);
+			if (!is_file($settingsFilePath)) {
+				throw new \RuntimeException('Failed to load settings file for plugin: ' . $pluginKeyName . ' (Tried: ' . $settingsFilePath . ')');
 			}
 
 			$this->settingsFile[$pluginKeyName] = require $settingsFilePath;
