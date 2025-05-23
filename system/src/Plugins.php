@@ -688,8 +688,9 @@ class Plugins {
 						require BASE . $install;
 						$db->revalidateCache();
 					}
-					else
+					else {
 						self::$warnings[] = 'Cannot load install script. Your plugin might be not working correctly.';
+					}
 				}
 
 				clearCache();
