@@ -11,12 +11,12 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'MyAAC Changelog';
 
-if (!file_exists(BASE . 'CHANGELOG.md')) {
+if (!file_exists(BASE . 'CHANGELOG-1.x.md')) {
 	echo 'File CHANGELOG.md doesn\'t exist.';
 	return;
 }
 
-$changelog = file_get_contents(BASE . 'CHANGELOG.md');
+$changelog = file_get_contents(BASE . 'CHANGELOG-1.x.md');
 
 $Parsedown = new Parsedown();
 
