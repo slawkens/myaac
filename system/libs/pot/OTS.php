@@ -32,19 +32,19 @@ class POT
 /**
  * North.
  */
-    const DIRECTION_NORTH = 0;
+	const DIRECTION_NORTH = 0;
 /**
  * East.
  */
-    const DIRECTION_EAST = 1;
+	const DIRECTION_EAST = 1;
 /**
  * South.
  */
-    const DIRECTION_SOUTH = 2;
+	const DIRECTION_SOUTH = 2;
 /**
  * West.
  */
-    const DIRECTION_WEST = 3;
+	const DIRECTION_WEST = 3;
 
 
 /**
@@ -80,70 +80,70 @@ class POT
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_HEAD = 1;
+	const SLOT_HEAD = 1;
 /**
  * Necklace slot.
  *
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_NECKLACE = 2;
+	const SLOT_NECKLACE = 2;
 /**
  * Backpack slot.
  *
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_BACKPACK = 3;
+	const SLOT_BACKPACK = 3;
 /**
  * Armor slot.
  *
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_ARMOR = 4;
+	const SLOT_ARMOR = 4;
 /**
  * Right hand slot.
  *
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_RIGHT = 5;
+	const SLOT_RIGHT = 5;
 /**
  * Left hand slot.
  *
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_LEFT = 6;
+	const SLOT_LEFT = 6;
 /**
  * Legs slot.
  *
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_LEGS = 7;
+	const SLOT_LEGS = 7;
 /**
  * Boots slot.
  *
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_FEET = 8;
+	const SLOT_FEET = 8;
 /**
  * Ring slot.
  *
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_RING = 9;
+	const SLOT_RING = 9;
 /**
  * Ammunition slot.
  *
  * @version 0.0.3
  * @since 0.0.3
  */
-    const SLOT_AMMO = 10;
+	const SLOT_AMMO = 10;
 
 /**
  * First depot item sid.
@@ -151,7 +151,7 @@ class POT
  * @version 0.0.4
  * @since 0.0.4
  */
-    const DEPOT_SID_FIRST = 100;
+	const DEPOT_SID_FIRST = 100;
 
 /**
  * IP ban.
@@ -159,21 +159,21 @@ class POT
  * @version 0.0.5
  * @since 0.0.5
  */
-    const BAN_IP = 1;
+	const BAN_IP = 1;
 /**
  * Player ban.
  *
  * @version 0.0.5
  * @since 0.0.5
  */
-    const BAN_PLAYER = 2;
+	const BAN_PLAYER = 2;
 /**
  * Account ban.
  *
  * @version 0.0.5
  * @since 0.0.5
  */
-    const BAN_ACCOUNT = 3;
+	const BAN_ACCOUNT = 3;
 
 /**
  * Ascencind sorting order.
@@ -181,33 +181,33 @@ class POT
  * @version 0.0.5
  * @since 0.0.5
  */
-    const ORDER_ASC = 1;
+	const ORDER_ASC = 1;
 /**
  * Descending sorting order.
  *
  * @version 0.0.5
  * @since 0.0.5
  */
-    const ORDER_DESC = 2;
+	const ORDER_DESC = 2;
 
 /**
  * @version 0.0.7
  * @since 0.0.7
  * @deprecated 0.1.0 Use OTS_SpellsList::SPELL_RUNE.
  */
-    const SPELL_RUNE = 0;
+	const SPELL_RUNE = 0;
 /**
  * @version 0.0.7
  * @since 0.0.7
  * @deprecated 0.1.0 Use OTS_SpellsList::SPELL_INSTANT.
  */
-    const SPELL_INSTANT = 1;
+	const SPELL_INSTANT = 1;
 /**
  * @version 0.0.7
  * @since 0.0.7
  * @deprecated 0.1.0 Use OTS_SpellsList::SPELL_CONJURE.
  */
-    const SPELL_CONJURE = 2;
+	const SPELL_CONJURE = 2;
 
 /**
  * Singleton.
@@ -220,18 +220,18 @@ class POT
  * @example examples/quickstart.php quickstart.php
  * @tutorial POT/Basics.pkg#basics.instance
  */
-    public static function getInstance()
-    {
-        static $instance;
+	public static function getInstance()
+	{
+		static $instance;
 
-        // creates new instance
-        if( !isset($instance) )
-        {
-            $instance = new self();
-        }
+		// creates new instance
+		if( !isset($instance) )
+		{
+			$instance = new self();
+		}
 
-        return $instance;
-    }
+		return $instance;
+	}
 
 /**
  * POT classes directory.
@@ -242,7 +242,7 @@ class POT
  *
  * @var string
  */
-    private $path = '';
+	private $path = '';
 
 /**
  * Set POT directory.
@@ -255,16 +255,16 @@ class POT
  * @example examples/fakeroot.php fakeroot.php
  * @tutorial POT/Basics.pkg#basics.fakeroot
  */
-    public function setPOTPath($path)
-    {
-        $this->path = str_replace('\\', '/', $path);
+	public function setPOTPath($path)
+	{
+		$this->path = str_replace('\\', '/', $path);
 
-        // appends ending slash to directory path
-        if( substr($this->path, -1) !== '/')
-        {
-            $this->path .= '/';
-        }
-    }
+		// appends ending slash to directory path
+		if( substr($this->path, -1) !== '/')
+		{
+			$this->path .= '/';
+		}
+	}
 
 /**
  * Class initialization tools.
@@ -283,13 +283,13 @@ class POT
  *
  * @version 0.0.3
  */
-    private function __construct()
-    {
-        // default POT directory
-        $this->path = __DIR__ . '/';
-        // registers POT autoload mechanism
-        spl_autoload_register( array($this, 'loadClass') );
-    }
+	private function __construct()
+	{
+		// default POT directory
+		$this->path = __DIR__ . '/';
+		// registers POT autoload mechanism
+		spl_autoload_register( array($this, 'loadClass') );
+	}
 
 /**
  * Loads POT class file.
@@ -309,13 +309,13 @@ class POT
  * @version 0.0.3
  * @param string $class Class name.
  */
-    public function loadClass($class)
-    {
-        if( preg_match('/^(I|E_)?OTS_/', $class) > 0)
-        {
-            include_once($this->path . $class . '.php');
-        }
-    }
+	public function loadClass($class)
+	{
+		if( preg_match('/^(I|E_)?OTS_/', $class) > 0)
+		{
+			include_once($this->path . $class . '.php');
+		}
+	}
 
 /**
  * Database connection.
@@ -326,7 +326,7 @@ class POT
  *
  * @var OTS_DB_MySQL
  */
-    private $db;
+	private $db;
 
 /**
  * Connects to database.
@@ -363,14 +363,14 @@ class POT
  * @example examples/quickstart.php quickstart.php
  * @tutorial POT/Basics.pkg#basics.database
  */
-    public function connect($params)
-    {
-        // checks if PDO extension is loaded
-        if( !extension_loaded('PDO') ) {
-            throw new RuntimeException('Please install PHP pdo extension. MyAAC will not work without it.');
-        }
+	public function connect($params)
+	{
+		// checks if PDO extension is loaded
+		if( !extension_loaded('PDO') ) {
+			throw new RuntimeException('Please install PHP pdo extension. MyAAC will not work without it.');
+		}
 
-	    global $debugBar;
+		global $debugBar;
 		if (isset($debugBar)) {
 			$this->db = new DebugBar\DataCollector\PDO\TraceablePDO(new OTS_DB_MySQL($params));
 			$debugBar->addCollector(new DebugBar\DataCollector\PDO\PDOCollector($this->db));
@@ -379,8 +379,8 @@ class POT
 			$this->db = new OTS_DB_MySQL($params);
 		}
 
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
+		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}
 
 /**
  * @version 0.1.0
@@ -388,11 +388,11 @@ class POT
  * @return IOTS_DAO OTServ database object.
  * @deprecated 0.1.0 Create objects directly from now.
  */
-    public function createObject($class)
-    {
-        $class = 'OTS_' . $class;
-        return new $class();
-    }
+	public function createObject($class)
+	{
+		$class = 'OTS_' . $class;
+		return new $class();
+	}
 
 /**
  * Queries server status.
@@ -415,11 +415,11 @@ class POT
  * @tutorial POT/Server_status.pkg
  * @deprecated 0.1.4 Use OTS_ServerInfo->status().
  */
-    public static function serverStatus($server, $port)
-    {
-        $status = new OTS_ServerInfo($server, $port);
-        return $status->status();
-    }
+	public static function serverStatus($server, $port)
+	{
+		$status = new OTS_ServerInfo($server, $port);
+		return $status->status();
+	}
 
 /**
  * Returns database connection handle.
@@ -440,10 +440,10 @@ class POT
  * @since 0.0.4
  * @return OTS_DB_MySQL Database connection handle.
  */
-    public function getDBHandle()
-    {
-        return $this->db;
-    }
+	public function getDBHandle()
+	{
+		return $this->db;
+	}
 
 /**
  * Bans given IP number.
@@ -464,37 +464,37 @@ class POT
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_IPBan class.
  */
-    public function banIP($ip, $mask = '255.255.255.255', $time = 0)
-    {
-        // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
-        // it's because that PHP integer types are signed
-        if($ip === '255.255.255.255')
-        {
-            $ip = 4294967295;
-        }
-        else
-        {
-            $ip = sprintf('%u', ip2long($ip) );
-        }
+	public function banIP($ip, $mask = '255.255.255.255', $time = 0)
+	{
+		// long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
+		// it's because that PHP integer types are signed
+		if($ip === '255.255.255.255')
+		{
+			$ip = 4294967295;
+		}
+		else
+		{
+			$ip = sprintf('%u', ip2long($ip) );
+		}
 
-        if($mask === '255.255.255.255')
-        {
-            $mask = 4294967295;
-        }
-        else
-        {
-            $mask = sprintf('%u', ip2long($mask) );
-        }
+		if($mask === '255.255.255.255')
+		{
+			$mask = 4294967295;
+		}
+		else
+		{
+			$mask = sprintf('%u', ip2long($mask) );
+		}
 
-        // creates ban entry
-        $ban = new OTS_IPBan();
-        $ban->setValue($ip);
-        $ban->setParam($mask);
-        $ban->setExpires($time);
-        $ban->setAdded( time() );
-        $ban->activate();
-        $ban->save();
-    }
+		// creates ban entry
+		$ban = new OTS_IPBan();
+		$ban->setValue($ip);
+		$ban->setParam($mask);
+		$ban->setExpires($time);
+		$ban->setAdded( time() );
+		$ban->activate();
+		$ban->save();
+	}
 
 /**
  * Deletes ban from given IP number.
@@ -510,26 +510,26 @@ class POT
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_IPBan class.
  */
-    public function unbanIP($ip, $mask = '255.255.255.255')
-    {
-        // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
-        // it's because that PHP integer types are signed
-        if($ip === '255.255.255.255')
-        {
-            $ip = 4294967295;
-        }
-        else
-        {
-            $ip = sprintf('%u', ip2long($ip) );
-        }
+	public function unbanIP($ip, $mask = '255.255.255.255')
+	{
+		// long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
+		// it's because that PHP integer types are signed
+		if($ip === '255.255.255.255')
+		{
+			$ip = 4294967295;
+		}
+		else
+		{
+			$ip = sprintf('%u', ip2long($ip) );
+		}
 
-        // mask is not used anymore
+		// mask is not used anymore
 
-        // deletes ban entry
-        $ban = new OTS_IPBan();
-        $ban->find($ip);
-        $ban->delete();
-    }
+		// deletes ban entry
+		$ban = new OTS_IPBan();
+		$ban->find($ip);
+		$ban->delete();
+	}
 
 /**
  * Checks if given IP is banned.
@@ -541,24 +541,24 @@ class POT
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_IPBan class.
  */
-    public function isIPBanned($ip)
-    {
-        // long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
-        // it's because that PHP integer types are signed
-        if($ip === '255.255.255.255')
-        {
-            $ip = 4294967295;
-        }
-        else
-        {
-            $ip = sprintf('%u', ip2long($ip) );
-        }
+	public function isIPBanned($ip)
+	{
+		// long2ip( ip2long('255.255.255.255') ) != '255.255.255.255' -.-'
+		// it's because that PHP integer types are signed
+		if($ip === '255.255.255.255')
+		{
+			$ip = 4294967295;
+		}
+		else
+		{
+			$ip = sprintf('%u', ip2long($ip) );
+		}
 
-        // finds ban entry
-        $ban = new OTS_IPBan();
-        $ban->find($ip);
-        return $ban->isLoaded() && $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() );
-    }
+		// finds ban entry
+		$ban = new OTS_IPBan();
+		$ban->find($ip);
+		return $ban->isLoaded() && $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() );
+	}
 
 /**
  * Returns list of banned IPs as list of pairs (ip => IP, mask => MASK).
@@ -569,22 +569,22 @@ class POT
  * @throws PDOException On PDO operation error.
  * @deprecated 0.1.5 Use OTS_IPBans_List class.
  */
-    public function bannedIPs()
-    {
-        $list = array();
+	public function bannedIPs()
+	{
+		$list = array();
 
-        // generates bans array
-        foreach( new OTS_IPBans_List() as $ban)
-        {
-            // checks if ban is active
-            if( $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() ) )
-            {
-                $list[] = array('ip' => $ban->getValue(), 'mask' => $ban->getParam() );
-            }
-        }
+		// generates bans array
+		foreach( new OTS_IPBans_List() as $ban)
+		{
+			// checks if ban is active
+			if( $ban->isActive() && ( $ban->getExpires() == 0 || $ban->getExpires() > time() ) )
+			{
+				$list[] = array('ip' => $ban->getValue(), 'mask' => $ban->getParam() );
+			}
+		}
 
-        return $list;
-    }
+		return $list;
+	}
 
 /**
  * @version 0.1.0
@@ -592,10 +592,10 @@ class POT
  * @return OTS_SQLFilter Filter object.
  * @deprecated 0.1.0 Create objects directly from now.
  */
-    public function createFilter()
-    {
-        return new OTS_SQLFilter();
-    }
+	public function createFilter()
+	{
+		return new OTS_SQLFilter();
+	}
 
 /**
  * List of vocations.
@@ -604,7 +604,7 @@ class POT
  * @since 0.0.5
  * @var OTS_VocationsList
  */
-    private $vocations;
+	private $vocations;
 
 /**
  * Loads vocations list.
@@ -622,11 +622,11 @@ class POT
  * @param string $file vocations.xml file location.
  * @throws DOMException On DOM operation error.
  */
-    public function loadVocations($file)
-    {
-        // loads DOM document
-        $this->vocations = new OTS_VocationsList($file);
-    }
+	public function loadVocations($file)
+	{
+		// loads DOM document
+		$this->vocations = new OTS_VocationsList($file);
+	}
 
 /**
  * Checks if vocations are loaded.
@@ -639,10 +639,10 @@ class POT
  * @since 0.1.0
  * @return bool True if vocations are loaded.
  */
-    public function areVocationsLoaded()
-    {
-        return isset($this->vocations);
-    }
+	public function areVocationsLoaded()
+	{
+		return isset($this->vocations);
+	}
 
 /**
  * Unloads vocations list.
@@ -650,10 +650,10 @@ class POT
  * @version 0.1.0
  * @since 0.1.0
  */
-    public function unloadVocations()
-    {
-        unset($this->vocations);
-    }
+	public function unloadVocations()
+	{
+		unset($this->vocations);
+	}
 
 /**
  * Returns vocations list object.
@@ -667,15 +667,15 @@ class POT
  * @return OTS_VocationsList List of vocations.
  * @throws E_OTS_NotLoaded If vocations list is not loaded.
  */
-    public function getVocationsList()
-    {
-        if( isset($this->vocations) )
-        {
-            return $this->vocations;
-        }
+	public function getVocationsList()
+	{
+		if( isset($this->vocations) )
+		{
+			return $this->vocations;
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -685,15 +685,15 @@ class POT
  * @throws E_OTS_NotLoaded If vocations list is not loaded.
  * @deprecated 0.1.3 Use POT::getVocationsList()->getVocationId().
  */
-    public function getVocationId($name)
-    {
-        if( isset($this->vocations) )
-        {
-            return $this->vocations->getVocationId($name);
-        }
+	public function getVocationId($name)
+	{
+		if( isset($this->vocations) )
+		{
+			return $this->vocations->getVocationId($name);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -703,15 +703,15 @@ class POT
  * @throws E_OTS_NotLoaded If vocations list is not loaded.
  * @deprecated 0.1.3 Use POT::getVocationsList()->getVocationName().
  */
-    public function getVocationName($id)
-    {
-        if( isset($this->vocations) )
-        {
-            return $this->vocations->getVocationName($id);
-        }
+	public function getVocationName($id)
+	{
+		if( isset($this->vocations) )
+		{
+			return $this->vocations->getVocationName($id);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * List of loaded monsters.
@@ -720,7 +720,7 @@ class POT
  * @since 0.0.6
  * @var OTS_MonstersList
  */
-    private $monsters;
+	private $monsters;
 
 /**
  * Loads monsters mapping file.
@@ -738,10 +738,10 @@ class POT
  * @param string $path Monsters directory.
  * @throws DOMException On DOM operation error.
  */
-    public function loadMonsters($path)
-    {
-        $this->monsters = new OTS_MonstersList($path);
-    }
+	public function loadMonsters($path)
+	{
+		$this->monsters = new OTS_MonstersList($path);
+	}
 
 /**
  * Checks if monsters are loaded.
@@ -754,10 +754,10 @@ class POT
  * @since 0.1.0
  * @return bool True if monsters are loaded.
  */
-    public function areMonstersLoaded()
-    {
-        return isset($this->monsters);
-    }
+	public function areMonstersLoaded()
+	{
+		return isset($this->monsters);
+	}
 
 /**
  * Unloads monsters list.
@@ -765,10 +765,10 @@ class POT
  * @version 0.1.0
  * @since 0.1.0
  */
-    public function unloadMonsters()
-    {
-        unset($this->monsters);
-    }
+	public function unloadMonsters()
+	{
+		unset($this->monsters);
+	}
 
 /**
  * Returns list of laoded monsters.
@@ -782,15 +782,15 @@ class POT
  * @return OTS_MonstersList List of monsters.
  * @throws E_OTS_NotLoaded If monsters list is not loaded.
  */
-    public function getMonstersList()
-    {
-        if( isset($this->monsters) )
-        {
-            return $this->monsters;
-        }
+	public function getMonstersList()
+	{
+		if( isset($this->monsters) )
+		{
+			return $this->monsters;
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -800,15 +800,15 @@ class POT
  * @throws E_OTS_NotLoaded If monsters list is not loaded.
  * @deprecated 0.1.3 Use POT::getMonstersList()->getMonster().
  */
-    public function getMonster($name)
-    {
-        if( isset($this->monsters) )
-        {
-            return $this->monsters->getMonster($name);
-        }
+	public function getMonster($name)
+	{
+		if( isset($this->monsters) )
+		{
+			return $this->monsters->getMonster($name);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * Spells list.
@@ -817,7 +817,7 @@ class POT
  * @since 0.1.0
  * @var OTS_SpellsList
  */
-    private $spells;
+	private $spells;
 
 /**
  * Loads spells list.
@@ -835,10 +835,10 @@ class POT
  * @param string $file Spells file name.
  * @throws DOMException On DOM operation error.
  */
-    public function loadSpells($file)
-    {
-        $this->spells = new OTS_SpellsList($file);
-    }
+	public function loadSpells($file)
+	{
+		$this->spells = new OTS_SpellsList($file);
+	}
 
 /**
  * Checks if spells are loaded.
@@ -851,10 +851,10 @@ class POT
  * @since 0.1.0
  * @return bool True if spells are loaded.
  */
-    public function areSpellsLoaded()
-    {
-        return isset($this->spells);
-    }
+	public function areSpellsLoaded()
+	{
+		return isset($this->spells);
+	}
 
 /**
  * Unloads spells list.
@@ -862,10 +862,10 @@ class POT
  * @version 0.1.0
  * @since 0.1.0
  */
-    public function unloadSpells()
-    {
-        unset($this->spells);
-    }
+	public function unloadSpells()
+	{
+		unset($this->spells);
+	}
 
 /**
  * Returns list of laoded spells.
@@ -875,15 +875,15 @@ class POT
  * @return OTS_SpellsList List of spells.
  * @throws E_OTS_NotLoaded If spells list is not loaded.
  */
-    public function getSpellsList()
-    {
-        if( isset($this->spells) )
-        {
-            return $this->spells;
-        }
+	public function getSpellsList()
+	{
+		if( isset($this->spells) )
+		{
+			return $this->spells;
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -892,15 +892,15 @@ class POT
  * @throws E_OTS_NotLoaded If spells list is not loaded.
  * @deprecated 0.1.3 Use POT::getSpellsList()->getRunesList().
  */
-    public function getRunesList()
-    {
-        if( isset($this->spells) )
-        {
-            return $this->spells->getRunesList();
-        }
+	public function getRunesList()
+	{
+		if( isset($this->spells) )
+		{
+			return $this->spells->getRunesList();
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -910,15 +910,15 @@ class POT
  * @throws E_OTS_NotLoaded If spells list is not loaded.
  * @deprecated 0.1.3 Use POT::getSpellsList()->getRune().
  */
-    public function getRune($name)
-    {
-        if( isset($this->spells) )
-        {
-            return $this->spells->getRune($name);
-        }
+	public function getRune($name)
+	{
+		if( isset($this->spells) )
+		{
+			return $this->spells->getRune($name);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -927,15 +927,15 @@ class POT
  * @throws E_OTS_NotLoaded If spells list is not loaded.
  * @deprecated 0.1.3 Use POT::getSpellsList()->getInstantsList().
  */
-    public function getInstantsList()
-    {
-        if( isset($this->spells) )
-        {
-            return $this->spells->getInstantsList();
-        }
+	public function getInstantsList()
+	{
+		if( isset($this->spells) )
+		{
+			return $this->spells->getInstantsList();
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -945,15 +945,15 @@ class POT
  * @throws E_OTS_NotLoaded If spells list is not loaded.
  * @deprecated 0.1.3 Use POT::getSpellsList()->getInstant().
  */
-    public function getInstant($name)
-    {
-        if( isset($this->spells) )
-        {
-            return $this->spells->getInstant($name);
-        }
+	public function getInstant($name)
+	{
+		if( isset($this->spells) )
+		{
+			return $this->spells->getInstant($name);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -962,15 +962,15 @@ class POT
  * @throws E_OTS_NotLoaded If spells list is not loaded.
  * @deprecated 0.1.3 Use POT::getSpellsList()->getConjuresList().
  */
-    public function getConjuresList()
-    {
-        if( isset($this->spells) )
-        {
-            return $this->spells->getConjuresList();
-        }
+	public function getConjuresList()
+	{
+		if( isset($this->spells) )
+		{
+			return $this->spells->getConjuresList();
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -980,15 +980,15 @@ class POT
  * @throws E_OTS_NotLoaded If spells list is not loaded.
  * @deprecated 0.1.3 Use POT::getSpellsList()->getConjure().
  */
-    public function getConjure($name)
-    {
-        if( isset($this->spells) )
-        {
-            return $this->spells->getConjure($name);
-        }
+	public function getConjure($name)
+	{
+		if( isset($this->spells) )
+		{
+			return $this->spells->getConjure($name);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * List of loaded houses.
@@ -997,7 +997,7 @@ class POT
  * @since 0.1.0
  * @var OTS_HousesList
  */
-    private $houses;
+	private $houses;
 
 /**
  * Loads houses list file.
@@ -1011,10 +1011,10 @@ class POT
  * @param string $path Houses file.
  * @throws DOMException On DOM operation error.
  */
-    public function loadHouses($path)
-    {
-        $this->houses = new OTS_HousesList($path);
-    }
+	public function loadHouses($path)
+	{
+		$this->houses = new OTS_HousesList($path);
+	}
 
 /**
  * Checks if houses are loaded.
@@ -1027,10 +1027,10 @@ class POT
  * @since 0.1.0
  * @return bool True if houses are loaded.
  */
-    public function areHousesLoaded()
-    {
-        return isset($this->houses);
-    }
+	public function areHousesLoaded()
+	{
+		return isset($this->houses);
+	}
 
 /**
  * Unloads houses list.
@@ -1038,10 +1038,10 @@ class POT
  * @version 0.1.0
  * @since 0.1.0
  */
-    public function unloadHouses()
-    {
-        unset($this->houses);
-    }
+	public function unloadHouses()
+	{
+		unset($this->houses);
+	}
 
 /**
  * Returns list of laoded houses.
@@ -1051,15 +1051,15 @@ class POT
  * @return OTS_HousesList List of houses.
  * @throws E_OTS_NotLoaded If houses list is not loaded.
  */
-    public function getHousesList()
-    {
-        if( isset($this->houses) )
-        {
-            return $this->houses;
-        }
+	public function getHousesList()
+	{
+		if( isset($this->houses) )
+		{
+			return $this->houses;
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -1069,15 +1069,15 @@ class POT
  * @throws E_OTS_NotLoaded If houses list is not loaded.
  * @deprecated 0.1.3 Use POT::getHousesList()->getHouse().
  */
-    public function getHouse($id)
-    {
-        if( isset($this->houses) )
-        {
-            return $this->houses->getHouse($id);
-        }
+	public function getHouse($id)
+	{
+		if( isset($this->houses) )
+		{
+			return $this->houses->getHouse($id);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -1087,15 +1087,15 @@ class POT
  * @throws E_OTS_NotLoaded If houses list is not loaded.
  * @deprecated 0.1.3 Use POT::getHousesList()->getHouseId().
  */
-    public function getHouseId($name)
-    {
-        if( isset($this->houses) )
-        {
-            return $this->houses->getHouseId($name);
-        }
+	public function getHouseId($name)
+	{
+		if( isset($this->houses) )
+		{
+			return $this->houses->getHouseId($name);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * Cache handler for items loading.
@@ -1104,7 +1104,7 @@ class POT
  * @since 0.1.0
  * @var IOTS_FileCache
  */
-    private $itemsCache;
+	private $itemsCache;
 
 /**
  * Presets cache handler for items loader.
@@ -1115,10 +1115,10 @@ class POT
  *
  * @param IOTS_FileCache $cache Cache handler (skip this parameter to reset cache handler to null).
  */
-    public function setItemsCache(?IOTS_FileCache $cache = null)
-    {
-        $this->itemsCache = $cache;
-    }
+	public function setItemsCache(?IOTS_FileCache $cache = null)
+	{
+		$this->itemsCache = $cache;
+	}
 
 /**
  * List of loaded items.
@@ -1127,7 +1127,7 @@ class POT
  * @since 0.1.0
  * @var OTS_ItemsList
  */
-    private $items;
+	private $items;
 
 /**
  * Loads items list.
@@ -1141,18 +1141,18 @@ class POT
  * @param string $path Items information directory.
  * @throws E_OTS_FileLoaderError On binary file loading error.
  */
-    public function loadItems($path)
-    {
-        $this->items = new OTS_ItemsList();
+	public function loadItems($path)
+	{
+		$this->items = new OTS_ItemsList();
 
-        // sets items cache if any
-        if( isset($this->itemsCache) )
-        {
-            $this->items->setCacheDriver($this->itemsCache);
-        }
+		// sets items cache if any
+		if( isset($this->itemsCache) )
+		{
+			$this->items->setCacheDriver($this->itemsCache);
+		}
 
-        $this->items->loadItems($path);
-    }
+		$this->items->loadItems($path);
+	}
 
 /**
  * Checks if items are loaded.
@@ -1165,10 +1165,10 @@ class POT
  * @since 0.1.0
  * @return bool True if items are loaded.
  */
-    public function areItemsLoaded()
-    {
-        return isset($this->items);
-    }
+	public function areItemsLoaded()
+	{
+		return isset($this->items);
+	}
 
 /**
  * Unloads items list.
@@ -1176,10 +1176,10 @@ class POT
  * @version 0.1.0
  * @since 0.1.0
  */
-    public function unloadItems()
-    {
-        unset($this->items);
-    }
+	public function unloadItems()
+	{
+		unset($this->items);
+	}
 
 /**
  * Returns list of laoded items.
@@ -1189,15 +1189,15 @@ class POT
  * @return OTS_ItemsList List of items.
  * @throws E_OTS_NotLoaded If items list is not loaded.
  */
-    public function getItemsList()
-    {
-        if( isset($this->items) )
-        {
-            return $this->items;
-        }
+	public function getItemsList()
+	{
+		if( isset($this->items) )
+		{
+			return $this->items;
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -1207,15 +1207,15 @@ class POT
  * @throws E_OTS_NotLoaded If items list is not loaded.
  * @deprecated 0.1.3 Use POT::getItemsList()->getItemType().
  */
-    public function getItemType($id)
-    {
-        if( isset($this->items) )
-        {
-            return $this->items->getItemType($id);
-        }
+	public function getItemType($id)
+	{
+		if( isset($this->items) )
+		{
+			return $this->items->getItemType($id);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -1225,15 +1225,15 @@ class POT
  * @throws E_OTS_NotLoaded If items list is not loaded.
  * @deprecated 0.1.3 Use POT::getItemsList()->getItemTypeId().
  */
-    public function getItemTypeId($name)
-    {
-        if( isset($this->items) )
-        {
-            return $this->items->getItemTypeId($name);
-        }
+	public function getItemTypeId($name)
+	{
+		if( isset($this->items) )
+		{
+			return $this->items->getItemTypeId($name);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * Cache handler for OTBM loading.
@@ -1242,7 +1242,7 @@ class POT
  * @since 0.1.0
  * @var IOTS_FileCache
  */
-    private $mapCache;
+	private $mapCache;
 
 /**
  * Presets cache handler for OTBM loader.
@@ -1253,10 +1253,10 @@ class POT
  *
  * @param IOTS_FileCache $cache Cache handler (skip this parameter to reset cache handler to null).
  */
-    public function setMapCache(?IOTS_FileCache $cache = null)
-    {
-        $this->mapCache = $cache;
-    }
+	public function setMapCache(?IOTS_FileCache $cache = null)
+	{
+		$this->mapCache = $cache;
+	}
 
 /**
  * Loaded map.
@@ -1265,7 +1265,7 @@ class POT
  * @since 0.1.0
  * @var OTS_OTBMFile
  */
-    private $map;
+	private $map;
 
 /**
  * Loads OTBM map.
@@ -1282,19 +1282,19 @@ class POT
  * @since 0.1.0
  * @param string $path Map file path.
  */
-    public function loadMap($path)
-    {
-        $this->map = new OTS_OTBMFile();
+	public function loadMap($path)
+	{
+		$this->map = new OTS_OTBMFile();
 
-        // sets items cache if any
-        if( isset($this->mapCache) )
-        {
-            $this->map->setCacheDriver($this->mapCache);
-        }
+		// sets items cache if any
+		if( isset($this->mapCache) )
+		{
+			$this->map->setCacheDriver($this->mapCache);
+		}
 
-        $this->map->loadFile($path);
-        $this->houses = $this->map->getHousesList();
-    }
+		$this->map->loadFile($path);
+		$this->houses = $this->map->getHousesList();
+	}
 
 /**
  * Checks if OTBM is loaded.
@@ -1307,10 +1307,10 @@ class POT
  * @since 0.1.0
  * @return bool True if map is loaded.
  */
-    public function isMapLoaded()
-    {
-        return isset($this->map);
-    }
+	public function isMapLoaded()
+	{
+		return isset($this->map);
+	}
 
 /**
  * Unloads OTBM map.
@@ -1318,10 +1318,10 @@ class POT
  * @version 0.1.0
  * @since 0.1.0
  */
-    public function unloadMap()
-    {
-        unset($this->map);
-    }
+	public function unloadMap()
+	{
+		unset($this->map);
+	}
 
 /**
  * Returns loaded map.
@@ -1331,15 +1331,15 @@ class POT
  * @return OTS_OTBMFile Loaded OTBM file.
  * @throws E_OTS_NotLoaded If map is not loaded.
  */
-    public function getMap()
-    {
-        if( isset($this->map) )
-        {
-            return $this->map;
-        }
+	public function getMap()
+	{
+		if( isset($this->map) )
+		{
+			return $this->map;
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -1348,15 +1348,15 @@ class POT
  * @throws E_OTS_NotLoaded If map is not loaded.
  * @deprecated 0.1.3 Use POT::getMap()->getMapWidth().
  */
-    public function getMapWidth()
-    {
-        if( isset($this->map) )
-        {
-            return $this->map->getWidth();
-        }
+	public function getMapWidth()
+	{
+		if( isset($this->map) )
+		{
+			return $this->map->getWidth();
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -1365,15 +1365,15 @@ class POT
  * @throws E_OTS_NotLoaded If map is not loaded.
  * @deprecated 0.1.3 Use POT::getMap()->getMapHeight().
  */
-    public function getMapHeight()
-    {
-        if( isset($this->map) )
-        {
-            return $this->map->getHeight();
-        }
+	public function getMapHeight()
+	{
+		if( isset($this->map) )
+		{
+			return $this->map->getHeight();
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -1382,15 +1382,15 @@ class POT
  * @throws E_OTS_NotLoaded If map is not loaded.
  * @deprecated 0.1.3 Use POT::getMap()->getMapDescription().
  */
-    public function getMapDescription()
-    {
-        if( isset($this->map) )
-        {
-            return $this->map->getDescription();
-        }
+	public function getMapDescription()
+	{
+		if( isset($this->map) )
+		{
+			return $this->map->getDescription();
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -1400,15 +1400,15 @@ class POT
  * @throws E_OTS_NotLoaded If map is not loaded.
  * @deprecated 0.1.3 Use POT::getMap()->getTownId().
  */
-    public function getTownId($name)
-    {
-        if( isset($this->map) )
-        {
-            return $this->map->getTownId($name);
-        }
+	public function getTownId($name)
+	{
+		if( isset($this->map) )
+		{
+			return $this->map->getTownId($name);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * @version 0.1.3
@@ -1418,15 +1418,15 @@ class POT
  * @throws E_OTS_NotLoaded If map is not loaded.
  * @deprecated 0.1.3 Use POT::getMap()->getTownName().
  */
-    public function getTownName($id)
-    {
-        if( isset($this->map) )
-        {
-            return $this->map->getTownName($id);
-        }
+	public function getTownName($id)
+	{
+		if( isset($this->map) )
+		{
+			return $this->map->getTownName($id);
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * Display driver.
@@ -1435,7 +1435,7 @@ class POT
  * @since 0.1.0
  * @var IOTS_Display
  */
-    private $display;
+	private $display;
 
 /**
  * Sets display driver for database-related resources.
@@ -1444,10 +1444,10 @@ class POT
  * @since 0.1.0
  * @param IOTS_Display $display Display driver.
  */
-    public function setDisplayDriver(IOTS_Display $display)
-    {
-        $this->display = $display;
-    }
+	public function setDisplayDriver(IOTS_Display $display)
+	{
+		$this->display = $display;
+	}
 
 /**
  * Checks if any display driver is loaded.
@@ -1460,10 +1460,10 @@ class POT
  * @since 0.1.0
  * @return bool True if driver is loaded.
  */
-    public function isDisplayDriverLoaded()
-    {
-        return isset($this->display);
-    }
+	public function isDisplayDriverLoaded()
+	{
+		return isset($this->display);
+	}
 
 /**
  * Unloads display driver.
@@ -1471,10 +1471,10 @@ class POT
  * @version 0.1.0
  * @since 0.1.0
  */
-    public function unloadDisplayDriver()
-    {
-        unset($this->display);
-    }
+	public function unloadDisplayDriver()
+	{
+		unset($this->display);
+	}
 
 /**
  * Returns current display driver.
@@ -1488,15 +1488,15 @@ class POT
  * @return IOTS_Display Current display driver.
  * @throws E_OTS_NotLoaded If display driver is not loaded.
  */
-    public function getDisplayDriver()
-    {
-        if( isset($this->display) )
-        {
-            return $this->display;
-        }
+	public function getDisplayDriver()
+	{
+		if( isset($this->display) )
+		{
+			return $this->display;
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 
 /**
  * Display driver for non-database resources.
@@ -1505,7 +1505,7 @@ class POT
  * @since 0.1.3
  * @var IOTS_DataDisplay
  */
-    private $dataDisplay;
+	private $dataDisplay;
 
 /**
  * Sets display driver for non-database resources.
@@ -1514,10 +1514,10 @@ class POT
  * @since 0.1.3
  * @param IOTS_DataDisplay $dataDisplay Display driver.
  */
-    public function setDataDisplayDriver(IOTS_DataDisplay $dataDisplay)
-    {
-        $this->dataDisplay = $dataDisplay;
-    }
+	public function setDataDisplayDriver(IOTS_DataDisplay $dataDisplay)
+	{
+		$this->dataDisplay = $dataDisplay;
+	}
 
 /**
  * Checks if any display driver for non-database resources is loaded.
@@ -1530,10 +1530,10 @@ class POT
  * @since 0.1.3
  * @return bool True if driver is loaded.
  */
-    public function isDataDisplayDriverLoaded()
-    {
-        return isset($this->dataDisplay);
-    }
+	public function isDataDisplayDriverLoaded()
+	{
+		return isset($this->dataDisplay);
+	}
 
 /**
  * Unloads display driver.
@@ -1541,10 +1541,10 @@ class POT
  * @version 0.1.3
  * @since 0.1.3
  */
-    public function unloadDataDisplayDriver()
-    {
-        unset($this->dataDisplay);
-    }
+	public function unloadDataDisplayDriver()
+	{
+		unset($this->dataDisplay);
+	}
 
 /**
  * Returns current display driver.
@@ -1558,15 +1558,15 @@ class POT
  * @return IOTS_DataDisplay Current display driver.
  * @throws E_OTS_NotLoaded If display driver is not loaded.
  */
-    public function getDataDisplayDriver()
-    {
-        if( isset($this->dataDisplay) )
-        {
-            return $this->dataDisplay;
-        }
+	public function getDataDisplayDriver()
+	{
+		if( isset($this->dataDisplay) )
+		{
+			return $this->dataDisplay;
+		}
 
-        throw new E_OTS_NotLoaded();
-    }
+		throw new E_OTS_NotLoaded();
+	}
 }
 
 /*
@@ -1581,7 +1581,7 @@ if( !defined('PDO_PARAM_STR') )
  * @since 0.0.7
  * @deprecated Will be dropped after dropping IOTS_DB::SQLquote() since only this deprecated method uses it.
  */
-    define('PDO_PARAM_STR', PDO::PARAM_STR);
+	define('PDO_PARAM_STR', PDO::PARAM_STR);
 }
 
 if( !defined('PDO_ATTR_STATEMENT_CLASS') )
@@ -1592,7 +1592,7 @@ if( !defined('PDO_ATTR_STATEMENT_CLASS') )
  * @since 0.0.7
  * @deprecated Use PDO::ATTR_STATEMENT_CLASS, this is for PHP 5.0 compatibility.
  */
-    define('PDO_ATTR_STATEMENT_CLASS', PDO::ATTR_STATEMENT_CLASS);
+	define('PDO_ATTR_STATEMENT_CLASS', PDO::ATTR_STATEMENT_CLASS);
 }
 
 if( !defined('PDO_ATTR_ERRMODE') )
@@ -1603,7 +1603,7 @@ if( !defined('PDO_ATTR_ERRMODE') )
  * @since 0.1.3
  * @deprecated Use PDO::ATTR_ERRMODE, this is for PHP 5.0 compatibility.
  */
-    define('PDO_ATTR_ERRMODE', PDO::ATTR_ERRMODE);
+	define('PDO_ATTR_ERRMODE', PDO::ATTR_ERRMODE);
 }
 
 if( !defined('PDO_ERRMODE_EXCEPTION') )
@@ -1614,7 +1614,7 @@ if( !defined('PDO_ERRMODE_EXCEPTION') )
  * @since 0.1.3
  * @deprecated Use PDO::ERRMODE_EXCEPTION, this is for PHP 5.0 compatibility.
  */
-    define('PDO_ERRMODE_EXCEPTION', PDO::ERRMODE_EXCEPTION);
+	define('PDO_ERRMODE_EXCEPTION', PDO::ERRMODE_EXCEPTION);
 }
 
 /**#@-*/
