@@ -415,9 +415,11 @@ class POT
  * @tutorial POT/Server_status.pkg
  * @deprecated 0.1.4 Use OTS_ServerInfo->status().
  */
-	public static function serverStatus($server, $port)
+	public static function serverStatus($server, $port, $timeout = 2.0)
 	{
 		$status = new OTS_ServerInfo($server, $port);
+		$status->setTimeout($timeout);
+
 		return $status->status();
 	}
 

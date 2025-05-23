@@ -26,14 +26,19 @@ class OTS_ServerInfo
  *
  * @var string
  */
-	private $server;
+	private string $server;
 
 /**
  * Connection port.
  *
  * @var int
  */
-	private $port;
+	private int $port;
+
+	/**
+	 * Status timeout
+	 */
+	private float $timeout = 2.0;
 
 /**
  * Creates handler for new server.
@@ -57,7 +62,7 @@ class OTS_ServerInfo
 	private function send(OTS_Buffer $packet)
 	{
 		// connects to server
-		$socket = @fsockopen($this->server, $this->port, $error, $message, setting('core.status_timeout'));
+		$socket = @fsockopen($this->server, $this->port, $error, $message, $this->timeout);
 
 		// if connected then checking statistics
 		if($socket)
@@ -223,6 +228,10 @@ class OTS_ServerInfo
 			default:
 				throw new OutOfBoundsException();
 		}
+	}
+
+	public function setTimeout($timeout) {
+		$this->timeout = $timeout;
 	}
 }
 
