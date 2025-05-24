@@ -5,7 +5,7 @@
 	<tr>
 		<td>
 			Here you can change description of your guild.<br/>
-			<form enctype="multipart/form-data" action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=change_description" method="post">
+			<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=change_description" method="post">
 				{{ csrf() }}
 				<input type="hidden" name="todo" value="save"/>
 				<textarea name="description" cols="60" rows="{{ setting('core.guild_description_lines_limit') - 1 }}">{{ guild.getCustomField('description')|raw }}</textarea><br>
