@@ -313,13 +313,15 @@ class POT
 	{
 		if( preg_match('/^(I|E_)?OTS_/', $class) > 0) {
 			global $hooks;
-
 			$include = $this->path . $class . '.php';
 
-			$args = ['include' => $include, 'class' => $class];
-			$hooks->triggerFilter(HOOK_FILTER_POT, $args);
+			if (isset($hooks)) {
+				$args = ['include' => $include, 'class' => $class];
+				$hooks->triggerFilter(HOOK_FILTER_POT, $args);
 
-			$include = $args['include'];
+				$include = $args['include'];
+			}
+
 			include_once($include);
 		}
 	}
