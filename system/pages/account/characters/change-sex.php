@@ -17,6 +17,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 $sex_changed = false;
 $player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : NULL;
 $new_sex = isset($_POST['new_sex']) ? (int)$_POST['new_sex'] : NULL;

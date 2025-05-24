@@ -17,6 +17,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 $email_new_time = $account_logged->getCustomField("email_new_time");
 
 if($email_new_time > 10) {

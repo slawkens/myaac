@@ -17,6 +17,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 $_POST['reg_password'] = $_POST['reg_password'] ?? '';
 $reg_password = encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $_POST['reg_password']);
 $old_key = $account_logged->getCustomField("key");

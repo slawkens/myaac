@@ -28,6 +28,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 if(Forum::canPost($account_logged)) {
 	$players_from_account = $db->query('SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = '.(int) $account_logged->getId())->fetchAll();
 	$section_id = $_REQUEST['section_id'] ?? null;

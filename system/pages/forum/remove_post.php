@@ -23,6 +23,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 if(Forum::isModerator()) {
 	$id = (int) $_REQUEST['id'];
 	$post = $db->query("SELECT `id`, `first_post`, `section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `id` = ".$id." LIMIT 1")->fetch();

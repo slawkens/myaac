@@ -18,6 +18,8 @@ if ($ret === false) {
 	return;
 }
 
+csrfProtect();
+
 if(!$logged) {
 	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . urlencode(getLink('forum')) . '">Log in</a> to post on the forum.<br /><br />';
 	return;

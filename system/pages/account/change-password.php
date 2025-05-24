@@ -17,6 +17,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 $new_password = $_POST['newpassword'] ?? NULL;
 $new_password_confirm = $_POST['newpassword_confirm'] ?? NULL;
 $old_password = $_POST['oldpassword'] ?? NULL;

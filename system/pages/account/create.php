@@ -23,6 +23,8 @@ if($logged)
 	return;
 }
 
+csrfProtect();
+
 if(setting('core.account_create_character_create')) {
 	$createCharacter = new CreateCharacter();
 }

@@ -8,7 +8,8 @@
 			<table border="0" cellpadding="3" cellspacing="1" width="100%">
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>
-						<form action="" method="get">
+						<form method="post">
+							{{ csrf() }}
 							<input type="hidden" name="subtopic" value="forum" />
 							<input type="hidden" name="action" value="move_thread" />
 							<input type="hidden" name="save" value="1" />
@@ -25,7 +26,6 @@
 							<input type="submit" value="Move Thread">
 						</form>
 						<form action="{{ section_link }}">
-							{{ csrf() }}
 							<input type="submit" value="Cancel">
 						</form>
 					</td>

@@ -18,6 +18,8 @@ if($logged || !isset($_POST['account_login']) || !isset($_POST['password_login']
 	return;
 }
 
+csrfProtect();
+
 $login_account = $_POST['account_login'];
 $login_password = $_POST['password_login'];
 $remember_me = isset($_POST['remember_me']);

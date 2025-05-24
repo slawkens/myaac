@@ -25,8 +25,9 @@ class CsrfToken
 	 *
 	 * @access public
 	 * @static true
+	 * @param bool $return
 	 * @return string
-	 **/
+	 */
 	public static function create(bool $return = false): string {
 		$input = '<input type="hidden" name="csrf_token" value="' . self::get() . '" />';
 		if ($return) {
@@ -58,7 +59,7 @@ class CsrfToken
 	 * @static true
 	 * @return boolean
 	 **/
-	public static function isValid($post): bool
+	public static function isValid(string|null $post): bool
 	{
 		if (!setting('core.csrf_protection')) {
 			return true;
