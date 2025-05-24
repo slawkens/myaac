@@ -311,9 +311,16 @@ class POT
  */
 	public function loadClass($class)
 	{
-		if( preg_match('/^(I|E_)?OTS_/', $class) > 0)
-		{
-			include_once($this->path . $class . '.php');
+		if( preg_match('/^(I|E_)?OTS_/', $class) > 0) {
+			global $hooks;
+
+			$include = $this->path . $class . '.php';
+
+			$args = ['include' => $include, 'class' => $class];
+			$hooks->triggerFilter(HOOK_FILTER_POT, $args);
+
+			$include = $args['include'];
+			include_once($include);
 		}
 	}
 
