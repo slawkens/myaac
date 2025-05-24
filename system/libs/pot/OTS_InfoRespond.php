@@ -219,9 +219,14 @@ class OTS_InfoRespond extends DOMDocument
  * @return int Count of monsters.
  * @throws DOMException On DOM operation error.
  */
-	public function getMonstersCount()
+	public function getMonstersCount(): int
 	{
 		return (int) $this->documentElement->getElementsByTagName('monsters')->item(0)->getAttribute('total');
+	}
+
+	public function getNPCsCount(): int
+	{
+		return (int) $this->documentElement->getElementsByTagName('npcs')->item(0)->getAttribute('total');
 	}
 
 /**
