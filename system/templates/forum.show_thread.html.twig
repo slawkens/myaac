@@ -53,15 +53,16 @@ Page: {{ links_to_pages|raw }}<br/>
 			<td>
 				{% if is_moderator %}
 					{% if post.first_post != post.id %}
-						<a href="{{ getLink('forum') }}?action=remove_post&id={{ post.id }}" title="Remove Post" onclick="return confirm('Are you sure you want remove post of {{ post.player.getName() }}?')"><img src="images/del.png"/></a>
+						{{ include('forum.remove_post.html.twig') }}
 					{% else %}
 						<a href="{{ getLink('forum') }}?action=move_thread&id={{ post.id }}" title="Move Thread"><img src="images/icons/arrow_right.gif"/></a>
-						<a href="{{ getLink('forum') }}?action=remove_post&id={{ post.id }}" title="Remove Thread" target="_blank" onclick="return confirm('Are you sure you want remove thread > {{ post.post_topic}} <?')"><img src="images/del.png"/></a>
+						{{ include('forum.remove_post.html.twig') }}
 					{% endif %}
 				{% endif %}
 					{% if logged and (post.player.getAccount().getId() == account_logged.getId() or is_moderator) %}
 						<a href="{{ getLink('forum') }}?action=edit_post&id={{ post.id }}" title="Edit Post" target="_blank">
-							<img src="images/edit.png"/></a>
+							<img src="images/edit.png"/>
+						</a>
 					{% endif %}
 					{% if logged %}
 						<a href="{{ getLink('forum') }}?action=new_post&thread_id={{ thread_id }}&quote={{ post.id }}" title="Quote Post"><img src="images/icons/comment_add.png"/></a>

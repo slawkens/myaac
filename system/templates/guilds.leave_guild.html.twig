@@ -1,5 +1,6 @@
-<form action="{{ getLink('guilds') }}?action=leave&guild={{ guild_name }}&todo=save" METHOD="post">
+<form action="{{ getLink('guilds') }}?action=leave&guild={{ guild_name }}" METHOD="post">
 	{{ csrf() }}
+	<input type="hidden" name="todo" value="save" />
 <table border="0" cellspacing="1" cellpadding="4" width="100%">
 	<tr bgcolor="{{ config.vdarkborder }}">
 		<td class="white"><b>Leave guild</b></td></tr>

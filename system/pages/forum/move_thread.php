@@ -18,22 +18,22 @@ if ($ret === false) {
 	return;
 }
 
-csrfProtect();
-
 if(!$logged) {
 	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . urlencode(getLink('forum')) . '">Log in</a> to post on the forum.<br /><br />';
 	return;
 }
+
+csrfProtect();
 
 if(!Forum::isModerator()) {
 	echo 'You are not logged in or you are not moderator.';
 	return;
 }
 
-$save = isset($_REQUEST['save']) && (int)$_REQUEST['save'] == 1;
+$save = isset($_POST['save']) && (int)$_POST['save'] == 1;
 if($save) {
-	$post_id = (int)$_REQUEST['id'];
-	$board = (int)$_REQUEST['section'];
+	$post_id = (int)$_POST['id'];
+	$board = (int)$_POST['section'];
 	if(!Forum::hasAccess($board)) {
 		$errors[] = "You don't have access to this board.";
 		displayErrorBoxWithBackButton($errors, getLink('forum'));

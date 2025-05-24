@@ -13,7 +13,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 require __DIR__ . '/base.php';
 
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
-$rank_name = isset($_REQUEST['rank_name']) ? $_REQUEST['rank_name'] : null;
+$rank_name = $_POST['rank_name'] ?? null;
 if(!Validator::guildName($guild_name)) {
 	$errors[] = Validator::getLastError();
 }
@@ -35,7 +35,7 @@ if(empty($errors)) {
 		$rank_list = $guild->getGuildRanksList();
 		$rank_list->orderBy('level', POT::ORDER_DESC);
 		$guild_leader = false;
-		$account_players = $account_logged->getPlayers();
+		$account_players = $account_logged->getPlayersList();
 		foreach($account_players as $player) {
 			if($guild_leader_char->getId() == $player->getId()) {
 				$guild_vice = true;

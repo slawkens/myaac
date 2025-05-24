@@ -20,17 +20,15 @@ if(!$logged) {
 }
 
 $name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : null;
-$new_nick = isset($_REQUEST['nick']) ? stripslashes($_REQUEST['nick']) : null;
+$new_nick = isset($_POST['nick']) ? stripslashes($_POST['nick']) : null;
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 
 if(!$name) {
 	$errors[] = 'Please enter new name.';
-	return;
 }
 
 if(!$new_nick) {
 	$errors[] = 'Please enter new nick.';
-	return;
 }
 
 if(empty($errors))

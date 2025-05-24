@@ -1,8 +1,11 @@
 {{ hook('HOOK_ACCOUNT_LOGIN_BEFORE_PAGE') }}
-<form action="{{ getLink('account/manage') }}" method="post" style="margin: 0px; padding: 0px;">
+<form action="{{ getLink('account/manage') }}" method="post" style="margin: 0; padding: 0;">
+	{{ csrf() }}
+
 	{% if redirect is not null %}
 		<input type="hidden" name="redirect" value="{{ redirect }}" />
 	{% endif %}
+
 	<div class="TableContainer" >
 		<div class="CaptionContainer" >
 			<div class="CaptionInnerContainer" >

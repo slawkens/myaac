@@ -64,7 +64,7 @@ if(!empty($action)) {
 	else if($action == 'delete_board') {
 		Forum::delete_board($id, $errors);
 		header('Location: ' . getLink('forum'));
-		$action = '';
+		exit;
 	}
 	else if($action == 'edit_board')
 	{
@@ -78,28 +78,27 @@ if(!empty($action)) {
 		else {
 			Forum::update_board($id, $name, $access, $guild, $description);
 			header('Location: ' . getLink('forum'));
-			$action = $name = $description = '';
-			$access = $guild = 0;
+			exit;
 		}
 	}
 	else if($action == 'hide_board') {
 		Forum::toggleHide_board($id, $errors);
 		header('Location: ' . getLink('forum'));
-		$action = '';
+		exit;
 	}
 	else if($action == 'moveup_board') {
 		Forum::move_board($id, -1, $errors);
 		header('Location: ' . getLink('forum'));
-		$action = '';
+		exit;
 	}
 	else if($action == 'movedown_board') {
 		Forum::move_board($id, 1, $errors);
 		header('Location: ' . getLink('forum'));
-		$action = '';
+		exit;
 	}
 
 	if(!empty($errors)) {
-		$twig->display('error_box.html.twig', array('errors' => $errors));
+		$twig->display('error_box.html.twig', ['errors' => $errors]);
 		$action = '';
 	}
 }

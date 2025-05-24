@@ -31,7 +31,7 @@ if(empty($errors)) {
 		$rank_list = $guild->getGuildRanksList();
 		$rank_list->orderBy('level', POT::ORDER_DESC);
 		$guild_leader = false;
-		$account_players = $account_logged->getPlayers();
+		$account_players = $account_logged->getPlayersList();
 
 		foreach($account_players as $player) {
 			if($guild_leader_char->getId() == $player->getId()) {
@@ -61,6 +61,7 @@ if(empty($errors)) {
 
 				$rank->save();
 			}
+
 			//show errors or redirect
 			if(empty($errors)) {
 				header("Location: " . getLink('guilds') . "?action=manager&guild=".$guild->getName());
@@ -73,10 +74,10 @@ if(empty($errors)) {
 	}
 	else
 	{
-		$errors[] = 'You are not logged. You can\'t manage guild.';
+		$errors[] = "You are not logged. You can't manage guild.";
 	}
 }
 
 if(!empty($errors)) {
-	$twig->display('error_box.html.twig', array('errors' => $errors));
+	$twig->display('error_box.html.twig', ['errors' => $errors]);
 }

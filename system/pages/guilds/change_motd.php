@@ -34,7 +34,7 @@ if(empty($errors)) {
 		$rank_list = $guild->getGuildRanksList();
 		$rank_list->orderBy('level', POT::ORDER_DESC);
 		$guild_leader = false;
-		$account_players = $account_logged->getPlayers();
+		$account_players = $account_logged->getPlayersList();
 		foreach($account_players as $player) {
 			if($guild->getOwner()->getId() == $player->getId()) {
 				$guild_vice = true;
@@ -45,8 +45,8 @@ if(empty($errors)) {
 
 		$saved = false;
 		if($guild_leader) {
-			if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
-				$motd = htmlspecialchars(stripslashes(substr($_REQUEST['motd'],0, setting('core.guild_motd_chars_limit'))));
+			if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
+				$motd = htmlspecialchars(stripslashes(substr($_POST['motd'],0, setting('core.guild_motd_chars_limit'))));
 				$guild->setCustomField('motd', $motd);
 				$saved = true;
 			}

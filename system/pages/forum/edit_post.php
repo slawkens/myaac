@@ -18,15 +18,14 @@ if ($ret === false) {
 	return;
 }
 
-csrfProtect();
-
 if(!$logged) {
 	echo 'You are not logged in. <a href="' . getLink('account/manage') . '?redirect=' . urlencode(getLink('forum')) . '">Log in</a> to post on the forum.<br /><br />';
 	return;
 }
 
-if(Forum::canPost($account_logged))
-{
+csrfProtect();
+
+if(Forum::canPost($account_logged)) {
 	$post_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : false;
 	if(!$post_id) {
 		$errors[] = 'Please enter post id.';
@@ -43,12 +42,12 @@ if(Forum::canPost($account_logged))
 			$char_id = $post_topic = $text = $smile = $html = null;
 			$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
 			$saved = false;
-			if(isset($_REQUEST['save'])) {
-				$text = stripslashes(trim($_REQUEST['text']));
-				$char_id = (int) $_REQUEST['char_id'];
-				$post_topic = stripslashes(trim($_REQUEST['topic']));
-				$smile = isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0;
-				$html = isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0;
+			if(isset($_POST['save'])) {
+				$text = stripslashes(trim($_POST['text']));
+				$char_id = (int) $_POST['char_id'];
+				$post_topic = stripslashes(trim($_POST['topic']));
+				$smile = isset($_POST['smile']) ? (int)$_POST['smile'] : 0;
+				$html = isset($_POST['html']) ? (int)$_POST['html'] : 0;
 
 				if (!superAdmin()) {
 					$html = 0;

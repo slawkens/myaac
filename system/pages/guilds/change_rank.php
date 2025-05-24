@@ -17,8 +17,9 @@ if(!$logged) {
 }
 else {
 	$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
-	if(!Validator::guildName($guild_name))
+	if(!Validator::guildName($guild_name)) {
 		$errors[] = Validator::getLastError();
+	}
 }
 
 if(empty($errors))
@@ -42,7 +43,7 @@ $rank_list = $guild->getGuildRanksList();
 $rank_list->orderBy('level', POT::ORDER_DESC);
 $guild_leader = false;
 $guild_vice = false;
-$account_players = $account_logged->getPlayers();
+$account_players = $account_logged->getPlayersList();
 foreach($account_players as $player)
 {
 	$player_rank = $player->getRank();
@@ -65,22 +66,23 @@ foreach($account_players as $player)
 	}
 }
 
-if($guild_vice)
-{
-	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] === 'save')
-	{
+if($guild_vice) {
+	if(isset($_POST['todo']) && $_POST['todo'] === 'save') {
 		$player_name = stripslashes($_REQUEST['name']);
-		$new_rank = (int) $_REQUEST['rankid'];
-		if(!Validator::characterName($player_name))
+		$new_rank = (int) $_POST['rankid'];
+
+		if(!Validator::characterName($player_name)) {
 			$errors[] = 'Invalid player name format.';
+		}
+
 		$rank = new OTS_GuildRank();
 		$rank->load($new_rank);
 		if(!$rank->isLoaded())
 			$errors[] = "Rank with this ID doesn't exist.";
 		if($level_in_guild <= $rank->getLevel() && !$guild_leader)
 			$errors[] = "You can't set ranks with equal or higher level than your.";
-		if(empty($errors))
-		{
+
+		if(empty($errors)) {
 			$player_to_change = new OTS_Player();
 			$player_to_change->find($player_name);
 			if(!$player_to_change->isLoaded())
@@ -108,8 +110,7 @@ if($guild_vice)
 				$errors[] = 'This player has higher rank in guild than you. You can\'t change his/her rank.';
 		}
 
-		if(empty($errors))
-		{
+		if(empty($errors)) {
 			$player_to_change->setRank($rank);
 			$twig->display('success.html.twig', array(
 				'title' => 'Rank Changed',
@@ -125,7 +126,7 @@ if($guild_vice)
 	$result = getPlayersWithLowerRank($rank_list, $guild_leader, $db, $level_in_guild, $guild);
 
 	$twig->display('guilds.change_rank.html.twig', array(
-		'players' => isset($result['players']) ? $result['players'] : array(),
+		'players' => $result['players'] ?? [],
 		'guild_name' => $guild->getName(),
 		'ranks' => $result['ranks']
 	));
