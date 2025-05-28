@@ -111,7 +111,26 @@ if(isset($todo) && $todo == 'save')
 	$new_guild->setOwner($player);
 	$new_guild->save();
 	$new_guild->setCustomField('description', 'New guild. Leader must edit this text :)');
-	//$new_guild->setCustomField('creationdata', time());
+
+	if ($db->hasTable('guild_ranks')) {
+		$query = $db->query("SELECT * FROM guild_ranks WHERE guild_id = " . $new_guild->getId());
+		if($query->rowCount() == 0) {
+			$ranks = [
+				['level' => 3, 'name' => 'the Leader'],
+				['level' => 2, 'name' => 'a Vice-Leader'],
+				['level' => 1, 'name' => 'a Member'],
+			];
+
+			foreach ($ranks as $rank) {
+				$db->insert('guild_ranks', [
+					'guild_id' => $new_guild->getId(),
+					'name' => $rank['name'],
+					'level' => $rank['level'],
+				]);
+			}
+		}
+	}
+
 	$ranks = $new_guild->getGuildRanksList();
 	$ranks->orderBy('level', POT::ORDER_DESC);
 	foreach($ranks as $rank) {
@@ -119,14 +138,11 @@ if(isset($todo) && $todo == 'save')
 			$player->setRank($rank);
 		}
 	}
+
 	$twig->display('guilds.create.success.html.twig', array(
 		'guild_name' => $guild_name,
 		'leader_name' => $player->getName()
 	));
-
-	/*$db->exec('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "the Leader", 3)');
-	$db->exec('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "a Vice-Leader", 2)');
-	$db->exec('INSERT INTO `guild_ranks` (`id`, `guild_id`, `name`, `level`) VALUES (null, '.$new_guild->getId().', "a Member", 1)');*/
 }
 else {
 	sort($array_of_player_nig);
