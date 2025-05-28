@@ -221,8 +221,14 @@ if($save)
 			}
 		}
 
-		if(setting('core.account_premium_points') && setting('core.account_premium_points') > 0) {
-			$new_account->setCustomField('premium_points', setting('core.account_premium_points'));
+		$accountDefaultPremiumPoints = setting('core.account_premium_points');
+		if($accountDefaultPremiumPoints > 0) {
+			$new_account->setCustomField('premium_points', $accountDefaultPremiumPoints);
+		}
+
+		$accountDefaultCoins = setting('core.account_coins');
+		if($db->hasColumn('accounts', 'coins') && $accountDefaultCoins > 0) {
+			$new_account->setCustomField('coins', $accountDefaultCoins);
 		}
 
 		$tmp_account = $email;

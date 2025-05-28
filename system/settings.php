@@ -19,6 +19,8 @@ $templates = Cache::remember('templates', 5 * 60, function () {
 });
 $defaultTemplate = in_array('kathrine', $templates) ? 'kathrine' : $templates[0];
 
+global $db;
+
 return [
 	'name' => 'MyAAC',
 	'settings' => [
@@ -672,6 +674,13 @@ Sent by MyAAC,<br/>
 			'name' => 'Default Account Premium Points',
 			'type' => 'number',
 			'desc' => 'Default premium points on new account',
+			'default' => 0,
+		],
+		'account_coins' => [
+			'name' => 'Default Account Coins',
+			'type' => 'number',
+			'desc' => 'Default coins on new account',
+			'hidden' => !$db->hasColumn('accounts', 'coins'),
 			'default' => 0,
 		],
 		'account_mail_change' => [
