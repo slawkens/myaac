@@ -680,7 +680,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Default Account Coins',
 			'type' => 'number',
 			'desc' => 'Default coins on new account',
-			'hidden' => !$db->hasColumn('accounts', 'coins'),
+			'hidden' => ($db && !$db->hasColumn('accounts', 'coins')),
 			'default' => 0,
 		],
 		'account_mail_change' => [
