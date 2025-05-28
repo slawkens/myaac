@@ -1,0 +1,40 @@
+services:
+  web:
+    ports:
+      - 8001:80
+    build:
+      args:
+        user: www-data
+        uid: 33
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www/html
+    depends_on:
+      - db
+    #volumes:
+    #  - ./:/var/www/html
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped # always?
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: myaac
+      #MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: myaac
+      MYSQL_USER: myaac
+    ports:
+      - 8003:3306
+    volumes:
+      - ./docker/tfs_schema.sql:/docker-entrypoint-initdb.d/tfs_schema.sql
+      - db:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8002:80
+
+volumes:
+  db:
