@@ -21,10 +21,12 @@ $defaultTemplate = in_array('kathrine', $templates) ? 'kathrine' : $templates[0]
 
 global $db;
 
-require SYSTEM . 'base.php';
+if (!IS_CLI) {
+	require SYSTEM . 'base.php';
 
-$serverUrl = 'http' . (isHttps() ? 's' : '') . '://' . $baseHost;
-$siteURL = $serverUrl . $baseDir;
+	$serverUrl = 'http' . (isHttps() ? 's' : '') . '://' . $baseHost;
+	$siteURL = $serverUrl . $baseDir;
+}
 
 return [
 	'name' => 'MyAAC',
@@ -41,7 +43,7 @@ return [
 			'name' => 'Website URL',
 			'type' => 'text',
 			'desc' => 'Website address of this MyAAC instance',
-			'default' => $siteURL,
+			'default' => IS_CLI ? '' : $siteURL,
 			'is_config' => true,
 		],
 		'env' => [
