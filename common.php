@@ -126,10 +126,10 @@ if (file_exists(BASE . 'config.local.php')) {
 	require BASE . 'config.local.php';
 }
 
-if(!IS_CLI) {
-	require SYSTEM . 'base.php';
-	define('BASE_DIR', $baseDir);
+require SYSTEM . 'base.php';
+define('BASE_DIR', $baseDir);
 
+if(!IS_CLI) {
 	if (isset($config['site_url'])) {
 		$hasSlashAtEnd = ($config['site_url'][strlen($config['site_url']) - 1] == '/');
 
@@ -144,7 +144,6 @@ if(!IS_CLI) {
 
 		//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
 	}
-
 }
 
 /** @var array $config */
