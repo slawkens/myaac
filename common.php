@@ -122,36 +122,29 @@ if (!IS_CLI) {
 	session_start();
 }
 
-// basedir
-$basedir = '';
-$tmp = explode('/', $_SERVER['SCRIPT_NAME']);
-$size = count($tmp) - 1;
-for($i = 1; $i < $size; $i++)
-	$basedir .= '/' . $tmp[$i];
-
-$basedir = str_replace(['/' . ADMIN_PANEL_FOLDER, '/install', '/tools'], '', $basedir);
-define('BASE_DIR', $basedir);
-
-if(!IS_CLI) {
-	if (isset($_SERVER['HTTP_HOST'][0])) {
-		$baseHost = $_SERVER['HTTP_HOST'];
-	} else {
-		if (isset($_SERVER['SERVER_NAME'][0])) {
-			$baseHost = $_SERVER['SERVER_NAME'];
-		} else {
-			$baseHost = $_SERVER['SERVER_ADDR'];
-		}
-	}
-
-	define('SERVER_URL', 'http' . (isHttps() ? 's' : '') . '://' . $baseHost);
-	define('BASE_URL', SERVER_URL . BASE_DIR . '/');
-	define('ADMIN_URL', SERVER_URL . BASE_DIR . '/' . ADMIN_PANEL_FOLDER . '/');
-
-	//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
-}
-
 if (file_exists(BASE . 'config.local.php')) {
 	require BASE . 'config.local.php';
+}
+
+if(!IS_CLI) {
+	require SYSTEM . 'base.php';
+	define('BASE_DIR', $baseDir);
+
+	if (isset($config['site_url'])) {
+		$hasSlashAtEnd = ($config['site_url'][strlen($config['site_url']) - 1] == '/');
+
+		define('SERVER_URL', $config['site_url']);
+		define('BASE_URL', SERVER_URL . ($hasSlashAtEnd ? '' : '/'));
+		define('ADMIN_URL', SERVER_URL . ($hasSlashAtEnd ? '' : '/') . ADMIN_PANEL_FOLDER . '/');
+	}
+	else {
+		define('SERVER_URL', 'http' . (isHttps() ? 's' : '') . '://' . $baseHost);
+		define('BASE_URL', SERVER_URL . BASE_DIR . '/');
+		define('ADMIN_URL', SERVER_URL . BASE_DIR . '/' . ADMIN_PANEL_FOLDER . '/');
+
+		//define('CURRENT_URL', BASE_URL . $_SERVER['REQUEST_URI']);
+	}
+
 }
 
 /** @var array $config */

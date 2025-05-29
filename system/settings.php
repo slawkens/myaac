@@ -21,6 +21,11 @@ $defaultTemplate = in_array('kathrine', $templates) ? 'kathrine' : $templates[0]
 
 global $db;
 
+require SYSTEM . 'base.php';
+
+$serverUrl = 'http' . (isHttps() ? 's' : '') . '://' . $baseHost;
+$siteURL = $serverUrl . $baseDir;
+
 return [
 	'name' => 'MyAAC',
 	'settings' => [
@@ -31,6 +36,13 @@ return [
 		[
 			'type' => 'section',
 			'title' => 'General'
+		],
+		'site_url' => [
+			'name' => 'Website URL',
+			'type' => 'text',
+			'desc' => 'Website address of this MyAAC instance',
+			'default' => $siteURL,
+			'is_config' => true,
 		],
 		'env' => [
 			'name' => 'App Environment',
