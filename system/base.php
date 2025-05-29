@@ -8,12 +8,14 @@ for($i = 1; $i < $size; $i++)
 
 $baseDir = str_replace(['/' . ADMIN_PANEL_FOLDER, '/install', '/tools'], '', $baseDir);
 
-if (isset($_SERVER['HTTP_HOST'][0])) {
-	$baseHost = $_SERVER['HTTP_HOST'];
-} else {
-	if (isset($_SERVER['SERVER_NAME'][0])) {
-		$baseHost = $_SERVER['SERVER_NAME'];
+if(!IS_CLI) {
+	if (isset($_SERVER['HTTP_HOST'][0])) {
+		$baseHost = $_SERVER['HTTP_HOST'];
 	} else {
-		$baseHost = $_SERVER['SERVER_ADDR'];
+		if (isset($_SERVER['SERVER_NAME'][0])) {
+			$baseHost = $_SERVER['SERVER_NAME'];
+		} else {
+			$baseHost = $_SERVER['SERVER_ADDR'];
+		}
 	}
 }
