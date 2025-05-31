@@ -334,7 +334,7 @@ if($load_it)
 
 	$success = false;
 	$tmp_content = getCustomPage($page, $success);
-	if($success) {
+	if($success && $hooks->trigger(HOOK_BEFORE_PAGE_CUSTOM)) {
 		$content .= $tmp_content;
 		if(hasFlag(FLAG_CONTENT_PAGES) || superAdmin()) {
 			$pageInfo = getCustomPageInfo($page);
@@ -342,6 +342,8 @@ if($load_it)
 					'page' => array('id' => $pageInfo !== null ? $pageInfo['id'] : 0, 'hidden' => $pageInfo !== null ? $pageInfo['hidden'] : '0')
 				)) . $content;
 		}
+
+		$hooks->trigger(HOOK_AFTER_PAGE_CUSTOM);
 	} else {
 		$file = TEMPLATES . "$template_name/pages/$page.php";
 		if(!@file_exists($file) || preg_match('/[^A-z0-9_\-]/', $page)) {
