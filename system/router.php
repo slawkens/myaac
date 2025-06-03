@@ -129,14 +129,14 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 		return ($a[3] < $b[3]) ? -1 : 1;
 	});
 
+	$aliases = [
+		[':int', ':string', ':alphanum'],
+		[':\d+', ':[A-Za-z0-9-_%+\' \[\]]+', ':[A-Za-z0-9]+'],
+	];
+
 	// remove duplicates
 	// if same route pattern, but different priority
-	$routesFinal = array_filter($routesFinal, function ($a) {
-		$aliases = [
-			[':int', ':string', ':alphanum'],
-			[':\d+', ':[A-Za-z0-9-_%+\' ]+', ':[A-Za-z0-9]+'],
-		];
-
+	$routesFinal = array_filter($routesFinal, function ($a) use ($aliases) {
 		// apply aliases
 		$a[1] = str_replace($aliases[0], $aliases[1], $a[1]);
 
@@ -170,11 +170,6 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 			// convert to upper case, fast-route accepts only upper case
 			$route[0] = array_map($toUpperCase, $route[0]);
 		}
-
-		$aliases = [
-			[':int', ':string', ':alphanum'],
-			[':\d+', ':[A-Za-z0-9-_%+\' ]+', ':[A-Za-z0-9]+'],
-		];
 
 		// apply aliases
 		$route[1] = str_replace($aliases[0], $aliases[1], $route[1]);
