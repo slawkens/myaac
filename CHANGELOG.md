@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.24 - 03.06.2025]
+
+### Added
+* Add code to insert guild_ranks on guild create, in case guild trigger is missing (https://github.com/slawkens/myaac/commit/149e10261befab22a38246bd792e2e4d1c42ef1e)
+* Two new hooks for pages loaded from database (custom pages): HOOK_BEFORE_PAGE_CUSTOM + HOOK_AFTER_PAGE_CUSTOM (https://github.com/slawkens/myaac/commit/e542e8a7cebad2d4bd6984c62cd6f385363ba9eb)
+* Load hooks before twig, add new hooks: HOOK_TWIG + HOOK_INIT (https://github.com/slawkens/myaac/commit/5726c9fa94e6f5a198917f6bda9014c0cbb141fb)
+* New hooks for account characters change-comment page (https://github.com/slawkens/myaac/commit/76440a37d009b845db9157312f2807774e15de14)
+
+### Fixed
+* Do not allow access to tools/ folder after install (https://github.com/slawkens/myaac/commit/fcfe5b0dbd33fd628031fe60ae3f2acc5164eed8)
+
+### Changed
+* Do not return -1 in case of freePremium, makes things harder (https://github.com/slawkens/myaac/commit/335b7b3112b3f2ed87b46c5dbc5db70a33bbd953)
+
 ## [0.8.23 - 22.04.2025]
 
 ### Added
