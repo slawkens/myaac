@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.6 - 03.06.2025]
+
+### Added
+* Add new setting/configurable: site_url, prevents domain spoofing (https://github.com/slawkens/myaac/commit/d8a6090be382c35c19117cfef964b594ed02b8d4)
+* Add new account coins setting (https://github.com/slawkens/myaac/commit/28886551e86fe562172c4c7f2afb89a2e7672c2e)
+* autoload: settings/install/init.php (https://github.com/slawkens/myaac/commit/e5749437074c3b3556628a2aeb5bad2edf97bde0, https://github.com/slawkens/myaac/commit/7d213f479a7e40c6254069b5fc4e578dc32bf8d9)
+* Protect against csrf in more places (accounts & guilds & forums pages) (https://github.com/slawkens/myaac/commit/6eda38603c8ed7e99b92a78a4600b1245377f74d, https://github.com/slawkens/myaac/commit/e776bd52beb3064a9e694efd1b9021ec972ee2f6, https://github.com/slawkens/myaac/commit/84d502bf105f2a789481fba1acc820d236b4de66)
+* Added two new hooks for pages loaded from database (custom pages): HOOK_BEFORE_PAGE_CUSTOM, HOOK_AFTER_PAGE_CUSTOM (https://github.com/slawkens/myaac/commit/c961a1ebf837f2ab1734a825ff2c57b4937610c9)
+* Add global variables into $hooks->executeFilter (https://github.com/slawkens/myaac/commit/8fdea943768b20193eede99d60313ee84511a0be)
+* Add getNPCsCount() to OTS_InfoRespond (https://github.com/slawkens/myaac/commit/7d435ff6433ef1fb2295ee79ed043ee10dc725e9)
+
+### Fixed
+* Allow [] in character name (https://github.com/slawkens/myaac/commit/064b92984172e0e5ece25b36902f1026b49aa43c)
+* Do not allow access to tools/ folder after install (https://github.com/slawkens/myaac/commit/6e0f5913831f8dba69fd2d1505be3e2a303c6324)
+* Fix CHANGELOG-1.x.md loading in admin panel (https://github.com/slawkens/myaac/commit/4a30fb495dbfbe1d434e8d52419eaf44fe517aee)
+* Fix links not working in admin dashboard modules (https://github.com/slawkens/myaac/commit/be7b27c31aa3bbd6c0289c34d1e61139a3fe015c)
+* Fix twig variables: logged + account_logged being not set directly after login (https://github.com/slawkens/myaac/commit/1e9b10d6489c488cadf7f6ed17b42f1ea6c767a8)
+
+### Changed
+* OTS_ServerInfo -> move setTimeout out of class - Possibility to use the class without MyAAC (https://github.com/slawkens/myaac/commit/40d65a6613149fda51bdceb82c807e5301a3388b)
+
 ## [1.5 - 14.05.2025]
 
 ### Added
