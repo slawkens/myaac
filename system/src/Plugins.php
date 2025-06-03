@@ -11,6 +11,25 @@ class Plugins {
 	private static $error = null;
 	private static $plugin_json = [];
 
+	public static function getInits()
+	{
+		return Cache::remember('plugins_inits', 10 * 60, function () {
+			$inits = [];
+			foreach(self::getAllPluginsJson() as $plugin) {
+				if (!self::getAutoLoadOption($plugin, 'init', false)) {
+					continue;
+				}
+
+				$pluginInits = glob(PLUGINS . $plugin['filename'] . '/init.php');
+				foreach ($pluginInits as $path) {
+					$inits[] = $path;
+				}
+			}
+
+			return $inits;
+		});
+	}
+
 	public static function getAdminPages()
 	{
 		return Cache::remember('plugins_admin_pages', 10 * 60, function () {

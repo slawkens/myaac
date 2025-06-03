@@ -12,6 +12,7 @@ use DebugBar\StandardDebugBar;
 use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
 use MyAAC\Hooks;
+use MyAAC\Plugins;
 use MyAAC\Models\Town;
 use MyAAC\Settings;
 
@@ -45,6 +46,11 @@ if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HT
 // cache
 global $cache;
 $cache = Cache::getInstance();
+
+// load plugins init.php
+foreach (Plugins::getInits() as $init) {
+	require $init;
+}
 
 // event system
 global $hooks;
