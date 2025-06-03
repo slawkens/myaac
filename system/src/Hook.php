@@ -38,6 +38,8 @@ class Hook
 	}
 
 	public function executeFilter(&$args) {
+		global $db, $config, $template_path, $ots, $content, $twig;
+
 		return include BASE . $this->_file;
 	}
 
