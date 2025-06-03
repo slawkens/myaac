@@ -252,13 +252,15 @@ else {
 
 				$success = false;
 				$tmp_content = getCustomPage($pageName, $success);
-				if ($success) {
+				if ($success && $hooks->trigger(HOOK_BEFORE_PAGE_CUSTOM)) {
 					$content .= $tmp_content;
 					if (hasFlag(FLAG_CONTENT_PAGES) || superAdmin()) {
 						$pageInfo = getCustomPageInfo($pageName);
 						$content = $twig->render('admin.links.html.twig', ['page' => 'pages', 'id' => $pageInfo !== null ? $pageInfo['id'] : 0, 'hide' => $pageInfo !== null ? $pageInfo['hide'] : '0']
 							) . $content;
 					}
+
+					$hooks->trigger(HOOK_AFTER_PAGE_CUSTOM);
 
 					$page = $pageName;
 					$file = false;
