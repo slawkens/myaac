@@ -22,11 +22,11 @@ return [
 	['GET', 'account/confirm-email/{hash:alphanum}', 'account/confirm-email.php'],
 
 	['GET', 'bans/{page:int}', 'bans.php'],
-	[['GET', 'POST'], 'characters[/{name:[A-Za-z0-9-_%+\' \[\]]+}]', 'characters.php'],
-	['GET', 'changelog[/{page:int}]', 'changelog.php'],
-	[['GET', 'POST'], 'monsters[/{name:string}]', 'monsters.php'],
+	[['GET', 'POST'], 'characters/{name:[A-Za-z0-9-_%+\' \[\]]+}', 'characters.php'],
+	['GET', 'changelog/{page:int}', 'changelog.php'],
+	[['GET', 'POST'], 'monsters/{name:string}', 'monsters.php'],
 
-	[['GET', 'POST'], 'faq[/{action:string}]', 'faq.php'],
+	[['GET', 'POST'], 'faq/{action:string}', 'faq.php'],
 
 	[['GET', 'POST'], 'forum/{action:string}', 'forum.php'],
 	['GET', 'forum/board/{id:int}', 'forum/show_board.php'],
