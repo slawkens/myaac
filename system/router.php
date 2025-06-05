@@ -174,7 +174,12 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 		// apply aliases
 		$route[1] = str_replace($aliases[0], $aliases[1], $route[1]);
 
-		$r->addRoute($route[0], $route[1], $route[2]);
+		try {
+			$r->addRoute($route[0], $route[1], $route[2]);
+		}
+		catch (\Exception $e) {
+			// duplicated route, just ignore
+		}
 	}
 
 	if (config('env') === 'dev') {
