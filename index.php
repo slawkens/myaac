@@ -117,6 +117,14 @@ if(setting('core.backward_support')) {
 		$config['status']['serverStatus_' . $key] = $value;
 }
 
+if(setting('core.views_counter')) {
+	require_once SYSTEM . 'counter.php';
+}
+
+if(setting('core.visitors_counter')) {
+	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
+}
+
 require_once SYSTEM . 'router.php';
 
 // anonymous usage statistics
@@ -151,13 +159,6 @@ if(setting('core.anonymous_usage_statistics')) {
 			$cache->set('last_usage_report', time(), 60 * 60);
 		}
 	}
-}
-
-if(setting('core.views_counter'))
-	require_once SYSTEM . 'counter.php';
-
-if(setting('core.visitors_counter')) {
-	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
 }
 
 /**
