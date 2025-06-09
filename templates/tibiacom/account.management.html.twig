@@ -11,13 +11,14 @@
 					<td width="100%"></td>
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0" >
-							<form action="{{ getLink('account/logout') }}" method="post" >
-								<tr>
-									<td style="border:0px;">
+							<tr>
+								<td style="border:0;">
+									<form action="{{ getLink('account/logout') }}" method="post" >
+										{{ csrf() }}
 										{{ include('buttons.logout.html.twig') }}
-									</td>
-								</tr>
-							</form>
+									</form>
+								</td>
+							</tr>
 						</table>
 					</td>
 				</tr>
@@ -59,13 +60,14 @@
 			</table>
 			<div style="text-align:center">
 				<table border="0" cellspacing="0" cellpadding="0" style="margin-left: auto; margin-right: auto;">
-					<form action="{{ getLink('account/register') }}" method="post">
-						<tr>
-							<td style="border:0;">
+					<tr>
+						<td style="border:0;">
+							<form action="{{ getLink('account/register') }}" method="post">
+								{{ csrf() }}
 								{{ include('buttons.register_account.html.twig') }}
-							</td>
-						</tr>
-					</form>
+							</form>
+						</td>
+					</tr>
 				</table>
 			</div>
 		</div>
@@ -94,13 +96,14 @@
 			</table>
 			<div style="text-align:center">
 				<table border="0" cellspacing="0" cellpadding="0">
-					<form action="{{ getLink('account/change-email') }}" method="post">
-						<tr>
-							<td style="border:0px;">
+					<tr>
+						<td style="border:0;">
+							<form action="{{ getLink('account/change-email') }}" method="post">
+								{{ csrf() }}
 								{{ include('buttons.edit.html.twig') }}
-							</td>
-						</tr>
-					</form>
+							</form>
+						</td>
+					</tr>
 				</table>
 			</div>
 		</div>
@@ -177,26 +180,29 @@
 				<tr>
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0">
-							<form action="{{ getLink('account/change-password') }}" method="post">
-								<tr>
-									<td style="border:0px;" >
+							<tr>
+								<td style="border:0;" >
+									<form action="{{ getLink('account/change-password') }}" method="post">
+										{{ csrf() }}
 										{{ include('buttons.change_password.html.twig') }}
-									</td>
-								</tr>
-							</form>
+									</form>
+								</td>
+							</tr>
 						</table>
 					</td>
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0">
-							<form action="{{ getLink('account/change-email') }}" method="post">
-								<tr>
-									<td style="border:0px;">
+							<tr>
+								<td style="border:0;">
+									<form action="{{ getLink('account/change-email') }}" method="post">
+										{{ csrf() }}
+
 										<input type="hidden" name="newemail" value=""/>
 										<input type="hidden" name="newemaildate" value="0">
 										{{ include('buttons.change_email.html.twig') }}
-									</td>
-								</tr>
-							</form>
+									</form>
+								</td>
+							</tr>
 						</table>
 					</td>
 					<td width="100%"></td>
@@ -204,13 +210,14 @@
 					{% if recovery_key is empty %}
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0">
-							<form action="{{ getLink('account/register') }}" method="post">
-								<tr>
-									<td style="border:0px;">
+							<tr>
+								<td style="border:0;">
+									<form action="{{ getLink('account/register') }}" method="post">
+										{{ csrf() }}
 										{{ include('buttons.register_account.html.twig') }}
-									</td>
-								</tr>
-							</form>
+									</form>
+								</td>
+							</tr>
 						</table>
 					</td>
 					{% endif %}
@@ -258,13 +265,14 @@
 							</td>
 							<td align=right>
 								<table border="0" cellspacing="0" cellpadding="0">
-									<form action="{{ getLink('account/change-info') }}" method="post">
-										<tr>
-											<td style="border:0px;">
+									<tr>
+										<td style="border:0;">
+											<form action="{{ getLink('account/change-info') }}" method="post">
+												{{ csrf() }}
 												{{ include('buttons.edit.html.twig') }}
-											</td>
-										</tr>
-									</form>
+											</form>
+										</td>
+									</tr>
 								</table>
 							</td>
 						</tr>
@@ -398,8 +406,9 @@
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0" >
 							<tr>
-								<td style="border:0px;">
+								<td style="border:0;">
 									<form action="{{ getLink('account/characters/create') }}" method="post" >
+										{{ csrf() }}
 										{{ include('buttons.create_character.html.twig') }}
 									</form>
 								</td>
@@ -410,8 +419,9 @@
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0" >
 							<tr>
-								<td style="border:0px;">
+								<td style="border:0;">
 									<form action="{{ getLink('account/characters/change-name') }}" method="post" >
+										{{ csrf() }}
 										{{ include('buttons.change_name.html.twig') }}
 									</form>
 								</td>
@@ -423,8 +433,9 @@
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0" >
 							<tr>
-								<td style="border:0px;">
+								<td style="border:0;">
 									<form action="{{ getLink('account/characters/change-sex') }}" method="post">
+										{{ csrf() }}
 										{{ include('buttons.change_sex.html.twig') }}
 									</form>
 								</td>
@@ -436,8 +447,9 @@
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0">
 							<tr>
-								<td style="border: 0px;">
+								<td style="border: 0;">
 									<form action="{{ getLink('account/characters/delete') }}" method="post">
+										{{ csrf() }}
 										{{ include('buttons.delete_character.html.twig') }}
 									</form>
 								</td>
