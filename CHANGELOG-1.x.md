@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.6.1 - 11.06.2025]
+
+### Fixed
+* Fixed "Request has been cancelled due to security reasons", cause of missing csrf() in twig files (https://github.com/slawkens/myaac/commit/10cd71a6630ffec91b43a26a6d685b66c5836a6a)
+* Fix: Ignore duplicated route exception (https://github.com/slawkens/myaac/commit/9d8e9d27bd87167d8d4005942a6af62bfe4c0892)
+
+### Changed
+* Move counter & visitors code before router (In case someone wants to include that info on page) (https://github.com/slawkens/myaac/commit/f78285030708ad3c74ab048711f73bbf3ee5281e)
+* Set TinyMCE license key to gpl (Avoid warning message in browser console) (https://github.com/slawkens/myaac/commit/8d29fdb98b92dbc3d2853ef88a185c67036b4a77)
+
+### Removed
+* Remove deprecated TinyMCE plugin - template (https://github.com/slawkens/myaac/commit/309c1fb715b882e67cb673b1544a03befbf64a22)
+
 ## [1.6 - 03.06.2025]
 
 ### Added
