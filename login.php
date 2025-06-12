@@ -88,8 +88,8 @@ switch ($action) {
 	case 'boostedcreature':
 		$clientVersion = (int)setting('core.client');
 
-		// 13.40 exclusively and 14.00+
-		if ($clientVersion == 1340 || $clientVersion >= 1400) {
+		// 13.40 and up
+		if ($clientVersion >= 1340) {
 			$creatureBoost = $db->query("SELECT * FROM " . $db->tableName('boosted_creature'))->fetchAll();
 			$bossBoost     = $db->query("SELECT * FROM " . $db->tableName('boosted_boss'))->fetchAll();
 			die(json_encode([
