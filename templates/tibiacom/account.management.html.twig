@@ -463,4 +463,7 @@
 </table>
 {% endset %}
 {% include 'tables.headline.html.twig' %}
-<br/><br/>
+<br/>
+{{ hook('HOOK_ACCOUNT_MANAGE_AFTER_CHARACTERS') }}
+
+<br/>
