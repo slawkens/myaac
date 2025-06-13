@@ -326,7 +326,9 @@ if (isset($_REQUEST['_page_only'])) {
 
 if(!isset($title)) {
 	$title = str_replace('index.php/', '', $page);
-	$title = ucfirst($title);
+	$title = str_replace(['_', '-', '/'], ' ', $page);
+
+	$title = ucwords($title);
 }
 
 if(setting('core.backward_support')) {
