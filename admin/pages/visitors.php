@@ -45,7 +45,7 @@ foreach ($tmp as &$visitor) {
 		if ($dd->isBot()) {
 			$bot = $dd->getBot();
 			$message = '(Bot) %s, <a href="%s" target="_blank">%s</a>';
-			$browser = sprintf($message, $bot['category'], $bot['url'], $bot['name']);
+			$browser = sprintf($message, $bot['category'] ?? 'Unknown', $bot['url'] ?? '', $bot['name'] ?? 'Unknown name');
 		}
 		else {
 			$osFamily = OperatingSystem::getOsFamily($dd->getOs('name'));
