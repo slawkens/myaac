@@ -93,6 +93,7 @@ if(setting('core.backward_support')) {
 	if($logged && $account_logged)
 		$group_id_of_acc_logged = $account_logged->getGroupId();
 
+	$config['serverPath'] = $config['server_path'];
 	$config['site'] = &$config;
 	$config['server'] = &$config['lua'];
 	$config['site']['shop_system'] = setting('core.gifts_system');
