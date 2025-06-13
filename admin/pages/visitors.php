@@ -19,7 +19,7 @@ $use_datatable = true;
 
 if (!setting('core.visitors_counter')): ?>
 	Visitors counter is disabled.<br/>
-	You can enable it Settings -> General -> Visitors Counter.<br/>
+	You can enable it in Settings -> General -> Visitors Counter.<br/>
 	<?php
 	return;
 endif;
