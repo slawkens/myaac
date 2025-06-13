@@ -110,6 +110,15 @@ class OTS_Toolbox
 		$list->setFilter($filter);
 		return $list;
 	}
+
+	public static function getVocationName($id, $promotion = 0): string
+	{
+		if($promotion > 0) {
+			$id = ($id + ($promotion * config('vocations_amount')));
+		}
+
+		return config('vocations')[$id] ?? 'Unknown';
+	}
 }
 
 /**#@-*/

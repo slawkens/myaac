@@ -2953,21 +2953,14 @@ class OTS_Player extends OTS_Row_DAO
  * @return string Player proffesion name.
  * @throws E_OTS_NotLoaded If player is not loaded or global vocations list is not loaded.
  */
-	public function getVocationName()
+	public function getVocationName(): string
 	{
 		if( !isset($this->data['vocation']) )
 		{
 			throw new E_OTS_NotLoaded();
 		}
 
-		global $config;
-		$voc = $this->getVocation();
-		if(!isset($config['vocations'][$voc])) {
-			return 'Unknown';
-		}
-
-		return $config['vocations'][$voc];
-		//return POT::getInstance()->getVocationsList()->getVocationName($this->data['vocation']);
+		return OTS_Toolbox::getVocationName($this->data['vocation'], $this->data['promotion'] ?? 0);
 	}
 
 /**
