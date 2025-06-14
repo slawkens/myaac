@@ -127,5 +127,5 @@ $twig->display('online.html.twig', array(
 ));
 
 //search bar
-$twig->display('online.form.html.twig');
+$twig->display('characters.form.html.twig');
 ?>
