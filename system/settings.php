@@ -1264,6 +1264,12 @@ Sent by MyAAC,<br/>
 			'desc' => '',
 			'default' => false,
 		],
+		'online_datacenter' => [
+			'name' => 'Data Center',
+			'type' => 'text',
+			'desc' => 'Server Location, will be shown on online page',
+			'default' => 'Frankfurt - Germany',
+		],
 		[
 			'type' => 'section',
 			'title' => 'Team Page'

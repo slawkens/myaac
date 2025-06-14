@@ -22,13 +22,16 @@ $promotion = '';
 if($db->hasColumn('players', 'promotion'))
 	$promotion = '`promotion`,';
 
-$order = $_GET['order'] ?? 'name';
-if(!in_array($order, array('country', 'name', 'level', 'vocation')))
-	$order = $db->fieldName('name');
-else if($order == 'country')
-	$order = $db->tableName('accounts') . '.' . $db->fieldName('country');
-else if($order == 'vocation')
-	$order = $promotion . 'vocation ASC';
+$order = $_GET['order'] ?? 'name_asc';
+if(!in_array($order, ['country_asc', 'country_desc', 'name_asc', 'name_desc', 'level_asc', 'level_desc', 'vocation_asc', 'vocation_desc'])) {
+	$order = 'name_asc';
+}
+else if($order == 'vocation_asc' || $order == 'vocation_desc') {
+	$order = $promotion . 'vocation_' . (str_contains($order, 'asc') ? 'asc' : 'desc');
+}
+
+$orderExplode = explode('_', $order);
+$orderSql = $orderExplode[0] . ' ' . $orderExplode[1];
 
 $skull_type = 'skull';
 if($db->hasColumn('players', 'skull_type')) {
@@ -58,11 +61,11 @@ if (setting('core.online_vocations')) {
 }
 
 if($db->hasTable('players_online')) // tfs 1.0
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $orderSql);
 else
-	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $order);
+	$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $orderSql);
 
-$players_data = array();
+$players_data = [];
 $players = 0;
 $data = '';
 foreach($playersOnline as $player) {
@@ -115,7 +118,7 @@ if(count($players_data) > 0) {
 		}
 
 		if($result) {
-			$record = 'The maximum on this game world was ' . $result['record'] . ' players' . ($timestamp ? ' on ' . date("M d Y, H:i:s", $result['timestamp']) . '.' : '.');
+			$record = $result['record'] . ' player' . ($result['record'] > 1 ? 's' : '') . ($timestamp ? ' (on ' . date("M d Y, H:i:s", $result['timestamp']) . ')' : '');
 		}
 	}
 }
@@ -124,6 +127,7 @@ $twig->display('online.html.twig', array(
 	'players' => $players_data,
 	'record' => $record,
 	'vocs' => $vocs,
+	'order' => $order,
 ));
 
 //search bar
