@@ -49,6 +49,7 @@
 									{% include('buttons.base.html.twig') %}
 								</a>
 							{% endif %}
+							{{ hook('HOOK_GUILDS_AFTER_MANAGE_BUTTON') }}
 						</div>
 					</td>
 				</tr>
