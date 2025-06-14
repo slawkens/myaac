@@ -62,6 +62,7 @@
 			{{ hook('HOOK_GUILDS_AFTER_GUILD_INFORMATION') }}
 
 			{% set title = 'Guild Members' %}
+			{% set background = config('lightborder') %}
 			{% set content %}
 			<table style="width:100%;">
 				<tbody>
@@ -152,6 +153,7 @@
 
 			{{ hook('HOOK_GUILDS_AFTER_GUILD_MEMBERS') }}
 			{% set title = 'Invited Characters' %}
+			{% set background = config('lightborder') %}
 			{% set content %}
 			<table style="width:100%;">
 				<tbody>
