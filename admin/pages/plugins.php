@@ -51,6 +51,57 @@ else {
 		} else {
 			error('Error while disabling plugin ' . $disable . ': ' . Plugins::getError());
 		}
+	}
+	else if (isset($_GET['check-updates'])) {
+		success('Checking versions');
+
+		$adminPlugins = new \MyAAC\Admin\Plugins();
+
+		// TODO: Maybe find a better way? Probably settings
+		if (str_contains(BASE_URL, 'myaac.local')) {
+			$adminPlugins->setApiBaseUri('http://plugins.my-aac.local/api/');
+		}
+
+		try {
+			$plugins = $adminPlugins->getLatestVersions();
+		}
+		catch (Exception $e) {
+			error($e->getMessage());
+		}
+
+		if (isset($plugins) && count($plugins) > 0) {
+			$outdated = [];
+
+			foreach (get_plugins(true) as $plugin) {
+				$string = file_get_contents(BASE . 'plugins/' . $plugin . '.json');
+				$plugin_info = json_decode($string, true);
+
+				if (!$plugin_info) {
+					continue;
+				}
+
+				$disabled = (str_contains($plugin, 'disabled.'));
+				$pluginOriginal = ($disabled ? str_replace('disabled.', '', $plugin) : $plugin);
+
+				$info = $plugins[$pluginOriginal] ?? false;
+				if ($info && version_compare($info['version'], $plugin_info['version'], '>')) {
+					$outdated[] = [
+						'name' => $pluginOriginal,
+						'yourVersion' => $plugin_info['version'],
+						'latestVersion' => $info['version'],
+						'link' => $info['link'] ?? 'Unknown',
+						'download_link' => $info['download_link'] ?? 'Unknown',
+					];
+				}
+			}
+
+			if (count($outdated) > 0) {
+				$twig->display('admin.plugins.outdated.html.twig', ['plugins' => $outdated]);
+			}
+			else {
+				success('All plugins up do date!');
+			}
+		}
 	} else if (isset($_FILES['plugin']['name'])) {
 		$file = $_FILES['plugin'];
 		$filename = $file['name'];
