@@ -53,7 +53,7 @@ else {
 		}
 	}
 	else if (isset($_GET['check-updates'])) {
-		success('Checking versions');
+		success('Fetching latest info from plugins.my-aac.org..');
 
 		$adminPlugins = new \MyAAC\Admin\Plugins();
 
@@ -96,6 +96,7 @@ else {
 			}
 
 			if (count($outdated) > 0) {
+				info('Following updates have been found for your plugins:');
 				$twig->display('admin.plugins.outdated.html.twig', ['plugins' => $outdated]);
 			}
 			else {
