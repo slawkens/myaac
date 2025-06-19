@@ -53,14 +53,12 @@ else {
 		}
 	}
 	else if (isset($_GET['check-updates'])) {
-		success('Fetching latest info from plugins.my-aac.org..');
+		$repoUri = $config['admin_plugins_api_uri'] ?? 'https://plugins.my-aac.org/api/';
+		success("Fetching latest info from $repoUri..");
 
 		$adminPlugins = new \MyAAC\Admin\Plugins();
 
-		// TODO: Maybe find a better way? Probably settings
-		if (str_contains(BASE_URL, 'myaac.local')) {
-			$adminPlugins->setApiBaseUri('http://plugins.my-aac.local/api/');
-		}
+		$adminPlugins->setApiBaseUri($repoUri);
 
 		try {
 			$plugins = $adminPlugins->getLatestVersions();
@@ -100,7 +98,7 @@ else {
 				$twig->display('admin.plugins.outdated.html.twig', ['plugins' => $outdated]);
 			}
 			else {
-				success('All plugins up do date!');
+				success('All plugins up to date!');
 			}
 		}
 	} else if (isset($_FILES['plugin']['name'])) {
