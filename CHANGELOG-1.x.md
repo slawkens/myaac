@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.7 - 22.06.2025]
+
+### Added
+* Feature: plugins versions check (#310)
+* New hooks: HOOK_ACCOUNT_MANAGE_AFTER_CHARACTERS, HOOK_GUILDS_AFTER_MANAGE_BUTTON (https://github.com/slawkens/myaac/commit/c074a48f245df55646b6705737f667b6a84149b2, https://github.com/slawkens/myaac/commit/e6100a1b72de8695bba1dae9ba4e28bfdce47b10)
+* Add OTS_Toolbox::getVocationName(id, promotion) + OTS_Player->isNameLocked() (https://github.com/slawkens/myaac/commit/e222957893c4a1de0dc8dbba55bce1a43418d275, https://github.com/slawkens/myaac/commit/522f6c11d835afd36fd07a07074d96d7e219b488)
+* Add missing csrf in more places, causing white page with error about Request (https://github.com/slawkens/myaac/commit/dca904e61d21d856bf809070e7652803a2df0f58, https://github.com/slawkens/myaac/commit/c720ccc451ff90ef40b2a1595468d061ffd7e1e4)
+
+### Changed
+* Revamped online page (https://github.com/slawkens/myaac/commit/9a90e4aae280e607430511c6727d9a714b11f4c5, https://github.com/slawkens/myaac/commit/4767120043b09141870383e249f3729638d53dc2)
+* Better $title inventing (https://github.com/slawkens/myaac/commit/0c95bcfd06b68b21512e477646ef7bd3a0d4912b)
+
+### Fixed
+* Use apcu cache clear (https://github.com/slawkens/myaac/commit/b329da52aae9d0e21120a6444d3caf442420ce50, https://github.com/slawkens/myaac/commit/566c2a9151ab6392286f74e26853faa19a1b4f24)
+* fix: boostedcreatures for 13.40 (by @GooseWithAKnife) (#307)
+
 ## [1.6.1 - 11.06.2025]
 
 ### Fixed
