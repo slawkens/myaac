@@ -1,0 +1,59 @@
+{% set title = 'Enter Email Code' %}
+{% set content %}
+<table style="width:100%;">
+	<tbody>
+	<tr>
+		<td>
+			<div class="TableContentContainer">
+				<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+					<tbody>
+					<tr>
+						<td>
+							<div style="float: right;">
+								<form
+										action="{{ getLink('account/2fa') }}?action=email-code&step=resend"
+										method="post"
+										style="padding:0;margin:0;"
+								>
+									{{ csrf() }}
+									{% set button_name = 'Resend Email Code' %}
+									{{ include('buttons.base.html.twig') }}
+								</form>
+							</div>
+							An <b>email code</b> has already been sent to the email address assigned to your account.
+							Please check your email account's spam/junk filter and make sure that your mailbox is not
+							full.<br>In case you need a new email code, you can request one by clicking on "Resend Email
+							Code".
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="TableContentContainer">
+				<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+					<tbody>
+					<tr>
+						<td><b>Email code authentication is activated for your account.</b><br><br>Please enter the <b>most
+								recent email code</b> you have received in order to log in.<br>
+							<div style="margin-top: 15px; margin-bottom: 15px;">
+								<div class="LabelV150" style="float:left;">Email Code:</div>
+								<form method="post" action="{{ getLink('account/2fa') }}?action=email-code&step=verify">
+									{{ csrf() }}
+									<input name="email-code" maxlength="15" autocomplete="off">
+								</form>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+	</tr>
+	</tbody>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}

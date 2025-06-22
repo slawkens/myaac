@@ -10,6 +10,7 @@
  */
 
 use MyAAC\RateLimit;
+use MyAAC\TwoFactorAuth\TwoFactorAuth;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
@@ -55,6 +56,11 @@ if(!empty($login_account) && !empty($login_password))
 			setSession('password', encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $login_password));
 			if($remember_me) {
 				setSession('remember_me', true);
+			}
+
+			$twoFactorAuth = new TwoFactorAuth($account_logged);
+			if (!$twoFactorAuth->process()) {
+				return;
 			}
 
 			$logged = true;
