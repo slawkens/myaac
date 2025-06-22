@@ -58,8 +58,8 @@ if(!empty($login_account) && !empty($login_password))
 				setSession('remember_me', true);
 			}
 
-			$twoFactorAuth = new TwoFactorAuth($account_logged);
-			if (!$twoFactorAuth->process()) {
+			$twoFactorAuth = TwoFactorAuth::getInstance($account_logged);
+			if (!$twoFactorAuth->process($_POST['email-code'] ?? '')) {
 				return;
 			}
 

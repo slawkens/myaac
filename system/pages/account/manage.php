@@ -8,6 +8,9 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\TwoFactorAuth\TwoFactorAuth;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Account Management';
@@ -111,6 +114,8 @@ $twig->display('account.management.html.twig', array(
 	'account_registered' => $account_registered,
 	'account_rlname' => $account_rlname,
 	'account_location' => $account_location,
+	'twoFactorViews' => TwoFactorAuth::getInstance($account_logged)->getAccountManageViews(),
+
 	'actions' => $actions,
-	'players' => $account_players
+	'players' => $account_players,
 ));

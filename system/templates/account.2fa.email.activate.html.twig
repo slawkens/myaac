@@ -1,0 +1,37 @@
+<tr>
+	<td>
+		<div class="TableShadowContainerRightTop">
+			<div class="TableShadowRightTop" style="background-image:url({{ template_path }}/images/global/content/table-shadow-rt.gif);"></div>
+		</div>
+		<div class="TableContentAndRightShadow" style="background-image:url({{ template_path }}/images/global/content/table-shadow-rm.gif);">
+			<div class="TableContentContainer">
+				<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+					<tbody>
+					<tr>
+						<td class="LabelV"><b>Activate email code authentication for your account!</b>
+							<div style="float: right; font-size: 1px;">
+								<form action="{{ getLink('account/2fa') }}?action=email-code&step=activate" method="post" style="margin: 0; padding: 0;">
+									{{ csrf() }}
+									{% set button_name = 'Request' %}
+									{% include('buttons.base.html.twig') %}
+								</form>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>As a first step to activate <b>email code authentication</b> for your account, click on "Request"! An <b>email code</b> will be sent to the email address assigned to your account. You will be asked to enter this <b>email code</b> on the next page within 24 hours.</p>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="TableShadowContainer">
+			<div class="TableBottomShadow" style="background-image:url({{ template_path }}/images/global/content/table-shadow-bm.gif);">
+				<div class="TableBottomLeftShadow" style="background-image:url({{ template_path }}/images/global/content/table-shadow-bl.gif);"></div>
+				<div class="TableBottomRightShadow" style="background-image:url({{ template_path }}/images/global/content/table-shadow-br.gif);"></div>
+			</div>
+		</div>
+	</td>
+</tr>
