@@ -781,15 +781,15 @@ class Plugins {
 			return false;
 		}
 
-		if(!isset($plugin_json['install'])) {
-			self::$error = "Plugin doesn't have install options defined. Skipping...";
-			return false;
+		$install = $plugin_json['install'] ?? '';
+		if (self::getAutoLoadOption($plugin_json, 'install', true) && is_file(PLUGINS . $plugin_name . '/install.php')) {
+			$install = 'plugins/' . $plugin_name . '/install.php';
 		}
 
 		global $db;
-		if (file_exists(BASE . $plugin_json['install'])) {
+		if (file_exists(BASE . $install)) {
 			$db->revalidateCache();
-			require BASE . $plugin_json['install'];
+			require BASE . $install;
 			$db->revalidateCache();
 		}
 		else {
