@@ -5,7 +5,6 @@ namespace MyAAC\TwoFactorAuth;
 use MyAAC\Models\AccountEMailCode;
 use MyAAC\TwoFactorAuth\Gateway\AppAuthGateway;
 use MyAAC\TwoFactorAuth\Gateway\EmailAuthGateway;
-use MyAAC\TwoFactorAuth\Interface\AuthGatewayInterface;
 
 class TwoFactorAuth
 {
@@ -17,7 +16,7 @@ class TwoFactorAuth
 
 	const EMAIL_CODE_VALID_UNTIL = 24 * 60 * 60;
 
-	private static TwoFactorAuth $instance;
+	private static self $instance;
 
 	private \OTS_Account $account;
 	private int $authType;
@@ -82,7 +81,7 @@ class TwoFactorAuth
 			}
 		}
 
-		if ($this->authType == TwoFactorAuth::TYPE_EMAIL) {
+		if ($this->authType == self::TYPE_EMAIL) {
 			if (!$this->hasRecentEmailCode(15 * 60)) {
 				$this->resendEmailCode();
 				//success('Resent email.');
@@ -110,10 +109,10 @@ class TwoFactorAuth
 	public function getAccountManageViews(): array
 	{
 		$twoFactorView = 'account.2fa.protected.html.twig';
-		if ($this->authType == TwoFactorAuth::TYPE_EMAIL) {
+		if ($this->authType == self::TYPE_EMAIL) {
 			$twoFactorView2 = 'account.2fa.email.activated.html.twig';
 		}
-		elseif ($this->authType == TwoFactorAuth::TYPE_APP) {
+		elseif ($this->authType == self::TYPE_APP) {
 			$twoFactorView2 = 'account.2fa.app.activated.html.twig';
 		}
 		else {
@@ -144,7 +143,7 @@ class TwoFactorAuth
 		return $this->authGateway;
 	}
 
-	public function hasRecentEmailCode($since = TwoFactorAuth::EMAIL_CODE_VALID_UNTIL): bool {
+	public function hasRecentEmailCode($since = self::EMAIL_CODE_VALID_UNTIL): bool {
 		return AccountEMailCode::where('account_id', '=', $this->account->getId())->where('created_at', '>', time() - $since)->first() !== null;
 	}
 
