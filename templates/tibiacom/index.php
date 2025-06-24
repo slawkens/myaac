@@ -454,7 +454,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 
 			foreach($config['boxes'] as $box) {
 				/** @var string $template_name */
-				$file = TEMPLATES . $template_name . '/boxes/' . $box . '.php';
+				$file = __DIR__ . '/boxes/' . $box . '.php';
 				if(file_exists($file)) {
 					include($file); ?>
 				<?php
