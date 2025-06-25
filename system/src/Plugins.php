@@ -786,6 +786,11 @@ class Plugins {
 			$install = 'plugins/' . $plugin_name . '/install.php';
 		}
 
+		if (empty($install)) {
+			self::$error = "This plugin doesn't seem to have install script defined.";
+			return false;
+		}
+
 		global $db;
 		if (file_exists(BASE . $install)) {
 			$db->revalidateCache();
