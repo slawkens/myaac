@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.7.1 - 27.06.2025]
+
+### Changed
+* Rename plugin:install:install to plugin:setup, also add alias to previous command (https://github.com/slawkens/myaac/commit/13d33822b59df349199e885a78a3d6beb0863d0b)
+
+### Fixed
+* Fix commands: setup + cache:clear (https://github.com/slawkens/myaac/commit/0da524fefe93b3028392e9014550eea3324d3a22, https://github.com/slawkens/myaac/commit/fe8281594e989f00280ba1adc734a9198c6b5cc1)
+* Fix polls link in tibiacom template (https://github.com/slawkens/myaac/commit/d90fa323d7c77d81768df60feeb1c374b1650a0c)
+
 ## [1.7 - 22.06.2025]
 
 ### Added
