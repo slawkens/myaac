@@ -1275,21 +1275,10 @@ function clearCache()
 	deleteDirectory(CACHE . 'plugins', ['index.html'], true);
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html', 'persistent'], true);
 
-	// routes cache
-	clearRouteCache();
-
 	global $hooks;
 	$hooks->trigger(HOOK_CACHE_CLEAR, ['cache' => Cache::getInstance()]);
 
 	return true;
-}
-
-function clearRouteCache(): void
-{
-	$routeCacheFile = CACHE . 'route.cache';
-	if (file_exists($routeCacheFile)) {
-		unlink($routeCacheFile);
-	}
 }
 
 function getCustomPageInfo($name)
