@@ -1281,6 +1281,14 @@ function clearCache()
 	return true;
 }
 
+function clearRouteCache(): void
+{
+	$routeCacheFile = CACHE . 'route.cache';
+	if (file_exists($routeCacheFile)) {
+		unlink($routeCacheFile);
+	}
+}
+
 function getCustomPageInfo($name)
 {
 	global $logged_access;
