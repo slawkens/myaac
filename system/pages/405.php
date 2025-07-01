@@ -8,7 +8,7 @@
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-$title = '405 Method Not Allowed';
+$title = 'Method Not Allowed';
 
 header('HTTP/1.0 405 Method Not Allowed');
 ?>

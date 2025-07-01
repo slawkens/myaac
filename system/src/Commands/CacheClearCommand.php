@@ -17,10 +17,7 @@ class CacheClearCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		global $hooks;
-		$hooks = new Hooks();
-		$hooks->load();
-		$hooks->trigger(HOOK_INIT);
+		require SYSTEM . 'init.php';
 
 		$io = new SymfonyStyle($input, $output);
 
