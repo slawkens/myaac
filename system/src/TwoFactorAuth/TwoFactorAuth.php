@@ -44,7 +44,7 @@ class TwoFactorAuth
 		return self::$instance;
 	}
 
-	public function process($code): bool
+	public function process($login_account, $login_password, $code): bool
 	{
 		global $twig;
 
@@ -52,48 +52,48 @@ class TwoFactorAuth
 			return true;
 		}
 
-		if (!empty($code)) {
-			if ($this->getAuthGateway()->verifyCode($code)) {
-				if ($this->authType === self::TYPE_EMAIL) {
-					$this->deleteOldCodes();
-				}
-
-				header('Location: account/manage');
-				return true;
-			}
-			else {
-				if (setting('core.mail_enabled')) {
-					$mailBody = $twig->render('mail.account.2fa.email-code.wrong-attempt.html.twig');
-
-					if (!_mail($this->account->getEMail(), configLua('serverName') . ' - Failed Two-Factor Authentication Attempt', $mailBody)) {
-						error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
-					}
+		if (empty($code)) {
+			if ($this->authType == self::TYPE_EMAIL) {
+				if (!$this->hasRecentEmailCode(15 * 60)) {
+					$this->resendEmailCode();
+					//success('Resent email.');
 				}
 
 				define('HIDE_LOGIN_BOX', true);
-
-				$errors[] = 'Invalid email code!';
-				$twig->display('error_box.html.twig', ['errors' => $errors]);
-
-				$twig->display('account.2fa.email-code.login.html.twig', ['wrongCode' => true]);
-
-				return false;
+				$twig->display('account.2fa.email.login.html.twig');
 			}
-		}
-
-		if ($this->authType == self::TYPE_EMAIL) {
-			if (!$this->hasRecentEmailCode(15 * 60)) {
-				$this->resendEmailCode();
-				//success('Resent email.');
+			else {
+				echo 'Two Factor App Auth';
 			}
-
-			define('HIDE_LOGIN_BOX', true);
-			$twig->display('account.2fa.email-code.login.html.twig');
 
 			return false;
 		}
 
-		return true;
+		if ($this->getAuthGateway()->verifyCode($code)) {
+			if ($this->authType === self::TYPE_EMAIL) {
+				$this->deleteOldCodes();
+			}
+
+			header('Location: account/manage');
+			return true;
+		}
+
+		if (setting('core.mail_enabled')) {
+			$mailBody = $twig->render('mail.account.2fa.email-code.wrong-attempt.html.twig');
+
+			if (!_mail($this->account->getEMail(), configLua('serverName') . ' - Failed Two-Factor Authentication Attempt', $mailBody)) {
+				error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
+			}
+		}
+
+		define('HIDE_LOGIN_BOX', true);
+
+		$errors[] = 'Invalid email code!';
+		$twig->display('error_box.html.twig', ['errors' => $errors]);
+
+		$twig->display('account.2fa.email.login.html.twig', ['wrongCode' => true]);
+
+		return false;
 	}
 
 	public function setAuthGateway(int $authType): void

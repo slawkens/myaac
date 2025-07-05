@@ -50,7 +50,7 @@ if (ACTION == 'email-code') {
 			$twig->display('error_box.html.twig',  ['errors' => $errors]);
 		}
 
-		$twig->display('account.2fa.email-code.login.html.twig');
+		$twig->display('account.2fa.email.login.html.twig');
 	}
 	else if ($step == 'activate') {
 		if (!$twoFactorAuth->hasRecentEmailCode(15 * 60)) {
@@ -116,6 +116,6 @@ if (ACTION == 'email-code') {
 			$twig->display('error_box.html.twig', ['errors' => $errors]);
 		}
 
-		$twig->display('account.2fa.email-code.deactivate.html.twig', ['wrongCode' => count($errors) > 0]);
+		$twig->display('account.2fa.email.deactivate.html.twig', ['wrongCode' => count($errors) > 0]);
 	}
 }
