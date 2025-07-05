@@ -27,6 +27,13 @@ $nameOrNumberColumn = getAccountIdentityColumn();
 
 $hasSecretColumn = $db->hasColumn('accounts', 'secret');
 $hasCoinsColumn = $db->hasColumn('accounts', 'coins');
+
+$hasCoinsTransferableColumn = $db->hasColumn('accounts', 'coins_transferable');
+$hasTransferableCoinsColumn = $db->hasColumn('accounts', 'transferable_coins');
+$coinsTransferableColumn =
+	$hasTransferableCoinsColumn ?
+		'transferable_coins' : 'coins_transferable';
+
 $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $hasTypeColumn = $db->hasColumn('accounts', 'type');
 $hasGroupColumn = $db->hasColumn('accounts', 'group_id');
@@ -136,11 +143,18 @@ else if (isset($_REQUEST['search'])) {
 			if (!Validator::email($email))
 				$errors['email'] = Validator::getLastError();
 
-			//tibia coins
+			// tibia coins
 			if ($hasCoinsColumn) {
 				$t_coins = $_POST['t_coins'];
 				verify_number($t_coins, 'Tibia coins', 12);
 			}
+
+			// transferable tibia coins
+			if ($hasCoinsTransferableColumn || $hasTransferableCoinsColumn) {
+				$t_coins_transferable = $_POST['t_coins_transferable'];
+				verify_number($t_coins_transferable, 'Transferable Tibia coins', 12);
+			}
+
 			// prem days
 			$p_days = (int)$_POST['p_days'];
 			verify_number($p_days, 'Prem days', 11);
@@ -185,10 +199,16 @@ else if (isset($_REQUEST['search'])) {
 				if ($hasSecretColumn) {
 					$account->setCustomField('secret', $secret);
 				}
+
 				$account->setCustomField('key', $key);
 				$account->setEMail($email);
+
 				if ($hasCoinsColumn) {
 					$account->setCustomField('coins', $t_coins);
+				}
+
+				if ($hasCoinsTransferableColumn || $hasTransferableCoinsColumn) {
+					$account->setCustomField($coinsTransferableColumn, $t_coins_transferable);
 				}
 
 				$lastDay = 0;
@@ -399,6 +419,12 @@ else if (isset($_REQUEST['search'])) {
 										<div class="col-12 col-sm-12 col-lg-6">
 											<label for="t_coins">Tibia Coins:</label>
 											<input type="text" class="form-control" id="t_coins" name="t_coins" autocomplete="off" maxlength="11" value="<?php echo $account->getCustomField('coins') ?>"/>
+										</div>
+									<?php endif; ?>
+									<?php if ($hasCoinsTransferableColumn || $hasTransferableCoinsColumn): ?>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="t_coins_transferable">Transferable Tibia Coins:</label>
+											<input type="text" class="form-control" id="t_coins_transferable" name="t_coins_transferable" autocomplete="off" maxlength="11" value="<?php echo $account->getCustomField($coinsTransferableColumn) ?>"/>
 										</div>
 									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-6">
