@@ -125,7 +125,9 @@ if (!IS_CLI) {
 	session_start();
 }
 
-if (file_exists(BASE . 'config.local.php')) {
+if (IS_DOCKER && file_exists('/config/myaac.ini')) {
+	$config = parse_ini_file('/config/myaac.ini');
+} else if (file_exists(BASE . 'config.local.php')) {
 	require BASE . 'config.local.php';
 }
 

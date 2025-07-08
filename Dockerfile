@@ -3,7 +3,6 @@ FROM docker.io/node:22-bookworm-slim AS npm
 COPY . /myaac
 WORKDIR /myaac
 RUN npm install
-RUN mv .htaccess.dist .htaccess
 
 FROM docker.io/php:8.4-apache-bookworm
 

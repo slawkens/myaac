@@ -44,12 +44,17 @@ if(!$error) {
 
 	if(!$error) {
 		$content = '';
-		$saved = Settings::saveConfig($configToSave, BASE . 'config.local.php', $content);
+		$saved = Settings::saveConfig($configToSave, $content);
 		if ($saved) {
 			success($locale['step_database_config_saved']);
 			$_SESSION['saved'] = true;
 
-			require BASE . 'config.local.php';
+			if (IS_DOCKER && file_exists('/config/myaac.ini')) {
+				$config = parse_ini_file('/config/myaac.ini');
+			} else {
+				require BASE . 'config.local.php';
+			}
+
 			require BASE . 'install/includes/config.php';
 
 			if (!$error) {
