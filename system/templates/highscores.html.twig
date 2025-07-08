@@ -94,8 +94,10 @@
 				{% endif %}
 			</table>
 		</td>
+		{% if setting('core.highscores_skills_box') or setting('core.highscores_vocation_box') %}
 		<td width="5%"></td>
 		<td width="15%" valign="top" align="right">
+			{% if setting('core.highscores_skills_box') %}
 			<table style="border: 0; width: 100%" cellpadding="4" cellspacing="1">
 				<tr bgcolor="{{ config.vdarkborder }}">
 					<td class="white"><B>Choose a skill</B></TD>
@@ -109,7 +111,8 @@
 				</tr>
 			</table>
 			<br/>
-			{% if config.highscores_vocation_box %}
+			{% endif %}
+			{% if setting('core.highscores_vocation_box') %}
 			<table border="0" width="100%" cellpadding="4" cellspacing="1">
 				<tr bgcolor="{{ config.vdarkborder }}">
 					<td class="white"><b>Choose a vocation</b></td>
@@ -126,5 +129,6 @@
 			{% endif %}
 		</td>
 		<td style="width: 18px"></td>
+		{% endif %}
 	</tr>
 </table>

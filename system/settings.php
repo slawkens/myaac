@@ -1062,6 +1062,12 @@ Sent by MyAAC,<br/>
 			'desc' => 'How often to update highscores from database in minutes. Too low may slow down your website.<br/>0 to disable.',
 			'default' => 15,
 		],
+		'highscores_skills_box' => [
+			'name' => 'Display Skills Box',
+			'type' => 'boolean',
+			'desc' => 'show "Choose a skill" box on the highscores (allowing peoples to sort highscores by skill)?',
+			'default' => true,
+		],
 		'highscores_vocation_box' => [
 			'name' => 'Display Vocation Box',
 			'type' => 'boolean',
