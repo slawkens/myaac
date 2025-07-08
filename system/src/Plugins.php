@@ -532,193 +532,192 @@ class Plugins {
 		self::$plugin_json = $plugin_json;
 		if ($plugin_json == null) {
 			self::$warnings[] = 'Cannot load ' . $file_name . '. File might be not a valid json code.';
+			return false;
 		}
-		else {
-			$continue = true;
 
-			if(!isset($plugin_json['name']) || empty(trim($plugin_json['name']))) {
-				self::$error = 'Plugin "name" tag is not set.';
+		$continue = true;
+
+		if(!isset($plugin_json['name']) || empty(trim($plugin_json['name']))) {
+			self::$error = 'Plugin "name" tag is not set.';
+			return false;
+		}
+
+		if(!isset($plugin_json['version']) || empty(trim($plugin_json['version']))) {
+			self::$warnings[] = 'Plugin "version" tag is not set.';
+		}
+
+		if(isset($plugin_json['require'])) {
+			$require = $plugin_json['require'];
+
+			$myaac_satified = true;
+			if(isset($require['myaac_'])) {
+				$require_myaac = $require['myaac_'];
+				if(!Semver::satisfies(MYAAC_VERSION, $require_myaac)) {
+					$myaac_satified = false;
+				}
+			}
+			else if(isset($require['myaac'])) {
+				$require_myaac = $require['myaac'];
+				if(version_compare(MYAAC_VERSION, $require_myaac, '<')) {
+					$myaac_satified = false;
+				}
+			}
+
+			if(!$myaac_satified) {
+				self::$error = "Your AAC version doesn't meet the requirement of this plugin. Required version is: " . $require_myaac . ", and you're using version " . MYAAC_VERSION . ".";
 				return false;
 			}
 
-			if(!isset($plugin_json['version']) || empty(trim($plugin_json['version']))) {
-				self::$warnings[] = 'Plugin "version" tag is not set.';
+			$php_satisfied = true;
+			if(isset($require['php_'])) {
+				$require_php = $require['php_'];
+				if(!Semver::satisfies(phpversion(), $require_php)) {
+					$php_satisfied = false;
+				}
+			}
+			else if(isset($require['php'])) {
+				$require_php = $require['php'];
+				if(version_compare(phpversion(), $require_php, '<')) {
+					$php_satisfied = false;
+				}
 			}
 
-			if(isset($plugin_json['require'])) {
-				$require = $plugin_json['require'];
+			if(!$php_satisfied) {
+				self::$error = "Your PHP version doesn't meet the requirement of this plugin. Required version is: " . $require_php . ", and you're using version " . phpversion() . ".";
+				$continue = false;
+			}
 
-				$myaac_satified = true;
-				if(isset($require['myaac_'])) {
-					$require_myaac = $require['myaac_'];
-					if(!Semver::satisfies(MYAAC_VERSION, $require_myaac)) {
-						$myaac_satified = false;
+			$database_satisfied = true;
+			if(isset($require['database_'])) {
+				$require_database = $require['database_'];
+				if(!Semver::satisfies(DATABASE_VERSION, $require_database)) {
+					$database_satisfied = false;
+				}
+			}
+			else if(isset($require['database'])) {
+				$require_database = $require['database'];
+				if(version_compare(DATABASE_VERSION, $require_database, '<')) {
+					$database_satisfied = false;
+				}
+			}
+
+			if(!$database_satisfied) {
+				self::$error = "Your database version doesn't meet the requirement of this plugin. Required version is: " . $require_database . ", and you're using version " . DATABASE_VERSION . ".";
+				$continue = false;
+			}
+
+			if($continue) {
+				foreach($require as $req => $version) {
+					$req = strtolower(trim($req));
+					$version = trim($version);
+
+					if(in_array($req, array('myaac', 'myaac_', 'php', 'php_', 'database', 'database_'))) {
+						continue;
 					}
-				}
-				else if(isset($require['myaac'])) {
-					$require_myaac = $require['myaac'];
-					if(version_compare(MYAAC_VERSION, $require_myaac, '<')) {
-						$myaac_satified = false;
-					}
-				}
 
-				if(!$myaac_satified) {
-					self::$error = "Your AAC version doesn't meet the requirement of this plugin. Required version is: " . $require_myaac . ", and you're using version " . MYAAC_VERSION . ".";
-					return false;
-				}
+					if(in_array($req, array('php-ext', 'php-extension'))) { // require php extension
+						$tmpDisplayError = false;
+						$explode = explode(',', $version);
 
-				$php_satisfied = true;
-				if(isset($require['php_'])) {
-					$require_php = $require['php_'];
-					if(!Semver::satisfies(phpversion(), $require_php)) {
-						$php_satisfied = false;
-					}
-				}
-				else if(isset($require['php'])) {
-					$require_php = $require['php'];
-					if(version_compare(phpversion(), $require_php, '<')) {
-						$php_satisfied = false;
-					}
-				}
-
-				if(!$php_satisfied) {
-					self::$error = "Your PHP version doesn't meet the requirement of this plugin. Required version is: " . $require_php . ", and you're using version " . phpversion() . ".";
-					$continue = false;
-				}
-
-				$database_satisfied = true;
-				if(isset($require['database_'])) {
-					$require_database = $require['database_'];
-					if(!Semver::satisfies(DATABASE_VERSION, $require_database)) {
-						$database_satisfied = false;
-					}
-				}
-				else if(isset($require['database'])) {
-					$require_database = $require['database'];
-					if(version_compare(DATABASE_VERSION, $require_database, '<')) {
-						$database_satisfied = false;
-					}
-				}
-
-				if(!$database_satisfied) {
-					self::$error = "Your database version doesn't meet the requirement of this plugin. Required version is: " . $require_database . ", and you're using version " . DATABASE_VERSION . ".";
-					$continue = false;
-				}
-
-				if($continue) {
-					foreach($require as $req => $version) {
-						$req = strtolower(trim($req));
-						$version = trim($version);
-
-						if(in_array($req, array('myaac', 'myaac_', 'php', 'php_', 'database', 'database_'))) {
-							continue;
+						foreach ($explode as $item) {
+							if(!extension_loaded($item)) {
+								$errors[] = "This plugin requires php extension: " . $item . " to be installed.";
+								$tmpDisplayError = true;
+							}
 						}
 
-						if(in_array($req, array('php-ext', 'php-extension'))) { // require php extension
-							$tmpDisplayError = false;
-							$explode = explode(',', $version);
-
-							foreach ($explode as $item) {
-								if(!extension_loaded($item)) {
-									$errors[] = "This plugin requires php extension: " . $item . " to be installed.";
-									$tmpDisplayError = true;
-								}
-							}
-
-							if ($tmpDisplayError) {
-								self::$error = implode('<br/>', $errors);
-								$continue = false;
-								break;
-							}
-						}
-						else if($req == 'table') {
-							$tmpDisplayError = false;
-							$explode = explode(',', $version);
-							foreach ($explode as $item) {
-								if(!$db->hasTable($item)) {
-									$errors[] = "This plugin requires table: " . $item . " to exist in the database.";
-									$tmpDisplayError = true;
-								}
-							}
-
-							if ($tmpDisplayError) {
-								self::$error = implode('<br/>', $errors);
-								$continue = false;
-								break;
-							}
-						}
-						else if($req == 'column') {
-							$tmpDisplayError = false;
-							$explode = explode(',', $version);
-							foreach ($explode as $item) {
-								$tmp = explode('.', $item);
-
-								if(count($tmp) == 2) {
-									if(!$db->hasColumn($tmp[0], $tmp[1])) {
-										$errors[] = "This plugin requires database column: " . $tmp[0] . "." . $tmp[1] . " to exist in database.";
-										$tmpDisplayError = true;
-									}
-								}
-								else {
-									self::$warnings[] = "Invalid plugin require column: " . $item;
-								}
-							}
-
-							if ($tmpDisplayError) {
-								self::$error = implode('<br/>', $errors);
-								$continue = false;
-								break;
-							}
-						}
-						else if(strpos($req, 'ext-') !== false) {
-							$tmp = explode('-', $req);
-							if(count($tmp) == 2) {
-								if(!extension_loaded($tmp[1]) || !Semver::satisfies(phpversion($tmp[1]), $version)) {
-									self::$error = "This plugin requires php extension: " . $tmp[1] . ", version " . $version . " to be installed.";
-									$continue = false;
-									break;
-								}
-							}
-						}
-						else if(!self::is_installed($req, $version)) {
-							self::$error = "This plugin requires another plugin to run correctly. The another plugin is: " . $req . ", with version " . $version . ".";
+						if ($tmpDisplayError) {
+							self::$error = implode('<br/>', $errors);
 							$continue = false;
 							break;
 						}
 					}
-				}
-			}
+					else if($req == 'table') {
+						$tmpDisplayError = false;
+						$explode = explode(',', $version);
+						foreach ($explode as $item) {
+							if(!$db->hasTable($item)) {
+								$errors[] = "This plugin requires table: " . $item . " to exist in the database.";
+								$tmpDisplayError = true;
+							}
+						}
 
-			if($continue) {
-				if(!$zip->extractTo(BASE)) { // "Real" Install
-					self::$error = 'There was a problem with extracting zip archive to base directory.';
-					$zip->close();
-					return false;
-				}
-
-				$install = $plugin_json['install'] ?? '';
-				if (self::getAutoLoadOption($plugin_json, 'install', true) && is_file(PLUGINS . $pluginFilename . '/install.php')) {
-					$install = 'plugins/' . $pluginFilename . '/install.php';
-				}
-
-				if (!empty($install)) {
-					if (file_exists(BASE . $install)) {
-						$db->revalidateCache();
-						require BASE . $install;
-						$db->revalidateCache();
+						if ($tmpDisplayError) {
+							self::$error = implode('<br/>', $errors);
+							$continue = false;
+							break;
+						}
 					}
-					else {
-						self::$warnings[] = 'Cannot load install script. Your plugin might be not working correctly.';
+					else if($req == 'column') {
+						$tmpDisplayError = false;
+						$explode = explode(',', $version);
+						foreach ($explode as $item) {
+							$tmp = explode('.', $item);
+
+							if(count($tmp) == 2) {
+								if(!$db->hasColumn($tmp[0], $tmp[1])) {
+									$errors[] = "This plugin requires database column: " . $tmp[0] . "." . $tmp[1] . " to exist in database.";
+									$tmpDisplayError = true;
+								}
+							}
+							else {
+								self::$warnings[] = "Invalid plugin require column: " . $item;
+							}
+						}
+
+						if ($tmpDisplayError) {
+							self::$error = implode('<br/>', $errors);
+							$continue = false;
+							break;
+						}
+					}
+					else if(strpos($req, 'ext-') !== false) {
+						$tmp = explode('-', $req);
+						if(count($tmp) == 2) {
+							if(!extension_loaded($tmp[1]) || !Semver::satisfies(phpversion($tmp[1]), $version)) {
+								self::$error = "This plugin requires php extension: " . $tmp[1] . ", version " . $version . " to be installed.";
+								$continue = false;
+								break;
+							}
+						}
+					}
+					else if(!self::is_installed($req, $version)) {
+						self::$error = "This plugin requires another plugin to run correctly. The another plugin is: " . $req . ", with version " . $version . ".";
+						$continue = false;
+						break;
 					}
 				}
-
-				clearCache();
-
-				return true;
 			}
 		}
 
-		return false;
+		if(!$continue) {
+			return false;
+		}
+
+		if(!$zip->extractTo(BASE)) { // "Real" Install
+			self::$error = 'There was a problem with extracting zip archive to base directory.';
+			$zip->close();
+			return false;
+		}
+
+		$install = $plugin_json['install'] ?? '';
+		if (self::getAutoLoadOption($plugin_json, 'install', true) && is_file(PLUGINS . $pluginFilename . '/install.php')) {
+			$install = 'plugins/' . $pluginFilename . '/install.php';
+		}
+
+		if (!empty($install)) {
+			if (file_exists(BASE . $install)) {
+				$db->revalidateCache();
+				require BASE . $install;
+				$db->revalidateCache();
+			}
+			else {
+				self::$warnings[] = 'Cannot load install script. Your plugin might be not working correctly.';
+			}
+		}
+
+		clearCache();
+		return true;
 	}
 
 	public static function isEnabled($pluginFileName): bool
