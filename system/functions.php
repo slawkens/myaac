@@ -512,6 +512,16 @@ function template_place_holder($type): string
 	}
 	elseif ($type === 'body_start') {
 		$ret .= $twig->render('browsehappy.html.twig');
+
+		/**
+		 * @var OTS_Account $account_logged
+		 */
+		if (admin()) {
+			global $account_logged;
+			$ret .= $twig->render('admin-bar.html.twig', [
+				'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+			]);
+		}
 	}
 	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
