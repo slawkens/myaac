@@ -33,6 +33,9 @@ define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
 define('IS_CLI', in_array(php_sapi_name(), ['cli', 'phpdb']));
 
+$docker = isset($_SERVER['MYAAC_DOCKER']) ? $_SERVER['MYAAC_DOCKER'] : getenv('MYAAC_DOCKER');
+define('IS_DOCKER', filter_var($docker, FILTER_VALIDATE_BOOLEAN));
+
 // account flags
 const FLAG_NONE = 0;
 const FLAG_ADMIN = 1;

@@ -6,6 +6,8 @@ RUN npm install
 
 FROM docker.io/php:8.4-apache-bookworm
 
+ENV MYAAC_DOCKER=1
+
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
