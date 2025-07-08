@@ -49,12 +49,7 @@ if(!$error) {
 			success($locale['step_database_config_saved']);
 			$_SESSION['saved'] = true;
 
-			if (IS_DOCKER && file_exists('/config/myaac.ini')) {
-				$config = parse_ini_file('/config/myaac.ini');
-			} else {
-				require BASE . 'config.local.php';
-			}
-
+			require BASE . 'config.local.php';
 			require BASE . 'install/includes/config.php';
 
 			if (!$error) {

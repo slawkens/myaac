@@ -13,11 +13,6 @@ require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 require SYSTEM . 'clients.conf.php';
 
-if (IS_DOCKER && isset($config['installed']) && $config['installed']) {
-	// if installed, redirect to main page
-	header('Location: ' . BASE_URL);
-}
-
 // ignore undefined index from Twig autoloader
 $config['env'] = 'prod';
 
@@ -185,7 +180,7 @@ if(empty($errors)) {
 $error = false;
 
 clearstatcache();
-if(!IS_DOCKER && is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
+if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 	if(!file_exists(BASE . 'install/ip.txt')) {
 		$content = warning('AAC installation is disabled. To enable it make file <b>ip.txt</b> in install/ directory and put there your IP.<br/>
 		Your IP is:<br /><b>' . get_browser_real_ip() . '</b>', true);
@@ -216,7 +211,7 @@ if(!IS_DOCKER && is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable
 		}
 	}
 }
-else if (!IS_DOCKER) {
+else {
 	$content = error(file_get_contents(BASE . 'install/includes/twig_error.html'), true);
 }
 
