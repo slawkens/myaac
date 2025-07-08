@@ -91,7 +91,7 @@ else {
 			$file = BASE . $template_path . '/layout_config.ini';
 		}
 
-		$template_ini = parse_ini_file($file);
+		$template_ini = parse_ini_file($file, true);
 		unset($file);
 
 		if ($cache->enabled()) {
