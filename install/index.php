@@ -13,6 +13,11 @@ require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 require SYSTEM . 'clients.conf.php';
 
+if (IS_DOCKER && isset($config['installed']) && $config['installed']) {
+	// if installed, redirect to main page
+	header('Location: ' . BASE_URL);
+}
+
 // ignore undefined index from Twig autoloader
 $config['env'] = 'prod';
 
