@@ -11,8 +11,10 @@ ENV MYAAC_DOCKER=1
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-RUN apt update -yq && apt install libpng-dev libzip-dev -yq && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -yq && apt-get install libpng-dev libzip-dev -yq && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install gd pdo_mysql zip
+
+WORKDIR /var/www/html
 
 COPY --from=npm --chown=www-data:www-data /myaac .
 COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer

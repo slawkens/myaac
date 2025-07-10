@@ -44,12 +44,12 @@ if(!$error) {
 
 	if(!$error) {
 		$content = '';
-		$saved = Settings::saveConfig($configToSave, $content);
+		$saved = Settings::saveConfig($configToSave, CONFIG_DIR . 'config.local.php', $content);
 		if ($saved) {
 			success($locale['step_database_config_saved']);
 			$_SESSION['saved'] = true;
 
-			require BASE . 'config.local.php';
+			require CONFIG_DIR . 'config.local.php';
 			require BASE . 'install/includes/config.php';
 
 			if (!$error) {

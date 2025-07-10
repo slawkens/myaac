@@ -1674,12 +1674,8 @@ Sent by MyAAC,<br/>
 			$configOriginal = $config;
 			unset($config);
 
-			if (IS_DOCKER && file_exists('/config/myaac.ini')) {
-				$config = parse_ini_file('/config/myaac.ini');
-			} else {
-				$config = [];
-				require BASE . 'config.local.php';
-			}
+			$config = [];
+			require CONFIG_DIR . 'config.local.php';
 
 			$configToSave = $config;
 
@@ -1731,7 +1727,7 @@ Sent by MyAAC,<br/>
 				}
 			}
 
-			$success = Settings::saveConfig($configToSave);
+			$success = Settings::saveConfig($configToSave, CONFIG_DIR . 'config.local.php');
 			if (!$success) {
 				error('There has been error saving the config.local.php - probably problem with permissions.');
 			}

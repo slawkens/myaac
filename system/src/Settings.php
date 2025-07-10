@@ -133,12 +133,8 @@ class Settings implements \ArrayAccess
 	{
 		$settingsDb = ModelsSettings::where('name', $plugin)->pluck('value', 'key')->toArray();
 
-		if (IS_DOCKER && file_exists('/config/myaac.ini')) {
-			$config = parse_ini_file('/config/myaac.ini');
-		} else {
-			$config = [];
-			require BASE . 'config.local.php';
-		}
+		$config = [];
+		require CONFIG_DIR . 'config.local.php';
 
 		foreach ($config as $key => $value) {
 			if (is_bool($value)) {
@@ -573,32 +569,18 @@ class Settings implements \ArrayAccess
 		}
 	}
 
-	public static function saveConfig($config, &$content = '')
+	public static function saveConfig($config, $filename, &$content = '')
 	{
+		$content = "<?php" . PHP_EOL;
+
 		unset($config['installed']);
 
-		$filename = IS_DOCKER ? '/config/myaac.ini' : BASE . 'config.local.php';
-
-		if (!IS_DOCKER) {
-			$content = "<?php" . PHP_EOL . "\$config['installed'] = true;" . PHP_EOL;
-		} else {
-			$content = 'installed = true' . PHP_EOL;
-		}
+		$content .= "\$config['installed'] = true;" . PHP_EOL;
 
 		foreach ($config as $key => $value) {
-			if (IS_DOCKER) {
-				$content .= $key . ' = ';
-			} else {
-				$content .= "\$config['$key'] = ";
-			}
-
+			$content .= "\$config['$key'] = ";
 			$content .= var_export($value, true);
-
-			if (IS_DOCKER) {
-				$content .= PHP_EOL;
-			} else {
-				$content .= ';' . PHP_EOL;
-			}
+			$content .= ';' . PHP_EOL;
 		}
 
 		$success = @file_put_contents($filename, $content);
