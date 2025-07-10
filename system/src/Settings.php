@@ -132,7 +132,6 @@ class Settings implements \ArrayAccess
 	public static function display($plugin, $settings): array
 	{
 		$settingsDb = ModelsSettings::where('name', $plugin)->pluck('value', 'key')->toArray();
-
 		$config = [];
 		require CONFIG_DIR . 'config.local.php';
 

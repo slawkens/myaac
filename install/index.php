@@ -103,7 +103,7 @@ if($step == 'database') {
 	}
 }
 else if($step == 'admin') {
-	if(!file_exists(BASE . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
+	if(!file_exists(CONFIG_DIR . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
 		$step = 'database';
 	}
 	else {

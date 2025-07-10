@@ -123,8 +123,8 @@ if (!IS_CLI) {
 }
 
 define('CONFIG_DIR', getenv('MYAAC_CONFIG_DIR') ?: BASE);
-if (file_exists(BASE . 'config.local.php')) {
-	require BASE . 'config.local.php';
+if (file_exists(CONFIG_DIR . 'config.local.php')) {
+	require CONFIG_DIR . 'config.local.php';
 }
 
 require SYSTEM . 'base.php';
