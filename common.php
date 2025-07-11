@@ -122,7 +122,8 @@ if (!IS_CLI) {
 	session_start();
 }
 
-define('CONFIG_DIR', getenv('MYAAC_CONFIG_DIR') ?: BASE);
+$config_dir = getenv('MYAAC_CONFIG_DIR');
+define('CONFIG_DIR', $config_dir ? rtrim($config_dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : BASE);
 if (file_exists(CONFIG_DIR . 'config.local.php')) {
 	require CONFIG_DIR . 'config.local.php';
 }
