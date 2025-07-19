@@ -243,9 +243,6 @@ else if (isset($_REQUEST['search'])) {
 
 					$password = encrypt($password);
 					$account->setPassword($password);
-
-					if (USE_ACCOUNT_SALT)
-						$account->setCustomField('salt', $salt);
 				}
 
 				$account->save();
