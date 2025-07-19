@@ -27,8 +27,6 @@ class CacheClearCommand extends Command
 			return Command::FAILURE;
 		}
 
-		$cache = Cache::getInstance();
-
 		$cacheEngine = config('cache_engine') == 'auto' ?
 			Cache::detect() : config('cache_engine');
 
