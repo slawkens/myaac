@@ -473,12 +473,9 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 
     public function isPremium()
     {
-		global $config;
-        if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return true;
-
-	    if(isset($this->data['premium_ends_at'])) {
-		    return $this->data['premium_ends_at'] > time();
-	    }
+		if(isset($this->data['premium_ends_at'])) {
+			return $this->data['premium_ends_at'] > time();
+		}
 
 		if(isset($this->data['premend'])) {
 			return $this->data['premend'] > time();
