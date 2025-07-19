@@ -36,7 +36,11 @@ $twig->addExtension(new MyAAC\Twig\Extension\TypeCastingExtension());
 
 $filter = new TwigFilter('timeago', function ($datetime) {
 
-	$time = time() - strtotime($datetime);
+	if (!is_int($datetime)) {
+		$datetime = strtotime($datetime);
+	}
+
+	$time = time() - $datetime;
 
 	$units = array (
 		31536000 => 'year',
