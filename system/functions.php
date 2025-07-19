@@ -774,6 +774,10 @@ function formatExperience($exp, $color = true)
 	return $ret;
 }
 
+function getExperienceForLevel($level): float|int {
+	return ( 50 / 3 ) * pow( $level, 3 ) - ( 100 * pow( $level, 2 ) ) + ( ( 850 / 3 ) * $level ) - 200;
+}
+
 function get_locales()
 {
 	$ret = array();
