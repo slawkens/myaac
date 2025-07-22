@@ -144,6 +144,14 @@ $ots = POT::getInstance();
 $eloquentConnection = null;
 require_once SYSTEM . 'database.php';
 
+define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
+define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
+define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
+
+define('HAS_ACCOUNT_COINS_TRANSFERABLE', $db->hasColumn('accounts', 'coins_transferable'));
+define('HAS_ACCOUNT_TRANSFERABLE_COINS', $db->hasColumn('accounts', 'transferable_coins'));
+const ACCOUNT_COINS_TRANSFERABLE_COLUMN = (HAS_ACCOUNT_COINS_TRANSFERABLE ? 'coins_transferable' : 'transferable_coins');
+
 $twig->addGlobal('logged', false);
 $twig->addGlobal('account_logged', new \OTS_Account());
 
@@ -187,10 +195,6 @@ $settingsItemImagesURL = setting('core.item_images_url');
 if($settingsItemImagesURL[strlen($settingsItemImagesURL) - 1] !== '/') {
 	setting(['core.item_images_url', $settingsItemImagesURL . '/']);
 }
-
-define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
-define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
-define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
 
 $towns = Cache::remember('towns', 10 * 60, function () use ($db) {
 	if ($db->hasTable('towns') && Town::count() > 0) {

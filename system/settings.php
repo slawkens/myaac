@@ -697,6 +697,13 @@ Sent by MyAAC,<br/>
 			'hidden' => ($db && !$db->hasColumn('accounts', 'coins')),
 			'default' => 0,
 		],
+		'account_coins_transferable' => [
+			'name' => 'Default Account Transferable Coins',
+			'type' => 'number',
+			'desc' => 'Default transferable coins on new account',
+			'hidden' => (!HAS_ACCOUNT_COINS_TRANSFERABLE && !HAS_ACCOUNT_TRANSFERABLE_COINS),
+			'default' => 0,
+		],
 		'account_mail_change' => [
 			'name' => 'Account Mail Change Days',
 			'type' => 'number',
