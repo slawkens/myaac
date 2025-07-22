@@ -701,7 +701,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Default Account Transferable Coins',
 			'type' => 'number',
 			'desc' => 'Default transferable coins on new account',
-			'hidden' => (!HAS_ACCOUNT_COINS_TRANSFERABLE && !HAS_ACCOUNT_TRANSFERABLE_COINS),
+			'hidden' => ($db && !HAS_ACCOUNT_COINS_TRANSFERABLE && !HAS_ACCOUNT_TRANSFERABLE_COINS),
 			'default' => 0,
 		],
 		'account_mail_change' => [
