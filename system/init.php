@@ -148,6 +148,7 @@ define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
 define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
 define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
 
+define('HAS_ACCOUNT_COINS', $db->hasColumn('accounts', 'coins'));
 define('HAS_ACCOUNT_COINS_TRANSFERABLE', $db->hasColumn('accounts', 'coins_transferable'));
 define('HAS_ACCOUNT_TRANSFERABLE_COINS', $db->hasColumn('accounts', 'transferable_coins'));
 const ACCOUNT_COINS_TRANSFERABLE_COLUMN = (HAS_ACCOUNT_COINS_TRANSFERABLE ? 'coins_transferable' : 'transferable_coins');

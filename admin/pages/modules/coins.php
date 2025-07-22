@@ -6,7 +6,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 $coins = 0;
 
-if ($db->hasColumn('accounts', 'coins')) {
+if (HAS_ACCOUNT_COINS) {
 	$whatToGet = ['id', 'coins'];
 	if (USE_ACCOUNT_NAME) {
 		$whatToGet[] = 'name';

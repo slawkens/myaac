@@ -694,7 +694,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Default Account Coins',
 			'type' => 'number',
 			'desc' => 'Default coins on new account',
-			'hidden' => ($db && !$db->hasColumn('accounts', 'coins')),
+			'hidden' => ($db && !HAS_ACCOUNT_COINS),
 			'default' => 0,
 		],
 		'account_coins_transferable' => [
@@ -1595,7 +1595,7 @@ Sent by MyAAC,<br/>
 			'callbacks' => [
 				'beforeSave' => function($key, $value, &$errorMessage) {
 					global $db;
-					if ($value == 'coins' && !$db->hasColumn('accounts', 'coins')) {
+					if ($value == 'coins' && !HAS_ACCOUNT_COINS) {
 						$errorMessage = "Shop: Donate Column: Cannot set column to coins, because it doesn't exist in database.";
 						return false;
 					}

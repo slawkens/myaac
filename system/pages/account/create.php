@@ -227,7 +227,7 @@ if($save)
 		}
 
 		$accountDefaultCoins = setting('core.account_coins');
-		if($db->hasColumn('accounts', 'coins') && $accountDefaultCoins > 0) {
+		if(HAS_ACCOUNT_COINS && $accountDefaultCoins > 0) {
 			$new_account->setCustomField('coins', $accountDefaultCoins);
 		}
 

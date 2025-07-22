@@ -18,7 +18,6 @@ $title = 'Mass Account Actions';
 
 csrfProtect();
 
-$hasCoinsColumn = $db->hasColumn('accounts', 'coins');
 $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $freePremium = $config['lua']['freePremium'];
 
@@ -40,9 +39,7 @@ function admin_give_points($points)
 
 function admin_give_coins($coins)
 {
-	global $hasCoinsColumn;
-
-	if (!$hasCoinsColumn) {
+	if (!HAS_ACCOUNT_COINS) {
 		displayMessage('Coins not supported.');
 		return;
 	}
@@ -167,19 +164,19 @@ if (!empty(ACTION) && isRequestMethod('post')) {
 }
 else {
 	$twig->display('admin.tools.account.html.twig', array(
-		'hasCoinsColumn' => $hasCoinsColumn,
+		'hasCoinsColumn' => HAS_ACCOUNT_COINS,
 		'hasPointsColumn' => $hasPointsColumn,
 		'freePremium' => $freePremium,
 	));
 }
 
 function displayMessage($message, $success = false) {
-	global $twig, $hasCoinsColumn, $hasPointsColumn, $freePremium;
+	global $twig, $hasPointsColumn, $freePremium;
 
 	$success ? success($message): error($message);
 
 	$twig->display('admin.tools.account.html.twig', array(
-		'hasCoinsColumn' => $hasCoinsColumn,
+		'hasCoinsColumn' => HAS_ACCOUNT_COINS,
 		'hasPointsColumn' => $hasPointsColumn,
 		'freePremium' => $freePremium,
 	));

@@ -26,8 +26,6 @@ if (setting('core.account_country'))
 $nameOrNumberColumn = getAccountIdentityColumn();
 
 $hasSecretColumn = $db->hasColumn('accounts', 'secret');
-$hasCoinsColumn = $db->hasColumn('accounts', 'coins');
-
 $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $hasTypeColumn = $db->hasColumn('accounts', 'type');
 $hasGroupColumn = $db->hasColumn('accounts', 'group_id');
@@ -138,7 +136,7 @@ else if (isset($_REQUEST['search'])) {
 				$errors['email'] = Validator::getLastError();
 
 			// tibia coins
-			if ($hasCoinsColumn) {
+			if (HAS_ACCOUNT_COINS) {
 				$t_coins = $_POST['t_coins'];
 				verify_number($t_coins, 'Tibia coins', 12);
 			}
@@ -197,7 +195,7 @@ else if (isset($_REQUEST['search'])) {
 				$account->setCustomField('key', $key);
 				$account->setEMail($email);
 
-				if ($hasCoinsColumn) {
+				if (HAS_ACCOUNT_COINS) {
 					$account->setCustomField('coins', $t_coins);
 				}
 
@@ -406,7 +404,7 @@ else if (isset($_REQUEST['search'])) {
 										<label for="email">Email:</label><?php echo (setting('core.mail_enabled') ? ' (<a href="' . ADMIN_URL . '?p=mailer&mail_to=' . $account->getEMail() . '">Send Mail</a>)' : ''); ?>
 										<input type="text" class="form-control" id="email" name="email" autocomplete="off" value="<?php echo $account->getEMail(); ?>"/>
 									</div>
-									<?php if ($hasCoinsColumn): ?>
+									<?php if (HAS_ACCOUNT_COINS): ?>
 										<div class="col-12 col-sm-12 col-lg-6">
 											<label for="t_coins">Tibia Coins:</label>
 											<input type="text" class="form-control" id="t_coins" name="t_coins" autocomplete="off" maxlength="11" value="<?php echo $account->getCustomField('coins') ?>"/>
