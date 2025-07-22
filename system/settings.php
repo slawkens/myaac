@@ -1080,6 +1080,12 @@ Sent by MyAAC,<br/>
 			'desc' => 'Show player vocation under his nickname?',
 			'default' => true,
 		],
+		'highscores_online_status' => [
+			'name' => 'Display Online Status',
+			'type' => 'boolean',
+			'desc' => 'Show player status as red (offline) or green (online)',
+			'default' => false,
+		],
 		'highscores_frags' => [
 			'name' => 'Display Top Frags',
 			'type' => 'boolean',
