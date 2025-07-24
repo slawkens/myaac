@@ -123,16 +123,10 @@ if($db->hasColumn('players', 'promotion'))
 	$promotion = ',players.promotion';
 
 $outfit_addons = false;
-$outfit = '';
-
-$settingHighscoresOutfit = setting('core.highscores_outfit');
-
-if($settingHighscoresOutfit) {
-	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
-	if($db->hasColumn('players', 'lookaddons')) {
-		$outfit .= ', lookaddons';
-		$outfit_addons = true;
-	}
+$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
+if($db->hasColumn('players', 'lookaddons')) {
+	$outfit .= ', lookaddons';
+	$outfit_addons = true;
 }
 
 $configHighscoresPerPage = setting('core.highscores_per_page');
