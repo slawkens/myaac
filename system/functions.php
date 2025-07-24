@@ -1228,7 +1228,8 @@ function setting($key)
 		return $settings[$key[0]] = $key[1];
 	}
 
-	return $settings[$key]['value'];
+	$ret = $settings[$key];
+	return isset($ret) ? $ret['value'] : null;
 }
 
 function clearCache()
