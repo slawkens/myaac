@@ -9,6 +9,10 @@ class PlayerOnline extends Model {
 
 	public $timestamps = false;
 
+	protected $fillable = [
+		'player_id',
+	];
+
 	public function player()
 	{
 		return $this->belongsTo(Player::class);
