@@ -1247,6 +1247,14 @@ Sent by MyAAC,<br/>
 			'type' => 'section',
 			'title' => 'Online Page'
 		],
+		'online_cache_ttl' => [
+			'name' => 'Online Cache TTL (in minutes)',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'How often to update online list from database in minutes. Too low may slow down your website.' . PHP_EOL .
+				'0 to disable.',
+			'default' => 15,
+		],
 		'online_record' => [
 			'name' => 'Display Players Record',
 			'type' => 'boolean',
