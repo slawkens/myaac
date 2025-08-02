@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.8 - 01.08.2025]
+
+### Added
+* Templates - Kathrine: Possibility to add custom menu categories (https://github.com/slawkens/myaac/commit/ec11c1402417c25980582467546d1c1e9bb8267f)
+* Admin Panel - Accounts Editor: Add Coins Transferable (https://github.com/slawkens/myaac/commit/45d6047031c9c3a0e7e512dc5d15c75629aec5a2, https://github.com/slawkens/myaac/commit/bb097b69ce106500a49686d6f4fe604348eaa310)
+* Highscores:
+  * Revamped: (https://github.com/slawkens/myaac/commit/d8132d4d76e03d5aa0c042be426320655a601392)
+    * Show real rank, if 2 or more players have the same skill, show them with same rank
+    * New setting: highscores_online_status
+    * Additional fields passed to twig: updatedAt, totalResults, page, baseLink
+  * Add new Setting: Display Skills Box (https://github.com/slawkens/myaac/commit/36ca755243ef1c83f6ac87465b426d4d8d3b0bb9)
+* Functions: Add getExperienceForLevel (level) (https://github.com/slawkens/myaac/commit/1566deb84a082176b8c683fda205d828bc38fbcc)
+* Commands - cache:clear : Add warning about APCu clear in CLI (https://github.com/slawkens/myaac/commit/83f84172e02e8ea2ccb6dca29bc033e44c35aebc)
+* Models - PlayerOnline: Add missing $fillable into model (https://github.com/slawkens/myaac/commit/43415cf35db1c1307f2684c1728693d65065ffff)
+* Twig: add cache variable (https://github.com/slawkens/myaac/commit/0efe47ce71c4b364a9e96bc5a55b1655326ae6da)
+
+### Changed
+* pages/online: add cache, resulting in 20x performance boost
+  * (for an example server with 2k players) (https://github.com/slawkens/myaac/commit/c8363086015cbb6e8786c398c7b9ac3959a26ec4)
+* Admin Bar: Move admin bar code into body_start place_holder (https://github.com/slawkens/myaac/commit/f17269e44ce9dd38447bd2e2a8e1bdb065d4161f)
+* Cache::remember: $ttl = 0 means no cache (https://github.com/slawkens/myaac/commit/3b47e9df2f4051807c5ff87892f7fa3d348f9c55)
+* Templates: Load config.ini with $process_sections set to true (https://github.com/slawkens/myaac/commit/a89f9a84847630eb75b4890fdcc8b7a7bfa6b8ac)
+* Twig: Allow for timestamp as integer in the timeago twig function
+  (https://github.com/slawkens/myaac/commit/34fead906ea13b9f09d7a3c41ed88109d34d386c)
+
+### Fixed
+* Settings: Fixed two exceptions (https://github.com/slawkens/myaac/commit/6e5a4ff8c78ff5373aba091baa66cae029557643, https://github.com/slawkens/myaac/commit/20d69a641c0a933d14889a89da6d32f6a4bc6c7d)
+* Models\Account + OTS_Account -> isPremium -> ignore config.freePremium (https://github.com/slawkens/myaac/commit/5271633bdbfbbfed0b1d59c403093ce6fc2b7d20)
+* Admin Panel - Mailer:
+  * Fix send to email link redirecting from accounts page (https://github.com/slawkens/myaac/commit/080cc2781f034c844af658229e495e9a47fd2298)
+  * Option to send only to verified accounts - only if setting('core.account_mail_verify') enabled (https://github.com/slawkens/myaac/commit/cf7fd20452e863980045bb5d6012ec86c6e8e01f)
+
+### Internal
+* Rewrite to use constants (account transferable coins) (https://github.com/slawkens/myaac/commit/bccf8e056df985bbe1bab5f7ab5492f714d6b62b)
+* Refactor to use HAS_ACCOUNT_COINS (https://github.com/slawkens/myaac/commit/caf326a6584a234775ebc6c8000ea02b3fecd160)
+
 ## [1.7.1 - 27.06.2025]
 
 ### Changed
