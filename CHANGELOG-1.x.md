@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.8 - 01.08.2025]
+## [1.8 - 02.08.2025]
 
 ### Added
 * Templates - Kathrine: Possibility to add custom menu categories (https://github.com/slawkens/myaac/commit/ec11c1402417c25980582467546d1c1e9bb8267f)
