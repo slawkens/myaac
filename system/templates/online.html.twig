@@ -90,7 +90,7 @@
 		</td>
 	</tr>
 
-	{% if setting('core.online_record') %}
+	{% if setting('core.online_record') and record|length > 0 %}
 	<tr>
 		<td class="LabelV150"><b>Online Record:</b></td>
 		<td>

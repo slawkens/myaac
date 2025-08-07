@@ -105,8 +105,17 @@ $cached = Cache::remember("online_$order", setting('core.online_cache_ttl') * 60
 			$result = null;
 			$timestamp = false;
 			if($db->hasTable('server_record')) {
-				$timestamp = true;
-				$result = ServerRecord::where('world_id', configLua('worldId'))->orderByDesc('record')->first()->toArray();
+				$timestamp = $db->hasColumn('server_record', 'timestamp');
+				$serverRecordQuery = ServerRecord::query();
+
+				if ($db->hasColumn('server_record', 'world_id')) {
+					$serverRecordQuery->where('world_id', configLua('worldId'));
+				}
+
+				$result = $serverRecordQuery->orderByDesc('record')->first();
+				if ($result) {
+					$result = $result->toArray();
+				}
 			} else if($db->hasTable('server_config')) { // tfs 1.0
 				$row = ServerConfig::where('config', 'players_record')->first();
 				if ($row) {
