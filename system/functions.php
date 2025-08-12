@@ -512,6 +512,13 @@ function template_place_holder($type): string
 	}
 	elseif ($type === 'body_start') {
 		$ret .= $twig->render('browsehappy.html.twig');
+
+		if (admin()) {
+			global $account_logged;
+			$ret .= $twig->render('admin-bar.html.twig', [
+				'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+			]);
+		}
 	}
 	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
@@ -765,6 +772,10 @@ function formatExperience($exp, $color = true)
 		$ret .= '</span>';
 
 	return $ret;
+}
+
+function getExperienceForLevel($level): float|int {
+	return ( 50 / 3 ) * pow( $level, 3 ) - ( 100 * pow( $level, 2 ) ) + ( ( 850 / 3 ) * $level ) - 200;
 }
 
 function get_locales()
@@ -1217,7 +1228,8 @@ function setting($key)
 		return $settings[$key[0]] = $key[1];
 	}
 
-	return $settings[$key]['value'];
+	$ret = $settings[$key];
+	return isset($ret) ? $ret['value'] : null;
 }
 
 function clearCache()

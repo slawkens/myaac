@@ -27,11 +27,13 @@ body
 
 #tabs
 {
-	width: 580px;
+	width: 99%;
 	height: 32px;
 	background: url('images/tabs-bg.png') no-repeat;
-	float: left;
 	padding-left: 200px;
+	position: relative;
+	display: inline-flex;
+	right: 0;
 }
 
 	#tabs .tab

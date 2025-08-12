@@ -1,3 +1,9 @@
+{% set onlineTTL = setting('core.online_cache_ttl') %}
+{% if onlineTTL > 0 and cache.enabled() %}
+<small>*Note: Online List is updated every {{ onlineTTL > 1 ? ' ' ~ onlineTTL : '' }} minute{{ onlineTTL > 1 ? 's' : '' }}.</small>
+<br/>
+{% endif %}
+
 {# vocation statistics #}
 {% if setting('core.online_vocations') %}
 <br/>
@@ -84,7 +90,7 @@
 		</td>
 	</tr>
 
-	{% if setting('core.online_record') %}
+	{% if setting('core.online_record') and record|length > 0 %}
 	<tr>
 		<td class="LabelV150"><b>Online Record:</b></td>
 		<td>

@@ -227,8 +227,13 @@ if($save)
 		}
 
 		$accountDefaultCoins = setting('core.account_coins');
-		if($db->hasColumn('accounts', 'coins') && $accountDefaultCoins > 0) {
+		if(HAS_ACCOUNT_COINS && $accountDefaultCoins > 0) {
 			$new_account->setCustomField('coins', $accountDefaultCoins);
+		}
+
+		$accountDefaultCoinsTransferable = setting('core.account_coins_transferable');
+		if((HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS) && $accountDefaultCoinsTransferable > 0) {
+			$new_account->setCustomField(ACCOUNT_COINS_TRANSFERABLE_COLUMN, $accountDefaultCoinsTransferable);
 		}
 
 		$tmp_account = $email;

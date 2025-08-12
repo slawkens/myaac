@@ -472,13 +472,15 @@ class Settings implements \ArrayAccess
 			if (!isset($this->settingsFile[$pluginKeyName]['settings'])) {
 				throw new \RuntimeException('Unknown plugin settings: ' . $pluginKeyName);
 			}
+
 			return $this->settingsFile[$pluginKeyName]['settings'];
 		}
 
-		$ret = [];
-		if(isset($this->settingsFile[$pluginKeyName]['settings'][$key])) {
-			$ret = $this->settingsFile[$pluginKeyName]['settings'][$key];
+		if (!isset($this->settingsFile[$pluginKeyName]['settings'][$key])) {
+			return null;
 		}
+
+		$ret = $this->settingsFile[$pluginKeyName]['settings'][$key];
 
 		if(isset($this->settingsDatabase[$pluginKeyName][$key])) {
 			$value = $this->settingsDatabase[$pluginKeyName][$key];
@@ -486,10 +488,6 @@ class Settings implements \ArrayAccess
 			$ret['value'] = $value;
 		}
 		else {
-			if (!isset($this->settingsFile[$pluginKeyName]['settings'][$key])) {
-				return null;
-			}
-
 			$ret['value'] = $this->settingsFile[$pluginKeyName]['settings'][$key]['default'];
 		}
 
