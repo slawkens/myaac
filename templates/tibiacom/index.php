@@ -391,7 +391,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 	?>
 	</div>
 	<?php
-	if($id == MENU_CATEGORY_SHOP || (!setting('core.gifts_system') && $i == $countElements)) {
+	if ($i == $countElements) {
 	?>
 		<div id='MenuBottom' style='background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif);'></div>
 	<?php
