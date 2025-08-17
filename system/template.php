@@ -148,7 +148,7 @@ function get_template_menus(): array
 {
 	global $template_name;
 
-	$result = Cache::remember('template_menus', 10 * 60, function () use ($template_name) {
+	$result = Cache::remember('template_menus_' . $template_name, 10 * 60, function () use ($template_name) {
 		$result = Menu::select(['name', 'link', 'blank', 'color', 'category'])
 			->where('template', $template_name)
 			->orderBy('category')
