@@ -1295,7 +1295,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Data Center',
 			'type' => 'text',
 			'desc' => 'Server Location, will be shown on online page',
-			'default' => 'Frankfurt - Germany',
+			'default' => 'Poland - Warsaw',
 		],
 		[
 			'type' => 'section',
