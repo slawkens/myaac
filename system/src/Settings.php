@@ -207,7 +207,7 @@ class Settings implements \ArrayAccess
 				if (isset($setting['hidden']) && $setting['hidden']) {
 					$value = '';
 					if ($setting['type'] === 'boolean') {
-						$value = ($setting['default'] ? 'true' : 'false');
+						$value = (getBoolean($setting['default']) ? 'true' : 'false');
 					}
 					else if (in_array($setting['type'], ['text', 'number', 'float', 'double', 'email', 'password', 'textarea'])) {
 						$value = $setting['default'];
