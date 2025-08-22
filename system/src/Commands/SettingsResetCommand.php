@@ -3,6 +3,7 @@
 namespace MyAAC\Commands;
 
 use MyAAC\Models\Settings as SettingsModel;
+use MyAAC\Plugins;
 use MyAAC\Settings;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,7 +35,14 @@ class SettingsResetCommand extends Command
 			return Command::FAILURE;
 		}
 
-		if (!$name) {
+		// find by plugin name
+		foreach (Plugins::getAllPluginsSettings() as $key => $setting) {
+			if ($setting['pluginFilename'] === $name) {
+				$name = $key;
+			}
+		}
+
+		if (empty($name)) {
 			SettingsModel::truncate();
 		}
 		else {
