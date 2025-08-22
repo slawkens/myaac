@@ -220,12 +220,7 @@ class Settings implements \ArrayAccess
 				}
 				else if ($setting['type'] === 'boolean') {
 					if(isset($settingsDb[$key])) {
-						if($settingsDb[$key] === 'true') {
-							$value = true;
-						}
-						else {
-							$value = false;
-						}
+						$value = getBoolean($settingsDb[$key]);
 					}
 					else {
 						$value = ($setting['default'] ?? false);
