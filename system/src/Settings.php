@@ -25,23 +25,16 @@ class Settings implements \ArrayAccess
 
 	public function load(): void
 	{
-		$cache = Cache::getInstance();
-		if ($cache->enabled()) {
-			$tmp = '';
-			if ($cache->fetch('settings', $tmp)) {
-				$this->settingsDatabase = unserialize($tmp);
-				return;
+		$this->settingsDatabase = Cache::remember('settings', 10 * 60, function () {
+			$settingsDatabase = [];
+
+			$settings = ModelsSettings::all();
+			foreach ($settings as $setting) {
+				$settingsDatabase[$setting->name][$setting->key] = $setting->value;
 			}
-		}
 
-		$settings = ModelsSettings::all();
-		foreach ($settings as $setting) {
-			$this->settingsDatabase[$setting->name][$setting->key] = $setting->value;
-		}
-
-		if ($cache->enabled()) {
-			$cache->set('settings', serialize($this->settingsDatabase), 600);
-		}
+			return $settingsDatabase;
+		});
 	}
 
 	public function save($pluginName, $values): bool
