@@ -34,7 +34,7 @@ class PluginUninstallCommand extends Command
 			$io->warning($warning);
 		}
 
-		$io->success($pluginName . ' plugin has been successfully installed.');
+		$io->success('Successfully uninstalled plugin ' . $pluginName);
 		return Command::SUCCESS;
 	}
 }
