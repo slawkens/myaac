@@ -1612,7 +1612,7 @@ Sent by MyAAC,<br/>
 			'callbacks' => [
 				'beforeSave' => function($key, $value, &$errorMessage) {
 					global $db;
-					
+
 					if (!$db->hasColumn('accounts', $value)) {
 						$errorMessage = "Shop: Donate Column: Cannot set column to $value, because it doesn't exist in database.";
 						return false;
