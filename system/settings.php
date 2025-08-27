@@ -1612,8 +1612,9 @@ Sent by MyAAC,<br/>
 			'callbacks' => [
 				'beforeSave' => function($key, $value, &$errorMessage) {
 					global $db;
-					if ($value == 'coins' && !HAS_ACCOUNT_COINS) {
-						$errorMessage = "Shop: Donate Column: Cannot set column to coins, because it doesn't exist in database.";
+					
+					if (!$db->hasColumn('accounts', $value)) {
+						$errorMessage = "Shop: Donate Column: Cannot set column to $value, because it doesn't exist in database.";
 						return false;
 					}
 					return true;
