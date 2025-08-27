@@ -1598,7 +1598,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Donate Column',
 			'type' => 'options',
 			'desc' => 'What to give to player after donation - what column in accounts table to use.',
-			'options' => ['premium_points' => 'Premium Points', 'coins' => 'Coins'],
+			'options' => ['premium_points' => 'Premium Points', 'coins' => 'Coins', 'coins_transferable' => 'Coins Transferable'],
 			'default' => 'premium_points',
 			'callbacks' => [
 				'beforeSave' => function($key, $value, &$errorMessage) {
