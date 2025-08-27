@@ -28,6 +28,15 @@ if (!IS_CLI) {
 	$siteURL = $serverUrl . $baseDir;
 }
 
+$donateColumnOptions = [
+	'premium_points' => 'Premium Points',
+	'coins' => 'Coins',
+];
+
+if (HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS) {
+	$donateColumnOptions[ACCOUNT_COINS_TRANSFERABLE_COLUMN] = 'Coins Transferable';
+}
+
 return [
 	'name' => 'MyAAC',
 	'settings' => [
@@ -1598,7 +1607,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Donate Column',
 			'type' => 'options',
 			'desc' => 'What to give to player after donation - what column in accounts table to use.',
-			'options' => ['premium_points' => 'Premium Points', 'coins' => 'Coins'],
+			'options' => $donateColumnOptions,
 			'default' => 'premium_points',
 			'callbacks' => [
 				'beforeSave' => function($key, $value, &$errorMessage) {
