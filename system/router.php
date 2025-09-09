@@ -94,19 +94,30 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 		$routesFinal[] = ['*', $page, '__database__/' . $page, 100];
 	}
 
+	$routes = require SYSTEM . 'routes.php';
 	Plugins::clearWarnings();
-	foreach (Plugins::getRoutes() as $route) {
-		$routesFinal[] = [$route[0], $route[1], $route[2], $route[3] ?? 1000];
+
+	foreach (Plugins::getRoutes() as $pluginRoute) {
+
+		$routesFinal[] = [$pluginRoute[0], $pluginRoute[1], $pluginRoute[2], $pluginRoute[3] ?? 1000];
+
+		// Possibility to override routes with plugins pages, like characters.php
+		foreach ($routes as &$route) {
+			if (str_contains($pluginRoute[2], 'pages/' . $route[2])) {
+				$route[2] = $pluginRoute[2];
+			}
+		}
 /*
 		echo '<pre>';
-		var_dump($route[1], $route[3], $route[2]);
+		var_dump($pluginRoute[1], $pluginRoute[3], $pluginRoute[2]);
 		echo '/<pre>';
 */
 	}
 
-	$routes = require SYSTEM . 'routes.php';
 	foreach ($routes as $route) {
-		if (!str_contains($route[2], '__redirect__') && !str_contains($route[2], '__database__')) {
+		if (!str_contains($route[2], '__redirect__') && !str_contains($route[2], '__database__')
+			&& !str_contains($route[2], 'plugins/')
+		) {
 			if (!is_file(BASE . 'system/pages/' . $route[2])) {
 				continue;
 			}
