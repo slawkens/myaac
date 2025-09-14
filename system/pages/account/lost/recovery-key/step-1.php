@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Lost Account';
+
 if($account->isLoaded()) {
 	$account_key = $account->getCustomField('key');
 

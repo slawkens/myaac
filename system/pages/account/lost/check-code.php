@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Lost Account';
+
 $code = isset($_REQUEST['code']) ? trim($_REQUEST['code']) : '';
 $character = isset($_REQUEST['character']) ? stripslashes(trim($_REQUEST['character'])) : '';
 

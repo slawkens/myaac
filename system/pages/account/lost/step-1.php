@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Lost Account';
+
 $nick = stripslashes($_REQUEST['nick']);
 
 $player = new OTS_Player();

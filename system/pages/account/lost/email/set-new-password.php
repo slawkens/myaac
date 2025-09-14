@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Lost Account';
+
 $newPassword = $_REQUEST['passor'];
 $code = $_REQUEST['code'];
 $character = stripslashes($_REQUEST['character']);

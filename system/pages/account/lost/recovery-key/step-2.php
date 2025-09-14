@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+$title = 'Lost Account';
+
 $recKey = trim($_REQUEST['key']);
 $nick = stripslashes($_REQUEST['nick']);
 

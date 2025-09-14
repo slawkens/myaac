@@ -1,5 +1,7 @@
 <?php
 
+$title = 'Lost Account';
+
 if($account->isLoaded()) {
 	if($account->getCustomField('email_next') < time()) {
 		$twig->display('account/lost/email.html.twig', [

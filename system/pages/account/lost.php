@@ -9,7 +9,7 @@
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-$title = 'Lost Account Interface';
+$title = 'Lost Account';
 
 if(!setting('core.mail_enabled')) {
 	echo "<b>Account maker is not configured to send e-mails, you can't use Lost Account Interface. Contact with admin to get help.</b>";
