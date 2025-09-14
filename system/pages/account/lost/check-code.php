@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+csrfProtect();
+
 $title = 'Lost Account';
 
 $code = isset($_REQUEST['code']) ? trim($_REQUEST['code']) : '';

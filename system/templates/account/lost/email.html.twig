@@ -1,5 +1,8 @@
 Please enter e-mail to account with this character.<br/>
 <form action="{{ getLink('account/lost/email/send-code') }}" method="post">
+
+	{{ csrf() }}
+
 	<input type=hidden name="character">
 	<table class="myaac-table" style="width: 100%;">
 

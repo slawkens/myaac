@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+csrfProtect();
+
 require __DIR__ . '/../base.php';
 
 $title = 'Lost Account';

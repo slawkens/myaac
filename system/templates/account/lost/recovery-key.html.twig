@@ -1,5 +1,8 @@
 If you enter right recovery key you will see form to set new e-mail and password to account. To this e-mail will be send your new password and account name.<BR>
 <form action="{{ getLink('account/lost/recovery-key/step-2') }}" method="post">
+
+	{{ csrf() }}
+
 	<table class="myaac-table" style="width: 100%;">
 
 		<thead>

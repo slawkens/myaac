@@ -3,6 +3,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 require __DIR__ . '/../base.php';
 
+csrfProtect();
+
 $title = 'Lost Account';
 
 if($account->isLoaded()) {

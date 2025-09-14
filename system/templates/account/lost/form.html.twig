@@ -1,6 +1,8 @@
 The Lost Account Interface can help you to get back your account name and password. Please enter your character name and select what you want to do.<br/>
 <form action="{{ getLink('account/lost/step-1') }}" method="post">
+
 	{{ csrf() }}
+
 	<input type="hidden" name="character" value="">
 	<table class="myaac-table" style="width: 100%">
 		<thead>

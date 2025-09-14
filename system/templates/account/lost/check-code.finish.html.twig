@@ -1,5 +1,8 @@
 Please enter new password to your account and repeat to make sure you remember password.<BR>
 <form action="{{ getLink('account/lost/email/set-new-password') }}" method="post">
+
+	{{ csrf() }}
+
 	<input type="hidden" name="character" value="{{ character }}">
 	<input type="hidden" name="code" value="{{ code }}">
 	<table class="myaac-table" style="width: 100%;">
