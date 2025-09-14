@@ -1,0 +1,71 @@
+Set new password and e-mail to your account.<br>
+<form action="{{ getLink('account/lost/recovery-key/step-3') }}" method="post">
+
+	{{ csrf() }}
+
+	<input type="hidden" name="key" VALUE="{{ key }}">
+
+	<input type="hidden" name="character" value="">
+	<table class="myaac-table" style="width: 100%">
+
+		<thead>
+		<tr>
+			<th class="white">
+				<b>Please enter new password and e-mail</b>
+			</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr>
+			<td>
+
+				<table>
+					<tr>
+						<td>
+							<label for="nick">Account of character:</label>
+						</td>
+						<td>
+							<input type="text" id="nick" name="nick" value="{{ nick }}" size="40" readonly="readonly">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="nick">New password:</label>
+						</td>
+						<td>
+							<input id="passor" type="password" name="passor" value="" size="40">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="nick">Repeat new password:</label>
+						</td>
+						<td>
+							<input id="passor2" type="password" name="passor" value="" size="40">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="nick">New e-mail address:</label>
+						</td>
+						<td>
+							<input id="email" type="text" name="email" value="" size="40">
+						</td>
+					</tr>
+				</table>
+
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<br>
+	<table style="width: 100%">
+		<tr>
+			<td align="center">
+				{% set button_name = 'Submit' %}
+				{% include('buttons.base.html.twig') %}
+			</td>
+		</tr>
+</table>
+</form>

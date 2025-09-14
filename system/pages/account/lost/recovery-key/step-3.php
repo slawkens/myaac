@@ -5,7 +5,7 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-$recKey = trim($_REQUEST['key']);
+$key = trim($_REQUEST['key']);
 $nick = stripslashes($_REQUEST['nick']);
 $newPassword = trim($_REQUEST['passor']);
 $newEmail = trim($_REQUEST['email']);
@@ -21,7 +21,7 @@ if($account->isLoaded()) {
 	$accountKey = $account->getCustomField('key');
 
 	if(!empty($accountKey)) {
-		if($accountKey == $recKey) {
+		if($accountKey == $key) {
 			if(Validator::password($newPassword)) {
 				if(Validator::email($newEmail)) {
 					$account->setEMail($newEmail);
@@ -48,7 +48,7 @@ if($account->isLoaded()) {
 							'newEmail' => $newEmail,
 						]);
 
-						if(_mail($account->getCustomField('email'), $config['lua']['serverName']." - New password to your account", $mailBody)) {
+						if(_mail($account->getCustomField('email'), configLua('serverName') . ' - New password to your account', $mailBody)) {
 							$statusMsg = '<br /><small>Sent e-mail with your account name and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!</small>';
 						}
 						else {
@@ -67,27 +67,33 @@ if($account->isLoaded()) {
 					]);
 				}
 				else {
-					echo Validator::getLastError();
+					$errors[] = Validator::getLastError();
 				}
 			}
 			else {
-				echo Validator::getLastError();
+				$errors[] = Validator::getLastError();
 			}
 		}
 		else {
-			echo 'Wrong recovery key!';
+			$errors[] = 'Wrong recovery key!';
 		}
 	}
 	else {
-		echo 'Account of this character has no recovery key!';
+		$errors[] = 'Account of this character has no recovery key!';
 	}
 }
 else {
-	echo "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+	$errors[] = "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+}
+
+if (!empty($errors)) {
+	$twig->display('error_box.html.twig', [
+		'errors' => $errors,
+	]);
 }
 
 $twig->display('account.back_button.html.twig', [
 	'new_line' => true,
 	'center' => true,
-	'action' => getLink('account/lost') . '?action=step1&action_type=reckey&nick=' . urlencode($nick),
+	'action' => getLink('account/lost/step-1') . '?action=recovery-key&nick=' . urlencode($nick),
 ]);

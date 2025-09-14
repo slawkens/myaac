@@ -14,11 +14,17 @@ if($account->isLoaded()) {
 		]);
 	}
 	else {
-		echo 'Account of this character has no recovery key!';
+		$errors[] = 'Account of this character has no recovery key!';
 	}
 }
 else {
-	echo "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+	$errors[] = "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+}
+
+if (!empty($errors)) {
+	$twig->display('error_box.html.twig', [
+		'errors' => $errors,
+	]);
 }
 
 $twig->display('account.back_button.html.twig', [

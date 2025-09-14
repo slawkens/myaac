@@ -32,7 +32,11 @@ if($account->isLoaded()) {
 				$account->setCustomField('email_code', $newCode);
 				$account->setCustomField('email_next', (time() + setting('core.mail_lost_account_interval')));
 
-				echo '<br />Details about steps required to recover your account has been sent to <b>' . $accountEMail . '</b>. You should receive this email within 15 minutes. Please check your inbox/spam directory.';
+				$twig->display('success.html.twig', [
+					'title' => 'Email has been sent',
+					'description' => 'Details about steps required to recover your account has been sent to <b>' . $accountEMail . '</b>. You should receive this email within 15 minutes. Please check your inbox/spam directory.',
+					'custom_buttons' => '',
+				]);
 			}
 			else {
 				$account->setCustomField('email_next', (time() + 60));
@@ -40,19 +44,25 @@ if($account->isLoaded()) {
 			}
 		}
 		else {
-			echo 'Invalid e-mail to account of character <b>' . htmlspecialchars($nick) . '</b>. Try again.';
+			$errors[] = 'Invalid e-mail to account of character <b>' . escapeHtml($nick) . '</b>. Try again.';
 		}
 	}
 	else {
-		echo lostAccountCooldown($nick, (int)$account->getCustomField('email_next'));
+		lostAccountWriteCooldown($nick, (int)$account->getCustomField('email_next'));
 	}
 }
 else {
-	echo "Player or account of player <b>" . htmlspecialchars($nick) . "</b> doesn't exist.";
+	$errors[] =  "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+}
+
+if (!empty($errors)) {
+	$twig->display('error_box.html.twig', [
+		'errors' => $errors,
+	]);
 }
 
 $twig->display('account.back_button.html.twig', [
 	'new_line' => true,
 	'center' => true,
-	'action' => getLink('account/lost') . '?action=step1&action_type=email&nick=' . urlencode($nick),
+	'action' => getLink('account/lost/step-1') . '?action=email&nick=' . urlencode($nick),
 ]);

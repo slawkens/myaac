@@ -14,11 +14,17 @@ if($account->isLoaded()) {
 		]);
 	}
 	else {
-		echo lostAccountCooldown($nick, (int)$account->getCustomField('email_next'));
+		lostAccountWriteCooldown($nick, (int)$account->getCustomField('email_next'));
 	}
 }
 else {
-	echo "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+	$errors[] = "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+}
+
+if (!empty($errors)) {
+	$twig->display('error_box.html.twig', [
+		'errors' => $errors,
+	]);
 }
 
 $twig->display('account.back_button.html.twig', [

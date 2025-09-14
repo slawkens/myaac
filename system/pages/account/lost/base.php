@@ -1,8 +1,10 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
-function lostAccountCooldown(string $nick, int $time): string
+function lostAccountWriteCooldown(string $nick, int $time): void
 {
+	global $twig;
+
 	$inSec = $time - time();
 	$minutesLeft = floor($inSec / 60);
 	$secondsLeft = $inSec - ($minutesLeft * 60);
@@ -10,5 +12,7 @@ function lostAccountCooldown(string $nick, int $time): string
 
 	$timeRounded = ceil(setting('core.mail_lost_account_interval') / 60);
 
-	return "Account of selected character (<b>" . escapeHtml($nick) . "</b>) received e-mail in last $timeRounded minutes. You must wait $timeLeft before you can use Lost Account Interface again.";
+	$twig->display('error_box.html.twig', [
+		'errors' => ["Account of selected character (<b>" . escapeHtml($nick) . "</b>) received e-mail in last $timeRounded minutes. You must wait $timeLeft before you can use Lost Account Interface again."]
+	]);
 }
