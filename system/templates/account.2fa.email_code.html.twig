@@ -35,6 +35,9 @@
 									method="post" style="padding:0;margin:0;">
 									{{ csrf() }}
 
+									{% if account_logged is defined %}
+										<input type="hidden" name="account_logged" value="{{ account_logged.getId() }}">
+									{% endif %}
 									<input type="hidden" name="step" value="resend">
 
 									{% set button_name = 'Resend Email Code' %}
@@ -62,7 +65,7 @@
 							the email code you received at the email address assigned to your account.
 							<div style="margin-top: 15px; margin-bottom: 15px;">
 								<div class="LabelV150 {{ wrongCode ? 'red' : '' }}" style="float:left;">Email Code:</div>
-								<input form="confirmActivateForm" name="email-code" maxlength="6">
+								<input form="confirmActivateForm" name="auth-code" maxlength="6">
 								{% if wrongCode %}
 									<br/>
 									<div class="LabelV150" style="float:left;">&nbsp; </div>
@@ -80,6 +83,7 @@
 </table>
 {% endset %}
 {% include 'tables.headline.html.twig' %}
+<br/>
 <table style="width: 100%;">
 	<tbody>
 	<tr align="center" valign="top">
@@ -97,6 +101,7 @@
 		<td>
 			<form action="{{ getLink('account/manage') }}" method="post" style="padding:0;margin:0;">
 				{{ csrf() }}
+				{% set button_color = 'blue' %}
 				{{ include('buttons.back.html.twig') }}
 			</form>
 		</td>

@@ -42,7 +42,7 @@
 								recent email code</b> you have received in order to log in.<br>
 							<div style="margin-top: 15px; margin-bottom: 15px;">
 								<div class="LabelV150 {{ wrongCode ? 'red' : '' }}" style="float:left;"><label for="email-code">Email Code:</label></div>
-								<input form="form-code" id="email-code" name="email-code" maxlength="15" autocomplete="off">
+								<input form="form-code" id="auth-code" name="auth-code" maxlength="15" autocomplete="off">
 								{% if wrongCode %}
 									<br/>
 									<div class="LabelV150" style="float:left;">&nbsp; </div>
@@ -67,6 +67,12 @@
 			<form id="form-code" method="post" action="{{ getLink('account/manage') }}">
 				{{ csrf() }}
 
+				<input type="hidden" name="account_login" value="{{ account_login ?? '' }}" />
+				<input type="hidden" name="password_login" value="{{ password_login ?? '' }}" />
+				{% if remember_me %}
+					<input type="hidden" name="remember_me" value="true" />
+				{% endif %}
+
 				<input type="hidden" name="step" value="verify">
 				{% set button_name = 'Continue' %}
 				{% set button_color = 'green' %}
@@ -76,6 +82,7 @@
 		<td>
 			<form action="{{ getLink('account/manage') }}" method="post" style="padding:0;margin:0;">
 				{{ csrf() }}
+
 				{% set button_color = 'blue' %}
 				{{ include('buttons.back.html.twig') }}
 			</form>

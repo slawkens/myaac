@@ -21,7 +21,7 @@ csrfProtect();
  * @var OTS_Account $account_logged
  */
 $step = $_REQUEST['step'] ?? '';
-$code = $_REQUEST['email-code'] ?? '';
+$code = $_REQUEST['auth-code'] ?? '';
 
 if ((!setting('core.mail_enabled')) && ACTION == 'email-code') {
 	$twig->display('error_box.html.twig',  ['errors' => ['Account two-factor e-mail authentication disabled.']]);
@@ -31,11 +31,13 @@ if ((!setting('core.mail_enabled')) && ACTION == 'email-code') {
 if (!isset($account_logged) || !$account_logged->isLoaded()) {
 	$current_session = getSession('account');
 	if($current_session) {
+		$account_logged = new OTS_Account();
 		$account_logged->load($current_session);
 	}
 }
 
 $twoFactorAuth = TwoFactorAuth::getInstance($account_logged);
+$twig->addGlobal('account_logged', $account_logged);
 
 if (ACTION == 'email-code') {
 	if ($step == 'resend') {
@@ -86,14 +88,14 @@ if (ACTION == 'email-code') {
 		$twig->display('account.2fa.email_code.html.twig', ['wrongCode' => count($errors) > 0]);
 	}
 	else if ($step == 'deactivate') {
-		if (!$twoFactorAuth->hasRecentEmailCode(15 * 60)) {
-			$twoFactorAuth->resendEmailCode();
-		}
+		//if (!$twoFactorAuth->hasRecentEmailCode(15 * 60)) {
+		//	$twoFactorAuth->resendEmailCode();
+		//}
 
-		if (isset($_POST['save'])) {
+		/*if (isset($_POST['save'])) {
 			if (!empty($code)) {
 				if ($twoFactorAuth->getAuthGateway()->verifyCode($code)) {
-
+*/
 					$twoFactorAuth->disable();
 					$twoFactorAuth->deleteOldCodes();
 
@@ -103,19 +105,20 @@ if (ACTION == 'email-code') {
 							'description' => 'You have successfully <b>deactivated</b> the <b>Email Code Authentication</b> for your account.'
 						]
 					);
-
-					return;
+					/*
 				}
 				else {
 					$errors[] = 'Invalid email code!';
 				}
 			}
-		}
+		}*/
 
+		/*
 		if (!empty($errors)) {
 			$twig->display('error_box.html.twig', ['errors' => $errors]);
 		}
 
 		$twig->display('account.2fa.email.deactivate.html.twig', ['wrongCode' => count($errors) > 0]);
+		*/
 	}
 }

@@ -44,7 +44,7 @@ class TwoFactorAuth
 		return self::$instance;
 	}
 
-	public function process($login_account, $login_password, $code): bool
+	public function process($login_account, $login_password, $remember_me, $code): bool
 	{
 		global $twig;
 
@@ -60,7 +60,11 @@ class TwoFactorAuth
 				}
 
 				define('HIDE_LOGIN_BOX', true);
-				$twig->display('account.2fa.email.login.html.twig');
+				$twig->display('account.2fa.email.login.html.twig', [
+					'account_login' => $login_account,
+					'password_login' => $login_password,
+					'remember_me' => $remember_me,
+				]);
 			}
 			else {
 				echo 'Two Factor App Auth';
@@ -74,7 +78,6 @@ class TwoFactorAuth
 				$this->deleteOldCodes();
 			}
 
-			header('Location: account/manage');
 			return true;
 		}
 
@@ -91,7 +94,14 @@ class TwoFactorAuth
 		$errors[] = 'Invalid email code!';
 		$twig->display('error_box.html.twig', ['errors' => $errors]);
 
-		$twig->display('account.2fa.email.login.html.twig', ['wrongCode' => true]);
+		$twig->display('account.2fa.email.login.html.twig',
+			[
+				'account_login' => $login_account,
+				'password_login' => $login_password,
+				'remember_me' => $remember_me,
+
+				'wrongCode' => true,
+			]);
 
 		return false;
 	}

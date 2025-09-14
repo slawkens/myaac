@@ -51,13 +51,14 @@ if(!empty($login_account) && !empty($login_password))
 		if (setting('core.account_mail_verify') && (int)$account_logged->getCustomField('email_verified') !== 1) {
 			$errors[] = 'Your account is not verified. Please verify your email address. If the message is not coming check the SPAM folder in your E-Mail client.';
 		} else {
+			setSession('account', $account_logged->getId());
+
 			$twoFactorAuth = TwoFactorAuth::getInstance($account_logged);
-			if (!$twoFactorAuth->process($login_account, $login_password, $_POST['email-code'] ?? '')) {
+			if (!$twoFactorAuth->process($login_account, $login_password, $remember_me, $_POST['auth-code'] ?? '')) {
 				return;
 			}
 
 			session_regenerate_id();
-			setSession('account', $account_logged->getId());
 			setSession('password', encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $login_password));
 			if($remember_me) {
 				setSession('remember_me', true);
