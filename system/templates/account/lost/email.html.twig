@@ -15,8 +15,26 @@ Please enter e-mail to account with this character.<br/>
 		<tbody>
 		<tr>
 			<td>
-				Character: <input type=text name="nick" value="{{ nick }}" size="40" readonly="readonly"><br/>
-				E-mail to account: <input type=text name="email" value="" size="40"><br/>
+
+				<table>
+					<tr>
+						<td>
+							<label for="nick">Character:</label>
+						</td>
+						<td>
+							<input type=text id="nick" name="nick" value="{{ nick }}" size="40" readonly="readonly">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="name">E-mail to account:</label>
+						</td>
+						<td>
+							<input type=text id="name" name="email" value="" size="40">
+						</td>
+					</tr>
+				</table>
+
 			</td>
 		</tr>
 		</tbody>
