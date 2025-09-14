@@ -943,6 +943,14 @@ img {
   font-size: 8pt;
   color: red;
 }
+.AttentionSign img {
+	float: left;
+	top: 3px;
+	left: 8px;
+	width: 15px;
+	height: 13px;
+	margin-right: 5px;
+}
 .SmallBox {
   position: relative;
   font-size: 1px;
