@@ -56,10 +56,9 @@ the search criteria and start a new search.
 					</td>
 
 					<td>
-						<form action="{{ getLink('houses/view') }}" method="post">
-							<input type="hidden" name="house" value="{{ house.name }}">
+						<a href="{{ house.link }}">
 							{{ include('buttons.view.html.twig') }}
-						</form>
+						</a>
 					</td>
 				</tr>
 			{% endfor %}
@@ -85,17 +84,19 @@ the search criteria and start a new search.
 			<tr bgcolor="{{ config.darkborder }}">
 				<td valign="top" rowspan="2">
 					{% set checked = false %}
-					{% for id, name in config.towns if id > 0 %}
-						{% if ((townId is empty and name is not empty) or id == townId) and not checked %}
-							{% set variable = "checked" %}
-							{% set checked = true %}
-						{% else %}
-							{% set variable = "" %}
-						{% endif %}
+					{% for id, name in config.towns %}
+						{% if id > 0 %}
+							{% if ((townId is empty and name is not empty) or id == townId) and not checked %}
+								{% set variable = "checked" %}
+								{% set checked = true %}
+							{% else %}
+								{% set variable = "" %}
+							{% endif %}
 
-						<input type="radio" name="town" id="town_{{ id }}" value="{{ id }}"{% if variable is defined %} {{ variable }}{% endif %}>
-						<label for="town_{{ id }}"> {{ name }}</label>
-						<br>
+							<input type="radio" name="town" id="town_{{ id }}" value="{{ id }}"{% if variable is defined %} {{ variable }}{% endif %}>
+							<label for="town_{{ id }}"> {{ name }}</label>
+							<br>
+						{% endif %}
 					{% endfor %}
 				</td>
 

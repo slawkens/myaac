@@ -18,12 +18,15 @@ defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Highscores';
 
 $settingHighscoresCountryBox = setting('core.highscores_country_box');
-if(config('account_country') && $settingHighscoresCountryBox)
+if(config('account_country') && $settingHighscoresCountryBox) {
 	require SYSTEM . 'countries.conf.php';
+}
 
-$list = $_GET['list'] ?? 'experience';
+$highscoresTTL = setting('core.highscores_cache_ttl');
+
+$list = urldecode($_GET['list'] ?? 'experience');
 $page = $_GET['page'] ?? 1;
-$vocation = $_GET['vocation'] ?? 'all';
+$vocation = urldecode($_GET['vocation'] ?? 'all');
 
 if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 	$page = 1;
@@ -31,20 +34,22 @@ if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 
 $query = Player::query();
 
-$settingHighscoresVocationBox = setting('core.highscores_vocation_box');
 $configVocations = config('vocations');
 $configVocationsAmount = config('vocations_amount');
 
-if($settingHighscoresVocationBox && $vocation !== 'all')
-{
+$vocationId = null;
+if($vocation !== 'all') {
 	foreach($configVocations as $id => $name) {
 		if(strtolower($name) == $vocation) {
-			$add_vocs = array($id);
+			$vocationId = $id;
+			$add_vocs = [$id];
 
-			$i = $id + $configVocationsAmount;
-			while(isset($configVocations[$i])) {
-				$add_vocs[] = $i;
-				$i += $configVocationsAmount;
+			if ($id !== 0) {
+				$i = $id + $configVocationsAmount;
+				while (isset($configVocations[$i])) {
+					$add_vocs[] = $i;
+					$i += $configVocationsAmount;
+				}
 			}
 
 			$query->whereIn('players.vocation', $add_vocs);
@@ -118,16 +123,10 @@ if($db->hasColumn('players', 'promotion'))
 	$promotion = ',players.promotion';
 
 $outfit_addons = false;
-$outfit = '';
-
-$settingHighscoresOutfit = setting('core.highscores_outfit');
-
-if($settingHighscoresOutfit) {
-	$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
-	if($db->hasColumn('players', 'lookaddons')) {
-		$outfit .= ', lookaddons';
-		$outfit_addons = true;
-	}
+$outfit = ', lookbody, lookfeet, lookhead, looklegs, looktype';
+if($db->hasColumn('players', 'lookaddons')) {
+	$outfit .= ', lookaddons';
+	$outfit_addons = true;
 }
 
 $configHighscoresPerPage = setting('core.highscores_per_page');
@@ -138,20 +137,27 @@ $needReCache = true;
 $cacheKey = 'highscores_' . $skill . '_' . $vocation . '_' . $page . '_' . $configHighscoresPerPage;
 
 $cache = Cache::getInstance();
-if ($cache->enabled()) {
+if ($cache->enabled() && $highscoresTTL > 0) {
 	$tmp = '';
 	if ($cache->fetch($cacheKey, $tmp)) {
-		$highscores = unserialize($tmp);
+		$data = unserialize($tmp);
+		$totalResults = $data['totalResults'];
+		$highscores = $data['highscores'];
+		$updatedAt = $data['updatedAt'];
 		$needReCache = false;
 	}
 }
 
 $offset = ($page - 1) * $configHighscoresPerPage;
-$query->join('accounts', 'accounts.id', '=', 'players.account_id')
-	->withOnlineStatus()
+$query->withOnlineStatus()
 	->whereNotIn('players.id', setting('core.highscores_ids_hidden'))
 	->notDeleted()
-	->where('players.group_id', '<', setting('core.highscores_groups_hidden'))
+	->where('players.group_id', '<', setting('core.highscores_groups_hidden'));
+
+$totalResultsQuery = clone $query;
+
+$query
+	->join('accounts', 'accounts.id', '=', 'players.account_id')
 	->limit($limit)
 	->offset($offset)
 	->selectRaw('accounts.country, players.id, players.name, players.account_id, players.level, players.vocation' . $outfit . $promotion)
@@ -175,7 +181,7 @@ if (empty($highscores)) {
 			$query
 				->join('player_skills', 'player_skills.player_id', '=', 'players.id')
 				->where('skillid', $skill)
-				->addSelect('player_skills.skillid as value');
+				->addSelect('player_skills.value as value');
 		}
 	} else if ($skill == SKILL_FRAGS) // frags
 	{
@@ -205,20 +211,28 @@ if (empty($highscores)) {
 		$tmp = $row->toArray();
 		$tmp['online'] = $row->online_status;
 		$tmp['vocation'] = $row->vocation_name;
+		$tmp['outfit_url'] = $row->outfit_url; // @phpstan-ignore-line
 		unset($tmp['online_table']);
 
 		return $tmp;
 	})->toArray();
+
+	$updatedAt = time();
+	$totalResults = $totalResultsQuery->count();
 }
 
-if ($cache->enabled() && $needReCache) {
-	$cache->set($cacheKey, serialize($highscores), setting('core.highscores_cache_ttl') * 60);
+if ($highscoresTTL > 0 && $cache->enabled() && $needReCache) {
+	$cache->set($cacheKey, serialize(
+		[
+			'totalResults' => $totalResults,
+			'highscores' => $highscores,
+			'updatedAt' => $updatedAt,
+		]
+	), $highscoresTTL * 60);
 }
 
 $show_link_to_next_page = false;
 $i = 0;
-
-$settingHighscoresVocation = setting('core.highscores_vocation');
 
 foreach($highscores as $id => &$player)
 {
@@ -231,16 +245,24 @@ foreach($highscores as $id => &$player)
 			$player['experience'] = number_format($player['experience']);
 		}
 
-		if(!$settingHighscoresVocation) {
-			unset($player['vocation']);
-		}
-
 		$player['link'] = getPlayerLink($player['name'], false);
 		$player['flag'] = getFlagImage($player['country']);
-		if($settingHighscoresOutfit) {
-			$player['outfit'] = '<img style="position:absolute;margin-top:' . (in_array($player['looktype'], setting('core.outfit_images_wrong_looktypes')) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . setting('core.outfit_images_url') . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'] . '" alt="" />';
+		$player['outfit'] = '<img style="position:absolute;margin-top:' . (in_array($player['looktype'], setting('core.outfit_images_wrong_looktypes')) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . $player['outfit_url'] . '" alt="" />';
+
+		if ($skill != POT::SKILL__LEVEL) {
+			if (isset($lastValue) && $lastValue == $player['value']) {
+				$player['rank'] = $lastRank;
+			}
+			else {
+				$player['rank'] = $offset + $i;
+			}
+
+			$lastRank = $player['rank'] ;
+			$lastValue = $player['value'];
 		}
-		$player['rank'] = $offset + $i;
+		else {
+			$player['rank'] = $offset + $i;
+		}
 	}
 	else {
 		unset($highscores[$id]);
@@ -261,6 +283,8 @@ if($show_link_to_next_page) {
 	$linkNextPage = getLink('highscores') . '/' . $list . ($vocation !== 'all' ? '/' . $vocation : '') . '/' . ($page + 1);
 }
 
+$baseLink = getLink('highscores') . '/' . $list . ($vocation !== 'all' ? '/' . $vocation : '') . '/';
+
 $types = array(
 	'experience' => 'Experience',
 	'magic' => 'Magic',
@@ -279,6 +303,10 @@ if(setting('core.highscores_frags')) {
 if(setting('core.highscores_balance'))
 	$types['balance'] = 'Balance';
 
+if ($highscoresTTL > 0 && $cache->enabled()) {
+	echo '<small>*Note: Highscores are updated every' . ($highscoresTTL > 1 ? ' ' . $highscoresTTL : '') . ' minute' . ($highscoresTTL > 1 ? 's' : '') . '.</small><br/><br/>';
+}
+
 /** @var Twig\Environment $twig */
 $twig->display('highscores.html.twig', [
 	'highscores' => $highscores,
@@ -287,7 +315,12 @@ $twig->display('highscores.html.twig', [
 	'skillName' => ($skill == SKILL_FRAGS ? 'Frags' : ($skill == SKILL_BALANCE ? 'Balance' : getSkillName($skill))),
 	'levelName' => ($skill != SKILL_FRAGS && $skill != SKILL_BALANCE ? 'Level' : ($skill == SKILL_BALANCE ? 'Balance' : 'Frags')),
 	'vocation' => $vocation !== 'all' ? $vocation :  null,
+	'vocationId' => $vocationId,
 	'types' => $types,
 	'linkPreviousPage' => $linkPreviousPage,
 	'linkNextPage' => $linkNextPage,
+	'totalResults' => $totalResults,
+	'page' => $page,
+	'baseLink' => $baseLink,
+	'updatedAt' => $updatedAt,
 ]);

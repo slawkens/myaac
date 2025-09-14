@@ -28,6 +28,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 if(Forum::canPost($account_logged)) {
 	$players_from_account = $db->query('SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = '.(int) $account_logged->getId())->fetchAll();
 	$section_id = $_REQUEST['section_id'] ?? null;
@@ -38,19 +40,18 @@ if(Forum::canPost($account_logged)) {
 			if ($sections[$section_id]['closed'] && !Forum::isModerator())
 				$errors[] = 'You cannot create topic on this board.';
 
-			$quote = (int)(isset($_REQUEST['quote']) ? $_REQUEST['quote'] : 0);
-			$text = isset($_REQUEST['text']) ? stripslashes($_REQUEST['text']) : '';
-			$char_id = (int)(isset($_REQUEST['char_id']) ? $_REQUEST['char_id'] : 0);
-			$post_topic = isset($_REQUEST['topic']) ? stripslashes($_REQUEST['topic']) : '';
-			$smile = (isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0);
-			$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
+			$text = isset($_POST['text']) ? stripslashes($_POST['text']) : '';
+			$char_id = (int)(isset($_POST['char_id']) ? $_POST['char_id'] : 0);
+			$post_topic = isset($_POST['topic']) ? stripslashes($_POST['topic']) : '';
+			$smile = (isset($_POST['smile']) ? (int)$_POST['smile'] : 0);
+			$html = (isset($_POST['html']) ? (int)$_POST['html'] : 0);
 
 			if (!superAdmin()) {
 				$html = 0;
 			}
 
 			$saved = false;
-			if (isset($_REQUEST['save'])) {
+			if (isset($_POST['save'])) {
 				$length = strlen($post_topic);
 				if ($length < 1 || $length > 60) {
 					$errors[] = "Too short or too long topic (Length: $length letters). Minimum 1 letter, maximum 60 letters.";
@@ -95,7 +96,23 @@ if(Forum::canPost($account_logged)) {
 				if (count($errors) == 0) {
 					$saved = true;
 
-					$db->query("INSERT INTO `" . FORUM_TABLE_PREFIX . "forum` (`first_post` ,`last_post` ,`section` ,`replies` ,`views` ,`author_aid` ,`author_guid` ,`post_text` ,`post_topic` ,`post_smile`, `post_html` ,`post_date` ,`last_edit_aid` ,`edit_date`, `post_ip`) VALUES ('0', '" . time() . "', '" . (int)$section_id . "', '0', '0', '" . $account_logged->getId() . "', '" . $char_id . "', " . $db->quote($text) . ", " . $db->quote($post_topic) . ", '" . $smile . "', '" . $html . "', '" . time() . "', '0', '0', '" . $_SERVER['REMOTE_ADDR'] . "')");
+					$db->insert(FORUM_TABLE_PREFIX . 'forum', [
+						'first_post' => 0,
+						'last_post' => time(),
+						'section' => $section_id,
+						'replies' => 0,
+						'views' => 0,
+						'author_aid' => $account_logged->getId(),
+						'author_guid' => $char_id,
+						'post_text' => $text,
+						'post_topic' => $post_topic,
+						'post_smile' => $smile,
+						'post_html' => $html,
+						'post_date' => time(),
+						'last_edit_aid' => 0,
+						'edit_date' => 0,
+						'post_ip' => get_browser_real_ip(),
+					]);
 
 					$thread_id = $db->lastInsertId();
 

@@ -9,7 +9,7 @@
 <form action="{{ constant('BASE_URL') }}install/" method="post" autocomplete="off">
 	<input type="hidden" name="step" id="step" value="finish" />
 
-	{% set values = ['email', 'account', 'password', 'password_confirm'] %}
+	{% set values = ['email', account, 'password', 'password_confirm'] %}
 
 	{% if hasTablePlayers %}
 		{% set values = values|merge(['player_name']) %}

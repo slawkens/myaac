@@ -31,11 +31,11 @@ require_once 'common.php';
 require_once SYSTEM . 'functions.php';
 
 $uri = $_SERVER['REQUEST_URI'];
-if(false !== strpos($uri, 'index.php')) {
+if(str_contains($uri, 'index.php')) {
 	$uri = str_replace_first('/index.php', '', $uri);
 }
 
-if(0 === strpos($uri, '/')) {
+if(str_starts_with($uri, '/')) {
 	$uri = str_replace_first('/', '', $uri);
 }
 
@@ -76,6 +76,8 @@ require_once SYSTEM . 'status.php';
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
 
+$hooks->trigger(HOOK_STARTUP);
+
 // backward support for gesior
 if(setting('core.backward_support')) {
 	define('INITIALIZED', true);
@@ -91,6 +93,7 @@ if(setting('core.backward_support')) {
 	if($logged && $account_logged)
 		$group_id_of_acc_logged = $account_logged->getGroupId();
 
+	$config['serverPath'] = $config['server_path'];
 	$config['site'] = &$config;
 	$config['server'] = &$config['lua'];
 	$config['site']['shop_system'] = setting('core.gifts_system');
@@ -115,9 +118,15 @@ if(setting('core.backward_support')) {
 		$config['status']['serverStatus_' . $key] = $value;
 }
 
-require_once SYSTEM . 'router.php';
+if(setting('core.views_counter')) {
+	require_once SYSTEM . 'counter.php';
+}
 
-$hooks->trigger(HOOK_STARTUP);
+if(setting('core.visitors_counter')) {
+	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
+}
+
+require_once SYSTEM . 'router.php';
 
 // anonymous usage statistics
 // sent only when user agrees
@@ -134,7 +143,7 @@ if(setting('core.anonymous_usage_statistics')) {
 		if(fetchDatabaseConfig('last_usage_report', $value)) {
 			$should_report = time() > (int)$value + $report_time;
 			if($cache->enabled()) {
-				$cache->set('last_usage_report', $value);
+				$cache->set('last_usage_report', $value, 60 * 60);
 			}
 		}
 		else {
@@ -148,26 +157,11 @@ if(setting('core.anonymous_usage_statistics')) {
 
 		updateDatabaseConfig('last_usage_report', time());
 		if($cache->enabled()) {
-			$cache->set('last_usage_report', time());
+			$cache->set('last_usage_report', time(), 60 * 60);
 		}
 	}
 }
 
-if(setting('core.views_counter'))
-	require_once SYSTEM . 'counter.php';
-
-if(setting('core.visitors_counter')) {
-	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
-}
-
-/**
- * @var OTS_Account $account_logged
- */
-if ($logged && admin()) {
-	$content .= $twig->render('admin-bar.html.twig', [
-		'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
-	]);
-}
 $title_full =  (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];
 require $template_path . '/' . $template_index;
 

@@ -26,14 +26,19 @@ class OTS_ServerInfo
  *
  * @var string
  */
-    private $server;
+	private string $server;
 
 /**
  * Connection port.
  *
  * @var int
  */
-    private $port;
+	private int $port;
+
+	/**
+	 * Status timeout
+	 */
+	private float $timeout = 2.0;
 
 /**
  * Creates handler for new server.
@@ -41,11 +46,11 @@ class OTS_ServerInfo
  * @param string $server Server IP/domain.
  * @param int $port OTServ port.
  */
-    public function __construct($server, $port)
-    {
-        $this->server = $server;
-        $this->port = $port;
-    }
+	public function __construct($server, $port)
+	{
+		$this->server = $server;
+		$this->port = $port;
+	}
 
 /**
  * Sends packet to server.
@@ -54,46 +59,46 @@ class OTS_ServerInfo
  * @return OTS_Buffer|null Respond buffer (null if server is offline).
  * @throws E_OTS_OutOfBuffer When there is read attemp after end of packet stream.
  */
-    private function send(OTS_Buffer $packet)
-    {
-        // connects to server
-        $socket = @fsockopen($this->server, $this->port, $error, $message, setting('core.status_timeout'));
+	private function send(OTS_Buffer $packet)
+	{
+		// connects to server
+		$socket = @fsockopen($this->server, $this->port, $error, $message, $this->timeout);
 
-        // if connected then checking statistics
-        if($socket)
-        {
-            // sets 5 second timeout for reading and writing
-            stream_set_timeout($socket, 5);
+		// if connected then checking statistics
+		if($socket)
+		{
+			// sets 5 second timeout for reading and writing
+			stream_set_timeout($socket, 5);
 
-            // creates real packet
-            $packet = $packet->getBuffer();
-            $packet = pack('v', strlen($packet) ) . $packet;
+			// creates real packet
+			$packet = $packet->getBuffer();
+			$packet = pack('v', strlen($packet) ) . $packet;
 
-            // sends packet with request
-            // 06 - length of packet, 255, 255 is the comamnd identifier, 'info' is a request
-            fwrite($socket, $packet);
+			// sends packet with request
+			// 06 - length of packet, 255, 255 is the comamnd identifier, 'info' is a request
+			fwrite($socket, $packet);
 
-            // reads respond
-            //$data = stream_get_contents($socket);
+			// reads respond
+			//$data = stream_get_contents($socket);
 			$data = '';
 			while (!feof($socket))
 				$data .= fgets($socket, 1024);
 
-            // closing connection to current server
-            fclose($socket);
+			// closing connection to current server
+			fclose($socket);
 
-            // sometimes server returns empty info
-            if( empty($data) )
-            {
-                // returns offline state
-                return false;
-            }
+			// sometimes server returns empty info
+			if( empty($data) )
+			{
+				// returns offline state
+				return false;
+			}
 
-            return new OTS_Buffer($data);
-        }
+			return new OTS_Buffer($data);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 /**
  * Queries server status.
@@ -108,30 +113,30 @@ class OTS_ServerInfo
  * @example examples/info.php info.php
  * @tutorial POT/Server_status.pkg
  */
-    public function status()
-    {
-        // request packet
-        $request = new OTS_Buffer();
-        $request->putChar(255);
-        $request->putChar(255);
-        $request->putString('info', false);
+	public function status()
+	{
+		// request packet
+		$request = new OTS_Buffer();
+		$request->putChar(255);
+		$request->putChar(255);
+		$request->putString('info', false);
 
-        $status = $this->send($request);
+		$status = $this->send($request);
 
-        // checks if server is online
-        if($status)
-        {
-            // loads respond XML
-            $info = new OTS_InfoRespond();
-            if(!$info->loadXML( $status->getBuffer()))
+		// checks if server is online
+		if($status)
+		{
+			// loads respond XML
+			$info = new OTS_InfoRespond();
+			if(!$info->loadXML( $status->getBuffer()))
 				return false;
 
-            return $info;
-        }
+			return $info;
+		}
 
-        // offline
-        return false;
-    }
+		// offline
+		return false;
+	}
 
 /**
  * Queries server information.
@@ -146,26 +151,26 @@ class OTS_ServerInfo
  * @example examples/server.php info.php
  * @tutorial POT/Server_status.pkg
  */
-    public function info($flags)
-    {
-        // request packet
-        $request = new OTS_Buffer();
-        $request->putChar(255);
-        $request->putChar(1);
-        $request->putShort($flags);
+	public function info($flags)
+	{
+		// request packet
+		$request = new OTS_Buffer();
+		$request->putChar(255);
+		$request->putChar(1);
+		$request->putShort($flags);
 
-        $status = $this->send($request);
+		$status = $this->send($request);
 
-        // checks if server is online
-        if($status)
-        {
-            // loads respond
-            return new OTS_ServerStatus($status);
-        }
+		// checks if server is online
+		if($status)
+		{
+			// loads respond
+			return new OTS_ServerStatus($status);
+		}
 
-        // offline
-        return false;
-    }
+		// offline
+		return false;
+	}
 
 /**
  * Checks player online status.
@@ -180,27 +185,27 @@ class OTS_ServerInfo
  * @example examples/server.php info.php
  * @tutorial POT/Server_status.pkg
  */
-    public function playerStatus($name)
-    {
-        // request packet
-        $request = new OTS_Buffer();
-        $request->putChar(255);
-        $request->putChar(1);
-        $request->putShort(OTS_ServerStatus::REQUEST_PLAYER_STATUS_INFO);
-        $request->putString($name);
+	public function playerStatus($name)
+	{
+		// request packet
+		$request = new OTS_Buffer();
+		$request->putChar(255);
+		$request->putChar(1);
+		$request->putShort(OTS_ServerStatus::REQUEST_PLAYER_STATUS_INFO);
+		$request->putString($name);
 
-        $status = $this->send($request);
+		$status = $this->send($request);
 
-        // checks if server is online
-        if($status)
-        {
-            $status->getChar();
-            return (bool) $status->getChar();
-        }
+		// checks if server is online
+		if($status)
+		{
+			$status->getChar();
+			return (bool) $status->getChar();
+		}
 
-        // offline
-        return false;
-    }
+		// offline
+		return false;
+	}
 
 /**
  * Magic PHP5 method.
@@ -210,20 +215,24 @@ class OTS_ServerInfo
  * @throws OutOfBoundsException For non-supported properties.
  * @throws E_OTS_OutOfBuffer When there is read attemp after end of packet stream.
  */
-    public function __get($name)
-    {
-        switch($name)
-        {
-            case 'status':
-                return $this->status();
+	public function __get($name)
+	{
+		switch($name)
+		{
+			case 'status':
+				return $this->status();
 
-            case 'info':
-                return $this->info(OTS_ServerStatus::REQUEST_BASIC_SERVER_INFO | OTS_ServerStatus::REQUEST_OWNER_SERVER_INFO | OTS_ServerStatus::REQUEST_MISC_SERVER_INFO | OTS_ServerStatus::REQUEST_PLAYERS_INFO | OTS_ServerStatus::REQUEST_MAP_INFO | OTS_ServerStatus::REQUEST_PLAYER_STATUS_INFO);
+			case 'info':
+				return $this->info(OTS_ServerStatus::REQUEST_BASIC_SERVER_INFO | OTS_ServerStatus::REQUEST_OWNER_SERVER_INFO | OTS_ServerStatus::REQUEST_MISC_SERVER_INFO | OTS_ServerStatus::REQUEST_PLAYERS_INFO | OTS_ServerStatus::REQUEST_MAP_INFO | OTS_ServerStatus::REQUEST_PLAYER_STATUS_INFO);
 
-            default:
-                throw new OutOfBoundsException();
-        }
-    }
+			default:
+				throw new OutOfBoundsException();
+		}
+	}
+
+	public function setTimeout($timeout) {
+		$this->timeout = $timeout;
+	}
 }
 
 /**#@-*/

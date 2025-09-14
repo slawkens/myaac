@@ -52,6 +52,8 @@ $locale['step_config'] = 'Konfiguracja';
 $locale['step_config_title'] = 'Podstawowa konfiguracja';
 $locale['step_config_server_path'] = 'Ścieżka do serwera';
 $locale['step_config_server_path_desc'] = 'Ścieżka do Twojego folderu z TFS, gdzie znajduje się plik config.lua.';
+$locale['step_config_server_url'] = 'Adres strony';
+$locale['step_config_server_url_desc'] = 'Adres tej strony www.';
 $locale['step_config_mail_admin'] = 'E-Mail admina';
 $locale['step_config_mail_admin_desc'] = 'Na ten adres będą dostarczane E-Maile z formularza kontaktowego, przykładowo admin@gmail.com';
 $locale['step_config_mail_admin_error'] = 'E-Mail admina jest niepoprawny.';
@@ -93,7 +95,7 @@ $locale['step_database_loaded_npcs'] = 'Załadowano NPCs...';
 $locale['step_database_error_npcs'] = 'Wystąpił problem podczas ładowania NPCs';
 $locale['step_database_loaded_spells'] = 'Załadowano czary (spells)...';
 $locale['step_database_loaded_towns'] = 'Załadowano miasta (towns)...';
-$locale['step_database_error_towns'] = 'Wystąpił problem podczas ładowania miast. Trzeba będzie je skonfigurować manualnie.';
+$locale['step_database_error_towns'] = 'Wystąpił problem podczas ładowania miast. Trzeba będzie je skonfigurować manualnie w ustawieniach.';
 $locale['step_database_created_account'] = 'Utworzono konto admina...';
 $locale['step_database_created_news'] = 'Utworzono newsy...';
 

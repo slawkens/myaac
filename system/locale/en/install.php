@@ -52,6 +52,8 @@ $locale['step_config'] = 'Configuration';
 $locale['step_config_title'] = 'Basic configuration';
 $locale['step_config_server_path'] = 'Server path';
 $locale['step_config_server_path_desc'] = 'Path to your TFS main directory, where you have config.lua located.';
+$locale['step_config_site_url'] = 'Website URL';
+$locale['step_config_site_url_desc'] = 'Your website address.';
 $locale['step_config_mail_admin'] = 'Admin Email';
 $locale['step_config_mail_admin_desc'] = 'Address where emails from contact form will be delivered, for example admin@gmail.com';
 $locale['step_config_mail_admin_error'] = 'Admin Email is not correct.';
@@ -94,7 +96,7 @@ $locale['step_database_loaded_npcs'] = 'NPCs has been loaded...';
 $locale['step_database_error_npcs'] = 'There were some problems loading your NPCs';
 $locale['step_database_loaded_spells'] = 'Spells has been loaded...';
 $locale['step_database_loaded_towns'] = 'Towns has been loaded...';
-$locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in config.';
+$locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in Settings.';
 $locale['step_database_created_account'] = 'Created admin account...';
 $locale['step_database_created_news'] = 'Newses has been created...';
 

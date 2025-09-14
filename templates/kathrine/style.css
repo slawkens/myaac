@@ -27,11 +27,13 @@ body
 
 #tabs
 {
-	width: 580px;
+	width: 99%;
 	height: 32px;
 	background: url('images/tabs-bg.png') no-repeat;
-	float: left;
 	padding-left: 200px;
+	position: relative;
+	display: inline-flex;
+	right: 0;
 }
 
 	#tabs .tab
@@ -452,6 +454,27 @@ a:hover
   padding-right: 10px;
   white-space: nowrap;
   vertical-align: top;
+}
+.LabelV120 {
+	font-weight: bold;
+	padding-right: 10px;
+	white-space: nowrap;
+	vertical-align: top;
+	width: 120px;
+}
+.LabelV150 {
+	font-weight: bold;
+	padding-right: 10px;
+	white-space: nowrap;
+	vertical-align: top;
+	width: 150px;
+}
+.LabelV200 {
+	font-weight: bold;
+	padding-right: 10px;
+	white-space: nowrap;
+	vertical-align: top;
+	width: 200px;
 }
 .LabelH {
   font-weight: bold;

@@ -26,7 +26,7 @@ if (!hasFlag(FLAG_CONTENT_PAGES) && !superAdmin()) {
 
 header('X-XSS-Protection:0');
 
-// some constants, used mainly by database (cannot by modified without schema changes)
+// some constants, used mainly by database (cannot be modified without schema changes)
 const NEWS_TITLE_LIMIT = 100;
 const NEWS_BODY_LIMIT = 65535; // maximum news body length
 const ARTICLE_TEXT_LIMIT = 300;
@@ -136,9 +136,18 @@ if($action == 'edit' || $action == 'new') {
 
 $query = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news'));
 $newses = array();
+
+$cachePlayers = [];
 foreach ($query as $_news) {
-	$_player = new OTS_Player();
-	$_player->load($_news['player_id']);
+	$playerId = $_news['player_id'];
+	if (isset($cachePlayers[$playerId])) {
+		$_player = $cachePlayers[$playerId];
+	}
+	else {
+		$_player = new OTS_Player();
+		$_player->load($playerId);
+		$cachePlayers[$playerId] = $_player;
+	}
 
 	$newses[$_news['type']][] = array(
 		'id' => $_news['id'],
@@ -147,7 +156,7 @@ foreach ($query as $_news) {
 		'title' => $_news['title'],
 		'date' => $_news['date'],
 		'player_name' => $_player->isLoaded() ? $_player->getName() : '',
-		'player_link' => $_player->isLoaded() ? getPlayerLink($_player->getName(), false) : '',
+		'player_link' => $_player->isLoaded() ? getPlayerLink($_player, false) : '',
 	);
 }
 

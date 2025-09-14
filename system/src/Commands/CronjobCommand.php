@@ -16,10 +16,11 @@ class CronjobCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		require SYSTEM . 'init.php';
+
 		// Create a new scheduler
 		$scheduler = new Scheduler();
 
-		global $hooks;
 		$hooks->trigger(HOOK_CRONJOB, ['scheduler' => $scheduler]);
 
 		// Let the scheduler execute jobs which are due.

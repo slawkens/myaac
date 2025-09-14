@@ -1,0 +1,8 @@
+CREATE TABLE `myaac_weapons`
+(
+	`id` INT(11) NOT NULL,
+	`level` INT(11) NOT NULL DEFAULT 0,
+	`maglevel` INT(11) NOT NULL DEFAULT 0,
+	`vocations` VARCHAR(100) NOT NULL DEFAULT '',
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

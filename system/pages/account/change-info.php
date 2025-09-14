@@ -20,6 +20,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 if(setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 

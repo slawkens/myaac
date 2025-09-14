@@ -7,21 +7,19 @@
 				<tr>
 					<td>Filters</td>
 					<td>
-						<label for="vocationFilter">Choose a Skill</label>
-						<select onchange="location = this.value;" aria-label="skillFilter" id="skillFilter">
-							{% set i = 0 %}
+						<label for="skillFilter">Choose a Skill</label>
+						<select onchange="location = this.value;" id="skillFilter">
 							{% for link, name in types %}
-								<option value="{{ getLink('highscores') }}/{{ link }}{% if vocation is not null %}{{ vocation }}{% endif %}" class="size_xs">{{ name }}</option>
+								<option value="{{ getLink('highscores') }}/{{ link|urlencode }}{% if vocation is not null %}/{{ vocation|lower|urlencode }}{% endif %}" class="size_xs" {% if list is not null and list == link %}selected{% endif %}>{{ name }}</option>
 							{% endfor %}
 						</select>
 					</td>
 					<td>
 						<label for="vocationFilter">Choose a vocation</label>
-						<select onchange="location = this.value;" aria-label="vocationFilter" id="vocationFilter">
-							<option value="{{ getLink('highscores') }}/{{ list }}" class="size_xs">[ALL]</option>
-							{% set i = 0 %}
-							{% for i in 1..config.vocations_amount %}
-								<option value="{{ getLink('highscores') }}/{{ list }}/{{ config.vocations[i]|lower }}" class="size_xs">{{ config.vocations[i]}}</option>
+						<select onchange="location = this.value;" id="vocationFilter">
+							<option value="{{ getLink('highscores') }}/{{ list|urlencode }}" class="size_xs">[ALL]</option>
+							{% for i in 0..config.vocations_amount %}
+								<option value="{{ getLink('highscores') }}/{{ list|urlencode }}/{{ config.vocations[i]|lower|urlencode }}" class="size_xs" {% if vocationId is not null and vocationId == i %}selected{% endif %}>{{ config.vocations[i]}}</option>
 							{% endfor %}
 						</select>
 					</td>
@@ -68,7 +66,7 @@
 
 						<td>
 							<a href="{{ player.link }}">
-								<span style="color: {% if player.online > 0 %}green{% else %}red{% endif %}">{{ player.name }}</span>
+								<span {% if setting('core.highscores_online_status') %}style="color: {% if player.online > 0 %}green{% else %}red{% endif %}"{% endif %}>{{ player.name }}</span>
 							</a>
 							{% if setting('core.highscores_vocation') %}
 							<br/><small>{{ player.vocation }}</small>
@@ -96,8 +94,10 @@
 				{% endif %}
 			</table>
 		</td>
+		{% if setting('core.highscores_skills_box') or setting('core.highscores_vocation_box') %}
 		<td width="5%"></td>
 		<td width="15%" valign="top" align="right">
+			{% if setting('core.highscores_skills_box') %}
 			<table style="border: 0; width: 100%" cellpadding="4" cellspacing="1">
 				<tr bgcolor="{{ config.vdarkborder }}">
 					<td class="white"><B>Choose a skill</B></TD>
@@ -105,22 +105,23 @@
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>
 						{% for link, name in types %}
-						<a href="{{ getLink('highscores') }}/{{ link }}{% if vocation is not null %}/{{ vocation }}{% endif %}" class="size_xs">{{ name }}</a><br/>
+							<a href="{{ getLink('highscores') }}/{{ link|urlencode }}{% if vocation is not null %}/{{ vocation|urlencode }}{% endif %}" class="size_xs">{{ name }}</a><br/>
 						{% endfor %}
 					</td>
 				</tr>
 			</table>
 			<br/>
-			{% if config.highscores_vocation_box %}
+			{% endif %}
+			{% if setting('core.highscores_vocation_box') %}
 			<table border="0" width="100%" cellpadding="4" cellspacing="1">
 				<tr bgcolor="{{ config.vdarkborder }}">
 					<td class="white"><b>Choose a vocation</b></td>
 				</tr>
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>
-						<a href="{{ getLink('highscores') }}/{{ list }}" class="size_xs">[ALL]</a><br/>
-						{% for i in 1..config.vocations_amount %}
-						<a href="{{ getLink('highscores') }}/{{ list }}/{{ config.vocations[i]|lower }}" class="size_xs">{{ config.vocations[i]}}</a><br/>
+						<a href="{{ getLink('highscores') }}/{{ list|urlencode }}" class="size_xs">[ALL]</a><br/>
+						{% for i in 0..config.vocations_amount %}
+							<a href="{{ getLink('highscores') }}/{{ list|urlencode }}/{{ config.vocations[i]|lower|urlencode }}" class="size_xs">{{ config.vocations[i]}}</a><br/>
 						{% endfor %}
 					</td>
 				</tr>
@@ -128,5 +129,6 @@
 			{% endif %}
 		</td>
 		<td style="width: 18px"></td>
+		{% endif %}
 	</tr>
 </table>

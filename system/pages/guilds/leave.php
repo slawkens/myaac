@@ -34,7 +34,7 @@ if(empty($errors)) {
 $array_of_player_ig = array();
 if(empty($errors)) {
 	$guild_owner_name = $guild->getOwner()->getName();
-	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
+	if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
 		if(!Validator::characterName($name)) {
 			$errors[] = 'Invalid name format.';
 		}
@@ -72,7 +72,7 @@ if(empty($errors)) {
 	}
 	else
 	{
-		$account_players = $account_logged->getPlayers();
+		$account_players = $account_logged->getPlayersList();
 		foreach($account_players as $player_fac) {
 			$player_rank = $player_fac->getRank();
 			if($player_rank->isLoaded()) {
@@ -94,7 +94,7 @@ if(!empty($errors)) {
 }
 else
 {
-	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
+	if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
 		$player->setRank();
 		$twig->display('success.html.twig', array(
 			'title' => 'Leave guild',

@@ -41,7 +41,7 @@ if(empty($errors)) {
 	$rank_list->orderBy('level', POT::ORDER_DESC);
 	$guild_leader = false;
 	$guild_vice = false;
-	$account_players = $account_logged->getPlayers();
+	$account_players = $account_logged->getPlayersList();
 	foreach($account_players as $player) {
 		$player_rank = $player->getRank();
 		if($player_rank->isLoaded()) {
@@ -102,7 +102,7 @@ if(!empty($errors)) {
 }
 else
 {
-	if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save') {
+	if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
 		$player->setRank();
 
 		$twig->display('success.html.twig', array(

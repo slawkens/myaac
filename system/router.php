@@ -89,25 +89,39 @@ if($logged && $account_logged && $account_logged->isLoaded()) {
  * Routes loading
  */
 $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) {
-	$routes = require SYSTEM . 'routes.php';
-
 	$routesFinal = [];
 	foreach(getDatabasePages() as $page) {
 		$routesFinal[] = ['*', $page, '__database__/' . $page, 100];
 	}
 
+	$routes = require SYSTEM . 'routes.php';
 	Plugins::clearWarnings();
-	foreach (Plugins::getRoutes() as $route) {
-		$routesFinal[] = [$route[0], $route[1], $route[2], $route[3] ?? 1000];
+
+	foreach (Plugins::getRoutes() as $pluginRoute) {
+
+		$routesFinal[] = [$pluginRoute[0], $pluginRoute[1], $pluginRoute[2], $pluginRoute[3] ?? 1000];
+
+		// Possibility to override routes with plugins pages, like characters.php
+		foreach ($routes as &$route) {
+			if (str_contains($pluginRoute[2], 'pages/' . $route[2])) {
+				$route[2] = $pluginRoute[2];
+			}
+		}
 /*
 		echo '<pre>';
-		var_dump($route[1], $route[3], $route[2]);
+		var_dump($pluginRoute[1], $pluginRoute[3], $pluginRoute[2]);
 		echo '/<pre>';
 */
 	}
 
 	foreach ($routes as $route) {
-		if (!str_contains($route[2], '__redirect__') && !str_contains($route[2], '__database__')) {
+		if (!str_contains($route[2], '__redirect__') && !str_contains($route[2], '__database__')
+			&& !str_contains($route[2], 'plugins/')
+		) {
+			if (!is_file(BASE . 'system/pages/' . $route[2])) {
+				continue;
+			}
+
 			$routesFinal[] = [$route[0], $route[1], 'system/pages/' . $route[2], $route[3] ?? 10000];
 		}
 		else {
@@ -126,14 +140,14 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 		return ($a[3] < $b[3]) ? -1 : 1;
 	});
 
+	$aliases = [
+		[':int', ':string', ':alphanum'],
+		[':\d+', ':[A-Za-z0-9-_%+\' ]+', ':[A-Za-z0-9]+'],
+	];
+
 	// remove duplicates
 	// if same route pattern, but different priority
-	$routesFinal = array_filter($routesFinal, function ($a) {
-		$aliases = [
-			[':int', ':string', ':alphanum'],
-			[':\d+', ':[A-Za-z0-9-_%+\' ]+', ':[A-Za-z0-9]+'],
-		];
-
+	$routesFinal = array_filter($routesFinal, function ($a) use ($aliases) {
 		// apply aliases
 		$a[1] = str_replace($aliases[0], $aliases[1], $a[1]);
 
@@ -168,15 +182,15 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 			$route[0] = array_map($toUpperCase, $route[0]);
 		}
 
-		$aliases = [
-			[':int', ':string', ':alphanum'],
-			[':\d+', ':[A-Za-z0-9-_%+\' ]+', ':[A-Za-z0-9]+'],
-		];
-
 		// apply aliases
 		$route[1] = str_replace($aliases[0], $aliases[1], $route[1]);
 
-		$r->addRoute($route[0], $route[1], $route[2]);
+		try {
+			$r->addRoute($route[0], $route[1], $route[2]);
+		}
+		catch (\Exception $e) {
+			// duplicated route, just ignore
+		}
 	}
 
 	if (config('env') === 'dev') {
@@ -249,13 +263,15 @@ else {
 
 				$success = false;
 				$tmp_content = getCustomPage($pageName, $success);
-				if ($success) {
+				if ($success && $hooks->trigger(HOOK_BEFORE_PAGE_CUSTOM)) {
 					$content .= $tmp_content;
 					if (hasFlag(FLAG_CONTENT_PAGES) || superAdmin()) {
 						$pageInfo = getCustomPageInfo($pageName);
 						$content = $twig->render('admin.links.html.twig', ['page' => 'pages', 'id' => $pageInfo !== null ? $pageInfo['id'] : 0, 'hide' => $pageInfo !== null ? $pageInfo['hide'] : '0']
 							) . $content;
 					}
+
+					$hooks->trigger(HOOK_AFTER_PAGE_CUSTOM);
 
 					$page = $pageName;
 					$file = false;
@@ -279,7 +295,7 @@ else {
 					$uri = str_replace_first('/', '', $uri);
 				}
 
-				$page = $uri;
+				$page = str_replace('index.php/', '', $uri);
 				if (empty($page)) {
 					$page = 'news';
 				}
@@ -314,9 +330,16 @@ $content .= ob_get_contents();
 ob_end_clean();
 $hooks->trigger(HOOK_AFTER_PAGE);
 
+if (isset($_REQUEST['_page_only'])) {
+	echo $content;
+	die;
+}
+
 if(!isset($title)) {
 	$title = str_replace('index.php/', '', $page);
-	$title = ucfirst($title);
+	$title = str_replace(['_', '-', '/'], ' ', $page);
+
+	$title = ucwords($title);
 }
 
 if(setting('core.backward_support')) {
@@ -343,16 +366,16 @@ function getDatabasePages($withHidden = false): array
 
 function loadPageFromFileSystem($page, &$found): string
 {
-	$file = SYSTEM . 'pages/' . $page . '.php';
+	// feature: load pages from templates/ dir
+	global $template_path;
+	$file = $template_path . '/pages/' . $page . '.php';
 	if (!is_file($file)) {
-		// feature: convert camelCase to snake_case
-		// so instead of forum/move_thread
-		// we can write: forum/moveThread
-		$file = SYSTEM . 'pages/' . camelCaseToUnderscore($page) . '.php';
+		$file = SYSTEM . 'pages/' . $page . '.php';
 		if (!is_file($file)) {
-			// feature: load pages from templates/ dir
-			global $template_path;
-			$file = $template_path . '/pages/' . $page . '.php';
+			// feature: convert camelCase to snake_case
+			// so instead of forum/move_thread
+			// we can write: forum/moveThread
+			$file = SYSTEM . 'pages/' . camelCaseToUnderscore($page) . '.php';
 			if (!is_file($file)) {
 				$found = false;
 			}

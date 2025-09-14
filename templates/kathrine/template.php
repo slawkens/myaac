@@ -8,7 +8,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 		<link rel="stylesheet" href="<?php echo $template_path; ?>/style.css" type="text/css" />
 		<script type="text/javascript">
 			<?php
-				$twig->display('menu.js.html.twig', array('categories' => $config['menu_categories']));
+				$menus = get_template_menus();
+
+				$twig->display('menu.js.html.twig', ['menus' => $menus]);
 			?>
 		</script>
 		<script type="text/javascript" src="tools/basic.js"></script>
@@ -28,11 +30,24 @@ defined('MYAAC') or die('Direct access not allowed!');
 			<div id="header"></div>
 			<!-- End -->
 
+			<!-- Custom Style for #tabs -->
+			<?php
+			$menusCount = count($menus);
+			$tabsStyle = '';
+			if ($menusCount > 6) {
+				$tabsStyle .= 'padding-left: 4px;';
+				$tabsStyle .= 'padding-right: 12px;';
+			}
+			elseif ($menusCount > 5) {
+				$tabsStyle .= 'padding-left: 90px;';
+			}
+			?>
+
 			<!-- Menu Section -->
-			<div id="tabs">
+			<div id="tabs" style="<?= $tabsStyle; ?>">
 				<?php
 				foreach($config['menu_categories'] as $id => $cat) {
-					if($id != MENU_CATEGORY_SHOP || $config['gifts_system']) { ?>
+					if (($id != MENU_CATEGORY_SHOP || $config['gifts_system']) && isset($menus[$id])) { ?>
 				<span id="<?php echo $cat['id']; ?>" onclick="menuSwitch('<?php echo $cat['id']; ?>');"><?php echo $cat['name']; ?></span>
 				<?php
 					}
@@ -42,8 +57,6 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 			<div id="mainsubmenu">
 				<?php
-				$default_menu_color = "ffffff";
-
 				foreach($menus as $category => $menu) {
 					if(!isset($menus[$category])) {
 						continue;
@@ -54,8 +67,8 @@ defined('MYAAC') or die('Direct access not allowed!');
 					$size = count($menus[$category]);
 					$i = 0;
 
-					foreach($menus[$category] as $menu) {
-						echo '<a href="' . $menu['link_full'] . '"' . ($menu['blank'] ? ' target="_blank"' : '') . ' style="color: #' . (strlen($menu['color']) == 0 ? $default_menu_color : $menu['color']) . ';">' . $menu['name'] . '</a>';
+					foreach($menus[$category] as $link) {
+						echo '<a href="' . $link['link_full'] . '" ' . $link['target_blank'] . ' ' . $link['style_color'] . '>' . $link['name'] . '</a>';
 
 						if(++$i != $size) {
 							echo '<span class="separator"></span>';

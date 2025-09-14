@@ -114,6 +114,8 @@ function updateStatus() {
 
 	// get server status and save it to database
 	$serverInfo = new OTS_ServerInfo($status_ip, $status_port);
+	$serverInfo->setTimeout(setting('core.status_timeout'));
+
 	$serverStatus = $serverInfo->status();
 	if(!$serverStatus)
 	{

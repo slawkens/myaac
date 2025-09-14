@@ -60,7 +60,7 @@ class OTS_GuildRank extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws PDOException On PDO operation error.
  * @throws E_OTS_NotLoaded If given <var>$guild</var> object is not loaded.
  */
-    public function find($name, OTS_Guild $guild = null)
+    public function find($name, ?OTS_Guild $guild = null)
     {
         $where = '';
 

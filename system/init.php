@@ -12,11 +12,13 @@ use DebugBar\StandardDebugBar;
 use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
 use MyAAC\Hooks;
+use MyAAC\Plugins;
+use MyAAC\Models\Town;
 use MyAAC\Settings;
-use MyAAC\Towns;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
+global $config;
 if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
 }
@@ -38,15 +40,23 @@ if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
 	$config['server_path'] .= '/';
 
 // enable gzip compression if supported by the browser
-if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && function_exists('ob_gzhandler'))
+if(isset($config['gzip_output']) && $config['gzip_output'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && str_contains($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('ob_gzhandler'))
 	ob_start('ob_gzhandler');
 
 // cache
+global $cache;
 $cache = Cache::getInstance();
 
+// load plugins init.php
+foreach (Plugins::getInits() as $init) {
+	require $init;
+}
+
 // event system
+global $hooks;
 $hooks = new Hooks();
 $hooks->load();
+$hooks->trigger(HOOK_INIT);
 
 // twig
 require_once SYSTEM . 'twig.php';
@@ -93,8 +103,8 @@ if($config_lua_reload) {
 
 	// cache config
 	if($cache->enabled()) {
-		$cache->set('config_lua', serialize($config['lua']), 120);
-		$cache->set('server_path', $config['server_path']);
+		$cache->set('config_lua', serialize($config['lua']), 2 * 60);
+		$cache->set('server_path', $config['server_path'], 10 * 60);
 	}
 }
 unset($tmp);
@@ -134,13 +144,28 @@ $ots = POT::getInstance();
 $eloquentConnection = null;
 require_once SYSTEM . 'database.php';
 
+define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
+define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
+define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
+
+define('HAS_ACCOUNT_COINS', $db->hasColumn('accounts', 'coins'));
+define('HAS_ACCOUNT_COINS_TRANSFERABLE', $db->hasColumn('accounts', 'coins_transferable'));
+define('HAS_ACCOUNT_TRANSFERABLE_COINS', $db->hasColumn('accounts', 'transferable_coins'));
+const ACCOUNT_COINS_TRANSFERABLE_COLUMN = (HAS_ACCOUNT_COINS_TRANSFERABLE ? 'coins_transferable' : 'transferable_coins');
+
+$twig->addGlobal('logged', false);
+$twig->addGlobal('account_logged', new \OTS_Account());
+
 // verify myaac tables exists in database
 if(!defined('MYAAC_INSTALL') && !$db->hasTable('myaac_account_actions')) {
-	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting ' . BASE_URL . 'install');
+	throw new RuntimeException('Seems that the table myaac_account_actions of MyAAC doesn\'t exist in the database. This is a fatal error. You can try to reinstall MyAAC by visiting ' . (IS_CLI ? 'http://your-ip.com/' : BASE_URL) . 'install');
 }
 
 // execute migrations
-require SYSTEM . 'migrate.php';
+$configDatabaseAutoMigrate = config('database_auto_migrate');
+if (!isset($configDatabaseAutoMigrate) || $configDatabaseAutoMigrate) {
+	require SYSTEM . 'migrate.php';
+}
 
 // settings
 $settings = Settings::getInstance();
@@ -154,6 +179,9 @@ if (!isset($token) || !$token) {
 
 // deprecated config values
 require_once SYSTEM . 'compat/config.php';
+
+// deprecated classes
+require_once SYSTEM . 'compat/classes.php';
 
 date_default_timezone_set(setting('core.date_timezone'));
 
@@ -169,8 +197,17 @@ if($settingsItemImagesURL[strlen($settingsItemImagesURL) - 1] !== '/') {
 	setting(['core.item_images_url', $settingsItemImagesURL . '/']);
 }
 
-define('USE_ACCOUNT_NAME', $db->hasColumn('accounts', 'name'));
-define('USE_ACCOUNT_NUMBER', $db->hasColumn('accounts', 'number'));
-define('USE_ACCOUNT_SALT', $db->hasColumn('accounts', 'salt'));
+$towns = Cache::remember('towns', 10 * 60, function () use ($db) {
+	if ($db->hasTable('towns') && Town::count() > 0) {
+		return Town::orderBy('id', 'ASC')->pluck('name', 'id')->toArray();
+	}
 
-Towns::load();
+	return [];
+});
+
+if (count($towns) <= 0) {
+	$towns = setting('core.towns');
+}
+
+config(['towns', $towns]);
+unset($towns);

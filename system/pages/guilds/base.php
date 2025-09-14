@@ -15,3 +15,5 @@ else
 	define('GUILD_MEMBERS_TABLE', 'guild_membership');
 
 define('MOTD_EXISTS', $db->hasColumn('guilds', 'motd'));
+
+csrfProtect();

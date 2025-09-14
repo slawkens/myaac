@@ -7,8 +7,9 @@
 	<table border="0" cellspacing="0" cellpadding="0" width="100%">
 		<tr>
 			<td align="right" width="50%">
-				<form action="{{ getLink('guilds') }}?action=kick_player&guild={{ guild_name }}&name={{ player_name }}&todo=save" method="post">
+				<form action="{{ getLink('guilds') }}?action=kick_player&guild={{ guild_name }}&name={{ player_name }}" method="post">
 					{{ csrf() }}
+					<input type="hidden" name="todo" value="save" />
 					{{ include('buttons.submit.html.twig') }}
 				</form>
 			</td>

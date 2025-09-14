@@ -4,7 +4,7 @@ return [
 	MENU_CATEGORY_NEWS => [
 		'Latest News' => 'news',
 		'News Archive' => 'news/archive',
-		'Changelog' => 'changelog',
+		'Changelog' => 'change-log',
 	],
 	MENU_CATEGORY_ACCOUNT => [
 		'Account Management' => 'account/manage',
@@ -26,9 +26,9 @@ return [
 		'Team' => 'team',
 	],
 	MENU_CATEGORY_LIBRARY => [
-		'Monsters' => 'creatures',
+		'Monsters' => 'monsters',
 		'Spells' => 'spells',
-		'Server Info' => 'server-info',
+		'Server Info' => 'ots-info',
 		'Commands' => 'commands',
 		'Exp Stages' => 'exp-stages',
 		'Gallery' => 'gallery',

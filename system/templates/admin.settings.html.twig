@@ -80,7 +80,26 @@
 		}
 	});
 
-	$('#settings').submit(function(e) {
+	const noChangesText = "No changes has been made";
+
+	$('form')
+		.each(function(){
+			$(this).data('serialized', $(this).serialize())
+		})
+		.on('change input', function(){
+			const disable = $(this).serialize() === $(this).data('serialized');
+			$(this)
+				.find('input:submit, button:submit')
+				.prop('disabled', disable)
+				.prop('title', disable ? noChangesText : '')
+			;
+		})
+		.find('input:submit, button:submit')
+		.prop('disabled', true)
+		.prop('title', noChangesText)
+	;
+
+	$('#settings').on('submit', function(e) {
 		e.preventDefault();
 
 		$.ajax({
@@ -94,6 +113,13 @@
 					duration: 3000,
 					escapeMarkup: false,
 				}).showToast();
+
+				let $settings = $('#settings');
+				$settings.data('serialized', $settings.serialize());
+				$settings
+					.find('input:submit, button:submit')
+					.prop('disabled', true)
+					.prop('title', noChangesText);
 			},
 			error : function(response) {
 				Toastify({
@@ -108,4 +134,28 @@
 			}
 		});
 	});
+</script>
+
+<script>
+{% for key, value in settings %}
+	{% if value.type == 'password' %}
+			$(function () {
+				$('#show-hide-{{ key}} a').on('click', function(event) {
+					event.preventDefault();
+
+					const $showHideIcon = $('#show-hide-{{ key}} i');
+					const $showHideInput = $('#show-hide-{{ key }} input');
+					if($showHideInput.attr('type') === 'text'){
+						$showHideInput.attr('type', 'password');
+						$showHideIcon.addClass('fa-eye-slash');
+						$showHideIcon.removeClass('fa-eye');
+					}else if($showHideInput.attr("type") === 'password'){
+						$showHideInput.attr('type', 'text');
+						$showHideIcon.removeClass('fa-eye-slash');
+						$showHideIcon.addClass('fa-eye');
+					}
+				});
+			});
+	{% endif %}
+{% endfor %}
 </script>

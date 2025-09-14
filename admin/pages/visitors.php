@@ -19,8 +19,7 @@ $use_datatable = true;
 
 if (!setting('core.visitors_counter')): ?>
 	Visitors counter is disabled.<br/>
-	You can enable it by editing this configurable in <b>config.local.php</b> file:<br/>
-	<p style="margin-left: 3em;"><b>$config['visitors_counter'] = true;</b></p>
+	You can enable it in Settings -> General -> Visitors Counter.<br/>
 	<?php
 	return;
 endif;
@@ -46,7 +45,7 @@ foreach ($tmp as &$visitor) {
 		if ($dd->isBot()) {
 			$bot = $dd->getBot();
 			$message = '(Bot) %s, <a href="%s" target="_blank">%s</a>';
-			$browser = sprintf($message, $bot['category'], $bot['url'], $bot['name']);
+			$browser = sprintf($message, $bot['category'] ?? 'Unknown', $bot['url'] ?? '', $bot['name'] ?? 'Unknown name');
 		}
 		else {
 			$osFamily = OperatingSystem::getOsFamily($dd->getOs('name'));

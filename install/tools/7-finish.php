@@ -17,11 +17,11 @@ ini_set('max_execution_time', 300);
 ob_implicit_flush();
 
 header('X-Accel-Buffering: no');
-/*
+
 if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['saved'])) {
 	warning($locale['already_installed']);
 	return;
-}*/
+}
 
 require SYSTEM . 'init.php';
 
@@ -54,24 +54,34 @@ if ($db->hasTable('players')) {
 	}
 }
 
-Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
-Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
-
 DataLoader::setLocale($locale);
 DataLoader::load();
 
+// add menus entries
+require_once SYSTEM . 'migrations/17.php';
+$up();
+
 // update config.highscores_ids_hidden
 require_once SYSTEM . 'migrations/20.php';
+$up();
 
 // add z_polls tables
 require_once SYSTEM . 'migrations/22.php';
+$up();
 
 // add myaac_pages pages
 require_once SYSTEM . 'migrations/27.php';
+$up();
 require_once SYSTEM . 'migrations/30.php';
+$up();
 
 // new monster columns
 require_once SYSTEM . 'migrations/31.php';
+$up();
+
+// rules page
+require_once SYSTEM . 'migrations/45.php';
+$up();
 
 if(ModelsFAQ::count() == 0) {
 	ModelsFAQ::create([
@@ -83,6 +93,17 @@ if(ModelsFAQ::count() == 0) {
 $hooks->trigger(HOOK_INSTALL_FINISH);
 
 $db->setClearCacheAfter(true);
+
+// cleanup
+foreach($_SESSION as $key => $value) {
+	if(str_contains($key, 'var_')) {
+		unset($_SESSION[$key]);
+	}
+}
+unset($_SESSION['saved']);
+if(file_exists(CACHE . 'install.txt')) {
+	unlink(CACHE . 'install.txt');
+}
 
 $locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(str_replace('tools/', '',ADMIN_URL), $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
 $locale['step_finish_desc'] = str_replace('$HOMEPAGE$', generateLink(str_replace('tools/', '', BASE_URL), $locale['step_finish_homepage'], true), $locale['step_finish_desc']);

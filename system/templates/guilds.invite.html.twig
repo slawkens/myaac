@@ -1,5 +1,6 @@
-<form action="{{ getLink('guilds') }}?action=invite&guild={{ guild_name }}&todo=save" method="post">
+<form action="{{ getLink('guilds') }}?action=invite&guild={{ guild_name }}" method="post">
 	{{ csrf() }}
+	<input type="hidden" name="todo" value="save" />
 	Invite player with name:&nbsp;&nbsp;<input type="text" name="name">&nbsp;&nbsp;&nbsp;&nbsp;
 	{{ include('buttons.submit.html.twig') }}
 </form>

@@ -30,7 +30,7 @@ if(empty($errors)) {
 	if($logged) {
 		$guild_leader_char = $guild->getOwner();
 		$guild_leader = false;
-		$account_players = $account_logged->getPlayers();
+		$account_players = $account_logged->getPlayersList();
 
 		foreach($account_players as $player) {
 			if($guild_leader_char->getId() == $player->getId()) {
@@ -40,14 +40,13 @@ if(empty($errors)) {
 			}
 		}
 
-		if($guild_leader)
-		{
+		if($guild_leader) {
 			$max_image_size_b = setting('core.guild_image_size_kb') * 1024;
 			$allowed_ext = array('image/gif', 'image/jpg', 'image/pjpeg', 'image/jpeg', 'image/bmp', 'image/png', 'image/x-png');
 			$ext_name = array('image/gif' => 'gif', 'image/jpg' => 'jpg', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/bmp' => 'bmp', 'image/png' => 'png', 'image/x-png' => 'png');
 			$save_file_name = str_replace(' ', '_', strtolower($guild->getName()));
 			$save_path = GUILD_IMAGES_DIR . $save_file_name;
-			if(isset($_REQUEST['todo']) && $_REQUEST['todo'] == 'save')
+			if(isset($_POST['todo']) && $_POST['todo'] == 'save')
 			{
 				$file = $_FILES['newlogo'];
 				if(is_uploaded_file($file['tmp_name']))
@@ -97,13 +96,13 @@ if(empty($errors)) {
 
 			$guild_logo = $guild->getCustomField('logo_name');
 			if(empty($guild_logo) || !file_exists(GUILD_IMAGES_DIR . $guild_logo)) {
-				$guild_logo = "default.gif";
+				$guild_logo = 'default.gif';
 			}
 
 			$twig->display('guilds.change_logo.html.twig', array(
 				'guild_logo' => $guild_logo,
 				'guild' => $guild,
-				'max_image_size_b' => $max_image_size_b
+				//'max_image_size_b' => $max_image_size_b
 			));
 
 		}

@@ -9,16 +9,17 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
-use MyAAC\CsrfToken;
-use Twig\Environment as Twig_Environment;
+use MyAAC\Twig\EnvironmentBridge as MyAAC_Twig_EnvironmentBridge;
 use Twig\Extension\DebugExtension as Twig_DebugExtension;
 use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+global $twig, $twig_loader;
+
 $dev_mode = (config('env') === 'dev');
 $twig_loader = new Twig_FilesystemLoader(SYSTEM . 'templates');
-$twig = new Twig_Environment($twig_loader, array(
+$twig = new MyAAC_Twig_EnvironmentBridge($twig_loader, array(
 	'cache' => CACHE . 'twig/',
 	'auto_reload' => $dev_mode,
 	'debug' => $dev_mode
@@ -35,7 +36,11 @@ $twig->addExtension(new MyAAC\Twig\Extension\TypeCastingExtension());
 
 $filter = new TwigFilter('timeago', function ($datetime) {
 
-	$time = time() - strtotime($datetime);
+	if (!is_int($datetime)) {
+		$datetime = strtotime($datetime);
+	}
+
+	$time = time() - $datetime;
 
 	$units = array (
 		31536000 => 'year',
@@ -138,6 +143,11 @@ $function = new TwigFunction('csrfToken', function () {
 });
 $twig->addFunction($function);
 
+$function = new TwigFunction('session', function ($key) {
+	return session($key);
+});
+$twig->addFunction($function);
+
 $filter = new TwigFilter('urlencode', function ($s) {
 	return urlencode($s);
 });
@@ -146,3 +156,5 @@ $twig->addFilter($filter);
 unset($function, $filter);
 
 $hooks->trigger(HOOK_TWIG, ['twig' => $twig, 'twig_loader' => $twig_loader]);
+
+$twig->addGlobal('cache', $cache);

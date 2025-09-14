@@ -1,3 +1,4 @@
+<?php defined('MYAAC') or die('Direct access not allowed!'); ?>
 <!DOCTYPE html>
 <html dir="<?php echo $locale['direction']; ?>" lang="<?php echo $locale['lang']; ?>" xml:lang="<?php echo $locale['lang']; ?>">
 <head>

@@ -23,13 +23,9 @@ $use_datatable = true;
 if (setting('core.account_country'))
 	require SYSTEM . 'countries.conf.php';
 
-$nameOrNumberColumn = 'name';
-if (USE_ACCOUNT_NUMBER) {
-	$nameOrNumberColumn = 'number';
-}
+$nameOrNumberColumn = getAccountIdentityColumn();
 
 $hasSecretColumn = $db->hasColumn('accounts', 'secret');
-$hasCoinsColumn = $db->hasColumn('accounts', 'coins');
 $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $hasTypeColumn = $db->hasColumn('accounts', 'type');
 $hasGroupColumn = $db->hasColumn('accounts', 'group_id');
@@ -69,7 +65,7 @@ else if (isset($_REQUEST['search_email'])) {
 else if (isset($_REQUEST['search'])) {
 	$search_account = $_REQUEST['search'];
 	$min_size = 3;
-	if ($nameOrNumberColumn == 'number') {
+	if (in_array($nameOrNumberColumn, ['id', 'number'])) {
 		$min_size = 1;
 	}
 
@@ -139,11 +135,18 @@ else if (isset($_REQUEST['search'])) {
 			if (!Validator::email($email))
 				$errors['email'] = Validator::getLastError();
 
-			//tibia coins
-			if ($hasCoinsColumn) {
+			// tibia coins
+			if (HAS_ACCOUNT_COINS) {
 				$t_coins = $_POST['t_coins'];
 				verify_number($t_coins, 'Tibia coins', 12);
 			}
+
+			// transferable tibia coins
+			if (HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS) {
+				$t_coins_transferable = $_POST['t_coins_transferable'];
+				verify_number($t_coins_transferable, 'Transferable Tibia coins', 12);
+			}
+
 			// prem days
 			$p_days = (int)$_POST['p_days'];
 			verify_number($p_days, 'Prem days', 11);
@@ -188,10 +191,16 @@ else if (isset($_REQUEST['search'])) {
 				if ($hasSecretColumn) {
 					$account->setCustomField('secret', $secret);
 				}
+
 				$account->setCustomField('key', $key);
 				$account->setEMail($email);
-				if ($hasCoinsColumn) {
+
+				if (HAS_ACCOUNT_COINS) {
 					$account->setCustomField('coins', $t_coins);
+				}
+
+				if (HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS) {
+					$account->setCustomField(ACCOUNT_COINS_TRANSFERABLE_COLUMN, $t_coins_transferable);
 				}
 
 				$lastDay = 0;
@@ -212,7 +221,7 @@ else if (isset($_REQUEST['search'])) {
 				if(setting('core.account_country')) {
 					$account->setCountry($rl_country);
 				}
-				
+
 				$account->setCustomField('created', $created);
 				$account->setWebFlags($web_flags);
 				$account->setCustomField('web_lastlogin', $web_lastlogin);
@@ -226,9 +235,6 @@ else if (isset($_REQUEST['search'])) {
 
 					$password = encrypt($password);
 					$account->setPassword($password);
-
-					if (USE_ACCOUNT_SALT)
-						$account->setCustomField('salt', $salt);
 				}
 
 				$account->save();
@@ -248,7 +254,7 @@ else if (isset($_REQUEST['search'])) {
 						<thead>
 						<tr>
 							<th>ID</th>
-							<th><?= ($nameOrNumberColumn == 'number' ? 'Number' : 'Name'); ?></th>
+							<th><?= ($nameOrNumberColumn == 'name' ? 'Name' : 'Number'); ?></th>
 							<?php if($hasTypeColumn || $hasGroupColumn): ?>
 							<th>E-Mail</th>
 							<th>Position</th>
@@ -398,10 +404,16 @@ else if (isset($_REQUEST['search'])) {
 										<label for="email">Email:</label><?php echo (setting('core.mail_enabled') ? ' (<a href="' . ADMIN_URL . '?p=mailer&mail_to=' . $account->getEMail() . '">Send Mail</a>)' : ''); ?>
 										<input type="text" class="form-control" id="email" name="email" autocomplete="off" value="<?php echo $account->getEMail(); ?>"/>
 									</div>
-									<?php if ($hasCoinsColumn): ?>
+									<?php if (HAS_ACCOUNT_COINS): ?>
 										<div class="col-12 col-sm-12 col-lg-6">
 											<label for="t_coins">Tibia Coins:</label>
 											<input type="text" class="form-control" id="t_coins" name="t_coins" autocomplete="off" maxlength="11" value="<?php echo $account->getCustomField('coins') ?>"/>
+										</div>
+									<?php endif; ?>
+									<?php if (HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS): ?>
+										<div class="col-12 col-sm-12 col-lg-6">
+											<label for="t_coins_transferable">Transferable Tibia Coins:</label>
+											<input type="text" class="form-control" id="t_coins_transferable" name="t_coins_transferable" autocomplete="off" maxlength="11" value="<?php echo $account->getCustomField(ACCOUNT_COINS_TRANSFERABLE_COLUMN) ?>"/>
 										</div>
 									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-6">

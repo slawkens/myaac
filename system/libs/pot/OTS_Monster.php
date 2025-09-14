@@ -284,7 +284,7 @@ class OTS_Monster extends DOMDocument
  */
 	public function getLook()
 	{
-		$look = array();
+		$look = [];
 
 		$element = $this->documentElement->getElementsByTagName('look')->item(0);
 
@@ -292,14 +292,30 @@ class OTS_Monster extends DOMDocument
 			return $look;
 		}
 
-		$look['type'] = $element->getAttribute('type');
-		$look['typeex'] = $element->getAttribute('typeex');
-		$look['head'] = $element->getAttribute('head');
-		$look['body'] = $element->getAttribute('body');
-		$look['legs'] = $element->getAttribute('legs');
-		$look['feet'] = $element->getAttribute('feet');
-		$look['addons'] = $element->getAttribute('addons');
-		$look['corpse'] = $element->getAttribute('corpse');
+		if ($element->hasAttribute('typeex')) {
+			$look['typeEx'] = (int) $element->getAttribute('typeex');
+		}
+		if ($element->hasAttribute('type')) {
+			$look['type'] = (int) $element->getAttribute('type');
+		}
+		if ($element->hasAttribute('head')) {
+			$look['head'] = (int) $element->getAttribute('head');
+		}
+		if ($element->hasAttribute('body')) {
+			$look['body'] = (int) $element->getAttribute('body');
+		}
+		if ($element->hasAttribute('legs')) {
+			$look['legs'] = (int) $element->getAttribute('legs');
+		}
+		if ($element->hasAttribute('feet')) {
+			$look['feet'] = (int) $element->getAttribute('feet');
+		}
+		if ($element->hasAttribute('addons')) {
+			$look['addons'] = (int) $element->getAttribute('addons');
+		}
+		if ($element->hasAttribute('corpse')) {
+			$look['corpse'] = (int) $element->getAttribute('corpse');
+		}
 
 		return $look;
 	}

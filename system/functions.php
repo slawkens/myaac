@@ -49,7 +49,7 @@ function warning($message, $return = false) {
 	return message($message, 'warning', $return);
 }
 function note($message, $return = false) {
-	return info($message, $return);
+	return message($message, 'note', $return);
 }
 function info($message, $return = false) {
 	return message($message, 'info', $return);
@@ -89,13 +89,18 @@ function getForumBoardLink($board_id, $page = NULL): string {
 
 function getPlayerLink($name, $generate = true, bool $colored = false): string
 {
-	$player = new OTS_Player();
-
-	if(is_numeric($name)) {
-		$player->load((int)$name);
+	if (is_object($name) and $name instanceof OTS_Player) {
+		$player = $name;
 	}
 	else {
-		$player->find($name);
+		$player = new OTS_Player();
+
+		if(is_numeric($name)) {
+			$player->load((int)$name);
+		}
+		else {
+			$player->find($name);
+		}
 	}
 
 	if (!$player->isLoaded()) {
@@ -116,7 +121,7 @@ function getPlayerLink($name, $generate = true, bool $colored = false): string
 
 function getMonsterLink($name, $generate = true): string
 {
-	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'monsters/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'monsters?name=' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -124,16 +129,14 @@ function getMonsterLink($name, $generate = true): string
 
 function getHouseLink($name, $generate = true): string
 {
-	if(is_numeric($name))
-	{
+	if(is_numeric($name)) {
 		$house = House::find(intval($name), ['name']);
 		if ($house) {
 			$name = $house->name;
 		}
 	}
 
-
-	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'houses/' . urlencode($name);
+	$url = BASE_URL . (setting('core.friendly_urls') ? '' : 'index.php/') . 'houses?name=' . urlencode($name);
 
 	if(!$generate) return $url;
 	return generateLink($url, $name);
@@ -509,6 +512,13 @@ function template_place_holder($type): string
 	}
 	elseif ($type === 'body_start') {
 		$ret .= $twig->render('browsehappy.html.twig');
+
+		if (admin()) {
+			global $account_logged;
+			$ret .= $twig->render('admin-bar.html.twig', [
+				'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+			]);
+		}
 	}
 	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
@@ -542,33 +552,39 @@ function template_header($is_admin = false): string
  */
 function template_footer(): string
 {
-	global $views_counter;
-	$ret = '';
+	$footer = [];
+
 	if(admin()) {
-		$ret .= generateLink(ADMIN_URL, 'Admin Panel', true);
+		$footer[] = generateLink(ADMIN_URL, 'Admin Panel', true);
 	}
 
 	if(setting('core.visitors_counter')) {
 		global $visitors;
 		$amount = $visitors->getAmountVisitors();
-		$ret .= '<br/>Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
+		$footer[] = 'Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
 	}
 
 	if(setting('core.views_counter')) {
-		$ret .= '<br/>Page has been viewed ' . $views_counter . ' times.';
+		global $views_counter;
+		$footer[] = 'Page has been viewed ' . $views_counter . ' times.';
 	}
 
 	if(setting('core.footer_load_time')) {
-		$ret .= '<br/>Load time: ' . round(microtime(true) - START_TIME, 4) . ' seconds.';
+		$footer[] = 'Load time: ' . round(microtime(true) - START_TIME, 4) . ' seconds.';
 	}
 
 	$settingFooter = setting('core.footer');
 	if(isset($settingFooter[0])) {
-		$ret .= '<br/>' . $settingFooter;
+		$footer[] = '' . $settingFooter;
 	}
 
 	// please respect my work and help spreading the word, thanks!
-	return $ret . '<br/>' . base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
+	$footer[] = base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
+
+	global $hooks;
+	$hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
+
+	return implode('<br/>', $footer);
 }
 
 function template_ga_code()
@@ -584,24 +600,12 @@ function template_form()
 {
 	global $template_name;
 
-	$cache = Cache::getInstance();
-	if($cache->enabled())
-	{
-		$tmp = '';
-		if($cache->fetch('templates', $tmp)) {
-			$templates = unserialize($tmp);
-		}
-		else
-		{
-			$templates = get_templates();
-			$cache->set('templates', serialize($templates), 30);
-		}
-	}
-	else
-		$templates = get_templates();
+	$templates = Cache::remember('templates', 5 * 60, function() {
+		return get_templates();
+	});
 
 	$options = '';
-	foreach($templates as $key => $value)
+	foreach($templates as $value)
 		$options .= '<option ' . ($template_name == $value ? 'SELECTED' : '') . '>' . $value . '</option>';
 
 	global $twig;
@@ -768,6 +772,10 @@ function formatExperience($exp, $color = true)
 		$ret .= '</span>';
 
 	return $ret;
+}
+
+function getExperienceForLevel($level): float|int {
+	return ( 50 / 3 ) * pow( $level, 3 ) - ( 100 * pow( $level, 2 ) ) + ( ( 850 / 3 ) * $level ) - 200;
 }
 
 function get_locales()
@@ -985,37 +993,36 @@ function load_config_lua($filename)
 		foreach($lines as $ln => $line)
 		{
 			$line = trim($line);
-			if(@$line[0] === '{' || @$line[0] === '}') {
+			if(isset($line[0]) && ($line[0] === '{' || $line[0] === '}')) {
 				// arrays are not supported yet
 				// just ignore the error
 				continue;
 			}
+
 			$tmp_exp = explode('=', $line, 2);
-			if(strpos($line, 'dofile') !== false)
-			{
+			if(str_contains($line, 'dofile')) {
 				$delimiter = '"';
-				if(strpos($line, $delimiter) === false)
+				if(!str_contains($line, $delimiter)) {
 					$delimiter = "'";
+				}
 
 				$tmp = explode($delimiter, $line);
 				$result = array_merge($result, load_config_lua($config['server_path'] . $tmp[1]));
 			}
-			else if(count($tmp_exp) >= 2)
-			{
+			else if(count($tmp_exp) >= 2) {
 				$key = trim($tmp_exp[0]);
-				if(0 !== strpos($key, '--'))
-				{
+				if(!str_starts_with($key, '--')) {
 					$value = trim($tmp_exp[1]);
-					if(strpos($value, '--') !== false) {// found some deep comment
+					if(str_contains($value, '--')) {// found some deep comment
 						$value = preg_replace('/--.*$/i', '', $value);
 					}
 
 					if(is_numeric($value))
 						$result[$key] = (float) $value;
 					elseif(in_array(@$value[0], array("'", '"')) && in_array(@$value[strlen($value) - 1], array("'", '"')))
-						$result[$key] = (string) substr(substr($value, 1), 0, -1);
+						$result[$key] = substr(substr($value, 1), 0, -1);
 					elseif(in_array($value, array('true', 'false')))
-						$result[$key] = ($value === 'true') ? true : false;
+						$result[$key] = $value === 'true';
 					elseif(@$value[0] === '{') {
 						// arrays are not supported yet
 						// just ignore the error
@@ -1023,12 +1030,19 @@ function load_config_lua($filename)
 					}
 					else
 					{
-						foreach($result as $tmp_key => $tmp_value) // load values definied by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
+						foreach($result as $tmp_key => $tmp_value) { // load values defined by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
 							$value = str_replace($tmp_key, $tmp_value, $value);
-						$ret = @eval("return $value;");
-						if((string) $ret == '' && trim($value) !== '""') // = parser error
-						{
-							throw new RuntimeException('ERROR: Loading config.lua file. Line <b>' . ($ln + 1) . '</b> of LUA config file is not valid [key: <b>' . $key . '</b>]');
+						}
+
+						try {
+							$ret = eval("return $value;");
+						}
+						catch (Throwable $e) {
+							throw new RuntimeException('ERROR: Loading config.lua file. Line: ' . ($ln + 1) . ' - Unable to parse value "' . $value . '" - ' . $e->getMessage());
+						}
+
+						if((string) $ret == '' && trim($value) !== '""') {
+							throw new RuntimeException('ERROR: Loading config.lua file. Line ' . ($ln + 1) . ' is not valid [key: ' . $key . ']');
 						}
 						$result[$key] = $ret;
 					}
@@ -1037,8 +1051,7 @@ function load_config_lua($filename)
 		}
 	}
 
-	$result = array_merge($result, isset($config['lua']) ? $config['lua'] : array());
-	return $result;
+	return array_merge($result, $config['lua'] ?? []);
 }
 
 function str_replace_first($search,$replace, $subject) {
@@ -1064,15 +1077,34 @@ function get_browser_real_ip() {
 
 	return '0';
 }
-function setSession($key, $data) {
-	$_SESSION[setting('core.session_prefix') . $key] = $data;
+function setSession($key, $value = null): void {
+	if (!is_array($key)) {
+		$key = [$key => $value];
+	}
+
+	foreach ($key as $arrayKey => $arrayValue) {
+		if (is_null($arrayValue)) {
+			unsetSession($arrayKey);
+		}
+		else {
+			$_SESSION[setting('core.session_prefix') . $arrayKey] = $arrayValue;
+		}
+	}
 }
 function getSession($key) {
-	$key = setting('core.session_prefix') . $key;
-	return isset($_SESSION[$key]) ? $_SESSION[$key] : false;
+	return $_SESSION[setting('core.session_prefix') . $key] ?? null;
 }
-function unsetSession($key) {
+function unsetSession($key): void {
 	unset($_SESSION[setting('core.session_prefix') . $key]);
+}
+
+function session($key): mixed {
+	if (is_array($key)) {
+		setSession($key);
+		return null;
+	}
+
+	return getSession($key);
 }
 
 function csrf(bool $return = false): string {
@@ -1097,20 +1129,16 @@ function csrfProtect(): void
 	}
 }
 
-function getTopPlayers($limit = 5) {
+function getTopPlayers($limit = 5, $skill = 'level') {
 	global $db;
 
-	$cache = Cache::getInstance();
-	if($cache->enabled()) {
-		$tmp = '';
-		if($cache->fetch('top_' . $limit . '_level', $tmp)) {
-			$players = unserialize($tmp);
-		}
+	if ($skill === 'level') {
+		$skill = 'experience';
 	}
 
-	if (!isset($players)) {
+	return Cache::remember("top_{$limit}_{$skill}", 2 * 60, function () use ($db, $limit, $skill) {
 		$columns = [
-			'id', 'name', 'level', 'vocation', 'experience',
+			'id', 'name', 'level', 'vocation', 'experience', 'balance',
 			'looktype', 'lookhead', 'lookbody', 'looklegs', 'lookfeet'
 		];
 
@@ -1118,36 +1146,27 @@ function getTopPlayers($limit = 5) {
 			$columns[] = 'lookaddons';
 		}
 
-		if ($db->hasColumn('players', 'online')) {
-			$columns[] = 'online';
-		}
-
-		$players = Player::query()
+		return Player::query()
 			->select($columns)
 			->withOnlineStatus()
 			->notDeleted()
 			->where('group_id', '<', setting('core.highscores_groups_hidden'))
 			->whereNotIn('id', setting('core.highscores_ids_hidden'))
 			->where('account_id', '!=', 1)
-			->orderByDesc('experience')
+			->orderByDesc($skill)
 			->limit($limit)
 			->get()
 			->map(function ($e, $i) {
 				$row = $e->toArray();
 				$row['online'] = $e->online_status;
 				$row['rank'] = $i + 1;
+				$row['outfit_url'] = $e->outfit_url;
 
 				unset($row['online_table']);
 
 				return $row;
 			})->toArray();
-
-		if($cache->enabled()) {
-			$cache->set('top_' . $limit . '_level', serialize($players), 120);
-		}
-	}
-
-	return $players;
+	});
 }
 
 function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
@@ -1209,7 +1228,8 @@ function setting($key)
 		return $settings[$key[0]] = $key[1];
 	}
 
-	return $settings[$key]['value'];
+	$ret = $settings[$key];
+	return isset($ret) ? $ret['value'] : null;
 }
 
 function clearCache()
@@ -1258,13 +1278,14 @@ function clearCache()
 		$db->setClearCacheAfter(true);
 	}
 
+	if (function_exists('apcu_clear_cache')) {
+		apcu_clear_cache();
+	}
+
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
 	deleteDirectory(CACHE . 'twig', ['index.html'], true);
 	deleteDirectory(CACHE . 'plugins', ['index.html'], true);
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html', 'persistent'], true);
-
-	// routes cache
-	clearRouteCache();
 
 	global $hooks;
 	$hooks->trigger(HOOK_CACHE_CLEAR, ['cache' => Cache::getInstance()]);
@@ -1571,22 +1592,6 @@ function right($str, $length) {
 	return substr($str, -$length);
 }
 
-function getMonsterImgPath($monster): string
-{
-	$monster_path = setting('core.monsters_images_url');
-	$monster_gfx_name = trim(strtolower($monster)) . setting('core.monsters_images_extension');
-	if (!file_exists($monster_path . $monster_gfx_name)) {
-		$monster_gfx_name = str_replace(" ", "", $monster_gfx_name);
-		if (file_exists($monster_path . $monster_gfx_name)) {
-			return $monster_path . $monster_gfx_name;
-		} else {
-			return $monster_path . 'nophoto.png';
-		}
-	} else {
-		return $monster_path . $monster_gfx_name;
-	}
-}
-
 function between($x, $lim1, $lim2) {
 	if ($lim1 < $lim2) {
 		$lower = $lim1; $upper = $lim2;
@@ -1679,8 +1684,23 @@ function isRequestMethod(string $method): bool {
 	return strtolower($_SERVER['REQUEST_METHOD']) == strtolower($method);
 }
 
+function getAccountIdentityColumn(): string
+{
+	if (USE_ACCOUNT_NAME) {
+		return 'name';
+	}
+	elseif (USE_ACCOUNT_NUMBER) {
+		return 'number';
+	}
+
+	return 'id';
+}
+
 // validator functions
 require_once SYSTEM . 'compat/base.php';
 
 // custom functions
-require SYSTEM . 'functions_custom.php';
+$customFunctions = SYSTEM . 'functions_custom.php';
+if (is_file($customFunctions)) {
+	require $customFunctions;
+}

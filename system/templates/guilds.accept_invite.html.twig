@@ -7,12 +7,15 @@
 	</tr>
 	<tr bgcolor="{{ config.darkborder }}">
 		<td>
-			<form action="{{ getLink('guilds') }}?action=accept_invite&guild={{ guild_name }}&todo=save" method="post">
+			<form action="{{ getLink('guilds') }}?action=accept_invite&guild={{ guild_name }}" method="post">
 				{{ csrf() }}
+
+				<input type="hidden" name="todo" value="save" />
+
 				{% set i = 0 %}
 				{% for player in invited_players %}
-				<input type="radio" name="name" id="name_{{ i }}" value="{{ player }}" /><label for="name_{{ i }}">{{ player }}</label>
-				{% set i = i + 1 %}
+					<input type="radio" name="name" id="name_{{ i }}" value="{{ player }}" /><label for="name_{{ i }}">{{ player }}</label>
+					{% set i = i + 1 %}
 				{% endfor %}
 				{{ include('buttons.submit.html.twig') }}
 			</form>

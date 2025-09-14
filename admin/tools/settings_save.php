@@ -1,6 +1,5 @@
 <?php
 
-use MyAAC\Hooks;
 use MyAAC\Settings;
 
 const MYAAC_ADMIN = true;

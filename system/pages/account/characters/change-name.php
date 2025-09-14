@@ -17,6 +17,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 $player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : NULL;
 $name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : NULL;
 if((!setting('core.account_change_character_name')))
@@ -40,8 +42,13 @@ else
 
 		if(empty($errors))
 		{
-			if(!admin() && !Validator::newCharacterName($name))
+			if(!Validator::characterName($name)) {
 				$errors[] = Validator::getLastError();
+			}
+
+			if(!admin() && !Validator::newCharacterName($name)) {
+				$errors[] = Validator::getLastError();
+			}
 		}
 
 		if(empty($errors)) {

@@ -1,23 +1,25 @@
 <?php
+/**
+ * @var OTS_DB_MySQL $db
+ */
 
 use MyAAC\Plugins;
 
-if(!$db->hasTable('myaac_menu')) {
-	$db->query("
-CREATE TABLE `myaac_menu`
-(
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`template` VARCHAR(255) NOT NULL,
-	`name` VARCHAR(255) NOT NULL,
-	`link` VARCHAR(255) NOT NULL,
-	`category` INT(11) NOT NULL DEFAULT 1,
-	`ordering` INT(11) NOT NULL DEFAULT 0,
-	`enabled` INT(1) NOT NULL DEFAULT 1,
-	PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-");
-}
+$up = function () use ($db) {
+	if (!$db->hasTable(TABLE_PREFIX . 'menu')) {
+		$db->exec(file_get_contents(__DIR__ . '/17-menu.sql'));
+	}
 
-Plugins::installMenus('kathrine', require TEMPLATES . 'kathrine/menus.php');
-Plugins::installMenus('tibiacom', require TEMPLATES . 'tibiacom/menus.php');
+	$themes = ['kathrine', 'tibiacom',];
+	foreach ($themes as $theme) {
+		$file = TEMPLATES . $theme . '/menus.php';
+		if (is_file($file)) {
+			Plugins::installMenus($theme, require $file);
+		}
+	}
+};
+
+$down = function () use ($db) {
+	$db->dropTable(TABLE_PREFIX . 'menu');
+};
 

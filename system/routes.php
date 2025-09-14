@@ -22,11 +22,11 @@ return [
 	['GET', 'account/confirm-email/{hash:alphanum}', 'account/confirm-email.php'],
 
 	['GET', 'bans/{page:int}', 'bans.php'],
-	[['GET', 'POST'], 'characters[/{name:string}]', 'characters.php'],
-	['GET', 'changelog[/{page:int}]', 'changelog.php'],
-	[['GET', 'POST'], 'monsters[/{name:string}]', 'monsters.php'],
+	[['GET', 'POST'], 'characters/{name:[A-Za-z0-9-_%+\' \[\]]+}', 'characters.php'],
+	['GET', 'changelog/{page:int}', 'changelog.php'],
+	[['GET', 'POST'], 'monsters/{name:string}', 'monsters.php'],
 
-	[['GET', 'POST'], 'faq[/{action:string}]', 'faq.php'],
+	[['GET', 'POST'], 'faq/{action:string}', 'faq.php'],
 
 	[['GET', 'POST'], 'forum/{action:string}', 'forum.php'],
 	['GET', 'forum/board/{id:int}', 'forum/show_board.php'],
@@ -39,10 +39,10 @@ return [
 
 	[['GET', 'POST'], 'guilds/{guild:string}', 'guilds/show.php'],
 
-	['GET', 'highscores/{list:alphanum}/{vocation:alphanum}/{page:int}', 'highscores.php'],
-	['GET', 'highscores/{list:alphanum}/{page:int}', 'highscores.php'],
-	['GET', 'highscores/{list:alphanum}/{vocation:alphanum}', 'highscores.php'],
-	['GET', 'highscores/{list:alphanum}', 'highscores.php'],
+	['GET', 'highscores/{list:string}/{vocation:string}/{page:int}', 'highscores.php'],
+	['GET', 'highscores/{list:string}/{page:int}', 'highscores.php'],
+	['GET', 'highscores/{list:string}/{vocation:string}', 'highscores.php'],
+	['GET', 'highscores/{list:string}', 'highscores.php'],
 /*
 	'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
 	'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2'),

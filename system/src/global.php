@@ -5,9 +5,12 @@ const SKILL_BALANCE = -2;
 
 $i = 0;
 
+define('HOOK_INIT', ++$i);
 define('HOOK_STARTUP', ++$i);
 define('HOOK_BEFORE_PAGE', ++$i);
+define('HOOK_BEFORE_PAGE_CUSTOM', ++$i);
 define('HOOK_AFTER_PAGE', ++$i);
+define('HOOK_AFTER_PAGE_CUSTOM', ++$i);
 define('HOOK_FINISH', ++$i);
 define('HOOK_TIBIACOM_ARTICLE', ++$i);
 define('HOOK_TIBIACOM_BORDER_3', ++$i);
@@ -51,6 +54,7 @@ define('HOOK_ACCOUNT_MANAGE_BEFORE_GENERAL_INFORMATION', ++$i);
 define('HOOK_ACCOUNT_MANAGE_BEFORE_PUBLIC_INFORMATION', ++$i);
 define('HOOK_ACCOUNT_MANAGE_BEFORE_ACCOUNT_LOGS', ++$i);
 define('HOOK_ACCOUNT_MANAGE_BEFORE_CHARACTERS', ++$i);
+define('HOOK_ACCOUNT_MANAGE_AFTER_CHARACTERS', ++$i);
 define('HOOK_ACCOUNT_LOGIN_BEFORE_PAGE', ++$i);
 define('HOOK_ACCOUNT_LOGIN_BEFORE_ACCOUNT', ++$i);
 define('HOOK_ACCOUNT_LOGIN_AFTER_ACCOUNT', ++$i);
@@ -71,6 +75,14 @@ define('HOOK_ADMIN_BODY_START', ++$i);
 define('HOOK_ADMIN_BODY_END', ++$i);
 define('HOOK_ADMIN_BEFORE_PAGE', ++$i);
 define('HOOK_ADMIN_MENU', ++$i);
+define('HOOK_ADMIN_NEWS_ADD_PRE', ++$i);
+define('HOOK_ADMIN_NEWS_ADD', ++$i);
+define('HOOK_ADMIN_NEWS_UPDATE_PRE', ++$i);
+define('HOOK_ADMIN_NEWS_UPDATE', ++$i);
+define('HOOK_ADMIN_NEWS_DELETE_PRE', ++$i);
+define('HOOK_ADMIN_NEWS_DELETE', ++$i);
+define('HOOK_ADMIN_NEWS_TOGGLE_HIDE_PRE', ++$i);
+define('HOOK_ADMIN_NEWS_TOGGLE_HIDE', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_ACCOUNT', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_PASSWORD', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_SIGN_IN', ++$i);
@@ -81,6 +93,7 @@ define('HOOK_EMAIL_CONFIRMED', ++$i);
 define('HOOK_GUILDS_BEFORE_GUILD_HEADER', ++$i);
 define('HOOK_GUILDS_AFTER_GUILD_HEADER', ++$i);
 define('HOOK_GUILDS_AFTER_GUILD_INFORMATION', ++$i);
+define('HOOK_GUILDS_AFTER_MANAGE_BUTTON', ++$i);
 define('HOOK_GUILDS_AFTER_GUILD_MEMBERS', ++$i);
 define('HOOK_GUILDS_AFTER_INVITED_CHARACTERS', ++$i);
 define('HOOK_TWIG', ++$i);
@@ -88,7 +101,13 @@ define('HOOK_CACHE_CLEAR', ++$i);
 define('HOOK_INSTALL_FINISH', ++$i);
 define('HOOK_INSTALL_FINISH_END', ++$i);
 
-const HOOK_FIRST = HOOK_STARTUP;
+// hook filters
+define('HOOK_FILTER_ROUTES', ++$i);
+define('HOOK_FILTER_TWIG_DISPLAY', ++$i);
+define('HOOK_FILTER_TWIG_RENDER', ++$i);
+define('HOOK_FILTER_THEME_FOOTER', ++$i);
+
+const HOOK_FIRST = HOOK_INIT;
 define('HOOK_LAST', $i);
 
 function is_sub_dir($path = NULL, $parent_folder = BASE): bool|string

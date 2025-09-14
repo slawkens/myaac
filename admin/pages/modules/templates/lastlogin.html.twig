@@ -19,7 +19,7 @@
 						{% set i = i + 1 %}
 						<tr>
 							<th>{{ i }}</th>
-							<td><a href="?p=players&search_name={{ result.name }}">{{ result.name }}</a></td>
+							<td><a href="?p=players&id={{ result.id }}">{{ result.name }}</a></td>
 							<td>{{ result.lastlogin|date("M d Y, H:i:s") }}</td>
 						</tr>
 					{% endfor %}

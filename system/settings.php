@@ -11,7 +11,31 @@
  *  - for number: min, max, step
  */
 
+use MyAAC\Cache;
 use MyAAC\Settings;
+
+$templates = Cache::remember('templates', 5 * 60, function () {
+	return get_templates();
+});
+$defaultTemplate = in_array('kathrine', $templates) ? 'kathrine' : $templates[0];
+
+global $db;
+
+if (!IS_CLI) {
+	require SYSTEM . 'base.php';
+
+	$serverUrl = 'http' . (isHttps() ? 's' : '') . '://' . $baseHost;
+	$siteURL = $serverUrl . $baseDir;
+}
+
+$donateColumnOptions = [
+	'premium_points' => 'Premium Points',
+	'coins' => 'Coins',
+];
+
+if (defined('HAS_ACCOUNT_COINS_TRANSFERABLE') && (HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS)) {
+	$donateColumnOptions[ACCOUNT_COINS_TRANSFERABLE_COLUMN] = 'Coins Transferable';
+}
 
 return [
 	'name' => 'MyAAC',
@@ -23,6 +47,13 @@ return [
 		[
 			'type' => 'section',
 			'title' => 'General'
+		],
+		'site_url' => [
+			'name' => 'Website URL',
+			'type' => 'text',
+			'desc' => 'Website address of this MyAAC instance',
+			'default' => IS_CLI ? '' : $siteURL,
+			'is_config' => true,
 		],
 		'env' => [
 			'name' => 'App Environment',
@@ -88,7 +119,7 @@ return [
 			'type' => 'options',
 			'options' => '$templates',
 			'desc' => 'Name of the template used by website',
-			'default' => 'kathrine',
+			'default' => $defaultTemplate,
 		],
 		'template_allow_change' => [
 			'name' => 'Template Allow Change',
@@ -232,15 +263,14 @@ return [
 			'name' => 'Client Version',
 			'type' => 'options',
 			'options' => '$clients',
-			'desc' => 'what client version are you using on this OT?<br/>used for the Downloads page and some templates aswell',
+			'desc' => 'what client version are you using on this OT?<br/>used for the Downloads page and some templates as well',
 			'default' => 710
 		],
 		'towns' => [
 			'name' => 'Towns',
 			'type' => 'textarea',
-			'desc' => "if you use TFS 1.3 with support for 'towns' table in database, then you can ignore this - it will be configured automatically (from MySQL database - Table - towns)<br/>" .
-				"otherwise it will try to load from your .OTBM map file<br/>" .
-				"if you don't see towns on website, then you need to fill this out",
+			'desc' => "If you use TFS 1.3+ with support for 'towns' table in database, then you can ignore this - it will be automatically configured from there.<br/>" .
+				"If you don't see towns on website, then you need to fill this out",
 			'default' => "0=No Town\n1=Sample Town",
 			'callbacks' => [
 				'get' => function ($value) {
@@ -343,7 +373,7 @@ return [
 		],
 		'database_password' => [
 			'name' => 'Database Password',
-			'type' => 'text',
+			'type' => 'password',
 			'default' => '',
 			'show_if' => [
 				'database_overwrite', '=', 'true'
@@ -391,6 +421,13 @@ return [
 			'desc' => 'Use database permanent connection (like server), may speed up your site',
 			'type' => 'boolean',
 			'default' => false,
+			'is_config' => true,
+		],
+		'database_auto_migrate' => [
+			'name' => 'Database Auto Migrate',
+			'desc' => 'Migrate database to latest version in myaac, automatically.',
+			'type' => 'boolean',
+			'default' => true,
 			'is_config' => true,
 		],
 		[
@@ -497,7 +534,7 @@ Sent by MyAAC,<br/>
 		'smtp_port' => [
 			'name' => 'SMTP Host',
 			'type' => 'number',
-			'desc' => '25 (default) / 465 (ssl, GMail) / 587 (tls, Microsoft Outlook)',
+			'desc' => '25 (default) / 587 (tls - GMail, Microsoft Outlook)',
 			'default' => 25,
 			'show_if' => [
 				'mail_enabled', '=', 'true'
@@ -524,7 +561,8 @@ Sent by MyAAC,<br/>
 		'smtp_pass' => [
 			'name' => 'SMTP Password',
 			'type' => 'password',
-			'desc' => 'Here your email password to authenticate with SMTP',
+			'desc' => 'Here your email password to authenticate with SMTP.' . PHP_EOL
+				. 'For GMail use generated App password - https://myaccount.google.com/apppasswords.',
 			'default' => '',
 			'show_if' => [
 				'mail_enabled', '=', 'true'
@@ -534,7 +572,8 @@ Sent by MyAAC,<br/>
 			'name' => 'SMTP Security',
 			'type' => 'options',
 			'options' => ['None', 'SSL', 'TLS'],
-			'desc' => 'What kind of encryption to use on the SMTP connection',
+			'desc' => 'What kind of encryption to use on the SMTP connection.' . PHP_EOL
+				. '(Gmail, Outlook - tls).',
 			'default' => 0,
 			'show_if' => [
 				'mail_enabled', '=', 'true'
@@ -658,6 +697,20 @@ Sent by MyAAC,<br/>
 			'name' => 'Default Account Premium Points',
 			'type' => 'number',
 			'desc' => 'Default premium points on new account',
+			'default' => 0,
+		],
+		'account_coins' => [
+			'name' => 'Default Account Coins',
+			'type' => 'number',
+			'desc' => 'Default coins on new account',
+			'hidden' => ($db && !HAS_ACCOUNT_COINS),
+			'default' => 0,
+		],
+		'account_coins_transferable' => [
+			'name' => 'Default Account Transferable Coins',
+			'type' => 'number',
+			'desc' => 'Default transferable coins on new account',
+			'hidden' => ($db && !HAS_ACCOUNT_COINS_TRANSFERABLE && !HAS_ACCOUNT_TRANSFERABLE_COINS),
 			'default' => 0,
 		],
 		'account_mail_change' => [
@@ -1021,9 +1074,15 @@ Sent by MyAAC,<br/>
 		'highscores_cache_ttl' => [
 			'name' => 'Highscores Cache TTL (in minutes)',
 			'type' => 'number',
-			'min' => 1,
-			'desc' => 'How often to update highscores from database in minutes (default 15 minutes). Too low may cause lags on website.',
+			'min' => 0,
+			'desc' => 'How often to update highscores from database in minutes. Too low may slow down your website.<br/>0 to disable.',
 			'default' => 15,
+		],
+		'highscores_skills_box' => [
+			'name' => 'Display Skills Box',
+			'type' => 'boolean',
+			'desc' => 'show "Choose a skill" box on the highscores (allowing peoples to sort highscores by skill)?',
+			'default' => true,
 		],
 		'highscores_vocation_box' => [
 			'name' => 'Display Vocation Box',
@@ -1036,6 +1095,12 @@ Sent by MyAAC,<br/>
 			'type' => 'boolean',
 			'desc' => 'Show player vocation under his nickname?',
 			'default' => true,
+		],
+		'highscores_online_status' => [
+			'name' => 'Display Online Status',
+			'type' => 'boolean',
+			'desc' => 'Show player status as red (offline) or green (online)',
+			'default' => false,
 		],
 		'highscores_frags' => [
 			'name' => 'Display Top Frags',
@@ -1191,6 +1256,14 @@ Sent by MyAAC,<br/>
 			'type' => 'section',
 			'title' => 'Online Page'
 		],
+		'online_cache_ttl' => [
+			'name' => 'Online Cache TTL (in minutes)',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'How often to update online list from database in minutes. Too low may slow down your website.' . PHP_EOL .
+				'0 to disable.',
+			'default' => 15,
+		],
 		'online_record' => [
 			'name' => 'Display Players Record',
 			'type' => 'boolean',
@@ -1226,6 +1299,12 @@ Sent by MyAAC,<br/>
 			'type' => 'boolean',
 			'desc' => '',
 			'default' => false,
+		],
+		'online_datacenter' => [
+			'name' => 'Data Center',
+			'type' => 'text',
+			'desc' => 'Server Location, will be shown on online page',
+			'default' => 'Poland - Warsaw',
 		],
 		[
 			'type' => 'section',
@@ -1389,7 +1468,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Outfit Images URL',
 			'type' => 'text',
 			'desc' => 'Set to animoutfit.php for animated outfit',
-			'default' => 'https://outfit-images.ots.me/outfit.php',
+			'default' => 'https://outfit-images.ots.me/latest/outfit.php',
 		],
 		'outfit_images_wrong_looktypes' => [
 			'name' => 'Outfit Images Wrong Looktypes',
@@ -1459,7 +1538,7 @@ Sent by MyAAC,<br/>
 		],
 		'status_timeout' => [
 			'name' => 'Status Timeout',
-			'type' => 'number',
+			'type' => 'double',
 			'min' => 0,
 			'max' => 10, // more than 10 seconds waiting makes no sense
 			'step' => 0.1,
@@ -1528,13 +1607,14 @@ Sent by MyAAC,<br/>
 			'name' => 'Donate Column',
 			'type' => 'options',
 			'desc' => 'What to give to player after donation - what column in accounts table to use.',
-			'options' => ['premium_points' => 'Premium Points', 'coins' => 'Coins'],
+			'options' => $donateColumnOptions,
 			'default' => 'premium_points',
 			'callbacks' => [
 				'beforeSave' => function($key, $value, &$errorMessage) {
 					global $db;
-					if ($value == 'coins' && !$db->hasColumn('accounts', 'coins')) {
-						$errorMessage = "Shop: Donate Column: Cannot set column to coins, because it doesn't exist in database.";
+
+					if (!$db->hasColumn('accounts', $value)) {
+						$errorMessage = "Shop: Donate Column: Cannot set column to $value, because it doesn't exist in database.";
 						return false;
 					}
 					return true;
@@ -1608,14 +1688,20 @@ Sent by MyAAC,<br/>
 			'name' => 'Login Attempts Limit',
 			'type' => 'number',
 			'desc' => 'Number of incorrect login attempts before banning the IP',
-			'default' => 5, // Ajuste conforme necessário
+			'default' => 5,
+			'show_if' => [
+				'account_login_ipban_protection', '=', 'true'
+			]
 		],
 
 		'account_login_ban_time' => [
 			'name' => 'Ban Time (Minutes)',
 			'type' => 'number',
 			'desc' => 'Time in minutes the IP will be banned after exceeding login attempts',
-			'default' => 30, // Ajuste conforme necessário
+			'default' => 30,
+			'show_if' => [
+				'account_login_ipban_protection', '=', 'true'
+			]
 		],
 	],
 	'callbacks' => [

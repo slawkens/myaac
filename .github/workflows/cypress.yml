@@ -1,9 +1,9 @@
 name: Cypress
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
   push:
-    branches: [develop]
+    branches: [main]
 
 jobs:
   cypress:
@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: [ '8.1', '8.2', '8.3' ]
+        php-versions: [ '8.1', '8.2', '8.3', '8.4' ]
         ots: ['tfs-1.4', 'canary-3.1.2'] # TODO: add 'tfs-master' (actually doesn't work cause AAC doesn't support reading .env configuration)
     name: Cypress (PHP ${{ matrix.php-versions }}, ${{ matrix.ots }})
     steps:
@@ -35,7 +35,7 @@ jobs:
         - name: Checkout MyAAC
           uses: actions/checkout@v4
           with:
-            ref: develop
+            ref: main
 
         - uses: actions/setup-node@v4
           with:
@@ -146,6 +146,7 @@ jobs:
           with:
             name: cypress-screenshots-${{ matrix.php-versions }}-${{ matrix.ots }}
             path: cypress/screenshots
+            if-no-files-found: ignore
 
         - name: Upload Cypress Videos
           uses: actions/upload-artifact@v4
@@ -153,6 +154,7 @@ jobs:
           with:
             name: cypress-videos-${{ matrix.php-versions }}-${{ matrix.ots }}
             path: cypress/videos
+            if-no-files-found: ignore
 
         - name: Upload PHP Logs
           uses: actions/upload-artifact@v4

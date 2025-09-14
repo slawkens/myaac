@@ -34,6 +34,8 @@ if(isset($_REQUEST['redirect']))
 	return;
 }
 
+csrfProtect();
+
 $groups = new OTS_Groups_List();
 
 $freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;

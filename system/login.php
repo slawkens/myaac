@@ -14,12 +14,12 @@ $account_logged = new OTS_Account();
 
 // stay-logged with sessions
 $current_session = getSession('account');
-if($current_session !== false)
+if($current_session)
 {
 	$account_logged->load($current_session);
 	if($account_logged->isLoaded() && $account_logged->getPassword() == getSession('password')
 		//&& (!isset($_SESSION['admin']) || admin())
-		&& (getSession('remember_me') !== false || getSession('last_visit') > time() - 15 * 60)) {  // login for 15 minutes if "remember me" is not used
+		&& (getSession('remember_me') || getSession('last_visit') > time() - 15 * 60)) {  // login for 15 minutes if "remember me" is not used
 			$logged = true;
 	}
 	else {

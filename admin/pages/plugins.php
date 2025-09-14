@@ -17,11 +17,17 @@ csrfProtect();
 
 $use_datatable = true;
 
-if (!getBoolean(setting('core.admin_plugins_manage_enable'))) {
+if (!setting('core.admin_plugins_manage_enable')) {
 	warning('Plugin installation and management is disabled in Settings.<br/>If you wish to enable, go to Settings and enable <strong>Enable Plugins Manage</strong>.');
 }
 else {
-	$twig->display('admin.plugins.form.html.twig');
+	$pluginUploadEnabled = true;
+	if(!\class_exists('\ZipArchive')) {
+		error('Please install PHP zip extension. Plugins upload disabled until then.');
+		$pluginUploadEnabled = false;
+	}
+
+	$twig->display('admin.plugins.form.html.twig', ['pluginUploadEnabled' => $pluginUploadEnabled]);
 
 	if (isset($_POST['uninstall'])) {
 		$uninstall = $_POST['uninstall'];
@@ -44,6 +50,56 @@ else {
 			success('Successfully disabled plugin ' . $disable);
 		} else {
 			error('Error while disabling plugin ' . $disable . ': ' . Plugins::getError());
+		}
+	}
+	else if (isset($_GET['check-updates'])) {
+		$repoUri = $config['admin_plugins_api_uri'] ?? 'https://plugins.my-aac.org/api/';
+		success("Fetching latest info from $repoUri..");
+
+		$adminPlugins = new \MyAAC\Admin\Plugins();
+
+		$adminPlugins->setApiBaseUri($repoUri);
+
+		try {
+			$plugins = $adminPlugins->getLatestVersions();
+		}
+		catch (Exception $e) {
+			error($e->getMessage());
+		}
+
+		if (isset($plugins) && count($plugins) > 0) {
+			$outdated = [];
+
+			foreach (get_plugins(true) as $plugin) {
+				$string = file_get_contents(BASE . 'plugins/' . $plugin . '.json');
+				$plugin_info = json_decode($string, true);
+
+				if (!$plugin_info) {
+					continue;
+				}
+
+				$disabled = (str_contains($plugin, 'disabled.'));
+				$pluginOriginal = ($disabled ? str_replace('disabled.', '', $plugin) : $plugin);
+
+				$info = $plugins[$pluginOriginal] ?? false;
+				if ($info && version_compare($info['version'], $plugin_info['version'], '>')) {
+					$outdated[] = [
+						'name' => $pluginOriginal,
+						'yourVersion' => $plugin_info['version'],
+						'latestVersion' => $info['version'],
+						'link' => $info['link'] ?? 'Unknown',
+						'download_link' => $info['download_link'] ?? 'Unknown',
+					];
+				}
+			}
+
+			if (count($outdated) > 0) {
+				info('Following updates have been found for your plugins:');
+				$twig->display('admin.plugins.outdated.html.twig', ['plugins' => $outdated]);
+			}
+			else {
+				success('All plugins up to date!');
+			}
 		}
 	} else if (isset($_FILES['plugin']['name'])) {
 		$file = $_FILES['plugin'];

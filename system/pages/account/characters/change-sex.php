@@ -17,6 +17,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 $sex_changed = false;
 $player_id = isset($_POST['player_id']) ? (int)$_POST['player_id'] : NULL;
 $new_sex = isset($_POST['new_sex']) ? (int)$_POST['new_sex'] : NULL;
@@ -66,7 +68,7 @@ else
 							$new_sex_str = $config['genders'][$new_sex];
 
 						$player->save();
-						$account_logged->setCustomField(setting('core.donate_column'), $points - setting('core.account_change_character_name_price'));
+						$account_logged->setCustomField(setting('core.donate_column'), $points - setting('core.account_change_character_sex_price'));
 						$account_logged->logAction('Changed sex on character <b>' . $player->getName() . '</b> from <b>' . $old_sex_str . '</b> to <b>' . $new_sex_str . '</b>.');
 						$twig->display('success.html.twig', array(
 							'title' => 'Character Sex Changed',

@@ -1,27 +1,31 @@
 {{ hook('HOOK_ACCOUNT_LOGIN_BEFORE_PAGE') }}
-<form action="{{ getLink('account/manage') }}" method="post" style="margin: 0px; padding: 0px;">
+<form action="{{ getLink('account/manage') }}" method="post" style="margin: 0; padding: 0;">
+	{{ csrf() }}
+
 	{% if redirect is not null %}
 		<input type="hidden" name="redirect" value="{{ redirect }}" />
 	{% endif %}
+
 	<div class="TableContainer" >
-		<table class="Table4" cellpadding="0" cellspacing="0" >
-			<div class="CaptionContainer" >
-				<div class="CaptionInnerContainer" >
-					<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" /></span>
-					<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" /></span>
-					<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/global/content/table-headline-border.gif);" ></span>
-					<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/global/content/box-frame-vertical.gif);" /></span>
-					<div class="Text" >Account Login</div>
-					<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/global/content/box-frame-vertical.gif);" /></span>
-					<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/global/content/table-headline-border.gif);" ></span>
-					<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" /></span>
-					<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" /></span>
-				</div>
+		<div class="CaptionContainer" >
+			<div class="CaptionInnerContainer" >
+				<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" ></span>
+				<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" ></span>
+				<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/global/content/table-headline-border.gif);" ></span>
+				<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/global/content/box-frame-vertical.gif);" ></span>
+				<div class="Text" >Account Login</div>
+				<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/global/content/box-frame-vertical.gif);" ></span>
+				<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/global/content/table-headline-border.gif);" ></span>
+				<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" ></span>
+				<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" ></span>
 			</div>
+		</div>
+		<table class="Table4" cellpadding="0" cellspacing="0" >
 			<tr>
 				<td>
-					<div class="InnerTableContainer" >
-						<table style="width:100%;" >
+					<div class="InnerTableContainer">
+						<table style="width:100%;">
+							<tbody>
 							<tr>
 								<td>
 									<div class="TableShadowContainerRightTop" >
@@ -29,21 +33,22 @@
 									</div>
 									<div class="TableContentAndRightShadow" style="background-image:url({{ template_path }}/images/global/content/table-shadow-rm.gif);" >
 										<div class="TableContentContainer" >
-											<table class="TableContent" width="100%"  style="border:1px solid #faf0d7;" >
+											<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+											<tbody>
 												<tr>
 													<td>
-														<table style="float: left; width: 370px;" cellpadding="0" cellspacing="0" >
+														<table style="float: left; width: 100%;" cellpadding="0" cellspacing="0" >
 															{{ hook('HOOK_ACCOUNT_LOGIN_BEFORE_ACCOUNT') }}
 															<tr>
 																<td class="LabelV">
 																	<span{% if error is not null %} class="red"{% endif %}>{{ account_login_by }}:</span>
 																</td>
-																<td><input type="text" name="account_login" size="35" maxlength="{{ setting('core.account_login_by_email') ? '255' : '30' }}" autofocus /></td>
+																<td><input style="width: 100%;" type="text" name="account_login" size="35" maxlength="{{ setting('core.account_login_by_email') ? '255' : '30' }}" autofocus /></td>
 															</tr>
 															{{ hook('HOOK_ACCOUNT_LOGIN_AFTER_ACCOUNT') }}
 															<tr>
 																<td class="LabelV" ><span{% if error is not null %} class="red"{% endif %}>Password:</span></td>
-																<td><input type="password" name="password_login" size="35" maxlength="29" /></td>
+																<td><input style="width: 100%;" type="password" name="password_login" size="35" maxlength="29" /></td>
 															</tr>
 															{{ hook('HOOK_ACCOUNT_LOGIN_AFTER_PASSWORD') }}
 															<tr>
@@ -53,17 +58,19 @@
 															</tr>
 															{{ hook('HOOK_ACCOUNT_LOGIN_AFTER_REMEMBER_ME') }}
 														</table>
-														<div style="float: right; font-size: 1px;" >
-															<input type="hidden" name="page" value="overview" >
+													</td>
+													<td id="LoginFormButtonCell">
+														<div style="float: right;" >
 															{{ include('buttons.login.html.twig') }}
-</form>
 															<div style="width: 2px; height: 2px;" ></div>
-																<form action="{{ getLink('account/lost') }}" method="post" style="padding:0px;margin:0px;" >
-																	{{ include('buttons.account_lost.html.twig') }}
-																</form>
-															</div>
+															<a href="{{ getLink('account/lost') }}" style="padding:0;margin:0;" >
+																{% set noSubmit = true %}
+																{{ include('buttons.account_lost.html.twig') }}
+															</a>
+														</div>
 													</td>
 												</tr>
+												</tbody>
 											</table>
 										</div>
 									</div>
@@ -75,35 +82,40 @@
 									</div>
 								</td>
 							</tr>
+							</tbody>
 						</table>
 					</div>
 				</td>
 			</tr>
 		</table>
 	</div>
+</form>
 <br/>
+
 <div style="text-align:center">
 	<h1>New to {{ config.lua.serverName }}?</h1>
 </div>
 <div class="TableContainer" >
-	<table class="Table4" cellpadding="0" cellspacing="0" >
-		<div class="CaptionContainer" >
-			<div class="CaptionInnerContainer" >
-				<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" /></span>
-				<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" /></span>
-				<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/global/content/table-headline-border.gif);" ></span>
-				<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/global/content/box-frame-vertical.gif);" /></span>
-				<div class="Text" >New Player</div>
-				<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/global/content/box-frame-vertical.gif);" /></span>
-				<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/global/content/table-headline-border.gif);" ></span>
-				<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" /></span>
-				<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);" /></span>
-			</div>
+	<div class="CaptionContainer" >
+		<div class="CaptionInnerContainer" >
+			<span class="CaptionEdgeLeftTop" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);"></span>
+			<span class="CaptionEdgeRightTop" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);"></span>
+			<span class="CaptionBorderTop" style="background-image:url({{ template_path }}/images/global/content/table-headline-border.gif);" ></span>
+			<span class="CaptionVerticalLeft" style="background-image:url({{ template_path }}/images/global/content/box-frame-vertical.gif);"></span>
+			<div class="Text" >New Player</div>
+			<span class="CaptionVerticalRight" style="background-image:url({{ template_path }}/images/global/content/box-frame-vertical.gif);"></span>
+			<span class="CaptionBorderBottom" style="background-image:url({{ template_path }}/images/global/content/table-headline-border.gif);" ></span>
+			<span class="CaptionEdgeLeftBottom" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);"></span>
+			<span class="CaptionEdgeRightBottom" style="background-image:url({{ template_path }}/images/global/content/box-frame-edge.gif);"></span>
 		</div>
+	</div>
+	<table class="Table3" cellpadding="0" cellspacing="0" >
+	<tbody>
 		<tr>
 			<td>
 				<div class="InnerTableContainer" >
 					<table style="width:100%;" >
+					<tbody>
 						<tr>
 							<td>
 								<div class="TableShadowContainerRightTop" >
@@ -112,6 +124,7 @@
 								<div class="TableContentAndRightShadow" style="background-image:url({{ template_path }}/images/global/content/table-shadow-rm.gif);" >
 									<div class="TableContentContainer" >
 										<table class="TableContent" width="100%"  style="border:1px solid #faf0d7;" >
+										<tbody>
 											<tr>
 												<td >
 													<div style="float: right; margin-top: 20px;" >
@@ -129,9 +142,12 @@
 														<div style="margin-left: 10px;" >
 															<p>... where hardcore gaming meets fantasy.</p>
 															<p>... where friendships last a lifetime.</p>
-															<p>... unites adventurers since 2017!</p>
+															<p>... unites adventurers since 1997!</p>
 														</div>
 													</div>
+												</td>
+											</tr>
+										</tbody>
 										</table>
 									</div>
 								</div>
@@ -143,10 +159,12 @@
 								</div>
 							</td>
 						</tr>
+					</tbody>
 					</table>
 				</div>
 			</td>
 		</tr>
+	</tbody>
 	</table>
 </div>
 {{ hook('HOOK_ACCOUNT_LOGIN_AFTER_PAGE') }}

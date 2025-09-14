@@ -43,9 +43,6 @@ class Account extends Model {
 			return 0;
 		}
 
-		global $config;
-		if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return -1;
-
 		if($this->premdays == 65535){
 			return 65535;
 		}
@@ -56,12 +53,9 @@ class Account extends Model {
 
 	public function getIsPremiumAttribute()
 	{
-		global $config;
-        if(isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium'])) return true;
-
-	    if(isset($this->premium_ends_at)) {
-		    return $this->premium_ends_at > time();
-	    }
+		if(isset($this->premium_ends_at)) {
+			return $this->premium_ends_at > time();
+		}
 
 		if(isset($this->premend)) {
 			return $this->premend > time();

@@ -4,6 +4,7 @@ namespace MyAAC\Commands;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -16,11 +17,14 @@ class MigrateRunCommand extends Command
 			->addArgument('id',
 				InputArgument::IS_ARRAY | InputArgument::REQUIRED,
 				'Id or ids of migration(s)'
-			);
+			)
+			->addOption('down', 'd', InputOption::VALUE_NONE, 'Down');;
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		require SYSTEM . 'init.php';
+
 		$io = new SymfonyStyle($input, $output);
 
 		$ids = $input->getArgument('id');
@@ -39,8 +43,26 @@ class MigrateRunCommand extends Command
 			}
 		}
 
+		$down = $input->getOption('down') ?? false;
+
+		/**
+		 * Sort according to $down option.
+		 * Do we really want it?
+		 * Or should we use order provided by user,
+		 *      even when it's not sorted correctly?
+		 * Leaving it for consideration.
+		 */
+		/*
+		if ($down) {
+			rsort($ids);
+		}
+		else {
+			sort($ids);
+		}
+		*/
+
 		foreach ($ids as $id) {
-			$this->executeMigration($id, $io);
+			$this->executeMigration($id, $io, !$down);
 		}
 
 		return Command::SUCCESS;
@@ -50,13 +72,24 @@ class MigrateRunCommand extends Command
 		return file_exists(SYSTEM . 'migrations/' . $id . '.php');
 	}
 
-	private function executeMigration($id, $io): void
+	private function executeMigration($id, $io, $_up = true): void
 	{
 		global $db;
 
 		$db->revalidateCache();
 
 		require SYSTEM . 'migrations/' . $id . '.php';
-		$io->success('Migration ' . $id . ' successfully executed');
+		if ($_up) {
+			if (isset($up)) {
+				$up();
+			}
+		}
+		else {
+			if (isset($down)) {
+				$down();
+			}
+		}
+
+		$io->success('Migration ' . $id . ' successfully executed' . ($_up ? '' : ' (downgrade)'));
 	}
 }

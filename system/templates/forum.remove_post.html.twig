@@ -1,0 +1,12 @@
+<form action="{{ getLink('forum') }}" method="post" style="display: inline"
+	{% if post.first_post != post.id %}
+		onclick="return confirm('Are you sure you want remove post of {{ post.player.getName() }}?')"
+	{% else %}
+		onclick="return confirm('Are you sure you want remove thread > {{ post.post_topic}} <?')"
+	{% endif %}
+>
+	{{ csrf() }}
+	<input type="hidden" name="action" value="remove_post" />
+	<input type="hidden" name="id" value="{{ post.id }}" />
+	<input type="image" src="/images/del.png" border="0" alt="Delete" title="{% if post.first_post != post.id %}Remove Post{% else %}Remove Thread{% endif %}" />
+</form>

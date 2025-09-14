@@ -20,6 +20,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 $character_name = isset($_POST['name']) ? stripslashes($_POST['name']) : null;
 $character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
 $character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;

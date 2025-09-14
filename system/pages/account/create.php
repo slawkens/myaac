@@ -23,6 +23,8 @@ if($logged)
 	return;
 }
 
+csrfProtect();
+
 if(setting('core.account_create_character_create')) {
 	$createCharacter = new CreateCharacter();
 }
@@ -219,8 +221,19 @@ if($save)
 			}
 		}
 
-		if(setting('core.account_premium_points') && setting('core.account_premium_points') > 0) {
-			$new_account->setCustomField('premium_points', setting('core.account_premium_points'));
+		$accountDefaultPremiumPoints = setting('core.account_premium_points');
+		if($accountDefaultPremiumPoints > 0) {
+			$new_account->setCustomField('premium_points', $accountDefaultPremiumPoints);
+		}
+
+		$accountDefaultCoins = setting('core.account_coins');
+		if(HAS_ACCOUNT_COINS && $accountDefaultCoins > 0) {
+			$new_account->setCustomField('coins', $accountDefaultCoins);
+		}
+
+		$accountDefaultCoinsTransferable = setting('core.account_coins_transferable');
+		if((HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS) && $accountDefaultCoinsTransferable > 0) {
+			$new_account->setCustomField(ACCOUNT_COINS_TRANSFERABLE_COLUMN, $accountDefaultCoinsTransferable);
 		}
 
 		$tmp_account = $email;
@@ -331,7 +344,9 @@ if(setting('core.account_country_recognize')) {
 		$country_recognized = $country_session;
 	}
 	else {
-		$info = json_decode(@file_get_contents('http://ipinfo.io/' . $_SERVER['REMOTE_ADDR'] . '/geo'), true);
+		ini_set('default_socket_timeout', 5);
+
+		$info = json_decode(@file_get_contents('https://ipinfo.io/' . get_browser_real_ip() . '/geo'), true);
 		if(isset($info['country'])) {
 			$country_recognized = strtolower($info['country']);
 			setSession('country', $country_recognized);

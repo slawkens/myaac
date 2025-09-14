@@ -86,12 +86,25 @@ switch ($action) {
 		die(json_encode(['eventlist' => $eventlist, 'lastupdatetimestamp' => time()]));
 
 	case 'boostedcreature':
-		$boostedCreature = BoostedCreature::latest();
+		$clientVersion = (int)setting('core.client');
+
+		// 13.40 and up
+		if ($clientVersion >= 1340) {
+			$creatureBoost = $db->query("SELECT * FROM " . $db->tableName('boosted_creature'))->fetchAll();
+			$bossBoost     = $db->query("SELECT * FROM " . $db->tableName('boosted_boss'))->fetchAll();
+			die(json_encode([
+				'boostedcreature' => true,
+				'creatureraceid'  => intval($creatureBoost[0]['raceid']),
+				'bossraceid'      => intval($bossBoost[0]['raceid'])
+			]));
+		}
+
+		// lower clients
+		$boostedCreature = BoostedCreature::first();
 		die(json_encode([
 			'boostedcreature' => true,
 			'raceid' => $boostedCreature->raceid
 		]));
-	break;
 
 	case 'login':
 
@@ -143,7 +156,7 @@ switch ($action) {
 			if ($limiter->exceeded($ip)) {
 				sendError($ban_msg);
 			}
-			
+
 			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');
 		}
 
