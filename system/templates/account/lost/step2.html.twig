@@ -1,14 +1,19 @@
 Set new password and e-mail to your account.<br>
 <form action="{{ getLink('account/lost/step-3') }}" method="post">
 	<input type="hidden" name="character" value="">
-	<table cellspacing="1" width="100%">
+	<table class="myaac-table" style="width: 100%">
+
+		<thead>
 		<tr>
-			<td style="padding: 4px; background: {{ config('vdarkborder') }}" class="white">
+			<th class="white">
 				<b>Please enter new password and e-mail</b>
-			</td>
+			</th>
 		</tr>
+		</thead>
+
+		<tbody>
 		<tr>
-			<td style="padding: 4px; background: {{ config('darkborder') }}">
+			<td>
 				Account of character:&nbsp;&nbsp;<input type="text" name="nick" value="{{ nick }}" size="40" readonly="readonly"><br/>
 				New password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="passor" type="password" name="passor" value="" size="40"><br/>
 				Repeat new password:&nbsp;&nbsp;<input id="passor2" type="password" name="passor" value="" size="40"><br/>
@@ -16,6 +21,7 @@ Set new password and e-mail to your account.<br>
 				<input type="hidden" name="key" VALUE="{{ recKey }}">
 			</td>
 		</tr>
+		</tbody>
 	</table>
 	<br>
 	<table style="width: 100%">

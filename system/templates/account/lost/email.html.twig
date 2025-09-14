@@ -1,16 +1,23 @@
 Please enter e-mail to account with this character.<br/>
 <form action="{{ getLink('account/lost/email/send-code') }}" method="post">
 	<input type=hidden name="character">
-	<table style="width: 100%; border-spacing: 1px">
+	<table class="myaac-table" style="width: 100%;">
+
+		<thead>
 		<tr>
-			<td style="padding: 4px; background: {{ config('vdarkborder') }}" class="white"><b>Please enter e-mail to account</b></td>
+			<th class="white"><b>Please enter e-mail to account</b></th>
 		</tr>
+		</thead>
+
+		<tbody>
 		<tr>
-			<td style="padding: 4px; background: {{ config('darkborder') }}">
+			<td>
 				Character: <input type=text name="nick" value="{{ nick }}" size="40" readonly="readonly"><br/>
 				E-mail to account: <input type=text name="email" value="" size="40"><br/>
 			</td>
 		</tr>
+		</tbody>
+
 	</table>
 	<br>
 	<table style="width: 100%">

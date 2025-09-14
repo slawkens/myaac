@@ -1,17 +1,24 @@
 If you enter right recovery key you will see form to set new e-mail and password to account. To this e-mail will be send your new password and account name.<BR>
 <form action="{{ getLink('account/lost/recovery-key/step-2') }}" method="post">
-	<table style="width: 100%; border-spacing: 1px">
+	<table class="myaac-table" style="width: 100%;">
+
+		<thead>
 		<tr>
-			<td style="padding: 4px; background: {{ config('vdarkborder') }}" class="white">
+			<th class="white">
 				<b>Please enter your recovery key</b>
-			</td>
+			</th>
 		</tr>
+		</thead>
+
+		<tbody>
 		<tr>
-			<td style="padding: 4px; background: {{ config('darkborder') }}">
+			<td>
 				Character name:&nbsp;<input type=text name="nick" value="{{ nick }}" size="40" readonly="readonly"><br/>
 				Recovery key:&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="key" value="" size="40"><br/>
 			</td>
 		</tr>
+		</tbody>
+
 	</table>
 	<br>
 	<table style="width: 100%">

@@ -1,17 +1,22 @@
 Please enter code from e-mail and name of one character from account. Then press Submit.<br/>
 <form action="{{ getLink('account/lost/check-code') }}" method="post">
-	<table style="width: 100%; border-spacing: 1px">
+	<table class="myaac-table" style="width: 100%;">
+		<thead>
 		<tr>
-			<td style="padding: 4px; background: {{ config('vdarkborder') }}" class="white">
+			<th class="white">
 				<b>Code & character name</b>
-			</td>
+			</th>
 		</tr>
+		</thead>
+
+		<tbody>
 		<tr>
-			<td style="padding: 4px; background: {{ config('darkborder') }}">
+			<td>
 				Your code:&nbsp;<input type="text" name="code" value="{{ code }}" size="40"><br/>
 				Character:&nbsp;<input type="text" name="character" value="{{ character }}" size="40"><br/>
 			</td>
 		</tr>
+		</tbody>
 	</table>
 	<br>
 	<table style="width: 100%">
