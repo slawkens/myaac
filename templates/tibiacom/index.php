@@ -37,7 +37,9 @@ if(isset($config['boxes']))
 					$tmp = str_replace('/', '_', PAGE);
 					$exp = explode('/', PAGE);
 					if(PAGE !== 'account/create' && PAGE !== 'account/lost' && isset($exp[1])) {
-						if ($exp[0] === 'account') {
+						if ($exp[0] === 'account' && $exp[1] === 'lost') {
+							$tmp = 'account_lost';
+						} elseif ($exp[0] === 'account') {
 							$tmp = 'account_manage';
 						} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
 							$tmp = 'news_archive';
