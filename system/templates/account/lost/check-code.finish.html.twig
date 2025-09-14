@@ -1,0 +1,26 @@
+Please enter new password to your account and repeat to make sure you remember password.<BR>
+<form action="{{ getLink('account/lost/email/set-new-password') }}" method="post">
+	<input type="hidden" name="character" value="{{ character }}">
+	<input type="hidden" name="code" value="{{ code }}">
+	<table style="width: 100%; border-spacing: 1px">
+		<tr>
+			<td style="padding: 4px; background: {{ config('vdarkborder') }}" class="white"><B>Passwords</B></td></tr>
+		<TR>
+			<td style="padding: 4px; background: {{ config('darkborder') }}">
+				New password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" ID="passor" name="passor" value="" size="40"><br/>
+				Repeat new password:&nbsp;<input TYPE="password" ID="passor2" name="passor2" value="" size="40"><br/>
+			</td>
+		</TR>
+	</table>
+	<br/>
+	<table style="width: 100%">
+		<tr>
+			<td>
+				<div style="text-align: center">
+					{% set button_name = 'Submit' %}
+					{% include('buttons.base.html.twig') %}
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>

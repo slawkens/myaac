@@ -1,4 +1,6 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
+
 $recKey = trim($_REQUEST['key']);
 $nick = stripslashes($_REQUEST['nick']);
 $newPassword = trim($_REQUEST['passor']);
@@ -11,9 +13,9 @@ if($player->isLoaded()) {
 	$account = $player->getAccount();
 }
 
-if($account->isLoaded())
-{
+if($account->isLoaded()) {
 	$accountKey = $account->getCustomField('key');
+
 	if(!empty($accountKey)) {
 		if($accountKey == $recKey) {
 			if(Validator::password($newPassword)) {
@@ -53,7 +55,7 @@ if($account->isLoaded())
 						$statusMsg = '<br /><small>You will not receive e-mail with this informations.</small>';
 					}
 
-					$twig->display('account.lost.finish.new-email.html.twig', [
+					$twig->display('account/lost/finish.new-email.html.twig', [
 						'statusMsg' => $statusMsg,
 						'account' => $account,
 						'newPassword' => $newPassword,
@@ -77,7 +79,7 @@ if($account->isLoaded())
 	}
 }
 else {
-	echo "Player or account of player <b>" . htmlspecialchars($nick) . "</b> doesn't exist.";
+	echo "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
 }
 
 $twig->display('account.back_button.html.twig', [

@@ -1,4 +1,5 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
 
 $recKey = trim($_REQUEST['key']);
 $nick = stripslashes($_REQUEST['nick']);
@@ -14,7 +15,7 @@ if($account->isLoaded()) {
 	$accountKey = $account->getCustomField('key');
 	if(!empty($accountKey)) {
 		if($accountKey == $recKey) {
-			$twig->display('account.lost.step2.html.twig', [
+			$twig->display('account/lost/step2.html.twig', [
 				'nick' => $nick,
 				'recKey' => $recKey,
 			]);
@@ -28,7 +29,7 @@ if($account->isLoaded()) {
 	}
 }
 else
-	echo "Player or account of player <b>" . htmlspecialchars($nick) . "</b> doesn't exist.";
+	echo "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
 
 $twig->display('account.back_button.html.twig', [
 	'new_line' => true,

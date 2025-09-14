@@ -1,4 +1,6 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
+
 $newPassword = $_REQUEST['passor'];
 $code = $_REQUEST['code'];
 $character = stripslashes($_REQUEST['character']);
@@ -9,7 +11,7 @@ if(empty($code) || empty($character) || empty($newPassword)) {
 	$twig->display('account.back_button.html.twig', [
 		'new_line' => true,
 		'center' => true,
-		'action' => getLink('account/lost') . '?action=check-code',
+		'action' => getLink('account/lost/check-code')
 	]);
 }
 else
@@ -21,15 +23,11 @@ else
 		$account = $player->getAccount();
 	}
 
-	if($account->isLoaded())
-	{
-		if($account->getCustomField('email_code') == $code)
-		{
-			if(Validator::password($newPassword))
-			{
+	if($account->isLoaded()) {
+		if($account->getCustomField('email_code') == $code) {
+			if(Validator::password($newPassword)) {
 				$tmp_new_pass = $newPassword;
-				if(USE_ACCOUNT_SALT)
-				{
+				if(USE_ACCOUNT_SALT) {
 					$salt = generateRandomString(10, false, true, true);
 					$tmp_new_pass  = $salt . $newPassword;
 					$account->setCustomField('salt', $salt);
@@ -52,19 +50,22 @@ else
 					$statusMsg = '<br /><p class="error">New password work! An error occurred while sending email! You will not receive e-mail with new password. For Admin: More info can be found in system/logs/mailer-error.log';
 				}
 
-				$twig->display('account.lost.finish.new-password.html.twig', [
+				$twig->display('account/lost/finish.new-password.html.twig', [
 					'statusMsg' => $statusMsg,
 					'newPassword' => $newPassword,
 				]);
 			}
-			else
-				$error= Validator::getLastError();
+			else {
+				$error = Validator::getLastError();
+			}
 		}
-		else
-			$error= 'Wrong code to change password.';
+		else {
+			$error = 'Wrong code to change password.';
+		}
 	}
-	else
-		$error = 'Account of this character or this character doesn\'t exist.';
+	else {
+		$error = "Account of this character or this character doesn't exist.";
+	}
 }
 
 if(!empty($error)) {
@@ -74,7 +75,7 @@ if(!empty($error)) {
 
 	echo '<br/>';
 
-	$twig->display('account.lost.check-code.html.twig', [
+	$twig->display('account/lost/check-code.html.twig', [
 		'code' => $code,
 		'character' => $character,
 	]);

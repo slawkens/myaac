@@ -1,4 +1,5 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
 
 $email = $_REQUEST['email'];
 $nick = stripslashes($_REQUEST['nick']);
@@ -37,12 +38,14 @@ if($account->isLoaded()) {
 		}
 	}
 	else {
-		$insec = (int)$account->getCustomField('email_next') - time();
-		$minutesleft = floor($insec / 60);
-		$secondsleft = $insec - ($minutesleft * 60);
-		$timeleft = $minutesleft.' minutes '.$secondsleft.' seconds';
+		$inSec = (int)$account->getCustomField('email_next') - time();
+		$minutesLeft = floor($inSec / 60);
+		$secondsLeft = $inSec - ($minutesLeft * 60);
+		$timeLeft = $minutesLeft.' minutes '.$secondsLeft.' seconds';
 
-		echo 'Account of selected character (<b>' . htmlspecialchars($nick) . '</b>) received e-mail in last '.ceil(setting('core.mail_lost_account_interval') / 60) . ' minutes. You must wait '.$timeleft.' before you can use Lost Account Interface again.';
+		$timeRounded = ceil(setting('core.mail_lost_account_interval') / 60);
+
+		echo "Account of selected character (<b>" . escapeHtml($nick) . "</b>) received e-mail in last $timeRounded minutes. You must wait $timeLeft before you can use Lost Account Interface again.";
 	}
 }
 else {

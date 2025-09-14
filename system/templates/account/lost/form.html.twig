@@ -1,0 +1,37 @@
+The Lost Account Interface can help you to get back your account name and password. Please enter your character name and select what you want to do.<br/>
+<form action="{{ getLink('account/lost/step-1') }}" method="post">
+	{{ csrf() }}
+	<input type="hidden" name="character" value="">
+	<table style="width: 100%; border-spacing: 1px">
+		<tr>
+			<td style="padding: 4px; background: {{ config('vdarkborder') }}" class="white"><b>Please enter your character name</b></td>
+		</tr>
+		<tr>
+			<td style="padding: 4px; background: {{ config('darkborder') }}">
+				<input type="text" name="nick" size="40" autofocus/><br>
+			</td>
+		</tr>
+	</table>
+	<table style="width: 100%; border-spacing: 1px">
+		<tr>
+			<td style="padding: 4px; background: {{ config('vdarkborder') }}" class="white"><b>What do you want?</b></td>
+		</tr>
+		<tr>
+			<td style="padding: 4px; background: {{ config('darkborder') }}">
+				<input type="radio" name="action" id="action_type_email" value="email">
+				<label for="action_type_email"> Send me new password and my account name to account e-mail address.</label><br/>
+				<input type=radio name="action" id="action_type_key" value="recovery-key">
+				<label for="action_type_key"> I got <b>recovery key</b> and want set new password and e-mail address to my account.</label><br/>
+			</td>
+		</tr>
+	</table>
+	<br/>
+	<table style="width: 100%">
+		<tr>
+			<td align="center">
+				{% set button_name = 'Submit' %}
+				{% include('buttons.base.html.twig') %}
+			</td>
+		</tr>
+	</table>
+</form>
