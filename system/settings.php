@@ -28,6 +28,15 @@ if (!IS_CLI) {
 	$siteURL = $serverUrl . $baseDir;
 }
 
+$donateColumnOptions = [
+	'premium_points' => 'Premium Points',
+	'coins' => 'Coins',
+];
+
+if (defined('HAS_ACCOUNT_COINS_TRANSFERABLE') && (HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS)) {
+	$donateColumnOptions[ACCOUNT_COINS_TRANSFERABLE_COLUMN] = 'Coins Transferable';
+}
+
 return [
 	'name' => 'MyAAC',
 	'settings' => [
@@ -1295,7 +1304,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Data Center',
 			'type' => 'text',
 			'desc' => 'Server Location, will be shown on online page',
-			'default' => 'Frankfurt - Germany',
+			'default' => 'Poland - Warsaw',
 		],
 		[
 			'type' => 'section',
@@ -1598,13 +1607,14 @@ Sent by MyAAC,<br/>
 			'name' => 'Donate Column',
 			'type' => 'options',
 			'desc' => 'What to give to player after donation - what column in accounts table to use.',
-			'options' => ['premium_points' => 'Premium Points', 'coins' => 'Coins'],
+			'options' => $donateColumnOptions,
 			'default' => 'premium_points',
 			'callbacks' => [
 				'beforeSave' => function($key, $value, &$errorMessage) {
 					global $db;
-					if ($value == 'coins' && !HAS_ACCOUNT_COINS) {
-						$errorMessage = "Shop: Donate Column: Cannot set column to coins, because it doesn't exist in database.";
+
+					if (!$db->hasColumn('accounts', $value)) {
+						$errorMessage = "Shop: Donate Column: Cannot set column to $value, because it doesn't exist in database.";
 						return false;
 					}
 					return true;

@@ -7,16 +7,13 @@ use MyAAC\Models\Settings as ModelsSettings;
 
 class Settings implements \ArrayAccess
 {
-	static private $instance;
-	private $settingsFile = [];
-	private $settingsDatabase = [];
-	private $cache = [];
-	private $valuesAsked = [];
-	private $errors = [];
+	static private ?Settings $instance = null;
+	private array $settingsFile = [];
+	private array $settingsDatabase = [];
+	private array $cache = [];
+	private array $valuesAsked = [];
+	private array $errors = [];
 
-	/**
-	 * @return Settings
-	 */
 	public static function getInstance(): Settings
 	{
 		if (!self::$instance) {
@@ -26,28 +23,21 @@ class Settings implements \ArrayAccess
 		return self::$instance;
 	}
 
-	public function load()
+	public function load(): void
 	{
-		$cache = Cache::getInstance();
-		if ($cache->enabled()) {
-			$tmp = '';
-			if ($cache->fetch('settings', $tmp)) {
-				$this->settingsDatabase = unserialize($tmp);
-				return;
+		$this->settingsDatabase = Cache::remember('settings', 10 * 60, function () {
+			$settingsDatabase = [];
+
+			$settings = ModelsSettings::all();
+			foreach ($settings as $setting) {
+				$settingsDatabase[$setting->name][$setting->key] = $setting->value;
 			}
-		}
 
-		$settings = ModelsSettings::all();
-		foreach ($settings as $setting) {
-			$this->settingsDatabase[$setting->name][$setting->key] = $setting->value;
-		}
-
-		if ($cache->enabled()) {
-			$cache->set('settings', serialize($this->settingsDatabase), 600);
-		}
+			return $settingsDatabase;
+		});
 	}
 
-	public function save($pluginName, $values)
+	public function save($pluginName, $values): bool
 	{
 		$this->loadPlugin($pluginName);
 
@@ -104,7 +94,7 @@ class Settings implements \ArrayAccess
 		return true;
 	}
 
-	public function updateInDatabase($pluginName, $key, $value)
+	public function updateInDatabase($pluginName, $key, $value): void
 	{
 		if (ModelsSettings::where(['name' => $pluginName, 'key' => $key])->exists()) {
 			ModelsSettings::where(['name' => $pluginName, 'key' => $key])->update(['value' => $value]);
@@ -117,7 +107,7 @@ class Settings implements \ArrayAccess
 		$this->clearCache();
 	}
 
-	public function deleteFromDatabase($pluginName, $key = null)
+	public function deleteFromDatabase($pluginName, $key = null): void
 	{
 		if (!isset($key)) {
 			ModelsSettings::where('name', $pluginName)->delete();
@@ -217,7 +207,7 @@ class Settings implements \ArrayAccess
 				if (isset($setting['hidden']) && $setting['hidden']) {
 					$value = '';
 					if ($setting['type'] === 'boolean') {
-						$value = ($setting['default'] ? 'true' : 'false');
+						$value = (getBoolean($setting['default']) ? 'true' : 'false');
 					}
 					else if (in_array($setting['type'], ['text', 'number', 'float', 'double', 'email', 'password', 'textarea'])) {
 						$value = $setting['default'];
@@ -230,12 +220,7 @@ class Settings implements \ArrayAccess
 				}
 				else if ($setting['type'] === 'boolean') {
 					if(isset($settingsDb[$key])) {
-						if($settingsDb[$key] === 'true') {
-							$value = true;
-						}
-						else {
-							$value = false;
-						}
+						$value = getBoolean($settingsDb[$key]);
 					}
 					else {
 						$value = ($setting['default'] ?? false);
@@ -383,7 +368,7 @@ class Settings implements \ArrayAccess
 	}
 
 	#[\ReturnTypeWillChange]
-	public function offsetSet($offset, $value)
+	public function offsetSet($offset, $value): void
 	{
 		if (is_null($offset)) {
 			throw new \RuntimeException("Settings: You cannot set empty offset with value: $value!");
@@ -423,7 +408,7 @@ class Settings implements \ArrayAccess
 	}
 
 	#[\ReturnTypeWillChange]
-	public function offsetUnset($offset)
+	public function offsetUnset($offset): void
 	{
 		$this->loadPlugin($offset);
 
@@ -455,7 +440,7 @@ class Settings implements \ArrayAccess
 	 * @return array|mixed
 	 */
 	#[\ReturnTypeWillChange]
-	public function offsetGet($offset)
+	public function offsetGet($offset): mixed
 	{
 		// try cache hit
 		if(isset($this->cache[$offset])) {
@@ -521,7 +506,7 @@ class Settings implements \ArrayAccess
 		return $ret;
 	}
 
-	private function updateValuesAsked($offset)
+	private function updateValuesAsked($offset): void
 	{
 		$pluginKeyName = $offset;
 		if (strpos($offset, '.')) {
@@ -537,7 +522,7 @@ class Settings implements \ArrayAccess
 		}
 	}
 
-	private function loadPlugin($offset)
+	private function loadPlugin($offset): void
 	{
 		$this->updateValuesAsked($offset);
 
@@ -566,7 +551,7 @@ class Settings implements \ArrayAccess
 		}
 	}
 
-	public static function saveConfig($config, $filename, &$content = '')
+	public static function saveConfig($config, $filename, &$content = ''): bool|int
 	{
 		$content = "<?php" . PHP_EOL;
 

@@ -235,14 +235,16 @@
 															{% endif %}
 
 															{% if isVice %}
-																<form action="{{ getLink('guilds') }}?action=invite&guild={{ guild_name|url_encode }}" method="post">
-																	{{ csrf() }}
-																	<td>
-																		{% set button_name = 'Invite Character' %}
-																		{% set button_image = '_sbutton_invitecharacter' %}
-																		{% include('buttons.base.html.twig') %}
-																	</td>
-																</form>
+																{% if db.hasTableAndColumns('guild_invites', ['player_id']) %}
+																	<form action="{{ getLink('guilds') }}?action=invite&guild={{ guild_name|url_encode }}" method="post">
+																		{{ csrf() }}
+																		<td>
+																			{% set button_name = 'Invite Character' %}
+																			{% set button_image = '_sbutton_invitecharacter' %}
+																			{% include('buttons.base.html.twig') %}
+																		</td>
+																	</form>
+																{% endif %}
 
 																<form action="{{ getLink('guilds') }}?action=change_rank&guild={{ guild_name|url_encode }}" method="post">
 																	{{ csrf() }}

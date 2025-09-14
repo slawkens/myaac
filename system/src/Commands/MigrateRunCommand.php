@@ -45,6 +45,22 @@ class MigrateRunCommand extends Command
 
 		$down = $input->getOption('down') ?? false;
 
+		/**
+		 * Sort according to $down option.
+		 * Do we really want it?
+		 * Or should we use order provided by user,
+		 *      even when it's not sorted correctly?
+		 * Leaving it for consideration.
+		 */
+		/*
+		if ($down) {
+			rsort($ids);
+		}
+		else {
+			sort($ids);
+		}
+		*/
+
 		foreach ($ids as $id) {
 			$this->executeMigration($id, $io, !$down);
 		}

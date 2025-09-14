@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.8.1 - 05.09.2025]
+
+### Added
+* New Commands: plugin:enable/disable/uninstall {plugin-name} (https://github.com/slawkens/myaac/commit/7a08f91d3fc0897c1ff76089ef3c649a2c6d2003, https://github.com/slawkens/myaac/commit/fec773ba4b740f35c0a3ef92ca8444a4c7d02082)
+* Gifts: Added Transferable Coins to the store dropdown menu in the admin area (by @andreoam, #321) (https://github.com/slawkens/myaac/commit/42671c5c199dd9e91c774d8c9d30da9e12f1b695)
+
+### Changed
+* Commands: Allow settings to be changed/reset by plugin name (https://github.com/slawkens/myaac/commit/f8c4332e03e838d285ea0afb4b72b7c23e324d45, https://github.com/slawkens/myaac/commit/4b948e9510f7ba69d00f84d7fdaea8b3bf05b630)
+* Templates: Menus should be saved for each template separately (https://github.com/slawkens/myaac/commit/482f4067b2a2e7513d9ba214274a361ffaf123d8)
+
+### Fixed
+* Online: Fix skulls display (#320) (https://github.com/slawkens/myaac/commit/98073a110ae13f9592ec9d2c4d1d1aace87587a9)
+* Online: Fix if there is no world_id in the server_record table (https://github.com/slawkens/myaac/commit/b6e1620f14c20eecfc9001a7d86dfb67942985c6) (Reported by @gesior in #318)
+* tibiacom: some fixes to menus (https://github.com/slawkens/myaac/commit/20f99903ae80c74ad66c1cf5a5ea8d0b0fc2fd70, https://github.com/slawkens/myaac/commit/11dae90fa94fbbf47447017db5e5847c33d6aadf)
+* Guilds: Fix for some servers that don't have guild_invites table (https://github.com/slawkens/myaac/commit/9725a3c2bdb7003f5cb48febb77604c31a9b805b)
+
 ## [1.8 - 02.08.2025]
 
 ### Added
