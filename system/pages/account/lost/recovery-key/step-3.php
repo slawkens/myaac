@@ -7,7 +7,8 @@ $title = 'Lost Account';
 
 $key = trim($_REQUEST['key']);
 $nick = stripslashes($_REQUEST['nick']);
-$newPassword = trim($_REQUEST['passor']);
+$newPassword = trim($_REQUEST['password']);
+$passwordRepeat = trim($_REQUEST['password_repeat']);
 $newEmail = trim($_REQUEST['email']);
 
 $player = new OTS_Player();
@@ -23,51 +24,52 @@ if($account->isLoaded()) {
 	if(!empty($accountKey)) {
 		if($accountKey == $key) {
 			if(Validator::password($newPassword)) {
-				if(Validator::email($newEmail)) {
-					$account->setEMail($newEmail);
+				if ($newPassword == $passwordRepeat) {
+					if (Validator::email($newEmail)) {
+						$account->setEMail($newEmail);
 
-					$tmp_new_pass = $newPassword;
-					if(USE_ACCOUNT_SALT)
-					{
-						$salt = generateRandomString(10, false, true, true);
-						$tmp_new_pass = $salt . $newPassword;
-					}
+						$tmp_new_pass = $newPassword;
+						if (USE_ACCOUNT_SALT) {
+							$salt = generateRandomString(10, false, true, true);
+							$tmp_new_pass = $salt . $newPassword;
+						}
 
-					$account->setPassword(encrypt($tmp_new_pass));
-					$account->save();
+						$account->setPassword(encrypt($tmp_new_pass));
+						$account->save();
 
-					if(USE_ACCOUNT_SALT) {
-						$account->setCustomField('salt', $salt);
-					}
+						if (USE_ACCOUNT_SALT) {
+							$account->setCustomField('salt', $salt);
+						}
 
-					$statusMsg = '';
-					if($account->getCustomField('email_next') < time()) {
-						$mailBody = $twig->render('mail.account.lost.new-email.html.twig', [
+						$statusMsg = '';
+						if ($account->getCustomField('email_next') < time()) {
+							$mailBody = $twig->render('mail.account.lost.new-email.html.twig', [
+								'account' => $account,
+								'newPassword' => $newPassword,
+								'newEmail' => $newEmail,
+							]);
+
+							if (_mail($account->getCustomField('email'), configLua('serverName') . ' - New password to your account', $mailBody)) {
+								$statusMsg = '<br /><small>Sent e-mail with your account name and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!</small>';
+							} else {
+								$statusMsg = '<br /><p class="error">An error occurred while sending email! You will not receive e-mail with this informations. For Admin: More info can be found in system/logs/mailer-error.log</p>';
+							}
+						} else {
+							$statusMsg = '<br /><small>You will not receive e-mail with this informations.</small>';
+						}
+
+						$twig->display('account/lost/finish.new-email.html.twig', [
+							'statusMsg' => $statusMsg,
 							'account' => $account,
 							'newPassword' => $newPassword,
 							'newEmail' => $newEmail,
 						]);
-
-						if(_mail($account->getCustomField('email'), configLua('serverName') . ' - New password to your account', $mailBody)) {
-							$statusMsg = '<br /><small>Sent e-mail with your account name and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!</small>';
-						}
-						else {
-							$statusMsg = '<br /><p class="error">An error occurred while sending email! You will not receive e-mail with this informations. For Admin: More info can be found in system/logs/mailer-error.log</p>';
-						}
+					} else {
+						$errors[] = Validator::getLastError();
 					}
-					else {
-						$statusMsg = '<br /><small>You will not receive e-mail with this informations.</small>';
-					}
-
-					$twig->display('account/lost/finish.new-email.html.twig', [
-						'statusMsg' => $statusMsg,
-						'account' => $account,
-						'newPassword' => $newPassword,
-						'newEmail' => $newEmail,
-					]);
 				}
 				else {
-					$errors[] = Validator::getLastError();
+					$errors[] = 'Passwords are not the same!';
 				}
 			}
 			else {

@@ -9,7 +9,7 @@ if($account->isLoaded()) {
 	$account_key = $account->getCustomField('key');
 
 	if(!empty($account_key)) {
-		$twig->display('account/lost/recovery-key.html.twig', [
+		$twig->display('account/lost/recovery-key.step-1.html.twig', [
 			'nick' => $nick,
 		]);
 	}

@@ -12,9 +12,34 @@ Your account name, new password and new e-mail.<br/>
 	<tbody>
 	<tr>
 		<td>
-			Account name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ account.getName() }}</b><br/>
-			New password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ newPassword }}</b><br/>
-			New e-mail address:&nbsp;<b>{{ newEmail }}</b><br/>
+
+			<table>
+				<tr>
+					<td>
+						Account name:
+					</td>
+					<td>
+						<b>{{ account.getName() }}</b>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						New password:
+					</td>
+					<td>
+						<b>{{ newPassword }}</b>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						New e-mail address:
+					</td>
+					<td>
+						<b>{{ newEmail }}</b>
+					</td>
+				</tr>
+			</table>
+
 			{{ statusMsg|raw }}
 		</td>
 	</tr>

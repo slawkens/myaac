@@ -5,22 +5,40 @@ Please enter new password to your account and repeat to make sure you remember p
 
 	<input type="hidden" name="character" value="{{ character }}">
 	<input type="hidden" name="code" value="{{ code }}">
+
 	<table class="myaac-table" style="width: 100%;">
 
 		<thead>
 		<tr>
-			<th class="white"><B>Passwords</B></th>
+			<th class="white"><b>Passwords</b></th>
 		</tr>
 		</thead>
 
 		<tbody>
 		<tr>
 			<td>
-				New password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" ID="passor" name="passor" value="" size="40"><br/>
-				Repeat new password:&nbsp;<input TYPE="password" ID="passor2" name="passor2" value="" size="40"><br/>
+				<table>
+					<tr>
+						<td>
+							<label for="password">New password:</label>
+						</td>
+						<td>
+							<input type="password" id="password" name="password" value="" size="40">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="password_repeat">Repeat new password:</label>
+						</td>
+						<td>
+							<input type="password" id="password_repeat" name="password_repeat" value="" size="40">
+						</td>
+					</tr>
+				</table>
 			</td>
 		</tr>
 		</tbody>
+
 	</table>
 	<br/>
 	<table style="width: 100%">

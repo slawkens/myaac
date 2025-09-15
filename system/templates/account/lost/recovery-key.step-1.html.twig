@@ -16,8 +16,24 @@ If you enter right recovery key you will see form to set new e-mail and password
 		<tbody>
 		<tr>
 			<td>
-				Character name:&nbsp;<input type=text name="nick" value="{{ nick }}" size="40" readonly="readonly"><br/>
-				Recovery key:&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="key" value="" size="40"><br/>
+				<table>
+					<tr>
+						<td>
+							<label for="nick">Character name:</label>
+						</td>
+						<td>
+							<input type=text id="nick" name="nick" value="{{ nick }}" size="40" readonly="readonly">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="key">Recovery key:</label>
+						</td>
+						<td>
+							<input type="text" id="key" name="key" value="" size="40">
+						</td>
+					</tr>
+				</table>
 			</td>
 		</tr>
 		</tbody>

@@ -5,11 +5,12 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-$newPassword = $_REQUEST['passor'];
+$newPassword = $_REQUEST['password'];
+$passwordRepeat = $_REQUEST['password_repeat'];
 $code = $_REQUEST['code'];
 $character = stripslashes($_REQUEST['character']);
 
-if(empty($code) || empty($character) || empty($newPassword)) {
+if(empty($code) || empty($character) || empty($newPassword) || empty($passwordRepeat)) {
 	$errors[] = 'Please enter code from e-mail and name of one character from account. Then press Submit.';
 
 	$twig->display('error_box.html.twig', [
@@ -34,38 +35,41 @@ if($player->isLoaded()) {
 
 if($account->isLoaded()) {
 	if($account->getCustomField('email_code') == $code) {
-		if(Validator::password($newPassword)) {
-			$tmp_new_pass = $newPassword;
-			if(USE_ACCOUNT_SALT) {
-				$salt = generateRandomString(10, false, true, true);
-				$tmp_new_pass  = $salt . $newPassword;
-				$account->setCustomField('salt', $salt);
+		if ($newPassword == $passwordRepeat) {
+			if (Validator::password($newPassword)) {
+				$tmp_new_pass = $newPassword;
+				if (USE_ACCOUNT_SALT) {
+					$salt = generateRandomString(10, false, true, true);
+					$tmp_new_pass = $salt . $newPassword;
+					$account->setCustomField('salt', $salt);
+				}
+
+				$account->setPassword(encrypt($tmp_new_pass));
+				$account->save();
+				$account->setCustomField('email_code', '');
+
+				$mailBody = $twig->render('mail.account.lost.new-password.html.twig', [
+					'account' => $account,
+					'newPassword' => $newPassword,
+				]);
+
+				$statusMsg = '';
+				if (_mail($account->getCustomField('email'), configLua('serverName') . ' - Your new password', $mailBody)) {
+					$statusMsg = '<br /><small>New password work! Sent e-mail with your password and account name. You should receive this e-mail in 15 minutes. You can login now with new password!';
+				} else {
+					$statusMsg = '<br /><p class="error">New password work! An error occurred while sending email! You will not receive e-mail with new password. For Admin: More info can be found in system/logs/mailer-error.log';
+				}
+
+				$twig->display('account/lost/finish.new-password.html.twig', [
+					'statusMsg' => $statusMsg,
+					'newPassword' => $newPassword,
+				]);
+			} else {
+				$error = Validator::getLastError();
 			}
-
-			$account->setPassword(encrypt($tmp_new_pass));
-			$account->save();
-			$account->setCustomField('email_code', '');
-
-			$mailBody = $twig->render('mail.account.lost.new-password.html.twig', [
-				'account' => $account,
-				'newPassword' => $newPassword,
-			]);
-
-			$statusMsg = '';
-			if(_mail($account->getCustomField('email'), configLua('serverName') . ' - Your new password', $mailBody)) {
-				$statusMsg = '<br /><small>New password work! Sent e-mail with your password and account name. You should receive this e-mail in 15 minutes. You can login now with new password!';
-			}
-			else {
-				$statusMsg = '<br /><p class="error">New password work! An error occurred while sending email! You will not receive e-mail with new password. For Admin: More info can be found in system/logs/mailer-error.log';
-			}
-
-			$twig->display('account/lost/finish.new-password.html.twig', [
-				'statusMsg' => $statusMsg,
-				'newPassword' => $newPassword,
-			]);
 		}
 		else {
-			$error = Validator::getLastError();
+			$error = 'Passwords are not the same!';
 		}
 	}
 	else {
