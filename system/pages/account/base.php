@@ -17,6 +17,10 @@ if(!$logged)
 	if(!empty($errors))
 		$twig->display('error_box.html.twig', array('errors' => $errors));
 
+	if (defined('HIDE_LOGIN_BOX') && HIDE_LOGIN_BOX) {
+		return;
+	}
+
 	$twig->display('account.login.html.twig', array(
 		'redirect' => $_REQUEST['redirect'] ?? null,
 		'account' => USE_ACCOUNT_NAME ? 'Name' : 'Number',
