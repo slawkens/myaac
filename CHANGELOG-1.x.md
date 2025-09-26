@@ -14,6 +14,7 @@
 * Login Page: Add missing csrf() - fix create account button (https://github.com/slawkens/myaac/commit/3c0cb53e17dd0b85394cfa0fdc9cf9ad8d4551df)
 * tibiacom template: Fix account lost menu (https://github.com/slawkens/myaac/commit/ed9beaf2b6ca069e304e569c52e5b9188b58f05c)
 * tibiacom template: Fix Menu div wrong tag/closing (#329) (https://github.com/slawkens/myaac/commit/85e7005fd3f0be51466151a3c122b96085fdfe68)
+* tibiacom template: Replace firstChild with firstElementChild (Thanks to @un000000) (https://github.com/slawkens/myaac/commit/df7b6e29fb8875da97f431468c81ee99116271d9)
 
 ## [1.8.1 - 05.09.2025]
 
