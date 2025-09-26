@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.8.2 - 26.09.2025]
+
+### Added
+* Routes: Possibility to override routes with plugins pages, like characters.php - No need to define routes in plugin.json anymore (https://github.com/slawkens/myaac/commit/3f24f961b1cdeff5c60387e837ae454448bc5e1b)
+
+### Changed
+* Style: Better look for myaac-table (https://github.com/slawkens/myaac/commit/a6032093b21e5bb3f0e75d2704da87d6dea6469d, https://github.com/slawkens/myaac/commit/5aa9bbf1c8e580d973ec82ac012489f8e7bc437e)
+
+### Fixed
+* Install: Fix when config.local.php cannot be saved (https://github.com/slawkens/myaac/commit/4eab805d26d8c5562b29ed699769919d77dabced)
+* Create Account: Fix an exception when email cannot be sent (https://github.com/slawkens/myaac/commit/d0112d1a67e8b854b65ad131f0375b79305df8d3)
+* Login Page: Add missing csrf() - fix create account button (https://github.com/slawkens/myaac/commit/3c0cb53e17dd0b85394cfa0fdc9cf9ad8d4551df)
+* tibiacom template: Fix account lost menu (https://github.com/slawkens/myaac/commit/ed9beaf2b6ca069e304e569c52e5b9188b58f05c)
+* tibiacom template: Fix Menu div wrong tag/closing (#329) (https://github.com/slawkens/myaac/commit/85e7005fd3f0be51466151a3c122b96085fdfe68)
+
 ## [1.8.1 - 05.09.2025]
 
 ### Added
