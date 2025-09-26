@@ -102,14 +102,14 @@ if(isset($config['boxes']))
 		}
 		function LoginButtonAction()
 		{
-		  if(loginStatus == "false") {
+		  if(loginStatus === "false") {
 			window.location = "<?php echo getLink('account/manage'); ?>";
 		  } else {
 			window.location = "<?php echo getLink('account/manage'); ?>";
 		  }
 		}
 		function LoginstatusTextAction(source) {
-		  if(loginStatus == "false") {
+		  if(loginStatus === "false") {
 			window.location = "<?php echo getLink('account/create'); ?>";
 		  } else {
 			window.location = "<?php echo getLink('account/logout'); ?>";
