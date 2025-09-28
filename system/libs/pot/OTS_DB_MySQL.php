@@ -28,6 +28,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 {
 	private array $has_table_cache = [];
 	private array $has_column_cache = [];
+	private array $get_column_info_cache = [];
 
 	private bool $clearCacheAfter = false;
 /**
@@ -247,6 +248,51 @@ class OTS_DB_MySQL extends OTS_Base_DB
 		}
 
 		return true;
+	}
+
+	public function getColumnInfo(string $table, string $column): bool|array
+	{
+		if(isset($this->get_column_info_cache[$table . '.' . $column])) {
+			return $this->get_column_info_cache[$table . '.' . $column];
+		}
+
+		return $this->getColumnInfoInternal($table, $column);
+	}
+
+	private function getColumnInfoInternal(string $table, string $column): bool|array
+	{
+		if (!$this->hasTable($table) || !$this->hasColumn($table, $column)) {
+			return false;
+		}
+
+		$formatResult = function ($result) {
+			return [
+				'field' => $result['Field'],
+				'type' => $result['Type'],
+				'null' => strtolower($result['Null']),
+				'default' => $result['Default'],
+				'extra' => $result['Extra'],
+			];
+		};
+
+		$query = $this->query('SHOW COLUMNS FROM `' . $table . "` LIKE " . $this->quote($column));
+		$rowCount = $query->rowCount();
+		if ($rowCount > 1) {
+			$tmp = [];
+
+			$results = $query->fetchAll(PDO::FETCH_ASSOC);
+			foreach ($results as $result) {
+				$tmp[] = $formatResult($result);
+			}
+
+			return ($this->get_column_info_cache[$table . '.' . $column] = $tmp);
+		}
+		else if ($rowCount == 1) {
+			$result = $query->fetch(PDO::FETCH_ASSOC);
+			return ($this->get_column_info_cache[$table . '.' . $column] = $formatResult($result));
+		}
+
+		return [];
 	}
 
 	public function revalidateCache() {
