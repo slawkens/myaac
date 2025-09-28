@@ -101,6 +101,8 @@ $twig->addFunction($function);
 $function = new TwigFunction('hook', function ($context, $hook, array $params = []) {
 	global $hooks;
 
+	//note($hook);
+
 	if(is_string($hook)) {
 		if (defined($hook)) {
 			$hook = constant($hook);
