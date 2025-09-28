@@ -26,10 +26,10 @@ use MyAAC\Cache\Cache;
  */
 class OTS_DB_MySQL extends OTS_Base_DB
 {
-	private $has_table_cache = array();
-	private $has_column_cache = array();
+	private array $has_table_cache = [];
+	private array $has_column_cache = [];
 
-	private $clearCacheAfter = false;
+	private bool $clearCacheAfter = false;
 /**
  * Creates database connection.
  *
@@ -209,7 +209,8 @@ class OTS_DB_MySQL extends OTS_Base_DB
 		return $sql;
 	}
 
-	public function hasTable($name) {
+	public function hasTable($name): bool
+	{
 		if(isset($this->has_table_cache[$name])) {
 			return $this->has_table_cache[$name];
 		}
@@ -217,12 +218,13 @@ class OTS_DB_MySQL extends OTS_Base_DB
 		return $this->hasTableInternal($name);
 	}
 
-	private function hasTableInternal($name) {
-		global $config;
-		return ($this->has_table_cache[$name] = $this->query('SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = ' . $this->quote($config['database_name']) . ' AND `TABLE_NAME` = ' . $this->quote($name) . ' LIMIT 1;')->rowCount() > 0);
+	private function hasTableInternal($name): bool
+	{
+		return ($this->has_table_cache[$name] = $this->query('SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = ' . $this->quote(config('database_name')) . ' AND `TABLE_NAME` = ' . $this->quote($name) . ' LIMIT 1;')->rowCount() > 0);
 	}
 
-	public function hasColumn($table, $column) {
+	public function hasColumn($table, $column): bool
+	{
 		if(isset($this->has_column_cache[$table . '.' . $column])) {
 			return $this->has_column_cache[$table . '.' . $column];
 		}
