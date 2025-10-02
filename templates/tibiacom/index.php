@@ -27,26 +27,18 @@ if(isset($config['boxes']))
 		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
 		<?php
 			if(PAGE !== 'news') {
-				if(isset($_REQUEST['subtopic'])) {
-					$tmp = escapeHtml($_REQUEST['subtopic']);
-					if($tmp === 'accountmanagement') {
-						$tmp = 'accountmanage';
+				$tmp = str_replace('/', '_', isset($_REQUEST['subtopic']) ? escapeHtml($_REQUEST['subtopic']) :  PAGE);
+				$exp = explode('/', PAGE);
+				if(PAGE !== 'account/create' && PAGE !== 'account/lost' && isset($exp[1])) {
+					if ($exp[0] === 'account' && $exp[1] === 'lost') {
+						$tmp = 'account_lost';
+					} elseif ($exp[0] === 'account') {
+						$tmp = 'account_manage';
+					} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
+						$tmp = 'news_archive';
 					}
-				}
-				else {
-					$tmp = str_replace('/', '_', PAGE);
-					$exp = explode('/', PAGE);
-					if(PAGE !== 'account/create' && PAGE !== 'account/lost' && isset($exp[1])) {
-						if ($exp[0] === 'account' && $exp[1] === 'lost') {
-							$tmp = 'account_lost';
-						} elseif ($exp[0] === 'account') {
-							$tmp = 'account_manage';
-						} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
-							$tmp = 'news_archive';
-						}
-						else if (in_array($exp[0], ['characters', 'highscores', 'guilds', 'forum'])) {
-							$tmp = $exp[0];
-						}
+					else if (in_array($exp[0], ['characters', 'highscores', 'guilds', 'forum'])) {
+						$tmp = $exp[0];
 					}
 				}
 			}
