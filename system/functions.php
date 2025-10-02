@@ -1142,6 +1142,10 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 			'looktype', 'lookhead', 'lookbody', 'looklegs', 'lookfeet'
 		];
 
+		if ($db->hasColumn('players', 'promotion')) {
+			$columns[] = 'promotion';
+		}
+
 		if ($db->hasColumn('players', 'lookaddons')) {
 			$columns[] = 'lookaddons';
 		}
