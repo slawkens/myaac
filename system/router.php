@@ -88,9 +88,9 @@ if($logged && $account_logged && $account_logged->isLoaded()) {
 /**
  * Routes loading
  */
-$routesFinal = [];
 $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) {
-	global $routesFinal;
+	global $cache;
+	$routesFinal = [];
 
 	foreach(getDatabasePages() as $page) {
 		$routesFinal[] = ['*', $page, '__database__/' . $page, 100];
@@ -200,6 +200,8 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 			log_append('router.log', $warning);
 		}
 	}
+
+	$cache->set('routes_final', serialize($routesFinal), 10 * 365 * 24 * 60 * 60); // 10 years / infinite
 },
 	[
 		'cacheFile' => CACHE . 'route.cache',
@@ -224,6 +226,13 @@ if(!empty($page) && preg_match('/^[A-z0-9\/\-]+$/', $page)) {
 	}
 
 	$foundRoute = false;
+
+	$routesFinal = [];
+	$tmp = null;
+	if ($cache->fetch('routes_final', $tmp)) {
+		$routesFinal = unserialize($tmp);
+	}
+
 	foreach ($routesFinal as $route) {
 		if ($page === $route[1]) {
 			$file = $route[2];
