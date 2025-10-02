@@ -88,8 +88,10 @@ if($logged && $account_logged && $account_logged->isLoaded()) {
 /**
  * Routes loading
  */
+$routesFinal = [];
 $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) {
-	$routesFinal = [];
+	global $routesFinal;
+
 	foreach(getDatabasePages() as $page) {
 		$routesFinal[] = ['*', $page, '__database__/' . $page, 100];
 	}
@@ -165,7 +167,7 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 	echo '</pre>';
 	die;
 */
-	foreach ($routesFinal as $route) {
+	foreach ($routesFinal as &$route) {
 		if ($route[0] === '*') {
 			$route[0] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'];
 		}
@@ -212,7 +214,7 @@ $found = true;
 
 // old support for pages like /?subtopic=accountmanagement
 $page = $_REQUEST['p'] ?? ($_REQUEST['subtopic'] ?? '');
-if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
+if(!empty($page) && preg_match('/^[A-z0-9\/\-]+$/', $page)) {
 	if (isset($_REQUEST['p'])) { // some plugins may require this
 		$_REQUEST['subtopic'] = $_REQUEST['p'];
 	}
@@ -221,9 +223,20 @@ if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
 		require SYSTEM . 'compat/pages.php';
 	}
 
-	$file = loadPageFromFileSystem($page, $found);
-	if(!$found) {
-		$file = false;
+	$foundRoute = false;
+	foreach ($routesFinal as $route) {
+		if ($page === $route[1]) {
+			$file = $route[2];
+			$foundRoute = true;
+			break;
+		}
+	}
+
+	if (!$foundRoute) {
+		$file = loadPageFromFileSystem($page, $found);
+		if(!$found) {
+			$file = false;
+		}
 	}
 }
 else {
