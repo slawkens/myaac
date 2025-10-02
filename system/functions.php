@@ -1146,6 +1146,10 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 			$columns[] = 'lookaddons';
 		}
 
+		if ($db->hasColumn('players', 'lookmount')) {
+			$columns[] = 'lookmount';
+		}
+
 		return Player::query()
 			->select($columns)
 			->withOnlineStatus()
