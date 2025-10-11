@@ -9,7 +9,7 @@
 			<div class="AttentionSign" style="background-image:url({{ template_path }}/images/content/attentionsign.gif);"></div>
 			<b>The Following Errors Have Occurred:</b><br/>
 			{% for error in errors %}
-			<li>{{ error|striptags('<b>')|raw }}</li>
+			<li>{{ error|striptags('<b><a>')|raw }}</li>
 			{% endfor %}
 		</div>
 		<div class="BoxFrameHorizontal" style="background-image:url({{ template_path }}/images/content/box-frame-horizontal.gif);"></div>
