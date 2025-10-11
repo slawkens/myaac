@@ -102,18 +102,13 @@ if(!$db->hasColumn('accounts', 'web_flags')) {
 		success($locale['step_database_adding_field'] . ' accounts.web_flags...');
 }
 
-if(!$db->hasColumn('accounts', 'email_hash')) {
-	if(query("ALTER TABLE `accounts` ADD `email_hash` VARCHAR(32) NOT NULL DEFAULT '' AFTER `web_flags`;"))
-		success($locale['step_database_adding_field'] . ' accounts.email_hash...');
-}
-
 if(!$db->hasColumn('accounts', 'email_verified')) {
-	if(query("ALTER TABLE `accounts` ADD `email_verified` TINYINT(1) NOT NULL DEFAULT 0 AFTER `email_hash`;"))
+	if(query("ALTER TABLE `accounts` ADD `email_verified` TINYINT(1) NOT NULL DEFAULT 0 AFTER `web_flags`;"))
 		success($locale['step_database_adding_field'] . ' accounts.email_verified...');
 }
 
 if(!$db->hasColumn('accounts', 'email_new')) {
-	if(query("ALTER TABLE `accounts` ADD `email_new` VARCHAR(255) NOT NULL DEFAULT '' AFTER `email_hash`;"))
+	if(query("ALTER TABLE `accounts` ADD `email_new` VARCHAR(255) NOT NULL DEFAULT '' AFTER `email_verified`;"))
 		success($locale['step_database_adding_field'] . ' accounts.email_new...');
 }
 

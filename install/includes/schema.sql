@@ -1,4 +1,4 @@
-SET @myaac_database_version = 45;
+SET @myaac_database_version = 46;
 
 CREATE TABLE `myaac_account_actions`
 (
@@ -8,6 +8,15 @@ CREATE TABLE `myaac_account_actions`
 	`date` int NOT NULL DEFAULT 0,
 	`action` varchar(255) NOT NULL DEFAULT '',
 	KEY (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
+CREATE TABLE `myaac_account_emails_verify`
+(
+	`id` int NOT NULL AUTO_INCREMENT,
+	`account_id` int NOT NULL,
+	`hash` varchar(32) NOT NULL,
+	`sent_at` int NOT NULL DEFAULT 0,
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
 CREATE TABLE `myaac_admin_menu`
