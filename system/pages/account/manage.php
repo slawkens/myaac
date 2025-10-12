@@ -38,20 +38,24 @@ csrfProtect();
 
 $groups = new OTS_Groups_List();
 
-$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
-$dayOrDays = $account_logged->getPremDays() == 1 ? 'day' : 'days';
-$premDays = $account_logged->getPremDays();
-$vipEnabled = isset($config['lua']['vipSystemEnabled']) && getBoolean($config['lua']['vipSystemEnabled']);
-$premiumLabel = $vipEnabled ? 'VIP' : 'Premium Account';
 /**
  * @var OTS_Account $account_logged
  */
-if(!$account_logged->isPremium())
+$premDays = $account_logged->getPremDays();
+
+$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $premDays == OTS_Account::GRATIS_PREMIUM_DAYS;
+$dayOrDays = ($premDays == 1 ? 'day' : 'days');
+
+$vipSystemEnabled = isset($config['lua']['vipSystemEnabled']) && getBoolean($config['lua']['vipSystemEnabled']);
+$premiumLabel = $vipSystemEnabled ? 'VIP' : 'Premium Account';
+
+if ($freePremium && !$vipSystemEnabled) {
+	$account_status = '<b><span style="color: green">Gratis Premium Account</span></b>';
+} else if(!$account_logged->isPremium()) {
 	$account_status = '<b><span style="color: red">Free Account</span></b>';
-else if ($freePremium && !$vipEnabled)
-    $account_status = '<b><span style="color: green">Gratis Premium Account</span></b>';
-else
-    $account_status = '<b><span style="color: green">' . $premiumLabel . ', ' . $premDays . ' '.$dayOrDays.' left</span></b>';
+} else {
+	$account_status = '<b><span style="color: green">' . $premiumLabel . ', ' . $premDays . ' '.$dayOrDays.' left</span></b>';
+}
 
 $recovery_key = $account_logged->getCustomField('key');
 if(empty($recovery_key))
