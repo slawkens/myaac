@@ -22,13 +22,13 @@ if(empty($hash)) {
 }
 
 // by default link is valid for 30 days
-$accountVerifyEmail = AccountEmailVerify::where('hash', $hash)->where('sent_at', '>', time() - 30 * 24 * 60 * 60)->first();
-if(!$accountVerifyEmail) {
+$accountEmailVerify = AccountEmailVerify::where('hash', $hash)->where('sent_at', '>', time() - 30 * 24 * 60 * 60)->first();
+if(!$accountEmailVerify) {
 	note("Wrong link or link has expired.");
 }
 else
 {
-	$accountModel = Account::where('id', $accountVerifyEmail->account_id)->where('email_verified', 0)->first();
+	$accountModel = Account::where('id', $accountEmailVerify->account_id)->where('email_verified', 0)->first();
 	if ($accountModel) {
 		$accountModel->email_verified = 1;
 		$accountModel->save();
