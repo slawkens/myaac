@@ -44,6 +44,6 @@ else
 		}
 	}
 	else {
-		error('Link has expired.');
+		error('Your account is already verified.');
 	}
 }
