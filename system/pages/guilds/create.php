@@ -21,6 +21,8 @@ if(!$logged) {
 	$errors[] = 'You are not logged in. You can\'t create guild.';
 }
 
+$freePremium = getBoolean(configLua('freePremium'));
+
 $array_of_player_nig = array();
 if(empty($errors))
 {
@@ -31,7 +33,7 @@ if(empty($errors))
 		if(!$player_rank->isLoaded())
 		{
 			if($player->getLevel() >= setting('core.guild_need_level')) {
-				if(!setting('core.guild_need_premium') || $account_logged->isPremium()) {
+				if(!setting('core.guild_need_premium') || $account_logged->isPremium() || $freePremium) {
 					$array_of_player_nig[] = $player->getName();
 				}
 			}
@@ -95,7 +97,7 @@ if($todo == 'save')
 		if($player->getLevel() < setting('core.guild_need_level')) {
 			$errors[] = 'Character <b>'.$name.'</b> has too low level. To create guild you need character with level <b>' . setting('core.guild_need_level') . '</b>.';
 		}
-		if(setting('core.guild_need_premium') && !$account_logged->isPremium()) {
+		if(setting('core.guild_need_premium') && !$account_logged->isPremium() && !$freePremium) {
 			$errors[] = 'Character <b>'.$name.'</b> is on FREE account. To create guild you need PREMIUM account.';
 		}
 	}
