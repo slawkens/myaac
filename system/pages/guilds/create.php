@@ -21,7 +21,8 @@ if(!$logged) {
 	$errors[] = 'You are not logged in. You can\'t create guild.';
 }
 
-$freePremium = getBoolean(configLua('freePremium'));
+$configLuaFreePremium = configLua('freePremium');
+$freePremium = (isset($configLuaFreePremium) && getBoolean($configLuaFreePremium)) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
 
 $array_of_player_nig = array();
 if(empty($errors))
