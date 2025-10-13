@@ -49,8 +49,8 @@ $dayOrDays = ($premDays == 1 ? 'day' : 'days');
 $vipSystemEnabled = isset($config['lua']['vipSystemEnabled']) && getBoolean($config['lua']['vipSystemEnabled']);
 $premiumLabel = $vipSystemEnabled ? 'VIP' : 'Premium Account';
 
-if ($freePremium) {
-	$account_status = '<b><span style="color: green">Gratis ' . $premiumLabel .'</span></b>';
+if ($freePremium && !$vipSystemEnabled) {
+	$account_status = '<b><span style="color: green">Gratis Premium Account</span></b>';
 } else if(!$account_logged->isPremium()) {
 	$account_status = '<b><span style="color: red">Free Account</span></b>';
 } else {
