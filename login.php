@@ -220,6 +220,8 @@ switch ($action) {
 			}
 		}
 
+		/*
+		 * not needed anymore?
 		if (fieldExist('premdays', 'accounts') && fieldExist('lastday', 'accounts')) {
 			$save = false;
 			$timeNow = time();
@@ -256,6 +258,7 @@ switch ($action) {
 				$account->save();
 			}
 		}
+		*/
 
 		$worlds = [$world];
 		$playdata = compact('worlds', 'characters');
