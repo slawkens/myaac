@@ -33,10 +33,11 @@ class Account extends Model {
 
 	public function getPremiumDaysAttribute()
 	{
-		if(isset($this->premium_ends_at) || isset($this->premend)) {
-			$col = isset($this->premium_ends_at) ? 'premium_ends_at' : 'premend';
-			$ret = ceil(($this->{$col}- time()) / (24 * 60 * 60));
-			return $ret > 0 ? $ret : 0;
+		if(isset($this->premium_ends_at) || isset($this->premend) ||
+			(isCanary() && isset($this->data['lastday']))) {
+				$col = (isset($this->premium_ends_at) ? 'premium_ends_at' : (isset($this->data['lastday']) ? 'lastday' : 'premend'));
+				$ret = ceil(($this->{$col}- time()) / (24 * 60 * 60));
+				return max($ret, 0);
 		}
 
 		if($this->premdays == 0) {
