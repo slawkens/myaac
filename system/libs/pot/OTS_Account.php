@@ -449,6 +449,11 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 			return max($ret, 0);
 		}
 
+		if (isCanary() && isset($this->data['lastday'])) {
+			$ret = ceil(($this->data['lastday'] - time()) / 86400);
+			return $ret > 0 ? $ret : 0;
+		}
+
 		if($this->data['premdays'] == 0) {
 			return 0;
 		}

@@ -1704,6 +1704,12 @@ function getAccountIdentityColumn(): string
 	return 'id';
 }
 
+function isCanary(): bool
+{
+	$vipSystemEnabled = configLua('vipSystemEnabled');
+	return isset($vipSystemEnabled);
+}
+
 // validator functions
 require_once SYSTEM . 'compat/base.php';
 
