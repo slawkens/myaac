@@ -3,6 +3,7 @@
 use MyAAC\Settings;
 
 const MYAAC_ADMIN = true;
+const IGNORE_SET_LAST_VISIT = true;
 
 require '../../common.php';
 require SYSTEM . 'functions.php';
