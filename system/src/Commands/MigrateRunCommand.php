@@ -10,6 +10,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateRunCommand extends Command
 {
+	use Env;
+
 	protected function configure(): void
 	{
 		$this->setName('migrate:run')
@@ -23,11 +25,11 @@ class MigrateRunCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		require SYSTEM . 'init.php';
-
 		$io = new SymfonyStyle($input, $output);
 
 		$ids = $input->getArgument('id');
+
+		$this->init();
 
 		// pre-check
 		// in case one of the migrations doesn't exist - we won't execute any of them
