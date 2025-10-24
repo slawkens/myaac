@@ -22,6 +22,16 @@ class MigrateCommand extends Command
 		$this->init();
 
 		$io = new SymfonyStyle($input, $output);
+
+		$tmp = '';
+		if(fetchDatabaseConfig('database_version', $tmp)) { // we got version
+			$tmp = (int)$tmp;
+			if ($tmp >= DATABASE_VERSION) {
+				$io->success('Already on latest version.');
+				return Command::SUCCESS;
+			}
+		}
+
 		require SYSTEM . 'migrate.php';
 
 		$io->success('Migrated to latest version (' . DATABASE_VERSION . ')');
