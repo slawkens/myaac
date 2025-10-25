@@ -1,6 +1,4 @@
-SET @myaac_database_version = 46;
-
-CREATE TABLE `myaac_account_actions`
+CREATE TABLE IF NOT EXISTS `myaac_account_actions`
 (
 	`account_id` int NOT NULL,
 	`ip` int unsigned NOT NULL DEFAULT 0,
@@ -10,7 +8,7 @@ CREATE TABLE `myaac_account_actions`
 	KEY (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_account_emails_verify`
+CREATE TABLE IF NOT EXISTS `myaac_account_emails_verify`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`account_id` int NOT NULL,
@@ -19,7 +17,7 @@ CREATE TABLE `myaac_account_emails_verify`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_admin_menu`
+CREATE TABLE IF NOT EXISTS `myaac_admin_menu`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(255) NOT NULL DEFAULT '',
@@ -30,7 +28,7 @@ CREATE TABLE `myaac_admin_menu`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_changelog`
+CREATE TABLE IF NOT EXISTS `myaac_changelog`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`body` varchar(500) NOT NULL DEFAULT '',
@@ -42,9 +40,7 @@ CREATE TABLE `myaac_changelog`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-INSERT INTO `myaac_changelog` (`id`, `type`, `where`, `date`, `body`, `hide`) VALUES (1, 3, 2, UNIX_TIMESTAMP(), 'MyAAC installed. (:', 0);
-
-CREATE TABLE `myaac_config`
+CREATE TABLE IF NOT EXISTS `myaac_config`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(30) NOT NULL,
@@ -53,9 +49,7 @@ CREATE TABLE `myaac_config`
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-INSERT INTO `myaac_config` (`name`, `value`) VALUES ('database_version', @myaac_database_version);
-
-CREATE TABLE `myaac_faq`
+CREATE TABLE IF NOT EXISTS `myaac_faq`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`question` varchar(255) NOT NULL DEFAULT '',
@@ -65,7 +59,7 @@ CREATE TABLE `myaac_faq`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_forum_boards`
+CREATE TABLE IF NOT EXISTS `myaac_forum_boards`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(32) NOT NULL,
@@ -77,13 +71,8 @@ CREATE TABLE `myaac_forum_boards`
 	`hide` tinyint NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
-INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`, `closed`) VALUES (NULL, 'News', 'News commenting', 0, 1);
-INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`) VALUES (NULL, 'Trade', 'Trade offers.', 1);
-INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`) VALUES (NULL, 'Quests', 'Quest making.', 2);
-INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`) VALUES (NULL, 'Pictures', 'Your pictures.', 3);
-INSERT INTO `myaac_forum_boards` (`id`, `name`, `description`, `ordering`) VALUES (NULL, 'Bug Report', 'Report bugs there.', 4);
 
-CREATE TABLE `myaac_forum`
+CREATE TABLE IF NOT EXISTS `myaac_forum`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`first_post` int NOT NULL DEFAULT 0,
@@ -107,7 +96,7 @@ CREATE TABLE `myaac_forum`
 	KEY `section` (`section`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_menu`
+CREATE TABLE IF NOT EXISTS `myaac_menu`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`template` varchar(255) NOT NULL,
@@ -121,7 +110,7 @@ CREATE TABLE `myaac_menu`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_monsters` (
+CREATE TABLE IF NOT EXISTS `myaac_monsters` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`hide` tinyint NOT NULL DEFAULT 0,
 	`name` varchar(255) NOT NULL,
@@ -154,7 +143,7 @@ CREATE TABLE `myaac_monsters` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_news`
+CREATE TABLE IF NOT EXISTS `myaac_news`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`title` varchar(100) NOT NULL,
@@ -172,7 +161,7 @@ CREATE TABLE `myaac_news`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_news_categories`
+CREATE TABLE IF NOT EXISTS `myaac_news_categories`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(50) NOT NULL DEFAULT "",
@@ -182,13 +171,7 @@ CREATE TABLE `myaac_news_categories`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-INSERT INTO `myaac_news_categories` (`id`, `icon_id`) VALUES (NULL, 0);
-INSERT INTO `myaac_news_categories` (`id`, `icon_id`) VALUES (NULL, 1);
-INSERT INTO `myaac_news_categories` (`id`, `icon_id`) VALUES (NULL, 2);
-INSERT INTO `myaac_news_categories` (`id`, `icon_id`) VALUES (NULL, 3);
-INSERT INTO `myaac_news_categories` (`id`, `icon_id`) VALUES (NULL, 4);
-
-CREATE TABLE `myaac_notepad`
+CREATE TABLE IF NOT EXISTS `myaac_notepad`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`account_id` int NOT NULL,
@@ -198,7 +181,7 @@ CREATE TABLE `myaac_notepad`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_pages`
+CREATE TABLE IF NOT EXISTS `myaac_pages`
 (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`name` varchar(30) NOT NULL,
@@ -214,7 +197,7 @@ CREATE TABLE `myaac_pages`
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_gallery`
+CREATE TABLE IF NOT EXISTS `myaac_gallery`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`comment` varchar(255) NOT NULL DEFAULT '',
@@ -226,9 +209,7 @@ CREATE TABLE `myaac_gallery`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-INSERT INTO `myaac_gallery` (`id`, `ordering`, `comment`, `image`, `thumb`, `author`) VALUES (NULL, 1, 'Demon', 'images/gallery/demon.jpg', 'images/gallery/demon_thumb.gif', 'MyAAC');
-
-CREATE TABLE `myaac_settings`
+CREATE TABLE IF NOT EXISTS `myaac_settings`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(255) NOT NULL DEFAULT '',
@@ -238,7 +219,7 @@ CREATE TABLE `myaac_settings`
 	KEY `key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_spells`
+CREATE TABLE IF NOT EXISTS `myaac_spells`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`spell` varchar(255) NOT NULL DEFAULT '',
@@ -261,7 +242,7 @@ CREATE TABLE `myaac_spells`
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_visitors`
+CREATE TABLE IF NOT EXISTS `myaac_visitors`
 (
 	`ip` varchar(45) NOT NULL,
 	`lastvisit` int NOT NULL DEFAULT 0,
@@ -270,7 +251,7 @@ CREATE TABLE `myaac_visitors`
 	UNIQUE (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE `myaac_weapons`
+CREATE TABLE IF NOT EXISTS `myaac_weapons`
 (
 	`id` int NOT NULL,
 	`level` int NOT NULL DEFAULT 0,
