@@ -66,3 +66,5 @@ if (Gallery::count() === 0) {
 		'ordering' => 0,
 	]);
 }
+
+success($locale['step_database_success_import_data']);
