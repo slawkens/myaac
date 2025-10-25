@@ -7,18 +7,6 @@ use MyAAC\Models\ForumBoard;
 use MyAAC\Models\Gallery;
 use MyAAC\Models\NewsCategory;
 
-if (NewsCategory::count() === 0) {
-	$newsCategories = [
-		0, 1, 2, 3, 4
-	];
-
-	foreach ($newsCategories as $iconId) {
-		NewsCategory::create([
-			'icon_id' => $iconId,
-		]);
-	}
-}
-
 if (Changelog::count() === 0) {
 	Changelog::create([
 		'type' => 3,
@@ -28,7 +16,6 @@ if (Changelog::count() === 0) {
 		'hide' => 0,
 	]);
 }
-
 
 if (Config::where('name', 'database_version')->count() === 0) {
 	Config::create([
@@ -53,6 +40,18 @@ if (ForumBoard::count() === 0) {
 			'description' => $forumBoard['description'],
 			'ordering' => $i++,
 			'closed' => $forumBoard['closed'],
+		]);
+	}
+}
+
+if (NewsCategory::count() === 0) {
+	$newsCategoriesIcons = [
+		0, 1, 2, 3, 4
+	];
+
+	foreach ($newsCategoriesIcons as $iconId) {
+		NewsCategory::create([
+			'icon_id' => $iconId,
 		]);
 	}
 }
