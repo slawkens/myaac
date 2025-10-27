@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.8.4 - 27.10.2025]
+
+### Changed
+* Reimport myaac_ tables on every install, this fixes errors when one table is missing or is duplicated (https://github.com/slawkens/myaac/commit/2580edadf84779f09fd395c21f92019b2c762f83)
+* Use custom env init on migrate, migrate:run and migrate:to (https://github.com/slawkens/myaac/commit/13ea68cc0c9349380c8e4051d702a6c2c8256f44, https://github.com/slawkens/myaac/commit/07fd034fe4cb0ffdb88667b1e400f414d0c6d06f)
+
+### Fixed
+* Show if there is mysql error on import schema (https://github.com/slawkens/myaac/commit/44110a9496b4385e42c31b75de301037e711b6c3)
+* Fix the premium checks (mostly TFS 1.6+), introduced in v1.8.3 (https://github.com/slawkens/myaac/commit/9d92a11fb7cb6d7a1619d79c12faaa0b1c01f980)
+
 ## [1.8.3 - 21.10.2025]
 
 ### Added
