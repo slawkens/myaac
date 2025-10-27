@@ -78,6 +78,7 @@ $locale['step_database_error_mysql_connect_3'] = 'MySQL ist nicht richtig konfig
 $locale['step_database_error_mysql_connect_4'] = 'MySQL-Server läuft nicht.';
 $locale['step_database_error_schema'] = 'Fehler beim Importieren des Schemas:';
 $locale['step_database_success_schema'] = '$PREFIX$ Tabellen wurden erfolgreich installiert.';
+$locale['step_database_success_import_data'] = 'Import von Daten für Tabellen was erfolgreich.';
 $locale['step_database_error_file'] = '$FILE$ konnte nicht geöffnet werden. Bitte kopieren Sie diesen Inhalt und fügen Sie ihn dort ein:';
 $locale['step_database_adding_field'] = 'Folgendes Feld wurde hinzugefügt: ';
 $locale['step_database_modifying_field'] = 'Folgendes Feld wurde geändert: ';

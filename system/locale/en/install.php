@@ -83,6 +83,7 @@ $locale['step_database_error_mysql_connect_3'] = 'MySQL is not configured proper
 $locale['step_database_error_mysql_connect_4'] = 'MySQL server is not running.';
 $locale['step_database_error_schema'] = 'Error while importing schema:';
 $locale['step_database_success_schema'] = 'Successfully installed $PREFIX$ tables.';
+$locale['step_database_success_import_data'] = 'Successfully imported base data for tables.';
 $locale['step_database_error_file'] = '$FILE$ couldn\'t be opened. Please copy this content and paste there:';
 $locale['step_database_adding_field'] = 'Adding field';
 $locale['step_database_modifying_field'] = 'Modifying field';

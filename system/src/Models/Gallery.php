@@ -10,4 +10,9 @@ class Gallery extends Model {
 
 	public $timestamps = false;
 
+	protected $fillable = [
+		'comment', 'image', 'thumb',
+		'author', 'ordering', 'hide',
+	];
+
 }
