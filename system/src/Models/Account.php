@@ -5,6 +5,8 @@ namespace MyAAC\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property integer $premium_ends_at
+ * @property integer $premend
  * @property integer $lastday
  * @property integer $premdays
  */
