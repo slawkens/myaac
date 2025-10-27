@@ -8,7 +8,7 @@
 
 ### Fixed
 * Show if there is mysql error on import schema (https://github.com/slawkens/myaac/commit/44110a9496b4385e42c31b75de301037e711b6c3)
-* Fix the premium checks (mostly TFS 1.6+), introduced in v1.8.3 (https://github.com/slawkens/myaac/commit/9d92a11fb7cb6d7a1619d79c12faaa0b1c01f980)
+* Fix the premium checks, introduced in v1.8.3 (https://github.com/slawkens/myaac/commit/9d92a11fb7cb6d7a1619d79c12faaa0b1c01f980)
 
 ## [1.8.3 - 21.10.2025]
 
