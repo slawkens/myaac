@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Account extends Model {
 
+	const GRATIS_PREMIUM_DAYS = 65535;
+
 	protected $table = 'accounts';
 
 	public $timestamps = false;
@@ -34,9 +36,9 @@ class Account extends Model {
 	public function getPremiumDaysAttribute()
 	{
 		if(isset($this->premium_ends_at) || isset($this->premend) ||
-			(isCanary() && isset($this->data['lastday']))) {
-				$col = (isset($this->premium_ends_at) ? 'premium_ends_at' : (isset($this->data['lastday']) ? 'lastday' : 'premend'));
-				$ret = ceil(($this->{$col}- time()) / (24 * 60 * 60));
+			(isCanary() && isset($this->lastday))) {
+				$col = (isset($this->premium_ends_at) ? 'premium_ends_at' : (isset($this->lastday) ? 'lastday' : 'premend'));
+				$ret = ceil(($this->{$col} - time()) / (24 * 60 * 60));
 				return max($ret, 0);
 		}
 
@@ -44,8 +46,8 @@ class Account extends Model {
 			return 0;
 		}
 
-		if($this->premdays == 65535){
-			return 65535;
+		if($this->premdays == self::GRATIS_PREMIUM_DAYS){
+			return self::GRATIS_PREMIUM_DAYS;
 		}
 
 		$ret = ceil($this->premdays - ((int)date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->lastday))) - date("z", $this->lastday)));
@@ -54,12 +56,14 @@ class Account extends Model {
 
 	public function getIsPremiumAttribute()
 	{
-		if(isset($this->premium_ends_at)) {
-			return $this->premium_ends_at > time();
+		if(isset($this->premium_ends_at) || isset($this->premend) ||
+			(isCanary() && isset($this->lastday))) {
+			$col = (isset($this->premium_ends_at) ? 'premium_ends_at' : (isset($this->lastday) ? 'lastday' : 'premend'));
+			return $this->{$col} > time();
 		}
 
-		if(isset($this->premend)) {
-			return $this->premend > time();
+		if($this->premdays == self::GRATIS_PREMIUM_DAYS){
+			return true;
 		}
 
 		return ($this->premdays - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->lastday))) - date("z", $this->lastday)) > 0);
