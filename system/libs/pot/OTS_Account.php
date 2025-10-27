@@ -472,7 +472,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		return $this->data['lastday'];
 	}
 
-	public function isPremium()
+	public function isPremium(): bool
 	{
 		if(isset($this->data['premium_ends_at']) || isset($this->data['premend']) ||
 			(isCanary() && isset($this->data['lastday']))) {

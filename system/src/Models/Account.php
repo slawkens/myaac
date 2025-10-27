@@ -56,7 +56,7 @@ class Account extends Model {
 		return max($ret, 0);
 	}
 
-	public function getIsPremiumAttribute()
+	public function getIsPremiumAttribute(): bool
 	{
 		if(isset($this->premium_ends_at) || isset($this->premend) ||
 			(isCanary() && isset($this->lastday))) {
