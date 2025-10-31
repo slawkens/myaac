@@ -1142,8 +1142,16 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 			'looktype', 'lookhead', 'lookbody', 'looklegs', 'lookfeet'
 		];
 
+		if ($db->hasColumn('players', 'promotion')) {
+			$columns[] = 'promotion';
+		}
+
 		if ($db->hasColumn('players', 'lookaddons')) {
 			$columns[] = 'lookaddons';
+		}
+
+		if ($db->hasColumn('players', 'lookmount')) {
+			$columns[] = 'lookmount';
 		}
 
 		return Player::query()
@@ -1632,13 +1640,14 @@ function camelCaseToUnderscore($input)
 	return ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $input)), '_');
 }
 
-function removeIfFirstSlash(&$text) {
+function removeIfFirstSlash(&$text): void
+{
 	if(strpos($text, '/') === 0) {
 		$text = str_replace_first('/', '', $text);
 	}
 };
 
-function escapeHtml($html) {
+function escapeHtml($html): string {
 	return htmlspecialchars($html);
 }
 
@@ -1652,7 +1661,7 @@ function getGuildNameById($id)
 	return false;
 }
 
-function getGuildLogoById($id)
+function getGuildLogoById($id): string
 {
 	$logo = 'default.gif';
 
@@ -1668,7 +1677,8 @@ function getGuildLogoById($id)
 	return BASE_URL . GUILD_IMAGES_DIR . $logo;
 }
 
-function displayErrorBoxWithBackButton($errors, $action = null) {
+function displayErrorBoxWithBackButton($errors, $action = null): void
+{
 	global $twig;
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
 	$twig->display('account.back_button.html.twig', [
@@ -1694,6 +1704,12 @@ function getAccountIdentityColumn(): string
 	}
 
 	return 'id';
+}
+
+function isCanary(): bool
+{
+	$vipSystemEnabled = configLua('vipSystemEnabled');
+	return isset($vipSystemEnabled);
 }
 
 // validator functions

@@ -11,6 +11,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateToCommand extends Command
 {
+	use Env;
+
 	protected function configure(): void
 	{
 		$this->setName('migrate:to')
@@ -32,7 +34,7 @@ class MigrateToCommand extends Command
 			return Command::FAILURE;
 		}
 
-		$this->initEnv();
+		$this->init();
 
 		$currentVersion = Config::where('name', 'database_version')->first()->value;
 		if ($currentVersion > $versionDest) {
@@ -79,30 +81,5 @@ class MigrateToCommand extends Command
 		}
 
 		updateDatabaseConfig('database_version', ($_up ? $id : $id - 1));
-	}
-
-	private function initEnv()
-	{
-		global $config;
-		if (!isset($config['installed']) || !$config['installed']) {
-			throw new \RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
-		}
-
-		if(empty($config['server_path'])) {
-			throw new \RuntimeException('Server Path has been not set. Go to config.php and set it.');
-		}
-
-		// take care of trailing slash at the end
-		if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
-			$config['server_path'] .= '/';
-
-		$config['lua'] = load_config_lua($config['server_path'] . 'config.lua');
-
-		// POT
-		require_once SYSTEM . 'libs/pot/OTS.php';
-		$ots = POT::getInstance();
-		$eloquentConnection = null;
-
-		require_once SYSTEM . 'database.php';
 	}
 }

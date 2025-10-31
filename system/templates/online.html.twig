@@ -101,7 +101,7 @@
 
 	<tr>
 		<td class="LabelV150"><b>Location Datacenter:</b></td>
-		<td>{{ setting('core.online_datacenter') }} <small>(Server date & time: - {{ "now"|date("d/m/Y H:i:s") }})</small></td>
+		<td>{{ setting('core.online_datacenter')|raw }} <small>(Server date & time: - {{ "now"|date("d/m/Y H:i:s") }})</small></td>
 	</tr>
 	<tr>
 		<td class="LabelV150"><b>PvP Type:</b></td>

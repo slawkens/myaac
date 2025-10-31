@@ -10,6 +10,7 @@
  */
 
 use MyAAC\CreateCharacter;
+use MyAAC\Models\AccountEmailVerify;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Create Account';
@@ -244,7 +245,12 @@ if($save)
 		if(setting('core.mail_enabled') && setting('core.account_mail_verify'))
 		{
 			$hash = md5(generateRandomString(16, true, true) . $email);
-			$new_account->setCustomField('email_hash', $hash);
+
+			AccountEmailVerify::create([
+				'account_id' => $new_account->getId(),
+				'hash' => $hash,
+				'sent_at' => time(),
+			]);
 
 			$verify_url = getLink('account/confirm-email/' . $hash);
 			$body_html = $twig->render('mail.account.verify.html.twig', array(

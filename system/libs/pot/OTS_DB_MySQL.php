@@ -120,6 +120,11 @@ class OTS_DB_MySQL extends OTS_Base_DB
 				if($cache->fetch('database_columns', $tmp) && $tmp) {
 					$this->has_column_cache = unserialize($tmp);
 				}
+
+				$tmp = null;
+				if($cache->fetch('database_columns_info', $tmp) && $tmp) {
+					$this->get_column_info_cache = unserialize($tmp);
+				}
 			}
 		}
 
@@ -156,11 +161,13 @@ class OTS_DB_MySQL extends OTS_Base_DB
 			if ($this->clearCacheAfter) {
 				$cache->delete('database_tables');
 				$cache->delete('database_columns');
+				$cache->delete('database_columns_info');
 				$cache->delete('database_checksum');
 			}
 			else {
 				$cache->set('database_tables', serialize($this->has_table_cache), 3600);
 				$cache->set('database_columns', serialize($this->has_column_cache), 3600);
+				$cache->set('database_columns_info', serialize($this->get_column_info_cache), 3600);
 				$cache->set('database_checksum', serialize(sha1($config['database_host'] . '.' . $config['database_name'])), 3600);
 			}
 		}
@@ -295,7 +302,8 @@ class OTS_DB_MySQL extends OTS_Base_DB
 		return [];
 	}
 
-	public function revalidateCache() {
+	public function revalidateCache(): void
+	{
 		foreach($this->has_table_cache as $key => $value) {
 			$this->hasTableInternal($key);
 		}
@@ -308,6 +316,21 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
 			if($this->has_table_cache[$explode[0]]) {
 				$this->hasColumnInternal($explode[0], $explode[1]);
+			}
+		}
+
+		foreach($this->get_column_info_cache as $key => $value) {
+			$explode = explode('.', $key);
+			if(!isset($this->has_table_cache[$explode[0]])) { // first check if table exist
+				$this->hasTableInternal($explode[0]);
+			}
+
+			if($this->has_table_cache[$explode[0]]) {
+				$this->hasColumnInternal($explode[0], $explode[1]);
+			}
+
+			if($this->has_table_cache[$explode[0]]) {
+				$this->getColumnInfoInternal($explode[0], $explode[1]);
 			}
 		}
 	}
