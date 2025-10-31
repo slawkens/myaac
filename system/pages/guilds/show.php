@@ -16,19 +16,18 @@ $title = 'Guilds';
 require __DIR__ . '/base.php';
 
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
-if(!Validator::guildName($guild_name))
+if(!Validator::guildName($guild_name)) {
 	$errors[] = Validator::getLastError();
+}
 
-if(empty($errors))
-{
+if(empty($errors)) {
 	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded())
 		$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 }
 
-if(!empty($errors))
-{
+if(!empty($errors)) {
 	$twig->display('error_box.html.twig', array('errors' => $errors));
 	$twig->display('guilds.back_button.html.twig');
 	return;
@@ -47,9 +46,8 @@ $level_in_guild = 0;
 
 $players_from_account_in_guild = array();
 $players_from_account_ids = array();
-if($logged)
-{
-	$account_players = $account_logged->getPlayers();
+if($logged) {
+	$account_players = $account_logged->getPlayersList();
 	foreach($account_players as $player)
 	{
 		$players_from_account_ids[] = $player->getId();
@@ -123,24 +121,27 @@ foreach($rank_list as $rank)
 	}
 }
 
-include(SYSTEM . 'libs/pot/InvitesDriver.php');
-new InvitesDriver($guild);
-$invited_list = $guild->listInvites();
+$invited_list = [];
 $show_accept_invite = 0;
-if($logged && count($invited_list) > 0)
-{
-	foreach($invited_list as $invited_player)
-	{
-		if(count($account_players) > 0)
-		{
-			foreach($account_players as $player_from_acc)
-			{
-				if($player_from_acc->isLoaded() && $invited_player->isLoaded() && $player_from_acc->getName() == $invited_player->getName())
-					$show_accept_invite++;
+
+if ($db->hasTableAndColumns('guild_invites', ['player_id'])) {
+	include(SYSTEM . 'libs/pot/InvitesDriver.php');
+	new InvitesDriver($guild);
+	$invited_list = $guild->listInvites();
+
+	if($logged && count($invited_list) > 0) {
+		foreach($invited_list as $invited_player) {
+			if(count($account_players) > 0) {
+				foreach($account_players as $player_from_acc) {
+					if($player_from_acc->isLoaded() && $invited_player->isLoaded() && $player_from_acc->getName() == $invited_player->getName()) {
+						$show_accept_invite++;
+					}
+				}
 			}
 		}
 	}
 }
+
 
 $useGuildNick = $db->hasTable('guild_members') || $db->hasTable('guild_membership') || $db->hasColumn('players', 'guildnick');
 

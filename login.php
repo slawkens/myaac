@@ -86,12 +86,25 @@ switch ($action) {
 		die(json_encode(['eventlist' => $eventlist, 'lastupdatetimestamp' => time()]));
 
 	case 'boostedcreature':
+		$clientVersion = (int)setting('core.client');
+
+		// 13.40 and up
+		if ($clientVersion >= 1340) {
+			$creatureBoost = $db->query("SELECT * FROM " . $db->tableName('boosted_creature'))->fetchAll();
+			$bossBoost     = $db->query("SELECT * FROM " . $db->tableName('boosted_boss'))->fetchAll();
+			die(json_encode([
+				'boostedcreature' => true,
+				'creatureraceid'  => intval($creatureBoost[0]['raceid']),
+				'bossraceid'      => intval($bossBoost[0]['raceid'])
+			]));
+		}
+
+		// lower clients
 		$boostedCreature = BoostedCreature::first();
 		die(json_encode([
 			'boostedcreature' => true,
 			'raceid' => $boostedCreature->raceid
 		]));
-	break;
 
 	case 'login':
 
@@ -207,6 +220,8 @@ switch ($action) {
 			}
 		}
 
+		/*
+		 * not needed anymore?
 		if (fieldExist('premdays', 'accounts') && fieldExist('lastday', 'accounts')) {
 			$save = false;
 			$timeNow = time();
@@ -243,6 +258,7 @@ switch ($action) {
 				$account->save();
 			}
 		}
+		*/
 
 		$worlds = [$world];
 		$playdata = compact('worlds', 'characters');

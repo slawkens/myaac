@@ -512,6 +512,13 @@ function template_place_holder($type): string
 	}
 	elseif ($type === 'body_start') {
 		$ret .= $twig->render('browsehappy.html.twig');
+
+		if (admin()) {
+			global $account_logged;
+			$ret .= $twig->render('admin-bar.html.twig', [
+				'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+			]);
+		}
 	}
 	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
@@ -767,6 +774,10 @@ function formatExperience($exp, $color = true)
 	return $ret;
 }
 
+function getExperienceForLevel($level): float|int {
+	return ( 50 / 3 ) * pow( $level, 3 ) - ( 100 * pow( $level, 2 ) ) + ( ( 850 / 3 ) * $level ) - 200;
+}
+
 function get_locales()
 {
 	$ret = array();
@@ -982,11 +993,12 @@ function load_config_lua($filename)
 		foreach($lines as $ln => $line)
 		{
 			$line = trim($line);
-			if(@$line[0] === '{' || @$line[0] === '}') {
+			if(isset($line[0]) && ($line[0] === '{' || $line[0] === '}')) {
 				// arrays are not supported yet
 				// just ignore the error
 				continue;
 			}
+
 			$tmp_exp = explode('=', $line, 2);
 			if(str_contains($line, 'dofile')) {
 				$delimiter = '"';
@@ -1130,8 +1142,16 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 			'looktype', 'lookhead', 'lookbody', 'looklegs', 'lookfeet'
 		];
 
+		if ($db->hasColumn('players', 'promotion')) {
+			$columns[] = 'promotion';
+		}
+
 		if ($db->hasColumn('players', 'lookaddons')) {
 			$columns[] = 'lookaddons';
+		}
+
+		if ($db->hasColumn('players', 'lookmount')) {
+			$columns[] = 'lookmount';
 		}
 
 		return Player::query()
@@ -1216,7 +1236,8 @@ function setting($key)
 		return $settings[$key[0]] = $key[1];
 	}
 
-	return $settings[$key]['value'];
+	$ret = $settings[$key];
+	return isset($ret) ? $ret['value'] : null;
 }
 
 function clearCache()
@@ -1265,13 +1286,14 @@ function clearCache()
 		$db->setClearCacheAfter(true);
 	}
 
+	if (function_exists('apcu_clear_cache')) {
+		apcu_clear_cache();
+	}
+
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
 	deleteDirectory(CACHE . 'twig', ['index.html'], true);
 	deleteDirectory(CACHE . 'plugins', ['index.html'], true);
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html', 'persistent'], true);
-
-	// routes cache
-	clearRouteCache();
 
 	global $hooks;
 	$hooks->trigger(HOOK_CACHE_CLEAR, ['cache' => Cache::getInstance()]);
@@ -1618,13 +1640,14 @@ function camelCaseToUnderscore($input)
 	return ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $input)), '_');
 }
 
-function removeIfFirstSlash(&$text) {
+function removeIfFirstSlash(&$text): void
+{
 	if(strpos($text, '/') === 0) {
 		$text = str_replace_first('/', '', $text);
 	}
 };
 
-function escapeHtml($html) {
+function escapeHtml($html): string {
 	return htmlspecialchars($html);
 }
 
@@ -1638,7 +1661,7 @@ function getGuildNameById($id)
 	return false;
 }
 
-function getGuildLogoById($id)
+function getGuildLogoById($id): string
 {
 	$logo = 'default.gif';
 
@@ -1654,7 +1677,8 @@ function getGuildLogoById($id)
 	return BASE_URL . GUILD_IMAGES_DIR . $logo;
 }
 
-function displayErrorBoxWithBackButton($errors, $action = null) {
+function displayErrorBoxWithBackButton($errors, $action = null): void
+{
 	global $twig;
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
 	$twig->display('account.back_button.html.twig', [
@@ -1680,6 +1704,12 @@ function getAccountIdentityColumn(): string
 	}
 
 	return 'id';
+}
+
+function isCanary(): bool
+{
+	$vipSystemEnabled = configLua('vipSystemEnabled');
+	return isset($vipSystemEnabled);
 }
 
 // validator functions

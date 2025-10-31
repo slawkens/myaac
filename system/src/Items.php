@@ -76,10 +76,11 @@ class Items
 
 	public static function get($id) {
 		self::load();
-		return isset(self::$items[$id]) ? self::$items[$id] : [];
+		return self::$items[$id] ?? [];
 	}
 
-	public static function getDescription($id, $count = 1) {
+	public static function getDescription($id, $count = 1): string
+	{
 		$item = self::get($id);
 
 		$attr = $item['attributes'];
@@ -112,15 +113,15 @@ class Items
 			$s .= 'an item of type ' . $item['id'];
 
 		if(isset($attr['type']) && strtolower($attr['type']) == 'rune') {
-			$item = Spell::where('item_id', $id)->first();
-			if($item) {
-				if($item->level > 0 && $item->maglevel > 0) {
-					$s .= '. ' . ($count > 1 ? "They" : "It") . ' can only be used by ';
+			$spell = Spell::where('item_id', $id)->first();
+			if($spell) {
+				if($spell->level > 0 && $spell->maglevel > 0) {
+					$s .= '. ' . ($count > 1 ? 'They' : 'It') . ' can only be used by ';
 				}
 
 				$configVocations = config('vocations');
-				if(!empty(trim($item->vocations))) {
-					$vocations = json_decode($item->vocations);
+				if(!empty(trim($spell->vocations))) {
+					$vocations = json_decode($spell->vocations);
 					if(count($vocations) > 0) {
 						foreach($vocations as $voc => $show) {
 							$vocations[$configVocations[$voc]] = $show;
@@ -133,8 +134,39 @@ class Items
 
 				$s .= ' with';
 
+				if ($spell->level > 0) {
+					$s .= ' level ' . $spell->level;
+				}
+
+				if ($spell->maglevel > 0) {
+					if ($spell->level > 0) {
+						$s .= ' and';
+					}
+
+					$s .= ' magic level ' . $spell->maglevel;
+				}
+
+				$s .= ' or higher';
 			}
 		}
+
+		if (!empty($item['weaponType'])) {
+			if ($item['weaponType'] == 'distance' && isset($item['ammoType'])) {
+				$s .= ' (Range:' . $item['range'];
+			}
+
+			if (isset($item['attack']) && $item['attack'] != 0) {
+				$s .= ', Atk ' . ($item['attack'] > 0 ? '+' . $item['attack'] : '-' . $item['attack']);
+			}
+
+			if (isset($item['hitChance']) && $item['hitChance'] != -1) {
+				$s .= ', Hit% ' . ($item['hitChance'] > 0 ? '+' . $item['hitChance'] : '-' . $item['hitChance']);
+			}
+			elseif ($item['weaponType'] != 'ammo') {
+				
+			}
+		}
+
 		return $s;
 	}
 }

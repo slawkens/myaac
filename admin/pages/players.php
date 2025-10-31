@@ -669,11 +669,17 @@ else if (isset($_REQUEST['search'])) {
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="lastip" class="control-label">Last IP:</label>
 										<input type="text" class="form-control" id="lastip" name="lastip" autocomplete="off" maxlength="10" value="<?php
-										if (strlen($player->getLastIP()) > 11) {
-											echo inet_ntop($player->getLastIP());
+										$lastIPColumnInfo = $db->getColumnInfo('players', 'lastip');
+										if ($lastIPColumnInfo && is_array($lastIPColumnInfo)) {
+											if (str_contains($lastIPColumnInfo['type'], 'varbinary')) {
+												echo inet_ntop($player->getLastIP());
+											}
+											else {
+												echo longToIp($player->getLastIP());
+											}
 										}
 										else {
-											echo longToIp($player->getLastIP());
+											echo 'Error';
 										}
 										?>" readonly/>
 									</div>

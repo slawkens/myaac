@@ -42,45 +42,44 @@ if(!$error) {
 	$configToSave['cache_prefix'] = 'myaac_' . generateRandomString(8, true, false, true);
 	$configToSave['database_auto_migrate'] = true;
 
-	if(!$error) {
-		$content = '';
-		$saved = Settings::saveConfig($configToSave, BASE . 'config.local.php', $content);
-		if ($saved) {
-			success($locale['step_database_config_saved']);
-			$_SESSION['saved'] = true;
+	$content = '';
+	$saved = Settings::saveConfig($configToSave, BASE . 'config.local.php', $content);
+	if ($saved || file_exists(BASE . 'config.local.php')) {
+		success($locale['step_database_config_saved']);
+		$_SESSION['saved'] = true;
 
-			require BASE . 'config.local.php';
-			require BASE . 'install/includes/config.php';
+		require BASE . 'config.local.php';
+		require BASE . 'install/includes/config.php';
 
-			if (!$error) {
-				require BASE . 'install/includes/database.php';
+		if (!$error) {
+			require BASE . 'install/includes/database.php';
 
-				if (isset($database_error)) { // we failed connect to the database
-					error($database_error);
+			if (isset($database_error)) { // we failed connect to the database
+				error($database_error);
+			}
+			else {
+				if (!$db->hasTable('accounts')) {
+					$tmp = str_replace('$TABLE$', 'accounts', $locale['step_database_error_table']);
+					error($tmp);
+					$error = true;
 				}
-				else {
-					if (!$db->hasTable('accounts')) {
-						$tmp = str_replace('$TABLE$', 'accounts', $locale['step_database_error_table']);
-						error($tmp);
-						$error = true;
-					}
 
-					if (!$error) {
-						$twig->display('install.installer.html.twig', array(
-							'url' => 'tools/5-database.php',
-							'message' => $locale['loading_spinner']
-						));
-					}
+				if (!$error) {
+					$twig->display('install.installer.html.twig', array(
+						'url' => 'tools/5-database.php',
+						'message' => $locale['loading_spinner']
+					));
 				}
 			}
-		} else {
-			$_SESSION['config_content'] = $content;
-			unset($_SESSION['saved']);
-
-			$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.php</b>', $locale['step_database_error_file']);
-			error($locale['step_database_error_file'] . '<br/>
-				<textarea cols="70" rows="10">' . $content . '</textarea>');
 		}
+	} else {
+		$error = true;
+		$_SESSION['config_content'] = $content;
+		unset($_SESSION['saved']);
+
+		$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
+		error($locale['step_database_error_file'] . '<br/>
+			<textarea cols="70" rows="10">' . $content . '</textarea>');
 	}
 }
 ?>

@@ -122,6 +122,10 @@ try {
 
 	$eloquentConnection = $capsule->getConnection();
 
+	if (isset($twig)) {
+		$twig->addGlobal('db', $db);
+	}
+
 } catch (Exception $e) {
 	if(isset($cache) && $cache->enabled()) {
 		$cache->delete('config_lua');

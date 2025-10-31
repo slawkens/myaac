@@ -28,6 +28,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 if(Forum::canPost($account_logged)) {
 	$players_from_account = $db->query("SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = ".(int) $account_logged->getId())->fetchAll();
 	$thread_id = isset($_REQUEST['thread_id']) ? (int) $_REQUEST['thread_id'] : 0;
@@ -43,11 +45,11 @@ if(Forum::canPost($account_logged)) {
 		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.htmlspecialchars($thread['post_topic']).'</a> >> <b>Post new reply</b><br /><h3>'.htmlspecialchars($thread['post_topic']).'</h3>';
 
 		$quote = isset($_REQUEST['quote']) ? (int) $_REQUEST['quote'] : NULL;
-		$text = isset($_REQUEST['text']) ? stripslashes(trim($_REQUEST['text'])) : NULL;
-		$char_id = (int) ($_REQUEST['char_id'] ?? 0);
-		$post_topic = isset($_REQUEST['topic']) ? stripslashes(trim($_REQUEST['topic'])) : '';
-		$smile = (int)($_REQUEST['smile'] ?? 0);
-		$html = (int)($_REQUEST['html'] ?? 0);
+		$text = isset($_POST['text']) ? stripslashes(trim($_POST['text'])) : NULL;
+		$char_id = (int) ($_POST['char_id'] ?? 0);
+		$post_topic = isset($_POST['topic']) ? stripslashes(trim($_POST['topic'])) : '';
+		$smile = (int)($_POST['smile'] ?? 0);
+		$html = (int)($_POST['html'] ?? 0);
 		$saved = false;
 
 		if (!superAdmin()) {
@@ -60,10 +62,10 @@ if(Forum::canPost($account_logged)) {
 				$text = '[i]Originally posted by ' . $quoted_post[0]['name'] . ' on ' . date('d.m.y H:i:s', $quoted_post[0]['post_date']) . ':[/i][quote]' . $quoted_post[0]['post_text'] . '[/quote]';
 			}
 		}
-		elseif(isset($_REQUEST['save'])) {
+		elseif(isset($_POST['save'])) {
 			$length = strlen($text);
 			if($length < 1 || strlen($text) > 15000) {
-				$errors[] = 'Too short or too long post (Length: $length letters). Minimum 1 letter, maximum 15000 letters.';
+				$errors[] = "Too short or too long post (Length: $length letters). Minimum 1 letter, maximum 15000 letters.";
 			}
 
 			if($char_id == 0) {
@@ -79,15 +81,14 @@ if(Forum::canPost($account_logged)) {
 				}
 
 				if(!$player_on_account) {
-					$errors[] = 'Player with selected ID ' . $char_id . ' doesn\'t exist or isn\'t on your account';
+					$errors[] = "Player with selected ID $char_id doesn't exist or isn't on your account";
 				}
 			}
 
 			if(count($errors) == 0) {
 				$last_post = 0;
 				$query = $db->query('SELECT post_date FROM ' . FORUM_TABLE_PREFIX . 'forum ORDER BY post_date DESC LIMIT 1');
-				if($query->rowCount() > 0)
-				{
+				if($query->rowCount() > 0) {
 					$query = $query->fetch();
 					$last_post = $query['post_date'];
 				}

@@ -1,5 +1,6 @@
-<form action="{{ getLink('guilds') }}?action=create&todo=save" method="post">
+<form action="{{ getLink('guilds') }}?action=create" method="post">
 	{{ csrf() }}
+	<input type="hidden" name="todo" value="save" />
 	<table width="100%" border="0" cellspacing="1" cellpadding="4">
 		<tr>
 			<td bgcolor="{{ config.vdarkborder }}" class="white"><B>Create a {{ config.lua.serverName }} Guild</b></td>

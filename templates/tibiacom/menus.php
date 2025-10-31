@@ -4,7 +4,7 @@ return [
 	MENU_CATEGORY_NEWS => [
 		'Latest News' => 'news',
 		'News Archive' => 'news/archive',
-		'Changelog' => 'changelog',
+		'Changelog' => 'change-log',
 	],
 	MENU_CATEGORY_ACCOUNT => [
 		'Account Management' => 'account/manage',
@@ -33,7 +33,7 @@ return [
 		'Commands' => 'commands',
 		'Exp Stages' => 'exp-stages',
 		'Gallery' => 'gallery',
-		'Server Info' => 'server-info',
+		'Server Info' => 'ots-info',
 		'Exp Table' => 'exp-table',
 		'FAQ' => 'faq',
 	],

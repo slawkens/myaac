@@ -28,6 +28,8 @@ if(!$logged) {
 	return;
 }
 
+csrfProtect();
+
 if(Forum::canPost($account_logged)) {
 	$players_from_account = $db->query('SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = '.(int) $account_logged->getId())->fetchAll();
 	$section_id = $_REQUEST['section_id'] ?? null;
@@ -38,19 +40,18 @@ if(Forum::canPost($account_logged)) {
 			if ($sections[$section_id]['closed'] && !Forum::isModerator())
 				$errors[] = 'You cannot create topic on this board.';
 
-			$quote = (int)(isset($_REQUEST['quote']) ? $_REQUEST['quote'] : 0);
-			$text = isset($_REQUEST['text']) ? stripslashes($_REQUEST['text']) : '';
-			$char_id = (int)(isset($_REQUEST['char_id']) ? $_REQUEST['char_id'] : 0);
-			$post_topic = isset($_REQUEST['topic']) ? stripslashes($_REQUEST['topic']) : '';
-			$smile = (isset($_REQUEST['smile']) ? (int)$_REQUEST['smile'] : 0);
-			$html = (isset($_REQUEST['html']) ? (int)$_REQUEST['html'] : 0);
+			$text = isset($_POST['text']) ? stripslashes($_POST['text']) : '';
+			$char_id = (int)(isset($_POST['char_id']) ? $_POST['char_id'] : 0);
+			$post_topic = isset($_POST['topic']) ? stripslashes($_POST['topic']) : '';
+			$smile = (isset($_POST['smile']) ? (int)$_POST['smile'] : 0);
+			$html = (isset($_POST['html']) ? (int)$_POST['html'] : 0);
 
 			if (!superAdmin()) {
 				$html = 0;
 			}
 
 			$saved = false;
-			if (isset($_REQUEST['save'])) {
+			if (isset($_POST['save'])) {
 				$length = strlen($post_topic);
 				if ($length < 1 || $length > 60) {
 					$errors[] = "Too short or too long topic (Length: $length letters). Minimum 1 letter, maximum 60 letters.";

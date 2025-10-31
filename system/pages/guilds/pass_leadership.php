@@ -15,51 +15,52 @@ require __DIR__ . '/base.php';
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : NULL;
 $pass_to = isset($_REQUEST['player']) ? stripslashes($_REQUEST['player']) : NULL;
 if(!Validator::guildName($guild_name)) {
-	$guild_errors[] = Validator::getLastError();
+	$errors[] = Validator::getLastError();
 }
 
-if(empty($guild_errors)) {
+if(empty($errors)) {
 	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded()) {
-		$guild_errors[] = "Guild with name <b>" . $guild_name . "</b> doesn't exist.";
+		$errors[] = "Guild with name <b>" . $guild_name . "</b> doesn't exist.";
 	}
 }
-if(empty($guild_errors)) {
+
+if(empty($errors)) {
 	if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
 		if(!Validator::characterName($pass_to)) {
-			$guild_errors2[] = 'Invalid player name format.';
+			$errors2[] = 'Invalid player name format.';
 		}
 
-		if(empty($guild_errors2)) {
+		if(empty($errors2)) {
 			$to_player = new OTS_Player();
 			$to_player->find($pass_to);
 			if(!$to_player->isLoaded()) {
-				$guild_errors2[] = 'Player with name <b>'.$pass_to.'</b> doesn\'t exist.';
+				$errors2[] = 'Player with name <b>'.$pass_to.'</b> doesn\'t exist.';
 			} else if ($to_player->isDeleted()) {
-				$guild_errors2[] = "Character with name <b>$pass_to</b> has been deleted.";
+				$errors2[] = "Character with name <b>$pass_to</b> has been deleted.";
 			}
 
-			if(empty($guild_errors2)) {
+			if(empty($errors2)) {
 				$to_player_rank = $to_player->getRank();
 				if($to_player_rank->isLoaded()) {
 					$to_player_guild = $to_player_rank->getGuild();
 					if($to_player_guild->getId() != $guild->getId()) {
-						$guild_errors2[] = 'Player with name <b>'.$to_player->getName().'</b> isn\'t from your guild.';
+						$errors2[] = 'Player with name <b>'.$to_player->getName().'</b> isn\'t from your guild.';
 					}
 				}
 				else {
-					$guild_errors2[] = 'Player with name <b>'.$to_player->getName().'</b> isn\'t from your guild.';
+					$errors2[] = 'Player with name <b>'.$to_player->getName().'</b> isn\'t from your guild.';
 				}
 			}
 		}
 	}
 }
-if(empty($guild_errors) && empty($guild_errors2)) {
+if(empty($errors) && empty($errors2)) {
 	if($logged) {
 		$guild_leader_char = $guild->getOwner();
 		$guild_leader = false;
-		$account_players = $account_logged->getPlayers();
+		$account_players = $account_logged->getPlayersList();
 		foreach($account_players as $player) {
 			if($guild_leader_char->getId() == $player->getId()) {
 				$guild_vice = true;
@@ -99,23 +100,23 @@ if(empty($guild_errors) && empty($guild_errors2)) {
 			}
 		}
 		else {
-			$guild_errors[] = 'You are not a leader of guild!';
+			$errors[] = 'You are not a leader of guild!';
 		}
 	}
 	else {
-		$guild_errors[] = "You are not logged. You can't manage guild.";
+		$errors[] = "You are not logged. You can't manage guild.";
 	}
 }
-if(empty($guild_errors) && !empty($guild_errors2)) {
-	$twig->display('error_box.html.twig', array('errors' => $guild_errors2));
+if(empty($errors) && !empty($errors2)) {
+	$twig->display('error_box.html.twig', array('errors' => $errors2));
 
 	echo '<br/><div style="text-align:center"><form action="' . getLink('guilds') . '?guild='.$guild->getName().'&action=pass_leadership" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }
-if(!empty($guild_errors)) {
-	if(!empty($guild_errors2)) {
-		$guild_errors = array_merge($guild_errors, $guild_errors2);
+if(!empty($errors)) {
+	if(!empty($errors2)) {
+		$errors = array_merge($errors, $errors2);
 	}
-	$twig->display('error_box.html.twig', array('errors' => $guild_errors));
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 
 	echo '<br/><div style="text-align:center"><form action="' . getLink('guilds') . '" method="post">' . $twig->render('buttons.back.html.twig') . '</form></div>';
 }

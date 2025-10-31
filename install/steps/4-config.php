@@ -10,6 +10,14 @@ foreach($config['clients'] as $client) {
 	$clients[$client] = $client_version;
 }
 
+if (empty($_SESSION['var_site_url'])) {
+	//require SYSTEM . 'base.php';
+	$serverUrl = 'http' . (isHttps() ? 's' : '') . '://' . $baseHost;
+	$siteURL = $serverUrl . $baseDir;
+
+	$_SESSION['var_site_url'] = $siteURL;
+}
+
 $twig->display('install.config.html.twig', array(
 	'clients' => $clients,
 	'timezones' => DateTimeZone::listIdentifiers(),

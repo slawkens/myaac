@@ -18,7 +18,16 @@ class Changelog extends Model {
 
 	public $timestamps = false;
 
+	protected $fillable = [
+		'body', 'type', 'where',
+		'date', 'player_id', 'hide',
+	];
+
 	public function scopeIsPublic($query) {
 		$query->where('hide', '!=', 1);
+	}
+
+	public function player() {
+		return $this->belongsTo(Player::class);
 	}
 }

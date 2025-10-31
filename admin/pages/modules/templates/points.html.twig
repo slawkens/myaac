@@ -19,7 +19,7 @@
 						{% set i = i + 1 %}
 						<tr>
 							<th>{{ i }}</th>
-							<td><a href="?p=accounts&search_name={{ result.name }}">{{ result.name }}</a></td>
+							<td><a href="?p=accounts&id={{ result.id }}">{{ result.name }}</a></td>
 							<td>{{ result.premium_points }}</td>
 						</tr>
 					{% endfor %}

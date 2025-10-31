@@ -12,9 +12,10 @@ class MailSendCommand extends Command
 {
 	protected function configure(): void
 	{
-		$this->setName('mail:send')
+		$this->setName('email:send')
+			->setAliases(['mail:send'])
 			->setDescription('This command sends E-Mail to single user. Message can be provided as follows: ' . PHP_EOL
-				. '  echo "Hello World" | php sa email:send --subject="This is the subject" test@test.com')
+				. '  echo "Hello World" | php aac email:send --subject="This is the subject" test@test.com')
 			->addArgument('recipient', InputArgument::REQUIRED, 'Email, Account Name, Account id or Player Name')
 			->addOption('subject', 's', InputOption::VALUE_REQUIRED, 'Subject');
 	}

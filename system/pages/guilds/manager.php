@@ -21,7 +21,7 @@ if(empty($errors)) {
 	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded()) {
-		$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		$errors[] = "Guild with name <b>$guild_name</b> doesn't exist.";
 	}
 }
 
@@ -31,7 +31,7 @@ if(empty($errors)) {
 		$rank_list = $guild->getGuildRanksList();
 		$rank_list->orderBy('level', POT::ORDER_DESC);
 		$guild_leader = false;
-		$account_players = $account_logged->getPlayers();
+		$account_players = $account_logged->getPlayersList();
 		foreach($account_players as $player) {
 			if($guild_leader_char->getId() == $player->getId()) {
 				$guild_vice = true;
@@ -39,22 +39,22 @@ if(empty($errors)) {
 				$level_in_guild = 3;
 			}
 		}
+
 		if($guild_leader) {
 			$twig->display('guilds.manager.html.twig', array(
 				'guild' => $guild,
 				'rank_list' => $rank_list
 			));
 		}
-		else
-		{
+		else {
 			$errors[] = 'You are not a leader of guild!';
 		}
 	}
-	else
-	{
-		$errors[] = 'You are not logged. You can\'t manage guild.';
+	else {
+		$errors[] = "You are not logged. You can't manage guild.";
 	}
 }
+
 if(!empty($errors)) {
 	$twig->display('error_box.html.twig', array('errors' => $errors));
 }

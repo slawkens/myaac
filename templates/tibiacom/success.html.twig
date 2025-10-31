@@ -35,6 +35,7 @@
 		<tr>
 			<td style="border:0;">
 				<form action="{{ getLink('account/manage') }}" method="post">
+					{{ csrf() }}
 					{{ include('buttons.back.html.twig') }}
 				</form>
 			</td>

@@ -17,6 +17,8 @@ if(!$canEdit) {
 	return;
 }
 
+csrfProtect();
+
 $groupsList = new OTS_Groups_List();
 $groups = [
 	['id' => 0, 'name' => 'Guest'],
@@ -30,23 +32,24 @@ foreach ($groupsList as $group) {
 }
 
 if(!empty($action)) {
-	if($action == 'delete_board' || $action == 'edit_board' || $action == 'hide_board' || $action == 'moveup_board' || $action == 'movedown_board')
+	if($action == 'delete_board' || $action == 'edit_board' || $action == 'hide_board' || $action == 'moveup_board' || $action == 'movedown_board') {
 		$id = $_REQUEST['id'];
-
-	if(isset($_REQUEST['access'])) {
-		$access = $_REQUEST['access'];
 	}
 
-	if(isset($_REQUEST['guild'])) {
-		$guild = $_REQUEST['guild'];
+	if(isset($_POST['access'])) {
+		$access = $_POST['access'];
 	}
 
-	if(isset($_REQUEST['name'])) {
-		$name = $_REQUEST['name'];
+	if(isset($_POST['guild'])) {
+		$guild = $_POST['guild'];
 	}
 
-	if(isset($_REQUEST['description'])) {
-		$description = stripslashes($_REQUEST['description']);
+	if(isset($_POST['name'])) {
+		$name = $_POST['name'];
+	}
+
+	if(isset($_POST['description'])) {
+		$description = stripslashes($_POST['description']);
 	}
 
 	$errors = [];
@@ -55,12 +58,13 @@ if(!empty($action)) {
 		if(Forum::add_board($name, $description, $access, $guild, $errors)) {
 			$action = $name = $description = '';
 			header('Location: ' . getLink('forum'));
+			exit;
 		}
 	}
 	else if($action == 'delete_board') {
 		Forum::delete_board($id, $errors);
 		header('Location: ' . getLink('forum'));
-		$action = '';
+		exit;
 	}
 	else if($action == 'edit_board')
 	{
@@ -74,28 +78,27 @@ if(!empty($action)) {
 		else {
 			Forum::update_board($id, $name, $access, $guild, $description);
 			header('Location: ' . getLink('forum'));
-			$action = $name = $description = '';
-			$access = $guild = 0;
+			exit;
 		}
 	}
 	else if($action == 'hide_board') {
 		Forum::toggleHide_board($id, $errors);
 		header('Location: ' . getLink('forum'));
-		$action = '';
+		exit;
 	}
 	else if($action == 'moveup_board') {
 		Forum::move_board($id, -1, $errors);
 		header('Location: ' . getLink('forum'));
-		$action = '';
+		exit;
 	}
 	else if($action == 'movedown_board') {
 		Forum::move_board($id, 1, $errors);
 		header('Location: ' . getLink('forum'));
-		$action = '';
+		exit;
 	}
 
 	if(!empty($errors)) {
-		$twig->display('error_box.html.twig', array('errors' => $errors));
+		$twig->display('error_box.html.twig', ['errors' => $errors]);
 		$action = '';
 	}
 }

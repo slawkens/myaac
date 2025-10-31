@@ -13,25 +13,27 @@ defined('MYAAC') or die('Direct access not allowed!');
 require __DIR__ . '/base.php';
 
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
-$rank_to_delete = isset($_REQUEST['rankid']) ? (int) $_REQUEST['rankid'] : null;
+$rank_to_delete = isset($_POST['rankid']) ? (int) $_POST['rankid'] : null;
 
 if(!Validator::guildName($guild_name)) {
-	$guild_errors[] = Validator::getLastError();
+	$errors[] = Validator::getLastError();
 }
-if(empty($guild_errors)) {
+
+if(empty($errors)) {
 	$guild = new OTS_Guild();
 	$guild->find($guild_name);
 	if(!$guild->isLoaded()) {
-		$guild_errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
+		$errors[] = 'Guild with name <b>'.$guild_name.'</b> doesn\'t exist.';
 	}
 }
-if(empty($guild_errors)) {
+
+if(empty($errors)) {
 	if($logged) {
 		$guild_leader_char = $guild->getOwner();
 		$rank_list = $guild->getGuildRanksList();
 		$rank_list->orderBy('level', POT::ORDER_DESC);
 		$guild_leader = false;
-		$account_players = $account_logged->getPlayers();
+		$account_players = $account_logged->getPlayersList();
 		foreach($account_players as $player) {
 			if($guild->getOwner()->getId() == $player->getId()) {
 				$guild_vice = true;
@@ -39,21 +41,21 @@ if(empty($guild_errors)) {
 				$level_in_guild = 3;
 			}
 		}
+
 		if($guild_leader) {
 			$rank = new OTS_GuildRank();
 			$rank->load($rank_to_delete);
 			if(!$rank->isLoaded()) {
-				$guild_errors2[] = 'Rank with ID '.$rank_to_delete.' doesn\'t exist.';
+				$errors2[] = 'Rank with ID '.$rank_to_delete.' doesn\'t exist.';
 			}
-			else
-			{
+			else {
 				if($rank->getGuild()->getId() != $guild->getId()) {
-					$guild_errors2[] = 'Rank with ID '.$rank_to_delete.' isn\'t from your guild.';
+					$errors2[] = 'Rank with ID '.$rank_to_delete.' isn\'t from your guild.';
 				}
 				else
 				{
 					if(count($rank_list) < 2) {
-						$guild_errors2[] = 'You have only 1 rank in your guild. You can\'t delete this rank.';
+						$errors2[] = 'You have only 1 rank in your guild. You can\'t delete this rank.';
 					}
 					else
 					{
@@ -87,19 +89,21 @@ if(empty($guild_errors)) {
 									$player->setRank($new_rank);
 							}
 						}
+
 						$rank->delete();
 						$saved = true;
 					}
 				}
 			}
-			if($saved) {
+
+			if(isset($saved) && $saved) {
 				$twig->display('success.html.twig', array(
 					'title' => 'Rank Deleted',
 					'description' => 'Rank <b>'.$rank->getName().'</b> has been deleted. Players with this rank has now other rank.',
 					'custom_buttons' => ''
 				));
 			} else {
-				$twig->display('error_box.html.twig', array('errors' => $guild_errors2));
+				$twig->display('error_box.html.twig', array('errors' => $errors2));
 			}
 
 			$twig->display('guilds.back_button.html.twig', array(
@@ -107,18 +111,16 @@ if(empty($guild_errors)) {
 				'action' => getLink('guilds') . '?guild='.$guild->getName().'&action=manager'
 			));
 		}
-		else
-		{
-			$guild_errors[] = 'You are not a leader of guild!';
+		else {
+			$errors[] = 'You are not a leader of guild!';
 		}
 	}
-	else
-	{
-		$guild_errors[] = 'You are not logged. You can\'t manage guild.';
+	else {
+		$errors[] = 'You are not logged. You can\'t manage guild.';
 	}
 }
-if(!empty($guild_errors)) {
-	$twig->display('error_box.html.twig', array('errors' => $guild_errors));
+if(!empty($errors)) {
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 
 	$twig->display('guilds.back_button.html.twig', array(
 		'new_line' => true,

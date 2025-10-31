@@ -93,6 +93,7 @@ if(setting('core.backward_support')) {
 	if($logged && $account_logged)
 		$group_id_of_acc_logged = $account_logged->getGroupId();
 
+	$config['serverPath'] = $config['server_path'];
 	$config['site'] = &$config;
 	$config['server'] = &$config['lua'];
 	$config['site']['shop_system'] = setting('core.gifts_system');
@@ -115,6 +116,14 @@ if(setting('core.backward_support')) {
 
 	foreach($status as $key => $value)
 		$config['status']['serverStatus_' . $key] = $value;
+}
+
+if(setting('core.views_counter')) {
+	require_once SYSTEM . 'counter.php';
+}
+
+if(setting('core.visitors_counter')) {
+	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
 }
 
 require_once SYSTEM . 'router.php';
@@ -151,22 +160,6 @@ if(setting('core.anonymous_usage_statistics')) {
 			$cache->set('last_usage_report', time(), 60 * 60);
 		}
 	}
-}
-
-if(setting('core.views_counter'))
-	require_once SYSTEM . 'counter.php';
-
-if(setting('core.visitors_counter')) {
-	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
-}
-
-/**
- * @var OTS_Account $account_logged
- */
-if ($logged && admin()) {
-	$content .= $twig->render('admin-bar.html.twig', [
-		'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
-	]);
 }
 
 $title_full =  (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];

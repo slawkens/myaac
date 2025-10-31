@@ -1,0 +1,18 @@
+<table class="table table-bordered table-striped">
+	<thead>
+	<tr>
+		<th>Plugin Name</th>
+		<th>Your Version</th>
+		<th>Latest Version</th>
+		<th>Download Link</th>
+	</tr>
+	</thead>
+	{% for plugin in plugins %}
+		<tr>
+			<td>{{ plugin.name }}</td>
+			<td>{{ plugin.yourVersion }}</td>
+			<td>{{ plugin.latestVersion }}</td>
+			<td><a href="{{ plugin.download_link }}" target="_blank">{{ plugin.download_link }}</a></td>
+		</tr>
+	{% endfor %}
+</table>

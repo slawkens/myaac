@@ -10,6 +10,6 @@ class Visitor extends Model {
 
 	public $timestamps = false;
 
-	protected $fillable = ['ip', 'lastivist', 'page', 'user_agent'];
+	protected $fillable = ['ip', 'lastvisit', 'page', 'user_agent'];
 
 }

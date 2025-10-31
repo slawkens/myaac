@@ -49,6 +49,7 @@
 									{% include('buttons.base.html.twig') %}
 								</a>
 							{% endif %}
+							{{ hook('HOOK_GUILDS_AFTER_MANAGE_BUTTON') }}
 						</div>
 					</td>
 				</tr>
@@ -61,6 +62,7 @@
 			{{ hook('HOOK_GUILDS_AFTER_GUILD_INFORMATION') }}
 
 			{% set title = 'Guild Members' %}
+			{% set background = config('lightborder') %}
 			{% set content %}
 			<table style="width:100%;">
 				<tbody>
@@ -151,6 +153,7 @@
 
 			{{ hook('HOOK_GUILDS_AFTER_GUILD_MEMBERS') }}
 			{% set title = 'Invited Characters' %}
+			{% set background = config('lightborder') %}
 			{% set content %}
 			<table style="width:100%;">
 				<tbody>
@@ -232,14 +235,16 @@
 															{% endif %}
 
 															{% if isVice %}
-																<form action="{{ getLink('guilds') }}?action=invite&guild={{ guild_name|url_encode }}" method="post">
-																	{{ csrf() }}
-																	<td>
-																		{% set button_name = 'Invite Character' %}
-																		{% set button_image = '_sbutton_invitecharacter' %}
-																		{% include('buttons.base.html.twig') %}
-																	</td>
-																</form>
+																{% if db.hasTableAndColumns('guild_invites', ['player_id']) %}
+																	<form action="{{ getLink('guilds') }}?action=invite&guild={{ guild_name|url_encode }}" method="post">
+																		{{ csrf() }}
+																		<td>
+																			{% set button_name = 'Invite Character' %}
+																			{% set button_image = '_sbutton_invitecharacter' %}
+																			{% include('buttons.base.html.twig') %}
+																		</td>
+																	</form>
+																{% endif %}
 
 																<form action="{{ getLink('guilds') }}?action=change_rank&guild={{ guild_name|url_encode }}" method="post">
 																	{{ csrf() }}

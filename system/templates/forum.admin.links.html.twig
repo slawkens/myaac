@@ -1,0 +1,43 @@
+<table>
+	<tr>
+		<td>
+			<form action="{{ getLink('forum') }}" method="post" style="float: left">
+				{{ csrf() }}
+				<input type="hidden" name="action" value="edit_board" />
+				<input type="hidden" name="id" value="{{ id }}" />
+				<button type="submit" title="Edit"><img src="images/edit.png"/> Edit</button>
+			</form>
+
+			<form action="{{ getLink('forum') }}" method="post" style="float: left">
+				{{ csrf() }}
+				<input type="hidden" name="action" value="delete_board" />
+				<input type="hidden" name="id" value="{{ id }}" />
+				<button type="submit" onclick="return confirm('Are you sure?');" title="Delete"><img src="images/del.png"/>Delete</button>
+			</form>
+
+			<form action="{{ getLink('forum') }}" method="post" style="float: left">
+				{{ csrf() }}
+				<input type="hidden" name="action" value="hide_board" />
+				<input type="hidden" name="id" value="{{ id }}" />
+				<button type="submit" title="{% if hide != 1 %}Hide{% else %}Show{% endif %}"><img src="images/{{ hide != 1 ? 'success' : 'error' }}.png"/>{{ hide != 1 ? 'Hide' : 'Show' }}</button>
+			</form>
+
+			{% if i != 1 %}
+				<form action="{{ getLink('forum') }}" method="post" style="float: left">
+					{{ csrf() }}
+					<input type="hidden" name="action" value="moveup_board" />
+					<input type="hidden" name="id" value="{{ id }}" />
+					<button type="submit" title="Move up"><img src="images/icons/arrow_up.gif"/>Move up</button>
+				</form>
+			{% endif %}
+			{% if i != loop.last %}
+				<form action="{{ getLink('forum') }}" method="post" style="float: left">
+					{{ csrf() }}
+					<input type="hidden" name="action" value="movedown_board" />
+					<input type="hidden" name="id" value="{{ id }}" />
+					<button type="submit" title="Move down"><img src="images/icons/arrow_down.gif"/>Move down</button>
+				</form>
+			{% endif %}
+		</td>
+	</tr>
+</table>

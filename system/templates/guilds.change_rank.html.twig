@@ -1,5 +1,6 @@
-<form action="{{ getLink('guilds') }}?action=change_rank&guild={{ guild_name }}&todo=save" method="post">
+<form action="{{ getLink('guilds') }}?action=change_rank&guild={{ guild_name }}" method="post">
 	{{ csrf() }}
+	<input type="hidden" name="todo" value="save" />
 	<table border="0" cellspacing="1" cellpadding="4" width="100%">
 		<tr bgcolor="{{ config.vdarkborder }}"><td class="white"><b>Change Rank</b></td></tr>
 		<tr bgcolor="{{ config.darkborder }}">

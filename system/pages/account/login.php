@@ -18,6 +18,8 @@ if($logged || !isset($_POST['account_login']) || !isset($_POST['password_login']
 	return;
 }
 
+csrfProtect();
+
 $login_account = $_POST['account_login'];
 $login_password = $_POST['password_login'];
 $remember_me = isset($_POST['remember_me']);
@@ -46,7 +48,9 @@ if(!empty($login_account) && !empty($login_password))
 	)
 	{
 		if (setting('core.account_mail_verify') && (int)$account_logged->getCustomField('email_verified') !== 1) {
-			$errors[] = 'Your account is not verified. Please verify your email address. If the message is not coming check the SPAM folder in your E-Mail client.';
+			$link = getLink('account/resend-email-verify');
+			$errors[] = 'Your account is not verified. Please verify your email address. If the message is not coming check the SPAM folder in your E-Mail client.<br/>' .
+				'You can resend the Email here: <a href="' . $link . '">' . $link . '</a>';
 		} else {
 			session_regenerate_id();
 			setSession('account', $account_logged->getId());
@@ -95,3 +99,8 @@ else {
 }
 
 $hooks->trigger(HOOK_ACCOUNT_LOGIN_POST);
+
+if($logged) {
+	$twig->addGlobal('logged', true);
+	$twig->addGlobal('account_logged', $account_logged);
+}

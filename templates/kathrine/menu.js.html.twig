@@ -1,10 +1,10 @@
 var list = new Array();
 {% set i = 0 %}
-{% for cat in categories %}
-	{% if cat.id != 'shops' or setting('core.gifts_system') %}
-	list[{{ i }}] = '{{ cat.id }}';
+{% for id, cat in config('menu_categories') %}
+	{% if (cat.id != 'shops' or setting('core.gifts_system')) and menus[id]|length > 0 %}
+		list[{{ i }}] = '{{ cat.id }}';
+		{% set i = i + 1 %}
 	{% endif %}
-{% set i = i + 1 %}
 {% endfor %}
 
 function initMenu()

@@ -8,7 +8,7 @@
  * @link      https://my-aac.org
  */
 defined('MYAAC') or die('Direct access not allowed!');
-$title = '404 Not Found';
+$title = 'Not Found';
 
 header('HTTP/1.0 404 Not Found');
 ?>

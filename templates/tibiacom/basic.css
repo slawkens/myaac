@@ -1446,6 +1446,27 @@ img {
   white-space: nowrap;
   vertical-align: top;
 }
+.LabelV120 {
+	font-weight: bold;
+	padding-right: 10px;
+	white-space: nowrap;
+	vertical-align: top;
+	width: 120px;
+}
+.LabelV150 {
+	font-weight: bold;
+	padding-right: 10px;
+	white-space: nowrap;
+	vertical-align: top;
+	width: 150px;
+}
+.LabelV200 {
+	font-weight: bold;
+	padding-right: 10px;
+	white-space: nowrap;
+	vertical-align: top;
+	width: 200px;
+}
 .LabelH {
   font-weight: bold;
   padding-right: 10px;

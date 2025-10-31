@@ -14,15 +14,18 @@ use MyAAC\Models\GuildRank;
 
 require __DIR__ . '/base.php';
 
-$guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : NULL;
-$name = isset($_REQUEST['name']) ? stripslashes($_REQUEST['name']) : NULL;
-$todo = isset($_REQUEST['todo']) ? $_REQUEST['todo'] : NULL;
+$guild_name = isset($_POST['guild']) ? urldecode($_POST['guild']) : NULL;
+$name = isset($_POST['name']) ? stripslashes($_POST['name']) : NULL;
+$todo = isset($_POST['todo']) ? $_POST['todo'] : NULL;
 if(!$logged) {
-	$guild_errors[] = 'You are not logged in. You can\'t create guild.';
+	$errors[] = 'You are not logged in. You can\'t create guild.';
 }
 
+$configLuaFreePremium = configLua('freePremium');
+$freePremium = (isset($configLuaFreePremium) && getBoolean($configLuaFreePremium)) || ($logged && $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS);
+
 $array_of_player_nig = array();
-if(empty($guild_errors))
+if(empty($errors))
 {
 	$account_players = $account_logged->getPlayersList(false);
 	foreach($account_players as $player)
@@ -31,7 +34,7 @@ if(empty($guild_errors))
 		if(!$player_rank->isLoaded())
 		{
 			if($player->getLevel() >= setting('core.guild_need_level')) {
-				if(!setting('core.guild_need_premium') || $account_logged->isPremium()) {
+				if(!setting('core.guild_need_premium') || $account_logged->isPremium() || $freePremium) {
 					$array_of_player_nig[] = $player->getName();
 				}
 			}
@@ -41,45 +44,44 @@ if(empty($guild_errors))
 
 if(empty($todo)) {
 	if(count($array_of_player_nig) == 0) {
-		$guild_errors[] = 'On your account all characters are in guilds, have too low level to create new guild' . (setting('core.guild_need_premium') ? ' or you don\' have a premium account' : '') . '.';
+		$errors[] = 'On your account all characters are in guilds, have too low level to create new guild' . (setting('core.guild_need_premium') ? ' or you don\' have a premium account' : '') . '.';
 	}
 }
 
 if($todo == 'save')
 {
 	if(!Validator::guildName($guild_name)) {
-		$guild_errors[] = Validator::getLastError();
+		$errors[] = Validator::getLastError();
 		$guild_name = '';
 	}
 
 	if(!Validator::characterName($name)) {
-		$guild_errors[] = 'Invalid character name format.';
+		$errors[] = 'Invalid character name format.';
 		$name = '';
 	}
 
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		$player = new OTS_Player();
 		$player->find($name);
 		if(!$player->isLoaded()) {
-			$guild_errors[] = 'Character <b>'.$name.'</b> doesn\'t exist.';
+			$errors[] = 'Character <b>'.$name.'</b> doesn\'t exist.';
 		}
 	}
 
-
-	if(empty($guild_errors))
+	if(empty($errors))
 	{
 		$guild = new OTS_Guild();
 		$guild->find($guild_name);
 		if($guild->isLoaded()) {
-			$guild_errors[] = 'Guild <b>'.$guild_name.'</b> already exist. Select other name.';
+			$errors[] = 'Guild <b>'.$guild_name.'</b> already exist. Select other name.';
 		}
 	}
 
-	if(empty($guild_errors) && $player->isDeleted()) {
-		$guild_errors[] = "Character <b>$name</b> has been deleted.";
+	if(empty($errors) && $player->isDeleted()) {
+		$errors[] = "Character <b>$name</b> has been deleted.";
 	}
 
-	if(empty($guild_errors))
+	if(empty($errors))
 	{
 		$bad_char = true;
 		foreach($array_of_player_nig as $nick_from_list) {
@@ -88,22 +90,22 @@ if($todo == 'save')
 			}
 		}
 		if($bad_char) {
-			$guild_errors[] = 'Character <b>'.$name.'</b> isn\'t on your account or is already in guild.';
+			$errors[] = 'Character <b>'.$name.'</b> isn\'t on your account or is already in guild.';
 		}
 	}
 
-	if(empty($guild_errors)) {
+	if(empty($errors)) {
 		if($player->getLevel() < setting('core.guild_need_level')) {
-			$guild_errors[] = 'Character <b>'.$name.'</b> has too low level. To create guild you need character with level <b>' . setting('core.guild_need_level') . '</b>.';
+			$errors[] = 'Character <b>'.$name.'</b> has too low level. To create guild you need character with level <b>' . setting('core.guild_need_level') . '</b>.';
 		}
-		if(setting('core.guild_need_premium') && !$account_logged->isPremium()) {
-			$guild_errors[] = 'Character <b>'.$name.'</b> is on FREE account. To create guild you need PREMIUM account.';
+		if(setting('core.guild_need_premium') && !$account_logged->isPremium() && !$freePremium) {
+			$errors[] = 'Character <b>'.$name.'</b> is on FREE account. To create guild you need PREMIUM account.';
 		}
 	}
 }
 
-if(!empty($guild_errors)) {
-	$twig->display('error_box.html.twig', array('errors' => $guild_errors));
+if(!empty($errors)) {
+	$twig->display('error_box.html.twig', array('errors' => $errors));
 	unset($todo);
 }
 

@@ -80,7 +80,7 @@ Pull requests should be made to the *develop* branch as that is the working bran
 
 Bug fixes to current release should be done to master branch.
 
-Look: [Contributing](https://github.com/otsoft/myaac/wiki/Contributing) in our wiki.
+Look: [Contributing](https://docs.my-aac.org/misc/contributing) in our wiki.
 
 ### Other Notes
 
@@ -95,4 +95,4 @@ Many thanks to Jetbrains for kindly providing a license for me to work on this a
 ### License
 
 This program and all associated files are released under the GNU Public License.  
-See [LICENSE](https://github.com/slawkens/myaac/blob/master/LICENSE) for details.
+See [LICENSE](https://github.com/slawkens/myaac/blob/main/LICENSE) for details.
