@@ -7,8 +7,8 @@ require __DIR__ . '/../base.php';
 
 $title = 'Lost Account';
 
-$email = $_REQUEST['email'];
-$nick = stripslashes($_REQUEST['nick']);
+$email = $_POST['email'] ?? '';
+$nick = $_POST['nick'] ?? '';
 
 $player = new OTS_Player();
 $account = new OTS_Account();

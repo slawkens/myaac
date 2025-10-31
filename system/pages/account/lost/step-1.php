@@ -5,7 +5,7 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-$nick = stripslashes($_REQUEST['nick']);
+$nick = $_REQUEST['nick'] ?? '';
 
 $player = new OTS_Player();
 $account = new OTS_Account();

@@ -8,7 +8,7 @@ function lostAccountWriteCooldown(string $nick, int $time): void
 	$inSec = $time - time();
 	$minutesLeft = floor($inSec / 60);
 	$secondsLeft = $inSec - ($minutesLeft * 60);
-	$timeLeft = $minutesLeft.' minutes '.$secondsLeft.' seconds';
+	$timeLeft = "$minutesLeft minutes $secondsLeft seconds";
 
 	$timeRounded = ceil(setting('core.mail_lost_account_interval') / 60);
 

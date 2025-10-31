@@ -5,8 +5,8 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-$key = trim($_REQUEST['key']);
-$nick = stripslashes($_REQUEST['nick']);
+$key = $_REQUEST['key'] ?? '';
+$nick = $_POST['nick'] ?? '';
 
 $player = new OTS_Player();
 $account = new OTS_Account();
@@ -32,8 +32,9 @@ if($account->isLoaded()) {
 		$errors[] = 'Account of this character has no recovery key!';
 	}
 }
-else
-	$errors[] =  "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+else {
+	$errors[] = "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+}
 
 if (!empty($errors)) {
 	$twig->display('error_box.html.twig', [

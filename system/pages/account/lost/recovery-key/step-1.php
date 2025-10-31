@@ -5,6 +5,8 @@ csrfProtect();
 
 $title = 'Lost Account';
 
+$nick = $_POST['nick'] ?? '';
+
 if($account->isLoaded()) {
 	$account_key = $account->getCustomField('key');
 

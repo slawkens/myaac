@@ -5,10 +5,10 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-$newPassword = $_REQUEST['password'];
-$passwordRepeat = $_REQUEST['password_repeat'];
-$code = $_REQUEST['code'];
-$character = stripslashes($_REQUEST['character']);
+$newPassword = $_POST['password'] ?? '';
+$passwordRepeat = $_POST['password_repeat'] ?? '';
+$code = $_POST['code'] ?? '';
+$character = $_POST['character'] ?? '';
 
 if(empty($code) || empty($character) || empty($newPassword) || empty($passwordRepeat)) {
 	$errors[] = 'Please enter code from e-mail and name of one character from account. Then press Submit.';

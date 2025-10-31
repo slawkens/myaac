@@ -5,11 +5,11 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-$key = trim($_REQUEST['key']);
-$nick = stripslashes($_REQUEST['nick']);
-$newPassword = trim($_REQUEST['password']);
-$passwordRepeat = trim($_REQUEST['password_repeat']);
-$newEmail = trim($_REQUEST['email']);
+$key = $_POST['key'];
+$nick = $_POST['nick'] ?? '';
+$newPassword = $_POST['password'] ?? '';
+$passwordRepeat = $_POST['password_repeat'] ?? '';
+$newEmail = $_POST['email'] ?? '';
 
 $player = new OTS_Player();
 $account = new OTS_Account();
