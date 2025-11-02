@@ -549,21 +549,21 @@ class Plugins {
 		if(isset($plugin_json['require'])) {
 			$require = $plugin_json['require'];
 
-			$myaac_satified = true;
+			$myaac_satisfied = true;
 			if(isset($require['myaac_'])) {
 				$require_myaac = $require['myaac_'];
 				if(!Semver::satisfies(MYAAC_VERSION, $require_myaac)) {
-					$myaac_satified = false;
+					$myaac_satisfied = false;
 				}
 			}
 			else if(isset($require['myaac'])) {
 				$require_myaac = $require['myaac'];
 				if(version_compare(MYAAC_VERSION, $require_myaac, '<')) {
-					$myaac_satified = false;
+					$myaac_satisfied = false;
 				}
 			}
 
-			if(!$myaac_satified) {
+			if(!$myaac_satisfied) {
 				self::$error = "Your AAC version doesn't meet the requirement of this plugin. Required version is: " . $require_myaac . ", and you're using version " . MYAAC_VERSION . ".";
 				return false;
 			}
