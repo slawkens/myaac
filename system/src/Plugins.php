@@ -513,6 +513,9 @@ class Plugins {
 			return false;
 		}
 
+		ensureFolderExists($cachePlugins = CACHE . 'plugins');
+		ensureIndexExists($cachePlugins);
+
 		self::$error = 'There was a problem with extracting zip archive.';
 		$file_name = $plugin_temp_dir . $json_file;
 		if(!file_exists($file_name)) {

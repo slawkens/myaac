@@ -27,6 +27,9 @@ class PHP
 	{
 		$var = var_export($var, true);
 
+		ensureFolderExists($this->dir);
+		ensureIndexExists($this->dir);
+
 		// Write to temp file first to ensure atomicity
 		$tmp = $this->dir . "tmp_$key." . uniqid('', true) . '.tmp';
 		file_put_contents($tmp, '<?php $var = ' . $var . ';', LOCK_EX);

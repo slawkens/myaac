@@ -1177,7 +1177,8 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 	});
 }
 
-function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
+function deleteDirectory($dir, $ignore = array(), $contentOnly = false): bool
+{
 	if(!file_exists($dir)) {
 		return true;
 	}
@@ -1201,6 +1202,21 @@ function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
 	}
 
 	return rmdir($dir);
+}
+
+function ensureFolderExists($dir): void
+{
+	if (!file_exists($dir)) {
+		mkdir($dir, 0777, true);
+	}
+}
+
+function ensureIndexExists($dir): void
+{
+	$dir = rtrim($dir, '/');
+	if (!file_exists($file = $dir . '/index.html')) {
+		touch($file);
+	}
 }
 
 function config($key) {

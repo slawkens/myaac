@@ -18,6 +18,9 @@ use MyAAC\Settings;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
+ensureIndexExists(CACHE);
+ensureIndexExists(CACHE . 'twig/');
+
 global $config;
 if(!isset($config['installed']) || !$config['installed']) {
 	throw new RuntimeException('MyAAC has not been installed yet or there was error during installation. Please install again.');
