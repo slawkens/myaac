@@ -114,6 +114,7 @@ jobs:
           with:
             php-version: ${{ matrix.php-versions }}
             extensions: mbstring, dom, fileinfo, mysql, json, xml, pdo, pdo_mysql
+            ini-values: opcache.jit_buffer_size=16M
 
         - name: Get composer cache directory
           id: composer-cache
