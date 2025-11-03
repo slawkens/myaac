@@ -60,7 +60,7 @@ usort($menus, function ($a, $b) {
 
 foreach ($menus as $i => $menu) {
 	if (isset($menu['link']) && is_array($menu['link'])) {
-		usort($menus[$i]['link'], function ($a, $b) {
+		usort($menu['link'], function ($a, $b) {
 			return $a['order'] - $b['order'];
 		});
 	}
