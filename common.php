@@ -69,7 +69,7 @@ const ARTICLE = 3;
 // this may improve security
 const ADMIN_PANEL_FOLDER = 'admin';
 
-// directories
+// directoriess
 const BASE = __DIR__ . '/';
 const ADMIN = BASE . ADMIN_PANEL_FOLDER . '/';
 const SYSTEM = BASE . 'system/';
