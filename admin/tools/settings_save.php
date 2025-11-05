@@ -40,3 +40,6 @@ if (count($errors) > 0) {
 if ($success) {
 	echo 'Saved at ' . date('H:i');
 }
+else {
+	echo 'Something unexpected happened - it was impossible to save the settings, please try again later. If problem persists - contact MyAAC developers.';
+}
