@@ -12,7 +12,7 @@ require SYSTEM . 'login.php';
 
 if(!admin()) {
 	http_response_code(500);
-	die('Access denied.');
+	die('You are not logged in. Probably session expired. Please login again.');
 }
 
 csrfProtect();
