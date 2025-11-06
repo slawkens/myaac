@@ -1728,6 +1728,43 @@ function isCanary(): bool
 	return isset($vipSystemEnabled);
 }
 
+function getStatusUptimeReadable(int $uptime): string
+{
+	$fullMinute = 60;
+	$fullHour = (60 * $fullMinute);
+	$fullDay = (24 * $fullHour);
+	$fullMonth = (30 * $fullDay);
+	$fullYear = (365 * $fullDay);
+
+	// years
+	$years = floor($uptime / $fullYear);
+	$y = ($years > 1 ? "$years years, " : ($years == 1 ? 'year, ' : ''));
+
+	$uptime -= $years * $fullYear;
+
+	// months
+	$months = floor($uptime / $fullMonth);
+	$m = ($months > 1 ? "$months months, " : ($months == 1 ? 'month, ' : ''));
+
+	$uptime -= $months * $fullMonth;
+
+	// days
+	$days = floor($uptime / $fullDay);
+	$d = ($days > 1 ? "$days days, " : ($days == 1 ? 'day, ' : ''));
+
+	$uptime -= $days * $fullDay;
+
+	// hours
+	$hours = floor($uptime / $fullHour);
+
+	$uptime -= $hours * $fullHour;
+
+	// minutes
+	$min = floor($uptime / $fullMinute);
+
+	return "{$y}{$m}{$d}{$hours}h {$min}m";
+}
+
 // validator functions
 require_once SYSTEM . 'compat/base.php';
 
