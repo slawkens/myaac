@@ -97,6 +97,8 @@ class OTS_ServerInfo
 			return new OTS_Buffer($data);
 		}
 
+		log_append('status-error.log', "Cannot connect to {$this->server}:{$this->port} - Error code: $error, message: $message");
+
 		return false;
 	}
 
