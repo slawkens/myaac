@@ -737,6 +737,18 @@ Sent by MyAAC,<br/>
 			'desc' => 'should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io',
 			'default' => true,
 		],
+		'account_countries_most_popular' => [
+			'name' => 'Account Countries Most Popular',
+			'type' => 'text',
+			'desc' => 'Those countries will be display at the top of the list on the create account page. The short codes of countries can be found in file <i>system/countries.conf.php</i>',
+			'default' => 'pl,se,br,us,gb',
+			'callbacks' => [
+				'get' => function ($value) {
+					$tmp = array_map('trim', explode(',', $value));
+					return array_filter($tmp, function ($v) {return !empty($v); });
+				},
+			],
+		],
 		'characters_per_account' => [
 			'name' => 'Characters per Account',
 			'type' => 'number',
