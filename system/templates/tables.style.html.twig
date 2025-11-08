@@ -1,6 +1,9 @@
 <style>
-	.myaac-table tbody tr:nth-child(even) {background: {{ config.lightborder }}}
-	.myaac-table tbody tr:nth-child(odd) {background:  {{ config.darkborder }}}
-	.myaac-table thead td {background: {{ config.vdarkborder }}; color: #ffffff !important;}
-	.myaac-table tfoot td {background: {{ config.vdarkborder }}; color: #ffffff !important;}
+	.myaac-table {border-spacing: 1px;}
+	.myaac-table > tbody > tr:nth-child(even) {background: {{ config.lightborder }}}
+	.myaac-table > tbody > tr:nth-child(odd) {background:  {{ config.darkborder }}}
+	.myaac-table > tbody > tr > td {padding: 4px; }
+	.myaac-table > thead > tr > td {padding: 4px; background: {{ config.vdarkborder }}; color: #ffffff !important;}
+	.myaac-table > thead > tr > th {padding: 4px; background: {{ config.vdarkborder }}; color: #ffffff !important;}
+	.myaac-table > tfoot > tr > td {padding: 4px; background: {{ config.vdarkborder }}; color: #ffffff !important;}
 </style>

@@ -23,6 +23,12 @@ if(!Validator::guildName($guild_name)) {
 	$errors[] = Validator::getLastError();
 }
 
+if (!$db->hasTableAndColumns('guild_invites', ['player_id'])) {
+	$errors[] = "Guild invite is not possible on this website.";
+	$twig->display('error_box.html.twig', ['errors' => $errors]);
+	return;
+}
+
 if(empty($errors)) {
 	$guild = new OTS_Guild();
 	$guild->find($guild_name);
@@ -58,7 +64,7 @@ if(empty($errors)) {
 	}
 }
 
-if(!$guild_vice) {
+if(empty($errors) && !$guild_vice) {
 	$errors[] = 'You are not a leader or vice leader of guild <b>'.$guild_name.'</b>.'.$level_in_guild;
 }
 
@@ -84,6 +90,7 @@ if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
 		}
 	}
 }
+
 if(empty($errors)) {
 	include(SYSTEM . 'libs/pot/InvitesDriver.php');
 	new InvitesDriver($guild);
@@ -104,6 +111,7 @@ if(!empty($errors)) {
 else {
 	if(isset($_POST['todo']) && $_POST['todo'] == 'save') {
 		$guild->invite($player);
+
 		$twig->display('success.html.twig', array(
 			'title' => 'Invite player',
 			'description' => 'Player with name <b>' . $player->getName() . '</b> has been invited to your guild.',

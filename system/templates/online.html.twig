@@ -1,3 +1,9 @@
+{% set onlineTTL = setting('core.online_cache_ttl') %}
+{% if onlineTTL > 0 and cache.enabled() %}
+<small>*Note: Online List is updated every {{ onlineTTL > 1 ? ' ' ~ onlineTTL : '' }} minute{{ onlineTTL > 1 ? 's' : '' }}.</small>
+<br/>
+{% endif %}
+
 {# vocation statistics #}
 {% if setting('core.online_vocations') %}
 <br/>
@@ -84,7 +90,7 @@
 		</td>
 	</tr>
 
-	{% if setting('core.online_record') %}
+	{% if setting('core.online_record') and record|length > 0 %}
 	<tr>
 		<td class="LabelV150"><b>Online Record:</b></td>
 		<td>
@@ -95,7 +101,7 @@
 
 	<tr>
 		<td class="LabelV150"><b>Location Datacenter:</b></td>
-		<td>{{ setting('core.online_datacenter') }} <small>(Server date & time: - {{ "now"|date("d/m/Y H:i:s") }})</small></td>
+		<td>{{ setting('core.online_datacenter')|raw }} <small>(Server date & time: - {{ "now"|date("d/m/Y H:i:s") }})</small></td>
 	</tr>
 	<tr>
 		<td class="LabelV150"><b>PvP Type:</b></td>
@@ -155,7 +161,7 @@
 			{% endif %}
 
 			<td style="width:70%; text-align:left">
-				{{ player.name|raw }}{{ player.skull }}
+				{{ player.name|raw }}{{ player.skull|raw }}
 			</td>
 			<td style="width:10%">{{ player.level }}</td>
 			<td style="width:20%">{{ player.vocation }}</td>

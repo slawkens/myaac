@@ -34,8 +34,10 @@ if($logged) {
 	$twig->addGlobal('account_logged', $account_logged);
 }
 
-setSession('last_visit', time());
-if(defined('PAGE')) {
-	setSession('last_page', PAGE);
+if (!defined('IGNORE_SET_LAST_VISIT') || !IGNORE_SET_LAST_VISIT) {
+	setSession('last_visit', time());
+	if(defined('PAGE')) {
+		setSession('last_page', PAGE);
+	}
+	setSession('last_uri', $_SERVER['REQUEST_URI']);
 }
-setSession('last_uri', $_SERVER['REQUEST_URI']);

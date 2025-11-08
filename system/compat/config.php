@@ -81,6 +81,7 @@ $deprecatedConfig = [
 	'account_change_character_name_points' => 'account_change_character_name_price',
 	'account_change_character_sex',
 	'account_change_character_sex_points' => 'account_change_character_name_price',
+	'email_lai_sec_interval' => 'mail_lost_account_interval',
 ];
 
 foreach ($deprecatedConfig as $key => $value) {

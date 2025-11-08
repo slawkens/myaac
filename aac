@@ -25,7 +25,9 @@ foreach ($commandsGlob as $item) {
 	}
 
 	$commandPre = '\\MyAAC\Commands\\';
-	$application->add(new ($commandPre . $name));
+	if (!trait_exists($class = $commandPre . $name)) {
+		$application->add(new $class);
+	}
 }
 
 $pluginCommands = Plugins::getCommands();

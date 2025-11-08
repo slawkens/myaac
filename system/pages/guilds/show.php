@@ -121,24 +121,27 @@ foreach($rank_list as $rank)
 	}
 }
 
-include(SYSTEM . 'libs/pot/InvitesDriver.php');
-new InvitesDriver($guild);
-$invited_list = $guild->listInvites();
+$invited_list = [];
 $show_accept_invite = 0;
-if($logged && count($invited_list) > 0)
-{
-	foreach($invited_list as $invited_player)
-	{
-		if(count($account_players) > 0)
-		{
-			foreach($account_players as $player_from_acc)
-			{
-				if($player_from_acc->isLoaded() && $invited_player->isLoaded() && $player_from_acc->getName() == $invited_player->getName())
-					$show_accept_invite++;
+
+if ($db->hasTableAndColumns('guild_invites', ['player_id'])) {
+	include(SYSTEM . 'libs/pot/InvitesDriver.php');
+	new InvitesDriver($guild);
+	$invited_list = $guild->listInvites();
+
+	if($logged && count($invited_list) > 0) {
+		foreach($invited_list as $invited_player) {
+			if(count($account_players) > 0) {
+				foreach($account_players as $player_from_acc) {
+					if($player_from_acc->isLoaded() && $invited_player->isLoaded() && $player_from_acc->getName() == $invited_player->getName()) {
+						$show_accept_invite++;
+					}
+				}
 			}
 		}
 	}
 }
+
 
 $useGuildNick = $db->hasTable('guild_members') || $db->hasTable('guild_membership') || $db->hasColumn('players', 'guildnick');
 

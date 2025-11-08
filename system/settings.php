@@ -28,6 +28,15 @@ if (!IS_CLI) {
 	$siteURL = $serverUrl . $baseDir;
 }
 
+$donateColumnOptions = [
+	'premium_points' => 'Premium Points',
+	'coins' => 'Coins',
+];
+
+if (defined('HAS_ACCOUNT_COINS_TRANSFERABLE') && (HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS)) {
+	$donateColumnOptions[ACCOUNT_COINS_TRANSFERABLE_COLUMN] = 'Coins Transferable';
+}
+
 return [
 	'name' => 'MyAAC',
 	'settings' => [
@@ -694,7 +703,14 @@ Sent by MyAAC,<br/>
 			'name' => 'Default Account Coins',
 			'type' => 'number',
 			'desc' => 'Default coins on new account',
-			'hidden' => ($db && !$db->hasColumn('accounts', 'coins')),
+			'hidden' => ($db && !HAS_ACCOUNT_COINS),
+			'default' => 0,
+		],
+		'account_coins_transferable' => [
+			'name' => 'Default Account Transferable Coins',
+			'type' => 'number',
+			'desc' => 'Default transferable coins on new account',
+			'hidden' => ($db && !HAS_ACCOUNT_COINS_TRANSFERABLE && !HAS_ACCOUNT_TRANSFERABLE_COINS),
 			'default' => 0,
 		],
 		'account_mail_change' => [
@@ -720,6 +736,18 @@ Sent by MyAAC,<br/>
 			'type' => 'boolean',
 			'desc' => 'should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io',
 			'default' => true,
+		],
+		'account_countries_most_popular' => [
+			'name' => 'Account Countries Most Popular',
+			'type' => 'text',
+			'desc' => 'Those countries will be display at the top of the list on the create account page. The short codes of countries can be found in file <i>system/countries.conf.php</i>',
+			'default' => 'pl,se,br,us,gb',
+			'callbacks' => [
+				'get' => function ($value) {
+					$tmp = array_map('trim', explode(',', $value));
+					return array_filter($tmp, function ($v) {return !empty($v); });
+				},
+			],
 		],
 		'characters_per_account' => [
 			'name' => 'Characters per Account',
@@ -1062,6 +1090,12 @@ Sent by MyAAC,<br/>
 			'desc' => 'How often to update highscores from database in minutes. Too low may slow down your website.<br/>0 to disable.',
 			'default' => 15,
 		],
+		'highscores_skills_box' => [
+			'name' => 'Display Skills Box',
+			'type' => 'boolean',
+			'desc' => 'show "Choose a skill" box on the highscores (allowing peoples to sort highscores by skill)?',
+			'default' => true,
+		],
 		'highscores_vocation_box' => [
 			'name' => 'Display Vocation Box',
 			'type' => 'boolean',
@@ -1073,6 +1107,12 @@ Sent by MyAAC,<br/>
 			'type' => 'boolean',
 			'desc' => 'Show player vocation under his nickname?',
 			'default' => true,
+		],
+		'highscores_online_status' => [
+			'name' => 'Display Online Status',
+			'type' => 'boolean',
+			'desc' => 'Show player status as red (offline) or green (online)',
+			'default' => false,
 		],
 		'highscores_frags' => [
 			'name' => 'Display Top Frags',
@@ -1228,6 +1268,14 @@ Sent by MyAAC,<br/>
 			'type' => 'section',
 			'title' => 'Online Page'
 		],
+		'online_cache_ttl' => [
+			'name' => 'Online Cache TTL (in minutes)',
+			'type' => 'number',
+			'min' => 0,
+			'desc' => 'How often to update online list from database in minutes. Too low may slow down your website.' . PHP_EOL .
+				'0 to disable.',
+			'default' => 15,
+		],
 		'online_record' => [
 			'name' => 'Display Players Record',
 			'type' => 'boolean',
@@ -1268,7 +1316,7 @@ Sent by MyAAC,<br/>
 			'name' => 'Data Center',
 			'type' => 'text',
 			'desc' => 'Server Location, will be shown on online page',
-			'default' => 'Frankfurt - Germany',
+			'default' => 'Poland - Warsaw',
 		],
 		[
 			'type' => 'section',
@@ -1571,13 +1619,14 @@ Sent by MyAAC,<br/>
 			'name' => 'Donate Column',
 			'type' => 'options',
 			'desc' => 'What to give to player after donation - what column in accounts table to use.',
-			'options' => ['premium_points' => 'Premium Points', 'coins' => 'Coins'],
+			'options' => $donateColumnOptions,
 			'default' => 'premium_points',
 			'callbacks' => [
 				'beforeSave' => function($key, $value, &$errorMessage) {
 					global $db;
-					if ($value == 'coins' && !$db->hasColumn('accounts', 'coins')) {
-						$errorMessage = "Shop: Donate Column: Cannot set column to coins, because it doesn't exist in database.";
+
+					if (!$db->hasColumn('accounts', $value)) {
+						$errorMessage = "Shop: Donate Column: Cannot set column to $value, because it doesn't exist in database.";
 						return false;
 					}
 					return true;

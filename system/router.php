@@ -88,25 +88,38 @@ if($logged && $account_logged && $account_logged->isLoaded()) {
 /**
  * Routes loading
  */
+$routesFinal = [];
 $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) {
-	$routesFinal = [];
+	global $cache, $routesFinal;
+
 	foreach(getDatabasePages() as $page) {
 		$routesFinal[] = ['*', $page, '__database__/' . $page, 100];
 	}
 
+	$routes = require SYSTEM . 'routes.php';
 	Plugins::clearWarnings();
-	foreach (Plugins::getRoutes() as $route) {
-		$routesFinal[] = [$route[0], $route[1], $route[2], $route[3] ?? 1000];
+
+	foreach (Plugins::getRoutes() as $pluginRoute) {
+
+		$routesFinal[] = [$pluginRoute[0], $pluginRoute[1], $pluginRoute[2], $pluginRoute[3] ?? 1000];
+
+		// Possibility to override routes with plugins pages, like characters.php
+		foreach ($routes as &$route) {
+			if (str_contains($pluginRoute[2], 'pages/' . $route[2])) {
+				$route[2] = $pluginRoute[2];
+			}
+		}
 /*
 		echo '<pre>';
-		var_dump($route[1], $route[3], $route[2]);
+		var_dump($pluginRoute[1], $pluginRoute[3], $pluginRoute[2]);
 		echo '/<pre>';
 */
 	}
 
-	$routes = require SYSTEM . 'routes.php';
 	foreach ($routes as $route) {
-		if (!str_contains($route[2], '__redirect__') && !str_contains($route[2], '__database__')) {
+		if (!str_contains($route[2], '__redirect__') && !str_contains($route[2], '__database__')
+			&& !str_contains($route[2], 'plugins/')
+		) {
 			if (!is_file(BASE . 'system/pages/' . $route[2])) {
 				continue;
 			}
@@ -154,7 +167,7 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 	echo '</pre>';
 	die;
 */
-	foreach ($routesFinal as $route) {
+	foreach ($routesFinal as &$route) {
 		if ($route[0] === '*') {
 			$route[0] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'];
 		}
@@ -187,6 +200,10 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 			log_append('router.log', $warning);
 		}
 	}
+
+	if ($cache->enabled()) {
+		$cache->set('routes_final', serialize($routesFinal), 10 * 365 * 24 * 60 * 60); // 10 years / infinite
+	}
 },
 	[
 		'cacheFile' => CACHE . 'route.cache',
@@ -201,7 +218,7 @@ $found = true;
 
 // old support for pages like /?subtopic=accountmanagement
 $page = $_REQUEST['p'] ?? ($_REQUEST['subtopic'] ?? '');
-if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
+if(!empty($page) && preg_match('/^[A-z0-9\/\-]+$/', $page)) {
 	if (isset($_REQUEST['p'])) { // some plugins may require this
 		$_REQUEST['subtopic'] = $_REQUEST['p'];
 	}
@@ -210,9 +227,26 @@ if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
 		require SYSTEM . 'compat/pages.php';
 	}
 
-	$file = loadPageFromFileSystem($page, $found);
-	if(!$found) {
-		$file = false;
+	$foundRoute = false;
+
+	$tmp = null;
+	if ($cache->enabled() && $cache->fetch('routes_final', $tmp)) {
+		$routesFinal = unserialize($tmp);
+	}
+
+	foreach ($routesFinal as $route) {
+		if ($page === $route[1]) {
+			$file = $route[2];
+			$foundRoute = true;
+			break;
+		}
+	}
+
+	if (!$foundRoute) {
+		$file = loadPageFromFileSystem($page, $found);
+		if(!$found) {
+			$file = false;
+		}
 	}
 }
 else {

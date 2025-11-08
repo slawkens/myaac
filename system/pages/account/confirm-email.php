@@ -9,6 +9,7 @@
  */
 
 use MyAAC\Models\Account;
+use MyAAC\Models\AccountEmailVerify;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
@@ -20,15 +21,19 @@ if(empty($hash)) {
 	return;
 }
 
-if(!Account::where('email_hash', $hash)->exists()) {
-	note("Your email couldn't be verified. Please contact staff to do it manually.");
+// by default link is valid for 30 days
+$accountEmailVerify = AccountEmailVerify::where('hash', $hash)->where('sent_at', '>', time() - 30 * 24 * 60 * 60)->first();
+if(!$accountEmailVerify) {
+	note("Wrong link or link has expired.");
 }
 else
 {
-	$accountModel = Account::where('email_hash', $hash)->where('email_verified', 0)->first();
+	$accountModel = Account::where('id', $accountEmailVerify->account_id)->where('email_verified', 0)->first();
 	if ($accountModel) {
 		$accountModel->email_verified = 1;
 		$accountModel->save();
+
+		AccountEmailVerify::where('account_id', $accountModel->id)->delete();
 
 		success('You have now verified your e-mail, this will increase the security of your account. Thank you for doing this. You can now <a href=' . getLink('account/manage') . '>log in</a>.');
 
@@ -39,6 +44,6 @@ else
 		}
 	}
 	else {
-		error('Link has expired.');
+		error('Your account is already verified.');
 	}
 }

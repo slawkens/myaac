@@ -106,13 +106,18 @@ class Cache
 	public static function remember($key, $ttl, $callback)
 	{
 		$cache = self::getInstance();
-		if (!$cache->enabled()) {
+		if (!$cache->enabled() || $ttl == 0) {
 			return $callback();
 		}
 
 		$value = null;
 		if ($cache->fetch($key, $value)) {
 			return unserialize($value);
+		}
+
+		// -1 for infinite cache
+		if ($ttl == -1) {
+			$ttl = 10 * 365 * 24 * 60 * 60; // 10 years should be enough
 		}
 
 		$value = $callback();
