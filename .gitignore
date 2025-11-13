@@ -24,6 +24,7 @@ releases
 tmp
 
 config.local.php
+config2.local.php
 
 # all custom templates
 templates/*
