@@ -249,10 +249,10 @@ else if (isset($_REQUEST['search'])) {
 				$player->setLookHead($look_head);
 				$player->setLookLegs($look_legs);
 				$player->setLookType($look_type);
-				if ($hasLookAddons)
+				if ($hasLookAddons) {
 					$player->setLookAddons($look_addons);
-				if ($db->hasColumn('players', 'offlinetraining_time'))
-					$player->setCustomField('offlinetraining_time', $offlinetraining);
+				}
+
 				$player->setPosX($pos_x);
 				$player->setPosY($pos_y);
 				$player->setPosZ($pos_z);
@@ -275,23 +275,11 @@ else if (isset($_REQUEST['search'])) {
 				if ($hasBlessingsColumn)
 					$player->setBlessings($blessings);
 
-				if ($hasBlessingColumn) {
-					for ($i = 1; $i <= $bless_count; $i++) {
-						$a = 'blessing' . $i;
-						$player->setCustomField('blessings' . $i, ${'blessing' . $i} ? '1' : '0');
-					}
-				}
 				$player->setBalance($balance);
 				if ($db->hasColumn('players', 'stamina'))
 					$player->setStamina($stamina);
-				if ($db->hasColumn('players', 'deletion'))
-					$player->setCustomField('deletion', $deleted ? '1' : '0');
-				else
-					$player->setCustomField('deleted', $deleted ? '1' : '0');
-				$player->setCustomField('hide', $hide ? '1' : '0');
-				$player->setCustomField('created', $created);
-				if (isset($comment))
-					$player->setCustomField('comment', $comment);
+
+				$player->setDeleted($deleted ? '1' : '0');
 
 				foreach ($_POST['skills'] as $skill => $value) {
 					$player->setSkill($skill, $value);
@@ -300,6 +288,24 @@ else if (isset($_REQUEST['search'])) {
 					$player->setSkillTries($skill, $value);
 				}
 				$player->save();
+
+				if ($db->hasColumn('players', 'offlinetraining_time')) {
+					$player->setCustomField('offlinetraining_time', $offlinetraining);
+				}
+
+				if ($hasBlessingColumn) {
+					for ($i = 1; $i <= $bless_count; $i++) {
+						$a = 'blessing' . $i;
+						$player->setCustomField('blessings' . $i, ${'blessing' . $i} ? '1' : '0');
+					}
+				}
+
+				$player->setCustomField('hide', $hide ? '1' : '0');
+				$player->setCustomField('created', $created);
+				if (isset($comment)) {
+					$player->setCustomField('comment', $comment);
+				}
+
 				echo_success('Player saved at: ' . date('G:i'));
 				$player->load($id);
 			}
