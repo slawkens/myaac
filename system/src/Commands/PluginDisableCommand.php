@@ -13,6 +13,7 @@ class PluginDisableCommand extends Command
 	protected function configure(): void
 	{
 		$this->setName('plugin:disable')
+			->setAliases(['plugin:deactivate'])
 			->setDescription('This command disables plugin')
 			->addArgument('plugin-name', InputArgument::REQUIRED, 'Plugin that you want to disable');
 	}

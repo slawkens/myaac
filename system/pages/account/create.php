@@ -367,7 +367,7 @@ if(!empty($errors))
 
 if (setting('core.account_country')) {
 	$countries = array();
-	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
+	foreach (setting('core.account_countries_most_popular') ?? [] as $c)
 		$countries[$c] = $config['countries'][$c];
 
 	$countries['--'] = '----------';
