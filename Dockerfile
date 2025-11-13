@@ -1,11 +1,11 @@
-FROM docker.io/node:22-bookworm-slim AS npm
+FROM docker.io/node:24-trixie-slim AS npm
 
 WORKDIR /myaac
 
 COPY . .
 RUN mv .htaccess.dist .htaccess && npm install
 
-FROM docker.io/php:8.4-apache-bookworm
+FROM docker.io/php:8.4-apache-trixie
 
 ENV MYAAC_CONFIG_DIR=/config
 
