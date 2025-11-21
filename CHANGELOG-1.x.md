@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.8.5 - 21.11.2025]
+
+### Added
+* New Setting: Account Countries Most Popular (https://github.com/slawkens/myaac/commit/946364f59d7cd01472877108ab27ec78fb28307a)
+
+### Changed
+* Status: Write to status-error.log if there is connection error (https://github.com/slawkens/myaac/commit/780d4ccef741c1dd45a00bfc121fba9f1a175313)
+* Settings: escapeHtml in values (support for html code) (https://github.com/slawkens/myaac/commit/5861efdbe900ccd35309913af0c0a5f3d4cdc1a8)
+* News Page: Don't display hidden news for admin - it's confusing (https://github.com/slawkens/myaac/commit/175e97828b9a08ec3080cc8d3fb4eb3f1c08649f)
+* Plugins System: Add plugin:remove + plugin:delete as alias for plugin:uninstall + plugin:activate/deactivate (https://github.com/slawkens/myaac/commit/6367054487368c92741bfd1dc7c70c52aea9ee87, https://github.com/slawkens/myaac/commit/baec6c9ebf5c342b3b2f7123427c6ba21dbb93bc)
+
+### Fixed
+* Status: Fix $status['uptimeReadable'], was totally wrong (https://github.com/slawkens/myaac/commit/0a6d44bf21417562491aabc93543a2bc3a44b2df)
+* Guilds: Detect "deletion" column in guilds show/delete (https://github.com/slawkens/myaac/commit/6775a061bebc9ff449522f0173556d4a7a44fa5e, https://github.com/slawkens/myaac/commit/603d860b56bc7418db09e206f40aa06d0682c00e)
+* General: Ensure some cache folders & index.html exists (https://github.com/slawkens/myaac/commit/730a0f29124811f525207c24c06eb0d088fa3434)
+
 ## [1.8.4 - 27.10.2025]
 
 ### Changed
