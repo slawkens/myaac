@@ -13,6 +13,7 @@ class PluginEnableCommand extends Command
 	protected function configure(): void
 	{
 		$this->setName('plugin:enable')
+			->setAliases(['plugin:activate'])
 			->setDescription('This command enables plugin')
 			->addArgument('plugin-name', InputArgument::REQUIRED, 'Plugin that you want to enable');
 	}

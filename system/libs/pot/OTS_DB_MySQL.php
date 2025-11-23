@@ -277,6 +277,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 				'field' => $result['Field'],
 				'type' => $result['Type'],
 				'null' => strtolower($result['Null']),
+				'key' => strtolower($result['Key'] ?? ''),
 				'default' => $result['Default'],
 				'extra' => $result['Extra'],
 			];

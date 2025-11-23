@@ -9,6 +9,7 @@
  */
 
 use MyAAC\Models\Account as AccountModel;
+use MyAAC\Models\AccountAction;
 use MyAAC\Models\Player;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -481,9 +482,8 @@ else if (isset($_REQUEST['search'])) {
 									</thead>
 									<tbody>
 										<?php
-											$accountActions = \MyAAC\Models\AccountAction::where('account_id', $account->getId())->orderByDesc('date')->get();
+											$accountActions = AccountAction::where('account_id', $account->getId())->orderByDesc('date')->get();
 											foreach ($accountActions as $i => $log):
-												$log->ip = ($log->ip != 0 ? long2ip($log->ip) : inet_ntop($log->ipv6));
 												?>
 											<tr>
 												<td><?php echo $i + 1; ?></td>

@@ -433,16 +433,22 @@ function delete_guild($id)
 		$rank_list->orderBy('level');
 
 		global $db;
+
+		$deletedColumn = 'deleted';
+		if ($db->hasColumn('players', 'deletion')) {
+			$deletedColumn = 'deletion';
+		}
+
 		/**
 		 * @var OTS_GuildRank $rank_in_guild
 		 */
 		foreach($rank_list as $rank_in_guild) {
 			if($db->hasTable('guild_members'))
-				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_members`.`rank_id` as `rank_id` FROM `players`, `guild_members` WHERE `guild_members`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_members`.`player_id` ORDER BY `name`;');
+				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_members`.`rank_id` as `rank_id` FROM `players`, `guild_members` WHERE `guild_members`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_members`.`player_id` AND `' . $deletedColumn . '` = 0 ORDER BY `name`;');
 			else if($db->hasTable('guild_membership'))
-				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` ORDER BY `name`;');
+				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` AND `' . $deletedColumn . '` = 0 ORDER BY `name`;');
 			else
-				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank_in_guild->getId() . ' AND `deleted` = 0;');
+				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank_in_guild->getId() . ' AND `' . $deletedColumn . '` = 0;');
 
 			$players_with_rank_number = $players_with_rank->rowCount();
 			if($players_with_rank_number > 0) {
@@ -1177,7 +1183,8 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 	});
 }
 
-function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
+function deleteDirectory($dir, $ignore = array(), $contentOnly = false): bool
+{
 	if(!file_exists($dir)) {
 		return true;
 	}
@@ -1201,6 +1208,21 @@ function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
 	}
 
 	return rmdir($dir);
+}
+
+function ensureFolderExists($dir): void
+{
+	if (!file_exists($dir)) {
+		mkdir($dir, 0777, true);
+	}
+}
+
+function ensureIndexExists($dir): void
+{
+	$dir = rtrim($dir, '/');
+	if (!file_exists($file = $dir . '/index.html')) {
+		touch($file);
+	}
 }
 
 function config($key) {
@@ -1710,6 +1732,43 @@ function isCanary(): bool
 {
 	$vipSystemEnabled = configLua('vipSystemEnabled');
 	return isset($vipSystemEnabled);
+}
+
+function getStatusUptimeReadable(int $uptime): string
+{
+	$fullMinute = 60;
+	$fullHour = (60 * $fullMinute);
+	$fullDay = (24 * $fullHour);
+	$fullMonth = (30 * $fullDay);
+	$fullYear = (365 * $fullDay);
+
+	// years
+	$years = floor($uptime / $fullYear);
+	$y = ($years > 1 ? "$years years, " : ($years == 1 ? 'year, ' : ''));
+
+	$uptime -= $years * $fullYear;
+
+	// months
+	$months = floor($uptime / $fullMonth);
+	$m = ($months > 1 ? "$months months, " : ($months == 1 ? 'month, ' : ''));
+
+	$uptime -= $months * $fullMonth;
+
+	// days
+	$days = floor($uptime / $fullDay);
+	$d = ($days > 1 ? "$days days, " : ($days == 1 ? 'day, ' : ''));
+
+	$uptime -= $days * $fullDay;
+
+	// hours
+	$hours = floor($uptime / $fullHour);
+
+	$uptime -= $hours * $fullHour;
+
+	// minutes
+	$min = floor($uptime / $fullMinute);
+
+	return "{$y}{$m}{$d}{$hours}h {$min}m";
 }
 
 // validator functions

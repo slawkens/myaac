@@ -9,6 +9,6 @@ class AccountAction extends Model {
 
 	public $timestamps = false;
 
-	protected $fillable = ['account_id', 'ip', 'ipv6', 'date', 'action'];
+	protected $fillable = ['account_id', 'ip', 'date', 'action'];
 
 }

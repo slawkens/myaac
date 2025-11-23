@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS `myaac_account_actions`
 (
+	`id` int NOT NULL AUTO_INCREMENT,
 	`account_id` int NOT NULL,
-	`ip` int unsigned NOT NULL DEFAULT 0,
-	`ipv6` binary(16) NOT NULL DEFAULT 0,
+	`ip` varchar(45) NOT NULL DEFAULT '',
 	`date` int NOT NULL DEFAULT 0,
 	`action` varchar(255) NOT NULL DEFAULT '',
-	KEY (`account_id`)
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `myaac_account_emails_verify`
