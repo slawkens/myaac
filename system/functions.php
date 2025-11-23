@@ -433,16 +433,22 @@ function delete_guild($id)
 		$rank_list->orderBy('level');
 
 		global $db;
+
+		$deletedColumn = 'deleted';
+		if ($db->hasColumn('players', 'deletion')) {
+			$deletedColumn = 'deletion';
+		}
+
 		/**
 		 * @var OTS_GuildRank $rank_in_guild
 		 */
 		foreach($rank_list as $rank_in_guild) {
 			if($db->hasTable('guild_members'))
-				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_members`.`rank_id` as `rank_id` FROM `players`, `guild_members` WHERE `guild_members`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_members`.`player_id` ORDER BY `name`;');
+				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_members`.`rank_id` as `rank_id` FROM `players`, `guild_members` WHERE `guild_members`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_members`.`player_id` AND `' . $deletedColumn . '` = 0 ORDER BY `name`;');
 			else if($db->hasTable('guild_membership'))
-				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` ORDER BY `name`;');
+				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` AND `' . $deletedColumn . '` = 0 ORDER BY `name`;');
 			else
-				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank_in_guild->getId() . ' AND `deleted` = 0;');
+				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank_in_guild->getId() . ' AND `' . $deletedColumn . '` = 0;');
 
 			$players_with_rank_number = $players_with_rank->rowCount();
 			if($players_with_rank_number > 0) {
