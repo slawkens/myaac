@@ -108,6 +108,7 @@ define('HOOK_FILTER_ROUTES', ++$i);
 define('HOOK_FILTER_TWIG_DISPLAY', ++$i);
 define('HOOK_FILTER_TWIG_RENDER', ++$i);
 define('HOOK_FILTER_THEME_FOOTER', ++$i);
+define('HOOK_FILTER_VALIDATE_CHARACTER_NEW_NAME', ++$i);
 
 const HOOK_FIRST = HOOK_INIT;
 define('HOOK_LAST', $i);
