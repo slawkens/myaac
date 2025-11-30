@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: [ '8.1', '8.2', '8.3', '8.4' ]
+        php-versions: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
         ots: ['tfs-1.4', 'canary-3.1.2'] # TODO: add 'tfs-master' (actually doesn't work cause AAC doesn't support reading .env configuration)
     name: Cypress (PHP ${{ matrix.php-versions }}, ${{ matrix.ots }})
     steps:
