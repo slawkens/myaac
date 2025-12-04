@@ -9,6 +9,6 @@ class Menu extends Model {
 
 	public $timestamps = false;
 
-	protected $fillable = ['template', 'name', 'link', 'blank', 'color', 'category', 'ordering', 'enabled'];
+	protected $fillable = ['template', 'name', 'link', 'access', 'blank', 'color', 'category', 'ordering', 'enabled'];
 
 }

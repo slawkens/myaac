@@ -102,6 +102,7 @@ CREATE TABLE IF NOT EXISTS `myaac_menu`
 	`template` varchar(255) NOT NULL,
 	`name` varchar(255) NOT NULL,
 	`link` varchar(255) NOT NULL,
+	`access` tinyint NOT NULL DEFAULT 0,
 	`blank` tinyint NOT NULL DEFAULT 0,
 	`color` varchar(6) NOT NULL DEFAULT '',
 	`category` int NOT NULL DEFAULT 1,
