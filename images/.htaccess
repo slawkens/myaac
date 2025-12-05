@@ -1,1 +1,3 @@
-Options -Indexes
+<IfModule mod_autoindex.c>
+	Options -Indexes
+</IfModule>
