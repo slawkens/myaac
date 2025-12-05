@@ -16,7 +16,7 @@
 	</IfVersion>
 </FilesMatch>
 
-<DirectoryMatch ".*/(?:\.git|node_modules)/">
+<DirectoryMatch ".*/(?:\.git|node_modules|install/(?:includes|steps|tools)|admin/(?:includes|pages|tools))/">
     <IfVersion < 2.4>
 		order allow,deny
 		deny from all
