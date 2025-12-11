@@ -123,7 +123,7 @@ class Settings implements \ArrayAccess
 	{
 		$settingsDb = ModelsSettings::where('name', $plugin)->pluck('value', 'key')->toArray();
 		$config = [];
-		require BASE . 'config.local.php';
+		require CONFIG_DIR . 'config.local.php';
 
 		foreach ($config as $key => $value) {
 			if (is_bool($value)) {
