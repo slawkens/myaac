@@ -17,6 +17,8 @@ use MyAAC\Models\Guild;
 use MyAAC\Models\House;
 use MyAAC\Models\Pages;
 use MyAAC\Models\Player;
+use MyAAC\Models\PlayerDeath;
+use MyAAC\Models\PlayerKillers;
 use MyAAC\News;
 use MyAAC\Plugins;
 use MyAAC\Settings;
@@ -1135,11 +1137,29 @@ function csrfProtect(): void
 	}
 }
 
-function getTopPlayers($limit = 5, $skill = 'level') {
+function getTopPlayers($limit = 5, $skill = POT::SKILL_LEVEL)
+{
 	global $db;
 
-	if ($skill === 'level') {
-		$skill = 'experience';
+	$skillOriginal = $skill;
+
+	if (is_string($skill)) {
+		$skills = [
+			'level' => POT::SKILL_LEVEL,
+			'experience' => POT::SKILL_LEVEL,
+
+			'magic' => POT::SKILL_MAGIC,
+			'maglevel' => POT::SKILL_MAGIC,
+
+			'balance' => SKILL_BALANCE,
+			'frags' => SKILL_FRAGS,
+		];
+
+		$skill = $skills[$skill] ?? null;
+	}
+
+	if (!is_numeric($skill)) {
+		throw new RuntimeException("getTopPlayers: Invalid skill: $skillOriginal");
 	}
 
 	return Cache::remember("top_{$limit}_{$skill}", 2 * 60, function () use ($db, $limit, $skill) {
@@ -1160,15 +1180,64 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 			$columns[] = 'lookmount';
 		}
 
-		return Player::query()
+		$query = Player::query()
 			->select($columns)
 			->withOnlineStatus()
 			->notDeleted()
 			->where('group_id', '<', setting('core.highscores_groups_hidden'))
 			->whereNotIn('id', setting('core.highscores_ids_hidden'))
 			->where('account_id', '!=', 1)
-			->orderByDesc($skill)
-			->limit($limit)
+			->orderByDesc('value');
+
+		if ($limit > 0) {
+			$query->limit($limit);
+		}
+
+		if ($skill >= POT::SKILL_FIRST && $skill <= POT::SKILL_LAST) { // skills
+			if ($db->hasColumn('players', 'skill_fist')) {// tfs 1.0
+				$skill_ids = array(
+					POT::SKILL_FIST => 'skill_fist',
+					POT::SKILL_CLUB => 'skill_club',
+					POT::SKILL_SWORD => 'skill_sword',
+					POT::SKILL_AXE => 'skill_axe',
+					POT::SKILL_DIST => 'skill_dist',
+					POT::SKILL_SHIELD => 'skill_shielding',
+					POT::SKILL_FISH => 'skill_fishing',
+				);
+
+				$query
+					->addSelect($skill_ids[$skill] . ' as value')
+					->orderByDesc($skill_ids[$skill] . '_tries');
+			} else {
+				$query
+					->join('player_skills', 'player_skills.player_id', '=', 'players.id')
+					->where('skillid', $skill)
+					->addSelect('player_skills.value as value');
+			}
+		} else if ($skill == SKILL_FRAGS) // frags
+		{
+			if ($db->hasTable('player_killers')) {
+				$query->addSelect(['value' => PlayerKillers::whereColumn('player_killers.player_id', 'players.id')->selectRaw('COUNT(*)')]);
+			} else {
+				$query->addSelect(['value' => PlayerDeath::unjustified()->whereColumn('player_deaths.killed_by', 'players.name')->selectRaw('COUNT(*)')]);
+			}
+		} else if ($skill == SKILL_BALANCE) // balance
+		{
+			$query
+				->addSelect('players.balance as value');
+		} else {
+			if ($skill == POT::SKILL_MAGIC) {
+				$query
+					->addSelect('players.maglevel as value', 'players.maglevel')
+					->orderByDesc('manaspent');
+			} else { // level
+				$query
+					->addSelect('players.level as value', 'players.experience')
+					->orderByDesc('experience');
+			}
+		}
+
+		return $query
 			->get()
 			->map(function ($e, $i) {
 				$row = $e->toArray();
