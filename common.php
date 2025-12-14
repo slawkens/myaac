@@ -26,7 +26,7 @@
 if (version_compare(phpversion(), '8.1', '<')) die('PHP version 8.1 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '1.8.6-dev';
+const MYAAC_VERSION = '1.8.6';
 const DATABASE_VERSION = 46;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));

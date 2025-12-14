@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.6 - 14.12.2025]
+
+### Added
+* Added hook for adding custom rules to validate new character name (https://github.com/slawkens/myaac/commit/8e6749c59984631288e8e9803819b2f0ff389761)
+
+### Fixed
+* Highscores: Fix ordering by different skills (Adjust order by desc: skill_tries, manaspent, experience) - More exact results (https://github.com/slawkens/myaac/commit/c86257e6dacbad773aa09c0958eeaa106a967f2d)
+* Fix exception show on first install, when there is no vendor - Before it displayed 500 white page, now it display the exception (https://github.com/slawkens/myaac/commit/18a1178e4b93607a350259679e0366cb83fb4126)
+* Fix typo $up -> $down, in migration nr 7, was failing due that (https://github.com/slawkens/myaac/commit/fd74f01291d0e9cdb92ee1b95021c9d7b591ad7c)
+
+### Changed
+* Ini set html_errors = 0, to show html code in exceptions (https://github.com/slawkens/myaac/commit/9ed06782e67772826d927ad847a077b99df5060d)
+
 ## [1.8.5 - 21.11.2025]
 
 ### Added
