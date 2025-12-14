@@ -342,6 +342,16 @@ class Validator
 			}
 		}
 
+		global $hooks;
+
+		$params = ['name' => $name, 'error' => ''];
+		$hooks->triggerFilter(HOOK_FILTER_VALIDATE_CHARACTER_NEW_NAME, $params);
+
+		if (!empty($params['error'])) {
+			self::$lastError = $params['error'];
+			return false;
+		}
+
 		return true;
 	}
 

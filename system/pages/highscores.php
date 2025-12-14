@@ -176,7 +176,9 @@ if (empty($highscores)) {
 				POT::SKILL_FISH => 'skill_fishing',
 			);
 
-			$query->addSelect($skill_ids[$skill] . ' as value');
+			$query
+				->addSelect($skill_ids[$skill] . ' as value')
+				->orderByDesc($skill_ids[$skill] . '_tries');
 		} else {
 			$query
 				->join('player_skills', 'player_skills.player_id', '=', 'players.id')
@@ -198,11 +200,11 @@ if (empty($highscores)) {
 		if ($skill == POT::SKILL__MAGLEVEL) {
 			$query
 				->addSelect('players.maglevel as value', 'players.maglevel')
-				->orderBy('manaspent');
+				->orderByDesc('manaspent');
 		} else { // level
 			$query
 				->addSelect('players.level as value', 'players.experience')
-				->orderBy('experience');
+				->orderByDesc('experience');
 			$list = 'experience';
 		}
 	}
