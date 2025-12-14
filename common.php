@@ -148,15 +148,15 @@ if(!IS_CLI) {
 
 /** @var array $config */
 ini_set('log_errors', 1);
-if(@$config['env'] === 'dev' || defined('MYAAC_INSTALL')) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-}
-else {
+if(isset($config['env']) && $config['env'] !== 'dev' && !defined('MYAAC_INSTALL')) {
 	ini_set('display_errors', 0);
 	ini_set('display_startup_errors', 0);
 	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+}
+else {
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
 }
 
 $autoloadFile = VENDOR . 'autoload.php';
