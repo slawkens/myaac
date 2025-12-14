@@ -51,5 +51,8 @@
 		"themes": true,
 		"admin-pages": true,
 		"admin-pages-sub-folders": true,
+		"settings": true,
+		"install": true,
+		"init": false
 	}
  }

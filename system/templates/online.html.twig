@@ -1,39 +1,13 @@
-<table border="0" cellspacing="1" cellpadding="4" width="100%">
-	<tr bgcolor="{{ config.vdarkborder }}">
-		<td class="white"><b>Server Status</b></td>
-	</tr>
-{% if players|length == 0 %}
-	<tr bgcolor="{{ config.darkborder }}"><td>Currently no one is playing on {{ config.lua.serverName }}.</td></tr></table>
-{% else %}
-	<tr bgcolor="{{ config.darkborder }}">
-		<td>
-			{% if not status.online %}
-			Server is offline.<br/>
-			{% else %}
-				{% if setting('core.online_afk') %}
-					{% set players_count = players|length %}
-					{% set afk = players_count - status.players %}
-					{% if afk < 0 %}
-						{% set players_count = players_count + afk|abs %}
-						{% set afk = 0 %}
-					{% endif %}
-					Currently there are <b>{{ status.players }}</b> active and <b>{{ afk }}</b> AFK players.<br/>
-					Total number of players: <b>{{ players_count }}</b>.<br/>
-				{% else %}
-					Currently {{ players|length }} players are online.<br/>
-				{% endif %}
-			{% endif %}
-			{% if setting('core.online_record') %}
-				{{ record }}
-			{% endif %}
-		</td>
-	</tr>
-</table>
+{% set onlineTTL = setting('core.online_cache_ttl') %}
+{% if onlineTTL > 0 and cache.enabled() %}
+<small>*Note: Online List is updated every {{ onlineTTL > 1 ? ' ' ~ onlineTTL : '' }} minute{{ onlineTTL > 1 ? 's' : '' }}.</small>
 <br/>
-	{# vocation statistics #}
-	{% if setting('core.online_vocations') %}
+{% endif %}
+
+{# vocation statistics #}
+{% if setting('core.online_vocations') %}
 <br/>
-		{% if setting('core.online_vocations_images') %}
+	{% if setting('core.online_vocations_images') %}
 	<table width="200" cellspacing="1" cellpadding="0" border="0" align="center">
 		<tr bgcolor="{{ config.darkborder }}">
 			<td><img src="images/sorcerer.png" /></td>
@@ -69,11 +43,13 @@
 		{% endfor %}
 	</table>
 <br/>
-		{% endif %}
 	{% endif %}
+{% endif %}
 
-	{# show skulls #}
-	{% if setting('core.online_skulls') %}
+<br/>
+
+{# show skulls #}
+{% if setting('core.online_skulls') %}
 <table width="100%" cellspacing="1">
 	<tr>
 		<td style="background: {{ config.darkborder }};" align="center">
@@ -83,34 +59,114 @@
 		</td>
 	</tr>
 </table>
+{% endif %}
+
+<br/>
+
+{% set title = 'World Information' %}
+{% set tableClass = 'Table3' %}
+{% set background = config('darkborder') %}
+{% set content %}
+<table width="100%">
+	<tr>
+		<td class="LabelV150"><b>Status:</b></td>
+		<td>{% if not status.online %}Offline{% else %}Online{% endif %}</td>
+	</tr>
+	<tr>
+		<td class="LabelV150"><b>Players Online:</b></td>
+		<td>
+			{% if setting('core.online_afk') %}
+				{% set players_count = players|length %}
+				{% set afk = players_count - status.players %}
+				{% if afk < 0 %}
+					{% set players_count = players_count + afk|abs %}
+					{% set afk = 0 %}
+				{% endif %}
+				Currently there are <b>{{ status.players }}</b> active and <b>{{ afk }}</b> AFK players.<br/>
+				Total number of players: <b>{{ players_count }}</b>.<br/>
+			{% else %}
+				{{ players|length }}
+			{% endif %}
+		</td>
+	</tr>
+
+	{% if setting('core.online_record') and record|length > 0 %}
+	<tr>
+		<td class="LabelV150"><b>Online Record:</b></td>
+		<td>
+			{{ record }}
+		</td>
+	</tr>
 	{% endif %}
 
-<table border="0" cellspacing="1" cellpadding="4" width="100%">
-	<tr bgcolor="{{ config.vdarkborder }}">
+	<tr>
+		<td class="LabelV150"><b>Location Datacenter:</b></td>
+		<td>{{ setting('core.online_datacenter')|raw }} <small>(Server date & time: - {{ "now"|date("d/m/Y H:i:s") }})</small></td>
+	</tr>
+	<tr>
+		<td class="LabelV150"><b>PvP Type:</b></td>
+		<td>
+			{% set worldType = config('lua')['worldType']|lower %}
+			{% if worldType in ['pvp','2','normal','open','openpvp'] %}
+			Open PvP
+			{% elseif worldType in ['no-pvp','nopvp','non-pvp','nonpvp','1','safe','optional','optionalpvp'] %}
+			Optional PvP
+			{% elseif worldType in ['pvp-enforced','pvpenforced','pvp-enfo','pvpenfo','pvpe','enforced','enfo','3','war','hardcore','hardcorepvp'] %}
+			Hardcore PvP
+			{% endif %}
+		</td>
+	</tr>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+<br/>
+<br/>
+
+{% set title = 'Players Online' %}
+{% set tableClass = 'Table2' %}
+{% set content %}
+<table width="100%">
+	<tr class="LabelH" style="position: relative; z-index: 20;">
 		{% if setting('core.account_country') %}
-		<td width="11px"><a href="{{ getLink('online?order=country') }}" class="white">#</A></td>
+			<td width="11px"><a href="{{ getLink('online')}}?order=country_{{ order == 'country_asc' ? 'desc' : 'asc' }}">#&#160;&#160;</a>
+			</td>
 		{% endif %}
 		{% if setting('core.online_outfit') %}
-		<td class="white"><b>Outfit</b></td>
+			<td><b>Outfit</b></td>
 		{% endif %}
-		<td width="60%"><a href="{{ getLink('online?order=name') }}" class="white">Name</A></td>
-		<td width="20%"><a href="{{ getLink('online?order=level') }}" class="white">Level</A></td>
-		<td width="20%"><a href="{{ getLink('online?order=vocation') }}" class="white">Vocation</td>
+		<td style="text-align:left; width:50%">Name&#160;&#160;
+			<small style="font-weight:normal">[<a href="{{ getLink('online')}}?order=name_{{ order == 'name_asc' ? 'desc' : 'asc' }}">sort</a>]</small>
+			<img class="sortarrow" src="images/{{ order == 'name_asc' ? 'order_desc' : (order == 'name_desc' ? 'order_asc' : 'news/blank') }}.gif"/></td>
+		<td style="text-align:left;width:30%">Level&#160;&#160;
+			<small style="font-weight:normal">[<a href="{{ getLink('online')}}?order=level_{{ order == 'level_asc' ? 'desc' : 'asc' }}">sort</a>]</small>
+			<img class="sortarrow" src="images/{{ order == 'level_asc' ? 'order_desc' : (order == 'level_desc' ? 'order_asc' : 'news/blank') }}.gif"/>
+		</td>
+		<td style="text-align:left;width:50%">Vocation&#160;&#160;
+			<small style="font-weight:normal">[<a href="{{ getLink('online')}}?order=vocation_{{ order == 'vocation_asc' ? 'desc' : 'asc' }}">sort</a>]</small>
+			<img class="sortarrow" src="images/{{ order == 'vocation_asc' ? 'order_desc' : (order == 'vocation_desc' ? 'order_asc' : 'news/blank') }}.gif"/>
+		</td>
 	</tr>
+
 	{% set i = 0 %}
 	{% for player in players %}
 		{% set i = i + 1 %}
-		<tr bgcolor="{{ getStyle(i) }}">
-		{% if setting('core.account_country') %}
-			<td>{{ player.country_image|raw }}</td>
-		{% endif %}
-		{% if setting('core.online_outfit') %}
-			<td width="5%"><img style="position:absolute;margin-top:{% if player.player.looktype in setting('core.outfit_images_wrong_looktypes') %}-20px;margin-left:-0px;{% else %}-45px;margin-left:-25px;{%  endif %}" src="{{ player.outfit }}" alt="player outfit"/></td>
-		{% endif %}
-			<td>{{ player.name|raw }}{{ player.skull }}</td>
-			<td>{{ player.level }}</td>
-			<td>{{ player.vocation }}</td>
+
+		<tr style="background: {{ getStyle(i) }}; text-align: right; height: 40px;">
+			{% if setting('core.account_country') %}
+				<td>{{ player.country_image|raw }}</td>
+			{% endif %}
+
+			{% if setting('core.online_outfit') %}
+				<td width="5%"><img style="position:absolute;margin-top:-48px;margin-left:-70px;" src="{{ player.outfit }}" alt="player outfit"/></td>
+			{% endif %}
+
+			<td style="width:70%; text-align:left">
+				{{ player.name|raw }}{{ player.skull|raw }}
+			</td>
+			<td style="width:10%">{{ player.level }}</td>
+			<td style="width:20%">{{ player.vocation }}</td>
 		</tr>
 	{% endfor %}
 </table>
-{% endif %}
+{% endset %}
+{{ include('tables.headline.html.twig') }}

@@ -9,6 +9,8 @@
  * @link      https://my-aac.org
  */
 
+const IGNORE_SET_LAST_VISIT = true;
+
 // we need some functions
 require '../common.php';
 require SYSTEM . 'functions.php';

@@ -10,6 +10,7 @@
  */
 
 use MyAAC\CreateCharacter;
+use MyAAC\Models\AccountEmailVerify;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Create Account';
@@ -221,8 +222,19 @@ if($save)
 			}
 		}
 
-		if(setting('core.account_premium_points') && setting('core.account_premium_points') > 0) {
-			$new_account->setCustomField('premium_points', setting('core.account_premium_points'));
+		$accountDefaultPremiumPoints = setting('core.account_premium_points');
+		if($accountDefaultPremiumPoints > 0) {
+			$new_account->setCustomField('premium_points', $accountDefaultPremiumPoints);
+		}
+
+		$accountDefaultCoins = setting('core.account_coins');
+		if(HAS_ACCOUNT_COINS && $accountDefaultCoins > 0) {
+			$new_account->setCustomField('coins', $accountDefaultCoins);
+		}
+
+		$accountDefaultCoinsTransferable = setting('core.account_coins_transferable');
+		if((HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS) && $accountDefaultCoinsTransferable > 0) {
+			$new_account->setCustomField(ACCOUNT_COINS_TRANSFERABLE_COLUMN, $accountDefaultCoinsTransferable);
 		}
 
 		$tmp_account = $email;
@@ -233,7 +245,12 @@ if($save)
 		if(setting('core.mail_enabled') && setting('core.account_mail_verify'))
 		{
 			$hash = md5(generateRandomString(16, true, true) . $email);
-			$new_account->setCustomField('email_hash', $hash);
+
+			AccountEmailVerify::create([
+				'account_id' => $new_account->getId(),
+				'hash' => $hash,
+				'sent_at' => time(),
+			]);
 
 			$verify_url = getLink('account/confirm-email/' . $hash);
 			$body_html = $twig->render('mail.account.verify.html.twig', array(
@@ -257,8 +274,10 @@ if($save)
 			}
 			else
 			{
-				error('An error occorred while sending email! Account not created. Try again. For Admin: More info can be found in system/logs/mailer-error.log');
+				error('An error occurred while sending email! Account not created. Try again. For Admin: More info can be found in system/logs/mailer-error.log');
 				$new_account->delete();
+
+				return;
 			}
 		}
 		else
@@ -348,7 +367,7 @@ if(!empty($errors))
 
 if (setting('core.account_country')) {
 	$countries = array();
-	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
+	foreach (setting('core.account_countries_most_popular') ?? [] as $c)
 		$countries[$c] = $config['countries'][$c];
 
 	$countries['--'] = '----------';

@@ -53,6 +53,9 @@
 		exit;
 	}
 
+	ensureFolderExists(SIGNATURES_CACHE);
+	ensureIndexExists(SIGNATURES_CACHE);
+
 	$cached = SIGNATURES_CACHE.$player->getId() . '.png';
 	if(file_exists($cached) && (time() < (filemtime($cached) + (60 * setting('core.signature_cache_time')))))
 	{

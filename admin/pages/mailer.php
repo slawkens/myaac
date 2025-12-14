@@ -25,9 +25,10 @@ if (!setting('core.mail_enabled')) {
 	return;
 }
 
-$mail_to = isset($_POST['mail_to']) ? stripslashes(trim($_POST['mail_to'])) : null;
+$mail_to = isset($_REQUEST['mail_to']) ? stripslashes(trim($_REQUEST['mail_to'])) : null;
 $mail_subject = isset($_POST['mail_subject']) ? stripslashes($_POST['mail_subject']) : null;
 $mail_content = isset($_POST['mail_content']) ? stripslashes($_POST['mail_content']) : null;
+$mail_verified_only = $_POST['mail_verified_only'] ?? false;
 
 if (isset($_POST['submit'])) {
 	if (empty($mail_subject)) {
@@ -58,14 +59,14 @@ if (!empty($mail_content) && !empty($mail_subject) && empty($mail_to)) {
 	$success = 0;
 	$failed = 0;
 
-	$add = '';
-	if (setting('core.account_mail_verify')) {
-		note('Note: Sending only to users with verified E-Mail.');
-		$add = ' AND `email_verified` = 1';
+	$query = Account::where('email', '!=', '');
+
+	if ($mail_verified_only) {
+		info('Note: Sending only to users with verified E-Mail.');
+		$query->where('email_verified', 1);
 	}
 
-	$query = Account::where('email', '!=', '')->get(['email']);
-	foreach ($query as $email) {
+	foreach ($query->get(['email']) as $email) {
 		if (_mail($email->email, $mail_subject, $mail_content)) {
 			$success++;
 		}
@@ -84,5 +85,6 @@ if (!empty($mail_content) && !empty($mail_subject) && empty($mail_to)) {
 $twig->display('admin.mailer.html.twig', [
 	'mail_to' => $mail_to,
 	'mail_subject' => $mail_subject,
-	'mail_content' => $mail_content
+	'mail_content' => $mail_content,
+	'mail_verified_only' => $mail_verified_only,
 ]);

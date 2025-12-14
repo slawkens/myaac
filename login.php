@@ -88,8 +88,8 @@ switch ($action) {
 	case 'boostedcreature':
 		$clientVersion = (int)setting('core.client');
 
-		// 14.00 and up
-		if ($clientVersion >= 1400) {
+		// 13.40 and up
+		if ($clientVersion >= 1340) {
 			$creatureBoost = $db->query("SELECT * FROM " . $db->tableName('boosted_creature'))->fetchAll();
 			$bossBoost     = $db->query("SELECT * FROM " . $db->tableName('boosted_boss'))->fetchAll();
 			die(json_encode([
@@ -220,6 +220,8 @@ switch ($action) {
 			}
 		}
 
+		/*
+		 * not needed anymore?
 		if (fieldExist('premdays', 'accounts') && fieldExist('lastday', 'accounts')) {
 			$save = false;
 			$timeNow = time();
@@ -256,6 +258,7 @@ switch ($action) {
 				$account->save();
 			}
 		}
+		*/
 
 		$worlds = [$world];
 		$playdata = compact('worlds', 'characters');

@@ -8,11 +8,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class PluginInstallInstallCommand extends Command
+class PluginSetupCommand extends Command
 {
 	protected function configure(): void
 	{
-		$this->setName('plugin:install:install')
+		$this->setName('plugin:setup')
+			->setAliases(['plugin:install:install'])
 			->setDescription('This command executes the "install" part of the plugin')
 			->addArgument('plugin', InputArgument::REQUIRED, 'Plugin name');
 	}

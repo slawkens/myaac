@@ -10,6 +10,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MigrateRunCommand extends Command
 {
+	use Env;
+
 	protected function configure(): void
 	{
 		$this->setName('migrate:run')
@@ -23,11 +25,11 @@ class MigrateRunCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		require SYSTEM . 'init.php';
-
 		$io = new SymfonyStyle($input, $output);
 
 		$ids = $input->getArgument('id');
+
+		$this->init();
 
 		// pre-check
 		// in case one of the migrations doesn't exist - we won't execute any of them
@@ -44,6 +46,22 @@ class MigrateRunCommand extends Command
 		}
 
 		$down = $input->getOption('down') ?? false;
+
+		/**
+		 * Sort according to $down option.
+		 * Do we really want it?
+		 * Or should we use order provided by user,
+		 *      even when it's not sorted correctly?
+		 * Leaving it for consideration.
+		 */
+		/*
+		if ($down) {
+			rsort($ids);
+		}
+		else {
+			sort($ids);
+		}
+		*/
 
 		foreach ($ids as $id) {
 			$this->executeMigration($id, $io, !$down);

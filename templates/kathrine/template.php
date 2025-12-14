@@ -8,7 +8,9 @@ defined('MYAAC') or die('Direct access not allowed!');
 		<link rel="stylesheet" href="<?php echo $template_path; ?>/style.css" type="text/css" />
 		<script type="text/javascript">
 			<?php
-				$twig->display('menu.js.html.twig', array('categories' => $config['menu_categories']));
+				$menus = get_template_menus();
+
+				$twig->display('menu.js.html.twig', ['menus' => $menus]);
 			?>
 		</script>
 		<script type="text/javascript" src="tools/basic.js"></script>
@@ -28,11 +30,24 @@ defined('MYAAC') or die('Direct access not allowed!');
 			<div id="header"></div>
 			<!-- End -->
 
+			<!-- Custom Style for #tabs -->
+			<?php
+			$menusCount = count($menus);
+			$tabsStyle = '';
+			if ($menusCount > 6) {
+				$tabsStyle .= 'padding-left: 4px;';
+				$tabsStyle .= 'padding-right: 12px;';
+			}
+			elseif ($menusCount > 5) {
+				$tabsStyle .= 'padding-left: 90px;';
+			}
+			?>
+
 			<!-- Menu Section -->
-			<div id="tabs">
+			<div id="tabs" style="<?= $tabsStyle; ?>">
 				<?php
 				foreach($config['menu_categories'] as $id => $cat) {
-					if($id != MENU_CATEGORY_SHOP || $config['gifts_system']) { ?>
+					if (($id != MENU_CATEGORY_SHOP || $config['gifts_system']) && isset($menus[$id])) { ?>
 				<span id="<?php echo $cat['id']; ?>" onclick="menuSwitch('<?php echo $cat['id']; ?>');"><?php echo $cat['name']; ?></span>
 				<?php
 					}

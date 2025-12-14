@@ -433,16 +433,22 @@ function delete_guild($id)
 		$rank_list->orderBy('level');
 
 		global $db;
+
+		$deletedColumn = 'deleted';
+		if ($db->hasColumn('players', 'deletion')) {
+			$deletedColumn = 'deletion';
+		}
+
 		/**
 		 * @var OTS_GuildRank $rank_in_guild
 		 */
 		foreach($rank_list as $rank_in_guild) {
 			if($db->hasTable('guild_members'))
-				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_members`.`rank_id` as `rank_id` FROM `players`, `guild_members` WHERE `guild_members`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_members`.`player_id` ORDER BY `name`;');
+				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_members`.`rank_id` as `rank_id` FROM `players`, `guild_members` WHERE `guild_members`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_members`.`player_id` AND `' . $deletedColumn . '` = 0 ORDER BY `name`;');
 			else if($db->hasTable('guild_membership'))
-				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` ORDER BY `name`;');
+				$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `guild_membership`.`rank_id` as `rank_id` FROM `players`, `guild_membership` WHERE `guild_membership`.`rank_id` = ' . $rank_in_guild->getId() . ' AND `players`.`id` = `guild_membership`.`player_id` AND `' . $deletedColumn . '` = 0 ORDER BY `name`;');
 			else
-				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank_in_guild->getId() . ' AND `deleted` = 0;');
+				$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank_in_guild->getId() . ' AND `' . $deletedColumn . '` = 0;');
 
 			$players_with_rank_number = $players_with_rank->rowCount();
 			if($players_with_rank_number > 0) {
@@ -512,6 +518,13 @@ function template_place_holder($type): string
 	}
 	elseif ($type === 'body_start') {
 		$ret .= $twig->render('browsehappy.html.twig');
+
+		if (admin()) {
+			global $account_logged;
+			$ret .= $twig->render('admin-bar.html.twig', [
+				'username' => USE_ACCOUNT_NAME ? $account_logged->getName() : $account_logged->getId()
+			]);
+		}
 	}
 	elseif($type === 'body_end') {
 		$ret .= template_ga_code();
@@ -767,6 +780,10 @@ function formatExperience($exp, $color = true)
 	return $ret;
 }
 
+function getExperienceForLevel($level): float|int {
+	return ( 50 / 3 ) * pow( $level, 3 ) - ( 100 * pow( $level, 2 ) ) + ( ( 850 / 3 ) * $level ) - 200;
+}
+
 function get_locales()
 {
 	$ret = array();
@@ -982,11 +999,12 @@ function load_config_lua($filename)
 		foreach($lines as $ln => $line)
 		{
 			$line = trim($line);
-			if(@$line[0] === '{' || @$line[0] === '}') {
+			if(isset($line[0]) && ($line[0] === '{' || $line[0] === '}')) {
 				// arrays are not supported yet
 				// just ignore the error
 				continue;
 			}
+
 			$tmp_exp = explode('=', $line, 2);
 			if(str_contains($line, 'dofile')) {
 				$delimiter = '"';
@@ -1130,8 +1148,16 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 			'looktype', 'lookhead', 'lookbody', 'looklegs', 'lookfeet'
 		];
 
+		if ($db->hasColumn('players', 'promotion')) {
+			$columns[] = 'promotion';
+		}
+
 		if ($db->hasColumn('players', 'lookaddons')) {
 			$columns[] = 'lookaddons';
+		}
+
+		if ($db->hasColumn('players', 'lookmount')) {
+			$columns[] = 'lookmount';
 		}
 
 		return Player::query()
@@ -1157,7 +1183,8 @@ function getTopPlayers($limit = 5, $skill = 'level') {
 	});
 }
 
-function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
+function deleteDirectory($dir, $ignore = array(), $contentOnly = false): bool
+{
 	if(!file_exists($dir)) {
 		return true;
 	}
@@ -1181,6 +1208,21 @@ function deleteDirectory($dir, $ignore = array(), $contentOnly = false) {
 	}
 
 	return rmdir($dir);
+}
+
+function ensureFolderExists($dir): void
+{
+	if (!file_exists($dir)) {
+		mkdir($dir, 0777, true);
+	}
+}
+
+function ensureIndexExists($dir): void
+{
+	$dir = rtrim($dir, '/');
+	if (!file_exists($file = $dir . '/index.html')) {
+		touch($file);
+	}
 }
 
 function config($key) {
@@ -1216,7 +1258,8 @@ function setting($key)
 		return $settings[$key[0]] = $key[1];
 	}
 
-	return $settings[$key]['value'];
+	$ret = $settings[$key];
+	return isset($ret) ? $ret['value'] : null;
 }
 
 function clearCache()
@@ -1265,13 +1308,14 @@ function clearCache()
 		$db->setClearCacheAfter(true);
 	}
 
+	if (function_exists('apcu_clear_cache')) {
+		apcu_clear_cache();
+	}
+
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
 	deleteDirectory(CACHE . 'twig', ['index.html'], true);
 	deleteDirectory(CACHE . 'plugins', ['index.html'], true);
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html', 'persistent'], true);
-
-	// routes cache
-	clearRouteCache();
 
 	global $hooks;
 	$hooks->trigger(HOOK_CACHE_CLEAR, ['cache' => Cache::getInstance()]);
@@ -1618,13 +1662,14 @@ function camelCaseToUnderscore($input)
 	return ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $input)), '_');
 }
 
-function removeIfFirstSlash(&$text) {
+function removeIfFirstSlash(&$text): void
+{
 	if(strpos($text, '/') === 0) {
 		$text = str_replace_first('/', '', $text);
 	}
 };
 
-function escapeHtml($html) {
+function escapeHtml($html): string {
 	return htmlspecialchars($html);
 }
 
@@ -1638,7 +1683,7 @@ function getGuildNameById($id)
 	return false;
 }
 
-function getGuildLogoById($id)
+function getGuildLogoById($id): string
 {
 	$logo = 'default.gif';
 
@@ -1654,7 +1699,8 @@ function getGuildLogoById($id)
 	return BASE_URL . GUILD_IMAGES_DIR . $logo;
 }
 
-function displayErrorBoxWithBackButton($errors, $action = null) {
+function displayErrorBoxWithBackButton($errors, $action = null): void
+{
 	global $twig;
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
 	$twig->display('account.back_button.html.twig', [
@@ -1680,6 +1726,49 @@ function getAccountIdentityColumn(): string
 	}
 
 	return 'id';
+}
+
+function isCanary(): bool
+{
+	$vipSystemEnabled = configLua('vipSystemEnabled');
+	return isset($vipSystemEnabled);
+}
+
+function getStatusUptimeReadable(int $uptime): string
+{
+	$fullMinute = 60;
+	$fullHour = (60 * $fullMinute);
+	$fullDay = (24 * $fullHour);
+	$fullMonth = (30 * $fullDay);
+	$fullYear = (365 * $fullDay);
+
+	// years
+	$years = floor($uptime / $fullYear);
+	$y = ($years > 1 ? "$years years, " : ($years == 1 ? 'year, ' : ''));
+
+	$uptime -= $years * $fullYear;
+
+	// months
+	$months = floor($uptime / $fullMonth);
+	$m = ($months > 1 ? "$months months, " : ($months == 1 ? 'month, ' : ''));
+
+	$uptime -= $months * $fullMonth;
+
+	// days
+	$days = floor($uptime / $fullDay);
+	$d = ($days > 1 ? "$days days, " : ($days == 1 ? 'day, ' : ''));
+
+	$uptime -= $days * $fullDay;
+
+	// hours
+	$hours = floor($uptime / $fullHour);
+
+	$uptime -= $hours * $fullHour;
+
+	// minutes
+	$min = floor($uptime / $fullMinute);
+
+	return "{$y}{$m}{$d}{$hours}h {$min}m";
 }
 
 // validator functions

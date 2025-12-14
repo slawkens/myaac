@@ -91,13 +91,18 @@ $guild_owner = $guild->getOwner();
 if($guild_owner->isLoaded())
 	$guild_owner_name = $guild_owner->getName();
 
+$deletedColumn = 'deleted';
+if ($db->hasColumn('players', 'deletion')) {
+	$deletedColumn = 'deletion';
+}
+
 $guild_members = array();
 foreach($rank_list as $rank)
 {
 	if($db->hasTable(GUILD_MEMBERS_TABLE))
-		$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
+		$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` AND `' . $deletedColumn . '` = 0 ORDER BY `name`;');
 	else if($db->hasColumn('players', 'rank_id'))
-		$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
+		$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `' . $deletedColumn . '` = 0;');
 
 	$players_with_rank_number = $players_with_rank->rowCount();
 	if($players_with_rank_number > 0)
@@ -121,24 +126,27 @@ foreach($rank_list as $rank)
 	}
 }
 
-include(SYSTEM . 'libs/pot/InvitesDriver.php');
-new InvitesDriver($guild);
-$invited_list = $guild->listInvites();
+$invited_list = [];
 $show_accept_invite = 0;
-if($logged && count($invited_list) > 0)
-{
-	foreach($invited_list as $invited_player)
-	{
-		if(count($account_players) > 0)
-		{
-			foreach($account_players as $player_from_acc)
-			{
-				if($player_from_acc->isLoaded() && $invited_player->isLoaded() && $player_from_acc->getName() == $invited_player->getName())
-					$show_accept_invite++;
+
+if ($db->hasTableAndColumns('guild_invites', ['player_id'])) {
+	include(SYSTEM . 'libs/pot/InvitesDriver.php');
+	new InvitesDriver($guild);
+	$invited_list = $guild->listInvites();
+
+	if($logged && count($invited_list) > 0) {
+		foreach($invited_list as $invited_player) {
+			if(count($account_players) > 0) {
+				foreach($account_players as $player_from_acc) {
+					if($player_from_acc->isLoaded() && $invited_player->isLoaded() && $player_from_acc->getName() == $invited_player->getName()) {
+						$show_accept_invite++;
+					}
+				}
 			}
 		}
 	}
 }
+
 
 $useGuildNick = $db->hasTable('guild_members') || $db->hasTable('guild_membership') || $db->hasColumn('players', 'guildnick');
 

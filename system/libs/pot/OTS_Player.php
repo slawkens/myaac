@@ -2919,6 +2919,32 @@ class OTS_Player extends OTS_Row_DAO
 		$this->data['banned'] = $ban['active'];
 		$this->data['banned_time'] = $ban['expires'];
 	}
+
+	public function isNameLocked(): bool
+	{
+		// nothing can't be banned
+		if( !$this->isLoaded() ) {
+			throw new E_OTS_NotLoaded();
+		}
+
+		if($this->db->hasTable('player_namelocks')) {
+			$ban = $this->db->query('SELECT 1 FROM `player_namelocks` WHERE `player_id` = ' . $this->data['id'])->fetch(PDO::FETCH_ASSOC);
+			return (isset($ban['1']));
+		}
+		else if($this->db->hasTable('bans')) {
+			if($this->db->hasColumn('bans', 'active')) {
+				$ban = $this->db->query('SELECT `active`, `expires` FROM `bans` WHERE `type` = 2 AND `active` = 1 AND `value` = ' . $this->data['id'] . ' AND (`expires` > ' . time() .' OR `expires` = -1) ORDER BY `expires` DESC')->fetch();
+				return isset($ban['active']);
+			}
+			else { // tfs 0.2
+				$ban = $this->db->query('SELECT `time` FROM `bans` WHERE `type` = 2 AND `account` = ' . $this->data['account_id'] . ' AND (`time` > ' . time() .' OR `time` = -1) ORDER BY `time` DESC')->fetch();
+
+				return isset($ban['time']) && ($ban['time'] == -1 || $ban['time'] > 0);
+			}
+		}
+
+		return false;
+	}
 /**
  * Deletes player.
  *
@@ -2953,21 +2979,14 @@ class OTS_Player extends OTS_Row_DAO
  * @return string Player proffesion name.
  * @throws E_OTS_NotLoaded If player is not loaded or global vocations list is not loaded.
  */
-	public function getVocationName()
+	public function getVocationName(): string
 	{
 		if( !isset($this->data['vocation']) )
 		{
 			throw new E_OTS_NotLoaded();
 		}
 
-		global $config;
-		$voc = $this->getVocation();
-		if(!isset($config['vocations'][$voc])) {
-			return 'Unknown';
-		}
-
-		return $config['vocations'][$voc];
-		//return POT::getInstance()->getVocationsList()->getVocationName($this->data['vocation']);
+		return OTS_Toolbox::getVocationName($this->data['vocation'], $this->data['promotion'] ?? 0);
 	}
 
 /**
