@@ -11,7 +11,7 @@
 	<table width="200" cellspacing="1" cellpadding="0" border="0" align="center">
 		<tr bgcolor="{{ config.darkborder }}">
 			{% for vocationId in baseVocations %}
-				<td><img src="images/{{ config('vocations')[vocationId]|lower }}.png" /></td>
+				<td><img src="images/{{ config('vocations')[vocationId]|lower }}.png" width="150" height="200"/></td>
 			{% endfor %}
 		</tr>
 		<tr bgcolor="{{ config.vdarkborder }}">
