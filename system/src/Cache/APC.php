@@ -13,8 +13,8 @@ namespace MyAAC\Cache;
 
 class APC
 {
-	private $prefix;
-	private $enabled;
+	private string $prefix;
+	private bool $enabled;
 
 	public function __construct($prefix = '')
 	{
@@ -22,14 +22,14 @@ class APC
 		$this->enabled = function_exists('apc_fetch');
 	}
 
-	public function set($key, $var, $ttl = 0)
+	public function set($key, $var, $ttl = 0): void
 	{
 		$key = $this->prefix . $key;
 		apc_delete($key);
 		apc_store($key, $var, $ttl);
 	}
 
-	public function get($key)
+	public function get($key): string
 	{
 		$tmp = '';
 		if ($this->fetch($this->prefix . $key, $tmp)) {
@@ -39,18 +39,15 @@ class APC
 		return '';
 	}
 
-	public function fetch($key, &$var)
-	{
+	public function fetch($key, &$var): bool {
 		return ($var = apc_fetch($this->prefix . $key)) !== false;
 	}
 
-	public function delete($key)
-	{
+	public function delete($key): void {
 		apc_delete($this->prefix . $key);
 	}
 
-	public function enabled()
-	{
+	public function enabled(): bool {
 		return $this->enabled;
 	}
 }
