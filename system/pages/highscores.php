@@ -13,6 +13,7 @@ use MyAAC\Cache\Cache;
 use MyAAC\Models\Player;
 use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
+use MyAAC\Server\XML\Vocations;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Highscores';
@@ -35,24 +36,20 @@ if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 $query = Player::query();
 
 $configVocations = config('vocations');
-$configVocationsAmount = config('vocations_amount');
 
 $vocationId = null;
 if($vocation !== 'all') {
 	foreach($configVocations as $id => $name) {
 		if(strtolower($name) == $vocation) {
 			$vocationId = $id;
-			$add_vocs = [$id];
+			$filterVocations = [$id];
 
-			if ($id !== 0) {
-				$i = $id + $configVocationsAmount;
-				while (isset($configVocations[$i])) {
-					$add_vocs[] = $i;
-					$i += $configVocationsAmount;
-				}
+			while($tmpVoc = Vocations::getPromoted($id)) {
+				$id = $tmpVoc;
+				$filterVocations[] = $tmpVoc;
 			}
 
-			$query->whereIn('players.vocation', $add_vocs);
+			$query->whereIn('players.vocation', $filterVocations);
 			break;
 		}
 	}
@@ -325,4 +322,5 @@ $twig->display('highscores.html.twig', [
 	'page' => $page,
 	'baseLink' => $baseLink,
 	'updatedAt' => $updatedAt,
+	'baseVocations' => Vocations::getBase(true),
 ]);

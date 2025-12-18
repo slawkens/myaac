@@ -10,22 +10,19 @@
 	{% if setting('core.online_vocations_images') %}
 	<table width="200" cellspacing="1" cellpadding="0" border="0" align="center">
 		<tr bgcolor="{{ config.darkborder }}">
-			<td><img src="images/sorcerer.png" /></td>
-			<td><img src="images/druid.png" /></td>
-			<td><img src="images/paladin.png" /></td>
-			<td><img src="images/knight.png" /></td>
+			{% for vocationId in baseVocations %}
+				<td><img src="images/{{ config('vocations')[vocationId]|lower }}.png" /></td>
+			{% endfor %}
 		</tr>
 		<tr bgcolor="{{ config.vdarkborder }}">
-			<td class="white" style="text-align: center;"><strong>Sorcerers</strong></td>
-			<td class="white" style="text-align: center;"><strong>Druids</strong></td>
-			<td class="white" style="text-align: center;"><strong>Paladins</strong></td>
-			<td class="white" style="text-align: center;"><strong>Knights</strong></td>
+			{% for vocationId in baseVocations %}
+				<td class="white" style="text-align: center;"><strong>{{ config('vocations')[vocationId] }}s</strong></td>
+			{% endfor %}
 		</tr>
 		<tr bgcolor="{{ config.lightborder }}">
-			<td style="text-align: center;">{{ vocs[1] }}</td>
-			<td style="text-align: center;">{{ vocs[2] }}</td>
-			<td style="text-align: center;">{{ vocs[3] }}</td>
-			<td style="text-align: center;">{{ vocs[4] }}</td>
+			{% for vocationId in baseVocations %}
+				<td style="text-align: center;">{{ vocs[vocationId] }}</td>
+			{% endfor %}
 		</tr>
 	</table>
 	<div style="text-align: center;">&nbsp;</div>
@@ -35,11 +32,14 @@
 			<td class="white" colspan="2"><b>Vocation statistics</b></td>
 		</tr>
 
-		{% for i in 1..config.vocations_amount %}
-		<tr bgcolor="{{ getStyle(i) }}">
-			<td width="25%">{{ config.vocations[i] }}</td>
-			<td width="75%">{{ vocs[i] }}</td>
-		</tr>
+		{% set i = 0 %}
+		{% for vocationId in baseVocations %}
+			<tr bgcolor="{{ getStyle(i) }}">
+				<td width="25%">{{ config.vocations[vocationId] }}</td>
+				<td width="75%">{{ vocs[vocationId] }}</td>
+			</tr>
+
+			{% set i = i + 1 %}
 		{% endfor %}
 	</table>
 <br/>
