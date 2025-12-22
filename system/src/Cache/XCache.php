@@ -13,8 +13,8 @@ namespace MyAAC\Cache;
 
 class XCache
 {
-	private $prefix;
-	private $enabled;
+	private string $prefix;
+	private bool $enabled;
 
 	public function __construct($prefix = '')
 	{
@@ -22,14 +22,14 @@ class XCache
 		$this->enabled = function_exists('xcache_get') && ini_get('xcache.var_size');
 	}
 
-	public function set($key, $var, $ttl = 0)
+	public function set($key, $var, $ttl = 0): void
 	{
 		$key = $this->prefix . $key;
 		xcache_unset($key);
 		xcache_set($key, $var, $ttl);
 	}
 
-	public function get($key)
+	public function get($key): string
 	{
 		$tmp = '';
 		if ($this->fetch($this->prefix . $key, $tmp)) {
@@ -39,7 +39,7 @@ class XCache
 		return '';
 	}
 
-	public function fetch($key, &$var)
+	public function fetch($key, &$var): bool
 	{
 		$key = $this->prefix . $key;
 		if (!xcache_isset($key)) {
@@ -50,13 +50,11 @@ class XCache
 		return true;
 	}
 
-	public function delete($key)
-	{
+	public function delete($key): void {
 		xcache_unset($this->prefix . $key);
 	}
 
-	public function enabled()
-	{
+	public function enabled(): bool {
 		return $this->enabled;
 	}
 }

@@ -83,7 +83,7 @@ class Cache
 	/**
 	 * @return string
 	 */
-	public static function detect()
+	public static function detect(): string
 	{
 		if (function_exists('apc_fetch'))
 			return 'apc';
@@ -98,8 +98,7 @@ class Cache
 	/**
 	 * @return bool
 	 */
-	public function enabled()
-	{
+	public function enabled(): bool {
 		return false;
 	}
 

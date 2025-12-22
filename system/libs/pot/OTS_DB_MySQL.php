@@ -26,6 +26,7 @@ use MyAAC\Cache\Cache;
  */
 class OTS_DB_MySQL extends OTS_Base_DB
 {
+	private bool $hasCacheChanged = false;
 	private array $has_table_cache = [];
 	private array $has_column_cache = [];
 	private array $get_column_info_cache = [];
@@ -164,7 +165,7 @@ class OTS_DB_MySQL extends OTS_Base_DB
 				$cache->delete('database_columns_info');
 				$cache->delete('database_checksum');
 			}
-			else {
+			else if ($this->hasCacheChanged) {
 				$cache->set('database_tables', serialize($this->has_table_cache), 3600);
 				$cache->set('database_columns', serialize($this->has_column_cache), 3600);
 				$cache->set('database_columns_info', serialize($this->get_column_info_cache), 3600);
@@ -228,6 +229,8 @@ class OTS_DB_MySQL extends OTS_Base_DB
 
 	private function hasTableInternal($name): bool
 	{
+		$this->hasCacheChanged = true;
+
 		return ($this->has_table_cache[$name] = $this->query('SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = ' . $this->quote(config('database_name')) . ' AND `TABLE_NAME` = ' . $this->quote($name) . ' LIMIT 1;')->rowCount() > 0);
 	}
 
@@ -241,6 +244,8 @@ class OTS_DB_MySQL extends OTS_Base_DB
 	}
 
 	private function hasColumnInternal($table, $column): bool {
+		$this->hasCacheChanged = true;
+
 		return $this->hasTable($table) && ($this->has_column_cache[$table . '.' . $column] = count($this->query('SHOW COLUMNS FROM `' . $table . "` LIKE " . $this->quote($column))->fetchAll()) > 0);
 	}
 
@@ -271,6 +276,8 @@ class OTS_DB_MySQL extends OTS_Base_DB
 		if (!$this->hasTable($table) || !$this->hasColumn($table, $column)) {
 			return false;
 		}
+
+		$this->hasCacheChanged = true;
 
 		$formatResult = function ($result) {
 			return [
