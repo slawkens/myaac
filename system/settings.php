@@ -1724,7 +1724,7 @@ Sent by MyAAC,<br/>
 			unset($config);
 
 			$config = [];
-			require BASE . 'config.local.php';
+			require CONFIG_DIR . 'config.local.php';
 
 			$configToSave = $config;
 
@@ -1776,7 +1776,7 @@ Sent by MyAAC,<br/>
 				}
 			}
 
-			$success = Settings::saveConfig($configToSave, BASE . 'config.local.php');
+			$success = Settings::saveConfig($configToSave, CONFIG_DIR . 'config.local.php');
 			if (!$success) {
 				error('There has been error saving the config.local.php - probably problem with permissions.');
 			}
