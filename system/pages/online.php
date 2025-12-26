@@ -12,6 +12,7 @@
 use MyAAC\Cache\Cache;
 use MyAAC\Models\ServerConfig;
 use MyAAC\Models\ServerRecord;
+use MyAAC\Server\XML\Vocations;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Who is online?';
@@ -56,15 +57,14 @@ $cached = Cache::remember("online_$order", setting('core.online_cache_ttl') * 60
 
 	$vocations = array_map(function ($name) {
 		return 0;
-	}, setting('core.vocations'));
+	}, config('vocations'));
 
 	if($db->hasTable('players_online')) // tfs 1.0
 		$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players`, `players_online` WHERE `players`.`id` = `players_online`.`player_id` AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $orderSql);
 	else
 		$playersOnline = $db->query('SELECT `accounts`.`country`, `players`.`name`, `players`.`level`, `players`.`vocation`' . $outfit . ', ' . $promotion . ' `' . $skull_time . '` as `skulltime`, `' . $skull_type . '` as `skull` FROM `accounts`, `players` WHERE `players`.`online` > 0 AND `accounts`.`id` = `players`.`account_id`  ORDER BY ' . $orderSql);
 
-	$settingVocations = setting('core.vocations');
-	$settingVocationsAmount = setting('core.vocations_amount');
+	$configVocations = config('vocations');
 
 	$players = [];
 	foreach($playersOnline as $player) {
@@ -81,22 +81,19 @@ $cached = Cache::remember("online_$order", setting('core.online_cache_ttl') * 60
 			}
 		}
 
-		if(isset($player['promotion'])) {
-			if((int)$player['promotion'] > 0)
-				$player['vocation'] += ($player['promotion'] * $settingVocationsAmount);
-		}
+		$player['vocation'] = OTS_Toolbox::getVocationFromPromotion($player['vocation'], $player['promotion'] ?? 0);
 
 		$players[] = array(
 			'name' => getPlayerLink($player['name']),
 			'player' => $player,
 			'level' => $player['level'],
-			'vocation' => $settingVocations[$player['vocation']],
+			'vocation' => $configVocations[$player['vocation']],
 			'skull' => $skull,
 			'country_image' => getFlagImage($player['country']),
 			'outfit' => setting('core.outfit_images_url') . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'],
 		);
 
-		$vocations[($player['vocation'] > $settingVocationsAmount ? $player['vocation'] - $settingVocationsAmount : $player['vocation'])]++;
+		$vocations[Vocations::getOriginal($player['vocation'])]++;
 	}
 
 	$record = '';
@@ -142,6 +139,7 @@ $twig->display('online.html.twig', array(
 	'vocations' => $cached['vocations'],
 	'vocs' => $cached['vocations'], // deprecated, to be removed
 	'order' => $order,
+	'baseVocations' => Vocations::getBase(false),
 ));
 
 // search bar
