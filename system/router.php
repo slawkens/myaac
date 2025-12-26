@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Models\Menu;
 use MyAAC\Models\Pages;
 use MyAAC\Plugins;
 
@@ -331,7 +332,20 @@ else {
 	}
 }
 
-if (!$found) {
+$tmpPageOriginal = $page;
+$pagesWithDynamicPart = ['characters', 'forum', 'highscores', 'monsters'];
+foreach ($pagesWithDynamicPart as $_page) {
+	if (str_contains($page, $_page)) {
+		$tmpPageOriginal = $_page;
+	}
+}
+
+$themeMenu = Menu::select(['name'])
+	->where('template', $template_name)
+	->where('link', $tmpPageOriginal)
+	->where('access', '>', $logged_access);
+
+if (!$found || $themeMenu->count() >= 1) {
 	$page = '404';
 	$file = SYSTEM . 'pages/404.php';
 }
