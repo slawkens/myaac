@@ -51,6 +51,7 @@ $deprecatedConfig = [
 	'online_skulls',
 	'online_outfit',
 	'online_afk',
+	'team_style',
 	'team_display_outfit' => 'team_outfit',
 	'team_display_status' => 'team_status',
 	'team_display_world' => 'team_world',
