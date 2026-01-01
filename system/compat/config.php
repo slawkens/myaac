@@ -21,7 +21,6 @@ $deprecatedConfig = [
 	'visitors_counter_ttl',
 	'views_counter',
 	'outfit_images_url',
-	'outfit_images_wrong_looktypes',
 	'item_images_url',
 	'account_country',
 	'towns',
