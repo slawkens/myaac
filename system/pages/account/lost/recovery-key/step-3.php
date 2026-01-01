@@ -64,6 +64,8 @@ if($account->isLoaded()) {
 							'newPassword' => $newPassword,
 							'newEmail' => $newEmail,
 						]);
+
+						return;
 					} else {
 						$errors[] = Validator::getLastError();
 					}

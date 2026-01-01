@@ -5,8 +5,8 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-$code = $_POST['code'] ?? '';
-$character = $_POST['character'] ?? '';
+$code = $_REQUEST['code'] ?? '';
+$character = $_REQUEST['character'] ?? '';
 
 if(empty($code) || empty($character)) {
 	$twig->display('account/lost/check-code.html.twig', [

@@ -7,7 +7,7 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-$nick = $_POST['nick'] ?? '';
+$nick = $_REQUEST['nick'] ?? '';
 
 if($account->isLoaded()) {
 	if($account->getCustomField('email_next') < time()) {
