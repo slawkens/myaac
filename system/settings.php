@@ -1489,17 +1489,6 @@ Sent by MyAAC,<br/>
 			'desc' => 'Set to animoutfit.php for animated outfit',
 			'default' => 'https://outfit-images.ots.me/latest/outfit.php',
 		],
-		'outfit_images_wrong_looktypes' => [
-			'name' => 'Outfit Images Wrong Looktypes',
-			'type' => 'text',
-			'desc' => 'This looktypes needs to have different margin-top and margin-left because they are wrong positioned',
-			'default' => '75, 126, 127, 266, 302',
-			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
-				},
-			],
-		],
 		[
 			'type' => 'section',
 			'title' => 'Monster Images'

@@ -249,7 +249,7 @@ foreach($highscores as $id => &$player)
 
 		$player['link'] = getPlayerLink($player['name'], false);
 		$player['flag'] = getFlagImage($player['country']);
-		$player['outfit'] = '<img style="position:absolute;margin-top:' . (in_array($player['looktype'], setting('core.outfit_images_wrong_looktypes')) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . $player['outfit_url'] . '" alt="" />';
+		$player['outfit'] = '<img style="position:absolute;margin-top:-50px;margin-left:-30px" src="' . $player['outfit_url'] . '" alt="" />';
 
 		if ($skill != POT::SKILL__LEVEL) {
 			if (isset($lastValue) && $lastValue == $player['value']) {
