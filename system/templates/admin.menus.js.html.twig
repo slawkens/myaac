@@ -14,42 +14,62 @@
 	colors[{{ cat }}] = '{{ options['default_links_color'] ?? (menuDefaultLinksColor ?? config('menu_default_color')) }}';
 	{% endfor %}
 
+	function confirmRemoveMenuItem(that)
+	{
+		let id = $(that).attr("id");
+		if (confirm('Are you sure, that you want to remove this element?')) {
+			$('#list-' + id.replace('remove-button-', '')).remove();
+		}
+	}
+
 	$(function () {
 		const $sortable = $(".sortable");
 		$sortable.sortable();
 		$sortable.disableSelection();
 
 		$(".remove-button").on('click', function () {
-			var id = $(this).attr("id");
-			$('#list-' + id.replace('remove-button-', '')).remove();
+			confirmRemoveMenuItem(this);
 		});
 
 		$(".add-button").on('click', function () {
-			var cat = $(this).attr("id").replace('add-button-', '');
-			var id = last_id[cat];
+			let cat = $(this).attr("id").replace('add-button-', '');
+			let id = last_id[cat];
 			last_id[cat]++;
 			const color = colors[cat];
-			$('#sortable-' + cat).append('<li class="ui-state-default" id="list-' + cat + '-' + id + '"><label>Name:</label> <input type="text" name="menu[' + cat + '][]" value=""/> <label>Link:</label> <input type="text" name="menu_link[' + cat + '][]" value=""/><input type="hidden" name="menu_blank[' + cat + '][]" value="0" /> <label><input class="blank-checkbox" type="checkbox"/><span title="Open in New Window">New Window</span></label> <input class="color-picker" type="text" name="menu_color[' + cat + '][]" value="#' + color + '" /> <a class="remove-button" id="remove-button-' + cat + '-' + id + '"><i class="fas fa-trash"></i></a></li>'); //add input bo
-			$('#remove-button-' + cat + '-' + id).on('click', function () {
-				$('#list-' + $(this).attr("id").replace('remove-button-', '')).remove();
-			});
 
-			initializeSpectrum();
+			let copy = $('.ui-state-default:first').clone();
+
+			copy.attr('id', 'list-' + cat + '-' + id);
+
+			copy.find('.menu-name').val('').attr('name', 'menu[' + cat + '][]');
+			copy.find('.menu-link').val('').attr('name', 'menu_link[' + cat + '][]');
+			copy.find('.menu-access').val('0').attr('name', 'menu_access[' + cat + '][]');
+			copy.find('.menu-color').val(color).attr('name', 'menu_color[' + cat + '][]');
+			copy.find('.menu-blank').attr('name', 'menu_blank[' + cat + '][]');
+			copy.find('.menu-blank-checkbox').prop('checked', false);
+
+			copy.find('.remove-button').attr('id', 'remove-button-' + cat + '-' + id);
+
+			$('#sortable-' + cat).append(copy);
+
+			$('#remove-button-' + cat + '-' + id).on('click', function () {
+				confirmRemoveMenuItem(this);
+			});
 		});
 
 		$("#menus-form").on('submit', function (e) {
-			$('.blank-checkbox:not(:checked)').each(function (i, obj) {
+			$('.menu-blank-checkbox:not(:checked)').each(function (i, obj) {
 				$(obj).parent().prev().val("off");
 			});
 
-			$('.blank-checkbox:checked').each(function (i, obj) {
+			$('.menu-blank-checkbox:checked').each(function (i, obj) {
 				$(obj).parent().prev().val("on");
 			});
 		});
 
 	});
 </script>
-<style type="text/css">
+<style>
 	.sortable {
 		list-style-type: none;
 		margin: 0;
@@ -60,24 +80,16 @@
 	.remove-button, .add-button {
 		cursor: pointer;
 	}
-</style>
-<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/spectrum.js"></script>
-<link type="text/css" rel="stylesheet" href="{{ constant('BASE_URL') }}tools/css/spectrum.css"/>
-<script type="text/javascript">
-	$(function () {
-		initializeSpectrum();
-	});
 
-	function initializeSpectrum() {
-		$(".color-picker").spectrum({
-			preferredFormat: "hex",
-			showInput: true,
-			showPalette: true,
-			palette: [
-				['black', 'white', 'blanchedalmond',
-					'rgb(255, 128, 0);', 'hsv 100 70 50'],
-				['red', 'yellow', 'green', 'blue', 'violet']
-			]
-		});
+	.ui-sortable-handle {
+		padding: 10px;
 	}
-</script>
+
+	.label_menu_name, .label_menu_link {
+		width: 45%;
+	}
+
+	.menu-name, .menu-link {
+		width: 100%;
+	}
+</style>

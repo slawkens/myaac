@@ -12,18 +12,22 @@ namespace MyAAC\Cache;
 
 class File
 {
-	private $prefix;
-	private $dir;
-	private $enabled;
+	private string $prefix;
+	private string $dir;
+	private bool $enabled;
 
 	public function __construct($prefix = '', $dir = '')
 	{
 		$this->prefix = $prefix;
 		$this->dir = $dir;
+
+		ensureFolderExists($this->dir);
+		ensureIndexExists($this->dir);
+
 		$this->enabled = (file_exists($this->dir) && is_dir($this->dir) && is_writable($this->dir));
 	}
 
-	public function set($key, $var, $ttl = 0)
+	public function set($key, $var, $ttl = 0): void
 	{
 		$file = $this->_name($key);
 		file_put_contents($file, $var);
@@ -35,7 +39,7 @@ class File
 		touch($file, time() + $ttl);
 	}
 
-	public function get($key)
+	public function get($key): string
 	{
 		$tmp = '';
 		if ($this->fetch($key, $tmp)) {
@@ -45,7 +49,7 @@ class File
 		return '';
 	}
 
-	public function fetch($key, &$var)
+	public function fetch($key, &$var): bool
 	{
 		$file = $this->_name($key);
 		if (!file_exists($file) || filemtime($file) < time()) {
@@ -56,7 +60,7 @@ class File
 		return true;
 	}
 
-	public function delete($key)
+	public function delete($key): void
 	{
 		$file = $this->_name($key);
 		if (file_exists($file)) {
@@ -64,13 +68,11 @@ class File
 		}
 	}
 
-	public function enabled()
-	{
+	public function enabled(): bool {
 		return $this->enabled;
 	}
 
-	private function _name($key)
-	{
+	private function _name($key): string {
 		return sprintf('%s%s%s', $this->dir, $this->prefix, sha1($key));
 	}
 }
