@@ -6,6 +6,7 @@ csrfProtect();
 $title = 'Lost Account';
 
 $nick = $_REQUEST['nick'] ?? '';
+$key = $_REQUEST['key'] ?? '';
 
 if($account->isLoaded()) {
 	$account_key = $account->getCustomField('key');
@@ -13,6 +14,7 @@ if($account->isLoaded()) {
 	if(!empty($account_key)) {
 		$twig->display('account/lost/recovery-key.step-1.html.twig', [
 			'nick' => $nick,
+			'key' => $key,
 		]);
 	}
 	else {

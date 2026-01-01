@@ -99,5 +99,5 @@ if (!empty($errors)) {
 $twig->display('account.back_button.html.twig', [
 	'new_line' => true,
 	'center' => true,
-	'action' => getLink('account/lost/step-1') . '?action=recovery-key&nick=' . urlencode($nick),
+	'action' => getLink('account/lost/recovery-key/step-2') . '?nick=' . urlencode($nick) . '&key=' . urlencode($key),
 ]);

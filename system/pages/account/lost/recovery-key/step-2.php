@@ -6,7 +6,7 @@ csrfProtect();
 $title = 'Lost Account';
 
 $key = $_REQUEST['key'] ?? '';
-$nick = $_POST['nick'] ?? '';
+$nick = $_REQUEST['nick'] ?? '';
 
 $player = new OTS_Player();
 $account = new OTS_Account();
@@ -45,5 +45,5 @@ if (!empty($errors)) {
 $twig->display('account.back_button.html.twig', [
 	'new_line' => true,
 	'center' => true,
-	'action' => getLink('account/lost/step-1') . '?action=recovery-key&nick=' . urlencode($nick),
+	'action' => getLink('account/lost/step-1') . '?action=recovery-key&nick=' . urlencode($nick) . '&key=' . urlencode($key),
 ]);
