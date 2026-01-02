@@ -13,6 +13,8 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
+use MyAAC\Server\XML\Vocations;
+
 /**
  * Toolbox for common operations.
  *
@@ -110,14 +112,21 @@ class OTS_Toolbox
 		$list->setFilter($filter);
 		return $list;
 	}
-
-	public static function getVocationName($id, $promotion = 0): string
+	public static function getVocationFromPromotion($id, $promotion = 0): int
 	{
 		if($promotion > 0) {
-			$id = ($id + ($promotion * config('vocations_amount')));
+			for ($i = 0; $i < $promotion; $i++) {
+				if ($_id = Vocations::getPromoted($id)) {
+					$id = $_id;
+				}
+			}
 		}
 
-		return config('vocations')[$id] ?? 'Unknown';
+		return $id;
+	}
+
+	public static function getVocationName($id, $promotion = 0): string {
+		return config('vocations')[self::getVocationFromPromotion($id, $promotion)] ?? 'Unknown';
 	}
 }
 

@@ -452,10 +452,8 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 	if($query->rowCount() > 0) {
 		echo 'Did you mean:<ul>';
 		foreach($query as $player) {
-			if(isset($player['promotion'])) {
-				if((int)$player['promotion'] > 0)
-					$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
-			}
+			$player['vocation'] = OTS_Toolbox::getVocationFromPromotion($player['vocation'], $player['promotion'] ?? 0);
+
 			echo '<li>' . getPlayerLink($player['name']) . ' (<small><strong>level ' . $player['level'] . ', ' . $config['vocations'][$player['vocation']] . '</strong></small>)</li>';
 		}
 		echo '</ul>';

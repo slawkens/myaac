@@ -18,7 +18,7 @@
 						<label for="vocationFilter">Choose a vocation</label>
 						<select onchange="location = this.value;" id="vocationFilter">
 							<option value="{{ getLink('highscores') }}/{{ list|urlencode }}" class="size_xs">[ALL]</option>
-							{% for i in 0..config.vocations_amount %}
+							{% for i in baseVocations %}
 								<option value="{{ getLink('highscores') }}/{{ list|urlencode }}/{{ config.vocations[i]|lower|urlencode }}" class="size_xs" {% if vocationId is not null and vocationId == i %}selected{% endif %}>{{ config.vocations[i]}}</option>
 							{% endfor %}
 						</select>
@@ -120,7 +120,7 @@
 				<tr bgcolor="{{ config.lightborder }}">
 					<td>
 						<a href="{{ getLink('highscores') }}/{{ list|urlencode }}" class="size_xs">[ALL]</a><br/>
-						{% for i in 0..config.vocations_amount %}
+						{% for i in baseVocations %}
 							<a href="{{ getLink('highscores') }}/{{ list|urlencode }}/{{ config.vocations[i]|lower|urlencode }}" class="size_xs">{{ config.vocations[i]}}</a><br/>
 						{% endfor %}
 					</td>
