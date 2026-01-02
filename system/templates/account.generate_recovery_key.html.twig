@@ -5,10 +5,10 @@ To generate recovery key for your account please enter your password.<br/><br/>
 <table style="width:100%;" >
 	<tr>
 		<td class="LabelV">
-			<span>Password:</span>
+			<label for="reg_password">Password:</label>
 		</td>
 		<td>
-			<input form="form" type="password" name="reg_password" size="30" maxlength="29" autofocus/>
+			<input form="form" type="password" id="reg_password" name="reg_password" size="30" maxlength="29" autofocus/>
 		</td>
 	</tr>
 </table>
@@ -20,7 +20,7 @@ To generate recovery key for your account please enter your password.<br/><br/>
 		<td>
 			<table border="0" cellspacing="0" cellpadding="0" >
 				<tr>
-					<td style="border:0px;">
+					<td style="border:0;">
 						<form id="form" action="{{ getLink('account/register') }}" method="post">
 							{{ csrf() }}
 							<input type="hidden" name="registeraccountsave" value="1"/>

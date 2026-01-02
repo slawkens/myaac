@@ -5,18 +5,18 @@ Please enter your password and the new email address. Make sure that you enter a
 	<table style="width:100%;">
 		<tr>
 			<td class="LabelV" >
-				<span>New Email Address:</span>
+				<label for="new_email">New Email Address:</label>
 			</td>
 			<td style="width:90%;">
-				<input form="form" name="new_email" value="{% if new_email is defined %}{{ new_email }}{% endif %}" size="30" maxlength="50" autofocus/>
+				<input form="form" id="new_email" name="new_email" value="{% if new_email is defined %}{{ new_email }}{% endif %}" size="30" maxlength="50" autofocus/>
 			</td>
 		</tr>
 		<tr>
 			<td class="LabelV">
-				<span >Password:</span>
+				<label for="password">Password:</label>
 			</td>
 			<td>
-				<input form="form" type="password" name="password" size="30" maxlength="29">
+				<input form="form" type="password" id="password" name="password" size="30" maxlength="29">
 			</td>
 		</tr>
 	</table>

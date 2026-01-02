@@ -1,4 +1,4 @@
-To change a name of character select player and choose a new name.<br/>
+To change the name of a character, select a player and choose a new name.<br/>
 <span style="color: red">Change name cost {{ setting('core.account_change_character_name_price') }} {{ setting('core.donate_column') == 'coins' ? 'coins' : 'premium points' }}. You have {{ points }} {{ setting('core.donate_column') == 'coins' ? 'coins' : 'premium points' }}.</span><br/><br/>
 
 {% set title = 'Change Name' %}
@@ -6,9 +6,11 @@ To change a name of character select player and choose a new name.<br/>
 {% set content %}
 <table style="width:100%;" >
 	<tr>
-		<td class="LabelV" ><span>Character:</span></td>
+		<td class="LabelV">
+			<label for="player_id">Character:</label>
+		</td>
 		<td style="width:90%;" >
-			<select form="form" name="player_id">
+			<select form="form" id="player_id" name="player_id">
 				{% for player in account_logged.getPlayersList(false) %}
 				<option value="{{ player.getId() }}">{{ player.getName() }}</option>
 				{% endfor %}
@@ -16,7 +18,9 @@ To change a name of character select player and choose a new name.<br/>
 		</td>
 	</tr>
 	<tr>
-		<td class="LabelV" ><span>New Name:</span></td>
+		<td class="LabelV">
+			<label for="character_name">New Name:</label>
+		</td>
 		<td>
 			<input form="form" type="text" name="name" id="character_name" size="25" maxlength="25" >
 			<img id="character_indicator" src="images/global/general/{% if not save or errors|length > 0 %}n{% endif %}ok.gif" />
