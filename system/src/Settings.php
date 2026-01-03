@@ -184,11 +184,11 @@ class Settings implements \ArrayAccess
 					}
 					?>
 					<h3 id="row_<?= $key ?>" style="text-align: center"><strong><?= $setting['title']; ?></strong></h3>
-					<table class="table table-bordered table-striped">
+					<table class="table table-bordered table-striped table-responsive d-md-table">
 						<thead>
 							<tr>
 								<th style="width: 13%">Name</th>
-								<th style="width: 30%">Value</th>
+								<th style="width: 30%; min-width: 200px">Value</th>
 								<th>Description</th>
 							</tr>
 						</thead>
