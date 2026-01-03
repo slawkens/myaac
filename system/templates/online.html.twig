@@ -138,22 +138,22 @@
 {% set content %}
 <table width="100%" class="myaac-table">
 
-	<tr class="LabelH" style="position: relative; z-index: 20;">
+	<tr class="LabelH" style="z-index: 20;">
 		{% if setting('core.account_country') %}
-			<td width="11px"><a href="{{ getLink('online')}}?order=country_{{ order == 'country_asc' ? 'desc' : 'asc' }}">#&#160;&#160;</a>
+			<td style="width: 6px;"><a href="{{ getLink('online')}}?order=country_{{ order == 'country_asc' ? 'desc' : 'asc' }}">#&#160;&#160;</a>
 			</td>
 		{% endif %}
 		{% if setting('core.online_outfit') %}
-			<td><b>Outfit</b></td>
+			<td style="width: 32px;"><b>Outfit</b></td>
 		{% endif %}
-		<td style="text-align:left; width:50%">Name&#160;&#160;
+		<td style="text-align:left;">Name&#160;&#160;
 			<small style="font-weight:normal">[<a href="{{ getLink('online')}}?order=name_{{ order == 'name_asc' ? 'desc' : 'asc' }}">sort</a>]</small>
 			<img class="sortarrow" src="images/{{ order == 'name_asc' ? 'order_desc' : (order == 'name_desc' ? 'order_asc' : 'news/blank') }}.gif"/></td>
-		<td style="text-align:left;width:30%">Level&#160;&#160;
+		<td style="text-align:left;width:10%">Level&#160;&#160;
 			<small style="font-weight:normal">[<a href="{{ getLink('online')}}?order=level_{{ order == 'level_asc' ? 'desc' : 'asc' }}">sort</a>]</small>
 			<img class="sortarrow" src="images/{{ order == 'level_asc' ? 'order_desc' : (order == 'level_desc' ? 'order_asc' : 'news/blank') }}.gif"/>
 		</td>
-		<td style="text-align:left;width:50%">Vocation&#160;&#160;
+		<td style="text-align:left;width:20%">Vocation&#160;&#160;
 			<small style="font-weight:normal">[<a href="{{ getLink('online')}}?order=vocation_{{ order == 'vocation_asc' ? 'desc' : 'asc' }}">sort</a>]</small>
 			<img class="sortarrow" src="images/{{ order == 'vocation_asc' ? 'order_desc' : (order == 'vocation_desc' ? 'order_asc' : 'news/blank') }}.gif"/>
 		</td>
@@ -169,14 +169,14 @@
 			{% endif %}
 
 			{% if setting('core.online_outfit') %}
-				<td width="5%"><img style="position:absolute;margin-top:-48px;margin-left:-70px;" src="{{ player.outfit }}" alt="player outfit"/></td>
+				<td><img style="position:absolute;margin-top:-48px;margin-left:-70px;" src="{{ player.outfit }}" alt="player outfit"/></td>
 			{% endif %}
 
-			<td style="width:70%; text-align:left">
+			<td style="text-align:left">
 				{{ player.name|raw }}{{ player.skull|raw }}
 			</td>
-			<td style="width:10%">{{ player.level }}</td>
-			<td style="width:20%">{{ player.vocation }}</td>
+			<td>{{ player.level }}</td>
+			<td>{{ player.vocation }}</td>
 		</tr>
 	{% endfor %}
 </table>
