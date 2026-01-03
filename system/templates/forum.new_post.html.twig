@@ -1,7 +1,7 @@
 <form action="?" method="post">
 	{{ csrf() }}
 	<input type="hidden" name="action" value="new_post" />
-	<input type="hidden" name="thread_id" value=" {{ thread_id }}" />
+	<input type="hidden" name="thread_id" value="{{ thread_id }}" />
 	<input type="hidden" name="subtopic" value="forum" />
 	<input type="hidden" name="save" value="save" />
 	<table width="100%">
@@ -43,7 +43,8 @@
 		</tr>
 	</table>
 	<div style="text-align:center">
-		<input type="submit" value="Post Reply" />
+		{% set button_name = 'Post Reply' %}
+		{{ include('buttons.base.html.twig') }}
 	</div>
 </form>
 

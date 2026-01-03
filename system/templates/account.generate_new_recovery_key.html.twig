@@ -1,13 +1,15 @@
-To generate new recovery key for your account please enter your password.<br/>
-<span style="color: red"><b>New recovery key cost {{ setting('core.account_generate_new_reckey_price') }} Premium Points</b>.</span> You have {{ points }} premium points. You will receive e-mail with this recovery key.
+To generate a new recovery key for your account, please enter your password.<br/>
+<span style="color: red"><b>New recovery key cost {{ setting('core.account_change_character_name_price') }} {{ setting('core.donate_column') == 'coins' ? 'coins' : 'premium points' }}. You have {{ points }} {{ setting('core.donate_column') == 'coins' ? 'coins' : 'premium points' }}. You will receive an e-mail with this recovery key.
 <br/>
 {% set title = 'Generate recovery key' %}
 {% set background = config('darkborder') %}
 {% set content %}
 <table style="width:100%;">
 	<tr>
-		<td class="LabelV"><span>Password:</span></td>
-		<td><input form="form" type="password" name="reg_password" size="30" maxlength="29" ></td>
+		<td class="LabelV">
+			<label for="reg_password">Password:</label>
+		</td>
+		<td><input form="form" type="password" id="reg_password" name="reg_password" size="30" maxlength="29" ></td>
 	</tr>
 </table>
 {% endset %}
@@ -18,7 +20,7 @@ To generate new recovery key for your account please enter your password.<br/>
 		<td>
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td style="border:0px;">
+					<td style="border:0;">
 						<form id="form" action="{{ getLink('account/register-new') }}" method="post">
 							{{ csrf() }}
 							<input type="hidden" name="registeraccountsave" value="1">
@@ -31,7 +33,7 @@ To generate new recovery key for your account please enter your password.<br/>
 		<td>
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td style="border:0px;">
+					<td style="border:0;">
 						<form action="{{ getLink('account/manage') }}" method="post">
 							{{ csrf() }}
 							{{ include('buttons.back.html.twig') }}

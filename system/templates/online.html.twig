@@ -4,24 +4,35 @@
 <br/>
 {% endif %}
 
+<br/>
+
 {# vocation statistics #}
 {% if setting('core.online_vocations') %}
-<br/>
+
+	{% set title = 'Vocation statistics' %}
+	{% set tableClass = 'Table3' %}
+	{% set background = config('darkborder') %}
+	{% set content %}
+
 	{% if setting('core.online_vocations_images') %}
-	<table width="200" cellspacing="1" cellpadding="0" border="0" align="center">
-		<tr bgcolor="{{ config.darkborder }}">
-			<td><img src="images/sorcerer.png" /></td>
-			<td><img src="images/druid.png" /></td>
-			<td><img src="images/paladin.png" /></td>
-			<td><img src="images/knight.png" /></td>
-		</tr>
-		<tr bgcolor="{{ config.vdarkborder }}">
+	<table width="200" cellspacing="1" cellpadding="0" border="0" align="center" class="myaac-table">
+		<thead>
+		<tr>
 			<td class="white" style="text-align: center;"><strong>Sorcerers</strong></td>
 			<td class="white" style="text-align: center;"><strong>Druids</strong></td>
 			<td class="white" style="text-align: center;"><strong>Paladins</strong></td>
 			<td class="white" style="text-align: center;"><strong>Knights</strong></td>
 		</tr>
-		<tr bgcolor="{{ config.lightborder }}">
+		</thead>
+
+		<tr>
+			<td><img src="images/sorcerer.png" /></td>
+			<td><img src="images/druid.png" /></td>
+			<td><img src="images/paladin.png" /></td>
+			<td><img src="images/knight.png" /></td>
+		</tr>
+
+		<tr>
 			<td style="text-align: center;">{{ vocs[1] }}</td>
 			<td style="text-align: center;">{{ vocs[2] }}</td>
 			<td style="text-align: center;">{{ vocs[3] }}</td>
@@ -29,30 +40,30 @@
 		</tr>
 	</table>
 	<div style="text-align: center;">&nbsp;</div>
-		{% else %}
-	<table border="0" cellspacing="1" cellpadding="4" width="100%">
-		<tr bgcolor="{{ config.vdarkborder }}">
-			<td class="white" colspan="2"><b>Vocation statistics</b></td>
-		</tr>
-
+	{% else %}
+	<table border="0" cellspacing="1" cellpadding="4" width="100%" class="myaac-table">
 		{% for i in 1..config.vocations_amount %}
-		<tr bgcolor="{{ getStyle(i) }}">
+		<tr>
 			<td width="25%">{{ config.vocations[i] }}</td>
 			<td width="75%">{{ vocs[i] }}</td>
 		</tr>
 		{% endfor %}
 	</table>
-<br/>
+	<br/>
 	{% endif %}
+
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+
 {% endif %}
 
 <br/>
 
 {# show skulls #}
 {% if setting('core.online_skulls') %}
-<table width="100%" cellspacing="1">
+<table width="100%" cellspacing="1" class="myaac-table">
 	<tr>
-		<td style="background: {{ config.darkborder }};" align="center">
+		<td align="center">
 			<img src="images/white_skull.gif"/> - 1 - 6 Frags<br/>
 			<img src="images/red_skull.gif"/> - 6+ Frags or Red Skull<br/>
 			<img src="images/black_skull.gif"/> - 10+ Frags or Black Skull
@@ -125,7 +136,8 @@
 {% set title = 'Players Online' %}
 {% set tableClass = 'Table2' %}
 {% set content %}
-<table width="100%">
+<table width="100%" class="myaac-table">
+
 	<tr class="LabelH" style="position: relative; z-index: 20;">
 		{% if setting('core.account_country') %}
 			<td width="11px"><a href="{{ getLink('online')}}?order=country_{{ order == 'country_asc' ? 'desc' : 'asc' }}">#&#160;&#160;</a>
@@ -151,7 +163,7 @@
 	{% for player in players %}
 		{% set i = i + 1 %}
 
-		<tr style="background: {{ getStyle(i) }}; text-align: right; height: 40px;">
+		<tr style="text-align: right; height: 40px;">
 			{% if setting('core.account_country') %}
 				<td>{{ player.country_image|raw }}</td>
 			{% endif %}

@@ -22,7 +22,7 @@ csrfProtect();
 $new_password = $_POST['new_password'] ?? null;
 $new_password_confirm = $_POST['new_password_confirm'] ?? null;
 $old_password = $_POST['old_password'] ?? null;
-if(empty($new_password) && empty($new_password_confirm) && empty($old_password)) {
+if(is_null($new_password) && is_null($new_password_confirm) && is_null($old_password)) {
 	$twig->display('account.change-password.html.twig');
 }
 else {
