@@ -148,7 +148,8 @@ class OTS_Player extends OTS_Row_DAO
 
 		array_unshift($columns, 'id');
 
-		$this->data = PlayerModel::where('id', $id)->first($columns)->toArray();
+		$query = PlayerModel::where('id', $id)->first($columns);
+		$this->data = $query ? $query->toArray() : [];
 
 		// loads skills
 		if( $this->isLoaded() && $load_skills) {
