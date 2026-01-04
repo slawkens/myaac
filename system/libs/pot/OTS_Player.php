@@ -1390,12 +1390,7 @@ class OTS_Player extends OTS_Row_DAO
  */
 	public function getCap()
 	{
-		if( !isset($this->data['cap']) )
-		{
-			throw new E_OTS_NotLoaded();
-		}
-
-		return $this->data['cap'];
+		return $this->data['cap'] ?? 0;
 	}
 
 /**

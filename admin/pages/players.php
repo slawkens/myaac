@@ -35,6 +35,7 @@ $skills = array(
 $hasBlessingsColumn = $db->hasColumn('players', 'blessings');
 $hasBlessingColumn = $db->hasColumn('players', 'blessings1');
 $hasLookAddons = $db->hasColumn('players', 'lookaddons');
+$hasCapColumn = $db->hasColumn('players', 'cap');
 
 $skull_type = array("None", "Yellow", "Green", "White", "Red", "Black", "Orange");
 ?>
@@ -167,8 +168,11 @@ else if (isset($_REQUEST['search'])) {
 			$town = $_POST['town'];
 			verify_number($town, 'Town', 11);
 
-			$capacity = $_POST['capacity'];
-			verify_number($capacity, 'Capacity', 11);
+			if ($hasCapColumn) {
+				$capacity = $_POST['capacity'];
+				verify_number($capacity, 'Capacity', 11);
+			}
+
 			$sex = $_POST['sex'];
 			verify_number($sex, 'Sex', 1);
 
@@ -282,7 +286,11 @@ else if (isset($_REQUEST['search'])) {
 				$player->setPosZ($pos_z);
 				$player->setSoul($soul);
 				$player->setTownId($town);
-				$player->setCap($capacity);
+
+				if ($hasCapColumn) {
+					$player->setCap($capacity);
+				}
+
 				$player->setSex($sex);
 				$player->setLastLogin($lastlogin);
 				$player->setLastLogout($lastlogout);
@@ -561,10 +569,12 @@ else if (isset($_REQUEST['search'])) {
 									</div>
 								</div>
 								<div class="form-group row">
+									<?php if($hasCapColumn): ?>
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="capacity" class="control-label">Capacity:</label>
 										<input type="text" class="form-control" id="capacity" name="capacity" autocomplete="off" size="3" maxlength="11" value="<?php echo $player->getCap(); ?>"/>
 									</div>
+									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="soul" class="control-label">Soul:</label>
 										<input type="text" class="form-control" id="soul" name="soul" autocomplete="off" size="3" maxlength="10" value="<?php echo $player->getSoul(); ?>"/>
