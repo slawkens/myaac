@@ -48,14 +48,8 @@ class Player extends Model {
 		});
 	}
 
-	public function getVocationNameAttribute()
-	{
-		$vocation = $this->vocation;
-		if (isset($this->promotion) && $this->promotion > 0) {
-			$vocation += ($this->promotion * setting('core.vocations_amount'));
-		}
-
-		return config('vocations')[$vocation] ?? 'Unknown';
+	public function getVocationNameAttribute() {
+		return \OTS_Toolbox::getVocationName($this->vocation, $this->promotion ?? 0);
 	}
 
 	public function getIsDeletedAttribute()

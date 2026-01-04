@@ -91,13 +91,18 @@ $guild_owner = $guild->getOwner();
 if($guild_owner->isLoaded())
 	$guild_owner_name = $guild_owner->getName();
 
+$deletedColumn = 'deleted';
+if ($db->hasColumn('players', 'deletion')) {
+	$deletedColumn = 'deletion';
+}
+
 $guild_members = array();
 foreach($rank_list as $rank)
 {
 	if($db->hasTable(GUILD_MEMBERS_TABLE))
-		$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` ORDER BY `name`;');
+		$players_with_rank = $db->query('SELECT `players`.`id` as `id`, `' . GUILD_MEMBERS_TABLE . '`.`rank_id` as `rank_id` FROM `players`, `' . GUILD_MEMBERS_TABLE . '` WHERE `' . GUILD_MEMBERS_TABLE . '`.`rank_id` = ' . $rank->getId() . ' AND `players`.`id` = `' . GUILD_MEMBERS_TABLE . '`.`player_id` AND `' . $deletedColumn . '` = 0 ORDER BY `name`;');
 	else if($db->hasColumn('players', 'rank_id'))
-		$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `deleted` = 0;');
+		$players_with_rank = $db->query('SELECT `id`, `rank_id` FROM `players` WHERE `rank_id` = ' . $rank->getId() . ' AND `' . $deletedColumn . '` = 0;');
 
 	$players_with_rank_number = $players_with_rank->rowCount();
 	if($players_with_rank_number > 0)

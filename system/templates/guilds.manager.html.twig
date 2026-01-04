@@ -105,7 +105,8 @@ Here you can change names of ranks, delete and add ranks, pass leadership to oth
 				<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=delete_rank" method="post" style="display: inline;">
 					{{ csrf() }}
 					<input type="hidden" name="rankid" value="{{ rank.getId() }}" />
-					<input type="image" src="/images/news/delete.png" border="0" alt="Delete" />
+
+					<input type="submit" value="Delete" />
 				</form>
 			</td>
 			<td>

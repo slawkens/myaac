@@ -673,13 +673,7 @@ class OTS_Player extends OTS_Row_DAO
 			throw new E_OTS_NotLoaded();
 		}
 
-		if(isset($this->data['promotion'])) {
-			global $config;
-			if((int)$this->data['promotion'] > 0)
-				return ($this->data['vocation'] + ($this->data['promotion'] * $config['vocations_amount']));
-		}
-
-		return $this->data['vocation'];
+		return \OTS_Toolbox::getVocationFromPromotion($this->data['vocation'], $this->data['promotion'] ?? 0);
 	}
 
 

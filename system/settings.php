@@ -219,7 +219,14 @@ return [
 		'cache_engine' => [
 			'name' => 'Cache Engine',
 			'type' => 'options',
-			'options' => ['auto' => 'Auto', 'file' => 'Files', 'apc' => 'APC', 'apcu' => 'APCu', 'disable' => 'Disable'],
+			'options' => [
+				'auto' => 'Auto',
+				'file' => 'Files',
+				'apc' => 'APC',
+				'apcu' => 'APCu',
+				'php' => 'PHP',
+				'disable' => 'Disable',
+			],
 			'desc' => 'Auto is most reasonable. It will detect the best cache engine',
 			'default' => 'auto',
 			'is_config' => true,
@@ -306,23 +313,6 @@ return [
 			'type' => 'textarea',
 			'desc' => 'Separated with comma, you may need to adjust this for older tfs versions by removing Community Manager',
 			'default' => 'None, Normal, Tutor, Senior Tutor, Gamemaster, Community Manager, God',
-			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
-				},
-			],
-		],
-		'vocations_amount' => [
-			'name' => 'Vocations Amount',
-			'type' => 'number',
-			'desc' => 'How much basic vocations your server got (without promotion)',
-			'default' => 4,
-		],
-		'vocations' => [
-			'name' => 'Vocation Names',
-			'type' => 'textarea',
-			'desc' => 'Separated by comma. Must be in the same order as in vocations.xml, starting with id: 0.',
-			'default' => 'None, Sorcerer, Druid, Paladin, Knight, Master Sorcerer, Elder Druid,Royal Paladin, Elite Knight',
 			'callbacks' => [
 				'get' => function ($value) {
 					return array_map('trim', explode(',', $value));
@@ -1481,17 +1471,6 @@ Sent by MyAAC,<br/>
 			'type' => 'text',
 			'desc' => 'Set to animoutfit.php for animated outfit',
 			'default' => 'https://outfit-images.ots.me/latest/outfit.php',
-		],
-		'outfit_images_wrong_looktypes' => [
-			'name' => 'Outfit Images Wrong Looktypes',
-			'type' => 'text',
-			'desc' => 'This looktypes needs to have different margin-top and margin-left because they are wrong positioned',
-			'default' => '75, 126, 127, 266, 302',
-			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
-				},
-			],
 		],
 		[
 			'type' => 'section',

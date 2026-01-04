@@ -1,5 +1,46 @@
 # Changelog
 
+## [1.8.7 - 04.01.2026]
+
+### Fixed
+* Fixed [player/guild/house] bb code in forum (https://github.com/slawkens/myaac/commit/8ec9bf10682c73f1fe40967a106ccda2a5073ed0)
+
+### Changed
+* Settings: better responsiveness on mobile (https://github.com/slawkens/myaac/commit/c65d4e4b62ef26fb4e24ecb1d2bcc4556d746adf)
+* Signatures: Return 404 when the signature player is not found (https://github.com/slawkens/myaac/commit/7e6480b380799add7a2b1b7ce1d3c1f2b6819ff1)
+
+### Removed
+* Remove setting: outfit_images_wrong_looktypes - is obsolete, the bug doesn't exist in the latest outfit images (https://github.com/slawkens/myaac/commit/cc220bedc1f01535eaac23f6961135e2e7a6e310)
+
+## [1.8.6 - 14.12.2025]
+
+### Added
+* Added hook for adding custom rules to validate new character name (https://github.com/slawkens/myaac/commit/8e6749c59984631288e8e9803819b2f0ff389761)
+
+### Fixed
+* Highscores: Fix ordering by different skills (Adjust order by desc: skill_tries, manaspent, experience) - More exact results (https://github.com/slawkens/myaac/commit/c86257e6dacbad773aa09c0958eeaa106a967f2d)
+* Fix exception shown on first install, when there is no vendor - Before it displayed 500 white page, now it display the exception (https://github.com/slawkens/myaac/commit/18a1178e4b93607a350259679e0366cb83fb4126)
+* Fix typo $up -> $down, in migration nr 7, was failing due that (https://github.com/slawkens/myaac/commit/fd74f01291d0e9cdb92ee1b95021c9d7b591ad7c)
+
+### Changed
+* Ini set html_errors = 0, to show html code in exceptions (https://github.com/slawkens/myaac/commit/9ed06782e67772826d927ad847a077b99df5060d)
+
+## [1.8.5 - 21.11.2025]
+
+### Added
+* New Setting: Account Countries Most Popular (https://github.com/slawkens/myaac/commit/946364f59d7cd01472877108ab27ec78fb28307a)
+
+### Changed
+* Status: Write to status-error.log if there is connection error (https://github.com/slawkens/myaac/commit/780d4ccef741c1dd45a00bfc121fba9f1a175313)
+* Settings: escapeHtml in values (support for html code) (https://github.com/slawkens/myaac/commit/5861efdbe900ccd35309913af0c0a5f3d4cdc1a8)
+* News Page: Don't display hidden news for admin - it's confusing (https://github.com/slawkens/myaac/commit/175e97828b9a08ec3080cc8d3fb4eb3f1c08649f)
+* Plugins System: Add plugin:remove + plugin:delete as alias for plugin:uninstall + plugin:activate/deactivate (https://github.com/slawkens/myaac/commit/6367054487368c92741bfd1dc7c70c52aea9ee87, https://github.com/slawkens/myaac/commit/baec6c9ebf5c342b3b2f7123427c6ba21dbb93bc)
+
+### Fixed
+* Status: Fix $status['uptimeReadable'], was totally wrong (https://github.com/slawkens/myaac/commit/0a6d44bf21417562491aabc93543a2bc3a44b2df)
+* Guilds: Detect "deletion" column in guilds show/delete (https://github.com/slawkens/myaac/commit/6775a061bebc9ff449522f0173556d4a7a44fa5e, https://github.com/slawkens/myaac/commit/603d860b56bc7418db09e206f40aa06d0682c00e)
+* General: Ensure some cache folders & index.html exists (https://github.com/slawkens/myaac/commit/730a0f29124811f525207c24c06eb0d088fa3434)
+
 ## [1.8.4 - 27.10.2025]
 
 ### Changed

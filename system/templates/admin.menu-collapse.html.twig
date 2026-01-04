@@ -1,0 +1,33 @@
+<link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/toastify.min.css">
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/toastify.min.js"></script>
+{{ include('script.ajax-setup.html.twig') }}
+
+<script>
+	$(function () {
+		/* Store sidebar state */
+		$('.sidebar-toggle').on('click',function(event) {
+			event.preventDefault();
+
+			const isCollapsed = $('body').hasClass('sidebar-collapse');
+
+			$.ajax({
+				type: 'POST',
+				url: '{{ constant('ADMIN_URL') }}tools/menu_collapse.php',
+				data : { collapse: !isCollapsed},
+				success : function(response) {
+				},
+				error : function(response) {
+					Toastify({
+						position: 'center',
+						text: response.responseText,
+						duration: 3000,
+						style: {
+							background: 'red',
+						},
+						escapeMarkup: false,
+					}).showToast();
+				}
+			});
+		});
+	});
+</script>
