@@ -19,14 +19,14 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	<?php $hooks->trigger(HOOK_ADMIN_HEAD_END); ?>
 </head>
-<body class="sidebar-mini ">
+<body class="sidebar-mini <?= (session('admin.menu-collapse') ? 'sidebar-collapse' : ''); ?>">
 <?php $hooks->trigger(HOOK_ADMIN_BODY_START); ?>
 <?php if ($logged && admin()) { ?>
 	<div class="wrapper">
 		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+					<a class="nav-link sidebar-toggle" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
 				</li>
 				<li class="nav-item d-none d-sm-inline-block">
 					<a href="<?php echo ADMIN_URL; ?>" class="nav-link">Home</a>
@@ -198,6 +198,7 @@ if ($logged && admin()) {
 <script src="<?php echo BASE_URL; ?>tools/js/datatables.bs.min.js"></script>
 <?php } ?>
 <script src="<?php echo BASE_URL; ?>tools/js/adminlte.min.js"></script>
+<?php $twig->display('admin.menu-collapse.html.twig'); ?>
 <?php $hooks->trigger(HOOK_ADMIN_BODY_END); ?>
 </body>
 </html>

@@ -47,7 +47,7 @@
 
 					{% if setting('core.team_outfit') %}
 					<td>
-						<img style="position: absolute; margin-top: {% if member.player.looktype in setting('core.outfit_images_wrong_looktypes') %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
+						<img style="position: absolute; margin-top: -50px; margin-left: -30px;" src="{{ member.outfit }}" alt="player outfit"/>
 					</td>
 					{% endif %}
 
@@ -127,7 +127,7 @@
 				<tr bgcolor="{{ getStyle(i) }}" style="height: 32px;">
 				{% if setting('core.team_outfit') %}
 				<td>
-					<img style="position: absolute; margin-top: {% if member.player.looktype in setting('core.outfit_images_wrong_looktypes') %}-16px;margin-left:-0px;{% else %} -45px; margin-left: -30px;{%  endif %}" src="{{ member.outfit }}" alt="player outfit"/>
+					<img style="position: absolute; margin-top: -50px; margin-left: -30px;" src="{{ member.outfit }}" alt="player outfit"/>
 				</td>
 				{% endif %}
 

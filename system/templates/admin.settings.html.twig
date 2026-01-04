@@ -73,13 +73,9 @@
 <!-- jQuery Form Submit No Refresh + Toastify -->
 <link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/toastify.min.css">
 <script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/toastify.min.js"></script>
-<script>
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
+{{ include('script.ajax-setup.html.twig') }}
 
+<script>
 	const noChangesText = "No changes has been made";
 
 	$('form')

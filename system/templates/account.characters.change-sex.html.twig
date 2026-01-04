@@ -6,9 +6,11 @@ To change a sex of character select player and choose a new sex.<br/>
 {% set content %}
 <table style="width:100%;" >
 	<tr>
-		<td class="LabelV" ><span>Character:</span></td>
+		<td class="LabelV">
+			<label for="player_id">Character:</label>
+		</td>
 		<td style="width:90%;" >
-			<select form="form" name="player_id">
+			<select form="form" id="player_id" name="player_id">
 				{% for player in players %}
 				<option value="{{ player.getId() }}">{{ player.getName() }}</option>
 				{% endfor %}
@@ -16,9 +18,11 @@ To change a sex of character select player and choose a new sex.<br/>
 		</td>
 	</tr>
 	<tr>
-		<td class="LabelV" ><span>New Sex:</span></td>
+		<td class="LabelV">
+			<label for="new_sex">New Sex:</label>
+		</td>
 		<td>
-			<select form="form" name="new_sex">
+			<select form="form" id="new_sex" name="new_sex">
 				{% for id, gender in config.genders %}
 				<option value="{{ id }}"{% if player_sex == id %} selected{% endif %}>{{ gender }}</option>
 				{% endfor %}

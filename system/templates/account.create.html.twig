@@ -48,7 +48,7 @@
 								</tr>
 
 								{% if setting('core.mail_enabled') and setting('core.account_mail_verify') %}
-									<tr><td></td><td><span><strong>Please use real address!<br/>We will send a link to validate your Email.</strong></span></td></tr>
+									<tr><td></td><td><span><strong>Please use a real address!<br/>We will send a link to validate your Email.</strong></span></td></tr>
 								{% endif %}
 
 								{{ hook('HOOK_ACCOUNT_CREATE_AFTER_EMAIL') }}
