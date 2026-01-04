@@ -5,8 +5,6 @@ $deprecatedConfig = [
 	'genders',
 	'template',
 	'template_allow_change',
-	'vocations_amount',
-	'vocations',
 	'client',
 	'session_prefix',
 	'friendly_urls',

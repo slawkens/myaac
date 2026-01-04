@@ -319,23 +319,6 @@ return [
 				},
 			],
 		],
-		'vocations_amount' => [
-			'name' => 'Vocations Amount',
-			'type' => 'number',
-			'desc' => 'How much basic vocations your server got (without promotion)',
-			'default' => 4,
-		],
-		'vocations' => [
-			'name' => 'Vocation Names',
-			'type' => 'textarea',
-			'desc' => 'Separated by comma. Must be in the same order as in vocations.xml, starting with id: 0.',
-			'default' => 'None, Sorcerer, Druid, Paladin, Knight, Master Sorcerer, Elder Druid,Royal Paladin, Elite Knight',
-			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
-				},
-			],
-		],
 		[
 			'type' => 'category',
 			'title' => 'Database',
