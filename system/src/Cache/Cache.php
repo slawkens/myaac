@@ -47,35 +47,15 @@ class Cache
 			return self::$instance;
 		}
 
-		switch (strtolower($engine)) {
-			case 'apc':
-				self::$instance = new APC($prefix);
-				break;
-
-			case 'apcu':
-				self::$instance = new APCu($prefix);
-				break;
-
-			case 'xcache':
-				self::$instance = new XCache($prefix);
-				break;
-
-			case 'file':
-				self::$instance = new File($prefix, CACHE);
-				break;
-
-			case 'php':
-				self::$instance = new PHP($prefix, CACHE);
-				break;
-
-			case 'auto':
-				self::$instance = self::generateInstance(self::detect(), $prefix);
-				break;
-
-			default:
-				self::$instance = new self();
-				break;
-		}
+		self::$instance = match (strtolower($engine)) {
+			'apc' => new APC($prefix),
+			'apcu' => new APCu($prefix),
+			'xcache' => new XCache($prefix),
+			'file' => new File($prefix, CACHE),
+			'php' => new PHP($prefix, CACHE),
+			'auto' => self::generateInstance(self::detect(), $prefix),
+			default => new self(),
+		};
 
 		return self::$instance;
 	}

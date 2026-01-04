@@ -146,10 +146,10 @@ if($twig_loader) {
 
 function get_template_menus(): array
 {
-	global $template_name;
+	global $template_name, $logged_access;
 
 	$result = Cache::remember('template_menus_' . $template_name, 10 * 60, function () use ($template_name) {
-		$result = Menu::select(['name', 'link', 'blank', 'color', 'category'])
+		$result = Menu::select(['name', 'link', 'access', 'blank', 'color', 'category'])
 			->where('template', $template_name)
 			->orderBy('category')
 			->orderBy('ordering')
@@ -163,6 +163,10 @@ function get_template_menus(): array
 
 	$menus = [];
 	foreach($result as $menu) {
+		if ($menu['access'] > $logged_access) {
+			continue;
+		}
+
 		if (empty($menu['link'])) {
 			$menu['link'] = 'news';
 		}
