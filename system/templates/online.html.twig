@@ -18,22 +18,15 @@
 	<table width="200" cellspacing="1" cellpadding="0" border="0" align="center" class="myaac-table">
 		<thead>
 		<tr>
-			<td style="text-align: center;"><strong>Sorcerers</strong></td>
-			<td style="text-align: center;"><strong>Druids</strong></td>
-			<td style="text-align: center;"><strong>Paladins</strong></td>
-			<td style="text-align: center;"><strong>Knights</strong></td>
+			{% for vocationId in baseVocations %}
+				<td style="text-align: center;"><strong>{{ config('vocations')[vocationId] }}s</strong></td>
+			{% endfor %}
 		</tr>
 		</thead>
 
 		<tr>
 			{% for vocationId in baseVocations %}
 				<td><img src="images/{{ config('vocations')[vocationId]|lower }}.png" width="150" height="200"/></td>
-			{% endfor %}
-		</tr>
-
-		<tr>
-			{% for vocationId in baseVocations %}
-				<td style="text-align: center;"><strong>{{ config('vocations')[vocationId] }}s</strong></td>
 			{% endfor %}
 		</tr>
 
