@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.7 - 04.01.2026]
+
+### Fixed
+* Fixed [player/guild/house] bb code in forum (https://github.com/slawkens/myaac/commit/8ec9bf10682c73f1fe40967a106ccda2a5073ed0)
+
+### Changed
+* Settings: better responsiveness on mobile (https://github.com/slawkens/myaac/commit/c65d4e4b62ef26fb4e24ecb1d2bcc4556d746adf)
+* Signatures: Return 404 when the signature player is not found (https://github.com/slawkens/myaac/commit/7e6480b380799add7a2b1b7ce1d3c1f2b6819ff1)
+
+### Removed
+* Remove setting: outfit_images_wrong_looktypes - is obsolete, the bug doesn't exist in the latest outfit images (https://github.com/slawkens/myaac/commit/cc220bedc1f01535eaac23f6961135e2e7a6e310)
+
 ## [1.8.6 - 14.12.2025]
 
 ### Added
