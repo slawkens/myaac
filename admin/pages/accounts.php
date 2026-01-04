@@ -631,6 +631,7 @@ else if (isset($_REQUEST['search'])) {
 							</div>
 						</form>
 					</div>
+					<?php if (USE_ACCOUNT_NAME): ?>
 					<div class="col-6 col-lg-12">
 						<form action="<?php echo $admin_base; ?>" method="post">
 							<?php csrf(); ?>
@@ -641,6 +642,7 @@ else if (isset($_REQUEST['search'])) {
 							</div>
 						</form>
 					</div>
+					<?php endif; ?>
 					<div class="col-6 col-lg-12">
 						<form action="<?php echo $admin_base; ?>" method="post">
 							<?php csrf(); ?>
