@@ -1137,6 +1137,32 @@ function csrfProtect(): void
 	}
 }
 
+function getSkillIdByName(string $name): int|null
+{
+	$skills = [
+		'level' => POT::SKILL_LEVEL,
+		'experience' => POT::SKILL_LEVEL,
+
+		'magic' => POT::SKILL_MAGIC,
+		'maglevel' => POT::SKILL_MAGIC,
+
+		'balance' => SKILL_BALANCE,
+		'frags' => SKILL_FRAGS,
+
+		'club' => POT::SKILL_CLUB,
+		'sword' => POT::SKILL_SWORD,
+		'axe' => POT::SKILL_AXE,
+		'dist' => POT::SKILL_DIST,
+		'distance' => POT::SKILL_DIST,
+		'shield' => POT::SKILL_SHIELD,
+		'shielding' => POT::SKILL_SHIELD,
+		'fish' => POT::SKILL_FISH,
+		'fishing' => POT::SKILL_FISH,
+	];
+
+	return $skills[$name] ?? null;
+}
+
 function getTopPlayers($limit = 5, $skill = POT::SKILL_LEVEL)
 {
 	global $db;
@@ -1144,18 +1170,7 @@ function getTopPlayers($limit = 5, $skill = POT::SKILL_LEVEL)
 	$skillOriginal = $skill;
 
 	if (is_string($skill)) {
-		$skills = [
-			'level' => POT::SKILL_LEVEL,
-			'experience' => POT::SKILL_LEVEL,
-
-			'magic' => POT::SKILL_MAGIC,
-			'maglevel' => POT::SKILL_MAGIC,
-
-			'balance' => SKILL_BALANCE,
-			'frags' => SKILL_FRAGS,
-		];
-
-		$skill = $skills[$skill] ?? null;
+		$skill = getSkillIdByName($skill);
 	}
 
 	if (!is_numeric($skill)) {
