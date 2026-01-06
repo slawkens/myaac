@@ -70,7 +70,7 @@ foreach($posts as &$post) {
 	}
 
 	$post['group'] = $groupName;
-	$post['player_link'] = getPlayerLink($player->getName());
+	$post['player_link'] = '<a href="' . getPlayerLink($player, false) . '" style="position: relative;">' . $player->getName() . '</a>';
 
 	$post['vocation'] = $player->getVocationName();
 
