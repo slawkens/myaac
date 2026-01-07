@@ -33,6 +33,7 @@ If you do not want to specify a certain field, just leave it blank.<br/><br/>
 													<td class="LabelV">Name:</td>
 													<td style="width:80%;" >{{ player.name }}</td>
 												</tr>
+												{{ hook('HOOK_ACCOUNT_CHARACTERS_CHANGE_COMMENT_AFTER_NAME') }}
 												<tr>
 													<td class="LabelV" >Hide Account:</td>
 													<td>
@@ -42,6 +43,7 @@ If you do not want to specify a certain field, just leave it blank.<br/><br/>
 														{% if player.group_id > 1 %} (you will be also hidden on the Team page!){% endif %}
 													</td>
 												</tr>
+												{{ hook('HOOK_ACCOUNT_CHARACTERS_CHANGE_COMMENT_AFTER_HIDE_ACCOUNT') }}
 											</table>
 										</div>
 									</div>
@@ -65,6 +67,7 @@ If you do not want to specify a certain field, just leave it blank.<br/><br/>
 													<td class="LabelV" ><span>Comment:</span></td>
 													<td style="width:80%;"><textarea name="comment" rows="10" cols="50" wrap="virtual">{{ player.comment|raw }}</textarea><br>[max. length: 2000 chars, 50 lines (ENTERs)]</td>
 												</tr>
+												{{ hook('HOOK_ACCOUNT_CHARACTERS_CHANGE_COMMENT_AFTER_COMMENT') }}
 											</table>
 										</div>
 									</div>
