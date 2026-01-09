@@ -267,9 +267,6 @@ class OTS_Player extends OTS_Row_DAO
 		$values = [];
 		foreach ($columns as $column) {
 			$value = $this->data[$column];
-			if ($column == 'created') {
-				$value = time();
-			}
 
 			$values[$column] = $value;
 		}
@@ -280,7 +277,10 @@ class OTS_Player extends OTS_Row_DAO
 		}
 		// creates new player
 		else {
+			$values['created'] = time();
+
 			$player = PlayerModel::create($values);
+
 			// ID of new group
 			$this->data['id'] = $player->id;
 		}
