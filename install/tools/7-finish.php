@@ -37,8 +37,46 @@ if ($db->hasTable('players')) {
 
 		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($p['name']));
 		if ($query->rowCount() == 0) {
-			if (!query("INSERT INTO `players` (`id`, `name`, `group_id`, `account_id`, `level`, `vocation`, `health`, `healthmax`, `experience`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `maglevel`, `mana`, `manamax`, `manaspent`, `soul`, `town_id`, `posx`, `posy`, `posz`, `conditions`, `cap`, `sex`, `lastlogin`, `lastip`, `save`, `lastlogout`, `balance`, `$deleted`, `created`, `hide`, `comment`) VALUES (null, " . $db->quote($p['name']) . ", 1, " . getSession('account') . ", " . $p['level'] . ", " . $p['vocation_id'] . ", " . $p['health'] . ", " . $p['healthmax'] . ", " . $p['experience'] . ", 118, 114, 38, 57, " . $p['looktype'] . ", 0, " . $p['mana'] . ", " . $p['manamax'] . ", 0, " . $p['soul'] . ", 1, 1000, 1000, 7, '', " . $p['cap'] . ", 1, " . $time . ", 2130706433, 1, " . $time . ", 0, 0, " . $time . ", 1, '');"))
-				$success = false;
+			$player = new OTS_Player();
+
+			$player->setData([
+				'name' => $p['name'],
+				'group_id' => 1,
+				'account_id' => getSession('account'),
+				'level' => $p['level'],
+				'vocation' => $p['vocation_id'],
+				'health' => $p['health'],
+				'healthmax' => $p['healthmax'],
+				'experience' => $p['experience'],
+				'lookbody' => 118,
+				'lookfeet' => 114,
+				'lookhead' => 38,
+				'looklegs' => 57,
+				'looktype' => $p['looktype'],
+				'maglevel' => 0,
+				'mana' => $p['mana'],
+				'manamax' => $p['manamax'],
+				'manaspent' => 0,
+				'soul' => $p['soul'],
+				'town_id' => 1,
+				'posx' => 1000,
+				'posy' => 1000,
+				'posz' => 7,
+				'conditions' => '',
+				'cap' => $p['cap'],
+				'sex' => 1,
+				'lastlogin' => $time,
+				'lastip' => 2130706433,
+				'save' => 1,
+				'lastlogout' => $time,
+				'balance' => 0,
+				$deleted => 0,
+				'created' => $time,
+				'hide' => 1,
+				'comment' => '',
+			]);
+
+			$player->save();
 		}
 	}
 

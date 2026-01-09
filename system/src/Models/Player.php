@@ -23,6 +23,8 @@ class Player extends Model {
 
 	public $timestamps = false;
 
+	protected $guarded = [];
+
 	protected $casts = [
 		'worldid' => 'integer',
 		'sex' => 'integer',
