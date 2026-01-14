@@ -319,6 +319,34 @@ return [
 				},
 			],
 		],
+		/**
+		 * @deprecated
+		 * To be removed in v3.0
+		 */
+		'vocations_amount' => [
+			'hidden' => true,
+			'type' => 'number',
+			//'name' => 'Vocations Amount',
+			//'desc' => 'How many basic vocations your server got (without promotion)',
+			'default' => 4,
+			'callbacks' => [
+				'get' => function () {
+					return config('vocations_amount');
+				},
+			],
+		],
+		'vocations' => [
+			'hidden' => true,
+			'type' => 'textarea',
+			//'name' => 'Vocation Names',
+			//'desc' => 'Separated by comma. Must be in the same order as in vocations.xml, starting with id: 0.',
+			'default' => 'None, Sorcerer, Druid, Paladin, Knight, Master Sorcerer, Elder Druid,Royal Paladin, Elite Knight',
+			'callbacks' => [
+				'get' => function () {
+					return config('vocations');
+				},
+			],
+		],
 		[
 			'type' => 'category',
 			'title' => 'Database',
