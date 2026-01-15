@@ -880,11 +880,12 @@ function getWorldName($id)
  *
  * @param string $to Recipient email address.
  * @param string $subject Subject of the message.
- * @param string $body Message body in html format.
+ * @param string $body Message body in HTML format.
  * @param string $altBody Alternative message body, plain text.
  * @return bool PHPMailer status returned (success/failure).
+ * @throws \PHPMailer\PHPMailer\Exception
  */
-function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
+function _mail(string $to, string $subject, string $body, string $altBody = ''): bool
 {
 	global $mailer, $config;
 
@@ -901,12 +902,6 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	else {
 		$mailer->clearAllRecipients();
 	}
-
-	$signature_html = setting('core.mail_signature_html');
-	if($add_html_tags && isset($body[0]))
-		$tmp_body = '<html><head></head><body>' . $body . '<br/><br/>' . $signature_html . '</body></html>';
-	else
-		$tmp_body = $body . '<br/><br/>' . $signature_html;
 
 	$mailOption = setting('core.mail_option');
 	if($mailOption == MAIL_SMTP)
@@ -933,6 +928,9 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	else {
 		$mailer->isMail();
 	}
+
+	$signature_html = setting('core.mail_signature_html');
+	$tmp_body = $body . '<br/><br/>' . $signature_html;
 
 	$mailer->isHTML(isset($body[0]) > 0);
 	$mailer->From = setting('core.mail_address');
