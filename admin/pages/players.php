@@ -10,6 +10,7 @@
 
 use MyAAC\Forum;
 use MyAAC\Models\Player;
+use MyAAC\Server\XML\Vocations;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
@@ -237,7 +238,30 @@ else if (isset($_REQUEST['search'])) {
 				$player->setGroup($groups->getGroup($group));
 				$player->setLevel($level);
 				$player->setExperience($experience);
+
+				if ($db->hasColumn('players', 'promotion')) {
+					$promotion = 0;
+
+					$vocationOriginal = Vocations::getOriginal($vocation);
+					if ($vocation != $vocationOriginal) {
+						$tmpId = $vocationOriginal;
+						while($promoted = Vocations::getPromoted($tmpId)) {
+							$promotion++;
+
+							$tmpId = $promoted;
+							if ($promoted == $vocation) {
+								break;
+							}
+						}
+
+						$vocation = $vocationOriginal;
+					}
+
+					$player->setPromotion($promotion);
+				}
+
 				$player->setVocation($vocation);
+
 				$player->setHealth($health);
 				$player->setHealthMax($health_max);
 				$player->setMagLevel($magic_level);

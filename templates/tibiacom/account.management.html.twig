@@ -151,7 +151,7 @@
 						</tr>
 						<tr style="background-color: {{ config.darkborder }};" >
 							<td class="LabelV" >Last Login:</td>
-							<td>{{ "now"|date("j F Y, G:i:s") }}</td>
+							<td>{{ account_logged.getCustomField('web_lastlogin')|date("j F Y, G:i:s") }}</td>
 						</tr>
 						{% autoescape false %}
 						<tr style="background-color: {{ config.lightborder }};">

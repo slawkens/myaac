@@ -51,6 +51,8 @@ if($player_name != null) {
 						'description' => 'The character information has been changed.'
 					));
 					$show_form = false;
+
+					$hooks->trigger(HOOK_ACCOUNT_CHARACTERS_CHANGE_COMMENT_AFTER_SUCCESS, ['player' => $player]);
 				}
 			}
 		} else {
@@ -70,9 +72,11 @@ if($show_form) {
 	}
 
 	if(isset($player) && $player) {
-		$twig->display('account.characters.change-comment.html.twig', array(
-			'player' => $player->toArray()
-		));
+		$_player = $player->toArray();
+		$_player['id'] = $player->id; // Hack, as it's somehow missing in the toArray() function
+
+		$twig->display('account.characters.change-comment.html.twig', [
+			'player' => $_player,
+		]);
 	}
 }
-?>

@@ -77,7 +77,15 @@ class Vocations
 	}
 
 	public static function getOriginal(int $id): ?int {
-		return self::$vocationsFrom[$id] ?? null;
+		while ($tmpId = self::$vocationsFrom[$id]) {
+			if ($tmpId == $id) {
+				break;
+			}
+
+			$id = $tmpId;
+		}
+
+		return $id;
 	}
 
 	public static function getBase($includingRook = true): array {
