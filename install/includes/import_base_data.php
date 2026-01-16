@@ -3,6 +3,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 use MyAAC\Models\Changelog;
 use MyAAC\Models\Config;
+use MyAAC\Models\FAQ;
 use MyAAC\Models\ForumBoard;
 use MyAAC\Models\Gallery;
 use MyAAC\Models\NewsCategory;
@@ -63,6 +64,13 @@ if (Gallery::count() === 0) {
 		'thumb' => 'images/gallery/demon_thumb.gif',
 		'author' => 'MyAAC',
 		'ordering' => 0,
+	]);
+}
+
+if(FAQ::count() == 0) {
+	FAQ::create([
+		'question' => 'What is this?',
+		'answer' => 'This is website for OTS powered by MyAAC.',
 	]);
 }
 

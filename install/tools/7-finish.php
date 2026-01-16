@@ -2,8 +2,6 @@
 define('MYAAC_INSTALL', true);
 
 use MyAAC\DataLoader;
-use MyAAC\Models\FAQ as ModelsFAQ;
-use MyAAC\Plugins;
 
 require_once '../../common.php';
 
@@ -36,10 +34,6 @@ DataLoader::load();
 require_once SYSTEM . 'migrations/17.php';
 $up();
 
-// update config.highscores_ids_hidden
-require_once SYSTEM . 'migrations/20.php';
-$up();
-
 // add z_polls tables
 require_once SYSTEM . 'migrations/22.php';
 $up();
@@ -57,13 +51,6 @@ $up();
 // rules page
 require_once SYSTEM . 'migrations/45.php';
 $up();
-
-if(ModelsFAQ::count() == 0) {
-	ModelsFAQ::create([
-		'question' => 'What is this?',
-		'answer' => 'This is website for OTS powered by MyAAC.',
-	]);
-}
 
 $hooks->trigger(HOOK_INSTALL_FINISH);
 
