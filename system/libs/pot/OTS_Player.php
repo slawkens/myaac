@@ -281,7 +281,7 @@ class OTS_Player extends OTS_Row_DAO
 
 			$player = PlayerModel::create($values);
 
-			// ID of new group
+			// ID of new player
 			$this->data['id'] = $player->id;
 		}
 
