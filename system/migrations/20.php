@@ -1,5 +1,6 @@
 <?php
 
+use MyAAC\Models\Player as PlayerModel;
 use MyAAC\Settings;
 
 function updateHighscoresIdsHidden(): void
@@ -10,12 +11,22 @@ function updateHighscoresIdsHidden(): void
 		return;
 	}
 
-	$query = $db->query("SELECT `id` FROM `players` WHERE (`name` = " . $db->quote("Rook Sample") . " OR `name` = " . $db->quote("Sorcerer Sample") . " OR `name` = " . $db->quote("Druid Sample") . " OR `name` = " . $db->quote("Paladin Sample") . " OR `name` = " . $db->quote("Knight Sample") . " OR `name` = " . $db->quote("Account Manager") . ") ORDER BY `id`;");
+	$players = PlayerModel::where('name', 'Rook Sample')
+		->orWhere('name', 'Sorcerer Sample')
+		->orWhere('name', 'Druid Sample')
+		->orWhere('name', 'Paladin Sample')
+		->orWhere('name', 'Knight Sample')
+		->orWhere('name', 'Monk Sample')
+		->orWhere('name', 'Account Manager')
+		->orderBy('id')
+		->select('id')
+		->get();
 
-	$highscores_ignored_ids = array();
-	if ($query->rowCount() > 0) {
-		foreach ($query->fetchAll() as $result)
-			$highscores_ignored_ids[] = $result['id'];
+	$highscores_ignored_ids = [];
+	if (count($players) > 0) {
+		foreach ($players as $result) {
+			$highscores_ignored_ids[] = $result->id;
+		}
 	} else {
 		$highscores_ignored_ids[] = 0;
 	}

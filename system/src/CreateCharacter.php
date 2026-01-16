@@ -149,7 +149,10 @@ class CreateCharacter
 		if($db->hasColumn('players', 'direction'))
 			$player->setDirection($playerSample->getDirection());
 
-		$player->setConditions($playerSample->getConditions());
+		if($db->hasColumn('players', 'conditions')) {
+			$player->setConditions($playerSample->getConditions());
+		}
+
 		$rank = $playerSample->getRank();
 		if($rank->isLoaded()) {
 			$player->setRank($playerSample->getRank());
@@ -183,7 +186,11 @@ class CreateCharacter
 		$player->setLookHead($playerSample->getLookHead());
 		$player->setLookLegs($playerSample->getLookLegs());
 		$player->setLookType($playerSample->getLookType());
-		$player->setCap($playerSample->getCap());
+
+		if($db->hasColumn('players', 'cap')) {
+			$player->setCap($playerSample->getCap());
+		}
+
 		$player->setBalance(0);
 		$player->setPosX(0);
 		$player->setPosY(0);
