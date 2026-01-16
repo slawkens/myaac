@@ -45,7 +45,7 @@ class PHP
 		rename($tmp, $file);
 	}
 
-	public function get($key): string
+	public function get($key)
 	{
 		$tmp = '';
 		if ($this->fetch($key, $tmp)) {
