@@ -233,6 +233,10 @@ class OTS_Player extends OTS_Row_DAO
 	public function save()
 	{
 		$defaultValues = [
+			'cap' => 0,
+			'skull' => 0,
+			'skull_type' => 0,
+			'skull_time' => 0,
 			'loss_experience' => 100,
 			'loss_mana' => 100,
 			'loss_skills' => 100,
@@ -243,11 +247,15 @@ class OTS_Player extends OTS_Row_DAO
 			'promotion' => 0,
 			'direction' => 0,
 			'blessings' => 0,
+			'stamina' => 0,
+			'lookaddons' => 0,
+			'save' => 1,
 			'conditions' => '',
 			'town_id' => 1,
+			'world_id' => 1,
+			'online' => 0,
 			'deletion' => 0,
 			'deleted' => 0,
-			'stamina' => 0,
 			'marriage' => 0,
 		];
 

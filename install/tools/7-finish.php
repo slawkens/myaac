@@ -25,72 +25,9 @@ if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['save
 
 require SYSTEM . 'init.php';
 
-if ($db->hasTable('players')) {
-	$deleted = 'deleted';
-	if ($db->hasColumn('players', 'deletion'))
-		$deleted = 'deletion';
-
-	$time = time();
-	function insert_sample_if_not_exist($p)
-	{
-		global $db, $success, $deleted, $time;
-
-		$query = $db->query('SELECT `id` FROM `players` WHERE `name` = ' . $db->quote($p['name']));
-		if ($query->rowCount() == 0) {
-			$player = new OTS_Player();
-
-			$player->setData([
-				'name' => $p['name'],
-				'group_id' => 1,
-				'account_id' => getSession('account'),
-				'level' => $p['level'],
-				'vocation' => $p['vocation_id'],
-				'health' => $p['health'],
-				'healthmax' => $p['healthmax'],
-				'experience' => $p['experience'],
-				'lookbody' => 118,
-				'lookfeet' => 114,
-				'lookhead' => 38,
-				'looklegs' => 57,
-				'looktype' => $p['looktype'],
-				'maglevel' => 0,
-				'mana' => $p['mana'],
-				'manamax' => $p['manamax'],
-				'manaspent' => 0,
-				'soul' => $p['soul'],
-				'town_id' => 1,
-				'posx' => 1000,
-				'posy' => 1000,
-				'posz' => 7,
-				'conditions' => '',
-				'cap' => $p['cap'],
-				'sex' => 1,
-				'lastlogin' => $time,
-				'lastip' => 2130706433,
-				'save' => 1,
-				'lastlogout' => $time,
-				'balance' => 0,
-				$deleted => 0,
-				'created' => $time,
-				'hide' => 1,
-				'comment' => '',
-			]);
-
-			$player->save();
-		}
-	}
-
-	$success = true;
-	insert_sample_if_not_exist(array('name' => 'Rook Sample', 'level' => 1, 'vocation_id' => 0, 'health' => 150, 'healthmax' => 150, 'experience' => 0, 'looktype' => 130, 'mana' => 0, 'manamax' => 0, 'soul' => 100, 'cap' => 400));
-	insert_sample_if_not_exist(array('name' => 'Sorcerer Sample', 'level' => 8, 'vocation_id' => 1, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 90, 'manamax' => 90, 'soul' => 100, 'cap' => 470));
-	insert_sample_if_not_exist(array('name' => 'Druid Sample', 'level' => 8, 'vocation_id' => 2, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 130, 'mana' => 90, 'manamax' => 90, 'soul' => 100, 'cap' => 470));
-	insert_sample_if_not_exist(array('name' => 'Paladin Sample', 'level' => 8, 'vocation_id' => 3, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 129, 'mana' => 90, 'manamax' => 90, 'soul' => 100, 'cap' => 470));
-	insert_sample_if_not_exist(array('name' => 'Knight Sample', 'level' => 8, 'vocation_id' => 4, 'health' => 185, 'healthmax' => 185, 'experience' => 4200, 'looktype' => 131, 'mana' => 90, 'manamax' => 90, 'soul' => 100, 'cap' => 470));
-
-	if ($success) {
-		success($locale['step_database_imported_players']);
-	}
-}
+// add player samples
+require_once SYSTEM . 'migrations/49.php';
+$up();
 
 DataLoader::setLocale($locale);
 DataLoader::load();
