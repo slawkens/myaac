@@ -1,4 +1,7 @@
 <?php
+
+use MyAAC\Models\Account as AccountModel;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 csrfProtect();
@@ -26,46 +29,57 @@ if($account->isLoaded()) {
 			if(Validator::password($newPassword)) {
 				if ($newPassword == $passwordRepeat) {
 					if (Validator::email($newEmail)) {
-						$account->setEMail($newEmail);
+						$emailExists = AccountModel::where('email', $newEmail)->count() > 0;
+						if (!$emailExists) {
 
-						$tmp_new_pass = $newPassword;
-						if (USE_ACCOUNT_SALT) {
-							$salt = generateRandomString(10, false, true, true);
-							$tmp_new_pass = $salt . $newPassword;
-						}
+							$hooks->trigger(HOOK_ACCOUNT_LOST_RECOVERY_KEY_STEP_3_POST);
 
-						$account->setPassword(encrypt($tmp_new_pass));
-						$account->save();
+							if (empty($errors)) {
+								$account->setEMail($newEmail);
 
-						if (USE_ACCOUNT_SALT) {
-							$account->setCustomField('salt', $salt);
-						}
+								$tmp_new_pass = $newPassword;
+								if (USE_ACCOUNT_SALT) {
+									$salt = generateRandomString(10, false, true, true);
+									$tmp_new_pass = $salt . $newPassword;
+								}
 
-						$statusMsg = '';
-						if ($account->getCustomField('email_next') < time()) {
-							$mailBody = $twig->render('mail.account.lost.new-email.html.twig', [
-								'account' => $account,
-								'newPassword' => $newPassword,
-								'newEmail' => $newEmail,
-							]);
+								$account->setPassword(encrypt($tmp_new_pass));
+								$account->save();
 
-							if (_mail($account->getCustomField('email'), configLua('serverName') . ' - New password to your account', $mailBody)) {
-								$statusMsg = '<br /><small>Sent e-mail with your account name and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!</small>';
-							} else {
-								$statusMsg = '<br /><p class="error">An error occurred while sending email! You will not receive e-mail with this informations. For Admin: More info can be found in system/logs/mailer-error.log</p>';
+								if (USE_ACCOUNT_SALT) {
+									$account->setCustomField('salt', $salt);
+								}
+
+								$statusMsg = '';
+								if ($account->getCustomField('email_next') < time()) {
+									$mailBody = $twig->render('mail.account.lost.new-email.html.twig', [
+										'account' => $account,
+										'newPassword' => $newPassword,
+										'newEmail' => $newEmail,
+									]);
+
+									if (_mail($account->getCustomField('email'), configLua('serverName') . ' - New password to your account', $mailBody)) {
+										$statusMsg = '<br /><small>Sent e-mail with your account name and password to new e-mail. You should receive this e-mail in 15 minutes. You can login now with new password!</small>';
+									} else {
+										$statusMsg = '<br /><p class="error">An error occurred while sending email! You will not receive e-mail with this informations. For Admin: More info can be found in system/logs/mailer-error.log</p>';
+									}
+								} else {
+									$statusMsg = '<br /><small>You will not receive e-mail with this informations.</small>';
+								}
+
+								$twig->display('account/lost/finish.new-email.html.twig', [
+									'statusMsg' => $statusMsg,
+									'account' => $account,
+									'newPassword' => $newPassword,
+									'newEmail' => $newEmail,
+								]);
+
+								return;
 							}
-						} else {
-							$statusMsg = '<br /><small>You will not receive e-mail with this informations.</small>';
 						}
-
-						$twig->display('account/lost/finish.new-email.html.twig', [
-							'statusMsg' => $statusMsg,
-							'account' => $account,
-							'newPassword' => $newPassword,
-							'newEmail' => $newEmail,
-						]);
-
-						return;
+						else {
+							$errors[] = 'This email is already registered!';
+						}
 					} else {
 						$errors[] = Validator::getLastError();
 					}

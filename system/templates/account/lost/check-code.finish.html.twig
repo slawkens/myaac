@@ -20,20 +20,22 @@ Please enter new password to your account and repeat to make sure you remember p
 				<table>
 					<tr>
 						<td>
-							<label for="password">New password:</label>
+							<label for="password"><strong>New password:</strong></label>
 						</td>
 						<td>
 							<input type="password" id="password" name="password" value="" size="40">
 						</td>
 					</tr>
+					{{ hook('HOOK_ACCOUNT_LOST_CHECK_CODE_FINISH_AFTER_PASSWORD') }}
 					<tr>
 						<td>
-							<label for="password_repeat">Repeat new password:</label>
+							<label for="password_repeat"><strong>Repeat the new password:</strong></label>
 						</td>
 						<td>
 							<input type="password" id="password_repeat" name="password_repeat" value="" size="40">
 						</td>
 					</tr>
+					{{ hook('HOOK_ACCOUNT_LOST_CHECK_CODE_FINISH_AFTER_PASSWORD_REPEAT') }}
 				</table>
 			</td>
 		</tr>

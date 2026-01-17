@@ -37,11 +37,18 @@ if($account->isLoaded()) {
 					'description' => 'Details about steps required to recover your account has been sent to <b>' . $accountEMail . '</b>. You should receive this email within 15 minutes. Please check your inbox/spam directory.',
 					'custom_buttons' => '',
 				]);
+
+				$twig->display('account.back_button.html.twig', [
+					'new_line' => true,
+					'center' => true,
+					'action' => getLink('news'),
+				]);
+
+				return;
 			}
-			else {
-				$account->setCustomField('email_next', (time() + 60));
-				error('An error occurred while sending email! Try again later or contact with admin. For Admin: More info can be found in system/logs/mailer-error.log</p>');
-			}
+
+			$account->setCustomField('email_next', (time() + 60));
+			error('An error occurred while sending email! Try again later or contact with admin. For Admin: More info can be found in system/logs/mailer-error.log</p>');
 		}
 		else {
 			$errors[] = 'Invalid e-mail to account of character <b>' . escapeHtml($nick) . '</b>. Try again.';

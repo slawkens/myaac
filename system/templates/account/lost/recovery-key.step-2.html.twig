@@ -11,7 +11,7 @@ Set new password and e-mail to your account.<br>
 		<thead>
 		<tr>
 			<th class="white">
-				<b>Please enter new password and e-mail</b>
+				<strong>Please enter new password and e-mail</strong>
 			</th>
 		</tr>
 		</thead>
@@ -23,36 +23,55 @@ Set new password and e-mail to your account.<br>
 				<table>
 					<tr>
 						<td>
-							<label for="nick">Account of character:</label>
+							<label for="nick">
+								<strong>Account of character:</strong>
+							</label>
 						</td>
 						<td>
 							<input type="text" id="nick" name="nick" value="{{ nick }}" size="40" readonly="readonly">
 						</td>
 					</tr>
+
+					{{ hook('HOOK_ACCOUNT_LOST_RECOVERY_KEY_STEP_2_AFTER_CHARACTER') }}
+
 					<tr>
 						<td>
-							<label for="password">New password:</label>
+							<label for="password">
+								<strong>New password:</strong>
+							</label>
 						</td>
 						<td>
 							<input type="password" id="password" name="password" value="" size="40">
 						</td>
 					</tr>
+
+					{{ hook('HOOK_ACCOUNT_LOST_RECOVERY_KEY_STEP_2_AFTER_PASSWORD') }}
+
 					<tr>
 						<td>
-							<label for="password_repeat">Repeat new password:</label>
+							<label for="password_repeat">
+								<strong>Repeat the new password:</strong>
+							</label>
 						</td>
 						<td>
 							<input type="password" id="password_repeat" name="password_repeat" value="" size="40">
 						</td>
 					</tr>
+
+					{{ hook('HOOK_ACCOUNT_LOST_RECOVERY_KEY_STEP_2_AFTER_PASSWORD_REPEAT') }}
+
 					<tr>
 						<td>
-							<label for="email">New e-mail address:</label>
+							<label for="email">
+								<strong>New e-mail address:</strong>
+							</label>
 						</td>
 						<td>
 							<input type="text" id="email" name="email" value="" size="40">
 						</td>
 					</tr>
+
+					{{ hook('HOOK_ACCOUNT_LOST_RECOVERY_KEY_STEP_2_AFTER_EMAIL') }}
 				</table>
 
 			</td>
