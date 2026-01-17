@@ -1,0 +1,56 @@
+Please enter new password to your account and repeat to make sure you remember password.<BR>
+<form action="{{ getLink('account/lost/email/set-new-password') }}" method="post">
+
+	{{ csrf() }}
+
+	<input type="hidden" name="character" value="{{ character }}">
+	<input type="hidden" name="code" value="{{ code }}">
+
+	<table class="myaac-table" style="width: 100%;">
+
+		<thead>
+		<tr>
+			<th class="white"><b>Passwords</b></th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<label for="password"><strong>New password:</strong></label>
+						</td>
+						<td>
+							<input type="password" id="password" name="password" value="" size="40">
+						</td>
+					</tr>
+					{{ hook('HOOK_ACCOUNT_LOST_CHECK_CODE_FINISH_AFTER_PASSWORD') }}
+					<tr>
+						<td>
+							<label for="password_repeat"><strong>Repeat the new password:</strong></label>
+						</td>
+						<td>
+							<input type="password" id="password_repeat" name="password_repeat" value="" size="40">
+						</td>
+					</tr>
+					{{ hook('HOOK_ACCOUNT_LOST_CHECK_CODE_FINISH_AFTER_PASSWORD_REPEAT') }}
+				</table>
+			</td>
+		</tr>
+		</tbody>
+
+	</table>
+	<br/>
+	<table style="width: 100%">
+		<tr>
+			<td>
+				<div style="text-align: center">
+					{% set button_name = 'Submit' %}
+					{% include('buttons.base.html.twig') %}
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>

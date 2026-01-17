@@ -1,0 +1,57 @@
+If you enter right recovery key you will see form to set new e-mail and password to account. To this e-mail will be send your new password and account name.<BR>
+<form action="{{ getLink('account/lost/recovery-key/step-2') }}" method="post">
+
+	{{ csrf() }}
+
+	<table class="myaac-table" style="width: 100%;">
+
+		<thead>
+		<tr>
+			<th class="white">
+				<b>Please enter your recovery key</b>
+			</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<label for="nick">
+								<strong>Character name:</strong>
+							</label>
+						</td>
+						<td>
+							<input type=text id="nick" name="nick" value="{{ nick }}" size="40" readonly="readonly">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="key">
+								<strong>Recovery key:</strong>
+							</label>
+						</td>
+						<td>
+							<input type="text" id="key" name="key" value="{{ key }}" size="40">
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		</tbody>
+
+	</table>
+	<br>
+	<table style="width: 100%">
+		<tr>
+			<td>
+				<div style="text-align:center">
+					{% set button_name = 'Submit' %}
+					{% include('buttons.base.html.twig') %}
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>

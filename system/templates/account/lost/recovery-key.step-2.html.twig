@@ -1,0 +1,90 @@
+Set new password and e-mail to your account.<br>
+<form action="{{ getLink('account/lost/recovery-key/step-3') }}" method="post">
+
+	{{ csrf() }}
+
+	<input type="hidden" name="key" VALUE="{{ key }}">
+
+	<input type="hidden" name="character" value="">
+	<table class="myaac-table" style="width: 100%">
+
+		<thead>
+		<tr>
+			<th class="white">
+				<strong>Please enter new password and e-mail</strong>
+			</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr>
+			<td>
+
+				<table>
+					<tr>
+						<td>
+							<label for="nick">
+								<strong>Account of character:</strong>
+							</label>
+						</td>
+						<td>
+							<input type="text" id="nick" name="nick" value="{{ nick }}" size="40" readonly="readonly">
+						</td>
+					</tr>
+
+					{{ hook('HOOK_ACCOUNT_LOST_RECOVERY_KEY_STEP_2_AFTER_CHARACTER') }}
+
+					<tr>
+						<td>
+							<label for="password">
+								<strong>New password:</strong>
+							</label>
+						</td>
+						<td>
+							<input type="password" id="password" name="password" value="" size="40">
+						</td>
+					</tr>
+
+					{{ hook('HOOK_ACCOUNT_LOST_RECOVERY_KEY_STEP_2_AFTER_PASSWORD') }}
+
+					<tr>
+						<td>
+							<label for="password_repeat">
+								<strong>Repeat the new password:</strong>
+							</label>
+						</td>
+						<td>
+							<input type="password" id="password_repeat" name="password_repeat" value="" size="40">
+						</td>
+					</tr>
+
+					{{ hook('HOOK_ACCOUNT_LOST_RECOVERY_KEY_STEP_2_AFTER_PASSWORD_REPEAT') }}
+
+					<tr>
+						<td>
+							<label for="email">
+								<strong>New e-mail address:</strong>
+							</label>
+						</td>
+						<td>
+							<input type="text" id="email" name="email" value="" size="40">
+						</td>
+					</tr>
+
+					{{ hook('HOOK_ACCOUNT_LOST_RECOVERY_KEY_STEP_2_AFTER_EMAIL') }}
+				</table>
+
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<br>
+	<table style="width: 100%">
+		<tr>
+			<td align="center">
+				{% set button_name = 'Submit' %}
+				{% include('buttons.base.html.twig') %}
+			</td>
+		</tr>
+</table>
+</form>
