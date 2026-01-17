@@ -35,6 +35,7 @@ $skills = array(
 $hasBlessingsColumn = $db->hasColumn('players', 'blessings');
 $hasBlessingColumn = $db->hasColumn('players', 'blessings1');
 $hasLookAddons = $db->hasColumn('players', 'lookaddons');
+$hasCapColumn = $db->hasColumn('players', 'cap');
 
 $skull_type = array("None", "Yellow", "Green", "White", "Red", "Black", "Orange");
 ?>
@@ -167,8 +168,11 @@ else if (isset($_REQUEST['search'])) {
 			$town = $_POST['town'];
 			verify_number($town, 'Town', 11);
 
-			$capacity = $_POST['capacity'];
-			verify_number($capacity, 'Capacity', 11);
+			if ($hasCapColumn) {
+				$capacity = $_POST['capacity'];
+				verify_number($capacity, 'Capacity', 11);
+			}
+
 			$sex = $_POST['sex'];
 			verify_number($sex, 'Sex', 1);
 
@@ -273,16 +277,20 @@ else if (isset($_REQUEST['search'])) {
 				$player->setLookHead($look_head);
 				$player->setLookLegs($look_legs);
 				$player->setLookType($look_type);
-				if ($hasLookAddons)
+				if ($hasLookAddons) {
 					$player->setLookAddons($look_addons);
-				if ($db->hasColumn('players', 'offlinetraining_time'))
-					$player->setCustomField('offlinetraining_time', $offlinetraining);
+				}
+
 				$player->setPosX($pos_x);
 				$player->setPosY($pos_y);
 				$player->setPosZ($pos_z);
 				$player->setSoul($soul);
 				$player->setTownId($town);
-				$player->setCap($capacity);
+
+				if ($hasCapColumn) {
+					$player->setCap($capacity);
+				}
+
 				$player->setSex($sex);
 				$player->setLastLogin($lastlogin);
 				$player->setLastLogout($lastlogout);
@@ -299,23 +307,11 @@ else if (isset($_REQUEST['search'])) {
 				if ($hasBlessingsColumn)
 					$player->setBlessings($blessings);
 
-				if ($hasBlessingColumn) {
-					for ($i = 1; $i <= $bless_count; $i++) {
-						$a = 'blessing' . $i;
-						$player->setCustomField('blessings' . $i, ${'blessing' . $i} ? '1' : '0');
-					}
-				}
 				$player->setBalance($balance);
 				if ($db->hasColumn('players', 'stamina'))
 					$player->setStamina($stamina);
-				if ($db->hasColumn('players', 'deletion'))
-					$player->setCustomField('deletion', $deleted ? '1' : '0');
-				else
-					$player->setCustomField('deleted', $deleted ? '1' : '0');
-				$player->setCustomField('hide', $hide ? '1' : '0');
-				$player->setCustomField('created', $created);
-				if (isset($comment))
-					$player->setCustomField('comment', $comment);
+
+				$player->setDeleted($deleted ? '1' : '0');
 
 				foreach ($_POST['skills'] as $skill => $value) {
 					$player->setSkill($skill, $value);
@@ -324,6 +320,24 @@ else if (isset($_REQUEST['search'])) {
 					$player->setSkillTries($skill, $value);
 				}
 				$player->save();
+
+				if ($db->hasColumn('players', 'offlinetraining_time')) {
+					$player->setCustomField('offlinetraining_time', $offlinetraining);
+				}
+
+				if ($hasBlessingColumn) {
+					for ($i = 1; $i <= $bless_count; $i++) {
+						$a = 'blessing' . $i;
+						$player->setCustomField('blessings' . $i, ${'blessing' . $i} ? '1' : '0');
+					}
+				}
+
+				$player->setCustomField('hide', $hide ? '1' : '0');
+				$player->setCustomField('created', $created);
+				if (isset($comment)) {
+					$player->setCustomField('comment', $comment);
+				}
+
 				echo_success('Player saved at: ' . date('G:i'));
 				$player->load($id);
 			}
@@ -555,10 +569,12 @@ else if (isset($_REQUEST['search'])) {
 									</div>
 								</div>
 								<div class="form-group row">
+									<?php if($hasCapColumn): ?>
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="capacity" class="control-label">Capacity:</label>
 										<input type="text" class="form-control" id="capacity" name="capacity" autocomplete="off" size="3" maxlength="11" value="<?php echo $player->getCap(); ?>"/>
 									</div>
+									<?php endif; ?>
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="soul" class="control-label">Soul:</label>
 										<input type="text" class="form-control" id="soul" name="soul" autocomplete="off" size="3" maxlength="10" value="<?php echo $player->getSoul(); ?>"/>
