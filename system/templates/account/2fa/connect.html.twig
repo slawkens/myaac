@@ -9,7 +9,7 @@
 					<tbody><tr>
 						<td class="LabelV"><b>Connect your {{ config.lua.serverName }} account to an authenticator app!</b>
 							<div style="float: right; font-size: 1px;">
-								<form action="{{ getLink('account/2fa') }}?action=email-code" method="post" style="margin: 0px; padding: 0px;">
+								<form action="{{ getLink('account/2fa/app/activate') }}" method="post" style="margin: 0; padding: 0;">
 									{{ csrf() }}
 									{% set button_name = 'Request' %}
 									{% include('buttons.base.html.twig') %}

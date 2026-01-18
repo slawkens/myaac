@@ -10,7 +10,7 @@
 					<tr>
 						<td class="LabelV"><b>Activate email code authentication for your account!</b>
 							<div style="float: right; font-size: 1px;">
-								<form action="{{ getLink('account/2fa') }}?action=email-code&step=activate" method="post" style="margin: 0; padding: 0;">
+								<form action="{{ getLink('account/2fa/email/activate') }}" method="post" style="margin: 0; padding: 0;">
 									{{ csrf() }}
 									{% set button_name = 'Request' %}
 									{% include('buttons.base.html.twig') %}

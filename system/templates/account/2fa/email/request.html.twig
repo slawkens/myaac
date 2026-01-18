@@ -31,14 +31,13 @@
 					<tr>
 						<td>
 							<div style="float: right;">
-								<form action="{{ getLink('account/2fa') }}?action=email-code"
+								<form action="{{ getLink('account/2fa/email/resend-code') }}"
 									method="post" style="padding:0;margin:0;">
 									{{ csrf() }}
 
 									{% if account_logged is defined %}
 										<input type="hidden" name="account_logged" value="{{ account_logged.getId() }}">
 									{% endif %}
-									<input type="hidden" name="step" value="resend">
 
 									{% set button_name = 'Resend Email Code' %}
 									{% include('buttons.base.html.twig') %}
@@ -88,10 +87,9 @@
 	<tbody>
 	<tr align="center" valign="top">
 		<td>
-			<form id="confirmActivateForm" action="{{ getLink('account/2fa') }}?action=email-code" method="post" style="padding:0;margin:0;">
+			<form id="confirmActivateForm" action="{{ getLink('account/2fa/email/activate') }}" method="post" style="padding:0;margin:0;">
 				{{ csrf() }}
 
-				<input type="hidden" name="step" value="activate">
 				<input type="hidden" name="save" value="1">
 
 				{% set button_color = 'green' %}

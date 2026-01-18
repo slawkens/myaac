@@ -60,7 +60,7 @@ class TwoFactorAuth
 				}
 
 				define('HIDE_LOGIN_BOX', true);
-				$twig->display('account.2fa.email.login.html.twig', [
+				$twig->display('account/2fa/email/login.html.twig', [
 					'account_login' => $login_account,
 					'password_login' => $login_password,
 					'remember_me' => $remember_me,
@@ -94,7 +94,7 @@ class TwoFactorAuth
 		$errors[] = 'Invalid email code!';
 		$twig->display('error_box.html.twig', ['errors' => $errors]);
 
-		$twig->display('account.2fa.email.login.html.twig',
+		$twig->display('account/2fa/email/login.html.twig',
 			[
 				'account_login' => $login_account,
 				'password_login' => $login_password,
@@ -118,16 +118,16 @@ class TwoFactorAuth
 
 	public function getAccountManageViews(): array
 	{
-		$twoFactorView = 'account.2fa.protected.html.twig';
+		$twoFactorView = 'account/2fa/protected.html.twig';
 		if ($this->authType == self::TYPE_EMAIL) {
-			$twoFactorView2 = 'account.2fa.email.activated.html.twig';
+			$twoFactorView2 = 'account/2fa/email/activated.html.twig';
 		}
 		elseif ($this->authType == self::TYPE_APP) {
-			$twoFactorView2 = 'account.2fa.app.activated.html.twig';
+			$twoFactorView2 = 'account/2fa/app/activated.html.twig';
 		}
 		else {
-			$twoFactorView = 'account.2fa.connect.html.twig';
-			$twoFactorView2 = 'account.2fa.email.activate.html.twig';
+			$twoFactorView = 'account/2fa/connect.html.twig';
+			$twoFactorView2 = 'account/2fa/email/activate.html.twig';
 		}
 
 		return [$twoFactorView, $twoFactorView2];

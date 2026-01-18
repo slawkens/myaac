@@ -6,9 +6,9 @@
 				<tr>
 					<td>
 						<div style="float: right; width: 135px;">
-							<form action="{{ getLink('account/2fa') }}?action=email-code" method="post" style="padding:0;margin:0;">
+							<form action="{{ getLink('account/2fa/email/deactivate') }}" method="post" style="padding:0;margin:0;">
 								{{ csrf() }}
-								<input type="hidden" name="step" value="deactivate">
+
 								{% set button_name = 'Deactivate' %}
 								{{ include('buttons.base.html.twig') }}
 							</form>

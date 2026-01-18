@@ -10,7 +10,7 @@
 						<tr>
 							<td>To deactivate <b>two-factor email code authentication</b> for your account, enter the
 								received <b>email code</b> below. Note, however, that <b>email code authentication</b>
-								is an important security feature which helps to prevent any unauthorised access to your
+								is an important security feature which helps to prevent any unauthorized access to your
 								Tibia account.
 							</td>
 						</tr>
@@ -28,7 +28,7 @@
 							<td>
 								<div style="float: right;">
 									<form
-										action="{{ getLink('account/2fa') }}?action=email-code&step=resend"
+										action="{{ getLink('account/2fa/email/resend-code') }}"
 										method="post"
 										style="padding:0;margin:0;"
 									>
@@ -86,10 +86,9 @@
 	<tbody>
 	<tr align="center" valign="top">
 		<td>
-			<form id="form-code" method="post" action="{{ getLink('account/2fa') }}?action=email-code">
+			<form id="form-code" method="post" action="{{ getLink('account/2fa/email/deactivate') }}">
 				{{ csrf() }}
 
-				<input type="hidden" name="step" value="deactivate">
 				<input type="hidden" name="save" value="1">
 
 				{% set button_name = 'Continue' %}
