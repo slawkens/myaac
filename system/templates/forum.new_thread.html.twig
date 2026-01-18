@@ -44,6 +44,7 @@
 		</tr>
 	</table>
 	<div style="text-align:center">
-		<input type="submit" value="Post Thread" />
+		{% set button_name = 'Post Thread' %}
+		{{ include('buttons.base.html.twig') }}
 	</div>
 </form>

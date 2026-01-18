@@ -26,8 +26,8 @@
 if (version_compare(phpversion(), '8.1', '<')) die('PHP version 8.1 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '1.8.2-dev';
-const DATABASE_VERSION = 46;
+const MYAAC_VERSION = '2.0-dev';
+const DATABASE_VERSION = 50;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -148,15 +148,16 @@ if(!IS_CLI) {
 
 /** @var array $config */
 ini_set('log_errors', 1);
-if(@$config['env'] === 'dev' || defined('MYAAC_INSTALL')) {
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-}
-else {
+if(isset($config['env']) && $config['env'] !== 'dev' && !defined('MYAAC_INSTALL')) {
 	ini_set('display_errors', 0);
 	ini_set('display_startup_errors', 0);
 	error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+}
+else {
+	ini_set('html_errors', 0);
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
 }
 
 $autoloadFile = VENDOR . 'autoload.php';

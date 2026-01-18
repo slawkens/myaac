@@ -47,35 +47,15 @@ class Cache
 			return self::$instance;
 		}
 
-		switch (strtolower($engine)) {
-			case 'apc':
-				self::$instance = new APC($prefix);
-				break;
-
-			case 'apcu':
-				self::$instance = new APCu($prefix);
-				break;
-
-			case 'xcache':
-				self::$instance = new XCache($prefix);
-				break;
-
-			case 'file':
-				self::$instance = new File($prefix, CACHE);
-				break;
-
-			case 'php':
-				self::$instance = new PHP($prefix, CACHE);
-				break;
-
-			case 'auto':
-				self::$instance = self::generateInstance(self::detect(), $prefix);
-				break;
-
-			default:
-				self::$instance = new self();
-				break;
-		}
+		self::$instance = match (strtolower($engine)) {
+			'apc' => new APC($prefix),
+			'apcu' => new APCu($prefix),
+			'xcache' => new XCache($prefix),
+			'file' => new File($prefix, CACHE),
+			'php' => new PHP($prefix, CACHE),
+			'auto' => self::generateInstance(self::detect(), $prefix),
+			default => new self(),
+		};
 
 		return self::$instance;
 	}
@@ -83,7 +63,7 @@ class Cache
 	/**
 	 * @return string
 	 */
-	public static function detect()
+	public static function detect(): string
 	{
 		if (function_exists('apc_fetch'))
 			return 'apc';
@@ -98,8 +78,7 @@ class Cache
 	/**
 	 * @return bool
 	 */
-	public function enabled()
-	{
+	public function enabled(): bool {
 		return false;
 	}
 
@@ -113,6 +92,11 @@ class Cache
 		$value = null;
 		if ($cache->fetch($key, $value)) {
 			return unserialize($value);
+		}
+
+		// -1 for infinite cache
+		if ($ttl == -1) {
+			$ttl = 10 * 365 * 24 * 60 * 60; // 10 years should be enough
 		}
 
 		$value = $callback();

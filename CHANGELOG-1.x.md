@@ -1,5 +1,97 @@
 # Changelog
 
+## [1.8.7 - 04.01.2026]
+
+### Fixed
+* Fixed [player/guild/house] bb code in forum (https://github.com/slawkens/myaac/commit/8ec9bf10682c73f1fe40967a106ccda2a5073ed0)
+
+### Changed
+* Settings: better responsiveness on mobile (https://github.com/slawkens/myaac/commit/c65d4e4b62ef26fb4e24ecb1d2bcc4556d746adf)
+* Signatures: Return 404 when the signature player is not found (https://github.com/slawkens/myaac/commit/7e6480b380799add7a2b1b7ce1d3c1f2b6819ff1)
+
+### Removed
+* Remove setting: outfit_images_wrong_looktypes - is obsolete, the bug doesn't exist in the latest outfit images (https://github.com/slawkens/myaac/commit/cc220bedc1f01535eaac23f6961135e2e7a6e310)
+
+## [1.8.6 - 14.12.2025]
+
+### Added
+* Added hook for adding custom rules to validate new character name (https://github.com/slawkens/myaac/commit/8e6749c59984631288e8e9803819b2f0ff389761)
+
+### Fixed
+* Highscores: Fix ordering by different skills (Adjust order by desc: skill_tries, manaspent, experience) - More exact results (https://github.com/slawkens/myaac/commit/c86257e6dacbad773aa09c0958eeaa106a967f2d)
+* Fix exception shown on first install, when there is no vendor - Before it displayed 500 white page, now it display the exception (https://github.com/slawkens/myaac/commit/18a1178e4b93607a350259679e0366cb83fb4126)
+* Fix typo $up -> $down, in migration nr 7, was failing due that (https://github.com/slawkens/myaac/commit/fd74f01291d0e9cdb92ee1b95021c9d7b591ad7c)
+
+### Changed
+* Ini set html_errors = 0, to show html code in exceptions (https://github.com/slawkens/myaac/commit/9ed06782e67772826d927ad847a077b99df5060d)
+
+## [1.8.5 - 21.11.2025]
+
+### Added
+* New Setting: Account Countries Most Popular (https://github.com/slawkens/myaac/commit/946364f59d7cd01472877108ab27ec78fb28307a)
+
+### Changed
+* Status: Write to status-error.log if there is connection error (https://github.com/slawkens/myaac/commit/780d4ccef741c1dd45a00bfc121fba9f1a175313)
+* Settings: escapeHtml in values (support for html code) (https://github.com/slawkens/myaac/commit/5861efdbe900ccd35309913af0c0a5f3d4cdc1a8)
+* News Page: Don't display hidden news for admin - it's confusing (https://github.com/slawkens/myaac/commit/175e97828b9a08ec3080cc8d3fb4eb3f1c08649f)
+* Plugins System: Add plugin:remove + plugin:delete as alias for plugin:uninstall + plugin:activate/deactivate (https://github.com/slawkens/myaac/commit/6367054487368c92741bfd1dc7c70c52aea9ee87, https://github.com/slawkens/myaac/commit/baec6c9ebf5c342b3b2f7123427c6ba21dbb93bc)
+
+### Fixed
+* Status: Fix $status['uptimeReadable'], was totally wrong (https://github.com/slawkens/myaac/commit/0a6d44bf21417562491aabc93543a2bc3a44b2df)
+* Guilds: Detect "deletion" column in guilds show/delete (https://github.com/slawkens/myaac/commit/6775a061bebc9ff449522f0173556d4a7a44fa5e, https://github.com/slawkens/myaac/commit/603d860b56bc7418db09e206f40aa06d0682c00e)
+* General: Ensure some cache folders & index.html exists (https://github.com/slawkens/myaac/commit/730a0f29124811f525207c24c06eb0d088fa3434)
+
+## [1.8.4 - 27.10.2025]
+
+### Changed
+* Reimport myaac_ tables on every install, this fixes errors when one table is missing or is duplicated (https://github.com/slawkens/myaac/commit/2580edadf84779f09fd395c21f92019b2c762f83)
+* Use custom env init on migrate, migrate:run and migrate:to (https://github.com/slawkens/myaac/commit/13ea68cc0c9349380c8e4051d702a6c2c8256f44, https://github.com/slawkens/myaac/commit/07fd034fe4cb0ffdb88667b1e400f414d0c6d06f)
+
+### Fixed
+* Show if there is mysql error on import schema (https://github.com/slawkens/myaac/commit/44110a9496b4385e42c31b75de301037e711b6c3)
+* Fix the premium checks, introduced in v1.8.3 (https://github.com/slawkens/myaac/commit/9d92a11fb7cb6d7a1619d79c12faaa0b1c01f980)
+
+## [1.8.3 - 21.10.2025]
+
+### Added
+* Feature: resend email verify (https://github.com/slawkens/myaac/commit/fe821c58085483e70491dcf76376ad5b96de3fdd)
+* New config: hooks_debug (To view where hooks are located in .twig files) (https://github.com/slawkens/myaac/commit/8c3cb0e06f9709c1de3398b48221241e7cbdd310)
+* Functions: Add db->getColumnInfo(table, column) (https://github.com/slawkens/myaac/commit/c898fe25efff6793a01d11c26fc153cb23fcb858)
+* Plugins: Add option to use ?subtopic=x for plugins pages (https://github.com/slawkens/myaac/commit/97f9d3d6f6c28aef6d824973058d7133f56e09c4)
+* getTopPlayers() Function - Add lookmount & promotion (https://github.com/slawkens/myaac/commit/2da0024c68f1cedc38a16ebbc6f52ffa55e65f7a, https://github.com/slawkens/myaac/commit/901df48d134079d648a18f9d82b60182e818ac02)
+* New hooks for account/change-password (https://github.com/slawkens/myaac/commit/470555f2687809a0c12491bbb27597e64b8929c1)
+
+### Changed
+* Feature: show vip days in account management (https://github.com/slawkens/myaac/commit/c88b08eb1ec1f560cbfdaaa16b24e3a0f26da7b3, by @andreoam)
+* Allow links in error_box.html.twig (https://github.com/slawkens/myaac/commit/9acad15451071639acf7a7d4e81619b0a9742b12)
+* Canary - Comment code to update lastday in login.php (https://github.com/slawkens/myaac/commit/38902c30d114fdbce259467f5820f97037b393e9)
+* Cache::remember $ttl = -1 = infinite (https://github.com/slawkens/myaac/commit/64acf70d3854182d88aaf0b67f77cea2a254f179)
+
+### Fixed
+* Online - Allow for html code (example - img) in online_datacenter (https://github.com/slawkens/myaac/commit/3bb272ebbbd2eb7769d174b7082061d14a17bd44)
+* Guilds - Fix guild create with freePremium enabled (https://github.com/slawkens/myaac/commit/c91bb5d4097647dca2196d3dea87bc90c89181d2)
+* Canary - Fix premDays count (https://github.com/slawkens/myaac/commit/3e61692780d4add93b7b0e9f12f7a283bd8f4b7a)
+* Template Change: Ignore set last visit for AJAX pages - Fixes template change redirect (https://github.com/slawkens/myaac/commit/89fae38caa7e4f645957fcf1a9330a36358ac04f)
+* Admin Panel - Accounts: Fix lastip v6 (TFS master) (https://github.com/slawkens/myaac/commit/f54b1bdd2af4c16c64ddff0e87a6c96bc4cf9eeb)
+* Functions - Prevent injection in $db->hasColumn (https://github.com/slawkens/myaac/commit/56bd7ec5ed904666074492f2e4f13e4fce226bee)
+* Compat Config: Add missing config: email_lai_sec_interval (https://github.com/slawkens/myaac/commit/2eae44e0755e624a91be68b4d1ec26d01eb4d9a1)
+
+## [1.8.2 - 26.09.2025]
+
+### Added
+* Routes: Possibility to override routes with plugins pages, like characters.php - No need to define routes in plugin.json anymore (https://github.com/slawkens/myaac/commit/3f24f961b1cdeff5c60387e837ae454448bc5e1b)
+
+### Changed
+* Style: Better look for myaac-table (https://github.com/slawkens/myaac/commit/a6032093b21e5bb3f0e75d2704da87d6dea6469d, https://github.com/slawkens/myaac/commit/5aa9bbf1c8e580d973ec82ac012489f8e7bc437e)
+
+### Fixed
+* Install: Fix when config.local.php cannot be saved (https://github.com/slawkens/myaac/commit/4eab805d26d8c5562b29ed699769919d77dabced)
+* Create Account: Fix an exception when email cannot be sent (https://github.com/slawkens/myaac/commit/d0112d1a67e8b854b65ad131f0375b79305df8d3)
+* Login Page: Add missing csrf() - fix create account button (https://github.com/slawkens/myaac/commit/3c0cb53e17dd0b85394cfa0fdc9cf9ad8d4551df)
+* tibiacom template: Fix account lost menu (https://github.com/slawkens/myaac/commit/ed9beaf2b6ca069e304e569c52e5b9188b58f05c)
+* tibiacom template: Fix Menu div wrong tag/closing (#329) (https://github.com/slawkens/myaac/commit/85e7005fd3f0be51466151a3c122b96085fdfe68)
+* tibiacom template: Replace firstChild with firstElementChild (Thanks to @un000000) (https://github.com/slawkens/myaac/commit/df7b6e29fb8875da97f431468c81ee99116271d9)
+
 ## [1.8.1 - 05.09.2025]
 
 ### Added

@@ -202,35 +202,37 @@ if($player->isLoaded() && !$player->isDeleted())
 		unset($storage);
 	}
 
-	if($db->hasTable('player_items') && $db->hasColumn('player_items', 'pid') && $db->hasColumn('player_items', 'sid') && $db->hasColumn('player_items', 'itemtype')) {
+	if ($db->hasTableAndColumns('player_items', ['pid', 'sid', 'itemtype'])) {
 		$eq_sql = $db->query('SELECT `pid`, `itemtype` FROM player_items WHERE player_id = '.$player->getId().' AND (`pid` >= 1 and `pid` <= 10)');
-		$equipment = array();
-		foreach($eq_sql as $eq)
+		$equipment = [];
+		foreach($eq_sql as $eq) {
 			$equipment[$eq['pid']] = $eq['itemtype'];
+		}
 
-		$empty_slots = array("", "no_helmet", "no_necklace", "no_backpack", "no_armor", "no_handleft", "no_handright", "no_legs", "no_boots", "no_ring", "no_ammo");
-		for($i = 0; $i <= 10; $i++)
-		{
+		$empty_slots = ["", "no_helmet", "no_necklace", "no_backpack", "no_armor", "no_handleft", "no_handright", "no_legs", "no_boots", "no_ring", "no_ammo"];
+
+		for($i = 0; $i <= 10; $i++) {
 			if(!isset($equipment[$i]) || $equipment[$i] == 0)
 				$equipment[$i] = $empty_slots[$i];
 		}
 
-		for($i = 1; $i < 11; $i++)
-		{
-			if(Validator::number($equipment[$i]))
+		for($i = 1; $i < 11; $i++) {
+			if(Validator::number($equipment[$i])) {
 				$equipment[$i] = getItemImage($equipment[$i]);
-			else
+			}
+			else {
 				$equipment[$i] = '<img src="images/items/' . $equipment[$i] . '.gif" width="32" height="32" border="0" alt=" ' . $equipment[$i] . '" />';
+			}
 		}
-
-		$skulls = array(
-			1 => 'yellow_skull',
-			2 => 'green_skull',
-			3 => 'white_skull',
-			4 => 'red_skull',
-			5 => 'black_skull'
-		);
 	}
+
+	$skulls = [
+		1 => 'yellow_skull',
+		2 => 'green_skull',
+		3 => 'white_skull',
+		4 => 'red_skull',
+		5 => 'black_skull',
+	];
 
 	$dead_add_content = '';
 	$deaths = array();
@@ -450,10 +452,8 @@ WHERE killers.death_id = '".$death['id']."' ORDER BY killers.final_hit DESC, kil
 	if($query->rowCount() > 0) {
 		echo 'Did you mean:<ul>';
 		foreach($query as $player) {
-			if(isset($player['promotion'])) {
-				if((int)$player['promotion'] > 0)
-					$player['vocation'] += ($player['promotion'] * $config['vocations_amount']);
-			}
+			$player['vocation'] = OTS_Toolbox::getVocationFromPromotion($player['vocation'], $player['promotion'] ?? 0);
+
 			echo '<li>' . getPlayerLink($player['name']) . ' (<small><strong>level ' . $player['level'] . ', ' . $config['vocations'][$player['vocation']] . '</strong></small>)</li>';
 		}
 		echo '</ul>';

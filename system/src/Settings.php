@@ -184,11 +184,11 @@ class Settings implements \ArrayAccess
 					}
 					?>
 					<h3 id="row_<?= $key ?>" style="text-align: center"><strong><?= $setting['title']; ?></strong></h3>
-					<table class="table table-bordered table-striped">
+					<table class="table table-bordered table-striped table-responsive d-md-table">
 						<thead>
 							<tr>
 								<th style="width: 13%">Name</th>
-								<th style="width: 30%">Value</th>
+								<th style="width: 30%; min-width: 200px">Value</th>
 								<th>Description</th>
 							</tr>
 						</thead>
@@ -248,7 +248,7 @@ class Settings implements \ArrayAccess
 						echo '<div class="input-group" id="show-hide-' . $key . '">';
 					}
 
-					echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . ($settingsDb[$key] ?? ($setting['default'] ?? '')) . '" id="' . $key . '"' . $min . $max . $step . '/>';
+					echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . escapeHtml($settingsDb[$key] ?? ($setting['default'] ?? '')) . '" id="' . $key . '"' . $min . $max . $step . '/>';
 
 					if ($setting['type'] === 'password') {
 						echo '<div class="input-group-append input-group-text"><a href=""><i class="fas fa-eye-slash" ></i></a></div></div>';
@@ -266,7 +266,7 @@ class Settings implements \ArrayAccess
 					if ($rows < 2) {
 						$rows = 2; // always min 2 rows for textarea
 					}
-					echo '<textarea class="form-control" rows="' . $rows . '" name="settings[' . $key . ']" id="' . $key . '">' . $value . '</textarea>';
+					echo '<textarea class="form-control" rows="' . $rows . '" name="settings[' . $key . ']" id="' . $key . '">' . escapeHtml($value) . '</textarea>';
 				}
 
 				else if ($setting['type'] === 'options') {

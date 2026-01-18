@@ -1,0 +1,58 @@
+Your account name, new password and new e-mail.<br/>
+<table class="myaac-table" style="width: 100%;">
+
+	<thead>
+	<tr>
+		<th class="white">
+			<b>Your account name, new password and new e-mail</b>
+		</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	<tr>
+		<td>
+
+			<table>
+				<tr>
+					<td>
+						Account name:
+					</td>
+					<td>
+						<b>{{ account.getName() }}</b>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						New password:
+					</td>
+					<td>
+						<b>{{ newPassword }}</b>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						New e-mail address:
+					</td>
+					<td>
+						<b>{{ newEmail }}</b>
+					</td>
+				</tr>
+			</table>
+
+			{{ statusMsg|raw }}
+		</td>
+	</tr>
+	</tbody>
+
+</table>
+<br>
+<table style="width: 100%">
+	<tr>
+		<td align="center">
+			<form action="{{ getLink('account/manage') }}" method="post">
+				{{ include('buttons.login.html.twig') }}
+			</form>
+		</td>
+	</tr>
+</table>

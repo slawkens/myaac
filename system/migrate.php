@@ -9,6 +9,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+global $db;
+
 // database migrations
 $tmp = '';
 if(fetchDatabaseConfig('database_version', $tmp)) { // we got version

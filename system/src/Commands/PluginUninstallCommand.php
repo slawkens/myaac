@@ -13,6 +13,7 @@ class PluginUninstallCommand extends Command
 	protected function configure(): void
 	{
 		$this->setName('plugin:uninstall')
+			->setAliases(['plugin:remove', 'plugin:delete'])
 			->setDescription('This command uninstalls plugin')
 			->addArgument('plugin-name', InputArgument::REQUIRED, 'Plugin that you want to uninstall');
 	}

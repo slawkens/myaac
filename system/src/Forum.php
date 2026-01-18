@@ -231,6 +231,7 @@ class Forum
 			if(!is_int($rows / 2)) { $bgcolor = 'ABED25'; } else { $bgcolor = '23ED25'; } $rows++;
 			$text = str_ireplace('[code]'.$code.'[/code]', '<i>Code:</i><br /><table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #CCCCCC; border-width: 2px"><tr><td>'.$code.'</td></tr></table>', $text);
 		}
+
 		$rows = 0;
 		while(stripos($text, '[quote]') !== false && stripos($text, '[/quote]') !== false )
 		{
@@ -238,11 +239,31 @@ class Forum
 			if(!is_int($rows / 2)) { $bgcolor = 'AAAAAA'; } else { $bgcolor = 'CCCCCC'; } $rows++;
 			$text = str_ireplace('[quote]'.$quote.'[/quote]', '<table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #007900; border-width: 2px"><tr><td>'.$quote.'</td></tr></table>', $text);
 		}
-		$rows = 0;
-		while(stripos($text, '[url]') !== false && stripos($text, '[/url]') !== false )
-		{
-			$url = substr($text, stripos($text, '[url]')+5, stripos($text, '[/url]') - stripos($text, '[url]') - 5);
-			$text = str_ireplace('[url]'.$url.'[/url]', '<a href="'.$url.'" target="_blank">'.$url.'</a>', $text);
+
+		$tagsToParse = [
+			'url' => function ($str) {
+				return '<a href="'.$str.'" target="_blank">'.$str.'</a>';
+			},
+			'player' => function ($str) {
+				return generateLink(getPlayerLink($str, false), $str, true);
+			},
+			'guild' => function ($str) {
+				return generateLink(getGuildLink($str, false), $str, true);
+			},
+			'house' => function ($str) {
+				return generateLink(getHouseLink($str, false), $str, true);
+			}
+		];
+
+		foreach ($tagsToParse as $tag => $callback) {
+			while(stripos($text, "[$tag]") !== false && stripos($text, "[/$tag]") !== false
+				&& stripos($text, "[$tag]") < stripos($text, "[/$tag]"))
+			{
+				$length = strlen("[$tag]");
+				$substr = substr($text, stripos($text, "[$tag]") + $length, stripos($text, "[/$tag]") - stripos($text, "[$tag]") - $length);
+
+				$text = str_ireplace('[' . $tag . ']' . $substr . '[/' . $tag . ']', $callback($substr), $text);
+			}
 		}
 
 		$xhtml = false;
@@ -252,9 +273,6 @@ class Forum
 			'#\[u\](.*?)\[/u\]#si' => ($xhtml ? '<span style="text-decoration: underline;">\\1</span>' : '<u>\\1</u>'),
 			'#\[s\](.*?)\[/s\]#si' => ($xhtml ? '<strike>\\1</strike>' : '<s>\\1</s>'),
 
-			'#\[guild\](.*?)\[/guild\]#si' => urldecode(generateLink(getGuildLink('$1', false), '$1', true)),
-			'#\[house\](.*?)\[/house\]#si' => urldecode(generateLink(getHouseLink('$1', false), '$1', true)),
-			'#\[player\](.*?)\[/player\]#si' => urldecode(generateLink(getPlayerLink('$1', false), '$1', true)),
 			// TODO: [poll] tag
 
 			'#\[color=(.*?)\](.*?)\[/color\]#si' => ($xhtml ? '<span style="color: \\1;">\\2</span>' : '<span style="color: \\1">\\2</span>'),

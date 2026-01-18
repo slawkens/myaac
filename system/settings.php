@@ -219,7 +219,14 @@ return [
 		'cache_engine' => [
 			'name' => 'Cache Engine',
 			'type' => 'options',
-			'options' => ['auto' => 'Auto', 'file' => 'Files', 'apc' => 'APC', 'apcu' => 'APCu', 'disable' => 'Disable'],
+			'options' => [
+				'auto' => 'Auto',
+				'file' => 'Files',
+				'apc' => 'APC',
+				'apcu' => 'APCu',
+				'php' => 'PHP',
+				'disable' => 'Disable',
+			],
 			'desc' => 'Auto is most reasonable. It will detect the best cache engine',
 			'default' => 'auto',
 			'is_config' => true,
@@ -312,20 +319,31 @@ return [
 				},
 			],
 		],
+		/**
+		 * @deprecated
+		 * To be removed in v3.0
+		 */
 		'vocations_amount' => [
-			'name' => 'Vocations Amount',
+			'hidden' => true,
 			'type' => 'number',
-			'desc' => 'How much basic vocations your server got (without promotion)',
+			//'name' => 'Vocations Amount',
+			//'desc' => 'How many basic vocations your server got (without promotion)',
 			'default' => 4,
+			'callbacks' => [
+				'get' => function () {
+					return config('vocations_amount');
+				},
+			],
 		],
 		'vocations' => [
-			'name' => 'Vocation Names',
+			'hidden' => true,
 			'type' => 'textarea',
-			'desc' => 'Separated by comma. Must be in the same order as in vocations.xml, starting with id: 0.',
+			//'name' => 'Vocation Names',
+			//'desc' => 'Separated by comma. Must be in the same order as in vocations.xml, starting with id: 0.',
 			'default' => 'None, Sorcerer, Druid, Paladin, Knight, Master Sorcerer, Elder Druid,Royal Paladin, Elite Knight',
 			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
+				'get' => function () {
+					return config('vocations');
 				},
 			],
 		],
@@ -736,6 +754,18 @@ Sent by MyAAC,<br/>
 			'type' => 'boolean',
 			'desc' => 'should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io',
 			'default' => true,
+		],
+		'account_countries_most_popular' => [
+			'name' => 'Account Countries Most Popular',
+			'type' => 'text',
+			'desc' => 'Those countries will be display at the top of the list on the create account page. The short codes of countries can be found in file <i>system/countries.conf.php</i>',
+			'default' => 'pl,se,br,us,gb',
+			'callbacks' => [
+				'get' => function ($value) {
+					$tmp = array_map('trim', explode(',', $value));
+					return array_filter($tmp, function ($v) {return !empty($v); });
+				},
+			],
 		],
 		'characters_per_account' => [
 			'name' => 'Characters per Account',
@@ -1469,17 +1499,6 @@ Sent by MyAAC,<br/>
 			'type' => 'text',
 			'desc' => 'Set to animoutfit.php for animated outfit',
 			'default' => 'https://outfit-images.ots.me/latest/outfit.php',
-		],
-		'outfit_images_wrong_looktypes' => [
-			'name' => 'Outfit Images Wrong Looktypes',
-			'type' => 'text',
-			'desc' => 'This looktypes needs to have different margin-top and margin-left because they are wrong positioned',
-			'default' => '75, 126, 127, 266, 302',
-			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
-				},
-			],
 		],
 		[
 			'type' => 'section',

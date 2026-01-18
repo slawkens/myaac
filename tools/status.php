@@ -1,4 +1,7 @@
 <?php
+
+const IGNORE_SET_LAST_VISIT = true;
+
 require '../common.php';
 require SYSTEM . 'init.php';
 require SYSTEM . 'functions.php';

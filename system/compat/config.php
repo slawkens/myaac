@@ -5,8 +5,6 @@ $deprecatedConfig = [
 	'genders',
 	'template',
 	'template_allow_change',
-	'vocations_amount',
-	'vocations',
 	'client',
 	'session_prefix',
 	'friendly_urls',
@@ -21,7 +19,6 @@ $deprecatedConfig = [
 	'visitors_counter_ttl',
 	'views_counter',
 	'outfit_images_url',
-	'outfit_images_wrong_looktypes',
 	'item_images_url',
 	'account_country',
 	'towns',
@@ -52,6 +49,7 @@ $deprecatedConfig = [
 	'online_skulls',
 	'online_outfit',
 	'online_afk',
+	'team_style',
 	'team_display_outfit' => 'team_outfit',
 	'team_display_status' => 'team_status',
 	'team_display_world' => 'team_world',
@@ -81,6 +79,7 @@ $deprecatedConfig = [
 	'account_change_character_name_points' => 'account_change_character_name_price',
 	'account_change_character_sex',
 	'account_change_character_sex_points' => 'account_change_character_name_price',
+	'email_lai_sec_interval' => 'mail_lost_account_interval',
 ];
 
 foreach ($deprecatedConfig as $key => $value) {

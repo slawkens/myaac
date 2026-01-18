@@ -1,0 +1,45 @@
+Please enter your account Email address.<br/><br/>
+{% set title = 'Resend Email' %}
+{% set background = config('darkborder') %}
+{% set content %}
+	<table style="width:100%;">
+		<tr>
+			<td class="LabelV" >
+				<span><label for="email">Email Address:</label></span>
+			</td>
+			<td style="width:90%;">
+				<input type="email" form="form" id="email" name="email" size="30" maxlength="50" autofocus/>
+			</td>
+		</tr>
+	</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+<br/>
+<table style="width:100%;">
+	<tr align="center">
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td style="border:0;">
+						<form id="form" action="{{ getLink('account/resend-email-verify') }}" method="post">
+							{{ csrf() }}
+							<input type="hidden" name="submit" value="1"/>
+							{{ include('buttons.submit.html.twig') }}
+						</form>
+					</td>
+				<tr>
+			</table>
+		</td>
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td style="border:0;">
+						<form action="{{ getLink('news') }}" method="post">
+							{{ include('buttons.back.html.twig') }}
+						</form>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

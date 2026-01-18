@@ -1,0 +1,57 @@
+<a href="{{ getLink('forum') }}">Boards</a> >> <b>{{ section_name }}</b>
+
+{% if (logged and (not closed or is_moderator)) %}
+	<br/><br/>
+	<a href="{{ getLink('forum') }}?action=new_thread&section_id={{ section_id }}"><img src="images/forum/topic.gif" border="0" /></a>
+{% endif %}
+
+{% if threads|length > 0 %}
+	<br/><br/>Page: {{ links_to_pages|raw }}<br/>
+
+	<table width="100%">
+		<tr bgcolor=" {{  config.vdarkborder }}" align="center">
+			<td class="white"><span style="font-size: 10px"><b>Thread</b></span></td>
+			<td class="white"><span style="font-size: 10px"><b>Thread Starter</b></span></td>
+			<td class="white"><span style="font-size: 10px"><b>Replies</b></span></td>
+			<td class="white"><span style="font-size: 10px"><b>Views</b></span></td>
+			<td class="white"><span style="font-size: 10px"><b>Last Post</b></span></td>
+		</tr>
+
+		{% set i = 0 %}
+		{% for thread in threads %}
+			<tr bgcolor="{{ getStyle(i) }}">
+				<td>
+					{% if is_moderator %}
+						<a href="{{ getLink('forum') }}?action=move_thread&id={{ thread.id }}" title="Move Thread"><img src="images/icons/arrow_right.gif"/></a>
+						{{ include('forum.remove_post.html.twig', {post: thread}) }}
+					{% endif %}
+					<a href="{{ thread.link }}">{{ thread.post_topic }}</a><br />
+					<small>{{ thread.post_shortened|raw }}...</small>
+				</td>
+				<td>{{ thread.player_link|raw }}</td>
+				<td>{{ thread.replies }}</td>
+				<td>{{ thread.views }}</td>
+				<td>
+					{% if thread.last_post > 0 %}
+						{% if thread.latest_post.name is defined %}
+							{{ thread.latest_post.post_date|date('d.m.y H:i:s') }}<br />by {{ thread.latest_post.player_link|raw }}
+						{% else %}
+							No posts.
+						{% endif %}
+					{% else %}
+						{{ thread.post_date|date('d.m.y H:i:s') }}<br />by {{ thread.player_link|raw }}
+					{% endif %}
+				</td>
+			</tr>
+
+			{% set i = i + 1 %}
+		{% endfor %}
+	</table>
+
+{% else %}
+<h3>No threads in this board.</h3>
+{% endif %}
+
+{% if(logged and (not closed or is_moderator)) %}
+	<br /><a href="{{ getLink('forum') }}?action=new_thread&section_id={{ section_id  }}"><img src="images/forum/topic.gif" border="0" /></a>
+{% endif %}

@@ -9,7 +9,7 @@ $up = function () use ($db) {
 	}
 };
 
-$up = function () use ($db) {
+$down = function () use ($db) {
 	if (!$db->hasColumn(TABLE_PREFIX . 'screenshots', 'name')) {
 		$db->addColumn(TABLE_PREFIX . 'screenshots', 'name', 'VARCHAR(30) NOT NULL');
 	}

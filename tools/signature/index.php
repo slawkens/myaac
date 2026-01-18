@@ -35,14 +35,14 @@
 	if(!isset($_REQUEST['name']))
 		die('Please enter name as get or post parameter.');
 
-	$name = stripslashes(ucwords(strtolower(trim($_REQUEST['name']))));
 	$player = new OTS_Player();
-	$player->find($name);
+	$player->find($_REQUEST['name']);
 
 	if(!$player->isLoaded())
 	{
-		header('Content-type: image/png');
-		readfile(SIGNATURES_IMAGES.'nocharacter.png');
+		//header('Content-type: image/png');
+		//readfile(SIGNATURES_IMAGES.'nocharacter.png');
+		http_response_code(404);
 		exit;
 	}
 
@@ -52,6 +52,9 @@
 		readfile(SIGNATURES_IMAGES.'nogd.png');
 		exit;
 	}
+
+	ensureFolderExists(SIGNATURES_CACHE);
+	ensureIndexExists(SIGNATURES_CACHE);
 
 	$cached = SIGNATURES_CACHE.$player->getId() . '.png';
 	if(file_exists($cached) && (time() < (filemtime($cached) + (60 * setting('core.signature_cache_time')))))

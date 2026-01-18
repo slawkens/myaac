@@ -19,18 +19,17 @@ if(!$logged) {
 
 csrfProtect();
 
-$new_password = $_POST['newpassword'] ?? NULL;
-$new_password_confirm = $_POST['newpassword_confirm'] ?? NULL;
-$old_password = $_POST['oldpassword'] ?? NULL;
-if(empty($new_password) && empty($new_password_confirm) && empty($old_password)) {
+$new_password = $_POST['new_password'] ?? null;
+$new_password_confirm = $_POST['new_password_confirm'] ?? null;
+$old_password = $_POST['old_password'] ?? null;
+if(is_null($new_password) && is_null($new_password_confirm) && is_null($old_password)) {
 	$twig->display('account.change-password.html.twig');
 }
-else
-{
+else {
 	if(empty($new_password) || empty($new_password_confirm) || empty($old_password)){
 		$errors[] = 'Please fill in form.';
 	}
-	$password_strlen = strlen($new_password);
+
 	if($new_password != $new_password_confirm) {
 		$errors[] = 'The new passwords do not match!';
 	}
@@ -41,9 +40,12 @@ else
 		}
 
 		/** @var OTS_Account $account_logged */
-		$old_password = encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $old_password);
-		if($old_password != $account_logged->getPassword()) {
+		$old_password_hashed = encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $old_password);
+		if($old_password_hashed != $account_logged->getPassword()) {
 			$errors[] = 'Current password is incorrect!';
+		}
+		else if ($old_password == $new_password) {
+			$errors[] = 'The old password is same as the new password!';
 		}
 
 		$hooks->trigger(HOOK_ACCOUNT_CHANGE_PASSWORD_POST);

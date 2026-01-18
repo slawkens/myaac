@@ -1,7 +1,26 @@
 {% if new_line is defined and new_line %}
 	<br/>
 {% endif %}
-<form action="{% if action is not defined %}{{ getLink('account/manage') }}{% else %}{{ action }}{% endif %}" method="post">
-	{{ csrf() }}
-	{{ include('buttons.back.html.twig') }}
-</form>
+
+{% set _center = false %}
+
+{% if center is defined and center %}
+{% set _center = true %}
+{% endif %}
+
+{% if _center %}
+<table border="0" cellspacing="1" cellpadding="4" width="100%">
+	<tbody>
+	<tr>
+		<td align="center">
+{% endif %}
+			<form action="{% if action is not defined %}{{ getLink('account/manage') }}{% else %}{{ action }}{% endif %}" method="post">
+				{{ csrf() }}
+				{{ include('buttons.back.html.twig') }}
+			</form>
+{% if _center %}
+		</td>
+	</tr>
+	</tbody>
+</table>
+{% endif %}

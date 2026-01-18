@@ -23,6 +23,7 @@ if (!hasFlag(FLAG_CONTENT_MENUS) && !superAdmin()) {
 }
 
 $pluginThemes = Plugins::getThemes();
+$groups = new OTS_Groups_List();
 
 if (isset($_POST['template'])) {
 	$template = $_POST['template'];
@@ -32,6 +33,8 @@ if (isset($_POST['template'])) {
 		$post_menu_link = $_POST['menu_link'] ?? [];
 		$post_menu_blank = $_POST['menu_blank'] ?? [];
 		$post_menu_color = $_POST['menu_color'] ?? [];
+		$post_menu_access = $_POST['menu_access'] ?? [];
+
 		if (count($post_menu) != count($post_menu_link)) {
 			echo 'Menu count is not equal menu links. Something went wrong when sending form.';
 			return;
@@ -50,6 +53,7 @@ if (isset($_POST['template'])) {
 						'link' => $post_menu_link[$category][$i],
 						'blank' => $post_menu_blank[$category][$i] == 'on' ? 1 : 0,
 						'color' => str_replace('#', '', $post_menu_color[$category][$i]),
+						'access' => $post_menu_access[$category][$i],
 						'category' => $category,
 						'ordering' => $i
 					]);
@@ -122,7 +126,7 @@ if (isset($_POST['template'])) {
 	?>
 	<?php
 	$menus = Menu::query()
-		->select('name', 'link', 'blank', 'color', 'category', 'ordering')
+		->select('name', 'link', 'access', 'blank', 'color', 'category', 'ordering')
 		->where('enabled', 1)
 		->where('template', $template)
 		->orderBy('ordering')
@@ -151,11 +155,34 @@ if (isset($_POST['template'])) {
 									foreach ($menus[$id] as $menu):
 										$color = (empty($menu['color']) ? ($cat['default_links_color'] ?? ($config['menu_default_links_color'] ?? ($config['menu_default_color'] ?? '#ffffff'))) : '#' . $menu['color']);
 										?>
-										<li class="ui-state-default" id="list-<?php echo $id ?>-<?php echo $i ?>"><label>Name:</label> <input type="text" name="menu[<?php echo $id ?>][]" value="<?php echo escapeHtml($menu['name']); ?>"/>
-											<label>Link:</label> <input type="text" name="menu_link[<?php echo $id ?>][]" value="<?php echo $menu['link'] ?>"/>
-											<input type="hidden" name="menu_blank[<?php echo $id ?>][]" value="0"/>
-											<label><input class="blank-checkbox" type="checkbox" <?php echo($menu['blank'] == 1 ? 'checked' : '') ?>/><span title="Open in New Window">New Window</span></label>
-											<input class="color-picker" type="text" name="menu_color[<?php echo $id ?>][]" value="<?php echo $color; ?>"/>
+										<li class="ui-state-default" id="list-<?php echo $id ?>-<?php echo $i ?>">
+											<label class="label_menu_name">Name: <input type="text" name="menu[<?php echo $id ?>][]" class="form-control menu-name" value="<?php echo escapeHtml($menu['name']); ?>"/>
+											</label>
+
+											<label class="label_menu_link">Link: <input type="text" name="menu_link[<?= $id ?>][]" class="form-control menu-link" value="<?php echo $menu['link'] ?>"/>
+											</label>
+
+											<br/>
+
+											<div class="menu-options-row">
+
+												<label>Access:
+													<select name="menu_access[<?= $id ?>][]" class="form-control menu-access">
+														<option value="0" <?= ($menu['access'] == 0 ? 'selected' : ''); ?>>Guest*</option>
+														<?php foreach ($groups->getGroups() as $group): ?>
+															<option value="<?= $group->getId(); ?>" <?= ($menu['access'] == $group->getId() ? 'selected' : ''); ?>><?= ucfirst($group->getName()); ?></option>
+														<?php endforeach; ?>
+													</select>
+												</label>
+
+												<label>Color: <input class="menu-color" type="color" name="menu_color[<?php echo $id ?>][]" value="<?php echo $color; ?>"/>
+												</label>
+
+												<input type="hidden" name="menu_blank[<?php echo $id ?>][]" class="menu-blank" value="0"/>
+												<label><input type="checkbox" class="menu-blank-checkbox" <?php echo($menu['blank'] == 1 ? 'checked' : '') ?>/><span title="Open in New Window">New Window</span></label>
+
+											</div>
+
 											<a class="remove-button" id="remove-button-<?php echo $id ?>-<?php echo $i ?>"><i class="fas fa-trash"></a></i></li>
 										<?php $i++; $last_id[$id] = $i;
 									endforeach;

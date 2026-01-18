@@ -1,9 +1,9 @@
 name: Cypress
 on:
   pull_request:
-    branches: [main]
+    branches: [develop]
   push:
-    branches: [main]
+    branches: [develop]
 
 jobs:
   cypress:
@@ -22,8 +22,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: [ '8.1', '8.2', '8.3', '8.4' ]
-        ots: ['tfs-1.4', 'canary-3.1.2'] # TODO: add 'tfs-master' (actually doesn't work cause AAC doesn't support reading .env configuration)
+        php-versions: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
+        ots: ['tfs-1.4', 'canary-3.1.2', 'tfs-0.3'] # TODO: add 'tfs-master' (actually doesn't work cause AAC doesn't support reading .env configuration)
     name: Cypress (PHP ${{ matrix.php-versions }}, ${{ matrix.ots }})
     steps:
         - name: 📌 MySQL Start & init & show db
@@ -58,6 +58,14 @@ jobs:
             ref: master
             path: ots
 
+        - name: Checkout TFS 0.3
+          uses: actions/checkout@v4
+          if: matrix.ots == 'tfs-0.3'
+          with:
+              repository: otland/tfs-old-svn
+              ref: 0.3
+              path: ots
+
         - name: Checkout Canary
           uses: actions/checkout@v4
           if: matrix.ots == 'canary-3.1.2'
@@ -67,8 +75,14 @@ jobs:
             path: ots
 
         - name: Import OTS Schema
+          if: matrix.ots != 'tfs-0.3'
           run: |
               mysql -uroot -proot myaac < ots/schema.sql
+
+        - name: Import OTS Schema (TFS 0.3)
+          if: matrix.ots == 'tfs-0.3'
+          run: |
+              mysql -uroot -proot myaac < ots/schemas/mysql.sql
 
         - name: Rename config.lua
           run: mv ots/config.lua.dist ots/config.lua
@@ -106,6 +120,33 @@ jobs:
           with:
               find: 'mysqlDatabase = "otservbr-global"'
               replace: 'mysqlDatabase = "myaac"'
+              regex: false
+              include: 'ots/config.lua'
+
+        - name: Replace mysqlPass (TFS 0.3.6pl1)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'tfs-0.3'
+          with:
+              find: 'sqlType = "sqlite"'
+              replace: 'sqlType = "mysql"'
+              regex: false
+              include: 'ots/config.lua'
+
+        - name: Replace mysqlPass (TFS 0.3.6pl1)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'tfs-0.3'
+          with:
+              find: 'sqlPass = ""'
+              replace: 'sqlPass = "root"'
+              regex: false
+              include: 'ots/config.lua'
+
+        - name: Replace mysqlDatabase (Canary)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'tfs-0.3'
+          with:
+              find: 'sqlDatabase = "theforgottenserver"'
+              replace: 'sqlDatabase = "myaac"'
               regex: false
               include: 'ots/config.lua'
 

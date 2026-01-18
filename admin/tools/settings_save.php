@@ -3,6 +3,7 @@
 use MyAAC\Settings;
 
 const MYAAC_ADMIN = true;
+const IGNORE_SET_LAST_VISIT = true;
 
 require '../../common.php';
 require SYSTEM . 'functions.php';
@@ -11,7 +12,7 @@ require SYSTEM . 'login.php';
 
 if(!admin()) {
 	http_response_code(500);
-	die('Access denied.');
+	die('You are not logged in. Probably session expired. Please login again.');
 }
 
 csrfProtect();
@@ -38,4 +39,7 @@ if (count($errors) > 0) {
 
 if ($success) {
 	echo 'Saved at ' . date('H:i');
+}
+else {
+	echo 'Something unexpected happened - it was impossible to save the settings, please try again later. If problem persists - contact MyAAC developers.';
 }

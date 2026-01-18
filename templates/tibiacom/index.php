@@ -27,24 +27,18 @@ if(isset($config['boxes']))
 		var loginStatus="<?php echo ($logged ? 'true' : 'false'); ?>";
 		<?php
 			if(PAGE !== 'news') {
-				if(isset($_REQUEST['subtopic'])) {
-					$tmp = escapeHtml($_REQUEST['subtopic']);
-					if($tmp === 'accountmanagement') {
-						$tmp = 'accountmanage';
+				$tmp = str_replace('/', '_', isset($_REQUEST['subtopic']) ? escapeHtml($_REQUEST['subtopic']) :  PAGE);
+				$exp = explode('/', PAGE);
+				if(PAGE !== 'account/create' && PAGE !== 'account/lost' && isset($exp[1])) {
+					if ($exp[0] === 'account' && $exp[1] === 'lost') {
+						$tmp = 'account_lost';
+					} elseif ($exp[0] === 'account') {
+						$tmp = 'account_manage';
+					} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
+						$tmp = 'news_archive';
 					}
-				}
-				else {
-					$tmp = str_replace('/', '_', PAGE);
-					$exp = explode('/', PAGE);
-					if(PAGE !== 'account/create' && PAGE !== 'account/lost' && isset($exp[1])) {
-						if ($exp[0] === 'account') {
-							$tmp = 'account_manage';
-						} else if ($exp[0] === 'news' && $exp[1] === 'archive') {
-							$tmp = 'news_archive';
-						}
-						else if (in_array($exp[0], ['characters', 'highscores', 'guilds', 'forum'])) {
-							$tmp = $exp[0];
-						}
+					else if (in_array($exp[0], ['characters', 'highscores', 'guilds', 'forum'])) {
+						$tmp = $exp[0];
 					}
 				}
 			}
@@ -90,24 +84,24 @@ if(isset($config['boxes']))
 		// mouse-over and click events of the loginbox
 		function MouseOverLoginBoxText(source)
 		{
-		  source.lastChild.style.visibility = "visible";
-		  source.firstChild.style.visibility = "hidden";
+		  source.lastElementChild.style.visibility = "visible";
+		  source.firstElementChild.style.visibility = "hidden";
 		}
 		function MouseOutLoginBoxText(source)
 		{
-		  source.firstChild.style.visibility = "visible";
-		  source.lastChild.style.visibility = "hidden";
+		  source.firstElementChild.style.visibility = "visible";
+		  source.lastElementChild.style.visibility = "hidden";
 		}
 		function LoginButtonAction()
 		{
-		  if(loginStatus == "false") {
+		  if(loginStatus === "false") {
 			window.location = "<?php echo getLink('account/manage'); ?>";
 		  } else {
 			window.location = "<?php echo getLink('account/manage'); ?>";
 		  }
 		}
 		function LoginstatusTextAction(source) {
-		  if(loginStatus == "false") {
+		  if(loginStatus === "false") {
 			window.location = "<?php echo getLink('account/create'); ?>";
 		  } else {
 			window.location = "<?php echo getLink('account/logout'); ?>";
@@ -226,11 +220,11 @@ if(isset($config['boxes']))
 		// mouse-over effects of menubuttons and submenuitems
 		function MouseOverMenuItem(source)
 		{
-		  source.firstChild.style.visibility = "visible";
+		  source.firstElementChild.style.visibility = "visible";
 		}
 		function MouseOutMenuItem(source)
 		{
-		  source.firstChild.style.visibility = "hidden";
+		  source.firstElementChild.style.visibility = "hidden";
 		}
 		function MouseOverSubmenuItem(source)
 		{
@@ -336,7 +330,7 @@ if(isset($config['boxes']))
     <div id="LoginBottom" class="Loginstatus" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif)" ></div>
   </div>
 
-<div-- id='Menu'>
+<div id='Menu'>
 <div id='MenuTop' style='background-image:url(<?php echo $template_path; ?>/images/general/box-top.gif);'></div>
 
 <?php
@@ -401,6 +395,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 	<?php
 	}
 	?>
+</div>
 		<script type="text/javascript">
 			InitializePage();
         </script>

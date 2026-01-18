@@ -14,9 +14,13 @@ use MyAAC\CsrfToken;
 use MyAAC\Hooks;
 use MyAAC\Plugins;
 use MyAAC\Models\Town;
+use MyAAC\Server\XML\Vocations;
 use MyAAC\Settings;
 
 defined('MYAAC') or die('Direct access not allowed!');
+
+ensureIndexExists(CACHE);
+ensureIndexExists(CACHE . 'twig/');
 
 global $config;
 if(!isset($config['installed']) || !$config['installed']) {
@@ -211,3 +215,5 @@ if (count($towns) <= 0) {
 
 config(['towns', $towns]);
 unset($towns);
+
+new Vocations();

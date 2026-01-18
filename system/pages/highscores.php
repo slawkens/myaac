@@ -13,6 +13,7 @@ use MyAAC\Cache\Cache;
 use MyAAC\Models\Player;
 use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
+use MyAAC\Server\XML\Vocations;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Highscores';
@@ -35,24 +36,20 @@ if(!is_numeric($page) || $page < 1 || $page > PHP_INT_MAX) {
 $query = Player::query();
 
 $configVocations = config('vocations');
-$configVocationsAmount = config('vocations_amount');
 
 $vocationId = null;
 if($vocation !== 'all') {
 	foreach($configVocations as $id => $name) {
 		if(strtolower($name) == $vocation) {
 			$vocationId = $id;
-			$add_vocs = [$id];
+			$filterVocations = [$id];
 
-			if ($id !== 0) {
-				$i = $id + $configVocationsAmount;
-				while (isset($configVocations[$i])) {
-					$add_vocs[] = $i;
-					$i += $configVocationsAmount;
-				}
+			while($tmpVoc = Vocations::getPromoted($id)) {
+				$id = $tmpVoc;
+				$filterVocations[] = $tmpVoc;
 			}
 
-			$query->whereIn('players.vocation', $add_vocs);
+			$query->whereIn('players.vocation', $filterVocations);
 			break;
 		}
 	}
@@ -176,7 +173,9 @@ if (empty($highscores)) {
 				POT::SKILL_FISH => 'skill_fishing',
 			);
 
-			$query->addSelect($skill_ids[$skill] . ' as value');
+			$query
+				->addSelect($skill_ids[$skill] . ' as value')
+				->orderByDesc($skill_ids[$skill] . '_tries');
 		} else {
 			$query
 				->join('player_skills', 'player_skills.player_id', '=', 'players.id')
@@ -198,11 +197,11 @@ if (empty($highscores)) {
 		if ($skill == POT::SKILL__MAGLEVEL) {
 			$query
 				->addSelect('players.maglevel as value', 'players.maglevel')
-				->orderBy('manaspent');
+				->orderByDesc('manaspent');
 		} else { // level
 			$query
 				->addSelect('players.level as value', 'players.experience')
-				->orderBy('experience');
+				->orderByDesc('experience');
 			$list = 'experience';
 		}
 	}
@@ -247,7 +246,7 @@ foreach($highscores as $id => &$player)
 
 		$player['link'] = getPlayerLink($player['name'], false);
 		$player['flag'] = getFlagImage($player['country']);
-		$player['outfit'] = '<img style="position:absolute;margin-top:' . (in_array($player['looktype'], setting('core.outfit_images_wrong_looktypes')) ? '-15px;margin-left:5px' : '-45px;margin-left:-25px') . ';" src="' . $player['outfit_url'] . '" alt="" />';
+		$player['outfit'] = '<img style="position:absolute;margin-top:-50px;margin-left:-30px" src="' . $player['outfit_url'] . '" alt="" />';
 
 		if ($skill != POT::SKILL__LEVEL) {
 			if (isset($lastValue) && $lastValue == $player['value']) {
@@ -323,4 +322,5 @@ $twig->display('highscores.html.twig', [
 	'page' => $page,
 	'baseLink' => $baseLink,
 	'updatedAt' => $updatedAt,
+	'baseVocations' => Vocations::getBase(true),
 ]);

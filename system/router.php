@@ -8,6 +8,7 @@
  * @link      https://my-aac.org
  */
 
+use MyAAC\Models\Menu;
 use MyAAC\Models\Pages;
 use MyAAC\Plugins;
 
@@ -88,8 +89,10 @@ if($logged && $account_logged && $account_logged->isLoaded()) {
 /**
  * Routes loading
  */
+$routesFinal = [];
 $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) {
-	$routesFinal = [];
+	global $cache, $routesFinal;
+
 	foreach(getDatabasePages() as $page) {
 		$routesFinal[] = ['*', $page, '__database__/' . $page, 100];
 	}
@@ -165,7 +168,7 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 	echo '</pre>';
 	die;
 */
-	foreach ($routesFinal as $route) {
+	foreach ($routesFinal as &$route) {
 		if ($route[0] === '*') {
 			$route[0] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'];
 		}
@@ -198,6 +201,10 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 			log_append('router.log', $warning);
 		}
 	}
+
+	if ($cache->enabled()) {
+		$cache->set('routes_final', serialize($routesFinal), 10 * 365 * 24 * 60 * 60); // 10 years / infinite
+	}
 },
 	[
 		'cacheFile' => CACHE . 'route.cache',
@@ -212,7 +219,7 @@ $found = true;
 
 // old support for pages like /?subtopic=accountmanagement
 $page = $_REQUEST['p'] ?? ($_REQUEST['subtopic'] ?? '');
-if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
+if(!empty($page) && preg_match('/^[A-z0-9\/\-]+$/', $page)) {
 	if (isset($_REQUEST['p'])) { // some plugins may require this
 		$_REQUEST['subtopic'] = $_REQUEST['p'];
 	}
@@ -221,9 +228,26 @@ if(!empty($page) && preg_match('/^[A-z0-9\-]+$/', $page)) {
 		require SYSTEM . 'compat/pages.php';
 	}
 
-	$file = loadPageFromFileSystem($page, $found);
-	if(!$found) {
-		$file = false;
+	$foundRoute = false;
+
+	$tmp = null;
+	if ($cache->enabled() && $cache->fetch('routes_final', $tmp)) {
+		$routesFinal = unserialize($tmp);
+	}
+
+	foreach ($routesFinal as $route) {
+		if ($page === $route[1]) {
+			$file = $route[2];
+			$foundRoute = true;
+			break;
+		}
+	}
+
+	if (!$foundRoute) {
+		$file = loadPageFromFileSystem($page, $found);
+		if(!$found) {
+			$file = false;
+		}
 	}
 }
 else {
@@ -308,7 +332,20 @@ else {
 	}
 }
 
-if (!$found) {
+$tmpPageOriginal = $page;
+$pagesWithDynamicPart = ['characters', 'forum', 'highscores', 'monsters'];
+foreach ($pagesWithDynamicPart as $_page) {
+	if (str_contains($page, $_page)) {
+		$tmpPageOriginal = $_page;
+	}
+}
+
+$themeMenu = Menu::select(['name'])
+	->where('template', $template_name)
+	->where('link', $tmpPageOriginal)
+	->where('access', '>', $logged_access);
+
+if (!$found || $themeMenu->count() >= 1) {
 	$page = '404';
 	$file = SYSTEM . 'pages/404.php';
 }

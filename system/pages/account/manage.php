@@ -41,15 +41,24 @@ csrfProtect();
 
 $groups = new OTS_Groups_List();
 
-$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $account_logged->getPremDays() == OTS_Account::GRATIS_PREMIUM_DAYS;
-$dayOrDays = $account_logged->getPremDays() == 1 ? 'day' : 'days';
 /**
  * @var OTS_Account $account_logged
  */
-if(!$account_logged->isPremium())
+$premDays = $account_logged->getPremDays();
+
+$freePremium = isset($config['lua']['freePremium']) && getBoolean($config['lua']['freePremium']) || $premDays == OTS_Account::GRATIS_PREMIUM_DAYS;
+$dayOrDays = ($premDays == 1 ? 'day' : 'days');
+
+$vipSystemEnabled = isset($config['lua']['vipSystemEnabled']) && getBoolean($config['lua']['vipSystemEnabled']);
+$premiumLabel = $vipSystemEnabled ? 'VIP' : 'Premium Account';
+
+if ($freePremium && !$vipSystemEnabled) {
+	$account_status = '<b><span style="color: green">Gratis Premium Account</span></b>';
+} else if(!$account_logged->isPremium()) {
 	$account_status = '<b><span style="color: red">Free Account</span></b>';
-else
-	$account_status = '<b><span style="color: green">' . ($freePremium ? 'Gratis Premium Account' : 'Premium Account, ' . $account_logged->getPremDays() . ' '.$dayOrDays.' left') . '</span></b>';
+} else {
+	$account_status = '<b><span style="color: green">' . $premiumLabel . ', ' . $premDays . ' '.$dayOrDays.' left</span></b>';
+}
 
 $recovery_key = $account_logged->getCustomField('key');
 if(empty($recovery_key))
@@ -90,12 +99,8 @@ if($email_new_time > 1)
 	}
 }
 
-$actions = array();
-foreach($account_logged->getActionsLog(0, 1000) as $action) {
-	$actions[] = array('action' => $action['action'], 'date' => $action['date'], 'ip' => $action['ip'] != 0 ? long2ip($action['ip']) : inet_ntop($action['ipv6']));
-}
+$actions = $account_logged->getActionsLog(1000);
 
-$players = array();
 /** @var OTS_Players_List $account_players */
 $account_players = $account_logged->getPlayersList();
 $account_players->orderBy('id');
