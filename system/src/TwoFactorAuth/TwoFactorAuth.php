@@ -52,23 +52,26 @@ class TwoFactorAuth
 			return true;
 		}
 
+		$view = 'app';
+
+		if ($this->authType == self::TYPE_EMAIL) {
+			$view = 'email';#
+		}
+
 		if (empty($code)) {
 			if ($this->authType == self::TYPE_EMAIL) {
 				if (!$this->hasRecentEmailCode(15 * 60)) {
 					$this->resendEmailCode();
 					//success('Resent email.');
 				}
+			}
 
-				define('HIDE_LOGIN_BOX', true);
-				$twig->display('account/2fa/email/login.html.twig', [
-					'account_login' => $login_account,
-					'password_login' => $login_password,
-					'remember_me' => $remember_me,
-				]);
-			}
-			else {
-				echo 'Two Factor App Auth';
-			}
+			define('HIDE_LOGIN_BOX', true);
+			$twig->display("account/2fa/$view/login.html.twig", [
+				'account_login' => $login_account,
+				'password_login' => $login_password,
+				'remember_me' => $remember_me,
+			]);
 
 			return false;
 		}
@@ -91,10 +94,16 @@ class TwoFactorAuth
 
 		define('HIDE_LOGIN_BOX', true);
 
-		$errors[] = 'Invalid email code!';
+		if ($this->authType == self::TYPE_APP) {
+			$errors[] = 'The token is invalid!';
+		}
+		else {
+			$errors[] = 'Invalid email code!';
+		}
+
 		$twig->display('error_box.html.twig', ['errors' => $errors]);
 
-		$twig->display('account/2fa/email/login.html.twig',
+		$twig->display("account/2fa/$view/login.html.twig",
 			[
 				'account_login' => $login_account,
 				'password_login' => $login_password,
@@ -120,14 +129,14 @@ class TwoFactorAuth
 	{
 		$twoFactorView = 'account/2fa/protected.html.twig';
 		if ($this->authType == self::TYPE_EMAIL) {
-			$twoFactorView2 = 'account/2fa/email/activated.html.twig';
+			$twoFactorView2 = 'account/2fa/email/enabled.html.twig';
 		}
 		elseif ($this->authType == self::TYPE_APP) {
-			$twoFactorView2 = 'account/2fa/app/activated.html.twig';
+			$twoFactorView2 = 'account/2fa/app/enabled.html.twig';
 		}
 		else {
 			$twoFactorView = 'account/2fa/connect.html.twig';
-			$twoFactorView2 = 'account/2fa/email/activate.html.twig';
+			$twoFactorView2 = 'account/2fa/email/manage.html.twig';
 		}
 
 		return [$twoFactorView, $twoFactorView2];

@@ -9,7 +9,7 @@
 				<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
 					<tbody>
 					<tr>
-						<td>Enter the email code below to activate <b>two-factor email code authentication</b>. Note
+						<td>Enter the email code below to enable <b>two-factor email code authentication</b>. Note
 							that this code is only valid for 24 hours.<br><br>
 							<div class="AttentionSign"><img src="{{ template_path }}/images/global/content/attentionsign.gif"></div>
 							<b>Note:</b> Once you have email code authentication activated, an <b>email code</b> will be
@@ -87,7 +87,7 @@
 	<tbody>
 	<tr align="center" valign="top">
 		<td>
-			<form id="confirmActivateForm" action="{{ getLink('account/2fa/email/activate') }}" method="post" style="padding:0;margin:0;">
+			<form id="confirmActivateForm" action="{{ getLink('account/2fa/email/enable') }}" method="post" style="padding:0;margin:0;">
 				{{ csrf() }}
 
 				<input type="hidden" name="save" value="1">

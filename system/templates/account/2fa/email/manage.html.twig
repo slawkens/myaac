@@ -10,7 +10,7 @@
 					<tr>
 						<td class="LabelV"><b>Activate email code authentication for your account!</b>
 							<div style="float: right; font-size: 1px;">
-								<form action="{{ getLink('account/2fa/email/activate') }}" method="post" style="margin: 0; padding: 0;">
+								<form action="{{ getLink('account/2fa/email/enable') }}" method="post" style="margin: 0; padding: 0;">
 									{{ csrf() }}
 									{% set button_name = 'Request' %}
 									{% include('buttons.base.html.twig') %}
@@ -20,7 +20,7 @@
 					</tr>
 					<tr>
 						<td>
-							<p>As a first step to activate <b>email code authentication</b> for your account, click on "Request"! An <b>email code</b> will be sent to the email address assigned to your account. You will be asked to enter this <b>email code</b> on the next page within 24 hours.</p>
+							<p>As a first step to enable <b>email code authentication</b> for your account, click on "Request"! An <b>email code</b> will be sent to the email address assigned to your account. You will be asked to enter this <b>email code</b> on the next page within 24 hours.</p>
 						</td>
 					</tr>
 					</tbody>

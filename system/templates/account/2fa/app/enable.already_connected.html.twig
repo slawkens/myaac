@@ -1,0 +1,22 @@
+{% set title = 'Disable Two Factor App' %}
+{% set background = config('darkborder') %}
+
+{% set content %}
+<table style="width:100%;">
+	<tbody>
+	<tr>
+		<td>
+			Two-factor authentication is already enabled on your account.<br/>
+			Click the button to disable the two-factor app.<br/><br/>
+			<form action="{{ getLink('account/2fa/app/disable') }}" method="post" style="padding:0;margin:0;">
+				{{ csrf() }}
+
+				{% set button_name = 'Disable' %}
+				{{ include('buttons.base.html.twig') }}
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}

@@ -103,6 +103,11 @@ if(!$db->hasColumn('accounts', '2fa_type')) {
 		success($locale['step_database_adding_field'] . ' accounts.2fa_type...');
 }
 
+if(!$db->hasColumn('accounts', '2fa_secret')) {
+	if(query("ALTER TABLE `accounts` ADD `2fa_secret` varchar(16) NOT NULL DEFAULT '' AFTER `2fa_type`;"))
+		success($locale['step_database_adding_field'] . ' accounts.2fa_secret...');
+}
+
 if(!$db->hasColumn('accounts', 'email_verified')) {
 	if(query("ALTER TABLE `accounts` ADD `email_verified` TINYINT(1) NOT NULL DEFAULT 0 AFTER `web_flags`;"))
 		success($locale['step_database_adding_field'] . ' accounts.email_verified...');

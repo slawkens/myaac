@@ -36,4 +36,4 @@ if (!empty($errors)) {
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
 }
 
-$twig->display('account/2fa/email/request.html.twig', ['wrongCode' => count($errors) > 0]);
+$twig->display('account/2fa/email/enable.html.twig', ['wrongCode' => count($errors) > 0]);

@@ -1,0 +1,81 @@
+{% set title = 'Warning' %}
+{% set background = config('darkborder') %}
+
+{% set content %}
+<table style="width:100%;">
+	<tbody>
+	<tr>
+		<td>
+			<span class="red"><b>Please read this warning carefully as it contains important security information! If you skip this message, you might lose your Tibia account!</b></span><br><br>
+			<p>Before you connect your account with an authenticator app, you will be asked to
+				enter your recovery key. If you do not have a valid recovery key, you need to
+				order a new one before you can connect your account with an authenticator.</p>
+			<p>Why?<br>The recovery key is the only way to unlink the authenticator app from
+				your Tibia account in various cases, among others, if:</p>
+			<ul style="list-style-type:square">
+				<li>you lose your device (mobile phone, tablet, etc.) with the authenticator
+					app
+				</li>
+				<li>the device with the authenticator app does not work anymore</li>
+				<li>the device with the authenticator app gets stolen</li>
+				<li>you delete the authenticator app from your device and reinstall it</li>
+				<li>your device is reset for some reason</li>
+			</ul>
+			<p></p>
+			<p>Please note that the authenticator app data is not saved on your device's account
+				(e.g. Google or iTunes sync) even if you have app data backup&amp;synchronisation
+				activated in the settings of your device!</p>
+			<p>In all these scenarios, the recovery key is the only way to get access to your
+				Tibia account. Note that not even customer support will be able to help you in
+				these cases if you do not have a valid recovery key.<br>For this reason, make
+				sure to store your recovery key always in a safe place!</p><br>Do you have a
+			valid recovery key and would like to request the email with the confirmation key to
+			start connecting your Tibia account to an authenticator app?<br><br><b>Enter your
+				recovery key:</b><br>
+			<div style="margin-top: 15px; margin-bottom: 15px;">
+
+				<input class="UpperCaseInput" name="key1" value="" size="5" maxlength="5" autocomplete="off"> -
+				<input class="UpperCaseInput" name="key2" value="" size="5" maxlength="5" autocomplete="off"> - <input class="UpperCaseInput" name="key3" value="" size="5" maxlength="5" autocomplete="off"> -
+				<input class="UpperCaseInput" name="key4" value="" size="5" maxlength="5" autocomplete="off"></div>
+		</td>
+	</tr>
+	</tbody>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+
+<br>
+<table style="width:100%;">
+	<tbody>
+	<tr align="center">
+		<td>
+			<form action="{{ getLink('account/2fa/app/enable') }}" method="post" style="padding:0;margin:0;">
+
+			<input type="hidden" name="action" value="request" />
+
+			{{ csrf() }}
+
+			{% set button_name = 'Request' %}
+			{{ include('buttons.base.html.twig') }}
+		</td>
+		<td>
+			<form action="{{ getLink('account/register') }}" method="post" style="padding:0;margin:0;">
+
+				{{ csrf() }}
+
+				{% set button_name = 'Order Recovery Key' %}
+				{{ include('buttons.base.html.twig') }}
+			</form>
+		</td>
+		<td>
+			<form action="{{ getLink('account/manage') }}" method="post" style="padding:0;margin:0;">
+
+				{{ csrf() }}
+
+				{% set button_name = 'Cancel Request' %}
+				{{ include('buttons.base.html.twig') }}
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
