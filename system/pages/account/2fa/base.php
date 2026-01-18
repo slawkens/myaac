@@ -17,7 +17,7 @@ if ((!setting('core.mail_enabled')) && ACTION == 'email-code') {
 	return;
 }
 
-if (!isset($account_logged) || !$account_logged->isLoaded()) {
+if (!$account_logged->isLoaded()) {
 	$current_session = getSession('account');
 	if($current_session) {
 		$account_logged = new OTS_Account();
