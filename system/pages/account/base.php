@@ -34,3 +34,11 @@ if(!$logged)
 else {
 	$show_form = true;
 }
+
+function generateRecoveryKey(): string
+{
+	return generateRandomString(5, false, true, true) . '-' .
+		generateRandomString(5, false, true, true) . '-' .
+		generateRandomString(5, false, true, true) . '-' .
+		generateRandomString(5, false, true, true);
+}
