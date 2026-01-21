@@ -2,8 +2,6 @@
 defined('MYAAC') or die('Direct access not allowed!');
 
 use MyAAC\TwoFactorAuth\TwoFactorAuth;
-use OTPHP\TOTP;
-use Symfony\Component\Clock\NativeClock;
 
 require __DIR__ . '/../base.php';
 
