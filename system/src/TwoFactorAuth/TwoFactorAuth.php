@@ -191,7 +191,7 @@ class TwoFactorAuth
 		return $otp;
 	}
 
-	public function appDisplayEnable(string $secret, TOTP $otp = null, array $errors = []): void
+	public function appDisplayEnable(string $secret, ?TOTP $otp = null, array $errors = []): void
 	{
 		global $twig;
 
