@@ -26,8 +26,6 @@ if (ACTION == 'request') {
 
 	$accountKey = $account_logged->getCustomField('key');
 	if (!empty($key) && $key == $accountKey) {
-		$clock = new NativeClock();
-
 		$secret = getSession('2fa_secret');
 		if ($secret === null) {
 			$secret = generateRandom2faSecret();
