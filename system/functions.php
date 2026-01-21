@@ -1812,8 +1812,8 @@ function getAccountIdentityColumn(): string
 
 function isCanary(): bool
 {
-	$vipSystemEnabled = configLua('vipSystemEnabled');
-	return isset($vipSystemEnabled);
+	$dataPackDirectory = configLua('dataPackDirectory');
+	return isset($dataPackDirectory);
 }
 
 function getStatusUptimeReadable(int $uptime): string
