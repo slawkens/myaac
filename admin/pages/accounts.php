@@ -183,39 +183,7 @@ else if (isset($_REQUEST['search'])) {
 					$account->setName($name);
 				}
 
-				if ($hasTypeColumn) {
-					$account->setCustomField('type', $group);
-				} elseif ($hasGroupColumn) {
-					$account->setCustomField('group_id', $group);
-				}
-
-				if ($hasSecretColumn) {
-					$account->setCustomField('secret', $secret);
-				}
-
-				$account->setCustomField('key', $key);
 				$account->setEMail($email);
-
-				if (HAS_ACCOUNT_COINS) {
-					$account->setCustomField('coins', $t_coins);
-				}
-
-				if (HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS) {
-					$account->setCustomField(ACCOUNT_COINS_TRANSFERABLE_COLUMN, $t_coins_transferable);
-				}
-
-				$lastDay = 0;
-				if($p_days != 0 && $p_days != OTS_Account::GRATIS_PREMIUM_DAYS) {
-					$lastDay = time();
-				} else if ($lastDay != 0) {
-					$lastDay = 0;
-				}
-
-				$account->setPremDays($p_days);
-				$account->setLastLogin($lastDay);
-				if ($hasPointsColumn) {
-					$account->setCustomField('premium_points', $p_points);
-				}
 				$account->setRLName($rl_name);
 				$account->setLocation($rl_loca);
 
@@ -223,9 +191,18 @@ else if (isset($_REQUEST['search'])) {
 					$account->setCountry($rl_country);
 				}
 
-				$account->setCustomField('created', $created);
 				$account->setWebFlags($web_flags);
-				$account->setCustomField('web_lastlogin', $web_lastlogin);
+
+				if (!isCanary()) {
+					$lastDay = 0;
+					if($p_days != 0 && $p_days != OTS_Account::GRATIS_PREMIUM_DAYS) {
+						$lastDay = time();
+					}
+
+					$account->setLastLogin($lastDay);
+				}
+
+				$account->setPremDays($p_days);
 
 				if (isset($password)) {
 					if (USE_ACCOUNT_SALT) {
@@ -239,6 +216,34 @@ else if (isset($_REQUEST['search'])) {
 				}
 
 				$account->save();
+
+				if ($hasTypeColumn) {
+					$account->setCustomField('type', $group);
+				} elseif ($hasGroupColumn) {
+					$account->setCustomField('group_id', $group);
+				}
+
+				if ($hasSecretColumn) {
+					$account->setCustomField('secret', $secret);
+				}
+
+				$account->setCustomField('key', $key);
+
+				if (HAS_ACCOUNT_COINS) {
+					$account->setCustomField('coins', $t_coins);
+				}
+
+				if (HAS_ACCOUNT_COINS_TRANSFERABLE || HAS_ACCOUNT_TRANSFERABLE_COINS) {
+					$account->setCustomField(ACCOUNT_COINS_TRANSFERABLE_COLUMN, $t_coins_transferable);
+				}
+
+				if ($hasPointsColumn) {
+					$account->setCustomField('premium_points', $p_points);
+				}
+
+				$account->setCustomField('created', $created);
+				$account->setCustomField('web_lastlogin', $web_lastlogin);
+
 				echo_success('Account saved at: ' . date('G:i'));
 			}
 		}

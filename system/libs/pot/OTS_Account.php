@@ -12,6 +12,7 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
+use MyAAC\Models\Account as AccountModel;
 use MyAAC\Models\AccountAction;
 
 /**
@@ -42,7 +43,11 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
 	private $data = array('email' => '', 'rlname' => '','location' => '', 'country' => '','web_flags' => 0, 'lastday' => 0, 'premdays' => 0, 'created' => 0);
 
-	public static $cache = array();
+	private array $columns = ['password', 'email', 'rlname', 'location', 'country', 'web_flags', 'created'];
+
+	private array $optionalColumns = ['name', 'number', 'lastday', 'premdays', 'premium_ends_at', 'premend'];
+
+	public static array $cache = [];
 
 	const GRATIS_PREMIUM_DAYS = 65535;
 /**
@@ -327,27 +332,50 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
 	public function save()
 	{
-		if( !isset($this->data['id']) )
-		{
+		if (!isset($this->data['id'])) {
 			throw new E_OTS_NotLoaded();
 		}
 
-	$field = 'lastday';
-	if($this->db->hasColumn('accounts', 'premend')) { // othire
-			$field = 'premend';
-		if(!isset($this->data['premend'])) {
-			$this->data['premend'] = 0;
-		}
-	}
-	else if($this->db->hasColumn('accounts', 'premium_ends_at')) {
-		$field = 'premium_ends_at';
-		if(!isset($this->data['premium_ends_at'])) {
-			$this->data['premium_ends_at'] = 0;
-		}
-	}
+		$defaultValues = [
+			'premium_ends_at' => 0,
+			'lastday' => 0,
+			'premend' => 0,
+			'premdays' => 0,
+		];
 
-		// UPDATE query on database
-		$this->db->exec('UPDATE `accounts` SET ' . ($this->db->hasColumn('accounts', 'name') ? '`name` = ' . $this->db->quote($this->data['name']) . ',' : '') . '`password` = ' . $this->db->quote($this->data['password']) . ', `email` = ' . $this->db->quote($this->data['email']) . ', `rlname` = ' . $this->db->quote($this->data['rlname']) . ', `location` = ' . $this->db->quote($this->data['location']) . ', `country` = ' . $this->db->quote($this->data['country']) . ', `web_flags` = ' . (int) $this->data['web_flags'] . ', ' . ($this->db->hasColumn('accounts', 'premdays') ? '`premdays` = ' . (int) $this->data['premdays'] . ',' : '') . '`' . $field . '` = ' . (int) $this->data[$field] . ' WHERE `id` = ' . $this->data['id']);
+		foreach ($defaultValues as $key => $value) {
+			if (!isset($this->data[$key])) {
+				$this->data[$key] = $value;
+			}
+		}
+
+		$columns = $this->columns;
+		foreach ($this->optionalColumns as $column) {
+			if ($this->db->hasColumn('accounts', $column)) {
+				$columns[] = $column;
+			}
+		}
+
+		$values = [];
+		foreach ($columns as $column) {
+			$value = $this->data[$column];
+
+			$values[$column] = $value;
+		}
+
+		// updates existing player
+		if( isset($this->data['id']) ) {
+			AccountModel::where('id', $this->data['id'])->update($values);
+		}
+		// creates new player
+		else {
+			$values['created'] = time();
+
+			$account = AccountModel::create($values);
+
+			// ID of new player
+			$this->data['id'] = $account->id;
+		}
 	}
 
 /**
@@ -506,11 +534,17 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @since 0.7.5
  * @throws E_OTS_NotLoaded If account is not loaded.
  */
-	public function setPremDays($premdays)
+	public function setPremDays($premdays): void
 	{
 		$this->data['premdays'] = (int) $premdays;
-		$this->data['premend'] = time() + ($premdays * 24 * 60 * 60);
-		$this->data['premium_ends_at'] = time() + ($premdays * 24 * 60 * 60);
+
+		$premiumTimeInSeconds = time() + ($premdays * 24 * 60 * 60);
+		$this->data['premend'] = $premiumTimeInSeconds;
+		$this->data['premium_ends_at'] = $premiumTimeInSeconds;
+
+		if (isCanary()) {
+			$this->data['lastday'] = $premiumTimeInSeconds;
+		}
 	}
 
 	public function setRLName($name)
