@@ -20,8 +20,7 @@
         "filp/whoops": "^2.15",
         "maximebf/debugbar": "1.*",
         "guzzlehttp/guzzle": "7.9.3",
-        "spomky-labs/otphp": "^11.3",
-        "symfony/clock": "^7.4"
+        "spomky-labs/otphp": "^11.3"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.10"
