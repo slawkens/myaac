@@ -15,7 +15,7 @@
 								<div class="LabelV200" style="float:left;">Authenticator App
 									Token:
 								</div>
-								<input form="form-code" id="auth-code" name="auth-code" maxlength="6" autocomplete="off"></div>
+								<input form="form" id="auth-code" name="auth-code" maxlength="6" autocomplete="off"></div>
 						</td>
 					</tr>
 					</tbody>
@@ -33,7 +33,7 @@
 	<tbody>
 	<tr align="center" valign="top">
 		<td>
-			<form id="form-code" action="{{ getLink('account/manage') }}" method="post">
+			<form id="form" action="{{ getLink('account/manage') }}" method="post">
 
 				{{ csrf() }}
 

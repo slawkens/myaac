@@ -12,7 +12,7 @@
 						<td>Enter the email code below to enable <b>two-factor email code authentication</b>. Note
 							that this code is only valid for 24 hours.<br><br>
 							<div class="AttentionSign"><img src="{{ template_path }}/images/global/content/attentionsign.gif"></div>
-							<b>Note:</b> Once you have email code authentication activated, an <b>email code</b> will be
+							<b>Note:</b> Once you have email code authentication enabled, an <b>email code</b> will be
 							sent to the email address assigned to your account whenever you try to log in to the Tibia
 							client or the {{ config.lua.serverName }} website. In order to log in, you will need to enter the <b>most recent
 								email code</b> you have received.
@@ -64,7 +64,7 @@
 							the email code you received at the email address assigned to your account.
 							<div style="margin-top: 15px; margin-bottom: 15px;">
 								<div class="LabelV150 {{ wrongCode ? 'red' : '' }}" style="float:left;">Email Code:</div>
-								<input form="confirmActivateForm" name="auth-code" maxlength="6">
+								<input form="form" name="auth-code" maxlength="6" autocomplete="off">
 								{% if wrongCode %}
 									<br/>
 									<div class="LabelV150" style="float:left;">&nbsp; </div>
@@ -87,7 +87,7 @@
 	<tbody>
 	<tr align="center" valign="top">
 		<td>
-			<form id="confirmActivateForm" action="{{ getLink('account/2fa/email/enable') }}" method="post" style="padding:0;margin:0;">
+			<form id="form" action="{{ getLink('account/2fa/email/enable') }}" method="post" style="padding:0;margin:0;">
 				{{ csrf() }}
 
 				<input type="hidden" name="save" value="1">

@@ -5,6 +5,7 @@ namespace MyAAC\TwoFactorAuth;
 use MyAAC\Models\AccountEMailCode;
 use MyAAC\TwoFactorAuth\Gateway\AppAuthGateway;
 use MyAAC\TwoFactorAuth\Gateway\EmailAuthGateway;
+use OTPHP\TOTP;
 
 class TwoFactorAuth
 {
@@ -127,16 +128,17 @@ class TwoFactorAuth
 
 	public function getAccountManageViews(): array
 	{
-		$twoFactorView = 'account/2fa/protected.html.twig';
 		if ($this->authType == self::TYPE_EMAIL) {
-			$twoFactorView2 = 'account/2fa/email/enabled.html.twig';
+			$twoFactorView = 'account/2fa/main.protected.html.twig';
+			$twoFactorView2 = 'account/2fa/email/manage.connected.html.twig';
 		}
 		elseif ($this->authType == self::TYPE_APP) {
-			$twoFactorView2 = 'account/2fa/app/enabled.html.twig';
+			$twoFactorView = 'account/2fa/app/manage.connected.html.twig';
+			$twoFactorView2 = 'account/2fa/main.protected.html.twig';
 		}
 		else {
-			$twoFactorView = 'account/2fa/connect.html.twig';
-			$twoFactorView2 = 'account/2fa/email/manage.html.twig';
+			$twoFactorView = 'account/2fa/app/manage.enable.html.twig';
+			$twoFactorView2 = 'account/2fa/email/manage.enable.html.twig';
 		}
 
 		return [$twoFactorView, $twoFactorView2];
@@ -146,8 +148,17 @@ class TwoFactorAuth
 		$this->account->setCustomField('2fa_type', $type);
 	}
 
-	public function disable(): void {
+	public function disable(): void
+	{
+		global $db;
+
 		$this->account->setCustomField('2fa_type', self::TYPE_NONE);
+
+		if ($db->hasColumn('accounts', 'secret')) {
+			$this->account->setCustomField('secret', null);
+		}
+
+		$this->account->setCustomField('2fa_secret', '');
 	}
 
 	public function isActive(): bool {
@@ -168,6 +179,36 @@ class TwoFactorAuth
 
 	public function deleteOldCodes(): void {
 		AccountEMailCode::where('account_id', '=', $this->account->getId())->delete();
+	}
+
+	public function appInitTOTP(string $secret): TOTP
+	{
+		$otp = TOTP::createFromSecret($secret);
+
+		$otp->setLabel($this->account->getEmail());
+		$otp->setIssuer(configLua('serverName'));
+
+		return $otp;
+	}
+
+	public function appDisplayEnable(string $secret, TOTP $otp = null, array $errors = []): void
+	{
+		global $twig;
+
+		if ($otp === null) {
+			$otp = $this->appInitTOTP($secret);
+		}
+
+		$grCodeUri = $otp->getQrCodeUri(
+			'https://api.qrserver.com/v1/create-qr-code/?data=[DATA]&size=200x200&ecc=M',
+			'[DATA]'
+		);
+
+		$twig->display('account/2fa/app/enable.html.twig', [
+			'grCodeUri' => $grCodeUri,
+			'secret' => $secret,
+			'errors' => $errors,
+		]);
 	}
 
 	public function resendEmailCode(): void

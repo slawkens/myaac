@@ -3,18 +3,10 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 require __DIR__ . '/../base.php';
 
-$account = \MyAAC\Models\Account::find($account_logged->getId());
-if (!$account) {
+if (!$account_logged->isLoaded()) {
 	error('Account not found!');
 	return;
 }
-
-if ($db->hasColumn('accounts', 'secret')) {
-	$account->secret = NULL;
-}
-
-$account->{'2fa_secret'} = '';
-$account->save();
 
 $twoFactorAuth->disable();
 

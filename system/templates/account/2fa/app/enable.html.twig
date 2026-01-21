@@ -23,7 +23,13 @@
 								<li><label for="totp">Enter the verification code you have received from the used
 										authenticator app:</label><br>
 									<div style="margin-top: 15px; margin-bottom: 15px;">
-										<input form="form" id="totp" name="totp" autocomplete="off"></div>
+
+										<input form="form" id="auth-code" name="auth-code" maxlength="6" autocomplete="off">
+										{% if errors|length > 0 %}
+											<br/>
+											<div class="FormFieldError">{{ errors[0] }}</div>
+										{% endif %}
+									</div>
 								</li>
 								<li>Click on "Continue" to connect the authenticator app to your
 									Tibia account.
@@ -46,13 +52,14 @@
 		<td>
 			<form id="form" method="post" action="{{ getLink('account/2fa/app/enable') }}">
 
-			<input type="hidden" name="action" value="link">
+				<input type="hidden" name="action" value="link">
 
-			{{ csrf() }}
+				{{ csrf() }}
 
-			{% set button_color = 'green' %}
-			{% set button_name = 'Continue' %}
-			{{ include('buttons.base.html.twig') }}
+				{% set button_color = 'green' %}
+				{% set button_name = 'Continue' %}
+				{{ include('buttons.base.html.twig') }}
+			</form>
 		</td>
 		<td>
 			<form action="{{ getLink('account/manage') }}" method="post" style="padding:0;margin:0;">
@@ -60,7 +67,7 @@
 				{{ csrf() }}
 
 				{% set button_color = 'blue' %}
-				{% set button_name = 'Request' %}
+				{% set button_name = 'Cancel' %}
 				{{ include('buttons.base.html.twig') }}
 			</form>
 		</td>

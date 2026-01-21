@@ -38,11 +38,11 @@
 				<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
 					<tbody>
 					<tr>
-						<td><b>Email code authentication is activated for your account.</b><br><br>Please enter the <b>most
+						<td><b>Email code authentication is enabled for your account.</b><br><br>Please enter the <b>most
 								recent email code</b> you have received in order to log in.<br>
 							<div style="margin-top: 15px; margin-bottom: 15px;">
 								<div class="LabelV150 {{ wrongCode ? 'red' : '' }}" style="float:left;"><label for="email-code">Email Code:</label></div>
-								<input form="form-code" id="auth-code" name="auth-code" maxlength="15" autocomplete="off">
+								<input form="form" id="auth-code" name="auth-code" maxlength="15" autocomplete="off">
 								{% if wrongCode %}
 									<br/>
 									<div class="LabelV150" style="float:left;">&nbsp; </div>
@@ -64,7 +64,7 @@
 	<tbody>
 	<tr align="center" valign="top">
 		<td>
-			<form id="form-code" method="post" action="{{ getLink('account/manage') }}">
+			<form id="form" method="post" action="{{ getLink('account/manage') }}">
 				{{ csrf() }}
 
 				<input type="hidden" name="account_login" value="{{ account_login ?? '' }}" />

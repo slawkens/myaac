@@ -1,0 +1,22 @@
+{% if logged and account_logged.getCustomField('2fa_type') == 1 %}
+	{% set header = 'Two-Factor Email Code Authentication' %}
+	{% set text =  'Your account is currently protected by email code authentication. If you prefer to use a <strong>two-factor authentication app</strong>, you have to "Disable" email code authentication first.' %}
+{% else %}
+	{% set header = 'Two-Factor App Code Authentication' %}
+	{% set text =  'Your account is currently protected by an authenticator app. If you prefer to use the <strong>two-factor email code authentication</strong>, you have to "Unlink" the authenticator app first.' %}
+{% endif %}
+<tr>
+	<td>
+		<div class="TableContentContainer ">
+			<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+				<tbody>
+				<tr>
+					<td><b>{{ header|raw }}</b>
+						<p>{{ text|raw }}</p>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</td>
+</tr>

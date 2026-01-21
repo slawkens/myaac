@@ -16,8 +16,8 @@ $twoFactorAuth->deleteOldCodes();
 
 $twig->display('success.html.twig',
 	[
-		'title' => 'Email Code Authentication Deactivated',
-		'description' => 'You have successfully <b>deactivated</b> the <b>Email Code Authentication</b> for your account.'
+		'title' => 'Email Code Authentication Disabled',
+		'description' => 'You have successfully <strong>disabled</strong> the <b>Email Code Authentication</b> for your account.'
 	]
 );
 /*
