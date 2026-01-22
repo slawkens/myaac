@@ -103,7 +103,7 @@ if($step == 'database') {
 	}
 }
 else if($step == 'admin') {
-	if(!file_exists(BASE . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
+	if(!file_exists(CONFIG_DIR . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
 		$step = 'database';
 	}
 	else {
@@ -190,8 +190,9 @@ if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 		$allow = false;
 		$listIP = preg_split('/\s+/', $file_content);
 		foreach($listIP as $ip) {
-			if(get_browser_real_ip() == $ip) {
+			if($ip == '*' || get_browser_real_ip() == $ip) {
 				$allow = true;
+				break;
 			}
 		}
 
