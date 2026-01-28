@@ -37,21 +37,31 @@
 {% for key, value in settings %}
 	{% if value.show_if is defined %}
 		$(function () {
-			$('input[name="settings[{{ value.show_if[0] }}]"]').change(function () {
+			{% set inputType = 'input' %}
+
+			{% if settings[value.show_if[0]]['type'] == 'options' %}
+				{% set inputType = 'select' %}
+			{% endif %}
+
+			$('{{ inputType }}[name="settings[{{ value.show_if[0] }}]"]').change(function () {
 				performChecks_{{ key }}(this);
 			});
 
 			{% if settings[value.show_if[0]]['type'] == 'boolean' %}
 			performChecks_{{ key }}('input[name="settings[{{ value.show_if[0] }}]"]:checked');
 			{% else %}
-			performChecks_{{ key }}('input[name="settings[{{ value.show_if[0] }}]"]');
+			performChecks_{{ key }}('{{ inputType }}[name="settings[{{ value.show_if[0] }}]"]');
 			{% endif %}
 		});
 
 		function performChecks_{{ key }}(el)
 		{
 			let success = false;
+
 			let thisVal = $(el).val();
+			{% if settings[value.show_if[0]]['type'] == 'options' %}
+			thisVal = $(el).find(":selected").val();
+			{% endif %}
 
 			let operator = '{{ value.show_if[1]|raw }}';
 			if (operator === '>') {
