@@ -21,7 +21,6 @@ use MyAAC\News;
 use MyAAC\Plugins;
 use MyAAC\Settings;
 use PHPMailer\PHPMailer\PHPMailer;
-use Twig\Loader\ArrayLoader as Twig_ArrayLoader;
 
 function message($message, $type, $return)
 {
@@ -1379,17 +1378,7 @@ function getCustomPage($name, &$success): string
 			ob_end_clean();
 		}
 		else {
-			$oldLoader = $twig->getLoader();
-
-			$twig_loader_array = new Twig_ArrayLoader(array(
-				'content.html' => $page['body']
-			));
-
-			$twig->setLoader($twig_loader_array);
-
-			$content .= $twig->render('content.html');
-
-			$twig->setLoader($oldLoader);
+			$content .= $twig->renderInline($page['body']);
 		}
 	}
 
