@@ -17,7 +17,7 @@ function insert_sample_if_not_exist($p): void
 		$player->setData([
 			'name' => $p['name'],
 			'group_id' => 1,
-			'account_id' => getSession('account'),
+			'account_id' => getSession('account') ?? 1,
 			'level' => $p['level'],
 			'vocation' => $p['vocation_id'],
 			'health' => $p['health'],
