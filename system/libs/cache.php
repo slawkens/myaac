@@ -123,8 +123,13 @@ class Cache
 			return unserialize($value);
 		}
 
+		// -1 for infinite cache
+		if ($ttl == -1) {
+			$ttl = 10 * 365 * 24 * 60 * 60; // 10 years should be enough
+		}
+
 		$value = $callback();
-		$cache->set($key, serialize($value),$ttl);
+		$cache->set($key, serialize($value), $ttl);
 		return $value;
 	}
 }
