@@ -104,7 +104,7 @@
 		{% if config.online_outfit %}
 			<td width="5%"><img style="position:absolute;margin-top:{% if player.player.looktype in [75, 266, 302] %}-20px;margin-left:-0px;{% else %}-45px;margin-left:-25px;{%  endif %}" src="{{ player.outfit }}" alt="player outfit"/></td>
 		{% endif %}
-			<td>{{ player.name|raw }}{{ player.skull }}</td>
+			<td>{{ player.name|raw }}{{ player.skull|raw }}</td>
 			<td>{{ player.level }}</td>
 			<td>{{ player.vocation }}</td>
 		</tr>
