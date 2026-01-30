@@ -89,3 +89,5 @@ $twig->addFilter($filter);
 unset($function, $filter);
 
 $hooks->trigger(HOOK_TWIG, ['twig' => $twig, 'twig_loader' => $twig_loader]);
+
+$twig->addGlobal('cache', $cache);
