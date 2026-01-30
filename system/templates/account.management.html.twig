@@ -173,7 +173,7 @@
 				{% set i = i + 1 %}
 				<tr bgcolor="{{ getStyle(i) }}">
 					<td>
-						<a href="{{ getLink('characters/' ~ player.getName()|urlencode) }}">{{ player.getName() }}</a>
+						<a href="{{ getLink('characters/' ~ player.getName()|urlencode) }}">{{ player.getName() }}</a>{% if player.isDeleted() %}<span style="color: red"><b> [ DELETED ] </b></span>{% endif %}
 					</td>
 					<td>{{ player.getLevel() }}</td>
 					<td>{{ player.getVocationName() }}</td>
