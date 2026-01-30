@@ -232,8 +232,9 @@ if($save)
 			}
 			else
 			{
-				error('An error occorred while sending email! Account not created. Try again. For Admin: More info can be found in system/logs/mailer-error.log');
+				error('An error occurred while sending email! Account not created. Try again. For Admin: More info can be found in system/logs/mailer-error.log');
 				$new_account->delete();
+				return;
 			}
 		}
 		else
