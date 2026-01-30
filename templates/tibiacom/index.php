@@ -315,7 +315,7 @@ if(isset($config['boxes']))
     <div id="LoginBottom" class="Loginstatus" style="background-image:url(<?php echo $template_path; ?>/images/general/box-bottom.gif)" ></div>
   </div>
 
-<div-- id='Menu'>
+<div id='Menu'>
 <div id='MenuTop' style='background-image:url(<?php echo $template_path; ?>/images/general/box-top.gif);'></div>
 
 <?php
@@ -371,6 +371,7 @@ foreach($config['menu_categories'] as $id => $cat) {
 	<?php
 	}
 	?>
+</div>
 		<script type="text/javascript">
             InitializePage();
         </script>
