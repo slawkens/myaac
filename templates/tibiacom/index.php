@@ -146,7 +146,10 @@ if(isset($config['boxes']))
 		// hide or show the corresponding submenus
 		function InitializeMenu()
 		{
-		  for(menuItemName in menu[0]) {
+			for(menuItemName in menu[0]) {
+				if (!document.getElementById(menuItemName+"_Submenu")) {
+					continue;
+				}
 			if(menu[0][menuItemName] == "0") {
 			  document.getElementById(menuItemName+"_Submenu").style.visibility = "hidden";
 			  document.getElementById(menuItemName+"_Submenu").style.display = "none";
