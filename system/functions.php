@@ -823,11 +823,11 @@ function getWorldName($id)
  *
  * @param string $to Recipient email address.
  * @param string $subject Subject of the message.
- * @param string $body Message body in html format.
+ * @param string $body Message body in HTML format.
  * @param string $altBody Alternative message body, plain text.
  * @return bool PHPMailer status returned (success/failure).
  */
-function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
+function _mail(string $to, string $subject, string $body, string $altBody = ''): bool
 {
 	/** @var PHPMailer $mailer */
 	global $mailer, $config;
@@ -840,15 +840,6 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	else {
 		$mailer->clearAllRecipients();
 	}
-
-	$signature_html = '';
-	if(isset($config['mail_signature']['html']))
-		$signature_html = $config['mail_signature']['html'];
-
-	if($add_html_tags && isset($body[0]))
-		$tmp_body = '<html><head></head><body>' . $body . '<br/><br/>' . $signature_html . '</body></html>';
-	else
-		$tmp_body = $body . '<br/><br/>' . $signature_html;
 
 	if($config['smtp_enabled'])
 	{
@@ -863,6 +854,12 @@ function _mail($to, $subject, $body, $altBody = '', $add_html_tags = true)
 	else {
 		$mailer->isMail();
 	}
+
+	if(isset($config['mail_signature']['html'])) {
+		$signature_html = $config['mail_signature']['html'];
+	}
+
+	$tmp_body = $body . '<br/><br/>' . $signature_html;
 
 	$mailer->isHTML(isset($body[0]) > 0);
 	$mailer->From = $config['mail_address'];
@@ -1336,6 +1333,43 @@ function getDatabasePages($withHidden = false): array
 	}
 
 	return $ret;
+}
+
+function getStatusUptimeReadable(int $uptime): string
+{
+	$fullMinute = 60;
+	$fullHour = (60 * $fullMinute);
+	$fullDay = (24 * $fullHour);
+	$fullMonth = (30 * $fullDay);
+	$fullYear = (365 * $fullDay);
+
+	// years
+	$years = floor($uptime / $fullYear);
+	$y = ($years > 1 ? "$years years, " : ($years == 1 ? 'year, ' : ''));
+
+	$uptime -= $years * $fullYear;
+
+	// months
+	$months = floor($uptime / $fullMonth);
+	$m = ($months > 1 ? "$months months, " : ($months == 1 ? 'month, ' : ''));
+
+	$uptime -= $months * $fullMonth;
+
+	// days
+	$days = floor($uptime / $fullDay);
+	$d = ($days > 1 ? "$days days, " : ($days == 1 ? 'day, ' : ''));
+
+	$uptime -= $days * $fullDay;
+
+	// hours
+	$hours = floor($uptime / $fullHour);
+
+	$uptime -= $hours * $fullHour;
+
+	// minutes
+	$min = floor($uptime / $fullMinute);
+
+	return "{$y}{$m}{$d}{$hours}h {$min}m";
 }
 
 // validator functions
