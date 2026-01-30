@@ -216,8 +216,8 @@ class OTS_DB_MySQL extends OTS_Base_DB
 		return $this->hasColumnInternal($table, $column);
 	}
 
-	private function hasColumnInternal($table, $column) {
-		return $this->hasTable($table) && ($this->has_column_cache[$table . '.' . $column] = count($this->query('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $column . "'")->fetchAll()) > 0);
+	private function hasColumnInternal($table, $column): bool {
+		return $this->hasTable($table) && ($this->has_column_cache[$table . '.' . $column] = count($this->query('SHOW COLUMNS FROM `' . $table . "` LIKE " . $this->quote($column))->fetchAll()) > 0);
 	}
 
 	public function hasTableAndColumns(string $table, array $columns = []): bool
