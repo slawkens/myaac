@@ -1175,6 +1175,10 @@ function clearCache()
 		if ($cache->fetch('last_kills', $tmp)) {
 			$cache->delete('last_kills');
 		}
+
+		if (function_exists('apcu_clear_cache')) {
+			apcu_clear_cache();
+		}
 	}
 
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
