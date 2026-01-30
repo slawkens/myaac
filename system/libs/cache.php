@@ -114,7 +114,7 @@ class Cache
 	public static function remember($key, $ttl, $callback)
 	{
 		$cache = self::getInstance();
-		if(!$cache->enabled()) {
+		if(!$cache->enabled() || $ttl == 0) {
 			return $callback();
 		}
 
