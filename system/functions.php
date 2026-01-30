@@ -931,11 +931,12 @@ function load_config_lua($filename)
 		foreach($lines as $ln => $line)
 		{
 			$line = trim($line);
-			if(@$line[0] === '{' || @$line[0] === '}') {
+			if(isset($line[0]) && ($line[0] === '{' || $line[0] === '}')) {
 				// arrays are not supported yet
 				// just ignore the error
 				continue;
 			}
+
 			$tmp_exp = explode('=', $line, 2);
 			if(strpos($line, 'dofile') !== false)
 			{
