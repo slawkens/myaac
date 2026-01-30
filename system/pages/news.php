@@ -115,7 +115,7 @@ if(!$news_cached)
 		);
 	}
 
-	$tickers_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . TICKER .($canEdit ? '' : ' AND `hidden` != 1') .' ORDER BY `date` DESC LIMIT ' . $config['news_ticker_limit']);
+	$tickers_db = $db->query('SELECT * FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . TICKER . ' AND `hidden` != 1 ORDER BY `date` DESC LIMIT ' . $config['news_ticker_limit']);
 	$tickers_content = '';
 	if($tickers_db->rowCount() > 0)
 	{
@@ -134,7 +134,7 @@ if(!$news_cached)
 	if($cache->enabled() && !$canEdit)
 		$cache->set('news_' . $template_name . '_' . TICKER, $tickers_content, 60 * 60);
 
-	$featured_article_db =$db->query('SELECT `id`, `title`, `article_text`, `article_image`, `hidden` FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . ARTICLE . ($canEdit ? '' : ' AND `hidden` != 1') .' ORDER BY `date` DESC LIMIT 1');
+	$featured_article_db =$db->query('SELECT `id`, `title`, `article_text`, `article_image`, `hidden` FROM `' . TABLE_PREFIX . 'news` WHERE `type` = ' . ARTICLE . ' AND `hidden` != 1 ORDER BY `date` DESC LIMIT 1');
 	$article = '';
 	if($featured_article_db->rowCount() > 0) {
 		$article = $featured_article_db->fetch();
@@ -166,7 +166,7 @@ else {
 if(!$news_cached)
 {
 	ob_start();
-	$newses = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news') . ' WHERE type = ' . NEWS . ($canEdit ? '' : ' AND hidden != 1') . ' ORDER BY date' . ' DESC LIMIT ' . $config['news_limit']);
+	$newses = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news') . ' WHERE type = ' . NEWS . ' AND hidden != 1 ORDER BY date' . ' DESC LIMIT ' . $config['news_limit']);
 	if($newses->rowCount() > 0)
 	{
 		foreach($newses as $news)
