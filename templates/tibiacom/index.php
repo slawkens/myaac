@@ -82,13 +82,13 @@ if(isset($config['boxes']))
 		// mouse-over and click events of the loginbox
 		function MouseOverLoginBoxText(source)
 		{
-		  source.lastChild.style.visibility = "visible";
-		  source.firstChild.style.visibility = "hidden";
+			source.lastElementChild.style.visibility = "visible";
+			source.firstElementChild.style.visibility = "hidden";
 		}
 		function MouseOutLoginBoxText(source)
 		{
-		  source.firstChild.style.visibility = "visible";
-		  source.lastChild.style.visibility = "hidden";
+			source.firstElementChild.style.visibility = "visible";
+			source.lastElementChild.style.visibility = "hidden";
 		}
 		function LoginButtonAction()
 		{
@@ -205,11 +205,11 @@ if(isset($config['boxes']))
 		// mouse-over effects of menubuttons and submenuitems
 		function MouseOverMenuItem(source)
 		{
-		  source.firstChild.style.visibility = "visible";
+			source.firstElementChild.style.visibility = "visible";
 		}
 		function MouseOutMenuItem(source)
 		{
-		  source.firstChild.style.visibility = "hidden";
+			source.firstElementChild.style.visibility = "hidden";
 		}
 		function MouseOverSubmenuItem(source)
 		{

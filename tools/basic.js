@@ -1,11 +1,11 @@
 function MouseOverBigButton(source) {
-	if (source?.firstChild?.style) {
-		source.firstChild.style.visibility = "visible";
+	if (source?.firstElementChild?.style) {
+		source.firstElementChild.style.visibility = "visible";
 	}
 }
 function MouseOutBigButton(source) {
-	if (source?.firstChild?.style) {
-		source.firstChild.style.visibility = "hidden";
+	if (source?.firstElementChild?.style) {
+		source.firstElementChild.style.visibility = "hidden";
 	}
 }
 function BigButtonAction(path) {
