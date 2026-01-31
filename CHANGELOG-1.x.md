@@ -10,7 +10,8 @@
 * Mail: Remove HTML tags from the email function (https://github.com/slawkens/myaac/commit/6661c78dac69c6aa498b9c79fe7da4fe0150e5c8)
 
 ### Fixed
-* Forum: Fix edit_post, despite being an author, didn't work (https://github.com/slawkens/myaac/commit/e8b47429e8c607c2662a78b65415dfa772aa0e48)
+* Forum: Fix XSS in board name (https://github.com/slawkens/myaac/commit/e52d9e486f5bf1dea867f59287f70aef3d538189, https://github.com/slawkens/myaac/commit/6db738a87c44b8d96919191ba5e661c32ab47457)
+* Forum: Fix edit_post, despite being an author, edit didn't work (https://github.com/slawkens/myaac/commit/e8b47429e8c607c2662a78b65415dfa772aa0e48)
 * Forum: Fix a player link in the forum thread being not clickable (When outfits are enabled) (https://github.com/slawkens/myaac/commit/f640ca636f34cd2dfc1fa8de6fdbed0674908b30)
 * Settings: Fix variable overlapping if the same var name as in core (https://github.com/slawkens/myaac/commit/c2415e9df3a5ffaf768f6f9668bdd38b5efd0771)
 * Settings: fix show_if for the selects (https://github.com/slawkens/myaac/commit/8dcbb66753914322706216cfd01436eb1478a5ce)
