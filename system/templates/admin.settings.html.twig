@@ -165,3 +165,31 @@
 	{% endif %}
 {% endfor %}
 </script>
+
+<script>
+	$(function () {
+		if ($('.tab-content').length) {
+
+			let url = window.location.href;
+			let activeTab = url.substring(url.indexOf("#") + 1);
+
+			let $selector = $('[href="#' + activeTab + '"]')
+			if ($selector.length) {
+				$selector.tab('show');
+			}
+		}
+
+		let url = location.href.replace(/\/$/, "");
+		$('a[data-toggle="tab"]').on("click", function() {
+			let newUrl;
+			const hash = $(this).attr("href");
+			if(hash === "#home") {
+				newUrl = url.split("#")[0];
+			} else {
+				newUrl = url.split("#")[0] + hash;
+			}
+
+			history.replaceState(null, null, newUrl);
+		});
+	});
+</script>

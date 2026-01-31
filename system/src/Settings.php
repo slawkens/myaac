@@ -152,9 +152,10 @@ class Settings implements \ArrayAccess
 				}
 
 				if ($setting['type'] === 'category') {
+					$title = strtolower(str_replace(' ', '', $setting['title']));
 					?>
 					<li class="nav-item">
-						<a class="nav-link<?= ($i === 0 ? ' active' : ''); ?>" id="home-tab-<?= $i++; ?>" data-toggle="tab" href="#tab-<?= str_replace(' ', '', $setting['title']); ?>" type="button"><?= $setting['title']; ?></a>
+						<a class="nav-link<?= ($i === 0 ? ' active' : ''); ?>" id="home-tab-<?= $i++; ?>" data-toggle="tab" href="#tab-<?= $title; ?>" type="button"><?= $setting['title']; ?></a>
 					</li>
 					<?php
 				}
@@ -175,8 +176,10 @@ class Settings implements \ArrayAccess
 					if ($j++ !== 0) { // close previous category
 						echo '</tbody></table></div>';
 					}
+
+					$title = strtolower(str_replace(' ', '', $setting['title']));
 				?>
-				<div class="tab-pane fade show<?= ($j === 1 ? ' active' : ''); ?>" id="tab-<?= str_replace(' ', '', $setting['title']); ?>">
+				<div class="tab-pane fade show<?= ($j === 1 ? ' active' : ''); ?>" id="tab-<?= $title; ?>">
 					<?php
 					continue;
 				}
