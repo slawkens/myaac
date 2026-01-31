@@ -13,6 +13,7 @@
 * Admin Panel: save menu collapse state (https://github.com/slawkens/myaac/commit/55da00520df7463a1d1ca41931df1598e9f2ffeb)
 
 ### Internal
+* Refactor account/lost pages (#326)
 * Refactor OTS_Player to support more distros (#348)
 * Refactor PHP cache to store expiration and improve typing (https://github.com/slawkens/myaac/commit/96b8e00f4999f8b4c4c97b54b97d91c6fd7df298)
 * Move forum show_board code to Twig (https://github.com/slawkens/myaac/commit/e0e0e467012a5fb9979cc4387af6bad1d4540279)
