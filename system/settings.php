@@ -156,7 +156,7 @@ return [
 		'footer' => [
 			'name' => 'Custom Text',
 			'type' => 'textarea',
-			'desc' => 'Text displayed in the footer.<br/>For example: <i>' . escapeHtml('<br/>') . 'Your Server &copy; 2023. All rights reserved.</i>',
+			'desc' => 'Text displayed in the footer.<br/>For example: <i>' . escapeHtml('<br/>') . 'Your Server &copy; ' . date("Y") . '. All rights reserved.</i>',
 			'default' => '',
 		],
 		'footer_load_time' => [
