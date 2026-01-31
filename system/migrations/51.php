@@ -17,7 +17,7 @@ $up = function () use ($db) {
 
 	// add myaac_account_email_codes table
 	if (!$db->hasTable(TABLE_PREFIX . 'account_email_codes')) {
-		$db->exec(file_get_contents(__DIR__ . '/46-account_email_codes.sql'));
+		$db->exec(file_get_contents(__DIR__ . '/51-account_email_codes.sql'));
 	}
 };
 
