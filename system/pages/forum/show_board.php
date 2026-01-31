@@ -34,7 +34,7 @@ for($i = 0; $i < $threads_count['threads_count'] / $config['forum_threads_per_pa
 	else
 		$links_to_pages .= '<b>'.($i + 1).' </b>';
 }
-echo '<a href="' . getLink('forum') . '">Boards</a> >> <b>'.$sections[$section_id]['name'].'</b>';
+echo '<a href="' . getLink('forum') . '">Boards</a> >> <b>'.escapeHtml($sections[$section_id]['name']).'</b>';
 if($logged && (!$sections[$section_id]['closed'] || Forum::isModerator()))
 {
 	echo '<br /><br />

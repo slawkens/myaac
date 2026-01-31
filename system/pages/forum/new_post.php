@@ -24,7 +24,7 @@ if(Forum::canPost($account_logged))
 
 	if(isset($thread['id']) && Forum::hasAccess($thread['section']))
 	{
-		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.htmlspecialchars($thread['post_topic']).'</a> >> <b>Post new reply</b><br /><h3>'.htmlspecialchars($thread['post_topic']).'</h3>';
+		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.escapeHtml($sections[$thread['section']]['name']).'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.htmlspecialchars($thread['post_topic']).'</a> >> <b>Post new reply</b><br /><h3>'.htmlspecialchars($thread['post_topic']).'</h3>';
 
 		$quote = isset($_REQUEST['quote']) ? (int) $_REQUEST['quote'] : NULL;
 		$text = isset($_REQUEST['text']) ? stripslashes(trim($_REQUEST['text'])) : NULL;
