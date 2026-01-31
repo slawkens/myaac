@@ -259,6 +259,28 @@ return [
 			'default' => true,
 		],
 		[
+			'type' => 'section',
+			'title' => 'Custom HTML',
+		],
+		'html_head' => [
+			'name' => 'HTML Head',
+			'type' => 'textarea',
+			'desc' => escapeHtml('These scripts will be printed in the <head> section. Can be, for example, Google Analytics code.'),
+			'default' => '',
+		],
+		'html_body' => [
+			'name' => 'HTML Body',
+			'type' => 'textarea',
+			'desc' => escapeHtml('These scripts will be printed just below the opening <body> tag.'),
+			'default' => '',
+		],
+		'html_footer' => [
+			'name' => 'HTML Footer',
+			'type' => 'textarea',
+			'desc' => escapeHtml('These scripts will be printed above the closing </body> tag.'),
+			'default' => '',
+		],
+		[
 			'type' => 'category',
 			'title' => 'Game',
 		],
