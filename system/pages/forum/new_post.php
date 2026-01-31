@@ -42,7 +42,7 @@ if(Forum::canPost($account_logged)) {
 	$thread = $db->query("SELECT `" . FORUM_TABLE_PREFIX . "forum`.`post_topic`, `" . FORUM_TABLE_PREFIX . "forum`.`id`, `" . FORUM_TABLE_PREFIX . "forum`.`section` FROM `" . FORUM_TABLE_PREFIX . "forum` WHERE `" . FORUM_TABLE_PREFIX . "forum`.`id` = ".(int) $thread_id." AND `" . FORUM_TABLE_PREFIX . "forum`.`first_post` = ".$thread_id." LIMIT 1")->fetch();
 
 	if(isset($thread['id']) && Forum::hasAccess($thread['section'])) {
-		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.$sections[$thread['section']]['name'].'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.htmlspecialchars($thread['post_topic']).'</a> >> <b>Post new reply</b><br /><h3>'.htmlspecialchars($thread['post_topic']).'</h3>';
+		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($thread['section']) . '">'.escapeHtml($sections[$thread['section']]['name']).'</a> >> <a href="' . getForumThreadLink($thread_id) . '">'.htmlspecialchars($thread['post_topic']).'</a> >> <b>Post new reply</b><br /><h3>'.htmlspecialchars($thread['post_topic']).'</h3>';
 
 		$quote = isset($_REQUEST['quote']) ? (int) $_REQUEST['quote'] : NULL;
 		$text = isset($_POST['text']) ? stripslashes(trim($_POST['text'])) : NULL;

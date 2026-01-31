@@ -122,18 +122,21 @@ class Settings implements \ArrayAccess
 	public static function display($plugin, $settings): array
 	{
 		$settingsDb = ModelsSettings::where('name', $plugin)->pluck('value', 'key')->toArray();
-		$config = [];
-		require BASE . 'config.local.php';
 
-		foreach ($config as $key => $value) {
-			if (is_bool($value)) {
-				$settingsDb[$key] = $value ? 'true' : 'false';
-			}
-			elseif (is_array($value)) {
-				$settingsDb[$key] = $value;
-			}
-			else {
-				$settingsDb[$key] = (string)$value;
+		if ($plugin === 'core') {
+			$config = [];
+			require BASE . 'config.local.php';
+
+			foreach ($config as $key => $value) {
+				if (is_bool($value)) {
+					$settingsDb[$key] = $value ? 'true' : 'false';
+				}
+				elseif (is_array($value)) {
+					$settingsDb[$key] = $value;
+				}
+				else {
+					$settingsDb[$key] = (string)$value;
+				}
 			}
 		}
 

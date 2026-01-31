@@ -3,11 +3,21 @@
  * @var OTS_DB_MySQL $db
  */
 
+use MyAAC\Models\Account as AccountModel;
+
 $time = time();
+
+$accountId = getSession('account') ?? 1;
+if (!defined('MYAAC_INSTALL')) {
+	$accountModel = AccountModel::where('web_flags', 3)->first();
+	if ($accountModel) {
+		$accountId = $accountModel->id;
+	}
+}
 
 function insert_sample_if_not_exist($p): void
 {
-	global $time;
+	global $time, $accountId;
 
 	$player = new OTS_Player();
 	$player->find($p['name']);
@@ -17,7 +27,7 @@ function insert_sample_if_not_exist($p): void
 		$player->setData([
 			'name' => $p['name'],
 			'group_id' => 1,
-			'account_id' => getSession('account'),
+			'account_id' => $accountId,
 			'level' => $p['level'],
 			'vocation' => $p['vocation_id'],
 			'health' => $p['health'],
