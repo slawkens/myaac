@@ -3,7 +3,7 @@
 ## [1.8.8 - 31.01.2026]
 ### Added
 * Change Comment: Add missing hooks - patched from 0.8 (https://github.com/slawkens/myaac/commit/a60a23b84f61d41d1503073b52e01e3120f6d92a)
-* 
+
 ### Changed
 * Account Manage: Change the last login to the correct login time – Instead of just "now" (https://github.com/slawkens/myaac/commit/5b841682cdc473b38ef1a5edfcfe1a020802e286)
 * Twig: Extract renderInline(content, context) as a method to $twig (https://github.com/slawkens/myaac/commit/5e4806f891f8c88c37d45b89bbede23afc2fa37b)
