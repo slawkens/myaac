@@ -517,7 +517,12 @@ function template_place_holder($type): string
 			$ret .= $debugBarRenderer->renderHead();
 		}
 	}
+	elseif ($type === 'head_end') {
+		$ret .= setting('core.html_head');
+	}
 	elseif ($type === 'body_start') {
+		$ret .= setting('core.html_body');
+
 		$ret .= $twig->render('browsehappy.html.twig');
 
 		if (admin()) {
@@ -528,6 +533,8 @@ function template_place_holder($type): string
 		}
 	}
 	elseif($type === 'body_end') {
+		$ret .= setting('core.html_footer');
+
 		$ret .= template_ga_code();
 		if (isset($debugBar)) {
 			$ret .= $debugBarRenderer->render();

@@ -156,7 +156,7 @@ return [
 		'footer' => [
 			'name' => 'Custom Text',
 			'type' => 'textarea',
-			'desc' => 'Text displayed in the footer.<br/>For example: <i>' . escapeHtml('<br/>') . 'Your Server &copy; 2023. All rights reserved.</i>',
+			'desc' => 'Text displayed in the footer.<br/>For example: <i>' . escapeHtml('<br/>') . 'Your Server &copy; ' . date("Y") . '. All rights reserved.</i>',
 			'default' => '',
 		],
 		'footer_load_time' => [
@@ -257,6 +257,28 @@ return [
 			'type' => 'boolean',
 			'desc' => 'Allow MyAAC to report anonymous usage statistics to developers? The data is sent only once per 30 days and is fully confidential. It won\'t affect the performance of your website',
 			'default' => true,
+		],
+		[
+			'type' => 'section',
+			'title' => 'Custom HTML',
+		],
+		'html_head' => [
+			'name' => 'HTML Head',
+			'type' => 'textarea',
+			'desc' => escapeHtml('These scripts will be printed in the <head> section. Can be, for example, Google Analytics code.'),
+			'default' => '',
+		],
+		'html_body' => [
+			'name' => 'HTML Body',
+			'type' => 'textarea',
+			'desc' => escapeHtml('These scripts will be printed just below the opening <body> tag.'),
+			'default' => '',
+		],
+		'html_footer' => [
+			'name' => 'HTML Footer',
+			'type' => 'textarea',
+			'desc' => escapeHtml('These scripts will be printed above the closing </body> tag.'),
+			'default' => '',
 		],
 		[
 			'type' => 'category',
