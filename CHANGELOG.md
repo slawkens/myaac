@@ -1,10 +1,43 @@
 # Changelog
 
+## [0.8.25 - 31.01.2026]
+### Added
+* New configurable: hooks_debug – To view where hooks are located in .twig files (https://github.com/slawkens/myaac/commit/7378905ae8cf033e36a27461b5ccffeed042dacd)
+* Twig: add global cache variable (https://github.com/slawkens/myaac/commit/f7cf2425d0e970356c477a96b20c4c31837430e7)
+
+### Changed
+* Server Status: Write to status-error.log if there is a connection error (https://github.com/slawkens/myaac/commit/ed8b36f4528668f29ea1a2adc7234ec249fa031b)
+* Remove HTML tags from the email function (patched from 1.x) – Better score in tests (https://github.com/slawkens/myaac/commit/a76741c9dae97584cbc6736bbc6404d1e59f856d)
+* Return 404 when the signature player is not found (patching from 1.x) - In most cases it was a request for a non existing file (https://github.com/slawkens/myaac/commit/c376fd93c6fbf3f9c4bd79bae8875720464c28fa)
+* Don't display hidden news for admin - it's confusing (https://github.com/slawkens/myaac/commit/6a1e6b470ca05e5a43d9986865f8938e92951e45)
+* Allow links in error_box.html.twig (https://github.com/slawkens/myaac/commit/ab89ccaaa722f4c1acdfb0302c3cddb2ed343e61)
+* Account character list: Add [ DELETED ] for deleted characters (https://github.com/slawkens/myaac/commit/44c917aefa20ad8dcba7a47ccab50635e33f2e53)
+
+### Fixed
+* Fix $status['uptimeReadable'], was totally wrong (https://github.com/slawkens/myaac/commit/2e50f8f81cfd1bfe763c6ed8e329c89b69604865)
+* Fixed [player/guild/house] bb code in forum (https://github.com/slawkens/myaac/commit/63e0ce696e078fb0b020c45a777d1c6571ac1ae3)
+* Fix post_edit being an author, didn't worked (https://github.com/slawkens/myaac/commit/63a99e0f92214bc5fd60b867f80bb451af29da79)
+* Show if there is a mysql error on import schema (https://github.com/slawkens/myaac/commit/db83a6c5a92a56ef47afd148ab1621759211e4b9)
+* Prevent injection in $db->hasColumn (https://github.com/slawkens/myaac/commit/52a62569056582da2862ffcfbb5c68bf7f25c4df)
+* Account Create: Fix the exception when email cannot be sent (https://github.com/slawkens/myaac/commit/fc3eaefc3f84cf4e977d4f3cc8b2fbf96555cc2a)
+* Online: Fix online skulls display (Fix #320) (https://github.com/slawkens/myaac/commit/b190db3149fca54217ca507e8502096d40813d44)
+* Tibiacom template: Fix submenu initialization for missing elements (https://github.com/slawkens/myaac/commit/207cf3a3c1b6f3ed18e3850e2240c15e6ca9e51c)
+* Account Manage: Change the last login to the correct login time - Instead of just "now" (https://github.com/slawkens/myaac/commit/0a930e9acb7f3adc708307cb2d4e1f57d9aa08ad)
+* Fix Menu div wrong tag/closing (#329) (https://github.com/slawkens/myaac/commit/fcf2b1492147c03ee3aa825284e3c974f6c2f66e)
+* tibiacom template: Fix polls link in the widget (https://github.com/slawkens/myaac/commit/54c1f5f486872efad418402b439a1a2e09abaa5f)
+* Fix xdebug warnings in load_config_lua (https://github.com/slawkens/myaac/commit/347ad40da10afa39b6c8cabd73937a21a3b629f6)
+
+### Internal
+* Replace firstChild with firstElementChild (Thanks to @un000000) (https://github.com/slawkens/myaac/commit/496499abbb54da738bf9190cf9cf962a5e3ce4ba)
+* Cache::remember -1 = infinite (https://github.com/slawkens/myaac/commit/92254e2671ec6f37e936f48f07ec645c7c595a5a)
+* Cache::remember: $ttl = 0 means no cache (https://github.com/slawkens/myaac/commit/364b140316346c3f8720caefb709fb1c412369ad)
+* Use apcu_clear_cache to clear cache (https://github.com/slawkens/myaac/commit/6715a83d03851bd191d74f431031495df27ea8f9)
+
 ## [0.8.24 - 03.06.2025]
 
 ### Added
-* Add code to insert guild_ranks on guild create, in case guild trigger is missing (https://github.com/slawkens/myaac/commit/149e10261befab22a38246bd792e2e4d1c42ef1e)
-* Two new hooks for pages loaded from database (custom pages): HOOK_BEFORE_PAGE_CUSTOM + HOOK_AFTER_PAGE_CUSTOM (https://github.com/slawkens/myaac/commit/e542e8a7cebad2d4bd6984c62cd6f385363ba9eb)
+* Add code to insert guild_ranks on guild create, in case the guild trigger is missing (https://github.com/slawkens/myaac/commit/149e10261befab22a38246bd792e2e4d1c42ef1e)
+* Two new hooks for pages loaded from a database (custom pages): HOOK_BEFORE_PAGE_CUSTOM + HOOK_AFTER_PAGE_CUSTOM (https://github.com/slawkens/myaac/commit/e542e8a7cebad2d4bd6984c62cd6f385363ba9eb)
 * Load hooks before twig, add new hooks: HOOK_TWIG + HOOK_INIT (https://github.com/slawkens/myaac/commit/5726c9fa94e6f5a198917f6bda9014c0cbb141fb)
 * New hooks for account characters change-comment page (https://github.com/slawkens/myaac/commit/76440a37d009b845db9157312f2807774e15de14)
 
