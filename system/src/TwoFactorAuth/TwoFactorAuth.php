@@ -114,6 +114,41 @@ class TwoFactorAuth
 		return false;
 	}
 
+	public function processClientLogin($code, string &$error, &$errorCode): bool
+	{
+		if (!$this->isActive()) {
+			return true;
+		}
+
+		if ($this->authType == self::TYPE_EMAIL) {
+			$errorCode = 8;
+		}
+
+		if ($code === false) {
+			$error = 'Submit a valid two-factor authentication token.';
+
+			if ($this->authType == self::TYPE_EMAIL) {
+				if (!$this->hasRecentEmailCode(15 * 60)) {
+					$this->resendEmailCode();
+				}
+			}
+
+			return false;
+		}
+
+		if (!$this->getAuthGateway()->verifyCode($code)) {
+			$error = 'Two-factor authentication failed, token is wrong.';
+
+			return false;
+		}
+
+		if ($this->authType === self::TYPE_EMAIL) {
+			$this->deleteOldCodes();
+		}
+
+		return true;
+	}
+
 	public function setAuthGateway(int $authType): void
 	{
 		if ($authType === self::TYPE_EMAIL) {
