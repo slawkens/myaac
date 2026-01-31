@@ -54,7 +54,6 @@ class TwoFactorAuth
 		}
 
 		$view = 'app';
-
 		if ($this->authType == self::TYPE_EMAIL) {
 			$view = 'email';#
 		}
@@ -63,7 +62,6 @@ class TwoFactorAuth
 			if ($this->authType == self::TYPE_EMAIL) {
 				if (!$this->hasRecentEmailCode(15 * 60)) {
 					$this->resendEmailCode();
-					//success('Resent email.');
 				}
 			}
 
@@ -99,7 +97,7 @@ class TwoFactorAuth
 			$errors[] = 'The token is invalid!';
 		}
 		else {
-			$errors[] = 'Invalid email code!';
+			$errors[] = 'Invalid E-Mail code!';
 		}
 
 		$twig->display('error_box.html.twig', ['errors' => $errors]);
@@ -161,7 +159,11 @@ class TwoFactorAuth
 		$this->account->setCustomField('2fa_secret', '');
 	}
 
-	public function isActive(): bool {
+	public function isActive(?int $authType = null): bool {
+		if ($authType !== null) {
+			return $this->authType === $authType;
+		}
+
 		return $this->authType != self::TYPE_NONE;
 	}
 

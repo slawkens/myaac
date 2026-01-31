@@ -5,9 +5,9 @@ use MyAAC\TwoFactorAuth\TwoFactorAuth;
 
 require __DIR__ . '/../base.php';
 
-if (!empty($account_logged->getCustomField('2fa_secret'))) {
-
-	$twig->display('account/2fa/app/enable.already_connected.html.twig');
+if ($twoFactorAuth->isActive()) {
+	$errors[] = 'Two-factor authentication is already enabled on your account.';
+	$twig->display('error_box.html.twig', ['errors' => $errors]);
 
 	return;
 }

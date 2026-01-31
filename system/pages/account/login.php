@@ -55,6 +55,10 @@ if(!empty($login_account) && !empty($login_password))
 		} else {
 			setSession('account', $account_logged->getId());
 
+			if (!$hooks->trigger(HOOK_ACCOUNT_LOGIN_PRE)) {
+				return;
+			}
+
 			$twoFactorAuth = TwoFactorAuth::getInstance($account_logged);
 			if (!$twoFactorAuth->process($login_account, $login_password, $remember_me, $_POST['auth-code'] ?? '')) {
 				return;

@@ -12,11 +12,6 @@ $title = 'Two Factor Authentication';
  */
 $code = $_REQUEST['auth-code'] ?? '';
 
-if ((!setting('core.mail_enabled')) && ACTION == 'email-code') {
-	$twig->display('error_box.html.twig',  ['errors' => ['Account two-factor e-mail authentication disabled.']]);
-	return;
-}
-
 if (!$account_logged->isLoaded()) {
 	$current_session = getSession('account');
 	if($current_session) {

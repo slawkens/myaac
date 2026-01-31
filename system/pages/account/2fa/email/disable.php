@@ -3,14 +3,26 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 require __DIR__ . '/../base.php';
 
-//if (!$twoFactorAuth->hasRecentEmailCode(15 * 60)) {
-//	$twoFactorAuth->resendEmailCode();
-//}
+if ((!setting('core.mail_enabled'))) {
+	$twig->display('error_box.html.twig',  ['errors' => ['Account Two-Factor E-Mail Authentication disabled.']]);
+	return;
+}
 
-/*if (isset($_POST['save'])) {
-	if (!empty($code)) {
-		if ($twoFactorAuth->getAuthGateway()->verifyCode($code)) {
-*/
+if (!isRequestMethod('post')) {
+	error('This page cannot be accessed directly.');
+	return;
+}
+
+if (!$account_logged->isLoaded()) {
+	error('Account not found!');
+	return;
+}
+
+if (!$twoFactorAuth->isActive($twoFactorAuth::TYPE_EMAIL)) {
+	error("Your account does not have Two Factor E-Mail Authentication enabled.");
+	return;
+}
+
 $twoFactorAuth->disable();
 $twoFactorAuth->deleteOldCodes();
 
@@ -20,18 +32,3 @@ $twig->display('success.html.twig',
 		'description' => 'You have successfully <strong>disabled</strong> the <b>Email Code Authentication</b> for your account.'
 	]
 );
-/*
-}
-else {
-$errors[] = 'Invalid email code!';
-}
-}
-}*/
-
-/*
-if (!empty($errors)) {
-	$twig->display('error_box.html.twig', ['errors' => $errors]);
-}
-
-$twig->display('account/2fa/email/deactivate.html.twig', ['wrongCode' => count($errors) > 0]);
-*/
