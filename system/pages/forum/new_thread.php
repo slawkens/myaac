@@ -34,7 +34,7 @@ if(Forum::canPost($account_logged)) {
 	$players_from_account = $db->query('SELECT `players`.`name`, `players`.`id` FROM `players` WHERE `players`.`account_id` = '.(int) $account_logged->getId())->fetchAll();
 	$section_id = $_REQUEST['section_id'] ?? null;
 	if($section_id !== null) {
-		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($section_id) . '">' . $sections[$section_id]['name'] . '</a> >> <b>Post new thread</b><br />';
+		echo '<a href="' . getLink('forum') . '">Boards</a> >> <a href="' . getForumBoardLink($section_id) . '">' . escapeHtml($sections[$section_id]['name']) . '</a> >> <b>Post new thread</b><br />';
 
 		if(isset($sections[$section_id]['name']) && Forum::hasAccess($section_id)) {
 			if ($sections[$section_id]['closed'] && !Forum::isModerator())
