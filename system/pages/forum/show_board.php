@@ -42,7 +42,7 @@ for($i = 0; $i < $threads_count['threads_count'] / setting('core.forum_threads_p
 		$links_to_pages .= '<b>'.($i + 1).' </b>';
 }
 
-echo '<a href="' . getLink('forum') . '">Boards</a> >> <b>'.$sections[$section_id]['name'].'</b>';
+echo '<a href="' . getLink('forum') . '">Boards</a> >> <b>'.escapeHtml($sections[$section_id]['name']).'</b>';
 
 if($logged && (!$sections[$section_id]['closed'] || Forum::isModerator())) {
 	echo '<br /><br />
