@@ -1,38 +1,31 @@
-Click on the image to enlarge.<br/><br/>
-{% set i = 0 %}
-{% for image in images %}
-	{% set i = i + 1 %}
-	<table>
-		<tr>
-			<td style="height: 120px;" >
-				<a href="{{ getLink('gallery') ~ '/' ~ image.id }}" >
-					<img src="{{ image.thumb }}" border="0" />
-				</a>
-			</td>
-			<td>{{ image.comment }}</td>
-			{% if canEdit %}
-			<td>
-				<a href="?subtopic=gallery&action=edit&id={{ image.id }}" title="Edit">
-					<img src="images/edit.png"/>Edit
-				</a>
-				<a id="delete" href="?subtopic=gallery&action=delete&id={{ image.id }}" onclick="return confirm('Are you sure?');" title="Delete">
-					<img src="images/del.png"/>Delete
-				</a>
-				<a href="?subtopic=gallery&action=hide&id={{ image.id }}" title="{% if image.hide != 1 %}Hide{% else %}Show{% endif %}">
-					<img src="images/{% if image.hide != 1 %}success{% else %}error{% endif %}.png"/>{% if image.hide != 1 %}Hide{% else %}Show{% endif %}
-				</a>
-				{% if i != 1 %}
-				<a href="?subtopic=gallery&action=moveup&id={{ image.id }}" title="Move up">
-					<img src="images/icons/arrow_up.gif"/>Move up
-				</a>
-				{% endif %}
-				{% if i != last %}
-				<a href="?subtopic=gallery&action=movedown&id={{ image.id }}" title="Move down">
-					<img src="images/icons/arrow_down.gif"/>Move down
-				</a>
-				{% endif %}
-			</td>
-			{% endif %}
-		</tr>
-	</table>
-{% endfor %}
+<!-- Slideshow container -->
+<div class="slideshow-container">
+
+	{% set i = 1 %}
+	{% for image in images %}
+		<div class="mySlides fade-effect">
+			<div class="numbertext">{{ i }} / {{ images|length }}</div>
+			<img src="{{ constant('GALLERY_DIR') }}{{ image }}" style="width:100%">
+		</div>
+
+		{% set i = i + 1 %}
+	{% endfor %}
+
+	<!-- Next and previous buttons -->
+	<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+	<a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+</div>
+
+<!-- The dots/circles -->
+<div style="text-align:center">
+	{% set i = 1 %}
+
+	{% for image in images %}
+		<span class="dot" onclick="currentSlide({{ i }})"></span>
+		{% set i = i + 1 %}
+	{% endfor %}
+</div>
+
+<link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/gallery.css" />
+<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/gallery.js"></script>

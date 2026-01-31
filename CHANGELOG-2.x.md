@@ -9,6 +9,7 @@
 * Better handling of vocations: (#345)
   * Load from vocations.xml (No need to manually set)
   * Support for Monk vocation
+* Better gallery, loads images from images/gallery folder
 * Reworked account action logs to use a single IP column as varchar(45) for both ipv4 and ipv6 (#289)
 * Admin Panel: save menu collapse state (https://github.com/slawkens/myaac/commit/55da00520df7463a1d1ca41931df1598e9f2ffeb)
 

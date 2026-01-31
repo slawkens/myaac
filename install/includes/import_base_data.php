@@ -57,16 +57,6 @@ if (NewsCategory::count() === 0) {
 	}
 }
 
-if (Gallery::count() === 0) {
-	Gallery::create([
-		'comment' => 'Demon',
-		'image' => 'images/gallery/demon.jpg',
-		'thumb' => 'images/gallery/demon_thumb.gif',
-		'author' => 'MyAAC',
-		'ordering' => 0,
-	]);
-}
-
 if(FAQ::count() == 0) {
 	FAQ::create([
 		'question' => 'What is this?',
