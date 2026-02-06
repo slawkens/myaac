@@ -10,6 +10,7 @@
  */
 
 use MyAAC\CreateCharacter;
+use MyAAC\Models\AccountAction;
 use MyAAC\Models\AccountEmailVerify;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -44,6 +45,16 @@ $errors = array();
 $save = isset($_POST['save']) && $_POST['save'] == 1;
 if($save)
 {
+	$cooldown = setting('core.account_create_ip_block_cooldown');;
+	if ($cooldown > 0) {
+		$accountAction = AccountAction::where('ip', get_browser_real_ip())->where('action', 'Account created.')->where('date', '>=', time() - ($cooldown * 60))->first();
+
+		if ($accountAction) {
+			$minute = ($cooldown > 1 ? 'minutes' : 'minute');
+			$errors['account'] = "You have to wait $cooldown $minute before creating another account.";
+		}
+	}
+
 	if(!config('account_login_by_email')) {
 		if(USE_ACCOUNT_NAME) {
 			$account_name = $_POST['account'];
@@ -140,7 +151,7 @@ if($save)
 		'country' => $country,
 		'password' => $password,
 		'password_confirm' => $password_confirm,
-		'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] === 'true' : false,
+		'accept_rules' => isset($_POST['accept_rules']) && $_POST['accept_rules'] === 'true',
 	);
 
 	if (!config('account_login_by_email')) {

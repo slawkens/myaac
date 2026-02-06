@@ -1744,6 +1744,18 @@ Sent by MyAAC,<br/>
 				'account_login_ipban_protection', '=', 'true'
 			]
 		],
+
+		[
+			'type' => 'section',
+			'title' => 'Cooldowns',
+		],
+		'account_create_ip_block_cooldown' => [
+			'name' => 'Create Account IP Block Cooldown',
+			'type' => 'number',
+			'desc' => 'Block flooding create account per ip. If you still have a problem with account create spam - then its recommended to install the recaptcha plugin.' .
+				'<br/><strong>In minutes.</strong> 0 to disable.',
+			'default' => 10,
+		],
 	],
 	'callbacks' => [
 		'beforeSave' => function(&$settings, &$values) {
