@@ -5,6 +5,7 @@ use MyAAC\Models\PlayerOnline;
 use MyAAC\Models\Account;
 use MyAAC\Models\Player;
 use MyAAC\RateLimit;
+use MyAAC\TwoFactorAuth\TwoFactorAuth;
 
 require_once 'common.php';
 require_once SYSTEM . 'functions.php';
@@ -12,7 +13,7 @@ require_once SYSTEM . 'init.php';
 require_once SYSTEM . 'status.php';
 
 # error function
-function sendError($message, $code = 3){
+function sendError($message, $code = 3) {
 	$ret = [];
 	$ret['errorCode'] = $code;
 	$ret['errorMessage'] = $message;
@@ -108,17 +109,18 @@ switch ($action) {
 
 	case 'login':
 
-		$port = $config['lua']['gameProtocolPort'];
+		$ip = configLua('ip');
+		$port = configLua('gameProtocolPort');
 
 		// default world info
 		$world = [
 			'id' => 0,
 			'name' => $config['lua']['serverName'],
-			'externaladdress' => $config['lua']['ip'],
+			'externaladdress' => $ip,
 			'externalport' => $port,
-			'externaladdressprotected' => $config['lua']['ip'],
+			'externaladdressprotected' => $ip,
 			'externalportprotected' => $port,
-			'externaladdressunprotected' => $config['lua']['ip'],
+			'externaladdressunprotected' => $ip,
 			'externalportunprotected' => $port,
 			'previewstate' => 0,
 			'location' => 'BRA', // BRA, EUR, USA
@@ -133,13 +135,12 @@ switch ($action) {
 
 		$inputEmail = $request->email ?? false;
 		$inputAccountName = $request->accountname ?? false;
-		$inputToken = $request->token ?? false;
 
 		$account = Account::query();
-		if ($inputEmail != false) { // login by email
+		if ($inputEmail) { // login by email
 			$account->where('email', $inputEmail);
 		}
-		else if($inputAccountName != false) { // login by account name
+		else if($inputAccountName) { // login by account name
 			$account->where('name', $inputAccountName);
 		}
 
@@ -151,13 +152,14 @@ switch ($action) {
 		$limiter->load();
 
 		$ban_msg = 'A wrong account, password or secret has been entered ' . setting('core.account_login_attempts_limit') . ' times in a row. You are unable to log into your account for the next ' . setting('core.account_login_ban_time') . ' minutes. Please wait.';
+
 		if (!$account) {
 			$limiter->increment($ip);
 			if ($limiter->exceeded($ip)) {
 				sendError($ban_msg);
 			}
 
-			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');
+			sendError(($inputEmail ? 'Email' : 'Account name') . ' or password is not correct.');
 		}
 
 		$current_password = encrypt((USE_ACCOUNT_SALT ? $account->salt : '') . $request->password);
@@ -167,32 +169,30 @@ switch ($action) {
 				sendError($ban_msg);
 			}
 
-			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');
+			sendError(($inputEmail ? 'Email' : 'Account name') . ' or password is not correct.');
 		}
 
-		$accountHasSecret = false;
-		if (fieldExist('secret', 'accounts')) {
-			$accountSecret = $account->secret;
-			if ($accountSecret != null && $accountSecret != '') {
-				$accountHasSecret = true;
-				if ($inputToken === false) {
-					$limiter->increment($ip);
-					if ($limiter->exceeded($ip)) {
-						sendError($ban_msg);
-					}
-					sendError('Submit a valid two-factor authentication token.', 6);
-				} else {
-					require_once LIBS . 'rfc6238.php';
-					if (TokenAuth6238::verify($accountSecret, $inputToken) !== true) {
-						$limiter->increment($ip);
-						if ($limiter->exceeded($ip)) {
-							sendError($ban_msg);
-						}
+		$twoFactorAuth = TwoFactorAuth::getInstance($account->id);
 
-						sendError('Two-factor authentication failed, token is wrong.', 6);
-					}
-				}
+		$code = '';
+		if ($twoFactorAuth->isActive()) {
+			if ($twoFactorAuth->getAuthType() === TwoFactorAuth::TYPE_EMAIL) {
+				$code = $request->emailcode ?? false;
 			}
+			else if ($twoFactorAuth->getAuthType() === TwoFactorAuth::TYPE_APP) {
+				$code = $request->token ?? false;
+			}
+		}
+
+		$error = '';
+		$errorCode = 6;
+		if (!$twoFactorAuth->processClientLogin($code, $error, $errorCode)) {
+			$limiter->increment($ip);
+			if ($limiter->exceeded($ip)) {
+				sendError($ban_msg);
+			}
+
+			sendError($error, $errorCode);
 		}
 
 		$limiter->reset($ip);
@@ -220,46 +220,6 @@ switch ($action) {
 			}
 		}
 
-		/*
-		 * not needed anymore?
-		if (fieldExist('premdays', 'accounts') && fieldExist('lastday', 'accounts')) {
-			$save = false;
-			$timeNow = time();
-			$premDays = $account->premdays;
-			$lastDay = $account->lastday;
-			$lastLogin = $lastDay;
-
-			if ($premDays != 0 && $premDays != PHP_INT_MAX) {
-				if ($lastDay == 0) {
-					$lastDay = $timeNow;
-					$save = true;
-				} else {
-					$days = (int)(($timeNow - $lastDay) / 86400);
-					if ($days > 0) {
-						if ($days >= $premDays) {
-							$premDays = 0;
-							$lastDay = 0;
-						} else {
-							$premDays -= $days;
-							$reminder = ($timeNow - $lastDay) % 86400;
-							$lastDay = $timeNow - $reminder;
-						}
-
-						$save = true;
-					}
-				}
-			} else if ($lastDay != 0) {
-				$lastDay = 0;
-				$save = true;
-			}
-			if ($save) {
-				$account->premdays = $premDays;
-				$account->lastday = $lastDay;
-				$account->save();
-			}
-		}
-		*/
-
 		$worlds = [$world];
 		$playdata = compact('worlds', 'characters');
 
@@ -268,7 +228,7 @@ switch ($action) {
 		if (!fieldExist('istutorial', 'players')) {
 			$sessionKey .= "\n";
 		}
-		$sessionKey .= ($accountHasSecret && strlen($accountSecret) > 5) ? $inputToken : '';
+		$sessionKey .= ($twoFactorAuth->isActive() && strlen($account->{'2fa_secret'}) > 5) ? $account->{'2fa_secret'} : '';
 
 		// this is workaround to distinguish between TFS 1.x and otservbr
 		// TFS 1.x requires the number in session key
