@@ -140,7 +140,7 @@ if($save)
 		'country' => $country,
 		'password' => $password,
 		'password_confirm' => $password_confirm,
-		'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] === 'true' : false,
+		'accept_rules' => isset($_POST['accept_rules']) && $_POST['accept_rules'] === 'true',
 	);
 
 	if (!config('account_login_by_email')) {
