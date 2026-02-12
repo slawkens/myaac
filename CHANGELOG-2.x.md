@@ -3,7 +3,7 @@
 ### Added
 * Add an "access" option to Menus (#340)
 	* Possibility to hide menus for unauthorized users
-* Add the possibility to fetch skills in the getTopPlayers function (#347)
+* Add the possibility to fetch skills, balance and frags in the getTopPlayers function (#347)
 
 ### Changed
 * Better handling of vocations: (#345)
