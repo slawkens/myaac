@@ -27,7 +27,7 @@ if(isset($_POST['registeraccountsave']) && $_POST['registeraccountsave'] == "1")
 	if($reg_password == $account_logged->getPassword()) {
 		if(empty($old_key)) {
 			$show_form = false;
-			$new_rec_key = generateRandomString(10, false, true, true);
+			$new_rec_key = generateRecoveryKey();
 
 			$account_logged->setCustomField("key", $new_rec_key);
 			$account_logged->logAction('Generated recovery key.');
