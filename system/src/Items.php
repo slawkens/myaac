@@ -16,57 +16,27 @@ use MyAAC\Models\Spell;
 
 class Items
 {
-	private static $error = '';
 	public static $items;
 
-	public static function loadFromXML($show = false)
-	{
-		$file_path = config('data_path') . 'items/items.xml';
-		if (!file_exists($file_path)) {
-			self::$error = 'Cannot load file ' . $file_path;
+	public static function load(): bool {
+		$file_path = config('data_path') . 'items/items.toml';
+		if (file_exists($file_path)) {
+			$items = new Server\TOML\Items();
+		}
+		elseif (file_exists(config('data_path') . 'items/items.xml')) {
+			$items = new Server\XML\Items();
+		}
+		else {
 			return false;
 		}
 
-		$xml = new \DOMDocument;
-		$xml->load($file_path);
+		$items->load();
 
-		$items = array();
-		foreach ($xml->getElementsByTagName('item') as $item) {
-			if ($item->getAttribute('fromid')) {
-				for ($id = $item->getAttribute('fromid'); $id <= $item->getAttribute('toid'); $id++) {
-					$tmp = self::parseNode($id, $item, $show);
-					$items[$tmp['id']] = $tmp['content'];
-				}
-			} else {
-				$tmp = self::parseNode($item->getAttribute('id'), $item, $show);
-				$items[$tmp['id']] = $tmp['content'];
-			}
-		}
-
-		$cache_php = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
-		$cache_php->set('items', $items, 5 * 365 * 24 * 60 * 60);
 		return true;
 	}
 
-	public static function parseNode($id, $node, $show = false) {
-		$name = $node->getAttribute('name');
-		$article = $node->getAttribute('article');
-		$plural = $node->getAttribute('plural');
-
-		$attributes = array();
-		foreach($node->getElementsByTagName('attribute') as $attr) {
-			$attributes[strtolower($attr->getAttribute('key'))] = $attr->getAttribute('value');
-		}
-
-		return array('id' => $id, 'content' => array('article' => $article, 'name' => $name, 'plural' => $plural, 'attributes' => $attributes));
-	}
-
-	public static function getError() {
-		return self::$error;
-	}
-
-	public static function load() {
-		if(self::$items) {
+	public static function init(): void {
+		if(count(self::$items) > 0) {
 			return;
 		}
 
@@ -75,7 +45,7 @@ class Items
 	}
 
 	public static function get($id) {
-		self::load();
+		self::init();
 		return self::$items[$id] ?? [];
 	}
 
@@ -163,7 +133,7 @@ class Items
 				$s .= ', Hit% ' . ($item['hitChance'] > 0 ? '+' . $item['hitChance'] : '-' . $item['hitChance']);
 			}
 			elseif ($item['weaponType'] != 'ammo') {
-				
+
 			}
 		}
 

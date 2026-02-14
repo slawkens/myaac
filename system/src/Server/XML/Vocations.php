@@ -2,35 +2,10 @@
 
 namespace MyAAC\Server\XML;
 
-use MyAAC\Cache\Cache;
-
 class Vocations
 {
-	private static array $vocations;
-	private static array $vocationsFrom;
-
-	public function __construct()
-	{
-		$cached = Cache::remember('vocations', 10 * 60, function () {
-			$this->load();
-			$from = $this->getFrom();
-
-			$amount = 0;
-			foreach ($from as $vocId => $fromVocation) {
-				if ($vocId != 0 && $vocId == $fromVocation) {
-					$amount++;
-				}
-			}
-
-			return ['vocations' => $this->get(), 'vocationsFrom' => $from, 'amount' => $amount];
-		});
-
-		self::$vocations = $cached['vocations'];
-		self::$vocationsFrom = $cached['vocationsFrom'];
-
-		config(['vocations', self::$vocations]);
-		config(['vocations_amount', $cached['amount']]);
-	}
+	private array $vocations;
+	private array $vocationsFrom;
 
 	public function load(): void
 	{
@@ -51,51 +26,26 @@ class Vocations
 		foreach($vocationsXML->getElementsByTagName('vocation') as $vocation) {
 			$id = $vocation->getAttribute('id');
 
-			self::$vocations[$id] = $vocation->getAttribute('name');
+			$this->vocations[$id] = $vocation->getAttribute('name');
 
 			$fromVocation = (int) $vocation->getAttribute('fromvoc');
-			self::$vocationsFrom[$id] = $fromVocation;
+			$this->vocationsFrom[$id] = $fromVocation;
 		}
 	}
 
-	public static function get(): array {
-		return self::$vocations;
+	public function get(): array {
+		return $this->vocations;
 	}
 
-	public static function getFrom(): array {
-		return self::$vocationsFrom;
-	}
-
-	public static function getPromoted(int $id): ?int {
-		foreach (self::$vocationsFrom as $vocId => $fromVocation) {
-			if ($id == $fromVocation && $vocId != $id) {
-				return $vocId;
-			}
-		}
-
-		return null;
-	}
-
-	public static function getOriginal(int $id): ?int {
-		while ($tmpId = self::$vocationsFrom[$id]) {
-			if ($tmpId == $id) {
-				break;
-			}
-
-			$id = $tmpId;
-		}
-
-		return $id;
+	public function getFrom(): array {
+		return $this->vocationsFrom;
 	}
 
 	public static function getBase($includingRook = true): array {
-		$vocations = [];
-		foreach (self::$vocationsFrom as $vocId => $fromVoc) {
-			if ($vocId == $fromVoc && ($vocId != 0 || $includingRook)) {
-				$vocations[] = $vocId;
-			}
-		}
+		return \MyAAC\Server\Vocations::getBase($includingRook);
+	}
 
-		return $vocations;
+	public static function getOriginal(int $id): ?int {
+		return \MyAAC\Server\Vocations::getOriginal($id);
 	}
 }
