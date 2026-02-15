@@ -16,7 +16,13 @@ use MyAAC\Models\Spell;
 
 class Items
 {
-	public static $items;
+	public static array $items;
+
+	private static string $error = '';
+
+	public static function getError(): string {
+		return self::$error;
+	}
 
 	public static function load(): bool {
 		$file_path = config('data_path') . 'items/items.toml';
@@ -27,10 +33,14 @@ class Items
 			$items = new Server\XML\Items();
 		}
 		else {
+			self::$error = 'Cannot load items.xml or items.toml file. Files not found.';
 			return false;
 		}
 
-		$items->load();
+		if (!$items->load()) {
+			self::$error = $items->getError();
+			return false;
+		}
 
 		return true;
 	}

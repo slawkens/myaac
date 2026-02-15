@@ -33,7 +33,20 @@ class Items
 				return !in_array($key, ['id', 'article', 'name', 'plural']);
 			}, ARRAY_FILTER_USE_KEY);
 
-			$items[$item['id']] = ['article' => $item['article'], 'name' => $item['name'], 'plural' => $item['plural'] ?? '', 'attributes' => $attributes];
+			$id = $item['id'] ?? null;
+			if ($id === null) {
+				continue;
+			}
+
+			$article = $item['article'] ?? '';
+			$name = $item['name'] ?? '';
+			$plural = $item['plural'] ?? '';
+			$items[$id] = [
+				'article' => $article,
+				'name' => $name,
+				'plural' => $plural,
+				'attributes' => $attributes,
+			];
 		}
 
 		$cache_php = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');

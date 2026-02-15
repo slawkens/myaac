@@ -4,8 +4,8 @@ namespace MyAAC\Server\XML;
 
 class Vocations
 {
-	private array $vocations;
-	private array $vocationsFrom;
+	private array $vocations = [];
+	private array $vocationsFrom = [];
 
 	public function load(): void
 	{

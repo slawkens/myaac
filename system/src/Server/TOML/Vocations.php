@@ -6,14 +6,14 @@ use Devium\Toml\Toml;
 
 class Vocations
 {
-	private array $vocations;
-	private array $vocationsFrom;
+	private array $vocations = [];
+	private array $vocationsFrom = [];
 
 	public function load(): void
 	{
 		$tomlVocations = glob(config('data_path') . 'vocations/*.toml');
 		if (count($tomlVocations) <= 0) {
-			throw new \RuntimeException('ERROR: Cannot load any <i>.toml</i> vocation in the data/vocations folder.');
+			throw new \RuntimeException('ERROR: Cannot load any .toml vocation from the data/vocations folder.');
 		}
 
 		foreach ($tomlVocations as $file) {

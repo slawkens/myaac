@@ -6,7 +6,7 @@ use MyAAC\Cache\Cache;
 
 class Groups
 {
-	private static array $groups;
+	private static array $groups = [];
 
 	public function __construct() {
 		self::$groups = Cache::remember('groups', 10 * 60, function () {

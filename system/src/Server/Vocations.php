@@ -6,8 +6,8 @@ use MyAAC\Cache\Cache;
 
 class Vocations
 {
-	private static array $vocations;
-	private static array $vocationsFrom;
+	private static array $vocations = [];
+	private static array $vocationsFrom = [];
 
 	public function __construct() {
 		$cached = Cache::remember('vocations', 10 * 60, function () {

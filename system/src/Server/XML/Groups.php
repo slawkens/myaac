@@ -4,7 +4,7 @@ namespace MyAAC\Server\XML;
 
 class Groups
 {
-	private array $groups;
+	private array $groups = [];
 
 	public function load(): void
 	{
@@ -12,7 +12,7 @@ class Groups
 
 		if(!@file_exists($file)) {
 			error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
-			log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). It doesnt exist.');
+			log_append('error.log', "[OTS_Groups_List.php] Fatal error: Cannot load groups.xml ($file). It doesn't exist.");
 			return;
 		}
 
