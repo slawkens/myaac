@@ -39,7 +39,7 @@ class Monsters {
 		}
 
 		$items = array();
-		Items::load();
+		Items::init();
 		foreach((array)Items::$items as $id => $item) {
 			$items[$item['name']] = $id;
 		}

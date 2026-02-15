@@ -14,7 +14,7 @@ use MyAAC\CsrfToken;
 use MyAAC\Hooks;
 use MyAAC\Plugins;
 use MyAAC\Models\Town;
-use MyAAC\Server\XML\Vocations;
+use MyAAC\Server\Vocations;
 use MyAAC\Settings;
 
 defined('MYAAC') or die('Direct access not allowed!');

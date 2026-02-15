@@ -40,7 +40,7 @@ class DataLoader
 	{
 		self::$startTime = microtime(true);
 
-		if(Items::loadFromXML()) {
+		if(Items::load()) {
 			success(self::$locale['step_database_loaded_items'] . self::getLoadedTime());
 		}
 		else {

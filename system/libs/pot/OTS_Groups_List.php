@@ -8,7 +8,7 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
-use MyAAC\Cache\Cache;
+use MyAAC\Server\Groups;
 
 /**
  * List of groups.
@@ -47,73 +47,9 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			return;
 		}
 
-		if(!isset($file[0]))
-		{
-			global $config;
-			$file = $config['data_path'] . 'XML/groups.xml';
-		}
-
-		if(!@file_exists($file)) {
-			error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
-			log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). It doesnt exist.');
-			return;
-		}
-
-		$cache = Cache::getInstance();
-
-		$data = array();
-		if($cache->enabled())
-		{
-			$tmp = '';
-			if($cache->fetch('groups', $tmp))
-				$data = unserialize($tmp);
-			else
-			{
-				$groups = new DOMDocument();
-				if(!@$groups->load($file)) {
-					error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
-					log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). Error: ' . print_r(error_get_last(), true));
-					return;
-				}
-
-				// loads groups
-				foreach( $groups->getElementsByTagName('group') as $group)
-				{
-					$data[$group->getAttribute('id')] = array(
-						'id' => $group->getAttribute('id'),
-						'name' => $group->getAttribute('name'),
-						'access' => $group->getAttribute('access')
-					);
-				}
-
-				$cache->set('groups', serialize($data), 120);
-			}
-
-			foreach($data as $id => $info)
-				$this->groups[ $id ] = new OTS_Group($info);
-		}
-		else
-		{
-			// loads DOM document
-			$groups = new DOMDocument();
-			if(!@$groups->load($file)) {
-				error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
-				log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). Error: ' . print_r(error_get_last(), true));
-				return;
-			}
-
-			// loads groups
-			foreach($groups->getElementsByTagName('group') as $group)
-			{
-				$data[$group->getAttribute('id')] = array(
-					'id' => $group->getAttribute('id'),
-					'name' => $group->getAttribute('name'),
-					'access' => $group->getAttribute('access')
-				);
-
-				$this->groups[ $group->getAttribute('id') ] = new OTS_Group($data[$group->getAttribute('id')]);
-				//echo $this->getGroup(1)->getName();
-			}
+		$groups = new Groups();
+		foreach($groups->getGroups() as $id => $info) {
+			$this->groups[$id] = new OTS_Group($info);
 		}
 	}
 
