@@ -29,10 +29,6 @@ class Groups
 				'access' => $group['access'],
 			];
 		}
-
-		echo '<pre>';
-		var_dump($this->groups);
-		echo '</pre>';
 	}
 
 	public function getGroups(): array {
