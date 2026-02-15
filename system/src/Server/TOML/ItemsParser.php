@@ -32,6 +32,8 @@ class ItemsParser
 				$parse .= $line;
 			}
 
+			$ret[] = parse_ini_string($parse);
+
 			fclose($handle);
 		}
 
