@@ -16,7 +16,7 @@ use MyAAC\Models\Spell;
 
 class Items
 {
-	public static array $items;
+	public static array $items = [];
 
 	private static string $error = '';
 
