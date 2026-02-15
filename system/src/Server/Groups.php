@@ -10,8 +10,7 @@ class Groups
 
 	public function __construct() {
 		self::$groups = Cache::remember('groups', 10 * 60, function () {
-			$tomlGroups = glob(config('server_path') . 'config/groups.toml');
-			if (count($tomlGroups) > 0) {
+			if (file_exists(config('server_path') . 'config/groups.toml')) {
 				$groups = new TOML\Groups();
 			}
 			else {
