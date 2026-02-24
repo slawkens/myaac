@@ -57,6 +57,8 @@ if ($db->hasTable('players')) {
 DataLoader::setLocale($locale);
 DataLoader::load();
 
+clearCache();
+
 // add menus entries
 require_once SYSTEM . 'migrations/17.php';
 $up();
@@ -103,6 +105,10 @@ foreach($_SESSION as $key => $value) {
 unset($_SESSION['saved']);
 if(file_exists(CACHE . 'install.txt')) {
 	unlink(CACHE . 'install.txt');
+}
+
+if(file_exists(BASE . 'install/ip.txt')) {
+	unlink(BASE . 'install/ip.txt');
 }
 
 $locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(str_replace('tools/', '',ADMIN_URL), $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);
