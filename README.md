@@ -7,7 +7,7 @@ Official website: https://my-aac.org
 [![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/slawkens/myaac/cypress.yml)](https://github.com/slawkens/myaac/actions)
 [![License: GPL-3.0](https://img.shields.io/github/license/slawkens/myaac)](https://opensource.org/licenses/gpl-license)
 [![Downloads Count](https://img.shields.io/github/downloads/slawkens/myaac/total)](https://github.com/slawkens/myaac/releases)
-[![OpenTibia Discord](https://img.shields.io/discord/288399552581468162)](https://discord.gg/2J39Wus)
+[![MyAAC Discord](https://img.shields.io/discord/1468205461319848049)](https://discord.gg/aVagGPJt3g)
 [![Closed Issues](https://img.shields.io/github/issues-closed-raw/slawkens/myaac)](https://github.com/slawkens/myaac/issues?q=is%3Aissue+is%3Aclosed)
 
 | Version | Status                 | Branch  | Requirements   |
