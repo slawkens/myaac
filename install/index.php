@@ -30,7 +30,7 @@ if(file_exists(CACHE . 'install.txt')) {
 	$install_status = unserialize(file_get_contents(CACHE . 'install.txt'));
 
 	if(!isset($_REQUEST['step'])) {
-		$step = isset($install_status['step']) ? $install_status['step'] : '';
+		$step = $install_status['step'] ?? '';
 	}
 }
 
@@ -53,7 +53,7 @@ if($step == 'finish' && (!isset($config['installed']) || !$config['installed']))
 
 // step verify
 $steps = array(1 => 'welcome', 2 => 'license', 3 => 'requirements', 4 => 'config', 5 => 'database', 6 => 'admin', 7 => 'finish');
-if(!in_array($step, $steps)) // check if step is valid
+if(!in_array($step, $steps)) // check if a step is valid
 	throw new RuntimeException('ERROR: Unknown step.');
 
 $install_status['step'] = $step;
@@ -61,7 +61,7 @@ $errors = array();
 
 if($step == 'database') {
 	foreach($_SESSION as $key => $value) {
-		if(strpos($key, 'var_') === false) {
+		if(!str_contains($key, 'var_')) {
 			continue;
 		}
 
@@ -182,7 +182,7 @@ $error = false;
 clearstatcache();
 if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 	if(!file_exists(BASE . 'install/ip.txt')) {
-		$content = warning('AAC installation is disabled. To enable it make file <b>ip.txt</b> in install/ directory and put there your IP.<br/>
+		$content = warning('AAC installation is disabled. To enable it make a file <b>ip.txt</b> in install/ directory and put there your IP.<br/>
 		Your IP is:<br /><b>' . get_browser_real_ip() . '</b>', true);
 	}
 	else {
@@ -198,7 +198,7 @@ if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 		if(!$allow)
 		{
 			$content = warning('In file <b>install/ip.txt</b> must be your IP!<br/>
-			In file is:<br /><b>' . nl2br($file_content) . '</b><br/>
+			In the file is:<br /><b>' . nl2br($file_content) . '</b><br/>
 			Your IP is:<br /><b>' . get_browser_real_ip() . '</b>', true);
 		}
 		else {
