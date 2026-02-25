@@ -736,17 +736,11 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  */
 	public function setCustomField($field, $value)
 	{
-		if( !isset($this->data['id']) )
-		{
+		if( !isset($this->data['id']) ) {
 			throw new E_OTS_NotLoaded();
 		}
 
-		// quotes value for SQL query
-		if(!( is_int($value) || is_float($value) ))
-		{
-			$value = $this->db->quote($value);
-		}
-		$this->db->exec('UPDATE ' . $this->db->tableName('accounts') . ' SET ' . $this->db->fieldName($field) . ' = ' . $value . ' WHERE ' . $this->db->fieldName('id') . ' = ' . $this->data['id']);
+		AccountModel::where('id', $this->data['id'])->update([$field => $value]);
 	}
 
 /**

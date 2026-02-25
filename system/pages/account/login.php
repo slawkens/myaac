@@ -10,6 +10,7 @@
  */
 
 use MyAAC\RateLimit;
+use MyAAC\TwoFactorAuth\TwoFactorAuth;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
@@ -52,8 +53,18 @@ if(!empty($login_account) && !empty($login_password))
 			$errors[] = 'Your account is not verified. Please verify your email address. If the message is not coming check the SPAM folder in your E-Mail client.<br/>' .
 				'You can resend the Email here: <a href="' . $link . '">' . $link . '</a>';
 		} else {
-			session_regenerate_id();
 			setSession('account', $account_logged->getId());
+
+			if (!$hooks->trigger(HOOK_ACCOUNT_LOGIN_PRE)) {
+				return;
+			}
+
+			$twoFactorAuth = TwoFactorAuth::getInstance($account_logged);
+			if (!$twoFactorAuth->process($login_account, $login_password, $remember_me, $_POST['auth-code'] ?? '')) {
+				return;
+			}
+
+			session_regenerate_id();
 			setSession('password', encrypt((USE_ACCOUNT_SALT ? $account_logged->getCustomField('salt') : '') . $login_password));
 			if($remember_me) {
 				setSession('remember_me', true);

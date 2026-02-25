@@ -1,0 +1,12 @@
+{% set title = 'Two-Factor Authentication' %}
+
+{% set content %}
+<table style="width:100%;">
+	<tbody>
+	{{ include(twoFactorViews[0]) }}
+	{{ include(twoFactorViews[1]) }}
+	</tbody>
+</table>
+{% endset %}
+{% include('tables.headline.html.twig') %}
+<br/>

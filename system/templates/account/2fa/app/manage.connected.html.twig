@@ -1,0 +1,25 @@
+<tr>
+	<td>
+		<div class="TableContentContainer ">
+			<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+				<tbody>
+				<tr>
+					<td>
+						<div style="float: right; width: 135px;">
+							<form action="{{ getLink('account/2fa/app/disable') }}" method="post" style="padding:0;margin:0;">
+								{{ csrf() }}
+
+								{% set button_name = 'Unlink' %}
+								{{ include('buttons.base.html.twig') }}
+							</form>
+						</div>
+						<b>Your Tibia account is <span style="color: green">connected</span> to an authenticator app.</b>
+						<p>If you do not want to use an authenticator app any longer, you can "Unlink" the authenticator
+							App. Note, however, an authenticator app is an important security feature which helps to
+							prevent any unauthorized access to your Tibia account.</p></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</td>
+</tr>

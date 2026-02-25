@@ -1,0 +1,91 @@
+{% set title = 'Enter Email Code' %}
+{% set content %}
+<table style="width:100%;">
+	<tbody>
+	<tr>
+		<td>
+			<div class="TableContentContainer">
+				<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+					<tbody>
+					<tr>
+						<td>
+							<div style="float: right;">
+								<form
+										action="{{ getLink('account/2fa/email/resend-code') }}"
+										method="post"
+										style="padding:0;margin:0;"
+								>
+									{{ csrf() }}
+
+									{% set button_name = 'Resend E-Mail Code' %}
+									{{ include('buttons.base.html.twig') }}
+								</form>
+							</div>
+							An <b>E-Mail code</b> has already been sent to the E-Mail address assigned to your account.
+							Please check your E-Mail account's spam/junk filter and make sure that your mailbox is not
+							full.<br>In case you need a new E-Mail code, you can request one by clicking on "Resend E-Mail Code".
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="TableContentContainer">
+				<table class="TableContent" width="100%" style="border:1px solid #faf0d7;">
+					<tbody>
+					<tr>
+						<td><b>E-Mail code authentication is enabled for your account.</b><br><br>Please enter the <b>most
+								recent E-Mail code</b> you have received in order to log in.<br>
+							<div style="margin-top: 15px; margin-bottom: 15px;">
+								<div class="LabelV150 {{ wrongCode ? 'red' : '' }}" style="float:left;"><label for="email-code">E-Mail Code:</label></div>
+								<input form="form" id="auth-code" name="auth-code" maxlength="15" autocomplete="off" required autofocus>
+								{% if wrongCode %}
+									<br/>
+									<div class="LabelV150" style="float:left;">&nbsp; </div>
+									<div class="FormFieldError">Invalid E-Mail code!</div>
+								{% endif %}
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+	</tr>
+	</tbody>
+</table>
+{% endset %}
+{% include 'tables.headline.html.twig' %}
+<table style="width: 100%;">
+	<tbody>
+	<tr align="center" valign="top">
+		<td>
+			<form id="form" method="post" action="{{ getLink('account/manage') }}">
+				{{ csrf() }}
+
+				<input type="hidden" name="account_login" value="{{ account_login ?? '' }}" />
+				<input type="hidden" name="password_login" value="{{ password_login ?? '' }}" />
+				{% if remember_me %}
+					<input type="hidden" name="remember_me" value="true" />
+				{% endif %}
+
+				<input type="hidden" name="step" value="verify">
+				{% set button_name = 'Continue' %}
+				{% set button_color = 'green' %}
+				{{ include('buttons.submit.html.twig') }}
+			</form>
+		</td>
+		<td>
+			<form action="{{ getLink('account/manage') }}" method="post" style="padding:0;margin:0;">
+				{{ csrf() }}
+
+				{% set button_color = 'blue' %}
+				{{ include('buttons.back.html.twig') }}
+			</form>
+		</td>
+	</tr>
+	</tbody>
+</table>
