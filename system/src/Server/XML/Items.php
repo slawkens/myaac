@@ -6,7 +6,7 @@ use MyAAC\Cache\PHP as CachePHP;
 
 class Items
 {
-	private string $error;
+	private string $error = '';
 
 	public function getError(): string {
 		return $this->error;

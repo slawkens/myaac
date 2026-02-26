@@ -9,33 +9,38 @@ class ItemsParser
 		$ret = [];
 
 		$i = 0;
-		$handle = fopen($path, "r");
-		if ($handle) {
-			$parse = '';
+		$handle = fopen($path, 'r');
 
-			while (($line = fgets($handle)) !== false) {
-				if (str_contains($line, '[[items]]') && $i++ != 0) {
-					//global $whoopsHandler;
-					//$whoopsHandler->addDataTable('ini', [$parse]);
-					$ret[] = parse_ini_string($parse);
-					$parse = '';
-					continue;
-				}
+		if ($handle === false) {
+			throw new \RuntimeException('Failed to open items file: ' . $path);
+		}
 
-				// skip lines like this
-				// field = {type = "fire", initdamage = 20, ticks = 10000, count = 7, damage = 10}
-				// as it cannot be parsed by parse_ini_string
-				if (str_contains($line, 'field =')) {
-					continue;
-				}
+		$parse = '';
 
-				$parse .= $line;
+		while (($line = fgets($handle)) !== false) {
+			if (str_contains($line, '[[items]]') && $i++ != 0) {
+				//global $whoopsHandler;
+				//$whoopsHandler->addDataTable('ini', [$parse]);
+				$ret[] = parse_ini_string($parse);
+				$parse = '';
+				continue;
 			}
 
-			$ret[] = parse_ini_string($parse);
+			// skip lines like this
+			// field = {type = "fire", initdamage = 20, ticks = 10000, count = 7, damage = 10}
+			// as it cannot be parsed by parse_ini_string
+			if (str_starts_with(ltrim($line), 'field =')) {
+				continue;
+			}
 
-			fclose($handle);
+			$parse .= $line;
 		}
+
+		if ($parse !== '') {
+			$ret[] = parse_ini_string($parse);
+		}
+
+		fclose($handle);
 
 		return $ret;
 	}

@@ -40,12 +40,4 @@ class Vocations
 	public function getFrom(): array {
 		return $this->vocationsFrom;
 	}
-
-	public static function getBase($includingRook = true): array {
-		return \MyAAC\Server\Vocations::getBase($includingRook);
-	}
-
-	public static function getOriginal(int $id): ?int {
-		return \MyAAC\Server\Vocations::getOriginal($id);
-	}
 }
