@@ -6,19 +6,25 @@ use MyAAC\Cache\Cache;
 
 class Mounts
 {
+	private static array $mounts = [];
+
 	public static function get()
 	{
-		return Cache::remember('mounts', 10 * 60, function () {
-			if (file_exists(config('server_path') . TOML\Mounts::FILE)) {
-				$mounts = new TOML\Mounts();
-			}
-			else {
-				$mounts = new XML\Mounts();
-			}
+		if (count(self::$mounts) == 0) {
+			self::$mounts = Cache::remember('mounts', 10 * 60, function () {
+				if (file_exists(config('server_path') . TOML\Mounts::FILE)) {
+					$mounts = new TOML\Mounts();
+				}
+				else {
+					$mounts = new XML\Mounts();
+				}
 
-			$mounts->load();
+				$mounts->load();
 
-			return $mounts->get();
-		});
+				return $mounts->get();
+			});
+		}
+
+		return self::$mounts;
 	}
 }

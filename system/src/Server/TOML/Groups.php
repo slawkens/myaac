@@ -8,9 +8,11 @@ class Groups
 {
 	private array $groups = [];
 
+	const FILE = 'config/groups.toml';
+
 	public function load(): void
 	{
-		$file = config('server_path') . 'config/groups.toml';
+		$file = config('server_path') . self::FILE;
 
 		if(!@file_exists($file)) {
 			error('Error: Cannot load groups.toml. More info in system/logs/error.log file.');

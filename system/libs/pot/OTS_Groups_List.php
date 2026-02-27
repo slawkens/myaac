@@ -47,8 +47,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 			return;
 		}
 
-		$groups = new Groups();
-		foreach($groups->getGroups() as $id => $info) {
+		foreach(Groups::get() as $id => $info) {
 			$this->groups[$id] = new OTS_Group($info);
 		}
 	}

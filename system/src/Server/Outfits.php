@@ -6,19 +6,24 @@ use MyAAC\Cache\Cache;
 
 class Outfits
 {
+	private static array $outfits = [];
+
 	public static function get()
 	{
-		return Cache::remember('outfits', 10 * 60, function () {
-			if (file_exists(config('server_path') . 'config/outfits.toml')) {
-				$outfits = new TOML\Outfits();
-			}
-			else {
-				$outfits = new XML\Outfits();
-			}
+		if (count(self::$outfits) == 0) {
+			self::$outfits = Cache::remember('outfits', 10 * 60, function () {
+				if (file_exists(config('server_path') . TOML\Outfits::FILE)) {
+					$outfits = new TOML\Outfits();
+				} else {
+					$outfits = new XML\Outfits();
+				}
 
-			$outfits->load();
+				$outfits->load();
 
-			return $outfits->getOutfits();
-		});
+				return $outfits->getOutfits();
+			});
+		}
+
+		return self::$outfits;
 	}
 }
