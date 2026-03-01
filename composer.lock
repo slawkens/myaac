@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5317e97a5025ebc2a977214bd3fa964c",
+    "content-hash": "de1219601202cf55861809fd69c5feb4",
     "packages": [
         {
             "name": "brick/math",
@@ -215,6 +215,75 @@
                 }
             ],
             "time": "2024-09-19T14:15:21+00:00"
+        },
+        {
+            "name": "devium/toml",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vanodevium/toml.git",
+                "reference": "190882f9d92e88f8031285129ba9df501da899a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vanodevium/toml/zipball/190882f9d92e88f8031285129ba9df501da899a6",
+                "reference": "190882f9d92e88f8031285129ba9df501da899a6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=8.1",
+                "php-ds/php-ds": "^1.5",
+                "symfony/polyfill-mbstring": "^1.30"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.17.3",
+                "pestphp/pest": "^2.35.1",
+                "phpstan/phpstan": "^1.12.2",
+                "rector/rector": "^1.2.4",
+                "symfony/var-dumper": "^6.4|^7.1.4"
+            },
+            "suggest": {
+                "ext-ds": "For best performance",
+                "ext-mbstring": "For best performance"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Devium\\Toml\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vano Devium",
+                    "email": "vano@devium.me"
+                }
+            ],
+            "description": "A PHP encoder/decoder for TOML compatible with specification 1.0.0",
+            "keywords": [
+                "decode",
+                "encode",
+                "parser",
+                "toml"
+            ],
+            "support": {
+                "issues": "https://github.com/vanodevium/toml/issues",
+                "source": "https://github.com/vanodevium/toml/tree/v1.0.6"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/vanodevium",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-04-22T18:10:54+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1614,6 +1683,62 @@
                 "source": "https://github.com/peppeocchi/php-cron-scheduler/tree/v4.0"
             },
             "time": "2021-04-22T21:32:03+00:00"
+        },
+        {
+            "name": "php-ds/php-ds",
+            "version": "v1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-ds/polyfill.git",
+                "reference": "017fb5cdfa52a1f13126c94987b04b884c44f9cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-ds/polyfill/zipball/017fb5cdfa52a1f13126c94987b04b884c44f9cd",
+                "reference": "017fb5cdfa52a1f13126c94987b04b884c44f9cd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.4"
+            },
+            "provide": {
+                "ext-ds": "1.5.0"
+            },
+            "require-dev": {
+                "php-ds/tests": "^1.5"
+            },
+            "suggest": {
+                "ext-ds": "to improve performance and reduce memory usage"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ds\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rudi Theunissen",
+                    "email": "rudolf.theunissen@gmail.com"
+                }
+            ],
+            "description": "Specialized data structures as alternatives to the PHP array",
+            "keywords": [
+                "data structures",
+                "ds",
+                "php",
+                "polyfill"
+            ],
+            "support": {
+                "issues": "https://github.com/php-ds/polyfill/issues",
+                "source": "https://github.com/php-ds/polyfill/tree/v1.7.0"
+            },
+            "time": "2025-05-18T04:50:53+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

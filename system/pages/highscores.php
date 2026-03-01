@@ -13,7 +13,7 @@ use MyAAC\Cache\Cache;
 use MyAAC\Models\Player;
 use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
-use MyAAC\Server\XML\Vocations;
+use MyAAC\Server\Vocations;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Highscores';
