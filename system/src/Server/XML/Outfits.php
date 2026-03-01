@@ -16,8 +16,12 @@ class Outfits
 			return;
 		}
 
-		$xml = new \DOMDocument;
-		$xml->load($file);
+		$xml = new \DOMDocument();
+		if(!$xml->load($file)) {
+			error('Error: Cannot load outfits.xml. More info in system/logs/error.log file.');
+			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load outfits.xml - $file. Error: " . print_r(error_get_last(), true));
+			return;
+		}
 
 		foreach ($xml->getElementsByTagName('outfit') as $outfit) {
 			$this->outfits[] = $this->parseOutfitNode($outfit);
@@ -43,7 +47,7 @@ class Outfits
 		];
 	}
 
-	public function getOutfits(): array {
+	public function get(): array {
 		return $this->outfits;
 	}
 }

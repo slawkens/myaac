@@ -7,23 +7,23 @@ class Vocations
 	private array $vocations = [];
 	private array $vocationsFrom = [];
 
+	const FILE = 'vocations.xml';
+
 	public function load(): void
 	{
-		if(!class_exists('DOMDocument')) {
-			throw new \RuntimeException('Please install PHP xml extension. MyAAC will not work without it.');
-		}
-
-		$vocationsXML = new \DOMDocument();
-		$file = config('data_path') . 'XML/vocations.xml';
+		$file = config('data_path') . 'XML/' . self::FILE;
 		if(!@file_exists($file)) {
-			$file = config('data_path') . 'vocations.xml';
+			$file = config('data_path') . self::FILE;
 		}
 
-		if(!$vocationsXML->load($file)) {
-			throw new \RuntimeException('ERROR: Cannot load <i>vocations.xml</i> - the file is malformed. Check the file with xml syntax validator.');
+		$xml = new \DOMDocument();
+		if(!$xml->load($file)) {
+			error('Error: Cannot load vocations.xml. More info in system/logs/error.log file.');
+			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load vocations.xml - $file. Error: " . print_r(error_get_last(), true));
+			return;
 		}
 
-		foreach($vocationsXML->getElementsByTagName('vocation') as $vocation) {
+		foreach($xml->getElementsByTagName('vocation') as $vocation) {
 			$id = $vocation->getAttribute('id');
 
 			$this->vocations[$id] = $vocation->getAttribute('name');

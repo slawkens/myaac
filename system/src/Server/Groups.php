@@ -20,7 +20,7 @@ class Groups
 
 				$groups->load();
 
-				return $groups->getGroups();
+				return $groups->get();
 			});
 		}
 

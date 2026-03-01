@@ -19,7 +19,15 @@ class Mounts
 		}
 
 		$toml = file_get_contents($file);
-		$mounts = Toml::decode($toml, asArray: true);
+
+		try {
+			$mounts = Toml::decode($toml, asArray: true);
+		}
+		catch (\Exception $e) {
+			error('Error: Cannot load mounts.toml. More info in system/logs/error.log file.');
+			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load mounts.toml - $file. Error: " . $e->getMessage());
+			return;
+		}
 
 		foreach ($mounts as $name => $mount)
 		{

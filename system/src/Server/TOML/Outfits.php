@@ -19,7 +19,15 @@ class Outfits
 		}
 
 		$toml = file_get_contents($file);
-		$outfits = Toml::decode($toml, asArray: true);
+
+		try {
+			$outfits = Toml::decode($toml, asArray: true);
+		}
+		catch (\Exception $e) {
+			error('Error: Cannot load outfits.toml. More info in system/logs/error.log file.');
+			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load outfits.toml - $file. Error: " . $e->getMessage());
+			return;
+		}
 
 		foreach ($outfits as $outfit)
 		{
@@ -34,7 +42,7 @@ class Outfits
 		}
 	}
 
-	public function getOutfits(): array {
+	public function get(): array {
 		return $this->outfits;
 	}
 }

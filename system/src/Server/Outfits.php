@@ -20,7 +20,7 @@ class Outfits
 
 				$outfits->load();
 
-				return $outfits->getOutfits();
+				return $outfits->get();
 			});
 		}
 

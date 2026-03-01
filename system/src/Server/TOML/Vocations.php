@@ -18,7 +18,16 @@ class Vocations
 
 		foreach ($tomlVocations as $file) {
 			$toml = file_get_contents($file);
-			$vocations = Toml::decode($toml, asArray: true);
+
+			try {
+				$vocations = Toml::decode($toml, asArray: true);
+			}
+			catch (\Exception $e) {
+				$basename = basename($file);
+				error("Error: Cannot load vocations/$basename. More info in system/logs/error.log file.");
+				log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load mounts.toml - $file. Error: " . $e->getMessage());
+				break;
+			}
 
 			foreach ($vocations as $vocationArray) {
 				$id = $vocationArray['id'];

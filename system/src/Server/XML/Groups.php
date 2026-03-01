@@ -6,20 +6,22 @@ class Groups
 {
 	private array $groups = [];
 
+	const FILE = 'XML/groups.xml';
+
 	public function load(): void
 	{
-		$file = config('data_path') . 'XML/groups.xml';
+		$file = config('data_path') . self::FILE;
 
 		if(!@file_exists($file)) {
 			error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
-			log_append('error.log', "[OTS_Groups_List.php] Fatal error: Cannot load groups.xml ($file). It doesn't exist.");
+			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load groups.xml - $file. It doesn't exist.");
 			return;
 		}
 
 		$groups = new \DOMDocument();
 		if(!@$groups->load($file)) {
 			error('Error: Cannot load groups.xml. More info in system/logs/error.log file.');
-			log_append('error.log', '[OTS_Groups_List.php] Fatal error: Cannot load groups.xml (' . $file . '). Error: ' . print_r(error_get_last(), true));
+			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load groups.xml - $file. Error: " . print_r(error_get_last(), true));
 			return;
 		}
 
@@ -34,7 +36,7 @@ class Groups
 		}
 	}
 
-	public function getGroups(): array {
+	public function get(): array {
 		return $this->groups;
 	}
 }

@@ -17,7 +17,11 @@ class Mounts
 		}
 
 		$xml = new \DOMDocument();
-		$xml->load($file);
+		if(!$xml->load($file)) {
+			error('Error: Cannot load mounts.xml. More info in system/logs/error.log file.');
+			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load mounts.xml - $file. Error: " . print_r(error_get_last(), true));
+			return;
+		}
 
 		foreach ($xml->getElementsByTagName('mount') as $mount) {
 			$this->mounts[] = $this->parseMountNode($mount);

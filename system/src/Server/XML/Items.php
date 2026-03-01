@@ -8,20 +8,26 @@ class Items
 {
 	private string $error = '';
 
+	const FILE = 'items/items.xml';
+
 	public function getError(): string {
 		return $this->error;
 	}
 
 	public function load(): bool
 	{
-		$file_path = config('data_path') . 'items/items.xml';
-		if (!file_exists($file_path)) {
-			$this->error = 'Cannot load file ' . $file_path;
+		$file = config('data_path') . self::FILE;
+		if (!file_exists($file)) {
+			$this->error = 'Cannot load file ' . $file;
 			return false;
 		}
 
 		$xml = new \DOMDocument;
-		$xml->load($file_path);
+		if(!$xml->load($file)) {
+			$this->error = 'Error: Cannot load items.xml. More info in system/logs/error.log file.';
+			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load items.xml - $file. Error: " . print_r(error_get_last(), true));
+			return false;
+		}
 
 		$items = [];
 		foreach ($xml->getElementsByTagName('item') as $item) {
@@ -52,6 +58,14 @@ class Items
 			$attributes[strtolower($attr->getAttribute('key'))] = $attr->getAttribute('value');
 		}
 
-		return ['id' => $id, 'content' => ['article' => $article, 'name' => $name, 'plural' => $plural, 'attributes' => $attributes]];
+		return [
+			'id' => $id,
+			'content' => [
+				'article' => $article,
+				'name' => $name,
+				'plural' => $plural,
+				'attributes' => $attributes
+			],
+		];
 	}
 }

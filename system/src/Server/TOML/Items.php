@@ -38,13 +38,10 @@ class Items
 				continue;
 			}
 
-			$article = $item['article'] ?? '';
-			$name = $item['name'] ?? '';
-			$plural = $item['plural'] ?? '';
 			$items[$id] = [
-				'article' => $article,
-				'name' => $name,
-				'plural' => $plural,
+				'article' => $item['article'] ?? '',
+				'name' => $item['name'] ?? '',
+				'plural' => $item['plural'] ?? '',
 				'attributes' => $attributes,
 			];
 		}
