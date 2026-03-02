@@ -6,26 +6,25 @@ use MyAAC\Cache\PHP as CachePHP;
 
 class Items
 {
-	private string $error;
+	private string $error = '';
 
-	public function getError(): string
-	{
+	public function getError(): string {
 		return $this->error;
 	}
 
 	public function load(): bool
 	{
-		$file_path = config('data_path') . 'items/items.toml';
-		if (!file_exists($file_path)) {
-			$this->error = 'Cannot load file ' . $file_path;
+		$file = config('data_path') . 'items/items.toml';
+		if (!file_exists($file)) {
+			$this->error = 'Cannot load file ' . $file;
 			return false;
 		}
 
-		//$toml = file_get_contents($file_path);
+		//$toml = file_get_contents($file);
 		//$items = \Devium\Toml\Toml::decode($toml, asArray: false);
 
 		$itemsParser = new ItemsParser();
-		$itemsParsed = $itemsParser->parse($file_path);
+		$itemsParsed = $itemsParser->parse($file);
 
 		$items = [];
 		foreach ($itemsParsed as $item) {
