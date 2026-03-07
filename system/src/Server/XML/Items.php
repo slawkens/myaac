@@ -31,9 +31,10 @@ class Items
 			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load items.xml - $file. Error: " . $e->getMessage());
 			return false;
 		}
+
 		foreach($xml->xpath('item') as $item) {
 			if ($item->attributes()->fromid) {
-				for ($id = $item->attributes()->fromid; $id <= $item->attributes()->toid; $id++) {
+				for ($id = (int)$item->attributes()->fromid; $id <= (int)$item->attributes()->toid; $id++) {
 					$tmp = $this->parseNode($id, $item);
 					$items[$tmp['id']] = $tmp['content'];
 				}
