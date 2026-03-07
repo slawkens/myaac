@@ -57,13 +57,13 @@ class Items
 
 		$attributes = [];
 		foreach($node->xpath('attribute') as $attr) {
+			$attributes[strtolower($attr->attributes()->key)] = (string)$attr->attributes()->value;
+
 			if ($attr->xpath('attribute')) {
 				foreach($attr->xpath('attribute') as $attr2) {
 					$attributes[strtolower($attr2->attributes()->key)] = (string)$attr2->attributes()->value;
 				}
 			}
-
-			$attributes[strtolower($attr->attributes()->key)] = (string)$attr->attributes()->value;
 		}
 
 		return [
