@@ -9,7 +9,7 @@
  * @link      https://my-aac.org
  */
 
-namespace MyAAC;
+namespace MyAAC\Server;
 
 use MyAAC\Cache\PHP as CachePHP;
 use MyAAC\Models\Spell;
@@ -20,17 +20,19 @@ class Items
 
 	private static string $error = '';
 
+	const FILE_ITEMS_TOML = 'items/items.toml';
+	const FILE_ITEMS_XML = 'items/items.xml';
+
 	public static function getError(): string {
 		return self::$error;
 	}
 
 	public static function load(): bool {
-		$file_path = config('data_path') . 'items/items.toml';
-		if (file_exists($file_path)) {
-			$items = new Server\TOML\Items();
+		if (file_exists(config('data_path') . self::FILE_ITEMS_TOML)) {
+			$items = new TOML\Items();
 		}
-		elseif (file_exists(config('data_path') . 'items/items.xml')) {
-			$items = new Server\XML\Items();
+		elseif (file_exists(config('data_path') . self::FILE_ITEMS_XML)) {
+			$items = new XML\Items();
 		}
 		else {
 			self::$error = 'Cannot load items.xml or items.toml file. Files not found.';
@@ -51,7 +53,7 @@ class Items
 		}
 
 		$cache_php = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
-		self::$items = $cache_php->get('items');
+		self::$items = (array)$cache_php->get('items');
 	}
 
 	public static function get($id) {

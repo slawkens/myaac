@@ -22,22 +22,23 @@ class Items
 			return false;
 		}
 
-		$xml = new \DOMDocument;
-		if(!$xml->load($file)) {
+		$items = [];
+
+		try {
+			$xml = new \SimpleXMLElement(file_get_contents($file));
+		} catch (\Exception $e) {
 			$this->error = 'Error: Cannot load items.xml. More info in system/logs/error.log file.';
-			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load items.xml - $file. Error: " . print_r(error_get_last(), true));
+			log_append('error.log', "[" . __CLASS__ . "] Fatal error: Cannot load items.xml - $file. Error: " . $e->getMessage());
 			return false;
 		}
-
-		$items = [];
-		foreach ($xml->getElementsByTagName('item') as $item) {
-			if ($item->getAttribute('fromid')) {
-				for ($id = $item->getAttribute('fromid'); $id <= $item->getAttribute('toid'); $id++) {
+		foreach($xml->xpath('item') as $item) {
+			if ($item->attributes()->fromid) {
+				for ($id = $item->attributes()->fromid; $id <= $item->attributes()->toid; $id++) {
 					$tmp = $this->parseNode($id, $item);
 					$items[$tmp['id']] = $tmp['content'];
 				}
 			} else {
-				$tmp = $this->parseNode($item->getAttribute('id'), $item);
+				$tmp = $this->parseNode($item->attributes()->id, $item);
 				$items[$tmp['id']] = $tmp['content'];
 			}
 		}
@@ -49,21 +50,21 @@ class Items
 
 	public function parseNode($id, $node): array
 	{
-		$name = $node->getAttribute('name');
-		$article = $node->getAttribute('article');
-		$plural = $node->getAttribute('plural');
+		$name = $node->attributes()->name;
+		$article = $node->attributes()->article;
+		$plural = $node->attributes()->plural;
 
-		$attributes = array();
-		foreach($node->getElementsByTagName('attribute') as $attr) {
-			$attributes[strtolower($attr->getAttribute('key'))] = $attr->getAttribute('value');
+		$attributes = [];
+		foreach($node->xpath('attribute') as $attr) {
+			$attributes[strtolower($attr->attributes()->key)] = (string)$attr->attributes()->value;
 		}
 
 		return [
-			'id' => $id,
+			'id' => (int)$id,
 			'content' => [
-				'article' => $article,
-				'name' => $name,
-				'plural' => $plural,
+				'article' => (string)$article,
+				'name' => (string)$name,
+				'plural' => (string)$plural,
 				'attributes' => $attributes
 			],
 		];

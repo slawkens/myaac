@@ -12,13 +12,11 @@
 namespace MyAAC;
 
 use MyAAC\Models\Monster;
+use MyAAC\Server\Items;
 
 class Monsters {
-	/**
-	 * @var \OTS_MonstersList
-	 */
-	private static $monstersList;
-	private static $lastError = '';
+	private static \OTS_MonstersList $monstersList;
+	private static string $lastError = '';
 
 	public static function loadFromXML($show = false) {
 		try {

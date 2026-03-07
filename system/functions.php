@@ -11,7 +11,6 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
-use MyAAC\Items;
 use MyAAC\Models\Config;
 use MyAAC\Models\Guild;
 use MyAAC\Models\House;
@@ -21,6 +20,7 @@ use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
 use MyAAC\News;
 use MyAAC\Plugins;
+use MyAAC\Server\Items;
 use MyAAC\Settings;
 use PHPMailer\PHPMailer\PHPMailer;
 
