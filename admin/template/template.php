@@ -172,7 +172,8 @@
 			<div class="float-sm-right d-none d-sm-inline">
 				<span class="p-2 right badge badge-<?php echo((isset($status['online']) and $status['online']) ? 'success' : 'danger'); ?>"><?php echo $config['lua']['serverName'] ?></span>
 			</div>
-			<?php echo base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?>
+			<?= base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4='); ?>
+			<?= 'Load time: ' . round(microtime(true) - START_TIME, 4) . ' seconds.'; ?>
 		</footer>
 		<div id="sidebar-overlay"></div>
 	</div>
