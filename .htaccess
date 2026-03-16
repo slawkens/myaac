@@ -1,0 +1,37 @@
+<IfModule mod_autoindex.c>
+	Options -Indexes
+</IfModule>
+
+<IfModule mod_negotiation.c>
+	Options -MultiViews
+</IfModule>
+
+<FilesMatch "^(.+\.(md|json|dist|twig|sql)|CHANGELOG|README|composer\.lock)$">
+    <IfVersion < 2.4>
+		order allow,deny
+		deny from all
+	</IfVersion>
+	<IfVersion >= 2.4>
+		Require all denied
+	</IfVersion>
+</FilesMatch>
+
+<DirectoryMatch ".*/(?:\.git|node_modules|vendor|system|install/(?:includes|steps|tools)|admin/(?:includes|pages|tools))/">
+    <IfVersion < 2.4>
+		order allow,deny
+		deny from all
+	</IfVersion>
+	<IfVersion >= 2.4>
+		Require all denied
+	</IfVersion>
+</DirectoryMatch>
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	#RewriteBase /myaac/
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^.*$ index.php [L]
+</IfModule>
