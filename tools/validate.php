@@ -63,10 +63,7 @@ else if(isset($_GET['email']))
 }
 else if(isset($_GET['name']))
 {
-	$name = $_GET['name'];
-	if(!admin()) {
-		$name = strtolower(stripslashes($name));
-	}
+	$name = stripslashes($_GET['name']);
 
 	if(!Validator::characterName($name)) {
 		error_(Validator::getLastError());
@@ -81,7 +78,12 @@ else if(isset($_GET['name']))
 		error_($errors['name']);
 	}
 
-	success_('Good. Your name will be:<br /><b>' . (admin() ? $name : ucwords($name)) . '</b>');
+	$extraText = '';
+	if (admin()) {
+		$extraText = "<br/>Note: You are logged in as admin, so you can create almost any name without rules.";
+	}
+
+	success_("Good. Your name will be:<br /><b>$name</b>$extraText");
 }
 else if(isset($_GET['password']) && isset($_GET['password_confirm'])) {
 	$password = $_GET['password'];

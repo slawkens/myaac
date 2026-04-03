@@ -183,7 +183,7 @@ class Validator
 			return false;
 		}
 
-		// installer doesn't know config.php yet
+		// installer doesn't know settings yet
 		// that's why we need to ignore the nulls
 		if(defined('MYAAC_INSTALL')) {
 			$minLength = 4;
@@ -207,9 +207,9 @@ class Validator
 			return false;
 		}
 
-		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- [ ] '") != $length)
+		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM ") != $length)
 		{
-			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
+			self::$lastError = "This name contains invalid letters. Please use only A-Z, a-z and space!";
 			return false;
 		}
 
@@ -249,11 +249,6 @@ class Validator
 			}
 		}
 
-		if(str_ends_with($name_lower, "'") || str_ends_with($name_lower, "-")) {
-			self::$lastError = 'Your name contains illegal characters.';
-			return false;
-		}
-
 		if(substr($name_lower, 1, 1) == ' ') {
 			self::$lastError = 'Your name contains illegal space.';
 			return false;
@@ -267,6 +262,31 @@ class Validator
 		if(preg_match('/ {2,}/', $name)) {
 			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
 			return false;
+		}
+
+		if (substr($name[0], 0, 1) !== strtoupper(substr($name[0], 0, 1))) {
+			self::$lastError = 'The first letter of a name has to be a capital letter.';
+			return false;
+		}
+
+		foreach (explode(' ', $name) as $word) {
+			$wordCut = substr($word, 1, strlen($word));
+			$hasUpperCase = preg_match('/[A-Z]/', $wordCut);
+			if ($hasUpperCase) {
+				self::$lastError = 'In names capital letters are only allowed at the beginning of a word.';
+				return false;
+			}
+
+			if (strlen($word) == 1) {
+				self::$lastError = 'This name contains a word with only one letter. Please use more than one letter for each word.';
+				return false;
+			}
+
+			$hasVowel = preg_match('/[aeiouAEIOU]/', $word);
+			if (!$hasVowel) {
+				self::$lastError = 'This name contains a word without vowels. Please choose another name.';
+				return false;
+			}
 		}
 
 		if(strtolower($config['lua']['serverName']) == $name_lower) {
