@@ -233,6 +233,7 @@ class Validator
 	{
 		global $db;
 
+		$name = trim($name);
 		$name_lower = strtolower($name);
 
 		if(strlen($name) < 1) {
