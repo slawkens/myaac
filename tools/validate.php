@@ -63,7 +63,7 @@ else if(isset($_GET['email']))
 }
 else if(isset($_GET['name']))
 {
-	$name = stripslashes($_GET['name']);
+	$name = trim(stripslashes($_GET['name']));
 
 	if(!Validator::characterName($name)) {
 		error_(Validator::getLastError());
