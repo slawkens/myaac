@@ -260,7 +260,7 @@ class Validator
 		}
 
 		if(preg_match('/ {2,}/', $name)) {
-			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
+			self::$lastError = 'Invalid character name format. Use only A-Z and no double spaces.';
 			return false;
 		}
 
