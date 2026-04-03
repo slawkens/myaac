@@ -215,13 +215,7 @@ class Validator
 
 		if(preg_match('/ {2,}/', $name))
 		{
-			self::$lastError = 'Invalid character name format. Use only A-Z and no double spaces.';
-			return false;
-		}
-
-		if(!preg_match("/[A-z ']/", $name))
-		{
-			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
+			self::$lastError = 'Invalid character name format. Use only A-Z, a-z and no double spaces.';
 			return false;
 		}
 
@@ -230,16 +224,21 @@ class Validator
 
 	/**
 	 * Validate new character name.
-	 * Name lenght must be 3-25 chars
+	 * Name length must be 3-25 chars
 	 *
 	 * @param  string $name Name to check
 	 * @return bool Is name valid?
 	 */
 	public static function newCharacterName($name)
 	{
-		global $db, $config;
+		global $db;
 
 		$name_lower = strtolower($name);
+
+		if(strlen($name) < 1) {
+			self::$lastError = 'Please enter a name.';
+			return false;
+		}
 
 		$first_words_blocked = array_merge(["'", '-'], setting('core.create_character_name_blocked_prefix'));
 		foreach($first_words_blocked as $word) {
@@ -289,7 +288,7 @@ class Validator
 			}
 		}
 
-		if(strtolower($config['lua']['serverName']) == $name_lower) {
+		if(strtolower(configLua('serverName')) == $name_lower) {
 			self::$lastError = 'Your name cannot be same as server name.';
 			return false;
 		}
