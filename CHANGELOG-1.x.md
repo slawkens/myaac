@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.9 - 06.04.2026]
+### Added
+* Settings: Possibility to add custom HTML for the head and body tags like Google Analytics code etc. (https://github.com/slawkens/myaac/commit/108e83806df5686a06826931ed5e243c19cbe130)
+* Add command: give-admin (https://github.com/slawkens/myaac/commit/9fa9ec746c4b344387a21f21886c2251319806fc)
+  * Usage: php aac give:admin slawkens@gmail.com
+    Parameter: account email, name or id
+  * It's admin for the website, not the GM for the game! For that, go into the admin panel and change the group manually
+* Add page load time to an Admin Panel footer (https://github.com/slawkens/myaac/commit/4ae2fdd0dfcd56697612395c14aecc2dfd33b1c3)
+
+### Changed
+* Better character name validation, like in the original game website (#356)
+* Install: don't suggest deleting of install folder - it's not required (https://github.com/slawkens/myaac/commit/5fcde4708a39255cf68edc8c43f2ac6597e2601d)
+
 ## [1.8.8 - 31.01.2026]
 ### Added
 * Change Comment: Add missing hooks - patched from 0.8 (https://github.com/slawkens/myaac/commit/a60a23b84f61d41d1503073b52e01e3120f6d92a)
