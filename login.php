@@ -93,9 +93,9 @@ switch ($action) {
 			$creatureBoost = $db->query("SELECT * FROM " . $db->tableName('boosted_creature'))->fetchAll();
 			$bossBoost     = $db->query("SELECT * FROM " . $db->tableName('boosted_boss'))->fetchAll();
 			die(json_encode([
-				'boostedcreature' => true,
+				//'boostedcreature' => true,
+				'bossraceid'      => intval($bossBoost[0]['raceid']),
 				'creatureraceid'  => intval($creatureBoost[0]['raceid']),
-				'bossraceid'      => intval($bossBoost[0]['raceid'])
 			]));
 		}
 

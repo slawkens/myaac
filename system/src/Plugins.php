@@ -868,6 +868,11 @@ class Plugins {
 			}
 		}
 
+		global $hooks;
+		foreach($plugin_info['hooks'] ?? [] as $name => $info) {
+			$hooks->unregister($name, $info['type'], $info['file']);
+		}
+
 		clearCache();
 		return true;
 	}
