@@ -183,7 +183,7 @@ class Validator
 			return false;
 		}
 
-		// installer doesn't know config.php yet
+		// installer doesn't know settings yet
 		// that's why we need to ignore the nulls
 		if(defined('MYAAC_INSTALL')) {
 			$minLength = 4;
@@ -207,21 +207,15 @@ class Validator
 			return false;
 		}
 
-		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM- [ ] '") != $length)
+		if(strspn($name, "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM ") != $length)
 		{
-			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
+			self::$lastError = "This name contains invalid letters. Please use only A-Z, a-z and space!";
 			return false;
 		}
 
 		if(preg_match('/ {2,}/', $name))
 		{
-			self::$lastError = 'Invalid character name format. Use only A-Z and no double spaces.';
-			return false;
-		}
-
-		if(!preg_match("/[A-z ']/", $name))
-		{
-			self::$lastError = "Invalid name format. Use only A-Z, spaces and '.";
+			self::$lastError = 'Invalid character name format. Use only A-Z, a-z and no double spaces.';
 			return false;
 		}
 
@@ -230,16 +224,22 @@ class Validator
 
 	/**
 	 * Validate new character name.
-	 * Name lenght must be 3-25 chars
+	 * Name length must be 3-25 chars
 	 *
 	 * @param  string $name Name to check
 	 * @return bool Is name valid?
 	 */
 	public static function newCharacterName($name)
 	{
-		global $db, $config;
+		global $db;
 
+		$name = trim($name);
 		$name_lower = strtolower($name);
+
+		if(strlen($name) < 1) {
+			self::$lastError = 'Please enter a name.';
+			return false;
+		}
 
 		$first_words_blocked = array_merge(["'", '-'], setting('core.create_character_name_blocked_prefix'));
 		foreach($first_words_blocked as $word) {
@@ -247,11 +247,6 @@ class Validator
 				self::$lastError = 'Your name contains blocked words.';
 				return false;
 			}
-		}
-
-		if(str_ends_with($name_lower, "'") || str_ends_with($name_lower, "-")) {
-			self::$lastError = 'Your name contains illegal characters.';
-			return false;
 		}
 
 		if(substr($name_lower, 1, 1) == ' ') {
@@ -265,11 +260,36 @@ class Validator
 		}
 
 		if(preg_match('/ {2,}/', $name)) {
-			self::$lastError = 'Invalid character name format. Use only A-Z and numbers 0-9 and no double spaces.';
+			self::$lastError = 'Invalid character name format. Use only A-Z and no double spaces.';
 			return false;
 		}
 
-		if(strtolower($config['lua']['serverName']) == $name_lower) {
+		if (substr($name[0], 0, 1) !== strtoupper(substr($name[0], 0, 1))) {
+			self::$lastError = 'The first letter of a name has to be a capital letter.';
+			return false;
+		}
+
+		foreach (explode(' ', $name) as $word) {
+			$wordCut = substr($word, 1, strlen($word));
+			$hasUpperCase = preg_match('/[A-Z]/', $wordCut);
+			if ($hasUpperCase) {
+				self::$lastError = 'In names capital letters are only allowed at the beginning of a word.';
+				return false;
+			}
+
+			if (strlen($word) == 1) {
+				self::$lastError = 'This name contains a word with only one letter. Please use more than one letter for each word.';
+				return false;
+			}
+
+			$hasVowel = preg_match('/[aeiouAEIOU]/', $word);
+			if (!$hasVowel) {
+				self::$lastError = 'This name contains a word without vowels. Please choose another name.';
+				return false;
+			}
+		}
+
+		if(strtolower(configLua('serverName')) == $name_lower) {
 			self::$lastError = 'Your name cannot be same as server name.';
 			return false;
 		}
