@@ -7,9 +7,9 @@ use MyAAC\Cache\Cache;
 use MyAAC\Models\Menu;
 
 class Plugins {
-	private static $warnings = [];
-	private static $error = null;
-	private static $plugin_json = [];
+	private static array $warnings = [];
+	private static string $error = '';
+	private static array $plugin_json = [];
 
 	public static function getInits()
 	{
@@ -450,7 +450,7 @@ class Plugins {
 		return $plugins;
 	}
 
-	public static function getPluginSettings($filename)
+	public static function getPluginSettings($filename): mixed
 	{
 		$plugin_json = self::getPluginJson($filename);
 		if (!$plugin_json) {
@@ -915,15 +915,15 @@ class Plugins {
 		return Semver::satisfies($plugin_info['version'], $version);
 	}
 
-	public static function getWarnings() {
+	public static function getWarnings(): array {
 		return self::$warnings;
 	}
 
-	public static function clearWarnings() {
+	public static function clearWarnings(): void {
 		self::$warnings = [];
 	}
 
-	public static function getError() {
+	public static function getError(): string {
 		return self::$error;
 	}
 
@@ -934,7 +934,7 @@ class Plugins {
 	 * @param string $templateName
 	 * @param array $menus
 	 */
-	public static function installMenus($templateName, $menus, $clearOld = false)
+	public static function installMenus($templateName, $menus, $clearOld = false): void
 	{
 		global $db;
 
@@ -985,7 +985,7 @@ class Plugins {
 		}
 	}
 
-	private static function getAutoLoadOption(array $plugin, string $optionName, bool $default = true)
+	private static function getAutoLoadOption(array $plugin, string $optionName, bool $default = true): bool
 	{
 		if (isset($plugin['autoload'])) {
 			$autoload = $plugin['autoload'];
@@ -994,7 +994,7 @@ class Plugins {
 					return getBoolean($autoload[$optionName]);
 				}
 			}
-			else if (is_bool($autoload)) {
+			elseif (is_bool($autoload)) {
 				return $autoload;
 			}
 		}
