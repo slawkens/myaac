@@ -367,6 +367,7 @@ class Settings implements \ArrayAccess
 		</div>
 		<div class="box-footer">
 			<button name="save" type="submit" class="btn btn-primary">Save</button>
+			<button form="reset-settings-form" name="reset" type="submit" class="btn btn-warning position-absolute" style="right: 0; bottom: 0" onclick="return confirm('Are you sure? This will clear all settings for this plugin!')">Reset</button>
 		</div>
 		<?php
 
