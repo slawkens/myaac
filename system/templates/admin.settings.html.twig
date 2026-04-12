@@ -22,7 +22,7 @@
 	</div>
 </div>
 
-<form id="reset-settings-form" method="post" action="{{ constant('ADMIN_URL') }}?p=settings&plugin={{ settingsKeyName }}">
+<form id="reset-settings-form" method="post" action="{{ constant('ADMIN_URL') }}?p=settings&plugin={{ pluginName }}">
 	{{ csrf() }}
 	<input type="hidden" name="reset" value="1">
 </form>
