@@ -20,13 +20,31 @@ class Plugins {
 					continue;
 				}
 
+				$initPriority = 1000;
+				if (isset($plugin['autoload']['init-priority'])) {
+					$initPriority = (int) $plugin['autoload']['init-priority'];
+				}
+
 				$pluginInits = glob(PLUGINS . $plugin['filename'] . '/init.php');
 				foreach ($pluginInits as $path) {
-					$inits[] = $path;
+					$inits[] = [
+						'file' => $path,
+						'priority' => $initPriority
+					];
 				}
 			}
 
-			return $inits;
+			usort($inits, function ($a, $b)
+			{
+				return $a['priority'] <=> $b['priority'];
+			});
+
+			$ret = [];
+			foreach ($inits as $init) {
+				$ret[] = $init['file'];
+			}
+
+			return $ret;
 		});
 	}
 
