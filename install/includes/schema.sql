@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS `myaac_changelog`
 CREATE TABLE IF NOT EXISTS `myaac_config`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
-	`name` varchar(30) NOT NULL,
-	`value` varchar(1000) NOT NULL,
+	`name` varchar(255) NOT NULL,
+	`value` varchar(10000) NOT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
