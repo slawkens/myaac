@@ -11,6 +11,8 @@ class Plugins {
 	private static string $error = '';
 	private static array $plugin_json = [];
 
+	const DEFAULT_PRIORITY = 1000;
+
 	public static function getInits()
 	{
 		return Cache::remember('plugins_inits', 10 * 60, function () {
@@ -20,7 +22,7 @@ class Plugins {
 					continue;
 				}
 
-				$initPriority = 1000;
+				$initPriority = self::DEFAULT_PRIORITY;
 				if (isset($plugin['autoload']['init-priority'])) {
 					$initPriority = (int) $plugin['autoload']['init-priority'];
 				}
@@ -57,7 +59,7 @@ class Plugins {
 					continue;
 				}
 
-				$adminPagesDefaultPriority = 1000;
+				$adminPagesDefaultPriority = self::DEFAULT_PRIORITY;
 				if (isset($plugin['admin-pages-default-priority'])) {
 					$adminPagesDefaultPriority = $plugin['admin-pages-default-priority'];
 				}
@@ -135,7 +137,7 @@ class Plugins {
 
 		$routes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
-			$routesDefaultPriority = 1000;
+			$routesDefaultPriority = self::DEFAULT_PRIORITY;
 			if (isset($plugin['routes-default-priority'])) {
 				$routesDefaultPriority = $plugin['routes-default-priority'];
 			}
@@ -183,7 +185,7 @@ class Plugins {
 				}
 			}
 
-			$pagesDefaultPriority = 1000;
+			$pagesDefaultPriority = self::DEFAULT_PRIORITY;
 			if (isset($plugin['pages-default-priority'])) {
 				$pagesDefaultPriority = $plugin['pages-default-priority'];
 			}
@@ -336,7 +338,7 @@ class Plugins {
 		foreach(self::getAllPluginsJson() as $plugin) {
 			if (isset($plugin['hooks'])) {
 				foreach ($plugin['hooks'] as $_name => $info) {
-					$priority = 1000;
+					$priority = self::DEFAULT_PRIORITY;
 
 					if (str_contains($info['type'], 'HOOK_')) {
 						$info['type'] = str_replace('HOOK_', '', $info['type']);
