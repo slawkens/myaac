@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS `myaac_account_actions`
 	`ip` varchar(45) NOT NULL DEFAULT '',
 	`date` int NOT NULL DEFAULT 0,
 	`action` varchar(255) NOT NULL DEFAULT '',
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	INDEX `myaac_account_actions_account_id` (`account_id`),
+	INDEX `myaac_account_actions_ip` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `myaac_account_emails_verify`
