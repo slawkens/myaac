@@ -3,7 +3,8 @@
 ### Added
 * Menus: Add an "access" option to Menus (#340)
   * Possibility to hide menus for unauthorized users
-* Settings: Add Reset button (https://github.com/slawkens/myaac/commit/7104c2258fd724a55239821b46a616dab845b22a, https://github.com/slawkens/myaac/commit/e274b8350451a20c24e652ea05ed1964ebb86b54) 
+* Settings: Add Reset button (https://github.com/slawkens/myaac/commit/7104c2258fd724a55239821b46a616dab845b22a, https://github.com/slawkens/myaac/commit/e274b8350451a20c24e652ea05ed1964ebb86b54)
+* New Setting: block create account spam by ip (https://github.com/slawkens/myaac/commit/54265f42e987522803288477952d6e5c4daeeb24)
 * Functions: Add the possibility to fetch skills, balance and frags in the getTopPlayers function (#347)
 * Plugins: autoload init-priority option (https://github.com/slawkens/myaac/commit/f1aa12840875960849fa0c99a2bbe0ad2949bbec)
 
