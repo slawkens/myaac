@@ -11,7 +11,6 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
-use MyAAC\Items;
 use MyAAC\Models\Config;
 use MyAAC\Models\Guild;
 use MyAAC\Models\House;
@@ -21,6 +20,7 @@ use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
 use MyAAC\News;
 use MyAAC\Plugins;
+use MyAAC\Server\Items;
 use MyAAC\Settings;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -1638,58 +1638,6 @@ function verify_number($number, $name, $max_length)
 	$number_length = strlen($number);
 	if ($number_length <= 0 || $number_length > $max_length)
 		echo_error($name . ' cannot be longer than ' . $max_length . ' digits.');
-}
-
-function Outfits_loadfromXML()
-{
-	global $config;
-	$file_path = $config['data_path'] . 'XML/outfits.xml';
-	if (!file_exists($file_path)) {	return null; }
-
-	$xml = new DOMDocument;
-	$xml->load($file_path);
-
-	$outfits = null;
-	foreach ($xml->getElementsByTagName('outfit') as $outfit) {
-		$outfits[] = Outfit_parseNode($outfit);
-	}
-	return $outfits;
-}
-
- function Outfit_parseNode($node) {
-	$looktype = (int)$node->getAttribute('looktype');
-	$type = (int)$node->getAttribute('type');
-	$lookname = $node->getAttribute('name');
-	$premium = $node->getAttribute('premium');
-	$unlocked = $node->getAttribute('unlocked');
-	$enabled = $node->getAttribute('enabled');
-	return array('id' => $looktype, 'type' => $type, 'name' => $lookname, 'premium' => $premium, 'unlocked' => $unlocked, 'enabled' => $enabled);
-}
-
-function Mounts_loadfromXML()
-{
-	global $config;
-	$file_path = $config['data_path'] . 'XML/mounts.xml';
-	if (!file_exists($file_path)) {	return null; }
-
-	$xml = new DOMDocument;
-	$xml->load($file_path);
-
-	$mounts = null;
-	foreach ($xml->getElementsByTagName('mount') as $mount) {
-		$mounts[] = Mount_parseNode($mount);
-	}
-	return $mounts;
-}
-
- function Mount_parseNode($node) {
-	$id = (int)$node->getAttribute('id');
-	$clientid = (int)$node->getAttribute('clientid');
-	$name = $node->getAttribute('name');
-	$speed = (int)$node->getAttribute('speed');
-	$premium = $node->getAttribute('premium');
-	$type = $node->getAttribute('type');
-	return array('id' => $id, 'clientid' => $clientid, 'name' => $name, 'speed' => $speed, 'premium' => $premium, 'type' => $type);
 }
 
 function left($str, $length) {
