@@ -18,6 +18,15 @@ class Account extends Model {
 
 	public $timestamps = false;
 
+	protected $fillable = [
+		'name', 'number', 'email', 'password',
+		'key', 'created', 'rlname', 'location', 'country',
+		'web_lastlogin', 'web_flags',
+		'email_new', 'email_new_time', 'email_code',
+		'premium_points', 'coins', 'coins_transferable',
+		'premium_ends_at', 'premend', 'lastday', 'premdays',
+	];
+
 	protected $casts = [
 		'lastday' => 'integer',
 		'premdays' => 'integer',
