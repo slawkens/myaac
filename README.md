@@ -86,12 +86,6 @@ Look: [Contributing](https://docs.my-aac.org/misc/contributing) in our wiki.
 
 If you have a great idea or want to contribute to the project - visit our website at https://www.my-aac.org
 
-## Project supported by JetBrains
-
-Many thanks to Jetbrains for kindly providing a license for me to work on this and other open-source projects.
-
-[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=https://github.com/slawkens)
-
 ### License
 
 This program and all associated files are released under the GNU Public License.  
