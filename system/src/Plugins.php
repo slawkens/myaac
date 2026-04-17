@@ -7,9 +7,11 @@ use MyAAC\Cache\Cache;
 use MyAAC\Models\Menu;
 
 class Plugins {
-	private static $warnings = [];
-	private static $error = null;
-	private static $plugin_json = [];
+	private static array $warnings = [];
+	private static string $error = '';
+	private static array $plugin_json = [];
+
+	const DEFAULT_PRIORITY = 1000;
 
 	public static function getInits()
 	{
@@ -20,13 +22,31 @@ class Plugins {
 					continue;
 				}
 
+				$initPriority = self::DEFAULT_PRIORITY;
+				if (isset($plugin['autoload']['init-priority'])) {
+					$initPriority = (int) $plugin['autoload']['init-priority'];
+				}
+
 				$pluginInits = glob(PLUGINS . $plugin['filename'] . '/init.php');
 				foreach ($pluginInits as $path) {
-					$inits[] = $path;
+					$inits[] = [
+						'file' => $path,
+						'priority' => $initPriority
+					];
 				}
 			}
 
-			return $inits;
+			usort($inits, function ($a, $b)
+			{
+				return $a['priority'] <=> $b['priority'];
+			});
+
+			$ret = [];
+			foreach ($inits as $init) {
+				$ret[] = $init['file'];
+			}
+
+			return $ret;
 		});
 	}
 
@@ -39,7 +59,7 @@ class Plugins {
 					continue;
 				}
 
-				$adminPagesDefaultPriority = 1000;
+				$adminPagesDefaultPriority = self::DEFAULT_PRIORITY;
 				if (isset($plugin['admin-pages-default-priority'])) {
 					$adminPagesDefaultPriority = $plugin['admin-pages-default-priority'];
 				}
@@ -117,7 +137,7 @@ class Plugins {
 
 		$routes = [];
 		foreach(self::getAllPluginsJson() as $plugin) {
-			$routesDefaultPriority = 1000;
+			$routesDefaultPriority = self::DEFAULT_PRIORITY;
 			if (isset($plugin['routes-default-priority'])) {
 				$routesDefaultPriority = $plugin['routes-default-priority'];
 			}
@@ -165,7 +185,7 @@ class Plugins {
 				}
 			}
 
-			$pagesDefaultPriority = 1000;
+			$pagesDefaultPriority = self::DEFAULT_PRIORITY;
 			if (isset($plugin['pages-default-priority'])) {
 				$pagesDefaultPriority = $plugin['pages-default-priority'];
 			}
@@ -318,7 +338,7 @@ class Plugins {
 		foreach(self::getAllPluginsJson() as $plugin) {
 			if (isset($plugin['hooks'])) {
 				foreach ($plugin['hooks'] as $_name => $info) {
-					$priority = 1000;
+					$priority = self::DEFAULT_PRIORITY;
 
 					if (str_contains($info['type'], 'HOOK_')) {
 						$info['type'] = str_replace('HOOK_', '', $info['type']);
@@ -432,7 +452,7 @@ class Plugins {
 		return $plugins;
 	}
 
-	public static function getPluginSettings($filename)
+	public static function getPluginSettings($filename): mixed
 	{
 		$plugin_json = self::getPluginJson($filename);
 		if (!$plugin_json) {
@@ -868,6 +888,11 @@ class Plugins {
 			}
 		}
 
+		global $hooks;
+		foreach($plugin_info['hooks'] ?? [] as $name => $info) {
+			$hooks->unregister($name, $info['type'], $info['file']);
+		}
+
 		clearCache();
 		return true;
 	}
@@ -892,15 +917,15 @@ class Plugins {
 		return Semver::satisfies($plugin_info['version'], $version);
 	}
 
-	public static function getWarnings() {
+	public static function getWarnings(): array {
 		return self::$warnings;
 	}
 
-	public static function clearWarnings() {
+	public static function clearWarnings(): void {
 		self::$warnings = [];
 	}
 
-	public static function getError() {
+	public static function getError(): string {
 		return self::$error;
 	}
 
@@ -911,7 +936,7 @@ class Plugins {
 	 * @param string $templateName
 	 * @param array $menus
 	 */
-	public static function installMenus($templateName, $menus, $clearOld = false)
+	public static function installMenus($templateName, $menus, $clearOld = false): void
 	{
 		global $db;
 
@@ -962,7 +987,7 @@ class Plugins {
 		}
 	}
 
-	private static function getAutoLoadOption(array $plugin, string $optionName, bool $default = true)
+	private static function getAutoLoadOption(array $plugin, string $optionName, bool $default = true): bool
 	{
 		if (isset($plugin['autoload'])) {
 			$autoload = $plugin['autoload'];
@@ -971,7 +996,7 @@ class Plugins {
 					return getBoolean($autoload[$optionName]);
 				}
 			}
-			else if (is_bool($autoload)) {
+			elseif (is_bool($autoload)) {
 				return $autoload;
 			}
 		}

@@ -39,7 +39,7 @@ class GiveAdminCommand extends Command
 		}
 
 		if (!$account->isLoaded()) {
-			$io->error('Cannot find account mit supplied parameter: ' . $accountParam);
+			$io->error('Cannot find account with supplied parameter: ' . $accountParam);
 			return self::FAILURE;
 		}
 
