@@ -25,7 +25,7 @@ class ExpStages
 
 		foreach($xml->getElementsByTagName('stage') as $stage)
 		{
-			/** @var DOMElement $stage */
+			/** @var \DOMElement $stage */
 			$maxLevel = $stage->getAttribute('maxlevel');
 			$this->stages[] = [
 				'levels' => $stage->getAttribute('minlevel') . (isset($maxLevel[0]) ? '-' . $maxLevel : '+'),
