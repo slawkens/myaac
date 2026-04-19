@@ -9,6 +9,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\Server\Lua\Loader;
+
 class Validator extends \MyAAC\Validator {}
 
 function check_name($name, &$errors = '') {
@@ -127,4 +129,24 @@ function Mount_parseNode($node): array
 	$premium = $node->getAttribute('premium');
 	$type = $node->getAttribute('type');
 	return array('id' => $id, 'clientid' => $clientid, 'name' => $name, 'speed' => $speed, 'premium' => $premium, 'type' => $type);
+}
+
+function load_config_lua(string $file): array
+{
+	$result = Loader::load($file);
+	if ($result === false) {
+		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $file . ').');
+		throw new \RuntimeException('ERROR: Cannot find ' . $file . ' file.');
+	}
+
+	return $result;
+}
+
+function configLua($key) {
+	global $config;
+	if (is_array($key)) {
+		return $config['lua'][$key[0]] = $key[1];
+	}
+
+	return @$config['lua'][$key];
 }
