@@ -1,4 +1,7 @@
 <?php
+
+use MyAAC\Server\Lua\Loader;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 if(!isset($_SESSION['var_server_path'])) {
@@ -11,23 +14,35 @@ $config['server_path'] = $_SESSION['var_server_path'];
 if($config['server_path'][strlen($config['server_path']) - 1] != '/')
 	$config['server_path'] .= '/';
 
-if((!isset($error) || !$error) && !file_exists($config['server_path'] . 'config.lua')) {
+$configLuaExists = file_exists($config['server_path'] . 'config.lua');
+$configTomlExists = file_exists($config['server_path'] . 'config/server.toml');
+if((!isset($error) || !$error)
+	&& !$configLuaExists
+	&& !$configTomlExists) {
 	error($locale['step_database_error_config']);
 	$error = true;
 }
 
-if(!isset($error) || !$error) {
-	$config['lua'] = load_config_lua($config['server_path'] . 'config.lua');
-	if(isset($config['lua']['sqlType'])) // tfs 0.3
-		$config['database_type'] = $config['lua']['sqlType'];
-	else if(isset($config['lua']['mysqlHost'])) // tfs 0.2/1.0
-		$config['database_type'] = 'mysql';
-	else if(isset($config['lua']['database_type'])) // otserv
-		$config['database_type'] = $config['lua']['database_type'];
-	else if(isset($config['lua']['sql_type'])) // otserv
-		$config['database_type'] = $config['lua']['sql_type'];
-	else {
-		$config['database_type'] = '';
+if (!isset($error) || !$error) {
+	if($configLuaExists) {
+		$config['lua'] = Loader::load($config['server_path'] . 'config.lua');
+		if (isset($config['lua']['sqlType'])) // tfs 0.3
+			$config['database_type'] = $config['lua']['sqlType'];
+		elseif (isset($config['lua']['mysqlHost'])) // tfs 0.2/1.0
+			$config['database_type'] = 'mysql';
+		elseif (isset($config['lua']['database_type'])) // otserv
+			$config['database_type'] = $config['lua']['database_type'];
+		elseif (isset($config['lua']['sql_type'])) // otserv
+			$config['database_type'] = $config['lua']['sql_type'];
+		else {
+			$config['database_type'] = '';
+		}
+	}
+	elseif ($configTomlExists) {
+		$tomlConfig = new MyAAC\Server\TOML\Config();
+		$tomlConfig->load();
+		$config['server'] = $tomlConfig->get();
+		$config['database_type'] = (isset($config['server']['database']['mysql']) ? 'mysql' : '');
 	}
 
 	$config['database_type'] = strtolower($config['database_type']);

@@ -10,6 +10,7 @@
 
 use MyAAC\Forum;
 use MyAAC\Models\Player;
+use MyAAC\Server\Outfits;
 use MyAAC\Server\XML\Vocations;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -659,14 +660,14 @@ else if (isset($_REQUEST['search'])) {
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="look_type" class="control-label">Type:</label>
 										<?php
-										$outfitlist = null;
-										$outfitlist = Outfits_loadfromXML();
-										if ($outfitlist) { ?>
+										$outfits = Outfits::get();
+										if ($outfits) { ?>
 											<select name="look_type" id="look_type" class="form-control custom-select">
 												<?php
-												foreach ($outfitlist as $_id => $outfit) {
-													if ($outfit['enabled'] == 'yes') ;
-													echo '<option value=' . $outfit['id'] . ($outfit['id'] == $player->getLookType() ? ' selected' : '') . '>' . $outfit['name'] . ' - ' . ($outfit['type'] == 1 ? 'Male' : 'Female') . '</option>';
+												foreach ($outfits as $outfit) {
+													if ($outfit['enabled']) {
+														echo '<option value=' . $outfit['id'] . ($outfit['id'] == $player->getLookType() ? ' selected' : '') . '>' . $outfit['name'] . ' - ' . ($outfit['sex'] == SEX_MALE ? 'Male' : 'Female') . '</option>';
+													}
 												}
 												?>
 											</select>
