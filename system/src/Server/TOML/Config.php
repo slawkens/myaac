@@ -50,6 +50,7 @@ class Config
 		$this->config['freePremium'] = $this->config['server']['accounts']['free_premium'] ?? false;
 		$this->config['ip'] = $this->config['server']['network']['ip'] ?? '127.0.0.1';
 		$this->config['worldType'] = $this->config['server']['world']['type'] ?? 'unknown';
+		$this->config['experienceStages'] = $this->config['stages']['config']['enabled'] ?? false;
 		$this->config['houseRentPeriod'] = $this->config['server']['houses']['rent_period'] ?? 'never';
 		$this->config['pzLocked'] = $this->config['combat']['skull']['pz_locked'] ?? 60 * 1000;
 		$this->config['url'] = $this->config['server']['identity']['url'] ?? 'http://localhost';
