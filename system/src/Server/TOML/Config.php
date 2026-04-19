@@ -15,7 +15,7 @@ class Config
 		$files = glob($path . '*.toml');
 
 		// filter files we don't need
-		$ignore = ['account_manager', 'mounts', 'object_pools', 'outfits', 'scripts'];
+		$ignore = ['account_manager', 'gameplay', 'groups', 'mounts', 'object_pools', 'outfits', 'scripts'];
 		$files = array_filter($files, function ($file) use ($ignore) {
 			foreach ($ignore as $item) {
 				if (str_contains($file, $item)) {
