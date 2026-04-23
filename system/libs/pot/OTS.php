@@ -372,8 +372,8 @@ class POT
 
 		global $debugBar;
 		if (isset($debugBar)) {
-			$this->db = new DebugBar\DataCollector\PDO\TraceablePDO(new OTS_DB_MySQL($params));
-			$debugBar->addCollector(new DebugBar\DataCollector\PDO\PDOCollector($this->db));
+			$this->db = new \MyAAC\Debug\TraceablePDOWithBacktrace(new OTS_DB_MySQL($params));
+			$debugBar->addCollector(new \MyAAC\Debug\PDOCollectorWithBacktrace($this->db));
 		}
 		else {
 			$this->db = new OTS_DB_MySQL($params);
