@@ -14,7 +14,8 @@ use MyAAC\CsrfToken;
 use MyAAC\Hooks;
 use MyAAC\Plugins;
 use MyAAC\Models\Town;
-use MyAAC\Server\XML\Vocations;
+use MyAAC\Server\Config;
+use MyAAC\Server\Vocations;
 use MyAAC\Settings;
 
 defined('MYAAC') or die('Direct access not allowed!');
@@ -90,28 +91,20 @@ foreach($_REQUEST as $var => $value) {
 }
 
 // load otserv config file
-$config_lua_reload = true;
 if($cache->enabled()) {
 	$tmp = null;
-	if($cache->fetch('server_path', $tmp) && $tmp == $config['server_path']) {
-		$tmp = null;
-		if($cache->fetch('config_lua', $tmp) && $tmp) {
-			$config['lua'] = unserialize($tmp);
-			$config_lua_reload = false;
-		}
+	if(!$cache->fetch('server_path', $tmp) || $tmp != config('server_path')) {
+		$cache->delete('config_server');
 	}
 }
 
-if($config_lua_reload) {
-	$config['lua'] = load_config_lua($config['server_path'] . 'config.lua');
+if (empty($config['server'])) {
+	$config['server'] = $config['lua'] = Config::get();
 
-	// cache config
 	if($cache->enabled()) {
-		$cache->set('config_lua', serialize($config['lua']), 2 * 60);
-		$cache->set('server_path', $config['server_path'], 10 * 60);
+		$cache->set('server_path', config('server_path'), 10 * 60);
 	}
 }
-unset($tmp);
 
 if(isset($config['lua']['servername']))
 	$config['lua']['serverName'] = $config['lua']['servername'];

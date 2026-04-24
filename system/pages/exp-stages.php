@@ -11,20 +11,20 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Experience Stages';
 
-if(file_exists($config['data_path'] . 'XML/stages.xml')) {
-	$stages = new DOMDocument();
-	$stages->load($config['data_path'] . 'XML/stages.xml');
-}
-
-if(!isset($config['lua']['experienceStages']) || !getBoolean($config['lua']['experienceStages']))
-{
+if((!isset($config['lua']['experienceStages']) || !getBoolean($config['lua']['experienceStages']))
+	&& (!isset($config['lua']['rateUseStages']) || !getBoolean($config['lua']['rateUseStages']))
+	) {
 	$enabled = false;
 
-	if(isset($stages)) {
+	if(file_exists($config['data_path'] . 'XML/stages.xml')) {
+		$stages = new DOMDocument();
+		$stages->load($config['data_path'] . 'XML/stages.xml');
+
 		foreach($stages->getElementsByTagName('config') as $node) {
 			/** @var DOMElement $node */
-			if($node->getAttribute('enabled'))
+			if($node->getAttribute('enabled')) {
 				$enabled = true;
+			}
 		}
 	}
 
@@ -42,21 +42,12 @@ if(!isset($config['lua']['experienceStages']) || !getBoolean($config['lua']['exp
 	}
 }
 
-if(!$stages)
-{
-	echo 'Error: cannot load <b>stages.xml</b>!';
-	return;
-}
+$stages = new MyAAC\Server\ExpStages();
+$stagesArray = $stages->get();
 
-$stagesArray = [];
-foreach($stages->getElementsByTagName('stage') as $stage)
-{
-	/** @var DOMElement $stage */
-	$maxLevel = $stage->getAttribute('maxlevel');
-	$stagesArray[] = [
-		'levels' => $stage->getAttribute('minlevel') . (isset($maxLevel[0]) ? '-' . $maxLevel : '+'),
-		'multiplier' => $stage->getAttribute('multiplier')
-	];
+if (empty($stagesArray)) {
+	echo 'Error when loading experience stages.';
+	return;
 }
 
 $twig->display('experience_stages.html.twig', ['stages' => $stagesArray]);

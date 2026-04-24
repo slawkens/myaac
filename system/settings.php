@@ -12,6 +12,7 @@
  */
 
 use MyAAC\Cache;
+use MyAAC\Server\Config;
 use MyAAC\Settings;
 
 $templates = Cache::remember('templates', 5 * 60, function () {
@@ -1802,8 +1803,8 @@ Sent by MyAAC,<br/>
 
 			// test config.lua existence
 			// if fail - revert the setting and inform the user
-			if (!file_exists($server_path . 'config.lua')) {
-				error('Server Path is invalid - cannot find config.lua in the directory. Setting have been reverted.');
+			if (!Config::exists()) {
+				error('Server Path is invalid - cannot find config.lua or config/server.toml in the directory. Setting have been reverted.');
 				$configToSave['server_path'] = $configOriginal['server_path'];
 			}
 
