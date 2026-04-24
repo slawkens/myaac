@@ -30,7 +30,6 @@ parameters:
 		# Eloquent models
 		- '#Call to an undefined method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\)#'
 		- '#Call to an undefined static method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\)#'
-		# system/pages/highscores.php
 		-
 			message: '#Variable \$tmp in empty\(\) always exists and is always falsy#'
 			path: templates\kathrine\javascript.php

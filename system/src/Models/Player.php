@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $name
  * @property int $level
  * @property int $vocation
+ * @property int $promotion
  * @property int $online
  * @property int $looktype
  * @property int $lookhead
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $looklegs
  * @property int $lookfeet
  * @property int $lookaddons
- * @property int $promotion
  * @property bool $online_status
  * @property string $vocation_name
  * @property string $outfit_url
