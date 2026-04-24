@@ -19,6 +19,7 @@ class PDOCollectorWithBacktrace extends PDOCollector
 					$stmt['backtrace'] = $this->formatBacktrace($backtraces[$i]);
 				}
 			}
+			unset($stmt);
 		}
 
 		return $data;
