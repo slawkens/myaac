@@ -36,6 +36,10 @@ class PDOCollectorWithBacktrace extends PDOCollector
 				continue;
 			}
 
+			if (str_contains($frame['file'], DIRECTORY_SEPARATOR . 'Debug' . DIRECTORY_SEPARATOR)) {
+				continue;
+			}
+
 			$function = isset($frame['class'])
 				? $frame['class'] . ($frame['type'] ?? '::') . ($frame['function'] ?? '')
 				: ($frame['function'] ?? '');
