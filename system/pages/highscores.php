@@ -211,6 +211,7 @@ if (empty($highscores)) {
 		$tmp['online'] = $row->online_status;
 		$tmp['vocation'] = $row->vocation_name;
 		$tmp['outfit_url'] = $row->outfit_url; // @phpstan-ignore-line
+		$tmp['link'] = getPlayerLink($row->name, false);
 		unset($tmp['online_table']);
 
 		return $tmp;
@@ -244,7 +245,6 @@ foreach($highscores as $id => &$player)
 			$player['experience'] = number_format($player['experience']);
 		}
 
-		$player['link'] = getPlayerLink($player['name'], false);
 		$player['flag'] = getFlagImage($player['country']);
 		$player['outfit'] = '<img style="position:absolute;margin-top:-50px;margin-left:-30px" src="' . $player['outfit_url'] . '" alt="" />';
 
