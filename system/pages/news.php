@@ -108,8 +108,9 @@ $title = 'Latest News';
 $cache = Cache::getInstance();
 
 $news_cached = false;
-if($cache->enabled())
+if($cache->enabled() && !admin()) {
 	$news_cached = News::getCached(NEWS);
+}
 
 if(!$news_cached)
 {

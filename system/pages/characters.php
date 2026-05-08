@@ -47,7 +47,6 @@ if(isset($_REQUEST['name']))
 
 if(empty($name))
 {
-	$tmp_link = getPlayerLink($name);
 	echo 'Here you can get detailed information about a certain player on ' . $config['lua']['serverName'] . '.<br/>';
 	echo generate_search_form(true);
 	return;
