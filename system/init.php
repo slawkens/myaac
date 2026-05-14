@@ -106,12 +106,6 @@ if (empty($config['server'])) {
 	}
 }
 
-if(isset($config['lua']['servername']))
-	$config['lua']['serverName'] = $config['lua']['servername'];
-
-if(isset($config['lua']['houserentperiod']))
-	$config['lua']['houseRentPeriod'] = $config['lua']['houserentperiod'];
-
 // localize data/ directory based on data directory set in config.lua
 foreach(array('dataDirectory', 'data_directory', 'datadir') as $key) {
 	if(!isset($config['lua'][$key][0])) {
