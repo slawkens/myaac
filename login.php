@@ -294,14 +294,12 @@ function cacheEventScheduleResponse($filePath, $format, $eventlist)
 	$response = encodeJsonResponse(['eventlist' => $eventlist, 'lastupdatetimestamp' => time()]);
 	$cache = Cache::getInstance();
 	if ($cache->enabled()) {
-		$payload = json_encode(array_merge(getEventScheduleFileSignature($filePath), ['response' => $response]));
-		if ($payload !== false) {
-			$cache->set(
-				getEventScheduleCacheKey($filePath, $format),
-				$payload,
-				10 * 365 * 24 * 60 * 60
-			);
-		}
+		$payload = encodeJsonResponse(array_merge(getEventScheduleFileSignature($filePath), ['response' => $response]));
+		$cache->set(
+			getEventScheduleCacheKey($filePath, $format),
+			$payload,
+			10 * 365 * 24 * 60 * 60
+		);
 	}
 
 	return $response;
