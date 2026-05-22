@@ -97,23 +97,37 @@ function parseEventSchedulerXmlValue($table, $attribute, $default = '')
 	return $value === 'error' ? $default : $value;
 }
 
+function getEventScheduleJsonField($event, $field, $default = '')
+{
+	return array_key_exists($field, $event) ? (string)$event[$field] : $default;
+}
+
+function getEventScheduleJsonSection($event, $field)
+{
+	if (!isset($event[$field]) || !is_array($event[$field])) {
+		return [];
+	}
+
+	return $event[$field];
+}
+
 function createEventScheduleJsonEntry($event)
 {
 	if (!is_array($event)) {
 		return null;
 	}
 
-	$defaultHour = isset($event['hour']) ? (string)$event['hour'] : '';
-	$startHour = isset($event['starthour']) ? (string)$event['starthour'] : $defaultHour;
-	$endHour = isset($event['endhour']) ? (string)$event['endhour'] : $defaultHour;
+	$defaultHour = getEventScheduleJsonField($event, 'hour');
+	$startHour = getEventScheduleJsonField($event, 'starthour', $defaultHour);
+	$endHour = getEventScheduleJsonField($event, 'endhour', $defaultHour);
 	$startDate = parseEventSchedulerJsonDate($event['startdate'] ?? '', $startHour);
 	$endDate = parseEventSchedulerJsonDate($event['enddate'] ?? '', $endHour, true);
 	if ($startDate === null || $endDate === null) {
 		return null;
 	}
 
-	$colors = isset($event['colors']) && is_array($event['colors']) ? $event['colors'] : [];
-	$details = isset($event['details']) && is_array($event['details']) ? $event['details'] : [];
+	$colors = getEventScheduleJsonSection($event, 'colors');
+	$details = getEventScheduleJsonSection($event, 'details');
 
 	return [
 		'colorlight' => (string)($colors['colorlight'] ?? ''),
