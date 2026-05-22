@@ -20,6 +20,16 @@ function sendError($message, $code = 3){
 	die(json_encode($ret));
 }
 
+function encodeJsonResponse($data)
+{
+	$response = json_encode($data);
+	if ($response === false) {
+		sendError('Failed to encode JSON response.', 500);
+	}
+
+	return $response;
+}
+
 # event schedule function
 function parseEvent($table1, $date, $table2)
 {
@@ -70,15 +80,41 @@ function parseEventSchedulerJsonDate($date, $hour, $endDate = false)
 	return $timestamp !== false ? $timestamp : null;
 }
 
+function parseEventSchedulerXmlDate($event, $attribute)
+{
+	$date = trim((string)$event->getAttribute($attribute));
+	if ($date === '') {
+		return null;
+	}
+
+	$dateTime = date_create($date);
+	return $dateTime !== false ? intval($dateTime->format('U')) : null;
+}
+
+function parseEventSchedulerXmlValue($table, $attribute, $default = '')
+{
+	$value = parseEvent($table, false, $attribute);
+	return $value === 'error' ? $default : $value;
+}
+
 function loadEventScheduleFromJson($filePath)
 {
 	if (!file_exists($filePath)) {
 		return null;
 	}
 
-	$json = json_decode(file_get_contents($filePath), true);
+	$content = file_get_contents($filePath);
+	if ($content === false) {
+		return null;
+	}
+
+	$json = json_decode($content, true);
+	if (json_last_error() !== JSON_ERROR_NONE) {
+		return null;
+	}
+
 	if (!is_array($json) || !isset($json['events']) || !is_array($json['events'])) {
-		return [];
+		return null;
 	}
 
 	$eventlist = [];
@@ -122,24 +158,35 @@ function loadEventScheduleFromXml($filePath)
 	}
 
 	$xml = new DOMDocument;
-	if (@$xml->load($filePath) === false) {
-		return [];
+	$previousUseInternalErrors = libxml_use_internal_errors(true);
+	libxml_clear_errors();
+	$loaded = $xml->load($filePath);
+	libxml_clear_errors();
+	libxml_use_internal_errors($previousUseInternalErrors);
+	if ($loaded === false) {
+		return null;
 	}
 
 	$eventlist = [];
 	$tableevent = $xml->getElementsByTagName('event');
 	foreach ($tableevent as $event) {
 		if ($event) {
+			$startDate = parseEventSchedulerXmlDate($event, 'startdate');
+			$endDate = parseEventSchedulerXmlDate($event, 'enddate');
+			if ($startDate === null || $endDate === null) {
+				continue;
+			}
+
 			$eventlist[] = [
-				'colorlight' => parseEvent($event->getElementsByTagName('colors'), false, 'colorlight'),
-				'colordark' => parseEvent($event->getElementsByTagName('colors'), false, 'colordark'),
-				'description' => parseEvent($event->getElementsByTagName('description'), false, 'description'),
-				'displaypriority' => intval(parseEvent($event->getElementsByTagName('details'), false, 'displaypriority')),
-				'enddate' => intval(parseEvent($event, true, false)),
-				'isseasonal' => getBoolean(intval(parseEvent($event->getElementsByTagName('details'), false, 'isseasonal'))),
+				'colorlight' => parseEventSchedulerXmlValue($event->getElementsByTagName('colors'), 'colorlight'),
+				'colordark' => parseEventSchedulerXmlValue($event->getElementsByTagName('colors'), 'colordark'),
+				'description' => parseEventSchedulerXmlValue($event->getElementsByTagName('description'), 'description'),
+				'displaypriority' => intval(parseEventSchedulerXmlValue($event->getElementsByTagName('details'), 'displaypriority', 0)),
+				'enddate' => $endDate,
+				'isseasonal' => getBoolean(intval(parseEventSchedulerXmlValue($event->getElementsByTagName('details'), 'isseasonal', 0))),
 				'name' => $event->getAttribute('name'),
-				'startdate' => intval(parseEvent($event, true, true)),
-				'specialevent' => intval(parseEvent($event->getElementsByTagName('details'), false, 'specialevent'))
+				'startdate' => $startDate,
+				'specialevent' => intval(parseEventSchedulerXmlValue($event->getElementsByTagName('details'), 'specialevent', 0))
 			];
 		}
 	}
@@ -224,7 +271,11 @@ function getCachedEventScheduleResponse($filePath, $format)
 		return null;
 	}
 
-	$cached = @unserialize($payload);
+	$cached = json_decode($payload, true);
+	if (json_last_error() !== JSON_ERROR_NONE) {
+		return null;
+	}
+
 	$signature = getEventScheduleFileSignature($filePath);
 	if (
 		is_array($cached)
@@ -240,14 +291,17 @@ function getCachedEventScheduleResponse($filePath, $format)
 
 function cacheEventScheduleResponse($filePath, $format, $eventlist)
 {
-	$response = json_encode(['eventlist' => $eventlist, 'lastupdatetimestamp' => time()]);
+	$response = encodeJsonResponse(['eventlist' => $eventlist, 'lastupdatetimestamp' => time()]);
 	$cache = Cache::getInstance();
 	if ($cache->enabled()) {
-		$cache->set(
-			getEventScheduleCacheKey($filePath, $format),
-			serialize(getEventScheduleFileSignature($filePath) + ['response' => $response]),
-			10 * 365 * 24 * 60 * 60
-		);
+		$payload = json_encode(array_merge(getEventScheduleFileSignature($filePath), ['response' => $response]));
+		if ($payload !== false) {
+			$cache->set(
+				getEventScheduleCacheKey($filePath, $format),
+				$payload,
+				10 * 365 * 24 * 60 * 60
+			);
+		}
 	}
 
 	return $response;
@@ -323,19 +377,21 @@ function getBoostedCreatureResponse($db)
 
 	$clientVersion = (int)setting('core.client');
 	if ($clientVersion >= 1340) {
-		$creatureBoost = $db->query("SELECT * FROM " . $db->tableName('boosted_creature'))->fetchAll();
-		$bossBoost = $db->query("SELECT * FROM " . $db->tableName('boosted_boss'))->fetchAll();
-		return cacheBoostedCreatureResponse($signature, json_encode([
+		$creatureBoostQuery = $db->query("SELECT `raceid` FROM " . $db->tableName('boosted_creature') . " LIMIT 1");
+		$bossBoostQuery = $db->query("SELECT `raceid` FROM " . $db->tableName('boosted_boss') . " LIMIT 1");
+		$creatureBoost = $creatureBoostQuery !== false ? $creatureBoostQuery->fetch(PDO::FETCH_ASSOC) : false;
+		$bossBoost = $bossBoostQuery !== false ? $bossBoostQuery->fetch(PDO::FETCH_ASSOC) : false;
+		return cacheBoostedCreatureResponse($signature, encodeJsonResponse([
 			//'boostedcreature' => true,
-			'bossraceid' => intval($bossBoost[0]['raceid']),
-			'creatureraceid' => intval($creatureBoost[0]['raceid']),
+			'bossraceid' => intval($bossBoost['raceid'] ?? 0),
+			'creatureraceid' => intval($creatureBoost['raceid'] ?? 0),
 		]));
 	}
 
 	$boostedCreature = BoostedCreature::first();
-	return cacheBoostedCreatureResponse($signature, json_encode([
+	return cacheBoostedCreatureResponse($signature, encodeJsonResponse([
 		'boostedcreature' => true,
-		'raceid' => $boostedCreature->raceid
+		'raceid' => $boostedCreature->raceid ?? 0
 	]));
 }
 
