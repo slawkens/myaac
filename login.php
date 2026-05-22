@@ -97,6 +97,37 @@ function parseEventSchedulerXmlValue($table, $attribute, $default = '')
 	return $value === 'error' ? $default : $value;
 }
 
+function createEventScheduleJsonEntry($event)
+{
+	if (!is_array($event)) {
+		return null;
+	}
+
+	$defaultHour = isset($event['hour']) ? (string)$event['hour'] : '';
+	$startHour = isset($event['starthour']) ? (string)$event['starthour'] : $defaultHour;
+	$endHour = isset($event['endhour']) ? (string)$event['endhour'] : $defaultHour;
+	$startDate = parseEventSchedulerJsonDate($event['startdate'] ?? '', $startHour);
+	$endDate = parseEventSchedulerJsonDate($event['enddate'] ?? '', $endHour, true);
+	if ($startDate === null || $endDate === null) {
+		return null;
+	}
+
+	$colors = isset($event['colors']) && is_array($event['colors']) ? $event['colors'] : [];
+	$details = isset($event['details']) && is_array($event['details']) ? $event['details'] : [];
+
+	return [
+		'colorlight' => (string)($colors['colorlight'] ?? ''),
+		'colordark' => (string)($colors['colordark'] ?? ''),
+		'description' => (string)($event['description'] ?? ''),
+		'displaypriority' => intval($details['displaypriority'] ?? 0),
+		'enddate' => intval($endDate),
+		'isseasonal' => getBoolean($details['isseasonal'] ?? false),
+		'name' => (string)($event['name'] ?? ''),
+		'startdate' => intval($startDate),
+		'specialevent' => intval($details['specialevent'] ?? 0)
+	];
+}
+
 function loadEventScheduleFromJson($filePath)
 {
 	if (!file_exists($filePath)) {
@@ -119,33 +150,12 @@ function loadEventScheduleFromJson($filePath)
 
 	$eventlist = [];
 	foreach ($json['events'] as $event) {
-		if (!is_array($event)) {
+		$eventEntry = createEventScheduleJsonEntry($event);
+		if ($eventEntry === null) {
 			continue;
 		}
 
-		$defaultHour = isset($event['hour']) ? (string)$event['hour'] : '';
-		$startHour = isset($event['starthour']) ? (string)$event['starthour'] : $defaultHour;
-		$endHour = isset($event['endhour']) ? (string)$event['endhour'] : $defaultHour;
-		$startDate = parseEventSchedulerJsonDate($event['startdate'] ?? '', $startHour);
-		$endDate = parseEventSchedulerJsonDate($event['enddate'] ?? '', $endHour, true);
-		if ($startDate === null || $endDate === null) {
-			continue;
-		}
-
-		$colors = isset($event['colors']) && is_array($event['colors']) ? $event['colors'] : [];
-		$details = isset($event['details']) && is_array($event['details']) ? $event['details'] : [];
-
-		$eventlist[] = [
-			'colorlight' => (string)($colors['colorlight'] ?? ''),
-			'colordark' => (string)($colors['colordark'] ?? ''),
-			'description' => (string)($event['description'] ?? ''),
-			'displaypriority' => intval($details['displaypriority'] ?? 0),
-			'enddate' => intval($endDate),
-			'isseasonal' => getBoolean($details['isseasonal'] ?? false),
-			'name' => (string)($event['name'] ?? ''),
-			'startdate' => intval($startDate),
-			'specialevent' => intval($details['specialevent'] ?? 0)
-		];
+		$eventlist[] = $eventEntry;
 	}
 
 	return $eventlist;
