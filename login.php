@@ -12,19 +12,155 @@ require_once SYSTEM . 'functions.php';
 require_once SYSTEM . 'init.php';
 require_once SYSTEM . 'status.php';
 
+const LOGIN_ERROR_INVALID_CREDENTIALS = 3;
+const LOGIN_ERROR_TWO_FACTOR_REQUIRED = 6;
+const LOGIN_ERROR_DATABASE_UNAVAILABLE = 2001;
+const LOGIN_ERROR_ACCOUNT_DATA_UNAVAILABLE = 2002;
+const LOGIN_ERROR_CHARACTER_LIST_LOAD_FAILED = 2003;
+const LOGIN_ERROR_LOGIN_SERVICE_UNAVAILABLE = 3001;
+const LOGIN_ERROR_UNSUPPORTED_REQUEST_TYPE = 3002;
+const LOGIN_ERROR_MALFORMED_REQUEST = 3003;
+const LOGIN_ERROR_JSON_RESPONSE_FAILED = 3004;
+const LOGIN_ERROR_EVENT_SCHEDULE_UNAVAILABLE = 4001;
+const LOGIN_ERROR_BOOSTED_DATA_UNAVAILABLE = 4002;
+const LOGIN_ERROR_LIVESTREAM_UNAVAILABLE = 4003;
+const LOGIN_ERROR_LIVESTREAM_DATA_UNAVAILABLE = 4004;
+const LOGIN_ACCOUNT_TYPE_GAMEMASTER = 4;
+const LOGIN_ACCOUNT_GROUP_GAMEMASTER = 4;
+
 # error function
 function sendError($message, $code = 3){
-	$ret = [];
-	$ret['errorCode'] = $code;
-	$ret['errorMessage'] = $message;
-	die(json_encode($ret));
+	sendJsonResponse([
+		'errorCode' => $code,
+		'errorMessage' => $message
+	]);
+}
+
+function sendJsonResponse($data)
+{
+	if (!headers_sent()) {
+		header('Content-Type: application/json');
+		http_response_code(200);
+	}
+
+	$response = json_encode($data);
+	if ($response === false) {
+		$response = '{"errorCode":' . LOGIN_ERROR_JSON_RESPONSE_FAILED . ',"errorMessage":"Failed to encode JSON response. Error: JSON_RESPONSE_FAILED (LS-' . LOGIN_ERROR_JSON_RESPONSE_FAILED . ')."}';
+	}
+
+	die($response);
+}
+
+function loginPublicErrorMessage($message, $name, $code)
+{
+	return $message . ' Error: ' . $name . ' (LS-' . $code . ').';
+}
+
+function loginAdminHint($name)
+{
+	switch ($name) {
+		case 'ACCOUNT_DATA_UNAVAILABLE':
+			return 'Check the accounts table schema and database connectivity; MyAAC needs the login identifier and password columns, and may use type, group_id or web_flags to identify admin accounts when those columns exist.';
+		case 'CHARACTER_LIST_LOAD_FAILED':
+			return 'Check the players table schema for the configured server base, especially account_id, name, level, sex, vocation, outfit and deletion columns.';
+		case 'ACCOUNT_EMAIL_NOT_VERIFIED':
+			return 'Verify the account email in the website database, or disable account_mail_verify if this server does not use website email verification.';
+		case 'TWO_FACTOR_TOKEN_REQUIRED':
+		case 'TWO_FACTOR_TOKEN_INVALID':
+			return 'Check the account secret column and the authenticator clock; clear the account secret only if you intentionally want to disable 2FA for this account.';
+		case 'LOGIN_RATE_LIMITED':
+			return 'Clear the failed_logins rate limit cache or wait for the configured account_login_ban_time before testing this account again.';
+		case 'LOGIN_SERVICE_UNAVAILABLE':
+			return 'Check system/logs/login-errors.log and the web server PHP error log for the root cause.';
+		default:
+			return '';
+	}
+}
+
+function appendLoginAdminHint($message, $name, $includeAdminHint)
+{
+	if (!$includeAdminHint) {
+		return $message;
+	}
+
+	$hint = loginAdminHint($name);
+	if ($hint === '') {
+		return $message;
+	}
+
+	return $message . ' Admin hint: ' . $hint;
+}
+
+function logLoginDiagnostic($name, $code, $cause = null, array $context = [])
+{
+	$details = [
+		'name' => $name,
+		'code' => $code
+	];
+
+	if ($cause instanceof Throwable) {
+		$details['cause'] = get_class($cause) . ': ' . $cause->getMessage();
+		$details['file'] = $cause->getFile();
+		$details['line'] = $cause->getLine();
+	} else if ($cause !== null) {
+		$details['cause'] = (string)$cause;
+	}
+
+	if (!empty($context)) {
+		$details['context'] = $context;
+	}
+
+	try {
+		log_append('login-errors.log', '[' . $name . '] ' . json_encode($details));
+	} catch (Throwable $error) {
+		error_log('[login.php][' . $name . '] ' . print_r($details, true));
+	}
+}
+
+function sendPublicError($code, $name, $message, $cause = null, array $context = [], $includeAdminHint = false)
+{
+	if ($cause !== null || !empty($context)) {
+		logLoginDiagnostic($name, $code, $cause, $context);
+	}
+
+	$message = appendLoginAdminHint($message, $name, $includeAdminHint);
+	sendError(loginPublicErrorMessage($message, $name, $code), $code);
+}
+
+function loginAccountReceivesAdminHints($account)
+{
+	if (!$account) {
+		return false;
+	}
+
+	$webFlags = isset($account->web_flags) ? intval($account->web_flags) : 0;
+	$adminFlag = defined('FLAG_ADMIN') ? FLAG_ADMIN : 1;
+	$superAdminFlag = defined('FLAG_SUPER_ADMIN') ? FLAG_SUPER_ADMIN : 2;
+	if (($webFlags & $adminFlag) === $adminFlag || ($webFlags & $superAdminFlag) === $superAdminFlag) {
+		return true;
+	}
+
+	if (isset($account->type) && intval($account->type) >= LOGIN_ACCOUNT_TYPE_GAMEMASTER) {
+		return true;
+	}
+
+	if (isset($account->group_id) && intval($account->group_id) >= LOGIN_ACCOUNT_GROUP_GAMEMASTER) {
+		return true;
+	}
+
+	return false;
 }
 
 function encodeJsonResponse($data)
 {
 	$response = json_encode($data);
 	if ($response === false) {
-		sendError('Failed to encode JSON response.', 500);
+		sendPublicError(
+			LOGIN_ERROR_JSON_RESPONSE_FAILED,
+			'JSON_RESPONSE_FAILED',
+			'Failed to encode JSON response.',
+			json_last_error_msg()
+		);
 	}
 
 	return $response;
@@ -142,7 +278,7 @@ function createEventScheduleJsonEntry($event)
 	];
 }
 
-function loadEventScheduleFromJson($filePath)
+function loadEventScheduleFromJson($filePath, &$error = null)
 {
 	if (!file_exists($filePath)) {
 		return null;
@@ -150,15 +286,18 @@ function loadEventScheduleFromJson($filePath)
 
 	$content = file_get_contents($filePath);
 	if ($content === false) {
+		$error = "Cannot read event scheduler JSON file: {$filePath}";
 		return null;
 	}
 
 	$json = json_decode($content, true);
 	if (json_last_error() !== JSON_ERROR_NONE) {
+		$error = "Invalid event scheduler JSON file {$filePath}: " . json_last_error_msg();
 		return null;
 	}
 
 	if (!is_array($json) || !isset($json['events']) || !is_array($json['events'])) {
+		$error = "Invalid event scheduler JSON structure in {$filePath}: missing events array.";
 		return null;
 	}
 
@@ -175,7 +314,7 @@ function loadEventScheduleFromJson($filePath)
 	return $eventlist;
 }
 
-function loadEventScheduleFromXml($filePath)
+function loadEventScheduleFromXml($filePath, &$error = null)
 {
 	if (!file_exists($filePath)) {
 		return null;
@@ -188,6 +327,7 @@ function loadEventScheduleFromXml($filePath)
 	libxml_clear_errors();
 	libxml_use_internal_errors($previousUseInternalErrors);
 	if ($loaded === false) {
+		$error = "Invalid event scheduler XML file: {$filePath}";
 		return null;
 	}
 
@@ -399,8 +539,27 @@ function getBoostedCreatureResponse($db)
 
 	$clientVersion = (int)setting('core.client');
 	if ($clientVersion >= 1340) {
-		$creatureBoostQuery = $db->query("SELECT `raceid` FROM " . $db->tableName('boosted_creature') . " LIMIT 1");
-		$bossBoostQuery = $db->query("SELECT `raceid` FROM " . $db->tableName('boosted_boss') . " LIMIT 1");
+		try {
+			$creatureBoostQuery = $db->query("SELECT `raceid` FROM " . $db->tableName('boosted_creature') . " LIMIT 1");
+			$bossBoostQuery = $db->query("SELECT `raceid` FROM " . $db->tableName('boosted_boss') . " LIMIT 1");
+		} catch (Throwable $error) {
+			sendPublicError(
+				LOGIN_ERROR_BOOSTED_DATA_UNAVAILABLE,
+				'BOOSTED_DATA_UNAVAILABLE',
+				'Boosted creature data is unavailable. Please contact support.',
+				$error
+			);
+		}
+
+		if ($creatureBoostQuery === false || $bossBoostQuery === false) {
+			sendPublicError(
+				LOGIN_ERROR_BOOSTED_DATA_UNAVAILABLE,
+				'BOOSTED_DATA_UNAVAILABLE',
+				'Boosted creature data is unavailable. Please contact support.',
+				'boosted_creature or boosted_boss query failed'
+			);
+		}
+
 		$creatureBoost = $creatureBoostQuery !== false ? $creatureBoostQuery->fetch(PDO::FETCH_ASSOC) : false;
 		$bossBoost = $bossBoostQuery !== false ? $bossBoostQuery->fetch(PDO::FETCH_ASSOC) : false;
 		return cacheBoostedCreatureResponse($signature, encodeJsonResponse([
@@ -410,7 +569,17 @@ function getBoostedCreatureResponse($db)
 		]));
 	}
 
-	$boostedCreature = BoostedCreature::first();
+	try {
+		$boostedCreature = BoostedCreature::first();
+	} catch (Throwable $error) {
+		sendPublicError(
+			LOGIN_ERROR_BOOSTED_DATA_UNAVAILABLE,
+			'BOOSTED_DATA_UNAVAILABLE',
+			'Boosted creature data is unavailable. Please contact support.',
+			$error
+		);
+	}
+
 	return cacheBoostedCreatureResponse($signature, encodeJsonResponse([
 		'boostedcreature' => true,
 		'raceid' => $boostedCreature->raceid ?? 0
@@ -425,6 +594,17 @@ function isLivestreamLogin($value)
 function getLivestreamUnavailableMessage()
 {
 	return 'No active livestream casters found, or livestream login is disabled.';
+}
+
+function sendLivestreamUnavailable($cause = null, array $context = [])
+{
+	sendPublicError(
+		LOGIN_ERROR_LIVESTREAM_UNAVAILABLE,
+		'LIVESTREAM_UNAVAILABLE',
+		getLivestreamUnavailableMessage(),
+		$cause,
+		$context
+	);
 }
 
 function sendLivestreamLogin($db, $world, $password)
@@ -442,17 +622,27 @@ function sendLivestreamLogin($db, $world, $password)
 			ORDER BY lc.livestream_viewers DESC, p.name ASC
 		");
 		if ($liveCastersQuery === false) {
-			sendError('Database query failed', 500);
+			sendPublicError(
+				LOGIN_ERROR_LIVESTREAM_DATA_UNAVAILABLE,
+				'LIVESTREAM_DATA_UNAVAILABLE',
+				'Livestream data is unavailable. Please contact support.',
+				'active_livestream_casters query failed'
+			);
 		}
 
 		$casters = $liveCastersQuery->fetchAll(PDO::FETCH_ASSOC);
 	}
-	catch (PDOException $error) {
+	catch (Throwable $error) {
 		if (stripos($error->getMessage(), 'active_livestream_casters') !== false) {
-			sendError(getLivestreamUnavailableMessage());
+			sendLivestreamUnavailable($error);
 		}
 
-		sendError('Database query failed', 500);
+		sendPublicError(
+			LOGIN_ERROR_LIVESTREAM_DATA_UNAVAILABLE,
+			'LIVESTREAM_DATA_UNAVAILABLE',
+			'Livestream data is unavailable. Please contact support.',
+			$error
+		);
 	}
 
 	$characters = [];
@@ -461,7 +651,7 @@ function sendLivestreamLogin($db, $world, $password)
 	}
 
 	if (empty($characters)) {
-		sendError(getLivestreamUnavailableMessage());
+		sendLivestreamUnavailable(null, ['reason' => 'no active casters']);
 	}
 
 	$worlds = [$world];
@@ -484,12 +674,26 @@ function sendLivestreamLogin($db, $world, $password)
 	die(json_encode(compact('session', 'playdata')));
 }
 
-$request = json_decode(file_get_contents('php://input'));
-$action = $request->type ?? '';
+$requestBody = file_get_contents('php://input');
+$request = json_decode($requestBody);
+if (!is_object($request) || json_last_error() !== JSON_ERROR_NONE) {
+	sendPublicError(
+		LOGIN_ERROR_MALFORMED_REQUEST,
+		'MALFORMED_REQUEST',
+		'Malformed login request. Please restart the client and try again.',
+		json_last_error_msg(),
+		['bodyLength' => is_string($requestBody) ? strlen($requestBody) : 0]
+	);
+}
+
+$action = trim((string)($request->type ?? ''));
 
 /** @var OTS_Base_DB $db */
 /** @var array $config */
 
+$includeAdminHint = false;
+
+try {
 switch ($action) {
 	case 'cacheinfo':
 		$playersonline = PlayerOnline::count();
@@ -503,6 +707,7 @@ switch ($action) {
 
 	case 'eventschedule':
 		$eventScheduleDirectories = getEventScheduleDirectoryPaths();
+		$eventScheduleErrors = [];
 		foreach ($eventScheduleDirectories as $eventScheduleDirectory) {
 			$jsonFilePath = $eventScheduleDirectory . 'json/eventscheduler/events.json';
 			$cachedResponse = getCachedEventScheduleResponse($jsonFilePath, 'json');
@@ -510,9 +715,13 @@ switch ($action) {
 				die($cachedResponse);
 			}
 
-			$eventlist = loadEventScheduleFromJson($jsonFilePath);
+			$error = null;
+			$eventlist = loadEventScheduleFromJson($jsonFilePath, $error);
 			if ($eventlist !== null) {
 				die(cacheEventScheduleResponse($jsonFilePath, 'json', $eventlist));
+			}
+			if ($error !== null) {
+				$eventScheduleErrors[] = $error;
 			}
 		}
 
@@ -523,10 +732,23 @@ switch ($action) {
 				die($cachedResponse);
 			}
 
-			$eventlist = loadEventScheduleFromXml($xmlFilePath);
+			$error = null;
+			$eventlist = loadEventScheduleFromXml($xmlFilePath, $error);
 			if ($eventlist !== null) {
 				die(cacheEventScheduleResponse($xmlFilePath, 'xml', $eventlist));
 			}
+			if ($error !== null) {
+				$eventScheduleErrors[] = $error;
+			}
+		}
+
+		if (!empty($eventScheduleErrors)) {
+			sendPublicError(
+				LOGIN_ERROR_EVENT_SCHEDULE_UNAVAILABLE,
+				'EVENT_SCHEDULE_UNAVAILABLE',
+				'Event schedule data is unavailable. Please contact support.',
+				implode(' | ', $eventScheduleErrors)
+			);
 		}
 
 		die(json_encode([]));
@@ -567,15 +789,42 @@ switch ($action) {
 			sendLivestreamLogin($db, $world, $request->password ?? '');
 		}
 
-		$account = Account::query();
-		if ($inputEmail != false) { // login by email
-			$account->where('email', $inputEmail);
-		}
-		else if($inputAccountName != false) { // login by account name
-			$account->where('name', $inputAccountName);
+		if ($inputEmail === false && $inputAccountName === false) {
+			sendPublicError(
+				LOGIN_ERROR_MALFORMED_REQUEST,
+				'MALFORMED_REQUEST',
+				'Malformed login request. Please restart the client and try again.',
+				'missing email/accountname'
+			);
 		}
 
-		$account = $account->first();
+		if (!isset($request->password)) {
+			sendPublicError(
+				LOGIN_ERROR_MALFORMED_REQUEST,
+				'MALFORMED_REQUEST',
+				'Malformed login request. Please restart the client and try again.',
+				'missing password'
+			);
+		}
+
+		try {
+			$account = Account::query();
+			if ($inputEmail != false) { // login by email
+				$account->where('email', $inputEmail);
+			}
+			else if($inputAccountName != false) { // login by account name
+				$account->where('name', $inputAccountName);
+			}
+
+			$account = $account->first();
+		} catch (Throwable $error) {
+			sendPublicError(
+				LOGIN_ERROR_ACCOUNT_DATA_UNAVAILABLE,
+				'ACCOUNT_DATA_UNAVAILABLE',
+				'Account data is unavailable. Please contact support.',
+				$error
+			);
+		}
 
 		$ip = get_browser_real_ip();
 		$limiter = new RateLimit('failed_logins', setting('core.account_login_attempts_limit'), setting('core.account_login_ban_time'));
@@ -586,22 +835,39 @@ switch ($action) {
 		if (!$account) {
 			$limiter->increment($ip);
 			if ($limiter->exceeded($ip)) {
-				sendError($ban_msg);
+				sendPublicError(
+					LOGIN_ERROR_INVALID_CREDENTIALS,
+					'LOGIN_RATE_LIMITED',
+					$ban_msg
+				);
 			}
 
-			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');
+			sendPublicError(
+				LOGIN_ERROR_INVALID_CREDENTIALS,
+				'INVALID_CREDENTIALS',
+				($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.'
+			);
 		}
 
 		$current_password = encrypt((USE_ACCOUNT_SALT ? $account->salt : '') . $request->password);
 		if (!$account || $account->password != $current_password) {
 			$limiter->increment($ip);
 			if ($limiter->exceeded($ip)) {
-				sendError($ban_msg);
+				sendPublicError(
+					LOGIN_ERROR_INVALID_CREDENTIALS,
+					'LOGIN_RATE_LIMITED',
+					$ban_msg
+				);
 			}
 
-			sendError(($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.');
+			sendPublicError(
+				LOGIN_ERROR_INVALID_CREDENTIALS,
+				'INVALID_CREDENTIALS',
+				($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.'
+			);
 		}
 
+		$includeAdminHint = loginAccountReceivesAdminHints($account);
 		$accountHasSecret = false;
 		if (fieldExist('secret', 'accounts')) {
 			$accountSecret = $account->secret;
@@ -610,18 +876,46 @@ switch ($action) {
 				if ($inputToken === false) {
 					$limiter->increment($ip);
 					if ($limiter->exceeded($ip)) {
-						sendError($ban_msg);
+						sendPublicError(
+							LOGIN_ERROR_INVALID_CREDENTIALS,
+							'LOGIN_RATE_LIMITED',
+							$ban_msg,
+							null,
+							[],
+							$includeAdminHint
+						);
 					}
-					sendError('Submit a valid two-factor authentication token.', 6);
+					sendPublicError(
+						LOGIN_ERROR_TWO_FACTOR_REQUIRED,
+						'TWO_FACTOR_TOKEN_REQUIRED',
+						'Submit a valid two-factor authentication token.',
+						null,
+						[],
+						$includeAdminHint
+					);
 				} else {
 					require_once LIBS . 'rfc6238.php';
 					if (TokenAuth6238::verify($accountSecret, $inputToken) !== true) {
 						$limiter->increment($ip);
 						if ($limiter->exceeded($ip)) {
-							sendError($ban_msg);
+							sendPublicError(
+								LOGIN_ERROR_INVALID_CREDENTIALS,
+								'LOGIN_RATE_LIMITED',
+								$ban_msg,
+								null,
+								[],
+								$includeAdminHint
+							);
 						}
 
-						sendError('Two-factor authentication failed, token is wrong.', 6);
+						sendPublicError(
+							LOGIN_ERROR_TWO_FACTOR_REQUIRED,
+							'TWO_FACTOR_TOKEN_INVALID',
+							'Two-factor authentication failed, token is wrong.',
+							null,
+							[],
+							$includeAdminHint
+						);
 					}
 				}
 			}
@@ -629,7 +923,14 @@ switch ($action) {
 
 		$limiter->reset($ip);
 		if (setting('core.account_mail_verify') && $account->email_verified !== 1) {
-			sendError('You need to verify your account, enter in our site and resend verify e-mail!');
+			sendPublicError(
+				LOGIN_ERROR_INVALID_CREDENTIALS,
+				'ACCOUNT_EMAIL_NOT_VERIFIED',
+				'You need to verify your account, enter in our site and resend verify e-mail.',
+				null,
+				[],
+				$includeAdminHint
+			);
 		}
 
 		// common columns
@@ -643,7 +944,18 @@ switch ($action) {
 			$columns .= ', istutorial';
 		}
 
-		$players = Player::where('account_id', $account->id)->notDeleted()->selectRaw($columns)->get();
+		try {
+			$players = Player::where('account_id', $account->id)->notDeleted()->selectRaw($columns)->get();
+		} catch (Throwable $error) {
+			sendPublicError(
+				LOGIN_ERROR_CHARACTER_LIST_LOAD_FAILED,
+				'CHARACTER_LIST_LOAD_FAILED',
+				'Character list is unavailable. Please contact support.',
+				$error,
+				[],
+				$includeAdminHint
+			);
+		}
 		if($players && $players->count()) {
 			$highestLevelId = $players->sortByDesc('experience')->first()->getKey();
 
@@ -727,8 +1039,24 @@ switch ($action) {
 		die(json_encode(compact('session', 'playdata')));
 
 	default:
-		sendError("Unrecognized event {$action}.");
+		sendPublicError(
+			LOGIN_ERROR_UNSUPPORTED_REQUEST_TYPE,
+			'UNSUPPORTED_REQUEST_TYPE',
+			'Unsupported login request type. Please restart the client and try again.',
+			null,
+			['type' => $action]
+		);
 	break;
+}
+} catch (Throwable $error) {
+	sendPublicError(
+		LOGIN_ERROR_LOGIN_SERVICE_UNAVAILABLE,
+		'LOGIN_SERVICE_UNAVAILABLE',
+		'Login service error. Please contact support.',
+		$error,
+		['type' => $action],
+		$includeAdminHint
+	);
 }
 
 function create_char($player, $highestLevelId) {
