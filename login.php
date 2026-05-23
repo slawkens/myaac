@@ -27,6 +27,7 @@ const LOGIN_ERROR_LIVESTREAM_UNAVAILABLE = 4003;
 const LOGIN_ERROR_LIVESTREAM_DATA_UNAVAILABLE = 4004;
 const LOGIN_ACCOUNT_TYPE_GAMEMASTER = 4;
 const LOGIN_ACCOUNT_GROUP_GAMEMASTER = 4;
+const LOGIN_EVENT_SCHEDULE_CACHE_TTL = 7 * 24 * 60 * 60;
 
 # error function
 function sendError($message, $code = 3){
@@ -149,6 +150,16 @@ function loginAccountReceivesAdminHints($account)
 	}
 
 	return false;
+}
+
+function normalizeLoginIdentifier($value)
+{
+	if (!is_string($value)) {
+		return false;
+	}
+
+	$value = trim($value);
+	return $value === '' ? false : $value;
 }
 
 function encodeJsonResponse($data)
@@ -323,7 +334,7 @@ function loadEventScheduleFromXml($filePath, &$error = null)
 	$xml = new DOMDocument;
 	$previousUseInternalErrors = libxml_use_internal_errors(true);
 	libxml_clear_errors();
-	$loaded = $xml->load($filePath);
+	$loaded = $xml->load($filePath, defined('LIBXML_NONET') ? LIBXML_NONET : 0);
 	libxml_clear_errors();
 	libxml_use_internal_errors($previousUseInternalErrors);
 	if ($loaded === false) {
@@ -371,7 +382,10 @@ function buildServerDirectoryPath($directory)
 	}
 
 	if (!isAbsoluteServerPath($directory)) {
-		$directory = config('server_path') . $directory;
+		$serverPath = rtrim((string)config('server_path'), "/\\");
+		if ($serverPath !== '') {
+			$directory = $serverPath . '/' . ltrim($directory, "/\\");
+		}
 	}
 
 	$lastChar = $directory[strlen($directory) - 1] ?? '';
@@ -462,7 +476,7 @@ function cacheEventScheduleResponse($filePath, $format, $eventlist)
 		$cache->set(
 			getEventScheduleCacheKey($filePath, $format),
 			$payload,
-			10 * 365 * 24 * 60 * 60
+			LOGIN_EVENT_SCHEDULE_CACHE_TTL
 		);
 	}
 
@@ -671,7 +685,7 @@ function sendLivestreamLogin($db, $world, $password)
 		'emailcoderequest' => false
 	];
 
-	die(json_encode(compact('session', 'playdata')));
+	sendJsonResponse(compact('session', 'playdata'));
 }
 
 $requestBody = file_get_contents('php://input');
@@ -697,13 +711,13 @@ try {
 switch ($action) {
 	case 'cacheinfo':
 		$playersonline = PlayerOnline::count();
-		die(json_encode([
+		sendJsonResponse([
 			'playersonline' => $playersonline,
 			'twitchstreams' => 0,
 			'twitchviewer' => 0,
 			'gamingyoutubestreams' => 0,
 			'gamingyoutubeviewer' => 0
-		]));
+		]);
 
 	case 'eventschedule':
 		$eventScheduleDirectories = getEventScheduleDirectoryPaths();
@@ -751,7 +765,7 @@ switch ($action) {
 			);
 		}
 
-		die(json_encode([]));
+		sendJsonResponse([]);
 
 	case 'boostedcreature':
 		die(getBoostedCreatureResponse($db));
@@ -781,8 +795,8 @@ switch ($action) {
 
 		$characters = [];
 
-		$inputEmail = $request->email ?? false;
-		$inputAccountName = $request->accountname ?? false;
+		$inputEmail = normalizeLoginIdentifier($request->email ?? false);
+		$inputAccountName = normalizeLoginIdentifier($request->accountname ?? false);
 		$inputToken = $request->token ?? false;
 
 		if (isLivestreamLogin($inputEmail) || isLivestreamLogin($inputAccountName)) {
@@ -809,10 +823,10 @@ switch ($action) {
 
 		try {
 			$account = Account::query();
-			if ($inputEmail != false) { // login by email
+			if ($inputEmail !== false) { // login by email
 				$account->where('email', $inputEmail);
 			}
-			else if($inputAccountName != false) { // login by account name
+			else if($inputAccountName !== false) { // login by account name
 				$account->where('name', $inputAccountName);
 			}
 
@@ -845,7 +859,7 @@ switch ($action) {
 			sendPublicError(
 				LOGIN_ERROR_INVALID_CREDENTIALS,
 				'INVALID_CREDENTIALS',
-				($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.'
+				($inputEmail !== false ? 'Email' : 'Account name') . ' or password is not correct.'
 			);
 		}
 
@@ -863,7 +877,7 @@ switch ($action) {
 			sendPublicError(
 				LOGIN_ERROR_INVALID_CREDENTIALS,
 				'INVALID_CREDENTIALS',
-				($inputEmail != false ? 'Email' : 'Account name') . ' or password is not correct.'
+				($inputEmail !== false ? 'Email' : 'Account name') . ' or password is not correct.'
 			);
 		}
 
@@ -1036,7 +1050,7 @@ switch ($action) {
 			'tournamentticketpurchasestate' => 0,
 			'emailcoderequest' => false
 		];
-		die(json_encode(compact('session', 'playdata')));
+		sendJsonResponse(compact('session', 'playdata'));
 
 	default:
 		sendPublicError(
