@@ -1,0 +1,99 @@
+{% set currentYear = 'now' | date('Y') %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="col-sm-3 col-md-6 col-lg-12">
+	<div class="card card-info card-outline">
+		<div class="card-header">
+			<h5 class="m-0">Insights</h5>
+		</div>
+
+		<div class="card-body p-3 row">
+			<div class="col-md-6 col-sm-3">
+				<label for="month">Month:</label>
+				<select class="form-control" id="month" name="month">
+					{% for id, name in months %}
+						<option value="{{ id }}" {{ getMonth == id ? 'selected="selected"' : '' }}>{{ name }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="col-md-6 col-sm-3">
+				<label for="year">Year:</label>
+				<select class="form-control" id="year" name="year">
+					{% for year in range(firstYear, currentYear) %}
+						<option value="{{ year }}" {{ getYear == year ? 'selected' : '' }}>{{ year }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<div class="card-body p-3 row">
+			<div class="col-6 col-md-6">
+				<div class="chart">
+					<canvas id="lastLoginsChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+				</div>
+			</div>
+			<div class="col-6 col-md-6">
+				<div class="chart">
+					<canvas id="lastCreatedChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function () {
+		$('#year').on('change', function() {
+			window.location.href = "?p=dashboard&year=" + $(this).val() + "&month={{ getMonth }}";
+		});
+
+		$('#month').on('change', function() {
+			window.location.href = "?p=dashboard&year={{ getYear }}" + "&month=" + $(this).val();
+		});
+	});
+
+	const config = {
+		type: 'bar',
+		data: {
+			labels: [
+				{% for player in lastLoginPlayers %}
+				"{{ player.date }}",
+				{% endfor %}
+			],
+			datasets: [
+				{
+					label: "Logged players",
+					backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+					data: [
+						{% for player in lastLoginPlayers %}
+						{{ player.how_much }},
+						{% endfor %}
+					]
+				}
+			]
+		}
+	}
+	const myChart = new Chart(document.getElementById('lastLoginsChart'), config);
+
+	const config2 = {
+		type: 'bar',
+		data: {
+			labels: [
+				{% for account in lastCreatedAccounts %}
+				"{{ account.date }}",
+				{% endfor %}
+			],
+			datasets: [
+				{
+					label: "Accounts created",
+					backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+					data: [
+						{% for account in lastCreatedAccounts %}
+						{{ account.how_much }},
+						{% endfor %}
+					]
+				}
+			]
+		}
+	}
+	const myChart2 = new Chart(document.getElementById('lastCreatedChart'), config2);
+</script>
