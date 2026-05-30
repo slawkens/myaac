@@ -1265,7 +1265,9 @@ function setting($key)
 function clearCache()
 {
 	global $db;
-	$db->setClearCacheAfter(true);
+	if (isset($db)) {
+		$db->setClearCacheAfter(true);
+	}
 
 	if (function_exists('apc_clear_cache')) {
 		apc_clear_cache();

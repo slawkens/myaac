@@ -90,21 +90,7 @@ foreach($_REQUEST as $var => $value) {
 		$_REQUEST[$var] = trim($value);
 }
 
-// load otserv config file
-if($cache->enabled()) {
-	$tmp = null;
-	if(!$cache->fetch('server_path', $tmp) || $tmp != config('server_path')) {
-		$cache->delete('config_server');
-	}
-}
-
-if (empty($config['server'])) {
-	$config['server'] = $config['lua'] = Config::get();
-
-	if($cache->enabled()) {
-		$cache->set('server_path', config('server_path'), 10 * 60);
-	}
-}
+$config['server'] = $config['lua'] = Config::get();
 
 // localize data/ directory based on data directory set in config.lua
 foreach(array('dataDirectory', 'data_directory', 'datadir') as $key) {
