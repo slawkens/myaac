@@ -1264,48 +1264,11 @@ function setting($key)
 
 function clearCache()
 {
-	News::clearCache();
+	global $db;
+	$db->setClearCacheAfter(true);
 
-	$cache = Cache::getInstance();
-	if($cache->enabled()) {
-		$keysToClear = [
-			'status', 'templates',
-			'config_lua',
-			'towns', 'groups', 'vocations',
-			'visitors', 'views_counter', 'failed_logins',
-			'template_menus',
-			'last_kills',
-			'hooks', 'plugins_hooks', 'plugins_routes', 'plugins_settings', 'plugins_themes', 'plugins_commands',
-			'settings',
-		];
-
-		foreach (get_templates() as $template) {
-			$keysToClear[] = 'template_ini_' . $template;
-		}
-
-		// highscores cache
-		$configHighscoresPerPage = setting('core.highscores_per_page');
-		$skills = [POT::SKILL_FIST, POT::SKILL_CLUB, POT::SKILL_SWORD, POT::SKILL_AXE, POT::SKILL_DIST, POT::SKILL_SHIELD, POT::SKILL_FISH, POT::SKILL_LEVEL, POT::SKILL__MAGLEVEL, SKILL_FRAGS, SKILL_BALANCE];
-		foreach ($skills as $skill) {
-			// config('vocations') may be empty after previous cache clear
-			$vocations = (config('vocations') ?? []) + ['all'];
-			foreach ($vocations as $vocation) {
-				for($page = 0; $page < 10; $page++) {
-					$cacheKey = 'highscores_' . $skill . '_' . strtolower($vocation) . '_' . $page . '_' . $configHighscoresPerPage;
-					$keysToClear[] = $cacheKey;
-				}
-			}
-		}
-
-		foreach ($keysToClear as $item) {
-			$tmp = '';
-			if ($cache->fetch($item, $tmp)) {
-				$cache->delete($item);
-			}
-		}
-
-		global $db;
-		$db->setClearCacheAfter(true);
+	if (function_exists('apc_clear_cache')) {
+		apc_clear_cache();
 	}
 
 	if (function_exists('apcu_clear_cache')) {
