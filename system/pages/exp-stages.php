@@ -11,24 +11,12 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Experience Stages';
 
+use MyAAC\Server\XML\ExpStages as ExpStagesXML;
+
 if((!isset($config['lua']['experienceStages']) || !getBoolean($config['lua']['experienceStages']))
 	&& (!isset($config['lua']['rateUseStages']) || !getBoolean($config['lua']['rateUseStages']))
 	) {
-	$enabled = false;
-
-	if(file_exists($config['data_path'] . 'XML/stages.xml')) {
-		$stages = new DOMDocument();
-		$stages->load($config['data_path'] . 'XML/stages.xml');
-
-		foreach($stages->getElementsByTagName('config') as $node) {
-			/** @var DOMElement $node */
-			if($node->getAttribute('enabled')) {
-				$enabled = true;
-			}
-		}
-	}
-
-	if(!$enabled) {
+	if(!ExpStagesXML::enabled()) {
 		$rate_exp = 'not set';
 		if(isset($config['lua']['rateExperience']))
 			$rate_exp = $config['lua']['rateExperience'];

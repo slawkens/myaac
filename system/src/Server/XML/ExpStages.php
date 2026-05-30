@@ -37,4 +37,23 @@ class ExpStages
 	public function get(): array {
 		return $this->stages;
 	}
+
+	public static function enabled(): bool
+	{
+		if(!@file_exists(config('data_path') . 'XML/stages.xml')) {
+			return false;
+		}
+
+		$stages = new \DOMDocument();
+		$stages->load(config('data_path') . 'XML/stages.xml');
+
+		foreach($stages->getElementsByTagName('config') as $node) {
+			/** @var \DOMElement $node */
+			if($node->getAttribute('enabled')) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
