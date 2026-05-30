@@ -20,18 +20,15 @@ class Items
 
 	private static string $error = '';
 
-	const FILE_ITEMS_TOML = 'items/items.toml';
-	const FILE_ITEMS_XML = 'items/items.xml';
-
 	public static function getError(): string {
 		return self::$error;
 	}
 
 	public static function load(): bool {
-		if (file_exists(config('data_path') . self::FILE_ITEMS_TOML)) {
+		if (file_exists(config('data_path') . TOML\Items::FILE)) {
 			$items = new TOML\Items();
 		}
-		elseif (file_exists(config('data_path') . self::FILE_ITEMS_XML)) {
+		elseif (file_exists(config('data_path') . XML\Items::FILE)) {
 			$items = new XML\Items();
 		}
 		else {
@@ -56,12 +53,12 @@ class Items
 		self::$items = (array)$cache_php->get('items');
 	}
 
-	public static function get($id) {
+	public static function get(int $id) {
 		self::init();
 		return self::$items[$id] ?? [];
 	}
 
-	public static function getDescription($id, $count = 1): string
+	public static function getDescription(int $id, int $count = 1): string
 	{
 		$item = self::get($id);
 

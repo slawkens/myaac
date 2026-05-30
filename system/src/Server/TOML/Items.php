@@ -8,6 +8,8 @@ class Items
 {
 	private string $error = '';
 
+	const FILE = 'items/items.toml';
+
 	public function getError(): string {
 		return $this->error;
 	}
