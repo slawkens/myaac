@@ -1801,7 +1801,7 @@ Sent by MyAAC,<br/>
 			if($server_path[strlen($server_path) - 1] != '/')
 				$server_path .= '/';
 
-			// test config.lua existence
+			// test config.lua or config/server.toml existence
 			// if fail - revert the setting and inform the user
 			if (!Config::exists()) {
 				error('Server Path is invalid - cannot find config.lua or config/server.toml in the directory. Setting have been reverted.');
