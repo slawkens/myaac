@@ -46,7 +46,7 @@ $save = isset($_POST['save']) && $_POST['save'] == 1;
 if($save)
 {
 	$cooldown = setting('core.account_create_ip_block_cooldown');;
-	if ($cooldown > 0 && !isset($_ENV['CI'])) {
+	if ($cooldown > 0 && !getenv('CI')) {
 		$accountAction = AccountAction::where('ip', get_browser_real_ip())->where('action', 'Account created.')->where('date', '>=', time() - ($cooldown * 60))->first();
 
 		if ($accountAction) {
