@@ -8,7 +8,7 @@ describe('Create Account Page', () => {
 	})
 
 	it('Create Test Account', () => {
-		cy.exec('php aac settings:set core.account_create_ip_block_cooldown 0')
+		cy.exec('php /home/runner/work/myaac/myaac/aac settings:set core.account_create_ip_block_cooldown 0')
 
 		cy.screenshot('create-account-page')
 
