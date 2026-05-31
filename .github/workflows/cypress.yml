@@ -79,7 +79,7 @@ jobs:
           if: matrix.ots == 'blacktek-1.0'
           with:
             repository: Black-Tek/BlackTek-Server
-            ref: 1.0
+            ref: '1.0'
             path: ots
 
         - name: Checkout BlackTek
@@ -87,7 +87,7 @@ jobs:
           if: matrix.ots == 'blacktek-2.0'
           with:
             repository: Black-Tek/BlackTek-Server
-            ref: 2.0
+            ref: '2.0'
             path: ots
 
         - name: Import OTS Schema
