@@ -5,6 +5,9 @@ on:
   push:
     branches: [develop]
 
+env:
+  CI: true
+
 jobs:
   cypress:
     runs-on: ubuntu-latest
