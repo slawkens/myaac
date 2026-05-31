@@ -4,7 +4,7 @@ namespace MyAAC\Server\Lua;
 
 class Loader
 {
-	public static function load($file): bool|array
+	public static function load(string $file): bool|array
 	{
 		if(!@file_exists($file)){
 			return false;
