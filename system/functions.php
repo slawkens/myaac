@@ -11,7 +11,6 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 use MyAAC\Cache\Cache;
 use MyAAC\CsrfToken;
-use MyAAC\Items;
 use MyAAC\Models\Config;
 use MyAAC\Models\Guild;
 use MyAAC\Models\House;
@@ -21,6 +20,7 @@ use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
 use MyAAC\News;
 use MyAAC\Plugins;
+use MyAAC\Server\Items;
 use MyAAC\Settings;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -987,85 +987,6 @@ function log_append($file, $str, array $params = [])
 	fclose($f);
 }
 
-function load_config_lua($filename)
-{
-	global $config;
-
-	$config_file = $filename;
-	if(!@file_exists($config_file))
-	{
-		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $filename . ').');
-		throw new RuntimeException('ERROR: Cannot find ' . $filename . ' file.');
-	}
-
-	$result = array();
-	$config_string = str_replace(array("\r\n", "\r"), "\n", file_get_contents($filename));
-	$lines = explode("\n", $config_string);
-	if(count($lines) > 0) {
-		foreach($lines as $ln => $line)
-		{
-			$line = trim($line);
-			if(isset($line[0]) && ($line[0] === '{' || $line[0] === '}')) {
-				// arrays are not supported yet
-				// just ignore the error
-				continue;
-			}
-
-			$tmp_exp = explode('=', $line, 2);
-			if(str_contains($line, 'dofile')) {
-				$delimiter = '"';
-				if(!str_contains($line, $delimiter)) {
-					$delimiter = "'";
-				}
-
-				$tmp = explode($delimiter, $line);
-				$result = array_merge($result, load_config_lua($config['server_path'] . $tmp[1]));
-			}
-			else if(count($tmp_exp) >= 2) {
-				$key = trim($tmp_exp[0]);
-				if(!str_starts_with($key, '--')) {
-					$value = trim($tmp_exp[1]);
-					if(str_contains($value, '--')) {// found some deep comment
-						$value = preg_replace('/--.*$/i', '', $value);
-					}
-
-					if(is_numeric($value))
-						$result[$key] = (float) $value;
-					elseif(in_array(@$value[0], array("'", '"')) && in_array(@$value[strlen($value) - 1], array("'", '"')))
-						$result[$key] = substr(substr($value, 1), 0, -1);
-					elseif(in_array($value, array('true', 'false')))
-						$result[$key] = $value === 'true';
-					elseif(@$value[0] === '{') {
-						// arrays are not supported yet
-						// just ignore the error
-						continue;
-					}
-					else
-					{
-						foreach($result as $tmp_key => $tmp_value) { // load values defined by other keys, like: dailyFragsToBlackSkull = dailyFragsToRedSkull
-							$value = str_replace($tmp_key, $tmp_value, $value);
-						}
-
-						try {
-							$ret = eval("return $value;");
-						}
-						catch (Throwable $e) {
-							throw new RuntimeException('ERROR: Loading config.lua file. Line: ' . ($ln + 1) . ' - Unable to parse value "' . $value . '" - ' . $e->getMessage());
-						}
-
-						if((string) $ret == '' && trim($value) !== '""') {
-							throw new RuntimeException('ERROR: Loading config.lua file. Line ' . ($ln + 1) . ' is not valid [key: ' . $key . ']');
-						}
-						$result[$key] = $ret;
-					}
-				}
-			}
-		}
-	}
-
-	return array_merge($result, $config['lua'] ?? []);
-}
-
 function str_replace_first($search,$replace, $subject) {
 	$pos = strpos($subject, $search);
 	if ($pos !== false) {
@@ -1325,15 +1246,6 @@ function config($key) {
 	return @$config[$key];
 }
 
-function configLua($key) {
-	global $config;
-	if (is_array($key)) {
-		return $config['lua'][$key[0]] = $key[1];
-	}
-
-	return @$config['lua'][$key];
-}
-
 function setting($key)
 {
 	$settings = Settings::getInstance();
@@ -1352,48 +1264,13 @@ function setting($key)
 
 function clearCache()
 {
-	News::clearCache();
-
-	$cache = Cache::getInstance();
-	if($cache->enabled()) {
-		$keysToClear = [
-			'status', 'templates',
-			'config_lua',
-			'towns', 'groups', 'vocations',
-			'visitors', 'views_counter', 'failed_logins',
-			'template_menus',
-			'last_kills',
-			'hooks', 'plugins_hooks', 'plugins_routes', 'plugins_settings', 'plugins_themes', 'plugins_commands',
-			'settings',
-		];
-
-		foreach (get_templates() as $template) {
-			$keysToClear[] = 'template_ini_' . $template;
-		}
-
-		// highscores cache
-		$configHighscoresPerPage = setting('core.highscores_per_page');
-		$skills = [POT::SKILL_FIST, POT::SKILL_CLUB, POT::SKILL_SWORD, POT::SKILL_AXE, POT::SKILL_DIST, POT::SKILL_SHIELD, POT::SKILL_FISH, POT::SKILL_LEVEL, POT::SKILL__MAGLEVEL, SKILL_FRAGS, SKILL_BALANCE];
-		foreach ($skills as $skill) {
-			// config('vocations') may be empty after previous cache clear
-			$vocations = (config('vocations') ?? []) + ['all'];
-			foreach ($vocations as $vocation) {
-				for($page = 0; $page < 10; $page++) {
-					$cacheKey = 'highscores_' . $skill . '_' . strtolower($vocation) . '_' . $page . '_' . $configHighscoresPerPage;
-					$keysToClear[] = $cacheKey;
-				}
-			}
-		}
-
-		foreach ($keysToClear as $item) {
-			$tmp = '';
-			if ($cache->fetch($item, $tmp)) {
-				$cache->delete($item);
-			}
-		}
-
-		global $db;
+	global $db;
+	if (isset($db)) {
 		$db->setClearCacheAfter(true);
+	}
+
+	if (function_exists('apc_clear_cache')) {
+		apc_clear_cache();
 	}
 
 	if (function_exists('apcu_clear_cache')) {
@@ -1638,58 +1515,6 @@ function verify_number($number, $name, $max_length)
 	$number_length = strlen($number);
 	if ($number_length <= 0 || $number_length > $max_length)
 		echo_error($name . ' cannot be longer than ' . $max_length . ' digits.');
-}
-
-function Outfits_loadfromXML()
-{
-	global $config;
-	$file_path = $config['data_path'] . 'XML/outfits.xml';
-	if (!file_exists($file_path)) {	return null; }
-
-	$xml = new DOMDocument;
-	$xml->load($file_path);
-
-	$outfits = null;
-	foreach ($xml->getElementsByTagName('outfit') as $outfit) {
-		$outfits[] = Outfit_parseNode($outfit);
-	}
-	return $outfits;
-}
-
- function Outfit_parseNode($node) {
-	$looktype = (int)$node->getAttribute('looktype');
-	$type = (int)$node->getAttribute('type');
-	$lookname = $node->getAttribute('name');
-	$premium = $node->getAttribute('premium');
-	$unlocked = $node->getAttribute('unlocked');
-	$enabled = $node->getAttribute('enabled');
-	return array('id' => $looktype, 'type' => $type, 'name' => $lookname, 'premium' => $premium, 'unlocked' => $unlocked, 'enabled' => $enabled);
-}
-
-function Mounts_loadfromXML()
-{
-	global $config;
-	$file_path = $config['data_path'] . 'XML/mounts.xml';
-	if (!file_exists($file_path)) {	return null; }
-
-	$xml = new DOMDocument;
-	$xml->load($file_path);
-
-	$mounts = null;
-	foreach ($xml->getElementsByTagName('mount') as $mount) {
-		$mounts[] = Mount_parseNode($mount);
-	}
-	return $mounts;
-}
-
- function Mount_parseNode($node) {
-	$id = (int)$node->getAttribute('id');
-	$clientid = (int)$node->getAttribute('clientid');
-	$name = $node->getAttribute('name');
-	$speed = (int)$node->getAttribute('speed');
-	$premium = $node->getAttribute('premium');
-	$type = $node->getAttribute('type');
-	return array('id' => $id, 'clientid' => $clientid, 'name' => $name, 'speed' => $speed, 'premium' => $premium, 'type' => $type);
 }
 
 function left($str, $length) {

@@ -9,6 +9,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\Server\Lua\Loader;
+
 class Validator extends \MyAAC\Validator {}
 
 function check_name($name, &$errors = '') {
@@ -73,4 +75,78 @@ function fieldExist($field, $table)
 {
 	global $db;
 	return $db->hasColumn($table, $field);
+}
+
+function Outfits_loadfromXML(): ?array
+{
+	global $config;
+	$file_path = $config['data_path'] . 'XML/outfits.xml';
+	if (!file_exists($file_path)) {	return null; }
+
+	$xml = new DOMDocument;
+	$xml->load($file_path);
+
+	$outfits = null;
+	foreach ($xml->getElementsByTagName('outfit') as $outfit) {
+		$outfits[] = Outfit_parseNode($outfit);
+	}
+	return $outfits;
+}
+
+function Outfit_parseNode($node): array
+{
+	$looktype = (int)$node->getAttribute('looktype');
+	$type = (int)$node->getAttribute('type');
+	$lookname = $node->getAttribute('name');
+	$premium = $node->getAttribute('premium');
+	$unlocked = $node->getAttribute('unlocked');
+	$enabled = $node->getAttribute('enabled');
+	return array('id' => $looktype, 'type' => $type, 'name' => $lookname, 'premium' => $premium, 'unlocked' => $unlocked, 'enabled' => $enabled);
+}
+
+function Mounts_loadfromXML(): ?array
+{
+	global $config;
+	$file_path = $config['data_path'] . 'XML/mounts.xml';
+	if (!file_exists($file_path)) {	return null; }
+
+	$xml = new DOMDocument;
+	$xml->load($file_path);
+
+	$mounts = null;
+	foreach ($xml->getElementsByTagName('mount') as $mount) {
+		$mounts[] = Mount_parseNode($mount);
+	}
+	return $mounts;
+}
+
+function Mount_parseNode($node): array
+{
+	$id = (int)$node->getAttribute('id');
+	$clientid = (int)$node->getAttribute('clientid');
+	$name = $node->getAttribute('name');
+	$speed = (int)$node->getAttribute('speed');
+	$premium = $node->getAttribute('premium');
+	$type = $node->getAttribute('type');
+	return array('id' => $id, 'clientid' => $clientid, 'name' => $name, 'speed' => $speed, 'premium' => $premium, 'type' => $type);
+}
+
+function load_config_lua(string $file): array
+{
+	$result = Loader::load($file);
+	if ($result === false) {
+		log_append('error.log', '[load_config_file] Fatal error: Cannot load config.lua (' . $file . ').');
+		throw new \RuntimeException('ERROR: Cannot find ' . $file . ' file.');
+	}
+
+	return $result;
+}
+
+function configLua($key) {
+	global $config;
+	if (is_array($key)) {
+		return $config['lua'][$key[0]] = $key[1];
+	}
+
+	return @$config['lua'][$key];
 }

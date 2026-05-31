@@ -104,6 +104,8 @@ const OTSERV_FIRST = OTSERV;
 const OTSERV_LAST = OTSERV_06;
 const TFS_02 = 3;
 const TFS_03 = 4;
+const BLACKTEK_2 = 5;
+const BLACKTEK = 6;
 const TFS_FIRST = TFS_02;
 const TFS_LAST = TFS_03;
 
