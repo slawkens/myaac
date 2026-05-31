@@ -21,7 +21,21 @@ class ItemsParser
 			if (str_contains($line, '[[items]]') && $i++ != 0) {
 				//global $whoopsHandler;
 				//$whoopsHandler->addDataTable('ini', [$parse]);
-				$ret[] = parse_ini_string($parse);
+
+				$tmp = false;
+				try {
+					$tmp = parse_ini_string($parse);
+				} catch (\Exception $e) {
+					warning('Failed to parse items.toml line: ' . $i . ' with error: ' . $e->getMessage());
+				}
+
+				if ($tmp === false) {
+					warning('Failed to parse items.toml line: ' . $i);
+				}
+				else {
+					$ret[] = $tmp;
+				}
+
 				$parse = '';
 				continue;
 			}
@@ -37,7 +51,12 @@ class ItemsParser
 		}
 
 		if ($parse !== '') {
-			$ret[] = parse_ini_string($parse);
+			$tmp = parse_ini_string($parse);
+			if ($tmp === false) {
+				warning('Failed to parse items.toml line: ' . $i);
+			} else {
+				$ret[] = $tmp;
+			}
 		}
 
 		fclose($handle);
