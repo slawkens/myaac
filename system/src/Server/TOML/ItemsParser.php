@@ -30,7 +30,7 @@ class ItemsParser
 				}
 
 				if ($tmp === false) {
-					warning('Failed to parse items.toml line: ' . $i);
+					warning('Failed to parse items.toml line: ' . $i . '(' . $parse . ')');
 				}
 				else {
 					$ret[] = $tmp;
