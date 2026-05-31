@@ -227,7 +227,7 @@ jobs:
           uses: cssnr/toml-action@v1
           if: matrix.ots == 'blacktek-master'
           with:
-            file: config/database.toml
+            file: ots/config/database.toml
             path: $.mysql.user
             value: root
 
@@ -235,7 +235,7 @@ jobs:
           uses: cssnr/toml-action@v1
           if: matrix.ots == 'blacktek-master'
           with:
-            file: config/database.toml
+            file: ots/config/database.toml
             path: $.mysql.pass
             value: root
 
@@ -243,7 +243,7 @@ jobs:
           uses: cssnr/toml-action@v1
           if: matrix.ots == 'blacktek-master'
           with:
-            file: config/database.toml
+            file: ots/config/database.toml
             path: $.mysql.database
             value: myaac
 
