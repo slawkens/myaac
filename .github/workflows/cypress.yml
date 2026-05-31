@@ -166,15 +166,6 @@ jobs:
               regex: false
               include: 'ots/config.lua'
 
-        - name: Replace mysqlHost (BlackTek 1.0)
-          uses: jacobtomlinson/gha-find-replace@v3
-          if: matrix.ots == 'blacktek-1.0'
-          with:
-            find: 'mysqlHost = "server-db""'
-            replace: 'mysqlHost = "localhost"'
-            regex: false
-            include: 'ots/config.lua'
-
         - name: Replace mysqlUser (BlackTek 1.0)
           uses: jacobtomlinson/gha-find-replace@v3
           if: matrix.ots == 'blacktek-1.0'
@@ -188,7 +179,7 @@ jobs:
           uses: jacobtomlinson/gha-find-replace@v3
           if: matrix.ots == 'blacktek-1.0'
           with:
-              find: 'mysqlPass = "blacktekpassword"'
+              find: 'mysqlPass = ""'
               replace: 'mysqlPass = "root"'
               regex: false
               include: 'ots/config.lua'
