@@ -223,32 +223,29 @@ jobs:
               regex: false
               include: 'ots/config.lua'
 
-        - name: Replace user (BlackTek master)
-          uses: jacobtomlinson/gha-find-replace@v3
+        - name: Replace mysql.user (BlackTek Master)
+          uses: cssnr/toml-action@v1
           if: matrix.ots == 'blacktek-master'
           with:
-              find: 'user               = "forgottenserver"'
-              replace: 'user               = "root"'
-              regex: false
-              include: 'config/database.toml'
+            file: config/database.toml
+            path: $.mysql.user
+            value: root
 
-        - name: Replace pass (BlackTek master)
-          uses: jacobtomlinson/gha-find-replace@v3
+        - name: Replace mysql.pass (BlackTek Master)
+          uses: cssnr/toml-action@v1
           if: matrix.ots == 'blacktek-master'
           with:
-              find: 'pass               = ""'
-              replace: 'pass               = "root"'
-              regex: false
-              include: 'config/database.toml'
+            file: config/database.toml
+            path: $.mysql.pass
+            value: root
 
-        - name: Replace database (BlackTek master)
-          uses: jacobtomlinson/gha-find-replace@v3
+        - name: Replace mysql.database (BlackTek Master)
+          uses: cssnr/toml-action@v1
           if: matrix.ots == 'blacktek-master'
           with:
-              find: 'database           = "forgottenserver"'
-              replace: 'database           = "myaac"'
-              regex: false
-              include: 'config/database.toml'
+            file: config/database.toml
+            path: $.mysql.database
+            value: myaac
 
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
