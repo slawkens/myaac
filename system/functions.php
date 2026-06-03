@@ -891,11 +891,30 @@ function getWorldName($id)
  */
 function _mail(string $to, string $subject, string $body, string $altBody = ''): bool
 {
-	global $mailer, $config;
+	global $mailer, $config, $hooks;
 
 	if (!setting('core.mail_enabled')) {
 		log_append('mailer-error.log', '_mail() function has been used, but Mail Support is disabled.');
 		return false;
+	}
+
+	if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
+		log_append('mailer-error.log', '_mail() function has been used with invalid email address: ' . $to);
+		return false;
+	}
+
+	$args = [
+		'recipient' => $to,
+		'subject' => $subject,
+		'body' => $body,
+		'altBody' => $altBody,
+		'return' => null,
+	];
+
+	$hooks->triggerFilter(HOOK_FILTER_MAIL, $args);
+
+	if ($args['return'] !== null) {
+		return (bool) $args['return'];
 	}
 
 	if(!$mailer)
