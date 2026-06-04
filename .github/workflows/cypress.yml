@@ -33,17 +33,17 @@ jobs:
             mysql -e "SHOW DATABASES" -uroot -proot
 
         - name: Checkout MyAAC
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
           with:
             ref: main
 
-        - uses: actions/setup-node@v4
+        - uses: actions/setup-node@v6
           with:
             node-version: 18
         - run: npm ci
 
         - name: Checkout TFS
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
           if: matrix.ots == 'tfs-1.4'
           with:
             repository: otland/forgottenserver
@@ -51,7 +51,7 @@ jobs:
             path: ots
 
         - name: Checkout TFS
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
           if: matrix.ots == 'tfs-master'
           with:
             repository: otland/forgottenserver
@@ -59,7 +59,7 @@ jobs:
             path: ots
 
         - name: Checkout Canary
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
           if: matrix.ots == 'canary-3.1.2'
           with:
             repository: opentibiabr/canary
@@ -120,7 +120,7 @@ jobs:
           run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
         - name: Cache composer dependencies
-          uses: actions/cache@v4
+          uses: actions/cache@v5
           with:
             path: ${{ steps.composer-cache.outputs.dir }}
             # Use composer.json for key, if composer.lock is not committed.
@@ -138,7 +138,7 @@ jobs:
           uses: cypress-io/github-action@v7
 
         - name: Save screenshots
-          uses: actions/upload-artifact@v4
+          uses: actions/upload-artifact@v7
           if: always()
           with:
             name: cypress-screenshots-${{ matrix.php-versions }}-${{ matrix.ots }}
@@ -146,7 +146,7 @@ jobs:
             if-no-files-found: ignore
 
         - name: Upload Cypress Videos
-          uses: actions/upload-artifact@v4
+          uses: actions/upload-artifact@v7
           if: always()
           with:
             name: cypress-videos-${{ matrix.php-versions }}-${{ matrix.ots }}
@@ -154,7 +154,7 @@ jobs:
             if-no-files-found: ignore
 
         - name: Upload PHP Logs
-          uses: actions/upload-artifact@v4
+          uses: actions/upload-artifact@v7
           if: always()
           with:
             name: php-log-${{ matrix.php-versions }}-${{ matrix.ots }}
