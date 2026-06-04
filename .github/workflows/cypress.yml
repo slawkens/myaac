@@ -135,10 +135,9 @@ jobs:
           run: nohup php -S localhost:8080 > php.log 2>&1 &
 
         - name: Cypress Run
-          uses: cypress-io/github-action@v6
-          env:
-            CYPRESS_URL: http://localhost:8080
-            CYPRESS_SERVER_PATH: /home/runner/work/myaac/myaac/ots
+          uses: cypress-io/github-action@v7
+          with:
+            expose: url=http://localhost:8080,serverPath=/home/runner/work/myaac/myaac/ots
 
         - name: Save screenshots
           uses: actions/upload-artifact@v4
