@@ -15,7 +15,7 @@ class CsrfToken
 {
 	public static function generate(): void
 	{
-		$token = sha1(uniqid(time(), true));
+		$token = bin2hex(random_bytes(32));
 
 		setSession('csrf_token', $token);
 	}
