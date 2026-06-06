@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.26 - xx.xx.xxxx]
+
+### Fixed
+* Security: Fix some session vulnerabilities (https://github.com/slawkens/myaac/commit/7176584d91ef3ab7b37329e413ddf66aca79dcb6)
+
 ## [0.8.25 - 31.01.2026]
 ### Added
 * New configurable: hooks_debug – To view where hooks are located in .twig files (https://github.com/slawkens/myaac/commit/7378905ae8cf033e36a27461b5ccffeed042dacd)
@@ -437,7 +442,7 @@ Please update your MyAAC instances to this version.
 ### Added:
 * new Awesome Bootstrap Admin Panel by Lee (@Leesneaks)
 	* using Bootstrap 3
-	* all existing pages were adjusted 
+	* all existing pages were adjusted
 	* new editor: Accounts
 	* improved editor: Players
 	* new Reports View page
