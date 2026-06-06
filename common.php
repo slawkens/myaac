@@ -117,7 +117,7 @@ const SMTP_SECURITY_TLS = 2;
 const ACCOUNT_NUMBER_LENGTH = 8;
 
 if (!IS_CLI) {
-	session_start();
+	session_start(['cookie_httponly' => true]);
 }
 
 if (file_exists(BASE . 'config.local.php')) {
