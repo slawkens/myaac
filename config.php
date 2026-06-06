@@ -299,4 +299,25 @@ $config = array(
 		'words' => array(),
 	),
 
+	/**
+	 * Session cookies security
+	 *
+	 * SameSite cookies allow you to declare if your cookie should be restricted to a first-party or same-site context. This provides some protection against cross-site request forgery attacks (CSRF).
+	 * Recommended: Lax
+	 *
+	 * Lax = Cookies are not sent on normal cross-site subrequests (for example to load images or frames into a third party site),
+	 * 		but are sent when a user is navigating to the origin site (i.e., when following a link).
+	 * Strict = Cookies will only be sent in a first-party context and not be sent along with requests initiated by third party websites.
+	 * In this mode, you will be logged out when you click a link from another site following to your site.
+	 * None = Cookies will be sent in all contexts, i.e., in responses to both first-party and cross-origin requests.
+	 * 		This means zero security.
+	 *
+	 * Re-logout is needed to apply changes to this config.
+	 * Possible values: None, Lax, Strict
+	 * None means disabled
+	 * Lax is recommended for most cases, Strict can cause problems with some browsers and features (like login from another site)
+	 *
+	 * WARNING: Only change if you know what you are doing!
+	 **/
+	'session_samesite' => 'Lax',
 );

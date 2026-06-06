@@ -85,7 +85,19 @@ define('TFS_03', 4);
 define('TFS_FIRST', TFS_02);
 define('TFS_LAST', TFS_03);
 
+require 'config.php';
+if (file_exists(BASE . 'config.local.php')) {
+	require BASE . 'config.local.php';
+}
+
 if (!IS_CLI) {
+	@ini_set('session.use_strict_mode', 1);
+
+	session_set_cookie_params([
+		'httponly' => true,
+		'samesite' => $config['session_samesite'] ?? 'Lax',
+	]);
+
 	session_save_path(SYSTEM . 'php_sessions');
 	session_start();
 }
@@ -99,10 +111,6 @@ for($i = 1; $i < $size; $i++)
 
 $basedir = str_replace(array('/admin', '/install', '/tools'), '', $basedir);
 define('BASE_DIR', $basedir);
-
-if (file_exists(BASE . 'config.local.php')) {
-	require BASE . 'config.local.php';
-}
 
 if(!IS_CLI) {
 	if (isset($_SERVER['HTTP_HOST'][0])) {
