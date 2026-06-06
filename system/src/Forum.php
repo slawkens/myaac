@@ -229,7 +229,7 @@ class Forum
 		{
 			$code = substr($text, stripos($text, '[code]')+6, stripos($text, '[/code]') - stripos($text, '[code]') - 6);
 			if(!is_int($rows / 2)) { $bgcolor = 'ABED25'; } else { $bgcolor = '23ED25'; } $rows++;
-			$text = str_ireplace('[code]'.$code.'[/code]', '<i>Code:</i><br /><table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #CCCCCC; border-width: 2px"><tr><td>'.$code.'</td></tr></table>', $text);
+			$text = str_ireplace('[code]'.$code.'[/code]', '<i>Code:</i><br /><table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #CCCCCC; border-width: 2px"><tr><td><pre class="bb-code-block">'.$code.'</pre></td></tr></table>', $text);
 		}
 
 		$rows = 0;
@@ -323,6 +323,13 @@ class Forum
 			return '<a href="' . $escapedHref . '" title="' . $escapedTitle . '">' . $escapedTitle . '</a>';
 		}, $text);
 
+		if (preg_match_all('/\<pre\>(.*?)\<\/pre\>/', $text, $match)) {
+			foreach ($match as $a) {
+				foreach ($a as $b) {
+					$text = str_replace('<pre>' . $b . '</pre>', '<pre>' . str_replace('<br />', '', $b) . '</pre>', $text);
+				}
+			}
+		}
 
 		return ($smiles ? Forum::parseSmiles($text) : $text);
 	}
