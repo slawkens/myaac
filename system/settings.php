@@ -1726,6 +1726,28 @@ Sent by MyAAC,<br/>
 				'account_login_ipban_protection', '=', 'true'
 			]
 		],
+
+		[
+			'type' => 'section',
+			'title' => 'PHP Session',
+		],
+
+		'session_samesite' => [
+			'name' => 'PHP Session SameSite',
+			'type' => 'options',
+			'options' => ['Lax' => 'Lax', 'Strict' => 'Strict', 'None' => 'None',],
+			'desc' => 'SameSite cookies allow you to declare if your cookie should be restricted to a first-party or same-site context. This provides some protection against cross-site request forgery attacks (CSRF).<br/>' .
+			'Recommended: <strong>Lax</strong><br/>' .
+			'<strong>Lax</strong> = Cookies are not sent on normal cross-site subrequests (for example to load images or frames into a third party site), but are sent when a user is navigating to the origin site (i.e., when following a link).' . '<br/>' .
+			'<strong>Strict</strong> = Cookies will only be sent in a first-party context and not be sent along with requests initiated by third party websites.<br/>' .
+			'In this mode, you will be logged out when you click a link from another site following to your site.' . '<br/>' .
+			'<strong>None</strong> = Cookies will be sent in all contexts, i.e., in responses to both first-party and cross-origin requests.<br/>' .
+			'This means zero security.' . '<br/><br/>' .
+			'Re-logout is needed to apply changes to this setting.',
+			'default' => 'Lax',
+			'is_config' => true,
+		],
+
 	],
 	'callbacks' => [
 		'beforeSave' => function(&$settings, &$values) {
