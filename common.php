@@ -132,8 +132,6 @@ if (!IS_CLI) {
 		'samesite' => $config['session_samesite'] ?? 'Lax',
 	]);
 
-	session_save_path(SESSIONS_DIR);
-
 	session_start();
 }
 
