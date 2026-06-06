@@ -70,7 +70,7 @@ class CsrfToken
 			return false;
 		}
 
-		return ($post == getSession('csrf_token'));
+		return hash_equals(getSession('csrf_token'), $post);
 	}
 
 	/**
