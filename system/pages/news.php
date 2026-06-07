@@ -180,13 +180,18 @@ if(!$news_cached)
 	$newses = $db->query('SELECT * FROM ' . $db->tableName(TABLE_PREFIX . 'news') . ' WHERE type = ' . NEWS . ' AND hide != 1 ORDER BY date' . ' DESC LIMIT ' . setting('core.news_limit'));
 	if($newses->rowCount() > 0)
 	{
-		foreach($newses as $news)
-		{
-			$author = '';
-			$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id']) . ' LIMIT 1');
-			if($query->rowCount() > 0) {
-				$query = $query->fetch();
-				$author = $query['name'];
+		$cachedPlayers = [];
+		foreach($newses as $news) {
+			if (isset($cachedPlayers[$news['player_id']])) {
+				$author = $cachedPlayers[$news['player_id']];
+			} else {
+				$author = '';
+				$query = $db->query('SELECT `name` FROM `players` WHERE id = ' . $db->quote($news['player_id']) . ' LIMIT 1');
+				if($query->rowCount() > 0) {
+					$query = $query->fetch();
+					$author = $query['name'];
+					$cachedPlayers[$news['player_id']] = $author;
+				}
 			}
 
 			$admin_options = '';
