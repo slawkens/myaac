@@ -84,7 +84,6 @@ const TOOLS = BASE . 'tools/';
 const VENDOR = BASE . 'vendor/';
 
 // other dirs
-const SESSIONS_DIR = SYSTEM . 'php_sessions';
 const GUILD_IMAGES_DIR = 'images/guilds/';
 const EDITOR_IMAGES_DIR = 'images/editor/';
 const GALLERY_DIR = 'images/gallery/';
@@ -119,13 +118,23 @@ const SMTP_SECURITY_TLS = 2;
 
 const ACCOUNT_NUMBER_LENGTH = 8;
 
-if (!IS_CLI) {
-	session_save_path(SESSIONS_DIR);
-	session_start();
-}
-
 if (file_exists(BASE . 'config.local.php')) {
 	require BASE . 'config.local.php';
+}
+
+if (!IS_CLI) {
+	@ini_set('session.use_strict_mode', 1);
+
+	if (@$config['session_samesite'] == 'None') {
+		$config['session_samesite'] = '';
+	}
+
+	session_set_cookie_params([
+		'httponly' => true,
+		'samesite' => $config['session_samesite'] ?? 'Lax',
+	]);
+
+	session_start();
 }
 
 require SYSTEM . 'base.php';

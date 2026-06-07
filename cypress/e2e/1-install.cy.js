@@ -4,11 +4,11 @@ describe('Install MyAAC', () => {
 		// so we must tell it to visit our website with the `cy.visit()` command.
 		// Since we want to visit the same URL at the start of all our tests,
 		// we include it in our beforeEach function so that it runs before each test
-		cy.visit(Cypress.env('URL'))
+		cy.visit('/install')
 	})
 
 	it('Go through installer', () => {
-		cy.visit(Cypress.env('URL') + '/install/?step=welcome')
+		cy.visit('/install/?step=welcome')
 		cy.wait(1000)
 
 		cy.screenshot('install-welcome')
@@ -37,7 +37,7 @@ describe('Install MyAAC', () => {
 		// step 4 - Configuration
 		cy.contains('Basic configuration');
 
-		cy.get('#vars_server_path').click().clear().type(Cypress.env('SERVER_PATH'))
+		cy.get('#vars_server_path').click().clear().type(Cypress.expose('serverPath'))
 
 		cy.get('[type="checkbox"]').uncheck() // usage statistics uncheck
 
