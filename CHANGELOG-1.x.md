@@ -1,5 +1,44 @@
 # Changelog
 
+## [1.9.0 - 07.06.2026]
+
+@Gesior helped me to scan the code for vulnerabilities.
+This results in following release, where we patched most of them.
+Also some performance problems has been fixed.
+
+Full changelog:
+
+### Added
+* New hook: HOOK_FILTER_MAIL (https://github.com/slawkens/myaac/pull/368)
+
+### Changed
+* Improve bb [code] tag (https://github.com/slawkens/myaac/commit/1b321cd93c9f03416befedb9e13fb05eb7928fcf)
+* News: Do not cache if logged as admin, so it shows the admin buttons (https://github.com/slawkens/myaac/commit/81b8bd8a2cb7605a631dc58c53adc131076c5e38)
+
+### Fixed
+* Security: Fix some session vulnerabilities (Thanks @Gesior) (https://github.com/slawkens/myaac/commit/328f65c3c2668e2a63dec934d7ce5f80c15483a6, https://github.com/slawkens/myaac/commit/392eaceaca434644c5fac02eb3c645efa65405fd)
+* Security: Fix inline javascript execution in forum bbcode (Thanks @Gesior) (https://github.com/slawkens/myaac/commit/a20a9b7b8f8b05de8ce974f56119c1f02592e532)
+* Highscores: Prevent mass queries amount caused by getPlayerLink (https://github.com/slawkens/myaac/commit/ac9a328206f79b125dc82758f6d6314f69116f69)
+* Fix: Clear hooks on plugin uninstall (https://github.com/slawkens/myaac/commit/4145d9eb3c1fd91aa4638b79120246349dcbd44c, https://github.com/slawkens/myaac/commit/609cf152af6a51832119acdb83375938ec2768f9)
+* Menus: Fix template_menus reload cache - instant change (https://github.com/slawkens/myaac/commit/c4435d206d81eb58d3143cfde0cdd07bc4ff8f51)
+* Security: Fix: CSRF Token Uses Non-Constant-Time Comparison (https://github.com/slawkens/myaac/commit/65a6895de51d717d7876fc0177af00815447c6aa)
+* Security: Fix: Safer csrf token generation (https://github.com/slawkens/myaac/commit/70f4ff264f1b8bc478279aa67c954bc6566b2054)
+* Security: Add escapeHtml in 404 & 405.php (https://github.com/slawkens/myaac/commit/065c1f000b383d9facaf38a265dd04c9190429e8)
+* Security: Fix: Account Redirect: Open Redirect via redirect Parameter (https://github.com/slawkens/myaac/commit/a1c1c8fcf744f963858aaa19ed532063c622af1f)
+* Fixes to cypress: Use expose instead of env (https://github.com/slawkens/myaac/commit/457bb3c1a95ed2d13e38c672f2b0591490d58420)
+
+### Removed
+* Move polls to plugins, may have sql injection (https://github.com/slawkens/myaac/commit/b6fc73c80d0775b79b3f2bba7715aafc0a8a8d75)
+* Delete news_preview.php, wasn't used anyway (https://github.com/slawkens/myaac/commit/dd5a92470d11ee7b505310cb6b8768c6f48b7258)
+
+### Updated
+* tinymce from 7.6.0 to 7.9.3
+* cypress from ^14.3.3 to ^15.15.0
+* lodash from 4.17.23 to 4.18.1
+* tmp from 0.2.4 to 0.2.7
+* qs from 6.14.2 to 6.15.2
+* Update workflows actions versions to suppress the warnings about node 20 (https://github.com/slawkens/myaac/commit/1fba3f93c4ceccddda0e5229f2debb25dd0600c8)
+
 ## [1.8.9 - 06.04.2026]
 ### Added
 * Settings: Possibility to add custom HTML for the head and body tags like Google Analytics code etc. (https://github.com/slawkens/myaac/commit/108e83806df5686a06826931ed5e243c19cbe130)
