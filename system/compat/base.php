@@ -74,3 +74,7 @@ function fieldExist($field, $table)
 	global $db;
 	return $db->hasColumn($table, $field);
 }
+
+function get_browser_real_ip(): string {
+	return $_SERVER['REMOTE_ADDR'];
+}
