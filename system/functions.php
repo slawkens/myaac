@@ -1273,8 +1273,8 @@ function getCustomPage($page, &$success)
 	return $content;
 }
 
-function escapeHtml($html) {
-	return htmlspecialchars($html);
+function escapeHtml(string $html): string {
+	return htmlspecialchars($html, ENT_QUOTES, 'UTF-8');
 }
 
 function getGuildNameById($id)
