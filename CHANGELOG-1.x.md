@@ -4,7 +4,7 @@
 
 I found another security vulnerability.
 It was in install script.
-If you don't have install/ip.txt, or the whole install folder - you are safe.
+If you don't have install/ip.txt, or if you removed the whole install folder - you are safe.
 You can also apply this patch - https://github.com/slawkens/myaac/commit/8e7cb12ac2935c63f9e9fe078d1460cdd6f953f3
 In worst scenario it allows to give admin rights to the specific account.
 So check your accounts table to see if you are already compromised - search for web_flags = 3.
