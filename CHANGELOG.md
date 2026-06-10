@@ -1,11 +1,23 @@
 # Changelog
 
-## [0.8.26 - xx.xx.xxxx]
+## [0.8.26 - 10.06.2026]
+
+Probably one of the latest security updates for 0.8 series.
+Upgrade to 1.x ASAP!
 
 ### Fixed
 * Security: Fix some session vulnerabilities (https://github.com/slawkens/myaac/commit/7176584d91ef3ab7b37329e413ddf66aca79dcb6)
+* Don't trust cloudflare IP, can be spoofed (https://github.com/slawkens/myaac/commit/f5d986a99bee49105762d5010e0b2b13a3a706c5)
+* Patch parseBBCode function from develop, fixing security issues + modify escapeHtml function to use UTF-8 encoding (https://github.com/slawkens/myaac/commit/591b793a0527e3fa08927acec0706bf479a39bfe)
+* Fix: Open Redirect via redirect Parameter (https://github.com/slawkens/myaac/commit/e1f819efadc96b9dfeaf08d70b349fcceb3e69cb)
+* News: Do not cache if logged as admin, so it shows the admin buttons (https://github.com/slawkens/myaac/commit/0f1fd1cd85d3b56d70ec376eecda9350d4e16cc8)
+* escapeHtml in 404.php (https://github.com/slawkens/myaac/commit/a251ccbf33b857a4da0726aeb14d6de1ebc53879)
+
+### Removed
+* Remove polls, may have sql injection (https://github.com/slawkens/myaac/commit/c76c95f1a94157c772b2c26f64fb91cc4e34a178)
 
 ## [0.8.25 - 31.01.2026]
+
 ### Added
 * New configurable: hooks_debug – To view where hooks are located in .twig files (https://github.com/slawkens/myaac/commit/7378905ae8cf033e36a27461b5ccffeed042dacd)
 * Twig: add global cache variable (https://github.com/slawkens/myaac/commit/f7cf2425d0e970356c477a96b20c4c31837430e7)
