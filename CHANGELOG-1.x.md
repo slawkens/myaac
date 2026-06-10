@@ -2,7 +2,7 @@
 
 ## [1.9.1 - 10.06.2026]
 
-I found another security vulnerability.
+I found another security vulnerability, probably one of the last.
 It was in install script.
 If you don't have install/ip.txt, or if you removed the whole install folder - you are safe.
 You can also apply this patch - https://github.com/slawkens/myaac/commit/8e7cb12ac2935c63f9e9fe078d1460cdd6f953f3
