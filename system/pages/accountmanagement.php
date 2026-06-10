@@ -53,7 +53,7 @@ $errors = array();
 		$redirect = urldecode($_REQUEST['redirect']);
 
 		// should never happen, unless hacker modify the URL
-		if (strpos($_REQUEST['redirect'], BASE_URL) === false) {
+		if (!str_starts_with($redirect, BASE_URL)) {
 			error('Fatal error: Cannot redirect outside the website.');
 			return;
 		}
