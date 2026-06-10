@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.9.1 - 10.06.2026]
+
+I found another security vulnerability, probably one of the last.
+It was in install script.
+If you don't have install/ip.txt, or if you removed the whole install folder - you are safe.
+You can also apply this patch - https://github.com/slawkens/myaac/commit/8e7cb12ac2935c63f9e9fe078d1460cdd6f953f3
+In worst scenario it allows to give admin rights to the specific account.
+So check your accounts table to see if you are already compromised - search for web_flags = 3.
+
+Full changelog:
+
+### Added
+* New Setting: Require Vowels for character name (https://github.com/slawkens/myaac/commit/41272b35514136dc6ff10aba4d01eb9958c7397f)
+
+### Fixed
+* Don't trust cloudflare IP, can be spoofed (https://github.com/slawkens/myaac/commit/8e7cb12ac2935c63f9e9fe078d1460cdd6f953f3)
+* Rewrite how install works, to prevent unauthorized access (https://github.com/slawkens/myaac/commit/f4086635845f2eec471ef0f95048ca9426a6b549)
+
+### Updated
+* Update clients list to include 15.10 & 15.11 (https://github.com/slawkens/myaac/commit/cc9c607cb0d949bfb5f526f0b1a3c303e78df683)
+
 ## [1.9.0 - 07.06.2026]
 
 @Gesior helped me to scan the code for vulnerabilities.

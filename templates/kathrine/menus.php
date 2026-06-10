@@ -20,7 +20,6 @@ return [
 		'Last Kills' => 'last-kills',
 		'Houses' => 'houses',
 		'Guilds' => 'guilds',
-		'Polls' => 'polls',
 		'Bans' => 'bans',
 		'Forum' => 'forum',
 		'Team' => 'team',

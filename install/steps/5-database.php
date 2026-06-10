@@ -46,7 +46,6 @@ if(!$error) {
 	$saved = Settings::saveConfig($configToSave, BASE . 'config.local.php', $content);
 	if ($saved || file_exists(BASE . 'config.local.php')) {
 		success($locale['step_database_config_saved']);
-		$_SESSION['saved'] = true;
 
 		require BASE . 'config.local.php';
 		require BASE . 'install/includes/config.php';
@@ -75,7 +74,6 @@ if(!$error) {
 	} else {
 		$error = true;
 		$_SESSION['config_content'] = $content;
-		unset($_SESSION['saved']);
 
 		$locale['step_database_error_file'] = str_replace('$FILE$', '<b>' . BASE . 'config.local.php</b>', $locale['step_database_error_file']);
 		error($locale['step_database_error_file'] . '<br/>
