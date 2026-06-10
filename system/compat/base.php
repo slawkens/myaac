@@ -63,14 +63,18 @@ function news_place() {
 	return tickers();
 }
 
-function tableExist($table)
+function tableExist(string $table): bool
 {
 	global $db;
 	return $db->hasTable($table);
 }
 
-function fieldExist($field, $table)
+function fieldExist(string $field, string $table): bool
 {
 	global $db;
 	return $db->hasColumn($table, $field);
+}
+
+function get_browser_real_ip(): string {
+	return $_SERVER['REMOTE_ADDR'];
 }

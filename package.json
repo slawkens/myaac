@@ -13,5 +13,8 @@
     "jquery": "^3.7.1",
     "jquery-ui": "^1.13.2",
     "tinymce": "^7.9.3"
+  },
+  "allowScripts": {
+    "cypress@15.16.0": true
   }
 }
