@@ -7,6 +7,8 @@ use RuntimeException;
 
 class Config
 {
+	const FILE = 'config/server.toml';
+
 	private array $config = [];
 
 	public function load(): void

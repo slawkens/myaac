@@ -6,6 +6,9 @@ use MyAAC\Cache\Cache;
 
 class Config
 {
+	const CONFIG_TYPE_LUA = 'lua';
+	const CONFIG_TYPE_TOML = 'toml';
+
 	public static function get()
 	{
 		$cache = Cache::getInstance();
@@ -40,5 +43,16 @@ class Config
 
 	public static function exists(): bool {
 		return file_exists(config('server_path') . Lua\Config::FILE) || file_exists(config('server_path') . 'config/server.toml');
+	}
+
+	public static function getType(): string {
+		if (file_exists(config('server_path') . Lua\Config::FILE)) {
+			return self::CONFIG_TYPE_LUA;
+		}
+		else if (file_exists(config('server_path') . TOML\Config::FILE)) {
+			return self::CONFIG_TYPE_TOML;
+		}
+
+		return '';
 	}
 }
