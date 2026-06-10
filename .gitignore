@@ -65,6 +65,9 @@ system/data/*
 system/php_sessions/*
 !system/php_sessions/index.html
 
+# install
+install/install.lock
+
 # plugins
 plugins/*
 !plugins/.htaccess

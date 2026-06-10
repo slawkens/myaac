@@ -880,6 +880,12 @@ Sent by MyAAC,<br/>
 				},
 			],
 		],
+		'create_character_name_require_vowels' => [
+			'name' => 'Require Vowels',
+			'type' => 'boolean',
+			'desc' => 'Should character names be required to have vowels (a, e, i, o, u)?',
+			'default' => true,
+		],
 		'create_character_name_monsters_check' => [
 			'name' => 'Block Monsters Names',
 			'type' => 'boolean',
