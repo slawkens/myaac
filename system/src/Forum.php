@@ -323,14 +323,6 @@ class Forum
 			return '<a href="' . $escapedHref . '" title="' . $escapedTitle . '">' . $escapedTitle . '</a>';
 		}, $text);
 
-		if (preg_match_all('/\<pre\>(.*?)\<\/pre\>/', $text, $match)) {
-			foreach ($match as $a) {
-				foreach ($a as $b) {
-					$text = str_replace('<pre>' . $b . '</pre>', '<pre>' . str_replace('<br />', '', $b) . '</pre>', $text);
-				}
-			}
-		}
-
 		return ($smiles ? Forum::parseSmiles($text) : $text);
 	}
 
