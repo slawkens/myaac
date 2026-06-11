@@ -59,7 +59,7 @@ jobs:
             path: ots
 
         - name: Checkout TFS 0.3
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
           if: matrix.ots == 'tfs-0.3'
           with:
               repository: otland/tfs-old-svn
@@ -75,7 +75,7 @@ jobs:
             path: ots
 
         - name: Checkout BlackTek
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
           if: matrix.ots == 'blacktek-1.0'
           with:
             repository: Black-Tek/BlackTek-Server
@@ -83,7 +83,7 @@ jobs:
             path: ots
 
         - name: Checkout BlackTek
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
           if: matrix.ots == 'blacktek-2.0'
           with:
             repository: Black-Tek/BlackTek-Server
@@ -91,7 +91,7 @@ jobs:
             path: ots
 
         - name: Checkout BlackTek
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
           if: matrix.ots == 'blacktek-master'
           with:
             repository: Black-Tek/BlackTek-Server
