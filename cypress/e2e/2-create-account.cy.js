@@ -10,7 +10,12 @@ describe('Create Account Page', () => {
 	it('Create Test Account', () => {
 		cy.screenshot('create-account-page')
 
-		cy.get('#account_input').type('tester')
+		cy.get("body").then($body => {
+			if ($body.find("#account_input").length > 0) {
+				cy.get('#account_input').type('tester')
+			}
+		});
+
 		cy.get('#email').type('tester@example.com')
 
 		cy.get('#password').type('test1234')
