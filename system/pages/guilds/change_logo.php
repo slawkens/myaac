@@ -64,6 +64,17 @@ if(empty($errors)) {
 					$upload_errors[] = 'You didn\'t send file or file is too big. Limit: <b>'.setting('core.guild_image_size_kb').' KB</b>.';
 				}
 
+				if (empty($upload_errors)) {
+					$_type = mime_content_type($file['tmp_name']);
+					if (!strstr($_type, 'image/')) {
+						$upload_errors[] = 'Invalid mime type.';
+					}
+
+					if (extension_loaded('gd') && getimagesize($file['tmp_name']) === false) {
+						$upload_errors[] = 'Invalid image file.';
+					}
+				}
+
 				if(empty($upload_errors)) {
 					$extension = $ext_name[$type];
 					if(!move_uploaded_file($file['tmp_name'], $save_path.'.'.$extension)) {
