@@ -52,7 +52,7 @@ else {
 	// include our page
 	$file = __DIR__ . '/pages/' . $page . '.php';
 	if(!@file_exists($file)) {
-		if (str_contains($page, 'plugins/')) {
+		if (str_contains($page, 'plugins/') && preg_match('/^[A-z0-9.\/\-]+$/', $page) && !str_contains($page, '..')) {
 			$file = BASE . $page;
 		}
 		else {

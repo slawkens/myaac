@@ -15,7 +15,7 @@
 			</td>
 			<td style="width: 10px; "></td>
 			<td>
-				<form action="{{ getLink('guilds') }}?action=show&guild={{ guild_name }}" method="post">
+				<form action="{{ getGuildLink(guild_name, false) }}" method="post">
 					{{ csrf() }}
 					{{ include('buttons.back.html.twig') }}
 				</form>

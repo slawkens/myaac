@@ -17,31 +17,62 @@
 		{% set i = i + 1 %}
 	<tr bgcolor="{{ getStyle(i) }}">
 		<td colspan="2" style="cursor: pointer;" onclick="toggleVisibility('faq_{{ i }}'); return false;">
-			<b>{{ faq.question|raw }}</b>
+			<b>{{ faq.question|striptags('<b><strong><i><u><span>')|raw }}</b>
 
-			<div id="faq_{{ i }}" style="display: none;">{{ faq.answer|raw }}</div>
+			<div id="faq_{{ i }}" style="display: none;">{{ faq.answer|striptags('<b><strong><i><u><span>')|raw }}</div>
 		</td>
 		{% if canEdit %}
 			<td>
-				<a href="?subtopic=faq&action=edit&id={{ faq.id }}" title="Edit">
+				<form method="post" id="faq_edit_{{ i }}" style="display: none;">
+					{{ csrf() }}
+					<input type="hidden" name="action" value="edit" />
+					<input type="hidden" name="id" value="{{ faq.id }}" />
+				</form>
+				<a href="#" onclick="document.getElementById('faq_edit_{{ i }}').submit(); return false;" title="Edit">
 					<img src="images/edit.png"/>Edit
 				</a>
-				<a id="delete" href="?subtopic=faq&action=delete&id={{ faq.id }}" onclick="return confirm('Are you sure?');" title="Delete">
+
+				<form method="post" id="faq_delete_{{ i }}" style="display: none;">
+					{{ csrf() }}
+					<input type="hidden" name="action" value="delete" />
+					<input type="hidden" name="id" value="{{ faq.id }}" />
+				</form>
+
+				<a href="#" onclick="confirm('Are you sure?') && document.getElementById('faq_delete_{{ i }}').submit(); return false;" title="Delete">
 					<img src="images/del.png"/>Delete
 				</a>
-				<a href="?subtopic=faq&action=hide&id={{ faq.id }}" title="{% if faq.hide != 1 %}Hide{% else %}Show{% endif %}">
+
+				<form method="post" id="faq_hide_{{ i }}" style="display: none;">
+					{{ csrf() }}
+					<input type="hidden" name="action" value="hide" />
+					<input type="hidden" name="id" value="{{ faq.id }}" />
+				</form>
+
+				<a href="#" onclick="document.getElementById('faq_hide_{{ i }}').submit(); return false;" title="{% if faq.hide != 1 %}Hide{% else %}Show{% endif %}">
 					<img src="images/{% if faq.hide != 1 %}success{% else %}error{% endif %}.png"/>{% if faq.hide != 1 %}Hide{% else %}Show{% endif %}
 				</a>
-                {% if i != 1 %}
-					<a href="?subtopic=faq&action=moveup&id={{ faq.id }}" title="Move up">
+
+				{% if i != 1 %}
+					<form method="post" id="faq_moveup_{{ i }}" style="display: none;">
+						{{ csrf() }}
+						<input type="hidden" name="action" value="moveup" />
+						<input type="hidden" name="id" value="{{ faq.id }}" />
+					</form>
+
+					<a href="#" onclick="document.getElementById('faq_moveup_{{ i }}').submit(); return false;" title="Move up">
 						<img src="images/icons/arrow_up.gif"/>Move up
 					</a>
-                {% endif %}
-                {% if i != last %}
-					<a href="?subtopic=faq&action=movedown&id={{ faq.id }}" title="Move down">
+				{% endif %}
+				{% if i != last %}
+					<form method="post" id="faq_movedown_{{ i }}" style="display: none;">
+						{{ csrf() }}
+						<input type="hidden" name="action" value="movedown" />
+						<input type="hidden" name="id" value="{{ faq.id }}" />
+					</form>
+					<a href="#" onclick="document.getElementById('faq_movedown_{{ i }}').submit(); return false;" title="Move down">
 						<img src="images/icons/arrow_down.gif"/>Move down
 					</a>
-                {% endif %}
+				{% endif %}
 			</td>
 		{% endif %}
 	</tr>

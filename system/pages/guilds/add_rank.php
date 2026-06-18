@@ -61,7 +61,7 @@ if(empty($errors)) {
 
 		$twig->display('guilds.back_button.html.twig', array(
 			'new_line' => true,
-			'action' => getLink('guilds') . '?guild='.$guild_name.'&action=show'
+			'action' => getGuildLink($guild_name, false),
 		));
 	}
 }

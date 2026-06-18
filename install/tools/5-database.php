@@ -15,6 +15,11 @@ ini_set('max_execution_time', 300);
 @ob_end_flush();
 ob_implicit_flush();
 
+if(file_exists(BASE . 'install/install.lock')) {
+	warning($locale['already_installed']);
+	return;
+}
+
 header('X-Accel-Buffering: no');
 
 if(!$error) {

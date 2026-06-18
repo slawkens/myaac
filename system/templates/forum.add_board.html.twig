@@ -12,7 +12,7 @@
 				<table border="0" cellpadding="1">
 					<tr>
 						<td>Name:</td>
-						<td><input name="name" value="{% if name is not null %}{{ name }}{% endif %}" size="29" maxlength="29"/></td>
+						<td><input type="text" name="name" value="{% if name is not null %}{{ name }}{% endif %}" size="29" maxlength="29"/></td>
 					<tr>
 						<td>Description:</td>
 						<td><textarea name="description" maxlength="300" cols="50" rows="5">{% if description is not null %}{{ description }}{% endif %}</textarea></td>

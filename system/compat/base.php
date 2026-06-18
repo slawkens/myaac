@@ -76,5 +76,5 @@ function fieldExist(string $field, string $table): bool
 }
 
 function get_browser_real_ip(): string {
-	return $_SERVER['REMOTE_ADDR'];
+	return $_SERVER['REMOTE_ADDR'] ?? '';
 }
