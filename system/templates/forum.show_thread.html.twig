@@ -59,6 +59,7 @@ Page: {{ links_to_pages|raw }}<br/>
 						{{ include('forum.remove_post.html.twig') }}
 					{% endif %}
 				{% endif %}
+
 					{% if logged and (post.player.getAccount().getId() == account_logged.getId() or is_moderator) %}
 						<a href="{{ getLink('forum') }}?action=edit_post&id={{ post.id }}" title="Edit Post" target="_blank">
 							<img src="images/edit.png"/>
