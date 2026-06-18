@@ -12,7 +12,7 @@ use MyAAC\Cache\Cache;
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Gallery';
 
-const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
 
 $images = Cache::remember('gallery', 5 * 60, function () {
 	$images = glob(BASE . GALLERY_DIR . '*.*');
