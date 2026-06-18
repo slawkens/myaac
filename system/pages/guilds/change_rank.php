@@ -43,6 +43,7 @@ $rank_list = $guild->getGuildRanksList();
 $rank_list->orderBy('level', POT::ORDER_DESC);
 $guild_leader = false;
 $guild_vice = false;
+$level_in_guild = 1;
 $account_players = $account_logged->getPlayersList();
 foreach($account_players as $player)
 {
