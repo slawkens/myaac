@@ -159,7 +159,7 @@ Here you can change names of ranks, delete and add ranks, pass leadership to oth
 {% endset %}
 {% include 'tables.headline.html.twig' %}
 	<div style="text-align:center">
-	<form action="{{ getLink('guilds') }}?action=show&guild={{ guild.getName() }}" method="post">
+	<form action="{{ getGuildLink(guild.getName(), false) }}" method="post">
 		{{ csrf() }}
 		{{ include('buttons.back.html.twig') }}
 	</form>
