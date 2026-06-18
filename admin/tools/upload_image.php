@@ -32,7 +32,7 @@ if (is_uploaded_file($temp['tmp_name'])) {
 
 	// Verify extension
 	$ext = strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION));
-	if (!in_array($ext, ['gif', 'jpg', 'png', 'webp'])) {
+	if (!in_array($ext, ['gif', 'jpg', 'png', 'bmp', 'webp'])) {
 		header('HTTP/1.1 400 Invalid extension.');
 		return;
 	}
