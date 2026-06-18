@@ -7,7 +7,7 @@ The Lost Account Interface can help you to get back your account name and passwo
 	<table class="myaac-table" style="width: 100%">
 		<thead>
 		<tr>
-			<th class="white"><b>Please enter your character name</b></th>
+			<th><b>Please enter your character name</b></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -18,12 +18,14 @@ The Lost Account Interface can help you to get back your account name and passwo
 			</tr>
 		</tbody>
 	</table>
-	<table style="width: 100%; border-spacing: 1px">
+	<table class="myaac-table" style="width: 100%; border-spacing: 1px">
+		<thead>
 		<tr>
-			<td style="padding: 4px; background: {{ config('vdarkborder') }}" class="white"><b>What do you want?</b></td>
+			<th><b>What do you want?</b></th>
 		</tr>
+		</thead>
 		<tr>
-			<td style="padding: 4px; background: {{ config('darkborder') }}">
+			<td style="padding: 4px;">
 				<input type="radio" name="action" id="action_type_email" value="email">
 				<label for="action_type_email"> Send me new password and my account name to account e-mail address.</label><br/>
 				<input type=radio name="action" id="action_type_key" value="recovery-key">
