@@ -19,7 +19,7 @@
         "symfony/var-dumper": "^6.4",
         "filp/whoops": "^2.15",
         "maximebf/debugbar": "1.*",
-        "guzzlehttp/guzzle": "7.9.3"
+        "guzzlehttp/guzzle": "7.12.1"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.10"
