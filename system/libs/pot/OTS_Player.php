@@ -1,4 +1,7 @@
 <?php
+
+use MyAAC\Models\PlayerStorage;
+
 $__load = array();
 /*
 	'loss_experience' => NULL,
@@ -2499,14 +2502,7 @@ class OTS_Player extends OTS_Row_DAO
 			throw new E_OTS_NotLoaded();
 		}
 
-		$value = $this->db->query('SELECT ' . $this->db->fieldName('value') . ' FROM ' . $this->db->tableName('player_storage') . ' WHERE ' . $this->db->fieldName('key') . ' = ' . (int) $key . ' AND ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'])->fetch();
-
-		if($value === false)
-		{
-			return null;
-		}
-
-		return $value['value'];
+		return PlayerStorage::where('player_id', $this->data['id'])->where('key', $key)->first()?->value;
 	}
 
 /**
