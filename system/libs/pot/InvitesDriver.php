@@ -27,10 +27,10 @@ class InvitesDriver implements IOTS_GuildAction
 {
     // assigned guild
     private $guild;
-	
+
     // database
     private $db;
-	
+
     // initializes driver
     public function __construct(OTS_Guild $guild)
     {
@@ -90,12 +90,17 @@ class InvitesDriver implements IOTS_GuildAction
 		$rank->setLevel(1);
 		$rank->save();
 		}
-        $player->setRank($rank);
-        $player->save();
 
-        // clears invitation
-        $this->deleteRequest($player);
-    }
+		$player->setRank($rank);
+
+		// Clear guild nickname after setting rank to ensure it's properly cleared in all tables
+		$player->setGuildNick('');
+
+		$player->save();
+
+		// clears invitation
+		$this->deleteRequest($player);
+	}
 }
 
 ?>

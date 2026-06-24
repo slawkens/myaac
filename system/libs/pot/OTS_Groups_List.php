@@ -40,7 +40,7 @@ class OTS_Groups_List implements IteratorAggregate, Countable
 				$info = array();
 				$info['id'] = $group['id'];
 				$info['name'] = $group['name'];
-				$info['access'] = $group['name'];
+				$info['access'] = $group['access'];
 				$this->groups[$group['id']] = new OTS_Group($info);
 			}
 

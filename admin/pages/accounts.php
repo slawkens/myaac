@@ -120,9 +120,14 @@ else if (isset($_REQUEST['search'])) {
 				$group = $_POST['group'];
 			}
 
-			$password = ((!empty($_POST["pass"]) ? $_POST['pass'] : null));
-			if (!Validator::password($password)) {
-				$errors['password'] = Validator::getLastError();
+			$change_password = isset($_POST['c_pass']) && $_POST['c_pass'] === 'true';
+			$password = null;
+
+			if ($change_password) {
+				$password = isset($_POST['pass']) ? trim($_POST['pass']) : '';
+				if (!Validator::password($password)) {
+					echo_error(Validator::getLastError());
+				}
 			}
 
 			//secret
@@ -133,8 +138,9 @@ else if (isset($_REQUEST['search'])) {
 			//key
 			$key = $_POST['key'];
 			$email = $_POST['email'];
-			if (!Validator::email($email))
-				$errors['email'] = Validator::getLastError();
+			if (!Validator::email($email)) {
+				echo_error(Validator::getLastError());
+			}
 
 			// tibia coins
 			if (HAS_ACCOUNT_COINS) {
@@ -153,8 +159,10 @@ else if (isset($_REQUEST['search'])) {
 			verify_number($p_days, 'Prem days', 11);
 
 			//prem points
-			$p_points = $_POST['p_points'];
-			verify_number($p_points, 'Prem Points', 11);
+			if ($hasPointsColumn) {
+				$p_points = $_POST['p_points'];
+				verify_number($p_points, 'Prem Points', 11);
+			}
 
 			//rl name
 			$rl_name = $_POST['rl_name'];
@@ -204,7 +212,7 @@ else if (isset($_REQUEST['search'])) {
 
 				$account->setPremDays($p_days);
 
-				if (isset($password)) {
+				if ($change_password) {
 					if (USE_ACCOUNT_SALT) {
 						$salt = generateRandomString(10, false, true, true);
 						$password = $salt . $password;
@@ -346,12 +354,12 @@ else if (isset($_REQUEST['search'])) {
 											<input type="checkbox"
 												   name="c_pass"
 												   id="c_pass"
-												   value="false"
+												   value="true"
 												   class="form-check-input"/>
 											<label for="c_pass">Password: (check to change)</label>
 										</div>
 										<div class="input-group">
-											<input type="text" class="form-control" id="pass" name="pass" autocomplete="off" maxlength="20" value=""/>
+											<input type="text" class="form-control" id="pass" name="pass" autocomplete="new-password" maxlength="20" value=""/>
 										</div>
 									</div>
 									<div class="col-12 col-sm-12 col-lg-3">
