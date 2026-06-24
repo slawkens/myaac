@@ -112,9 +112,13 @@ if ($id > 0) {
 			$group = $_POST['group'];
 		}
 
-		$password = ((!empty($_POST["pass"]) ? $_POST['pass'] : null));
-		if (!Validator::password($password)) {
-			$errors['password'] = Validator::getLastError();
+		$change_password = isset($_POST['c_pass']) && $_POST['c_pass'] === 'true';
+		$password = null;
+		if ($change_password) {
+			$password = isset($_POST['pass']) ? trim($_POST['pass']) : '';
+			if (!Validator::password($password)) {
+				echo_error(Validator::getLastError());
+			}
 		}
 
 		//secret
@@ -126,7 +130,7 @@ if ($id > 0) {
 		$key = $_POST['key'];
 		$email = $_POST['email'];
 		if (!Validator::email($email))
-			$errors['email'] = Validator::getLastError();
+			echo_error(Validator::getLastError());
 
 		//tibia coins
 		if ($hasCoinsColumn) {
@@ -138,8 +142,10 @@ if ($id > 0) {
 		verify_number($p_days, 'Prem days', 11);
 
 		//prem points
-		$p_points = $_POST['p_points'];
-		verify_number($p_points, 'Prem Points', 11);
+		if ($hasPointsColumn) {
+			$p_points = $_POST['p_points'];
+			verify_number($p_points, 'Prem Points', 11);
+		}
 
 		//rl name
 		$rl_name = $_POST['rl_name'];
@@ -200,12 +206,11 @@ if ($id > 0) {
 			$account->setWebFlags($web_flags);
 			$account->setCustomField('web_lastlogin', $web_lastlogin);
 
-			if (isset($password)) {
+			if ($change_password) {
 				$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 				if ($config_salt_enabled) {
 					$salt = generateRandomString(10, false, true, true);
 					$password = $salt . $password;
-					$account_logged->setCustomField('salt', $salt);
 				}
 
 				$password = encrypt($password);
@@ -260,11 +265,11 @@ else if ($id > 0 && isset($account) && $account->isLoaded()) {
                               <input type="checkbox"
 									 name="c_pass"
 									 id="c_pass"
-									 value="false"
+									 value="true"
 									 class="input_control"/>
                             </span>
 								<input type="text" class="form-control" id="pass" name="pass"
-									   autocomplete="off" maxlength="20"
+									   autocomplete="new-password" maxlength="20"
 									   value=""/>
 							</div>
 						</div>
