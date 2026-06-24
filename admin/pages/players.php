@@ -386,7 +386,7 @@ else if ($id > 0 && isset($player) && $player->isLoaded())
 									<div class="row">
 										<div class="col-xs-6">
 											<label for="sex" class="control-label">Sex:</label>
-											<select name="sex" id="sex" class="form-control">>
+											<select name="sex" id="sex" class="form-control">
 												<?php foreach ($config['genders'] as $id => $sex): ?>
 													<option value="<?php echo $id; ?>" <?php echo($player->getSex() == $id ? 'selected' : ''); ?>><?php echo strtolower($sex); ?></option>
 												<?php endforeach; ?>

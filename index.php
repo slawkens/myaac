@@ -143,7 +143,7 @@ else {
 			'/^news\/archive\/[0-9]+\/?$/' => array('subtopic' => 'newsarchive', 'id' => '$2'),
 			'/^polls\/[0-9]+\/?$/' => array('subtopic' => 'polls', 'id' => '$1'),
 			'/^spells\/[A-Za-z0-9-_%]+\/[A-Za-z0-9-_]+\/?$/' => array('subtopic' => 'spells', 'vocation' => '$1', 'order' => '$2'),
-			'/^houses\/view\/?$/' => array('subtopic' => 'houses', 'page' => 'view')
+			'/^houses\/view\/?$/' => array('subtopic' => 'houses', 'page' => 'view'),
 		);
 
 		foreach ($rules as $rule => $redirect) {
