@@ -90,7 +90,11 @@ class InvitesDriver implements IOTS_GuildAction
 		$rank->setLevel(1);
 		$rank->save();
 		}
+
         $player->setRank($rank);
+
+		// Clear guild nickname after setting rank to ensure it's properly cleared in all tables
+        $player->setGuildNick('');
         $player->save();
 
         // clears invitation
