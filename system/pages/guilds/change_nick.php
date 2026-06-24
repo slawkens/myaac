@@ -22,12 +22,7 @@ $new_nick = isset($_REQUEST['nick']) ? stripslashes($_REQUEST['nick']) : null;
 $guild_name = isset($_REQUEST['guild']) ? urldecode($_REQUEST['guild']) : null;
 
 if(!$name) {
-	$errors[] = 'Please enter new name.';
-	return;
-}
-
-if(!$new_nick) {
-	$errors[] = 'Please enter new nick.';
+	$errors[] = 'Please enter character name.';
 	return;
 }
 
@@ -50,7 +45,8 @@ $player = new OTS_Player();
 $player->find($name);
 $player_from_account = false;
 
-if(!Validator::guildNick($new_nick)) {
+// Only validate nickname if it's not empty (empty means removal)
+if(!empty($new_nick) && !Validator::guildNick($new_nick)) {
 	$errors[] = Validator::getLastError();
 }
 
@@ -73,12 +69,23 @@ if(empty($errors)) {
 		$errors[] = 'This player is not from your account.';
 	}
 
+	// Check if player is actually in the guild
+	if(!$player->getRank()->isLoaded()) {
+		$errors[] = 'This player is not a member of any guild.';
+	}
+	else if($player->getRank()->getGuild()->getId() != $guild->getId()) {
+		$errors[] = 'This player is not a member of this guild.';
+	}
+
 	if(empty($errors))
 	{
 		$player->setGuildNick($new_nick);
+		$description = empty($new_nick) 
+			? 'Guild nick of player <b>'.$player->getName().'</b> has been removed.'
+			: 'Guild nick of player <b>'.$player->getName().'</b> changed to <b>'.htmlentities($new_nick).'</b>.';
 		$twig->display('success.html.twig', array(
 			'title' => 'Nick Changed',
-			'description' => 'Guild nick of player <b>'.$player->getName().'</b> changed to <b>'.htmlentities($new_nick).'</b>.',
+			'description' => $description,
 			'custom_buttons' => ''
 		));
 	}
