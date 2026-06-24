@@ -324,13 +324,16 @@ class OTS_Spell
         foreach( $this->element->getElementsByTagName('vocation') as $vocation)
         {
 	        if($vocation->getAttribute('id') != NULL) {
-		        $voc_id = $vocation->getAttribute('id');
-	        }
-	        else {
-		        $voc_id = $config['vocations_ids'][$vocation->getAttribute('name')];
-	        }
-	
-	        $vocations[] = $voc_id;
+                $voc_id = explode(';',$vocation->getAttribute('id'));
+            } else {
+                $voc_id = $config['vocations_ids'][$vocation->getAttribute('name')];
+            }
+
+            if(is_array($voc_id)) {
+                $vocations = array_merge($vocations,$voc_id);
+            } else {
+                $vocations[] = $voc_id;
+            }
         }
 
         return $vocations;
