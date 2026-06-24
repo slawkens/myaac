@@ -1876,8 +1876,9 @@ class OTS_Player extends OTS_Row_DAO
 	public function loadRank()
 	{
 		$table = 'guild_membership';
-		if($this->db->hasTable('guild_members'))
+		if(!$this->db->hasTable('guild_membership') && $this->db->hasTable('guild_members')) {
 			$table = 'guild_members';
+		}
 
 		$ranks = $this->db->query('SELECT `rank_id`, `nick` FROM `' . $table . '` WHERE `player_id` = ' . $this->db->quote($this->getID()))->fetch();
 		if($ranks)
@@ -1912,14 +1913,13 @@ class OTS_Player extends OTS_Row_DAO
 	public function setGuildNick($guildnick)
 	{
 		$this->data['guildnick'] = (string) $guildnick;
-		if($this->db->hasTable('guild_members'))
-			$this->db->query('UPDATE `guild_members` SET `nick` = ' . $this->db->quote($this->data['guildnick']) . ' WHERE `player_id` = ' . $this->getId());
-		else if($this->db->hasTable('guild_membership'))
+		if($this->db->hasTable('guild_membership'))
 			$this->db->query('UPDATE `guild_membership` SET `nick` = ' . $this->db->quote($this->data['guildnick']) . ' WHERE `player_id` = ' . $this->getId());
+		else if($this->db->hasTable('guild_members'))
+			$this->db->query('UPDATE `guild_members` SET `nick` = ' . $this->db->quote($this->data['guildnick']) . ' WHERE `player_id` = ' . $this->getId());
 		else if($this->db->hasColumn('players', 'guildnick'))
 			$this->db->query('UPDATE `players` SET `guildnick` = ' . $this->db->quote($this->data['guildnick']) . ' WHERE `id` = ' . $this->getId());
-  }
-
+		}
 /**
  * @version 0.0.3
  * @return int Guild rank ID.
