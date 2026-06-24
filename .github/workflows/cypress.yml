@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
-        ots: ['tfs-1.4', 'canary-3.1.2', 'tfs-0.3'] # TODO: add 'tfs-master' (actually doesn't work cause AAC doesn't support reading .env configuration)
+        ots: ['tfs-1.4', 'canary-3.1.2', 'tfs-0.3', 'blacktek-1.0', 'blacktek-2.0', 'blacktek-master'] # TODO: add 'tfs-master' (actually doesn't work cause AAC doesn't support reading .env configuration)
     name: Cypress (PHP ${{ matrix.php-versions }}, ${{ matrix.ots }})
     steps:
         - name: 📌 MySQL Start & init & show db
@@ -35,7 +35,7 @@ jobs:
         - name: Checkout MyAAC
           uses: actions/checkout@v6
           with:
-            ref: main
+            ref: blacktek-toml
 
         - uses: actions/setup-node@v6
           with:
@@ -59,7 +59,7 @@ jobs:
             path: ots
 
         - name: Checkout TFS 0.3
-          uses: actions/checkout@v4
+          uses: actions/checkout@v6
           if: matrix.ots == 'tfs-0.3'
           with:
               repository: otland/tfs-old-svn
@@ -74,6 +74,30 @@ jobs:
             ref: v3.1.2
             path: ots
 
+        - name: Checkout BlackTek
+          uses: actions/checkout@v6
+          if: matrix.ots == 'blacktek-1.0'
+          with:
+            repository: Black-Tek/BlackTek-Server
+            ref: '1.0'
+            path: ots
+
+        - name: Checkout BlackTek
+          uses: actions/checkout@v6
+          if: matrix.ots == 'blacktek-2.0'
+          with:
+            repository: Black-Tek/BlackTek-Server
+            ref: '2.0'
+            path: ots
+
+        - name: Checkout BlackTek
+          uses: actions/checkout@v6
+          if: matrix.ots == 'blacktek-master'
+          with:
+            repository: Black-Tek/BlackTek-Server
+            ref: 'master'
+            path: ots
+
         - name: Import OTS Schema
           if: matrix.ots != 'tfs-0.3'
           run: |
@@ -85,6 +109,7 @@ jobs:
               mysql -uroot -proot myaac < ots/schemas/mysql.sql
 
         - name: Rename config.lua
+          if: matrix.ots != 'blacktek-master'
           run: mv ots/config.lua.dist ots/config.lua
 
         - name: Replace mysqlUser (TFS 1.4)
@@ -123,7 +148,7 @@ jobs:
               regex: false
               include: 'ots/config.lua'
 
-        - name: Replace mysqlPass (TFS 0.3.6pl1)
+        - name: Replace mysqlPass (TFS 0.3)
           uses: jacobtomlinson/gha-find-replace@v3
           if: matrix.ots == 'tfs-0.3'
           with:
@@ -132,7 +157,7 @@ jobs:
               regex: false
               include: 'ots/config.lua'
 
-        - name: Replace mysqlPass (TFS 0.3.6pl1)
+        - name: Replace mysqlPass (TFS 0.3)
           uses: jacobtomlinson/gha-find-replace@v3
           if: matrix.ots == 'tfs-0.3'
           with:
@@ -141,7 +166,7 @@ jobs:
               regex: false
               include: 'ots/config.lua'
 
-        - name: Replace mysqlDatabase (Canary)
+        - name: Replace mysqlDatabase (TFS 0.3)
           uses: jacobtomlinson/gha-find-replace@v3
           if: matrix.ots == 'tfs-0.3'
           with:
@@ -149,6 +174,75 @@ jobs:
               replace: 'sqlDatabase = "myaac"'
               regex: false
               include: 'ots/config.lua'
+
+        - name: Replace mysqlUser (BlackTek 1.0 & 2.0)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'blacktek-1.0' || matrix.ots == 'blacktek-2.0'
+          with:
+            find: 'mysqlUser = "blacktekserver"'
+            replace: 'mysqlUser = "root"'
+            regex: false
+            include: 'ots/config.lua'
+
+        - name: Replace mysqlPass (BlackTek 1.0)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'blacktek-1.0'
+          with:
+              find: 'mysqlPass = ""'
+              replace: 'mysqlPass = "root"'
+              regex: false
+              include: 'ots/config.lua'
+
+        - name: Replace mysqlDatabase (BlackTek 1.0 & 2.0)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'blacktek-1.0' || matrix.ots == 'blacktek-2.0'
+          with:
+              find: 'mysqlDatabase = "blacktekserver"'
+              replace: 'mysqlDatabase = "myaac"'
+              regex: false
+              include: 'ots/config.lua'
+
+        - name: Replace mysqlPass (BlackTek 2.0)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'blacktek-2.0'
+          with:
+              find: 'mysqlPass = "blacktekpassword"'
+              replace: 'mysqlPass = "root"'
+              regex: false
+              include: 'ots/config.lua'
+
+        - name: Replace mysqlHost (BlackTek 2.0)
+          uses: jacobtomlinson/gha-find-replace@v3
+          if: matrix.ots == 'blacktek-2.0'
+          with:
+              find: 'mysqlHost = "server-db"'
+              replace: 'mysqlHost = "localhost"'
+              regex: false
+              include: 'ots/config.lua'
+
+        - name: Replace mysql.user (BlackTek Master)
+          uses: cssnr/toml-action@v1
+          if: matrix.ots == 'blacktek-master'
+          with:
+            file: ots/config/database.toml
+            path: $.mysql.user
+            value: root
+
+        - name: Replace mysql.pass (BlackTek Master)
+          uses: cssnr/toml-action@v1
+          if: matrix.ots == 'blacktek-master'
+          with:
+            file: ots/config/database.toml
+            path: $.mysql.pass
+            value: root
+
+        - name: Replace mysql.database (BlackTek Master)
+          uses: cssnr/toml-action@v1
+          if: matrix.ots == 'blacktek-master'
+          with:
+            file: ots/config/database.toml
+            path: $.mysql.database
+            value: myaac
 
         - name: Setup PHP
           uses: shivammathur/setup-php@v2

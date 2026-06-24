@@ -1,5 +1,6 @@
 <?php
 
+use MyAAC\Server\Config;
 use Twig\Environment as Twig_Environment;
 use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
 
@@ -96,7 +97,7 @@ if($allow && $step == 'database') {
 				$config['server_path'] .= '/';
 			}
 
-			if(!file_exists($config['server_path'] . 'config.lua')) {
+			if(!Config::exists()) {
 				$errors[] = $locale['step_database_error_config'];
 				break;
 			}
