@@ -1,4 +1,5 @@
 <?php
+set_time_limit(240);
 /**
  * Load items.xml
  *
