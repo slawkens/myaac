@@ -27,6 +27,7 @@ namespace MyAAC;
 
 use MyAAC\Cache\Cache;
 use MyAAC\Models\Town;
+use MyAAC\Server\Items;
 
 class DataLoader
 {
@@ -40,7 +41,7 @@ class DataLoader
 	{
 		self::$startTime = microtime(true);
 
-		if(Items::loadFromXML()) {
+		if(Items::load()) {
 			success(self::$locale['step_database_loaded_items'] . self::getLoadedTime());
 		}
 		else {

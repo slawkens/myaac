@@ -12,7 +12,7 @@
 use MyAAC\Cache\Cache;
 use MyAAC\Models\ServerConfig;
 use MyAAC\Models\ServerRecord;
-use MyAAC\Server\XML\Vocations;
+use MyAAC\Server\Vocations;
 
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Who is online?';
@@ -87,13 +87,16 @@ $cached = Cache::remember("online_$order", setting('core.online_cache_ttl') * 60
 			'name' => getPlayerLink($player['name']),
 			'player' => $player,
 			'level' => $player['level'],
-			'vocation' => $configVocations[$player['vocation']],
+			'vocation' => $configVocations[$player['vocation']] ?? 'Unknown',
 			'skull' => $skull,
 			'country_image' => getFlagImage($player['country']),
 			'outfit' => setting('core.outfit_images_url') . '?id=' . $player['looktype'] . ($outfit_addons ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'],
 		);
 
-		$vocations[Vocations::getOriginal($player['vocation'])]++;
+		$originalId = Vocations::getOriginal($player['vocation']);
+		if ($originalId) {
+			$vocations[$originalId]++;
+		}
 	}
 
 	$record = '';

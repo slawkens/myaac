@@ -27,7 +27,7 @@ if (version_compare(phpversion(), '8.1', '<')) die('PHP version 8.1 or higher is
 
 const MYAAC = true;
 const MYAAC_VERSION = '2.0-dev';
-const DATABASE_VERSION = 52;
+const DATABASE_VERSION = 53;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -103,6 +103,8 @@ const OTSERV_FIRST = OTSERV;
 const OTSERV_LAST = OTSERV_06;
 const TFS_02 = 3;
 const TFS_03 = 4;
+const BLACKTEK_2 = 5;
+const BLACKTEK = 6;
 const TFS_FIRST = TFS_02;
 const TFS_LAST = TFS_03;
 
