@@ -66,12 +66,13 @@ function admin_give_premdays(int $days): void
 	$value = $days * 86400;
 	$now = time();
 
-	// othire
-	if ($db->hasColumn('accounts', 'premend')) {
-		// append premend
-		if (Account::where('premend', '>', $now)->increment('premend', $value) !== false) {
-			// set premend
-			if (Account::where('premend', '<=', $now)->update(['premend' => $now + $value]) !== false) {
+	// tfs 1.x & othire
+	if ($db->hasColumn('accounts', 'premium_ends_at') || $db->hasColumn('accounts', 'premend')) {
+		$column = $db->hasColumn('accounts', 'premium_ends_at') ? 'premium_ends_at' : 'premend';
+		// append column
+		if (Account::where($column, '>', $now)->increment($column, $value) !== false) {
+			// set column
+			if (Account::where($column, '<=', $now)->update([$column => $now + $value]) !== false) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 			} else {
 				displayMessage('Failed to execute set query.');
@@ -84,6 +85,8 @@ function admin_give_premdays(int $days): void
 	}
 
 	// tfs 0.x
+	// commented out because it is not working properly
+	/*
 	if ($db->hasColumn('accounts', 'premdays')) {
 		// append premdays
 		if (Account::query()->update(['premdays' => $days])) {
@@ -104,25 +107,9 @@ function admin_give_premdays(int $days): void
 
 		return;
 	}
+	*/
 
-	// tfs 1.x
-	if ($db->hasColumn('accounts', 'premium_ends_at')) {
-		// append premium_ends_at
-		if (Account::where('premium_ends_at', '>', $now)->increment('premium_ends_at', $value) !== false) {
-			// set premium_ends_at
-			if (Account::where('premium_ends_at', '<=', $now)->update(['premium_ends_at' => $now + $value]) !== false) {
-				displayMessage($days . ' premium days added to all accounts.', true);
-			} else {
-				displayMessage('Failed to execute set query.');
-			}
-		} else {
-			displayMessage('Failed to execute append query.');
-		}
-
-		return;
-	}
-
-	displayMessage('Premium Days not supported.');
+	displayMessage('Premium Days adding not supported for your OTS engine.');
 }
 
 if (!empty(ACTION) && isRequestMethod('post')) {
