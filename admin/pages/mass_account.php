@@ -22,7 +22,7 @@ csrfProtect();
 $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $freePremium = getBoolean(configLua('freePremium'));
 
-function admin_give_points($points): void
+function admin_give_points(int $points): void
 {
 	global $hasPointsColumn;
 
@@ -31,21 +31,22 @@ function admin_give_points($points): void
 		return;
 	}
 
-	if (!Account::query()->increment('premium_points', $points)) {
+	if (Account::query()->increment('premium_points', $points) === false) {
 		displayMessage('Failed to add points.');
 		return;
 	}
+
 	displayMessage($points . ' points added to all accounts.', true);
 }
 
-function admin_give_coins($coins): void
+function admin_give_coins(int $coins): void
 {
 	if (!HAS_ACCOUNT_COINS) {
 		displayMessage('Coins not supported.');
 		return;
 	}
 
-	if (!Account::query()->increment('coins', $coins)) {
+	if (Account::query()->increment('coins', $coins) === false) {
 		displayMessage('Failed to add coins.');
 		return;
 	}
@@ -53,7 +54,7 @@ function admin_give_coins($coins): void
 	displayMessage($coins . ' coins added to all accounts.', true);
 }
 
-function admin_give_premdays($days): void
+function admin_give_premdays(int $days): void
 {
 	global $db, $freePremium;
 
@@ -68,9 +69,9 @@ function admin_give_premdays($days): void
 	// othire
 	if ($db->hasColumn('accounts', 'premend')) {
 		// append premend
-		if (Account::where('premend', '>', $now)->increment('premend', $value)) {
+		if (Account::where('premend', '>', $now)->increment('premend', $value) !== false) {
 			// set premend
-			if (Account::where('premend', '<=', $now)->update(['premend' => $now + $value])) {
+			if (Account::where('premend', '<=', $now)->update(['premend' => $now + $value]) !== false) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 			} else {
 				displayMessage('Failed to execute set query.');
@@ -87,9 +88,9 @@ function admin_give_premdays($days): void
 		// append premdays
 		if (Account::query()->update(['premdays' => $days])) {
 			// append lastday
-			if (Account::where('lastday', '>', $now)->increment('lastday', $value)) {
+			if (Account::where('lastday', '>', $now)->increment('lastday', $value) !== false) {
 				// set lastday
-				if (Account::where('lastday', '<=', $now)->update(['lastday' => $now + $value])) {
+				if (Account::where('lastday', '<=', $now)->update(['lastday' => $now + $value]) !== false) {
 					displayMessage($days . ' premium days added to all accounts.', true);
 				} else {
 					displayMessage('Failed to execute set query.');
@@ -107,9 +108,9 @@ function admin_give_premdays($days): void
 	// tfs 1.x
 	if ($db->hasColumn('accounts', 'premium_ends_at')) {
 		// append premium_ends_at
-		if (Account::where('premium_ends_at', '>', $now)->increment('premium_ends_at', $value)) {
+		if (Account::where('premium_ends_at', '>', $now)->increment('premium_ends_at', $value) !== false) {
 			// set premium_ends_at
-			if (Account::where('premium_ends_at', '<=', $now)->update(['premium_ends_at' => $now + $value])) {
+			if (Account::where('premium_ends_at', '<=', $now)->update(['premium_ends_at' => $now + $value]) !== false) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 			} else {
 				displayMessage('Failed to execute set query.');
@@ -160,7 +161,7 @@ else {
 	));
 }
 
-function displayMessage($message, $success = false): void
+function displayMessage(string $message, bool $success = false): void
 {
 	global $twig, $hasPointsColumn, $freePremium;
 
