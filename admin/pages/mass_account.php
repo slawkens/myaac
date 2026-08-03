@@ -84,18 +84,37 @@ function admin_give_premdays(int $days): void
 		return;
 	}
 
-	// tfs 0.x
 	if ($db->hasColumn('accounts', 'premdays')) {
-		// append premdays
-		if (Account::query()->increment('premdays', $days) !== false) {
-			// append lastday
-			if (Account::query()->update(['lastday' => $now]) !== false) {
-				displayMessage($days . ' premium days added to all accounts.', true);
+		if (isCanary()) {
+			// canary
+			if (Account::where('lastday', '>', $now)->increment('lastday', $value) !== false) {
+				if (Account::where('lastday', '<=', $now)->update(['lastday' => $now + $value]) !== false) {
+					if (Account::query()->increment('premdays', $days) !== false) {
+						displayMessage($days . ' premium days added to all accounts.', true);
+					}
+					else {
+						displayMessage('Failed to execute increment premdays.');
+					}
+				} else {
+					displayMessage('Failed to execute update lastday query.');
+				}
 			} else {
-				displayMessage('Failed to execute append query.');
+				displayMessage('Failed to execute increment lastday query.');
 			}
-		} else {
-			displayMessage('Failed to execute set days query.');
+
+			return;
+		}
+		else {
+			// tfs 0.x
+			if (Account::query()->increment('premdays', $days) !== false) {
+				if (Account::query()->update(['lastday' => $now]) !== false) {
+					displayMessage($days . ' premium days added to all accounts.', true);
+				} else {
+					displayMessage('Failed to execute update lastday query.');
+				}
+			} else {
+				displayMessage('Failed to execute increment premdays query.');
+			}
 		}
 
 		return;
