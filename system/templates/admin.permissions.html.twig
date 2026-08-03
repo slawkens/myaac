@@ -1,0 +1,120 @@
+<div class="card card-info">
+	<div class="card-header">
+		<h3 class="card-title">Permissions</h3>
+	</div>
+	<div class="card-body">
+		<form method="post">
+			<input type="hidden" name="action" value="select-account">
+			<div class="form-group">
+				<label for="permission-account-id">Select account</label>
+				<input type="text" class="form-control" id="permission-account-id" name="account_id" placeholder="Enter account id" value="{{ selectedAccountId }}">
+			</div>
+			<div class="d-flex gap-2">
+				<button type="submit" class="btn btn-primary">Continue</button>
+				<button type="button" class="ml-2 btn btn-secondary js-permissions-cancel-account">Cancel</button>
+			</div>
+		</form>
+
+		{% if showMatrix %}
+			<hr>
+			<form method="post">
+				<input type="hidden" name="action" value="save">
+				<input type="hidden" name="account_id" value="{{ selectedAccountId }}">
+				<div class="alert alert-info">
+					Editing permissions for account ID <strong>{{ selectedAccountId }}</strong>.
+				</div>
+				<div class="d-flex gap-2 mb-3">
+					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="button" class="ml-2 btn btn-secondary js-permissions-cancel">Cancel</button>
+				</div>
+				<div class="table-responsive">
+					<table id="table-permissions" class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th class="text-right"><h3><strong>Page</strong></h3></th>
+								<th class="text-center">
+									<h3>View</h3>
+									<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="view">Select all</button>
+								</th>
+								<th class="text-center">
+									<h3>Add</h3>
+									<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="add">Select all</button></th>
+								<th class="text-center">
+									<h3>Edit</h3>
+									<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="edit">Select all</button>
+								</th>
+								<th class="text-center">
+									<h3>Remove</h3>
+									<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="remove">Select all</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for pageItem in pages %}
+								<tr>
+									<td class="text-right">
+										<strong>{{ pageItem.label }}</strong>
+										<br>
+										<small>{{ pageItem.name }}</small>
+										<br>
+										<small class="text-muted">Source: {{ pageItem.source }}</small>
+										<br>
+										<button type="button" class="btn btn-xs btn-outline-secondary mt-2" data-select-row="{{ pageItem.name }}">Select row</button>
+									</td>
+									{% for operation in operations %}
+										<td class="text-center">
+											<input type="checkbox" class="permission-checkbox form-check-input" data-row="{{ pageItem.name }}" data-operation="{{ operation }}" name="pages[{{ pageItem.name }}][{{ operation }}]" value="1"{% if selected[pageItem.name][operation] is defined %} checked{% endif %}>
+										</td>
+									{% endfor %}
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<div class="d-flex gap-2 mt-1">
+					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="button" class="ml-2 btn btn-secondary js-permissions-cancel">Cancel</button>
+				</div>
+			</form>
+		{% endif %}
+	</div>
+</div>
+<script>
+$(function () {
+	$('.js-permissions-cancel').on('click', function () {
+		const accountId = $('#permission-account-id').val() || '';
+	    const queryString = accountId ? '&account_id=' + accountId : '';
+	    window.location = '{{ constant("ADMIN_URL") }}?p=permissions' + queryString;
+	});
+
+	$('.js-permissions-cancel-account').on('click', function () {
+	    window.location = '{{ constant("ADMIN_URL") }}?p=permissions';
+	});
+
+	$('[data-select-column]').on('click', function () {
+		const operation = $(this).data('select-column');
+		const checkboxes = $('.permission-checkbox[data-operation="' + operation + '"]');
+		const shouldCheck = !checkboxes.toArray().every(function (checkbox) {
+			return checkbox.checked;
+		});
+
+		checkboxes.prop('checked', shouldCheck);
+	});
+
+	$('[data-select-row]').on('click', function () {
+		const row = $(this).data('select-row');
+		const checkboxes = $('.permission-checkbox[data-row="' + row + '"]');
+		const shouldCheck = !checkboxes.toArray().every(function (checkbox) {
+			return checkbox.checked;
+		});
+
+		checkboxes.prop('checked', shouldCheck);
+	});
+});
+</script>
+<style>
+    .permission-checkbox {
+        width: 3.5em;
+        height: 3.5em;
+    }
+</style>
