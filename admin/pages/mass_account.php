@@ -85,19 +85,12 @@ function admin_give_premdays(int $days): void
 	}
 
 	// tfs 0.x
-	// commented out because it is not working properly
-	/*
 	if ($db->hasColumn('accounts', 'premdays')) {
 		// append premdays
-		if (Account::query()->update(['premdays' => $days])) {
+		if (Account::query()->increment('premdays', $days) !== false) {
 			// append lastday
-			if (Account::where('lastday', '>', $now)->increment('lastday', $value) !== false) {
-				// set lastday
-				if (Account::where('lastday', '<=', $now)->update(['lastday' => $now + $value]) !== false) {
-					displayMessage($days . ' premium days added to all accounts.', true);
-				} else {
-					displayMessage('Failed to execute set query.');
-				}
+			if (Account::query()->update(['lastday' => $now]) !== false) {
+				displayMessage($days . ' premium days added to all accounts.', true);
 			} else {
 				displayMessage('Failed to execute append query.');
 			}
@@ -107,7 +100,6 @@ function admin_give_premdays(int $days): void
 
 		return;
 	}
-	*/
 
 	displayMessage('Premium Days adding not supported for your OTS engine.');
 }
