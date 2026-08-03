@@ -75,10 +75,10 @@ function admin_give_premdays(int $days): void
 			if (Account::where($column, '<=', $now)->update([$column => $now + $value]) !== false) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 			} else {
-				displayMessage('Failed to execute set query.');
+				displayMessage("Failed to execute update $column query.");
 			}
 		} else {
-			displayMessage('Failed to execute append query.');
+			displayMessage("Failed to execute increment $column query.");
 		}
 
 		return;
@@ -93,7 +93,7 @@ function admin_give_premdays(int $days): void
 						displayMessage($days . ' premium days added to all accounts.', true);
 					}
 					else {
-						displayMessage('Failed to execute increment premdays.');
+						displayMessage('Failed to execute increment premdays query.');
 					}
 				} else {
 					displayMessage('Failed to execute update lastday query.');
