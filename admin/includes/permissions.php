@@ -16,7 +16,7 @@ const ADMIN_PERMISSIONS_PAGES = [
 	'accounts' => [
 		'enabled' => true,
 		'label' => 'Accounts Editor',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => true, 'add' => false, 'edit' => true, 'remove' => true],
 	],
 	'changelog' => [
 		'enabled' => true,
@@ -26,12 +26,15 @@ const ADMIN_PERMISSIONS_PAGES = [
 	'dashboard' => [
 		'enabled' => true,
 		'label' => 'Dashboard',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => true, 'add' => false, 'edit' => false, 'remove' => false],
 	],
 	'data' => [
 		'enabled' => true,
 		'label' => 'Server Data',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => true, 'add' => false, 'edit' => true, 'remove' => false],
+		'descriptions' => [
+			'edit' => 'Reload',
+		],
 	],
 	'logs' => [
 		'enabled' => true,
@@ -41,7 +44,10 @@ const ADMIN_PERMISSIONS_PAGES = [
 	'mailer' => [
 		'enabled' => true,
 		'label' => 'Mailer',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => false, 'add' => true, 'edit' => false, 'remove' => false],
+		'descriptions' => [
+			'add' => 'Send mass email to players',
+		],
 	],
 	'mass_account' => [
 		'enabled' => true,
@@ -55,8 +61,8 @@ const ADMIN_PERMISSIONS_PAGES = [
 	],
 	'menus' => [
 		'enabled' => true,
-		'label' => 'Menu',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'label' => 'Menus',
+		'operations' => ['view' => false, 'add' => false, 'edit' => true, 'remove' => false],
 	],
 	'news' => [
 		'enabled' => true,
@@ -66,7 +72,7 @@ const ADMIN_PERMISSIONS_PAGES = [
 	'notepad' => [
 		'enabled' => true,
 		'label' => 'Notepad',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => true, 'add' => false, 'edit' => true, 'remove' => false],
 	],
 	'pages' => [
 		'enabled' => true,
@@ -76,51 +82,48 @@ const ADMIN_PERMISSIONS_PAGES = [
 	'permissions' => [
 		'enabled' => true,
 		'label' => 'Permissions',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => true, 'add' => false, 'edit' => true, 'remove' => false],
 	],
 	'phpinfo' => [
 		'enabled' => true,
 		'label' => 'PHP Information',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => true, 'add' => false, 'edit' => false, 'remove' => false],
 	],
 	'players' => [
 		'enabled' => true,
 		'label' => 'Players Editor',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => true, 'add' => false, 'edit' => true, 'remove' => true],
 	],
 	'plugins' => [
 		'enabled' => true,
 		'label' => 'Plugins',
 		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
 		'descriptions' => [
-			'view' => 'View plugins list and details',
-			'add' => 'Upload plugins',
-			'remove' => 'Uninstall plugins',
+			'view' => 'View list and details',
+			'add' => 'Upload',
+			'edit' => 'Enable and disable',
+			'remove' => 'Uninstall',
 		],
 	],
 	'reports' => [
 		'enabled' => true,
 		'label' => 'Reports',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => true, 'add' => false, 'edit' => false, 'remove' => false],
 	],
 	'settings' => [
 		'enabled' => true,
 		'label' => 'Settings',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
-	],
-	'statistics' => [
-		'enabled' => true,
-		'label' => 'Statistics',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'operations' => ['view' => true, 'add' => false, 'edit' => true, 'remove' => false],
 	],
 	'visitors' => [
 		'enabled' => true,
-		'label' => 'Visitor Analytics',
-		'operations' => ['view' => true, 'add' => true, 'edit' => true, 'remove' => true],
+		'label' => 'Visitors',
+		'operations' => ['view' => true, 'add' => false, 'edit' => false, 'remove' => false],
 	],
 ];
 
-function ensureAdminPermissionTables(): void {
+function ensureAdminPermissionTables(): void
+{
 	global $db;
 
 	if (!$db->hasTable(TABLE_PREFIX . 'admin_permissions')) {
@@ -137,7 +140,8 @@ function ensureAdminPermissionTables(): void {
 	}
 }
 
-function buildOperationsString(array $selectedOperations): string {
+function buildOperationsString(array $selectedOperations): string
+{
 	$letters = [];
 
 	foreach ($selectedOperations as $operation) {
@@ -149,49 +153,37 @@ function buildOperationsString(array $selectedOperations): string {
 	return implode('', array_unique($letters));
 }
 
-function getAdminPermissionPages(): array {
-	$pages = [];
-	$hiddenPages = ['index', 'login', 'clmd', 'version', 'open_source', 'tools'];
-	$configAdminPermissionsPages = config('admin_permissions_pages');
+function getAdminPermissionPages(): array
+{
+	global $hooks;
 
-	$corePages = glob(__DIR__ . '/../pages/*.php');
-	if ($corePages) {
-		foreach ($corePages as $file) {
+	$corePages = [];
+	$hiddenPages = ['index', 'login', 'clmd', 'version', 'open_source', 'tools'];
+
+	$corePagesFiles = glob(__DIR__ . '/../pages/*.php');
+	if ($corePagesFiles) {
+		foreach ($corePagesFiles as $file) {
 			$name = pathinfo($file, PATHINFO_FILENAME);
 			if (in_array($name, $hiddenPages, true)) {
 				continue;
 			}
 
-			$pages[] = [
-				'name' => $name,
+			$corePages[$name] = [
 				'source' => 'core',
 				'label' => ADMIN_PERMISSIONS_PAGES[$name]['label'] ?? $name,
+				'operations' => ADMIN_PERMISSIONS_PAGES[$name]['operations'] ?? [],
+				'descriptions' => ADMIN_PERMISSIONS_PAGES[$name]['descriptions'] ?? [],
 			];
 		}
 	}
 
-	$pluginPages = Plugins::getAdminPages();
-	foreach ($pluginPages as $name => $file) {
-		if (in_array($name, $hiddenPages, true)) {
-			continue;
-		}
+	ksort($corePages);
 
-		if (!isset($configAdminPermissionsPages[$name]) || !getBoolean($configAdminPermissionsPages[$name]['enabled'])) {
-			continue;
-		}
+	$pluginPages = [];
+	$args = ['pages' => ['core' => $corePages, 'plugins' => $pluginPages]];
+	$hooks->triggerFilter(HOOK_FILTER_ADMIN_PERMISSIONS, $args);
 
-		$pages[] = [
-			'name' => $name,
-			'source' => 'plugin',
-			'label' => $configAdminPermissionsPages[$name]['label'] ?? $name,
-		];
-	}
-
-	usort($pages, function ($a, $b) {
-		return strcmp($a['name'], $b['name']);
-	});
-
-	return $pages;
+	return $args['pages'];
 }
 
 function getAdminPagePermissionSelections(int $accountId): array {
@@ -204,7 +196,7 @@ function getAdminPagePermissionSelections(int $accountId): array {
 
 	$selected = [];
 	foreach ($rows as $row) {
-		$operations = str_split((string) $row->operations);
+		$operations = str_split($row->operations);
 		foreach ($operations as $operationLetter) {
 			$operationName = null;
 			if (isset($map[$operationLetter])) {
@@ -222,7 +214,7 @@ function getAdminPagePermissionSelections(int $accountId): array {
 function hasAdminPermission(string $page, ?string $operation = null): bool {
 	global $logged, $account_logged;
 
-	if (!$logged || !admin()) {
+	if (!$logged) {
 		return false;
 	}
 

@@ -18,31 +18,37 @@ if (!hasAdminPermission('permissions', 'view')) {
 }
 
 $action = $_POST['action'] ?? '';
-$selectedAccountId = $_REQUEST['account_id'] ?? '';
+$selectedAccountEmail = ($_REQUEST['account_email'] ?? '');
+$selectedAccountId = '';
 $showMatrix = false;
+$accountData = null;
 
-if (!empty($selectedAccountId)) {
-	$accountData = Account::query()->select(['id', 'name'])->where('id', $selectedAccountId)->first();
-    if (!$accountData) {
-        error('The selected account does not exist.');
-    }
-    else {
-        $showMatrix = true;
-    }
+if ($selectedAccountEmail !== '') {
+	$accountData = Account::query()->select(['id', 'name', 'web_flags', 'email'])->where('email', $selectedAccountEmail)->first();
+	if (!$accountData) {
+		error('The selected account email does not exist.');
+	}
+	else {
+		$selectedAccountId = $accountData->id;
+		$showMatrix = true;
+	}
 }
 
-if ($action === 'save') {
-	$selectedPages = $_POST['pages'] ?? [];
-    $operations = array_keys(ADMIN_PERMISSIONS_OPERATION_MAP);
+$webFlags = isset($accountData->web_flags) ? $accountData->web_flags : 0;
 
-	if ($selectedAccountId === '' || !ctype_digit($selectedAccountId)) {
+if ($action === 'save') {
+	$webFlags = (int) ($_POST['web_flags'] ?? 0);
+	$selectedPages = $_POST['pages'] ?? [];
+	$operations = array_keys(ADMIN_PERMISSIONS_OPERATION_MAP);
+
+	if (empty($selectedAccountId)) {
 		error('Please select an account before saving permissions.');
 	}
 	else {
 		try {
 			$db->beginTransaction();
 
-			AdminPermission::query()->where('account_id', (int) $selectedAccountId)->delete();
+			AdminPermission::query()->where('account_id', $selectedAccountId)->delete();
 
 			foreach ($selectedPages as $pageKey => $pageOperations) {
 				$pageName = str_replace(['..', '/', '\\'], '', (string) $pageKey);
@@ -69,15 +75,17 @@ if ($action === 'save') {
 				]);
 			}
 
+			Account::query()->where('id', $selectedAccountId)->update(['web_flags' => $webFlags]);
+
 			$db->commit();
 			success('Permissions saved at ' . date('H:i:s') . '.');
-			$showMatrix = true;
 		}
 		catch (\Exception $error) {
 			$db->rollBack();
 			error('Failed to save permissions: ' . $error->getMessage());
-			$showMatrix = true;
 		}
+
+		$showMatrix = true;
 	}
 }
 
@@ -91,8 +99,13 @@ if ($showMatrix) {
 
 $twig->display('admin.permissions.html.twig', [
 	'showMatrix' => $showMatrix,
+
+	'selectedAccountEmail' => $selectedAccountEmail,
 	'selectedAccountId' => $selectedAccountId,
+	'webFlags' => $webFlags,
+
 	'pages' => $pages,
+
 	'selected' => $selected,
 	'operations' => $operations,
 ]);
