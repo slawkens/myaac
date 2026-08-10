@@ -504,11 +504,25 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @since 0.7.5
  * @throws E_OTS_NotLoaded If account is not loaded.
  */
-	public function setPremDays($premdays)
+	public function setPremDays(int $premdays): void
 	{
 		$this->data['premdays'] = (int) $premdays;
-		$this->data['premend'] = time() + ($premdays * 24 * 60 * 60);
-		$this->data['premium_ends_at'] = time() + ($premdays * 24 * 60 * 60);
+
+		$premiumTimeInSeconds = time() + ($premdays * 24 * 60 * 60);
+		$this->data['premend'] = $premiumTimeInSeconds;
+		$this->data['premium_ends_at'] = $premiumTimeInSeconds;
+
+		if (isCanary()) {
+			$this->data['lastday'] = $premiumTimeInSeconds;
+		}
+		else {
+			$lastDay = 0;
+			if($premdays != 0 && $premdays != OTS_Account::GRATIS_PREMIUM_DAYS) {
+				$lastDay = time();
+			}
+
+			$this->data['lastday'] = (int) $lastDay;
+		}
 	}
 
 	public function setRLName($name)

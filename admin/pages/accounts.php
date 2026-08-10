@@ -211,15 +211,7 @@ else if (isset($_REQUEST['search'])) {
 					$account->setCustomField(ACCOUNT_COINS_TRANSFERABLE_COLUMN, $t_coins_transferable);
 				}
 
-				$lastDay = 0;
-				if($p_days != 0 && $p_days != OTS_Account::GRATIS_PREMIUM_DAYS) {
-					$lastDay = time();
-				} else if ($lastDay != 0) {
-					$lastDay = 0;
-				}
-
 				$account->setPremDays($p_days);
-				$account->setLastLogin($lastDay);
 				if ($hasPointsColumn) {
 					$account->setCustomField('premium_points', $p_points);
 				}
