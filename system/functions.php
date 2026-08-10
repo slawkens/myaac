@@ -1736,7 +1736,7 @@ function hasLastDayPremiumEndColumn(): bool
 		return false;
 	}
 
-	$serverConfig = ServerConfig::where('key', 'db_version')->first();
+	$serverConfig = ServerConfig::where('config', 'db_version')->first();
 	if (!$serverConfig) {
 		return false;
 	}

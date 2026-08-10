@@ -192,6 +192,12 @@ if($save)
 
 		$new_account->setPassword(encrypt($password));
 		$new_account->setEMail($email);
+
+		$settingAccountPremiumDays = setting('core.account_premium_days');
+		if($settingAccountPremiumDays && $settingAccountPremiumDays > 0) {
+			$new_account->setPremDays($settingAccountPremiumDays);
+		}
+
 		$new_account->save();
 
 		$hooks->trigger(HOOK_ACCOUNT_CREATE_AFTER_SAVED, ['account' => $new_account]);
@@ -204,22 +210,6 @@ if($save)
 
 		if(setting('core.account_country')) {
 			$new_account->setCustomField('country', $country);
-		}
-
-		$settingAccountPremiumDays = setting('core.account_premium_days');
-		if($settingAccountPremiumDays && $settingAccountPremiumDays > 0) {
-			if($db->hasColumn('accounts', 'premend')) { // othire
-				$new_account->setCustomField('premend', time() + $settingAccountPremiumDays * 86400);
-			}
-			else { // rest
-				if ($db->hasColumn('accounts', 'premium_ends_at')) { // TFS 1.4+
-					$new_account->setCustomField('premium_ends_at', time() + $settingAccountPremiumDays * (60 * 60 * 24));
-				}
-				else {
-					$new_account->setCustomField('premdays', $settingAccountPremiumDays);
-					$new_account->setCustomField('lastday', time());
-				}
-			}
 		}
 
 		$accountDefaultPremiumPoints = setting('core.account_premium_points');
