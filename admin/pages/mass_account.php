@@ -85,7 +85,7 @@ function admin_give_premdays(int $days): void
 	}
 
 	if ($db->hasColumn('accounts', 'premdays')) {
-		if (isCanary()) {
+		if (hasLastDayPremiumEndColumn()) {
 			// canary
 			if (Account::where('lastday', '>', $now)->increment('lastday', $value) !== false) {
 				if (Account::where('lastday', '<=', $now)->update(['lastday' => $now + $value]) !== false) {
