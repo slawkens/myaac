@@ -474,7 +474,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		}
 
 		if(isset($this->data['premium_ends_at']) || isset($this->data['premend']) ||
-			(isCanary() && isset($this->data['lastday']))) {
+			(hasLastDayPremiumEndColumn() && isset($this->data['lastday']))) {
 				$col = (isset($this->data['premium_ends_at']) ? 'premium_ends_at' : (isset($this->data['lastday']) ? 'lastday' : 'premend'));
 				$ret = ceil(($this->data[$col] - time()) / (24 * 60 * 60));
 				return max($ret, 0);
@@ -505,7 +505,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 	public function isPremium(): bool
 	{
 		if(isset($this->data['premium_ends_at']) || isset($this->data['premend']) ||
-			(isCanary() && isset($this->data['lastday']))) {
+			(hasLastDayPremiumEndColumn() && isset($this->data['lastday']))) {
 			$col = (isset($this->data['premium_ends_at']) ? 'premium_ends_at' : (isset($this->data['lastday']) ? 'lastday' : 'premend'));
 			return $this->data[$col] > time();
 		}
@@ -542,7 +542,7 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
 		$this->data['premend'] = $premiumTimeInSeconds;
 		$this->data['premium_ends_at'] = $premiumTimeInSeconds;
 
-		if (isCanary()) {
+		if (hasLastDayPremiumEndColumn()) {
 			$this->data['lastday'] = $premiumTimeInSeconds;
 		}
 		else {
