@@ -128,10 +128,10 @@ $(function () {
 			$('#permissions-container').hide();
 		} else {
 			$('#permissions-container').show();
-		}
 
-		const shouldHideCheckboxes = (webFlagsValue === 2);
-		$('.permission-checkbox:not(.disabled)').prop("disabled", shouldHideCheckboxes);
+			const shouldHideCheckboxes = (webFlagsValue === 2);
+			$('.permission-checkbox:not(.disabled)').prop("disabled", shouldHideCheckboxes);
+		}
 	}
 
 	$('#web_flags').on('change', togglePermissionCheckboxesVisibility);
