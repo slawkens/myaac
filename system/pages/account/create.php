@@ -207,15 +207,6 @@ if($save)
 		$settingAccountPremiumDays = setting('core.account_premium_days');
 		if($settingAccountPremiumDays && $settingAccountPremiumDays > 0) {
 			$new_account->setPremDays($settingAccountPremiumDays);
-
-			if (!isCanary()) {
-				$lastDay = 0;
-				if($settingAccountPremiumDays != 0 && $settingAccountPremiumDays != OTS_Account::GRATIS_PREMIUM_DAYS) {
-					$lastDay = time();
-				}
-
-				$new_account->setLastLogin($lastDay);
-			}
 		}
 
 		$new_account->save();

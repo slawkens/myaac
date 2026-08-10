@@ -200,16 +200,6 @@ else if (isset($_REQUEST['search'])) {
 				}
 
 				$account->setWebFlags($web_flags);
-
-				if (!isCanary()) {
-					$lastDay = 0;
-					if($p_days != 0 && $p_days != OTS_Account::GRATIS_PREMIUM_DAYS) {
-						$lastDay = time();
-					}
-
-					$account->setLastLogin($lastDay);
-				}
-
 				$account->setPremDays($p_days);
 
 				if ($change_password) {
