@@ -75,39 +75,50 @@ function admin_give_premdays(int $days): void
 			if (Account::where($column, '<=', $now)->update([$column => $now + $value]) !== false) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 			} else {
-				displayMessage('Failed to execute set query.');
+				displayMessage("Failed to execute update $column query.");
 			}
 		} else {
-			displayMessage('Failed to execute append query.');
+			displayMessage("Failed to execute increment $column query.");
 		}
 
 		return;
 	}
 
-	// tfs 0.x
-	// commented out because it is not working properly
-	/*
 	if ($db->hasColumn('accounts', 'premdays')) {
-		// append premdays
-		if (Account::query()->update(['premdays' => $days])) {
-			// append lastday
+		if (hasLastDayPremiumEndColumn()) {
+			// canary
 			if (Account::where('lastday', '>', $now)->increment('lastday', $value) !== false) {
-				// set lastday
 				if (Account::where('lastday', '<=', $now)->update(['lastday' => $now + $value]) !== false) {
-					displayMessage($days . ' premium days added to all accounts.', true);
+					if (Account::query()->increment('premdays', $days) !== false) {
+						displayMessage($days . ' premium days added to all accounts.', true);
+					}
+					else {
+						displayMessage('Failed to execute increment premdays query.');
+					}
 				} else {
-					displayMessage('Failed to execute set query.');
+					displayMessage('Failed to execute update lastday query.');
 				}
 			} else {
-				displayMessage('Failed to execute append query.');
+				displayMessage('Failed to execute increment lastday query.');
 			}
-		} else {
-			displayMessage('Failed to execute set days query.');
+
+			return;
+		}
+		else {
+			// tfs 0.x
+			if (Account::query()->increment('premdays', $days) !== false) {
+				if (Account::query()->update(['lastday' => $now]) !== false) {
+					displayMessage($days . ' premium days added to all accounts.', true);
+				} else {
+					displayMessage('Failed to execute update lastday query.');
+				}
+			} else {
+				displayMessage('Failed to execute increment premdays query.');
+			}
 		}
 
 		return;
 	}
-	*/
 
 	displayMessage('Premium Days adding not supported for your OTS engine.');
 }

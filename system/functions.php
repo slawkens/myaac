@@ -19,6 +19,7 @@ use MyAAC\Models\Pages;
 use MyAAC\Models\Player;
 use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
+use MyAAC\Models\ServerConfig;
 use MyAAC\News;
 use MyAAC\Plugins;
 use MyAAC\Settings;
@@ -1811,8 +1812,23 @@ function getAccountIdentityColumn(): string
 	return 'id';
 }
 
-function isCanary(): bool
+function hasLastDayPremiumEndColumn(): bool
 {
+	global $db;
+
+	if (!$db->hasTable('server_config')) {
+		return false;
+	}
+
+	$serverConfig = ServerConfig::where('config', 'db_version')->first();
+	if (!$serverConfig) {
+		return false;
+	}
+
+	if ($serverConfig->value < 36) {
+		return false;
+	}
+
 	$dataPackDirectory = configLua('dataPackDirectory');
 	return isset($dataPackDirectory);
 }
