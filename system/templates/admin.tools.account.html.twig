@@ -45,7 +45,6 @@
 	</div>
 	{% endif %}
 
-	{% if not freePremium %}
 	<div class="col-md-4">
 		<div class="card card-info card-outline">
 			<div class="card-header">
@@ -61,10 +60,9 @@
 				</div>
 				<div class="card-footer">
 					<input type="hidden" name="action" value="give-premdays">
-					<button type="submit" class="btn btn-info">Add Days</button>
+					<button type="submit" class="btn btn-info" {% if freePremium %}disabled title="Free Premium enabled, action not available"{% endif %}>Add Days</button>
 				</div>
 			</form>
 		</div>
 	</div>
-	{% endif %}
 </div>
