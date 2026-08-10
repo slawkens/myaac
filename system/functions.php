@@ -22,6 +22,7 @@ use MyAAC\Models\PlayerKillers;
 use MyAAC\Models\ServerConfig;
 use MyAAC\News;
 use MyAAC\Plugins;
+use MyAAC\Twig\EnvironmentBridge as MyAAC_Twig_EnvironmentBridge;
 use MyAAC\Settings;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -1475,6 +1476,9 @@ function getCustomPage($name, &$success): string
 			ob_end_clean();
 		}
 		else {
+			/**
+			 * @var MyAAC_Twig_EnvironmentBridge $twig
+			 **/
 			$content .= $twig->renderInline($page['body']);
 		}
 	}
