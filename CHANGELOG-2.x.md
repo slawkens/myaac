@@ -1,10 +1,11 @@
-## [2.0-dev - x.x.2025]
+## [2.0-alpha - 11.08.2026]
 
 ### Added
 * Menus: Add an "access" option to Menus (#340)
   * Possibility to hide menus for unauthorized users
 * Settings: Add Reset button (https://github.com/slawkens/myaac/commit/7104c2258fd724a55239821b46a616dab845b22a, https://github.com/slawkens/myaac/commit/e274b8350451a20c24e652ea05ed1964ebb86b54)
 * New Setting: block create account spam by ip (https://github.com/slawkens/myaac/commit/54265f42e987522803288477952d6e5c4daeeb24)
+* feat: debugbar backtrace (by @gpedro) (#360)
 * Functions: Add the possibility to fetch skills, balance and frags in the getTopPlayers function (#347)
 * Plugins: autoload init-priority option (https://github.com/slawkens/myaac/commit/f1aa12840875960849fa0c99a2bbe0ad2949bbec)
 
@@ -16,6 +17,7 @@
 * Reworked account action logs to use a single IP column as varchar(45) for both ipv4 and ipv6 (#289)
 * Make myaac_config table columns bigger (https://github.com/slawkens/myaac/commit/2c62a97160a3ffe9976ee5bd1d770a0abc576742)
 * Admin Panel: save menu collapse state (https://github.com/slawkens/myaac/commit/55da00520df7463a1d1ca41931df1598e9f2ffeb)
+* Do not save sessions in myaac system folder (https://github.com/slawkens/myaac/commit/6f2bfd21eb7657e98a71ab09c20e2b39fd1cfbdd)
 
 ### Internal
 * Refactor account/lost pages (#326)
