@@ -42,59 +42,62 @@
 					<li><strong>Admin</strong> can set permissions for each page and operation. The permissions are saved in the database and will be applied to the selected account.</li>
 					<li><strong>Super Admin</strong> can do everything, no matter the permissions.</li>
 				</ul>
-				{% for pageType in ['core', 'plugins'] %}
 
-				<h2 class="text-center">
-					{{ pageType == 'core' ? 'Core Pages' : 'Plugins Pages' }}
-				</h2>
-				<div>
-					<table id="table-permissions" class="table table-striped table-bordered">
-						<thead>
-							<tr>
-								<th class="text-right"><h3><strong>Page</strong></h3></th>
-								<th class="text-center">
-									<h3>View</h3>
-									<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="view">Select all</button>
-								</th>
-								<th class="text-center">
-									<h3>Add</h3>
-									<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="add">Select all</button></th>
-								<th class="text-center">
-									<h3>Edit</h3>
-									<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="edit">Select all</button>
-								</th>
-								<th class="text-center">
-									<h3>Remove</h3>
-									<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="remove">Select all</button>
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for name, page in pages[pageType] %}
-								<tr>
-									<td class="text-right">
-										<strong>{{ page.label|raw }}</strong>
-										<br>
-										<small>{{ name }}</small>
-										<br>
-										<button type="button" class="btn btn-xs btn-outline-secondary mt-2" data-select-row="{{ name }}">Select row</button>
-									</td>
-									{% for operation in operations %}
-										<td class="text-center">
-											<input type="checkbox" class="permission-checkbox form-check-input {% if page.operations[operation] is not defined or not page.operations[operation] %}disabled{% endif %}" data-row="{{ name }}" data-operation="{{ operation }}" name="pages[{{ name }}][{{ operation }}]" value="1"{% if selected[name][operation] is defined %} checked{% endif %} {% if page.operations[operation] is not defined or not page.operations[operation] %}disabled{% endif %}>
-											{% if page.descriptions[operation] is defined %}
-												<br/><br/><br/>
-												<small>{{ page.descriptions[operation] }}</small>
-											{% endif %}
+				<div id="permissions-container">
+					{% for pageType in ['core', 'plugins'] %}
 
-										</td>
+						<h2 class="text-center">
+							{{ pageType == 'core' ? 'Core Pages' : 'Plugins Pages' }}
+						</h2>
+						<div>
+							<table id="table-permissions" class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th class="text-right"><h3><strong>Page</strong></h3></th>
+										<th class="text-center">
+											<h3>View</h3>
+											<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="view">Select all</button>
+										</th>
+										<th class="text-center">
+											<h3>Add</h3>
+											<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="add">Select all</button></th>
+										<th class="text-center">
+											<h3>Edit</h3>
+											<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="edit">Select all</button>
+										</th>
+										<th class="text-center">
+											<h3>Remove</h3>
+											<button type="button" class="btn btn-sm btn-outline-secondary mt-1" data-select-column="remove">Select all</button>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for name, page in pages[pageType] %}
+										<tr>
+											<td class="text-right">
+												<strong>{{ page.label|raw }}</strong>
+												<br>
+												<small>{{ name }}</small>
+												<br>
+												<button type="button" class="btn btn-xs btn-outline-secondary mt-2" data-select-row="{{ name }}">Select row</button>
+											</td>
+											{% for operation in operations %}
+												<td class="text-center">
+													<input type="checkbox" class="permission-checkbox form-check-input {% if page.operations[operation] is not defined or not page.operations[operation] %}disabled{% endif %}" data-row="{{ name }}" data-operation="{{ operation }}" name="pages[{{ name }}][{{ operation }}]" value="1"{% if selected[name][operation] is defined %} checked{% endif %} {% if page.operations[operation] is not defined or not page.operations[operation] %}disabled{% endif %}>
+													{% if page.descriptions[operation] is defined %}
+														<br/><br/><br/>
+														<small>{{ page.descriptions[operation] }}</small>
+													{% endif %}
+
+												</td>
+											{% endfor %}
+										</tr>
 									{% endfor %}
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+								</tbody>
+							</table>
+						</div>
+					{% endfor %}
 				</div>
-				{% endfor %}
 				<div class="d-flex gap-2 mt-1">
 					<button type="submit" class="btn btn-primary">Save</button>
 					<button type="button" class="ml-2 btn btn-secondary js-permissions-cancel">Cancel</button>
@@ -121,7 +124,13 @@ $(function () {
 
 	function togglePermissionCheckboxesVisibility() {
 		const webFlagsValue = Number($('#web_flags').val());
-		const shouldHideCheckboxes = (webFlagsValue === 2 || webFlagsValue === 0);
+		if (webFlagsValue === 0) {
+			$('#permissions-container').hide();
+		} else {
+			$('#permissions-container').show();
+		}
+
+		const shouldHideCheckboxes = (webFlagsValue === 2);
 		$('.permission-checkbox:not(.disabled)').prop("disabled", shouldHideCheckboxes);
 	}
 
