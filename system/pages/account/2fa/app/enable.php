@@ -85,7 +85,7 @@ if (ACTION == 'link') {
 		$twig->display('success.html.twig',
 			[
 				'title' => 'Authenticator App Connected',
-				'description' => 'You successfully connected your Tibia account to an authenticator app.'
+				'description' => sprintf('You successfully connected your %s account to an authenticator app.', configLua('serverName'))
 			]
 		);
 
