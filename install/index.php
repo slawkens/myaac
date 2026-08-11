@@ -25,25 +25,38 @@ $twig = new Twig_Environment($twig_loader, array(
 // load installation status
 $step = $_REQUEST['step'] ?? 'welcome';
 
-$install_status = array();
+$allow = false;
+if (file_exists(BASE . 'install/ip.txt')) {
+	$ip_file_content = trim(file_get_contents(BASE . 'install/ip.txt'));
+
+	$listIP = preg_split('/\s+/', $ip_file_content);
+	foreach($listIP as $ip) {
+		if($_SERVER['REMOTE_ADDR'] == $ip) {
+			$allow = true;
+		}
+	}
+}
+
+$install_status = [];
 if(file_exists(CACHE . 'install.txt')) {
 	$install_status = unserialize(file_get_contents(CACHE . 'install.txt'));
 
 	if(!isset($_REQUEST['step'])) {
-		$step = isset($install_status['step']) ? $install_status['step'] : '';
+		$step = $install_status['step'] ?? '';
 	}
 }
 
-if(isset($_POST['vars']))
-{
-	foreach($_POST['vars'] as $key => $value) {
-		$_SESSION['var_' . $key] = $value;
-		$install_status[$key] = $value;
+if ($allow) {
+	if (isset($_POST['vars'])) {
+		foreach($_POST['vars'] as $key => $value) {
+			$_SESSION['var_' . $key] = $value;
+			$install_status[$key] = $value;
+		}
 	}
-}
-else {
-	foreach($install_status as $key => $value) {
-		$_SESSION['var_' . $key] = $value;
+	else {
+		foreach($install_status as $key => $value) {
+			$_SESSION['var_' . $key] = $value;
+		}
 	}
 }
 
@@ -53,15 +66,15 @@ if($step == 'finish' && (!isset($config['installed']) || !$config['installed']))
 
 // step verify
 $steps = array(1 => 'welcome', 2 => 'license', 3 => 'requirements', 4 => 'config', 5 => 'database', 6 => 'admin', 7 => 'finish');
-if(!in_array($step, $steps)) // check if step is valid
+if(!in_array($step, $steps)) // check if a step is valid
 	throw new RuntimeException('ERROR: Unknown step.');
 
 $install_status['step'] = $step;
-$errors = array();
+$errors = [];
 
-if($step == 'database') {
+if($allow && $step == 'database') {
 	foreach($_SESSION as $key => $value) {
-		if(strpos($key, 'var_') === false) {
+		if(!str_contains($key, 'var_')) {
 			continue;
 		}
 
@@ -102,15 +115,12 @@ if($step == 'database') {
 		$step = 'config';
 	}
 }
-else if($step == 'admin') {
+else if($allow && $step == 'admin') {
 	if(!file_exists(BASE . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
 		$step = 'database';
 	}
-	else {
-		$_SESSION['saved'] = true;
-	}
 }
-else if($step == 'finish') {
+else if($allow && $step == 'finish') {
 	$email = $_SESSION['var_email'];
 	$password = $_SESSION['var_password'];
 	$password_confirm = $_SESSION['var_password_confirm'];
@@ -182,32 +192,28 @@ $error = false;
 clearstatcache();
 if(is_writable(CACHE) && (MYAAC_OS != 'WINDOWS' || win_is_writable(CACHE))) {
 	if(!file_exists(BASE . 'install/ip.txt')) {
-		$content = warning('AAC installation is disabled. To enable it make file <b>ip.txt</b> in install/ directory and put there your IP.<br/>
-		Your IP is:<br /><b>' . get_browser_real_ip() . '</b>', true);
+		$locale['installation_disabled'] = str_replace('$IP$', $_SERVER['REMOTE_ADDR'], $locale['installation_disabled']);
+		$content = warning($locale['installation_disabled'], true);
 	}
 	else {
-		$file_content = trim(file_get_contents(BASE . 'install/ip.txt'));
-		$allow = false;
-		$listIP = preg_split('/\s+/', $file_content);
-		foreach($listIP as $ip) {
-			if(get_browser_real_ip() == $ip) {
-				$allow = true;
-			}
-		}
+		if (!$allow) {
+			$locale['install_wrong_ip'] = str_replace('$FILE_CONTENT$', nl2br($ip_file_content), $locale['install_wrong_ip']);
+			$locale['install_wrong_ip'] = str_replace('$IP$', $_SERVER['REMOTE_ADDR'], $locale['install_wrong_ip']);
 
-		if(!$allow)
-		{
-			$content = warning('In file <b>install/ip.txt</b> must be your IP!<br/>
-			In file is:<br /><b>' . nl2br($file_content) . '</b><br/>
-			Your IP is:<br /><b>' . get_browser_real_ip() . '</b>', true);
+			$content = warning($locale['install_wrong_ip'], true);
 		}
 		else {
-			ob_start();
+			if(file_exists(BASE . 'install/install.lock')) {
+				$content = warning($locale['already_installed'], true);
+			}
+			else {
+				ob_start();
 
-			$step_id = array_search($step, $steps);
-			require 'steps/' . $step_id . '-' . $step . '.php';
-			$content = ob_get_contents();
-			ob_end_clean();
+				$step_id = array_search($step, $steps);
+				require 'steps/' . $step_id . '-' . $step . '.php';
+				$content = ob_get_contents();
+				ob_end_clean();
+			}
 		}
 	}
 }

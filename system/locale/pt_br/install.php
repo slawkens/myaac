@@ -20,7 +20,9 @@ $locale['not_loaded'] = 'Não carregado';
 $locale['loading_spinner'] = 'Por favor aguarde, instalando...';
 $locale['importing_spinner'] = 'Por favor, aguarde, importando dados...';
 $locale['please_fill_all'] = 'Por favor, preencha todas as entradas!';
-$locale['already_installed'] = 'MyAAC já foi instalado. Por favor, apague o diretório <b> install/ <b/>. Se você quiser reinstalar o MyAAC - exclua o arquivo <strong> config.local.php </strong> do diretório principal e atualize a página.';
+$locale['already_installed'] = 'MyAAC já foi instalado. Se você quiser reinstalar o MyAAC - exclua o arquivo <strong>install/install.lock</strong> e atualize a página.';
+$locale['installation_disabled'] = 'A instalação do AAC está desativada. Para ativá-la, crie um arquivo <b>install/ip.txt</b> e coloque seu IP nele.<br/>Seu IP é:<br /><b>$IP$</b>';
+$locale['install_wrong_ip'] = 'No arquivo <b>install/ip.txt</b> deve estar o seu IP!<br/>No arquivo está:<br /><b>$FILE_CONTENT$</b><br/>Seu IP é:<br /><b>$IP$</b>';
 
 // welcome
 $locale['step_welcome'] = 'Bem vindo';
@@ -117,4 +119,5 @@ $locale['step_finish_homepage'] = 'pagina inicial';
 $locale['step_finish'] = 'Finalizar';
 $locale['step_finish_title'] = 'Instalação terminada!';
 $locale['step_finish_desc'] = 'Parabéns! <b>MyAAC</b> está pronto para uso!<br/>Agora você pode fazer login em $ADMIN_PANEL$ ou visitar $HOMEPAGE$.<br/><br/>
-<span style = "color: red">Por favor remova a pasta install/.</span><br/><br/>Postar bugs e sugestões em $LINK$, obrigado!';
+Postar bugs e sugestões em $LINK$, obrigado!';
+$locale['step_finish_fatal_error'] = 'Houve problemas ao excluir os arquivos de instalação. Por favor, exclua manualmente o arquivo <b>install/ip.txt</b>.';

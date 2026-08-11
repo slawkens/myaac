@@ -44,7 +44,7 @@
 <div id="Topbar" class="Themebox" style="background-image:url({{ template_path }}/images/themeboxes/highscores/highscores.png);">
 	<div class="top_level" style="background:url({{ template_path }}/images/themeboxes/bg_top.png)" align="	">
     {% for player in topPlayers %}
-	    <div style="text-align:left"><a href="{{ getPlayerLink(player['name'], false) }} " class="topfont {% if player['online'] %}online{% else %}offline{% endif %}">
+	    <div style="text-align:left"><a href="{{ player['link'] }} " class="topfont {% if player['online'] %}online{% else %}offline{% endif %}">
 			{% if setting('core.online_outfit') %}
 				<img style="position:absolute;margin-top:-45px;margin-left:-25px;" src="{{ player.outfit }}" alt="player outfit"/>
 			{% endif %}

@@ -3,21 +3,21 @@ describe('Check Public Pages', () => {
 	/// news
 	it('Go to news page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/news',
+			url: '/news',
 			method: 'GET',
 		})
 	})
 
 	it('Go to news archive page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/news/archive',
+			url: '/news/archive',
 			method: 'GET',
 		})
 	})
 
 	it('Go to changelog page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/change-log',
+			url: '/change-log',
 			method: 'GET',
 		})
 	})
@@ -25,28 +25,28 @@ describe('Check Public Pages', () => {
 	/// account management
 	it('Go to account manage page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/account/manage',
+			url: '/account/manage',
 			method: 'GET',
 		})
 	})
 
 	it('Go to account create page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/account/create',
+			url: '/account/create',
 			method: 'GET',
 		})
 	})
 
 	it('Go to account lost page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/account/lost',
+			url: '/account/lost',
 			method: 'GET',
 		})
 	})
 
 	it('Go to rules page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/rules',
+			url: '/rules',
 			method: 'GET',
 		})
 	})
@@ -54,63 +54,63 @@ describe('Check Public Pages', () => {
 	// community
 	it('Go to online page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/online',
+			url: '/online',
 			method: 'GET',
 		})
 	})
 
 	it('Go to characters list page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/characters',
+			url: '/characters',
 			method: 'GET',
 		})
 	})
 
 	it('Go to guilds page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/guilds',
+			url: '/guilds',
 			method: 'GET',
 		})
 	})
 
 	it('Go to highscores page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/highscores',
+			url: '/highscores',
 			method: 'GET',
 		})
 	})
 
 	it('Go to last kills page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/last-kills',
+			url: '/last-kills',
 			method: 'GET',
 		})
 	})
 
 	it('Go to houses page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/houses',
+			url: '/houses',
 			method: 'GET',
 		})
 	})
 
 	it('Go to bans page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/bans',
+			url: '/bans',
 			method: 'GET',
 		})
 	})
 
 	it('Go to forum page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/forum',
+			url: '/forum',
 			method: 'GET',
 		})
 	})
 
 	it('Go to team page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/team',
+			url: '/team',
 			method: 'GET',
 		})
 	})
@@ -118,56 +118,56 @@ describe('Check Public Pages', () => {
 	// library
 	it('Go to monsters page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/monsters',
+			url: '/monsters',
 			method: 'GET',
 		})
 	})
 
 	it('Go to spells page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/spells',
+			url: '/spells',
 			method: 'GET',
 		})
 	})
 
 	it('Go to server info page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/ots-info',
+			url: '/ots-info',
 			method: 'GET',
 		})
 	})
 
 	it('Go to commands page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/commands',
+			url: '/commands',
 			method: 'GET',
 		})
 	})
 
 	it('Go to downloads page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/downloads',
+			url: '/downloads',
 			method: 'GET',
 		})
 	})
 
 	it('Go to gallery page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/gallery',
+			url: '/gallery',
 			method: 'GET',
 		})
 	})
 
 	it('Go to experience table page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/exp-table',
+			url: '/exp-table',
 			method: 'GET',
 		})
 	})
 
 	it('Go to faq page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/faq',
+			url: '/faq',
 			method: 'GET',
 		})
 	})

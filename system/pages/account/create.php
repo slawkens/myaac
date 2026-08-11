@@ -171,7 +171,7 @@ if($save)
 	}
 
 	if(setting('core.account_create_character_create')) {
-		$character_name = isset($_POST['name']) ? stripslashes(ucwords(strtolower($_POST['name']))) : null;
+		$character_name = isset($_POST['name']) ? trim(stripslashes($_POST['name'])) : null;
 		$character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
 		$character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;
 		$character_town = isset($_POST['town']) ? (int)$_POST['town'] : null;
@@ -207,15 +207,6 @@ if($save)
 		$settingAccountPremiumDays = setting('core.account_premium_days');
 		if($settingAccountPremiumDays && $settingAccountPremiumDays > 0) {
 			$new_account->setPremDays($settingAccountPremiumDays);
-
-			if (!isCanary()) {
-				$lastDay = 0;
-				if($settingAccountPremiumDays != 0 && $settingAccountPremiumDays != OTS_Account::GRATIS_PREMIUM_DAYS) {
-					$lastDay = time();
-				}
-
-				$new_account->setLastLogin($lastDay);
-			}
 		}
 
 		$new_account->save();

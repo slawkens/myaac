@@ -15,7 +15,7 @@ node_modules
 tools/ext
 
 # cypress
-cypress.env.json
+cypress.config.local.js
 cypress/e2e/2-advanced-examples
 cypress/screenshots
 
@@ -64,6 +64,9 @@ system/data/*
 # php sessions
 system/php_sessions/*
 !system/php_sessions/index.html
+
+# install
+install/install.lock
 
 # plugins
 plugins/*

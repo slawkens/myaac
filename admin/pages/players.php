@@ -449,7 +449,7 @@ else if (isset($_REQUEST['search'])) {
 								<div class="form-group row">
 									<div class="col-12 col-sm-12 col-lg-6">
 										<label for="sex">Sex:</label>
-										<select name="sex" id="sex" class="form-control custom-select">>
+										<select name="sex" id="sex" class="form-control custom-select">
 											<?php foreach ($config['genders'] as $_id => $sex): ?>
 												<option value="<?php echo $_id; ?>" <?php echo($player->getSex() == $_id ? 'selected' : ''); ?>><?php echo strtolower($sex); ?></option>
 											<?php endforeach; ?>

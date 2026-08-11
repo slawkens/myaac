@@ -20,7 +20,9 @@ $locale['not_loaded'] = 'Not loaded';
 $locale['loading_spinner'] = 'Please wait, installing...';
 $locale['importing_spinner'] = 'Please wait, importing data...';
 $locale['please_fill_all'] = 'Please fill all inputs!';
-$locale['already_installed'] = 'MyAAC has been already installed. Please delete <b>install/</b> directory. If you want to reinstall MyAAC - please delete <strong>config.local.php</strong> file from the main directory and refresh the page.';
+$locale['already_installed'] = 'MyAAC has been already installed. If you want to reinstall MyAAC - please delete the <strong>install/install.lock</strong> file and refresh the page.';
+$locale['installation_disabled'] = 'AAC installation is disabled. To enable it make a file <b>install/ip.txt</b> and put there your IP.<br/>Your IP is:<br /><b>$IP$</b>';
+$locale['install_wrong_ip'] = 'In file <b>install/ip.txt</b> must be your IP!<br/>In the file is:<br /><b>$FILE_CONTENT$</b><br/>Your IP is:<br /><b>$IP$</b>';
 
 // welcome
 $locale['step_welcome'] = 'Welcome';
@@ -136,5 +138,5 @@ $locale['step_finish_homepage'] = 'homepage';
 $locale['step_finish'] = 'Finish';
 $locale['step_finish_title'] = 'Installation finished!';
 $locale['step_finish_desc'] = 'Congratulations! <b>MyAAC</b> is ready to use!<br/>You can now login to $ADMIN_PANEL$, or visit $HOMEPAGE$.<br/><br/>
-<span style="color: red">Please delete install/ directory.</span><br/><br/>
 Post bugs and suggestions at $LINK$, thanks!';
+$locale['step_finish_fatal_error'] = 'There were problems deleting the installation files. Please manually delete the file <b>install/ip.txt</b>.';

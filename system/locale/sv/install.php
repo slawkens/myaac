@@ -18,7 +18,9 @@ $locale['loaded'] = 'Laddad';
 $locale['not_loaded'] = 'Inte Laddad';
 
 $locale['please_fill_all'] = 'Vänligen fyll i allt!';
-$locale['already_installed'] = 'MyAAC är redan installerat. Vänligen ta bort <b>install/<b/> mappen. Om du vill installera MyAAC igen - ta bort filen <strong>config.local.php</strong> från huvudkatalogen och uppdatera sidan.';
+$locale['already_installed'] = 'MyAAC är redan installerat. Om du vill installera MyAAC igen - ta bort filen <strong>install/install.lock</strong> och uppdatera sidan.';
+$locale['installation_disabled'] = 'AAC installation är inaktiverad. För att aktivera den, skapa en fil <b>install/ip.txt</b> och lägg dit din IP-adress.<br/>Din IP är:<br /><b>$IP$</b>';
+$locale['install_wrong_ip'] = 'I filen <b>install/ip.txt</b> måste din IP vara!<br/>I filen är:<br /><b>$FILE_CONTENT$</b><br/>Din IP är:<br /><b>$IP$</b>';
 
 // welcome
 $locale['step_welcome'] = 'Välkommen';
@@ -85,6 +87,5 @@ $locale['step_finish_homepage'] = 'hemsida';
 $locale['step_finish'] = 'Klar';
 $locale['step_finish_title'] = 'Installationen klar!';
 $locale['step_finish_desc'] = 'Grattis! <b>MyAAC</b> är redo att användas!<br/>Du kan logga in på $ADMIN_PANEL$, eller titta till $HOMEPAGE$.<br/><br/>
-<span style="color: red">Var vänligen ta bort installations mappen.</span><br/><br/>
 Var vänligen rapportera buggar och förslag på $LINK$, tack!';
-?>
+$locale['step_finish_fatal_error'] = 'Det uppstod problem vid borttagning av installationsfilerna. Vänligen ta bort filen <b>install/ip.txt</b> manuellt.';

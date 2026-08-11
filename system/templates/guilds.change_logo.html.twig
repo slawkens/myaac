@@ -4,15 +4,17 @@
 <table style="width:100%;" >
 	<tr>
 		<td>
-			Here you can change logo of your guild.<br/>Actuall logo: <img src="{{ constant('GUILD_IMAGES_DIR') }}{{ guild_logo }}" height="64" width="64"><br/><br/>
+			Here you can change logo of your guild.<br/>Current logo: <img src="{{ constant('GUILD_IMAGES_DIR') }}{{ guild_logo }}" height="64" width="64"><br/><br/>
 			<form enctype="multipart/form-data" action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=change_logo" method="post" id="upload_form">
+
 				{{ csrf() }}
+
 				<input type="hidden" name="todo" value="save" />
-				<!--input type="hidden" name="MAX_FILE_SIZE" value="{{ max_image_size_b }}" /-->
+
 				Select new logo: <input name="newlogo" id="newlogo" type="file" />
-				<input type="submit" value="Send new logo" />
+				<input type="submit" value="Upload" />
 			</form>
-			Only <b>jpg, gif, png, bmp</b> pictures. Max. size: <b>{{ setting('core.guild_image_size_kb') }} KB</b><br>
+			Only <b>jpg, gif, png, bmp, webp</b> pictures. Max. size: <b>{{ setting('core.guild_image_size_kb') }} KB</b><br>
 			<br/>
 		</td>
 	</tr>
@@ -23,6 +25,7 @@
 <div style="text-align:center">
 	<form action="{{ getLink('guilds') }}?guild={{ guild.getName() }}&action=manager" method="post">
 		{{ csrf() }}
+
 		{{ include('buttons.back.html.twig') }}
 	</form>
 </div>
@@ -33,7 +36,7 @@
 			var max_img_size = {{ setting('core.guild_image_size_kb') * 1024 }};
 			var input = document.getElementById("newlogo");
 			// check for browser support (may need to be modified)
-			if (input.files && input.files.length == 1) {
+			if (input.files && input.files.length === 1) {
 				if (input.files[0].size > max_img_size) {
 					alert("The file must be less than " + (max_img_size / 1024) + "KB");
 					event.preventDefault();

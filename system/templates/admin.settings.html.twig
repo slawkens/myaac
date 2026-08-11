@@ -9,7 +9,10 @@
 					<div class="box">
 						<div class="box-body">
 							<button name="save" type="submit" class="btn btn-primary">Save</button>
+
+							<button form="reset-settings-form" name="reset" type="submit" class="btn btn-warning position-absolute" style="right: 0; top: 0" onclick="return confirm('Are you sure? This will clear all settings for this plugin!')">Reset</button>
 						</div>
+
 						<br/>
 						{{ settingsParsed|raw }}
 					</div>
@@ -18,6 +21,12 @@
 		</form>
 	</div>
 </div>
+
+<form id="reset-settings-form" method="post" action="{{ constant('ADMIN_URL') }}?p=settings&plugin={{ pluginName }}">
+	{{ csrf() }}
+	<input type="hidden" name="reset" value="1">
+</form>
+
 <style>
 	.setting-default {
 		white-space: pre-wrap;
@@ -95,12 +104,12 @@
 		.on('change input', function(){
 			const disable = $(this).serialize() === $(this).data('serialized');
 			$(this)
-				.find('input:submit, button:submit')
+				.find('button[name="save"]')
 				.prop('disabled', disable)
 				.prop('title', disable ? noChangesText : '')
 			;
 		})
-		.find('input:submit, button:submit')
+		.find('button[name="save"]')
 		.prop('disabled', true)
 		.prop('title', noChangesText)
 	;
@@ -123,7 +132,7 @@
 				let $settings = $('#settings');
 				$settings.data('serialized', $settings.serialize());
 				$settings
-					.find('input:submit, button:submit')
+					.find('button[name="save"]')
 					.prop('disabled', true)
 					.prop('title', noChangesText);
 			},

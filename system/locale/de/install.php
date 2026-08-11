@@ -20,7 +20,9 @@ $locale['not_loaded'] = 'Nicht geladen';
 $locale['loading_spinner'] = 'Bitte warten, installieren...';
 $locale['importing_spinner'] = 'Bitte warte, Daten werden importiert...';
 $locale['please_fill_all'] = 'Bitte füllen Sie alle Felder aus!';
-$locale['already_installed'] = 'MyAAC wurde bereits installiert. Bitte löschen <b>install/</b> Verzeichnis. Wenn Sie MyAAC neu installieren möchten, löschen Sie die Datei <strong>config.local.php</strong> aus dem Hauptverzeichnis und aktualisieren Sie die Seite.';
+$locale['already_installed'] = 'MyAAC wurde bereits installiert. Wenn Sie MyAAC neu installieren möchten, löschen Sie die Datei <strong>install/install.lock</strong> und aktualisieren Sie die Seite.';
+$locale['installation_disabled'] = 'Die AAC-Installation ist deaktiviert. Um sie zu aktivieren, erstellen Sie eine Datei <b>install/ip.txt</b> und tragen Sie Ihre IP-Adresse ein.<br/>Ihre IP ist:<br /><b>$IP$</b>';
+$locale['install_wrong_ip'] = 'In der Datei <b>install/ip.txt</b> muss Ihre IP-Adresse stehen!<br/>In der Datei steht:<br /><b>$FILE_CONTENT$</b><br/>Ihre IP ist:<br /><b>$IP$</b>';
 
 // welcome
 $locale['step_welcome'] = 'Willkommen';
@@ -78,23 +80,29 @@ $locale['step_database_error_mysql_connect_3'] = 'MySQL ist nicht richtig konfig
 $locale['step_database_error_mysql_connect_4'] = 'MySQL-Server läuft nicht.';
 $locale['step_database_error_schema'] = 'Fehler beim Importieren des Schemas:';
 $locale['step_database_success_schema'] = '$PREFIX$ Tabellen wurden erfolgreich installiert.';
-$locale['step_database_success_import_data'] = 'Import von Daten für Tabellen was erfolgreich.';
+$locale['step_database_success_import_data'] = 'Import von Daten für Tabellen war erfolgreich.';
 $locale['step_database_error_file'] = '$FILE$ konnte nicht geöffnet werden. Bitte kopieren Sie diesen Inhalt und fügen Sie ihn dort ein:';
 $locale['step_database_adding_field'] = 'Folgendes Feld wurde hinzugefügt: ';
 $locale['step_database_modifying_field'] = 'Folgendes Feld wurde geändert: ';
 $locale['step_database_changing_field'] = 'Änderung von $FIELD$ zu $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Spielerproben wurden importiert...';
 $locale['step_database_loaded_items'] = 'Items wurden geladen...';
-$locale['step_database_loaded_weapons'] = 'Weapons wurden geladen...';
+$locale['step_database_loaded_weapons'] = 'Waffen wurden geladen...';
 $locale['step_database_loaded_monsters'] = 'Monster wurden geladen...';
 $locale['step_database_error_monsters'] = 'Beim Laden der Datei monsters.xml sind einige Probleme aufgetreten. Bitte überprüfen Sie $LOG$ für weitere Informationen.';
 $locale['step_database_loaded_spells'] = 'Zauber wurden geladen...';
+$locale['step_database_loaded_towns'] = 'Städte wurden geladen...';
+$locale['step_database_error_towns'] = 'Beim Laden der Städte sind einige Probleme aufgetreten. Sie müssen diese manuell in den Einstellungen konfigurieren.';
 $locale['step_database_created_account'] = 'Administratorkonto wurde erstellt...';
 $locale['step_database_created_news'] = 'Neuigkeiten wurden erstellt...';
 
 // admin account
 $locale['step_admin'] = 'Administratorkonto';
 $locale['step_admin_title'] = 'Administratorkonto erstellen';
+$locale['step_admin_email'] = 'Admin E-Mail-Adresse';
+$locale['step_admin_email_desc'] = 'E-Mail Ihres Admin-Kontos, die zum Zurücksetzen des Passworts verwendet werden kann.';
+$locale['step_admin_email_error_empty'] = 'Bitte geben Sie die E-Mail-Adresse für Ihr neues Konto ein.';
+$locale['step_admin_email_error_format'] = 'Ungültiges E-Mail-Format.';
 $locale['step_admin_account'] = 'Name des Administratorkontos';
 $locale['step_admin_account_desc'] = 'Name Ihres Admin-Accounts, der für die Anmeldung an der Website und dem Server verwendet wird.';
 $locale['step_admin_account_error_format'] = 'Ungültiges Kontonamensformat. Verwenden Sie nur a-Z und Ziffern 0-9. Mindestens 3, maximal 32 Zeichen.';
@@ -110,13 +118,15 @@ $locale['step_admin_password_error_format'] = 'Ungültiges Passwortformat. Minde
 $locale['step_admin_password_confirm'] = 'Password wiederholen';
 $locale['step_admin_password_confirm_desc'] = 'Passwort für dein Konto wiederholen.';
 $locale['step_admin_password_confirm_error_not_same'] = 'Passwörter sind nicht gleich.';
-
+$locale['step_admin_player_name'] = 'Admin Spielername';
+$locale['step_admin_player_name_desc'] = 'Name Ihres Admin-Charakters.';
+$locale['step_admin_player_name_error_empty'] = 'Bitte geben Sie den Namen Ihres Charakters ein.';
+$locale['step_admin_player_name_error_format'] = 'Ungültiges Spielername-Format. Verwenden Sie nur A-Z, Leerzeichen und \'. Mindestens 3, maximal 25 Zeichen.';
 // finish
 $locale['step_finish_admin_panel'] = 'Admin Bereich';
 $locale['step_finish_homepage'] = 'Startseite';
 $locale['step_finish'] = 'Fertig';
 $locale['step_finish_title'] = 'Installation beendet!';
 $locale['step_finish_desc'] = 'Herzlichen Glückwunsch! <b>MyAAC</b> ist bereit zu verwenden!<br/>Sie können sich jetzt im $ADMIN_PANEL$ anmelden, oder die $HOMEPAGE$ besuchen.<br/><br/>
-<span style="color: red">Bitte lösche install/ Verzeichnis.</span><br/><br/>
 Bitte senden Sie Fehler und Vorschläge zu $LINK$, Vielen Dank!';
-?>
+$locale['step_finish_fatal_error'] = 'Es gab Probleme mit dem Löschen der Installationsdateien. Bitte löschen Sie manuell die Datei <b>install/ip.txt</b>.';

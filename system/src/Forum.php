@@ -229,7 +229,7 @@ class Forum
 		{
 			$code = substr($text, stripos($text, '[code]')+6, stripos($text, '[/code]') - stripos($text, '[code]') - 6);
 			if(!is_int($rows / 2)) { $bgcolor = 'ABED25'; } else { $bgcolor = '23ED25'; } $rows++;
-			$text = str_ireplace('[code]'.$code.'[/code]', '<i>Code:</i><br /><table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #CCCCCC; border-width: 2px"><tr><td>'.$code.'</td></tr></table>', $text);
+			$text = str_ireplace('[code]'.$code.'[/code]', '<i>Code:</i><br /><table cellpadding="0" style="background-color: #'.$bgcolor.'; width: 480px; border-style: dotted; border-color: #CCCCCC; border-width: 2px"><tr><td><pre class="bb-code-block">'.$code.'</pre></td></tr></table>', $text);
 		}
 
 		$rows = 0;
@@ -241,9 +241,6 @@ class Forum
 		}
 
 		$tagsToParse = [
-			'url' => function ($str) {
-				return '<a href="'.$str.'" target="_blank">'.$str.'</a>';
-			},
 			'player' => function ($str) {
 				return generateLink(getPlayerLink($str, false), $str, true);
 			},
@@ -266,26 +263,65 @@ class Forum
 			}
 		}
 
-		$xhtml = false;
-		$tags = array(
-			'#\[b\](.*?)\[/b\]#si' => ($xhtml ? '<strong>\\1</strong>' : '<b>\\1</b>'),
-			'#\[i\](.*?)\[/i\]#si' => ($xhtml ? '<em>\\1</em>' : '<i>\\1</i>'),
-			'#\[u\](.*?)\[/u\]#si' => ($xhtml ? '<span style="text-decoration: underline;">\\1</span>' : '<u>\\1</u>'),
-			'#\[s\](.*?)\[/s\]#si' => ($xhtml ? '<strike>\\1</strike>' : '<s>\\1</s>'),
+		$simpleTags = array(
+			'#\[b\](.*?)\[/b\]#si' => '<strong>\\1</strong>',
+			'#\[i\](.*?)\[/i\]#si' => '<i>\\1</i>',
+			'#\[u\](.*?)\[/u\]#si' => '<u>\\1</u>',
+			'#\[s\](.*?)\[/s\]#si' => '<s>\\1</s>',
 
 			// TODO: [poll] tag
 
-			'#\[color=(.*?)\](.*?)\[/color\]#si' => ($xhtml ? '<span style="color: \\1;">\\2</span>' : '<span style="color: \\1">\\2</span>'),
-			'#\[img\](.*?)\[/img\]#si' => ($xhtml ? '<img class="forum-image" style="max-width:550px; max-height; 550px;" src="\\1" border="0" alt="" />' : '<img class="forum-image" style="max-width:550px; max-height; 550px;" src="\\1" border="0" alt="">'),
-			'#\[url=(.*?)\](.*?)\[/url\]#si' => '<a href="\\1" title="\\2">\\2</a>',
 //		'#\[email\](.*?)\[/email\]#si' => '<a href="mailto:\\1" title="Email \\1">\\1</a>',
-			'#\[code\](.*?)\[/code\]#si' => '<code>\\1</code>',
 //		'#\[align=(.*?)\](.*?)\[/align\]#si' => ($xhtml ? '<div style="text-align: \\1;">\\2</div>' : '<div align="\\1">\\2</div>'),
-//		'#\[br\]#si' => ($xhtml ? '<br style="clear: both;" />' : '<br>'),
 		);
 
-		foreach($tags as $search => $replace)
+		foreach($simpleTags as $search => $replace) {
 			$text = preg_replace($search, $replace, $text);
+		}
+
+		$text = preg_replace_callback(
+			'#\[color=(.*?)\](.*?)\[/color\]#si',
+			function ($m) {
+				$color = trim($m[1]);
+				if (!preg_match('/^(#[0-9a-f]{3,6}|[a-z]+)$/i', $color)) {
+					return $m[2];
+				}
+				$escapedColor = escapeHtml($color);
+				return '<span style="color: ' . $escapedColor . ';">' . $m[2] . '</span>';
+			},
+			$text
+		);
+
+		$text = preg_replace_callback(
+			'#\[img\](.*?)\[/img\]#si',
+			function ($m) {
+				$url = trim($m[1]);
+				if (!preg_match('#^https?://#i', $url)) {
+					return escapeHtml($url);
+				}
+				$escapedUrl = escapeHtml($url);
+				return '<img class="forum-image" style="max-width:550px; max-height; 550px;" src="' . $escapedUrl . '" border="0" alt="" />';
+			},
+			$text
+		);
+
+		$text = preg_replace_callback('#\[url\](.*?)\[/url\]#si', function ($m) {
+			$url = strip_tags(trim($m[1]));
+			if (!preg_match('#^https?://#i', $url)) {
+				return escapeHtml($url);
+			}
+			$escapedUrl = escapeHtml($url);
+			return '<a href="' . $escapedUrl . '" target="_blank">' . $escapedUrl . '</a>';
+		}, $text);
+
+		$text = preg_replace_callback('#\[url=(.*?)\](.*?)\[/url\]#si', function ($m) {
+			if (!preg_match('#^https?://#i', $m[1])) {
+				return escapeHtml($m[2]);
+			}
+			$escapedHref = escapeHtml($m[1]);
+			$escapedTitle = escapeHtml($m[2]);
+			return '<a href="' . $escapedHref . '" title="' . $escapedTitle . '">' . $escapedTitle . '</a>';
+		}, $text);
 
 		return ($smiles ? Forum::parseSmiles($text) : $text);
 	}

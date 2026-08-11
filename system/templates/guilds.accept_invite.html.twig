@@ -8,6 +8,7 @@
 	<tr bgcolor="{{ config.darkborder }}">
 		<td>
 			<form action="{{ getLink('guilds') }}?action=accept_invite&guild={{ guild_name }}" method="post">
+
 				{{ csrf() }}
 
 				<input type="hidden" name="todo" value="save" />

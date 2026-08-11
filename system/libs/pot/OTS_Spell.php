@@ -15,7 +15,7 @@
 
 /**
  * Wrapper for spell info.
- * 
+ *
  * @package POT
  * @version 0.1.3
  * @property-read int $type Spell type.
@@ -42,346 +42,350 @@ class OTS_Spell
 {
 /**
  * Spell type.
- * 
+ *
  * @var int
  */
-    private $type;
+	private $type;
 
 /**
  * Spell info resource.
- * 
+ *
  * @var DOMElement
  */
-    private $element;
+	private $element;
 
 /**
  * Sets spell info.
- * 
+ *
  * @param int $type Spell type.
  * @param DOMElement $spell Spell info.
  */
-    public function __construct($type, DOMElement $spell)
-    {
-        $this->type = $type;
-        $this->element = $spell;
-    }
+	public function __construct($type, DOMElement $spell)
+	{
+		$this->type = $type;
+		$this->element = $spell;
+	}
 
 /**
  * Returns spell type.
- * 
+ *
  * @return int Spell type.
  */
-    public function getType()
-    {
-        return $this->type;
-    }
+	public function getType()
+	{
+		return $this->type;
+	}
 
 /**
  * Returns spell name.
- * 
+ *
  * @return string Name.
  * @throws DOMException On DOM operation error.
  */
-    public function getName()
-    {
-        return $this->element->getAttribute('name');
-    }
+	public function getName()
+	{
+		return $this->element->getAttribute('name');
+	}
 
 /**
  * Returns rune item id.
- * 
+ *
  * @return int Rune item ID.
  * @throws DOMException On DOM operation error.
  */
-    public function getID()
-    {
-        return (int) $this->element->getAttribute('id');
-    }
+	public function getID()
+	{
+		return (int) $this->element->getAttribute('id');
+	}
 
 /**
  * Returns spell formula.
- * 
+ *
  * @return string Formula.
  * @throws DOMException On DOM operation error.
  */
-    public function getWords()
-    {
-        return $this->element->getAttribute('words');
-    }
+	public function getWords()
+	{
+		return $this->element->getAttribute('words');
+	}
 
 /**
  * Checks if spell is threated as unfriendly by other creatures.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return bool Is spell aggressive.
  * @throws DOMException On DOM operation error.
  */
-    public function isAggressive()
-    {
-        return $this->element->getAttribute('aggressive') != '0';
-    }
+	public function isAggressive()
+	{
+		return $this->element->getAttribute('aggressive') != '0';
+	}
 
 /**
  * @version 0.1.0
  * @return bool Is spell aggressive.
  * @deprecated 0.1.0 Use isAggressive().
  */
-    public function isAggresive()
-    {
-        return $this->isAggressive();
-    }
+	public function isAggresive()
+	{
+		return $this->isAggressive();
+	}
 
 /**
  * Number of rune charges.
- * 
+ *
  * @return int Rune charges.
  * @throws DOMException On DOM operation error.
  */
-    public function getCharges()
-    {
-        return (int) $this->element->getAttribute('charges');
-    }
+	public function getCharges()
+	{
+		return (int) $this->element->getAttribute('charges');
+	}
 
 /**
  * Level required for use.
- * 
+ *
  * @return int Required level.
  * @throws DOMException On DOM operation error.
  */
-    public function getLevel()
-    {
-        return (int) $this->element->getAttribute('lvl');
-    }
+	public function getLevel()
+	{
+		return (int) $this->element->getAttribute('lvl');
+	}
 
 /**
  * Magic level required to cast.
- * 
+ *
  * @return int Required magic level.
  * @throws DOMException On DOM operation error.
  */
-    public function getMagicLevel()
-    {
-        return (int) $this->element->getAttribute('maglv');
-    }
+	public function getMagicLevel()
+	{
+		return (int) $this->element->getAttribute('maglv');
+	}
 
 /**
  * Mana cost.
- * 
+ *
  * @return int Mana usage.
  * @throws DOMException On DOM operation error.
  */
-    public function getMana()
-    {
-        return (int) $this->element->getAttribute('mana');
-    }
+	public function getMana()
+	{
+		return (int) $this->element->getAttribute('mana');
+	}
 
 /**
  * Soul points cost.
- * 
+ *
  * @return int Soul points usage.
  * @throws DOMException On DOM operation error.
  */
-    public function getSoul()
-    {
-        return (int) $this->element->getAttribute('soul');
-    }
+	public function getSoul()
+	{
+		return (int) $this->element->getAttribute('soul');
+	}
 
 /**
  * Checks if spell has parameter.
- * 
+ *
  * @return bool True if spell takes a parameter.
  * @throws DOMException On DOM operation error.
  */
-    public function hasParams()
-    {
-        return $this->element->getAttribute('params') == '1';
-    }
+	public function hasParams()
+	{
+		return $this->element->getAttribute('params') == '1';
+	}
 
 /**
  * Checks if spell is enabled.
- * 
+ *
  * @return bool Is spell enabled.
  * @throws DOMException On DOM operation error.
  */
-    public function isEnabled()
-    {
-        return $this->element->getAttribute('enabled') != '0';
-    }
+	public function isEnabled()
+	{
+		return $this->element->getAttribute('enabled') != '0';
+	}
 
 /**
  * Checks if distance use allowed.
- * 
+ *
  * @return bool Is it possible to use this spell from distance.
  * @throws DOMException On DOM operation error.
  */
-    public function isFarUseAllowed()
-    {
-        return $this->element->getAttribute('allowfaruse') == '1';
-    }
+	public function isFarUseAllowed()
+	{
+		return $this->element->getAttribute('allowfaruse') == '1';
+	}
 
 /**
  * Checks if spell requires PACC.
- * 
+ *
  * @return bool Is spell only for Premium Account.
  * @throws DOMException On DOM operation error.
  */
-    public function isPremium()
-    {
-        return $this->element->getAttribute('prem') == '1';
-    }
+	public function isPremium()
+	{
+		return $this->element->getAttribute('prem') == '1';
+	}
 
 /**
  * Checks if spell needs to be learned.
- * 
+ *
  * @return bool Does this spell need to be learned.
  * @throws DOMException On DOM operation error.
  */
-    public function isLearnNeeded()
-    {
-        return $this->element->getAttribute('needlearn') == '1';
-    }
+	public function isLearnNeeded()
+	{
+		return $this->element->getAttribute('needlearn') == '1';
+	}
 
 /**
  * @return int Item ID.
  * @deprecated 0.1.0 Use getConjure()->getId().
  */
-    public function getConjureId()
-    {
-        return (int) $this->element->getAttribute('conjureId');
-    }
+	public function getConjureId()
+	{
+		return (int) $this->element->getAttribute('conjureId');
+	}
 
 /**
  * Returns item type of conjured item.
- * 
+ *
  * <p>
  * Note: You need to have global items list resource loaded in order to use this method.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return OTS_ItemType|null Returns item type of conjure item (null if not exists).
  * @throws E_OTS_NotLoaded When there is no global items list available.
  * @throws DOMException On DOM operation error.
  */
-    public function getConjure()
-    {
-        return POT::getInstance()->getItemsList()->getItemType( (int) $this->element->getAttribute('conjureId') );
-    }
+	public function getConjure()
+	{
+		return POT::getInstance()->getItemsList()->getItemType( (int) $this->element->getAttribute('conjureId') );
+	}
 
 /**
  * @return int Reagent ID.
  * @deprecated 0.1.0 Use getReagent()->getId().
  */
-    public function getReagentId()
-    {
-        return (int) $this->element->getAttribute('reagentId');
-    }
+	public function getReagentId()
+	{
+		return (int) $this->element->getAttribute('reagentId');
+	}
 
 /**
  * Returns item type of reagent item.
- * 
+ *
  * <p>
  * Note: You need to have global items list resource loaded in order to use this method.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return OTS_ItemType|null Returns item type of reagent item (null if not exists).
  * @throws E_OTS_NotLoaded When there is no global items list available.
  * @throws DOMException On DOM operation error.
  */
-    public function getReagent()
-    {
-        return POT::getInstance()->getItemsList()->getItemType( (int) $this->element->getAttribute('reagentId') );
-    }
+	public function getReagent()
+	{
+		return POT::getInstance()->getItemsList()->getItemType( (int) $this->element->getAttribute('reagentId') );
+	}
 
 /**
  * Returns amount of items conjured by this spell.
- * 
+ *
  * @return int Items count.
  * @throws DOMException On DOM operation error.
  */
-    public function getConjureCount()
-    {
-        return (int) $this->element->getAttribute('conjureCount');
-    }
+	public function getConjureCount()
+	{
+		return (int) $this->element->getAttribute('conjureCount');
+	}
 
 /**
  * Returns list of vocations that are allowed to learn this spell.
- * 
+ *
  * @return array List of vocation names.
  * @throws DOMException On DOM operation error.
  */
-    public function getVocations()
-    {
-	    global $config;
-	    if(!isset($config['vocation_ids']))
-		    $config['vocations_ids'] = array_flip($config['vocations']);
-	
-	    $vocations = array();
-
-        foreach( $this->element->getElementsByTagName('vocation') as $vocation)
-        {
-	        if($vocation->getAttribute('id') != NULL) {
-		        $voc_id = $vocation->getAttribute('id');
-	        }
-	        else {
-		        $voc_id = $config['vocations_ids'][$vocation->getAttribute('name')];
-	        }
-	
-	        $vocations[] = $voc_id;
-        }
-
-        return $vocations;
-    }
-	
-	public function getVocationsFull()
+	public function getVocations()
 	{
-	    global $config;
-	    if(!isset($config['vocation_ids']))
-	        $config['vocations_ids'] = array_flip($config['vocations']);
-	    
+		global $config;
+		if(!isset($config['vocation_ids']))
+			$config['vocations_ids'] = array_flip($config['vocations']);
+
 		$vocations = array();
-		
+
 		foreach( $this->element->getElementsByTagName('vocation') as $vocation)
 		{
-		    $show = $vocation->getAttribute('showInDescription');
-            if($vocation->getAttribute('id') != NULL) {
-	            $voc_id = $vocation->getAttribute('id');
-            }
-            else {
-                $voc_id = $config['vocations_ids'][$vocation->getAttribute('name')];
-            }
-		    
-		    $vocations[$voc_id] = strlen($show) == 0 || $show != '0';
+			if($vocation->getAttribute('id') != NULL) {
+				$voc_id = explode(';', $vocation->getAttribute('id'));
+			}
+			else {
+				$voc_id = $config['vocations_ids'][$vocation->getAttribute('name')];
+			}
+
+			if(is_array($voc_id)) {
+				$vocations = array_merge($vocations, $voc_id);
+			} else {
+				$vocations[] = $voc_id;
+			}
 		}
-		
+
+		return $vocations;
+	}
+
+	public function getVocationsFull()
+	{
+		global $config;
+		if(!isset($config['vocation_ids']))
+			$config['vocations_ids'] = array_flip($config['vocations']);
+
+		$vocations = array();
+
+		foreach( $this->element->getElementsByTagName('vocation') as $vocation)
+		{
+			$show = $vocation->getAttribute('showInDescription');
+			if($vocation->getAttribute('id') != NULL) {
+				$voc_id = $vocation->getAttribute('id');
+			}
+			else {
+				$voc_id = $config['vocations_ids'][$vocation->getAttribute('name')];
+			}
+
+			$vocations[$voc_id] = strlen($show) == 0 || $show != '0';
+		}
+
 		return $vocations;
 	}
 /**
  * Creates conjure item.
- * 
+ *
  * <p>
  * Note: You need to have global items list resource loaded in order to use this method.
  * </p>
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @return OTS_Item Conjured item.
  * @throws E_OTS_NotLoaded When there is no global items list available.
  * @throws DOMException On DOM operation error.
  */
-    public function createConjure()
-    {
-        $item = $this->getConjure()->createItem();
-        $item->setCount( $this->getConjureCount() );
-        return $item;
-    }
+	public function createConjure()
+	{
+		$item = $this->getConjure()->createItem();
+		$item->setCount( $this->getConjureCount() );
+		return $item;
+	}
 
 /**
  * Magic PHP5 method.
- * 
+ *
  * @version 0.1.0
  * @since 0.1.0
  * @param string $name Property name.
@@ -390,95 +394,95 @@ class OTS_Spell
  * @throws OutOfBoundsException For non-supported properties.
  * @throws DOMException On DOM operation error.
  */
-    public function __get($name)
-    {
-        switch($name)
-        {
-            case 'type':
-                return $this->getType();
+	public function __get($name)
+	{
+		switch($name)
+		{
+			case 'type':
+				return $this->getType();
 
-            case 'name':
-                return $this->getName();
+			case 'name':
+				return $this->getName();
 
-            case 'id':
-                return $this->getId();
+			case 'id':
+				return $this->getId();
 
-            case 'words':
-                return $this->getWords();
+			case 'words':
+				return $this->getWords();
 
-            case 'aggressive':
-                return $this->isAggressive();
+			case 'aggressive':
+				return $this->isAggressive();
 
-            case 'charges':
-                return $this->getCharges();
+			case 'charges':
+				return $this->getCharges();
 
-            case 'level':
-                return $this->getLevel();
+			case 'level':
+				return $this->getLevel();
 
-            case 'magicLevel':
-                return $this->getMagicLevel();
+			case 'magicLevel':
+				return $this->getMagicLevel();
 
-            case 'mana':
-                return $this->getMana();
+			case 'mana':
+				return $this->getMana();
 
-            case 'soul':
-                return $this->getSoul();
+			case 'soul':
+				return $this->getSoul();
 
-            case 'hasParams':
-                return $this->hasParams();
+			case 'hasParams':
+				return $this->hasParams();
 
-            case 'enabled':
-                return $this->isEnabled();
+			case 'enabled':
+				return $this->isEnabled();
 
-            case 'farUseAllowed':
-                return $this->isFarUseAllowed();
+			case 'farUseAllowed':
+				return $this->isFarUseAllowed();
 
-            case 'premium':
-                return $this->isPremium();
+			case 'premium':
+				return $this->isPremium();
 
-            case 'learnNeeded':
-                return $this->isLearnNeeded();
+			case 'learnNeeded':
+				return $this->isLearnNeeded();
 
-            case 'conjure':
-                return $this->getConjure();
+			case 'conjure':
+				return $this->getConjure();
 
-            case 'reagent':
-                return $this->getReagent();
+			case 'reagent':
+				return $this->getReagent();
 
-            case 'conjuresCount':
-                return $this->getConjuresCount();
+			case 'conjuresCount':
+				return $this->getConjuresCount();
 
-            case 'vocations':
-                return $this->getVocations();
+			case 'vocations':
+				return $this->getVocations();
 
-            default:
-                throw new OutOfBoundsException();
-        }
-    }
+			default:
+				throw new OutOfBoundsException();
+		}
+	}
 
 /**
  * Returns string representation of XML.
- * 
+ *
  * <p>
  * If any display driver is currently loaded then it uses it's method. Otherwise just returns spell XML format.
  * </p>
- * 
+ *
  * @version 0.1.3
  * @since 0.1.0
  * @return string String representation of object.
  */
-    public function __toString()
-    {
-        $ots = POT::getInstance();
+	public function __toString()
+	{
+		$ots = POT::getInstance();
 
-        // checks if display driver is loaded
-        if( $ots->isDataDisplayDriverLoaded() )
-        {
-            return $ots->getDataDisplayDriver()->displaySpell($this);
-        }
+		// checks if display driver is loaded
+		if( $ots->isDataDisplayDriverLoaded() )
+		{
+			return $ots->getDataDisplayDriver()->displaySpell($this);
+		}
 
-        return $this->element->ownerDocument->saveXML($this->element);
-    }
+		return $this->element->ownerDocument->saveXML($this->element);
+	}
 }
 
 /**#@-*/

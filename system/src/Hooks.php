@@ -14,6 +14,26 @@ class Hooks
 		self::$_hooks[$hook->type()][] = $hook;
 	}
 
+	public function unregister($name, $type, $file): void
+	{
+		if (is_string($type)) {
+			$type = constant($type);
+		}
+
+		if(!isset(self::$_hooks[$type])) {
+			return;
+		}
+
+		foreach(self::$_hooks[$type] as $id => $hook) {
+			if($name == $hook->name()
+				&& $type == $hook->type()
+				&& $file == $hook->file()
+			) {
+				unset(self::$_hooks[$type][$id]);
+			}
+		}
+	}
+
 	public function trigger($type, $params = []): bool
 	{
 		$ret = true;

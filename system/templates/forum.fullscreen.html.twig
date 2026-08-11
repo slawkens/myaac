@@ -18,14 +18,22 @@
 		margin: 0 auto;
 		cursor: pointer;
 	}
-	
+
 	.forum-image {
 		cursor: pointer;
+	}
+
+	.bb-code-block {
+		white-space: pre-wrap; /* Allows for wrapping while preserving whitespace */
+	}
+
+	.bb-code-block br {
+		display: none;
 	}
 </style>
 <script type="text/javascript">
 $(function() {
-	$(".forum-image").click(function(event){		
+	$(".forum-image").click(function(event){
 		var src = $(this).attr('src'); //get the source attribute of the clicked image
 		$('#FullScreen img').attr('src', src); //assign it to the tag for your fullscreen div
 		$('#FullScreen').fadeIn();
