@@ -32,8 +32,19 @@ if (is_uploaded_file($temp['tmp_name'])) {
 
 	// Verify extension
 	$ext = strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION));
-	if (!in_array($ext, ['gif', 'jpg', 'png'])) {
+	if (!in_array($ext, ['gif', 'jpg', 'png', 'bmp', 'webp'])) {
 		header('HTTP/1.1 400 Invalid extension.');
+		return;
+	}
+
+	$type = mime_content_type($temp['tmp_name']);
+	if (!strstr($type, 'image/')) {
+		header('HTTP/1.1 400 Invalid mime type.');
+		return;
+	}
+
+	if (extension_loaded('gd') && getimagesize($temp['tmp_name']) === false) {
+		header('HTTP/1.1 400 Invalid image file.');
 		return;
 	}
 
@@ -50,5 +61,3 @@ if (is_uploaded_file($temp['tmp_name'])) {
 	// Notify editor that the upload failed
 	header('HTTP/1.1 500 Server Error');
 }
-
-

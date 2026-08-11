@@ -573,7 +573,7 @@ Sent by MyAAC,<br/>
 			]
 		],
 		'smtp_port' => [
-			'name' => 'SMTP Host',
+			'name' => 'SMTP Port',
 			'type' => 'number',
 			'desc' => '25 (default) / 587 (tls - GMail, Microsoft Outlook)',
 			'default' => 25,

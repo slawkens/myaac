@@ -20,7 +20,7 @@
         "symfony/var-dumper": "^6.4",
         "filp/whoops": "^2.15",
         "maximebf/debugbar": "1.*",
-        "guzzlehttp/guzzle": "7.9.3",
+        "guzzlehttp/guzzle": "7.15.2",
         "devium/toml": "^1.0"
     },
     "require-dev": {

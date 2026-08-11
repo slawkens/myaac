@@ -13,19 +13,21 @@ use MyAAC\Models\FAQ as ModelsFAQ;
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Frequently Asked Questions';
 
+csrfProtect();
+
 $canEdit = hasFlag(FLAG_CONTENT_FAQ) || superAdmin();
 if($canEdit)
 {
-	if(!empty($action))
+	if(!empty($action) && isRequestMethod('post'))
 	{
 		if($action == 'delete' || $action == 'edit' || $action == 'hide' || $action == 'moveup' || $action == 'movedown')
-			$id = $_REQUEST['id'];
+			$id = $_POST['id'];
 
-		if(isset($_REQUEST['question']))
-			$question = $_REQUEST['question'];
+		if(isset($_POST['question']))
+			$question = $_POST['question'];
 
-		if(isset($_REQUEST['answer']))
-			$answer = stripslashes($_REQUEST['answer']);
+		if(isset($_POST['answer']))
+			$answer = stripslashes($_POST['answer']);
 
 		$errors = array();
 
@@ -63,7 +65,7 @@ if($canEdit)
 	}
 
 	$twig->display('faq.form.html.twig', array(
-		'link' => getLink('faq/' . ($action == 'edit' ? 'edit' : 'add')),
+		'link' => getLink('faq?action=' . ($action == 'edit' ? 'edit' : 'add')),
 		'action' => $action,
 		'id' => isset($id) ? $id : null,
 		'question' => isset($question) ? $question : null,
@@ -103,7 +105,14 @@ class FAQ
 			$row = ModelsFAQ::where('question', $question)->first();
 			if(!$row)
 			{
-				$ordering = ModelsFAQ::max('ordering') ?? 0;
+				$ordering = ModelsFAQ::max('ordering');
+				if (!$ordering) {
+					$ordering = 0;
+				}
+				else {
+					$ordering++;
+				}
+
 				ModelsFAQ::create([
 					'question' => $question,
 					'answer' => $answer,
@@ -168,7 +177,6 @@ class FAQ
 
 	static public function move($id, $i, &$errors)
 	{
-		global $db;
 		$row = ModelsFAQ::find($id);
 		if($row)
 		{

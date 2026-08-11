@@ -47,7 +47,7 @@ class Account extends Model {
 	public function getPremiumDaysAttribute()
 	{
 		if(isset($this->premium_ends_at) || isset($this->premend) ||
-			(isCanary() && isset($this->lastday))) {
+			(hasLastDayPremiumEndColumn() && isset($this->lastday))) {
 				$col = (isset($this->premium_ends_at) ? 'premium_ends_at' : (isset($this->lastday) ? 'lastday' : 'premend'));
 				$ret = ceil(($this->{$col} - time()) / (24 * 60 * 60));
 				return max($ret, 0);
@@ -68,7 +68,7 @@ class Account extends Model {
 	public function getIsPremiumAttribute(): bool
 	{
 		if(isset($this->premium_ends_at) || isset($this->premend) ||
-			(isCanary() && isset($this->lastday))) {
+			(hasLastDayPremiumEndColumn() && isset($this->lastday))) {
 			$col = (isset($this->premium_ends_at) ? 'premium_ends_at' : (isset($this->lastday) ? 'lastday' : 'premend'));
 			return $this->{$col} > time();
 		}

@@ -18,9 +18,11 @@ use MyAAC\Models\Pages;
 use MyAAC\Models\Player;
 use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
+use MyAAC\Models\ServerConfig;
 use MyAAC\News;
 use MyAAC\Plugins;
 use MyAAC\Server\Items;
+use MyAAC\Twig\EnvironmentBridge as MyAAC_Twig_EnvironmentBridge;
 use MyAAC\Settings;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -1351,6 +1353,9 @@ function getCustomPage($name, &$success): string
 			ob_end_clean();
 		}
 		else {
+			/**
+			 * @var MyAAC_Twig_EnvironmentBridge $twig
+			 **/
 			$content .= $twig->renderInline($page['body']);
 		}
 	}
@@ -1636,8 +1641,23 @@ function getAccountIdentityColumn(): string
 	return 'id';
 }
 
-function isCanary(): bool
+function hasLastDayPremiumEndColumn(): bool
 {
+	global $db;
+
+	if (!$db->hasTable('server_config')) {
+		return false;
+	}
+
+	$serverConfig = ServerConfig::where('config', 'db_version')->first();
+	if (!$serverConfig) {
+		return false;
+	}
+
+	if ($serverConfig->value < 36) {
+		return false;
+	}
+
 	$dataPackDirectory = configLua('dataPackDirectory');
 	return isset($dataPackDirectory);
 }
@@ -1677,6 +1697,35 @@ function getStatusUptimeReadable(int $uptime): string
 	$min = floor($uptime / $fullMinute);
 
 	return "{$y}{$m}{$d}{$hours}h {$min}m";
+}
+
+
+function is_sub_dir(?string $path = NULL, string $parent_folder = BASE): bool|string
+{
+	//Get directory path minus last folder
+	$dir = dirname($path);
+	$folder = substr($path, strlen($dir));
+
+	//Check the base dir is valid
+	$dir = realpath($dir);
+
+	//Only allow valid filename characters
+	$folder = preg_replace('/[^a-z0-9\.\-_]/i', '', $folder);
+
+	//If this is a bad path or a bad end folder name
+	if( !$dir OR !$folder || $folder === '.') {
+		return false;
+	}
+
+	//Rebuild path
+	$path = $dir. '/' . $folder;
+
+	//If this path is higher than the parent folder
+	if( strcasecmp($path, $parent_folder) > 0 ) {
+		return $path;
+	}
+
+	return false;
 }
 
 // validator functions

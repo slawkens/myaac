@@ -42,8 +42,8 @@ if(empty($errors)) {
 
 		if($guild_leader) {
 			$max_image_size_b = setting('core.guild_image_size_kb') * 1024;
-			$allowed_ext = array('image/gif', 'image/jpg', 'image/pjpeg', 'image/jpeg', 'image/bmp', 'image/png', 'image/x-png');
-			$ext_name = array('image/gif' => 'gif', 'image/jpg' => 'jpg', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/bmp' => 'bmp', 'image/png' => 'png', 'image/x-png' => 'png');
+			$allowed_ext = array('image/gif', 'image/jpg', 'image/pjpeg', 'image/jpeg', 'image/bmp', 'image/png', 'image/x-png', 'image/webp');
+			$ext_name = array('image/gif' => 'gif', 'image/jpg' => 'jpg', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/bmp' => 'bmp', 'image/png' => 'png', 'image/x-png' => 'png', 'image/webp' => 'webp');
 			$save_file_name = str_replace(' ', '_', strtolower($guild->getName()));
 			$save_path = GUILD_IMAGES_DIR . $save_file_name;
 			if(isset($_POST['todo']) && $_POST['todo'] == 'save')
@@ -57,11 +57,22 @@ if(empty($errors)) {
 
 					$type = strtolower($file['type']);
 					if(!in_array($type, $allowed_ext)) {
-						$upload_errors[] = 'Your file type isn\' allowed. Allowed: <b>gif, jpg, bmp, png</b>. Your file type: <b>'.$type.'</b> If it\'s valid image contact with admin.';
+						$upload_errors[] = 'Your file type isn\' allowed. Allowed: <b>gif, jpg, bmp, png, webp</b>. Your file type: <b>'.$type.'</b> If it\'s valid image contact with admin.';
 					}
 				}
 				else {
 					$upload_errors[] = 'You didn\'t send file or file is too big. Limit: <b>'.setting('core.guild_image_size_kb').' KB</b>.';
+				}
+
+				if (empty($upload_errors)) {
+					$_type = mime_content_type($file['tmp_name']);
+					if (!strstr($_type, 'image/')) {
+						$upload_errors[] = 'Invalid mime type.';
+					}
+
+					if (extension_loaded('gd') && getimagesize($file['tmp_name']) === false) {
+						$upload_errors[] = 'Invalid image file.';
+					}
 				}
 
 				if(empty($upload_errors)) {
