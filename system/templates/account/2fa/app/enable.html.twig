@@ -17,8 +17,8 @@
 										rel="noopener noreferrer">Authy</a>). In the app you
 									will be asked either to enter a key manually:<br><b>{{ secret }}</b><br>or
 									to scan the barcode below:<br>
-									<img alt="QR code" style="margin-top: 15px; margin-bottom: 15px;"
-										 src="{{ grCodeUri }}">
+									<img alt="QR code" src="data:image/png;base64,{{ qr }}" style="margin-top: 15px; margin-bottom: 15px;">
+
 								</li>
 								<li><label for="totp">Enter the verification code you have received from the used
 										authenticator app:</label><br>

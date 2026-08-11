@@ -5,6 +5,13 @@ use MyAAC\TwoFactorAuth\TwoFactorAuth;
 
 require __DIR__ . '/../base.php';
 
+if (!extension_loaded('gd')) {
+	$errors[] = 'PHP GD extension is not loaded. Please contact the administrator.';
+	$twig->display('error_box.html.twig', ['errors' => $errors]);
+
+	return;
+}
+
 if ($twoFactorAuth->isActive()) {
 	$errors[] = 'Two-factor authentication is already enabled on your account.';
 	$twig->display('error_box.html.twig', ['errors' => $errors]);

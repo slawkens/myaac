@@ -2,6 +2,8 @@
 
 namespace MyAAC\TwoFactorAuth;
 
+use BaconQrCode\Renderer\GDLibRenderer;
+use BaconQrCode\Writer;
 use MyAAC\Models\AccountEMailCode;
 use MyAAC\TwoFactorAuth\Gateway\AppAuthGateway;
 use MyAAC\TwoFactorAuth\Gateway\EmailAuthGateway;
@@ -236,13 +238,12 @@ class TwoFactorAuth
 			$otp = $this->appInitTOTP($secret);
 		}
 
-		$grCodeUri = $otp->getQrCodeUri(
-			'https://api.qrserver.com/v1/create-qr-code/?data=[DATA]&size=200x200&ecc=M',
-			'[DATA]'
-		);
+		$renderer = new GDLibRenderer(250);
+		$writer = new Writer($renderer);
+		$qr = $writer->writeString($otp->getProvisioningUri());
 
 		$twig->display('account/2fa/app/enable.html.twig', [
-			'grCodeUri' => $grCodeUri,
+			'qr' => base64_encode($qr),
 			'secret' => $secret,
 			'errors' => $errors,
 		]);
