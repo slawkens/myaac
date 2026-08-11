@@ -65,7 +65,12 @@ if (ACTION == 'link') {
 	if (!empty($authCode)) {
 		$otp = $twoFactorAuth->appInitTOTP($secret);
 
-		if (!$otp->verify($authCode)) {
+		$timestamp = time();
+		$period = $otp->getPeriod();
+
+		if (!$otp->verify($authCode, $timestamp - $period)
+			&& !$otp->verify($authCode, $timestamp)
+			&& !$otp->verify($authCode, $timestamp + $period)) {
 			$errors = ['Token is invalid!'];
 
 			$twig->display('error_box.html.twig', ['errors' => $errors]);

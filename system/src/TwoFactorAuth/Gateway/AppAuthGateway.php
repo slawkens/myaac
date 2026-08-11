@@ -14,6 +14,11 @@ class AppAuthGateway extends BaseAuthGateway implements AuthGatewayInterface
 		$otp->setLabel($this->account->getEmail());
 		$otp->setIssuer(configLua('serverName'));
 
-		return $otp->verify($code);
+		$timestamp = time();
+		$period = $otp->getPeriod();
+
+		return $otp->verify($code, $timestamp - $period)
+			|| $otp->verify($code, $timestamp)
+			|| $otp->verify($code, $timestamp + $period);
 	}
 }
