@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.9.2 - 11.08.2026]
+
+### Added
+* Add option to clear nick in guild (By @MohamedRefaat) (https://github.com/slawkens/myaac/commit/a526b7e4363af53ea818c1f75b13a0c8c3248b72)
+* Add few disallowed things into robots.txt (Thanks @MohamedRefaat) (https://github.com/slawkens/myaac/commit/92f8a3c63b79ccfd16716f661fd49f08ed0ae376)
+
+### Fixed
+* Fixed canary premium time detection (https://github.com/slawkens/myaac/commit/cd0801ab8c6ae27141933e530f5fc1865f71ec85)
+* Admin - Mass Account Actions: Fix premdays & lastday updating for tfs 0.x (#382)
+* Admin - Mass Account Actions: Fix error when there are no accounts matched (https://github.com/slawkens/myaac/commit/e43d039541a0a55f46e80f08112f2579bc688f74)
+* Fix: Admin-to-RCE exploit chain (Thanks discord user - eddiexo) (https://github.com/slawkens/myaac/commit/a1ee2a41c01929978f4c87c2d2863a59fcb364e4, https://github.com/slawkens/myaac/commit/0fd3906c5b295d6984efb52c048f695e3f8c7c58)
+* Accounts editor: Fix email verification + password change (https://github.com/slawkens/myaac/commit/bafaf86d9ca424d28863d890a893dda37f7dc2ec)
+* Fix: Don't allow arbitrary PHP content to be uploaded as image (https://github.com/slawkens/myaac/commit/279ae0ba1c537cd6b659ffd9ac272f890c5eb5a1)
+* FAQ: Fix: Protect with csrf (https://github.com/slawkens/myaac/commit/141a6f33e2df729d81bfcac169c675284d3a0027)
+* Fix: XSS in account redirect link (https://github.com/slawkens/myaac/commit/1379f8d5403e17d895b14fa71920b74eca2047aa)
+
+### Changed
+* Allow webp and bmp as image type in editor & guild images (https://github.com/slawkens/myaac/commit/92a20ffc5e9b64c19d9d850eb021c7cfd983e92d, https://github.com/slawkens/myaac/commit/a1e9fb8d4b386cef8e86d9e6ba79160fd89314cd)
+
+### Internal
+* Deprecate get_browser_real_ip (https://github.com/slawkens/myaac/commit/0a0a8e73ac8d4d9563a8d697e43c890dfd287f0c)
+
 ## [1.9.1 - 10.06.2026]
 
 I found another security vulnerability, probably one of the last.
