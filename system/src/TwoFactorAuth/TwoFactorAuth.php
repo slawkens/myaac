@@ -55,7 +55,7 @@ class TwoFactorAuth
 
 		$view = 'app';
 		if ($this->authType == self::TYPE_EMAIL) {
-			$view = 'email';#
+			$view = 'email';
 		}
 
 		if (empty($code)) {
@@ -256,7 +256,6 @@ class TwoFactorAuth
 		AccountEMailCode::create([
 			'account_id' => $this->account->getId(),
 			'code' => $newCode,
-			'created_at' => time(),
 		]);
 
 		$mailBody = $twig->render('mail.account.2fa.email-code.html.twig', [
