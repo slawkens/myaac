@@ -1874,6 +1874,35 @@ function getStatusUptimeReadable(int $uptime): string
 	return "{$y}{$m}{$d}{$hours}h {$min}m";
 }
 
+
+function is_sub_dir(?string $path = NULL, string $parent_folder = BASE): bool|string
+{
+	//Get directory path minus last folder
+	$dir = dirname($path);
+	$folder = substr($path, strlen($dir));
+
+	//Check the base dir is valid
+	$dir = realpath($dir);
+
+	//Only allow valid filename characters
+	$folder = preg_replace('/[^a-z0-9\.\-_]/i', '', $folder);
+
+	//If this is a bad path or a bad end folder name
+	if( !$dir OR !$folder || $folder === '.') {
+		return false;
+	}
+
+	//Rebuild path
+	$path = $dir. '/' . $folder;
+
+	//If this path is higher than the parent folder
+	if( strcasecmp($path, $parent_folder) > 0 ) {
+		return $path;
+	}
+
+	return false;
+}
+
 // validator functions
 require_once SYSTEM . 'compat/base.php';
 
