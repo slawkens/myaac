@@ -765,6 +765,16 @@ class Plugins {
 
 	private static function enableDisable($pluginFileName, $enable): bool
 	{
+		if (!$enable && !self::isEnabled($pluginFileName)) {
+			self::$error = 'Cannot disable plugin: ' . $pluginFileName . '. It is already disabled.';
+			return false;
+		}
+
+		if ($enable && self::isEnabled($pluginFileName)) {
+			self::$error = 'Cannot enable plugin: ' . $pluginFileName . '. It is already enabled.';
+			return false;
+		}
+
 		$filenameJson = $pluginFileName . '.json';
 		$fileExist = is_file(PLUGINS . ($enable ? 'disabled.' : '') . $filenameJson);
 		if (!$fileExist) {
