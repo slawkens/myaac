@@ -17,6 +17,14 @@
 								>
 									{{ csrf() }}
 
+									<input type="hidden" name="account_login" value="{{ account_login ?? '' }}" />
+									<input type="hidden" name="password_login" value="{{ password_login ?? '' }}" />
+									{% if remember_me %}
+										<input type="hidden" name="remember_me" value="true" />
+									{% endif %}
+
+									<input type="hidden" name="from" value="login" />
+
 									{% set button_name = 'Resend E-Mail Code' %}
 									{{ include('buttons.base.html.twig') }}
 								</form>

@@ -35,6 +35,8 @@
 									method="post" style="padding:0;margin:0;">
 									{{ csrf() }}
 
+									<input type="hidden" name="from" value="enable" />
+
 									{% if account_logged is defined %}
 										<input type="hidden" name="account_logged" value="{{ account_logged.getId() }}">
 									{% endif %}

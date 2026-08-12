@@ -23,10 +23,21 @@ if ($twoFactorAuth->hasRecentEmailCode(30 * 60)) {
 }
 else {
 	$twoFactorAuth->resendEmailCode();
+
+	success('E-Mail code sent! Please check your inbox and SPAM folder.');
 }
 
 if (!empty($errors)) {
 	$twig->display('error_box.html.twig',  ['errors' => $errors]);
 }
 
-$twig->display('account/2fa/email/enable.html.twig');
+$login_account = $_POST['account_login'] ?? '';
+$login_password = $_POST['password_login'] ?? '';
+$remember_me = isset($_POST['remember_me']);
+
+$from = $_POST['from'] ?? 'login';
+$twig->display("account/2fa/email/$from.html.twig", [
+	'account_login' => $login_account,
+	'password_login' => $login_password,
+	'remember_me' => $remember_me,
+]);
