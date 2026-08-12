@@ -268,10 +268,6 @@ class TwoFactorAuth
 		global $twig;
 
 		$newCode = generateRandomString(6, true, false, true);
-		AccountEMailCode::create([
-			'account_id' => $this->account->getId(),
-			'code' => $newCode,
-		]);
 
 		$mailBody = $twig->render('mail.account.2fa.email-code.html.twig', [
 			'code' => $newCode,
@@ -279,6 +275,12 @@ class TwoFactorAuth
 
 		if (!_mail($this->account->getEMail(), configLua('serverName') . ' - Requested Authentication Email Code', $mailBody)) {
 			error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
+			return;
 		}
+
+		AccountEMailCode::create([
+			'account_id' => $this->account->getId(),
+			'code' => $newCode,
+		]);
 	}
 }
