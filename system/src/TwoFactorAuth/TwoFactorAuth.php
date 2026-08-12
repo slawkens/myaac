@@ -154,10 +154,10 @@ class TwoFactorAuth
 	public function setAuthGateway(int $authType): void
 	{
 		if ($authType === self::TYPE_EMAIL) {
-			$this->authGateway = new EmailAuthGateway($this->account);
+			$this->authGateway = new EmailAuthGateway($this->account, $this);
 		}
 		else if ($authType === self::TYPE_APP) {
-			$this->authGateway = new AppAuthGateway($this->account);
+			$this->authGateway = new AppAuthGateway($this->account, $this);
 		}
 	}
 
@@ -220,7 +220,7 @@ class TwoFactorAuth
 		AccountEMailCode::where('account_id', '=', $this->account->getId())->delete();
 	}
 
-	public function appInitTOTP(string $secret): TOTP
+	public function initTOTP(string $secret): TOTP
 	{
 		$otp = TOTP::createFromSecret($secret);
 
@@ -235,7 +235,7 @@ class TwoFactorAuth
 		global $twig;
 
 		if ($otp === null) {
-			$otp = $this->appInitTOTP($secret);
+			$otp = $this->initTOTP($secret);
 		}
 
 		$renderer = new GDLibRenderer(250);

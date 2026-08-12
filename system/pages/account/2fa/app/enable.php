@@ -63,7 +63,7 @@ if (ACTION == 'link') {
 
 	$authCode = $_POST['auth-code'] ?? '';
 	if (!empty($authCode)) {
-		$otp = $twoFactorAuth->appInitTOTP($secret);
+		$otp = $twoFactorAuth->initTOTP($secret);
 
 		$timestamp = time();
 		$period = $otp->getPeriod();
@@ -112,6 +112,6 @@ if (!empty($errors)) {
 $twig->display('account/2fa/app/enable.warning.html.twig',
 	[
 		'newRecoveryKeyFormat' => $newRecoveryKeyFormat,
-		'errors' => $errors,
+		'errors' => $errors ?? [],
 	]
 );
