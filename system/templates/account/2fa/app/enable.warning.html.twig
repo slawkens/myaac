@@ -32,19 +32,21 @@
 			valid recovery key and would like to request the email with the confirmation key to
 			start connecting your {{ config.lua.serverName }} account to an authenticator app?<br><br><b>Enter your
 				recovery key:</b><br/>
-				<small>You can paste the whole key using CTRL + V</small>
+				{% if newRecoveryKeyFormat %}
+					<small>You can paste the whole key using CTRL + V</small>
+				{% endif %}
 
 			<div style="margin-top: 15px; margin-bottom: 15px;">
 
 				{% if newRecoveryKeyFormat %}
 
-					<input form="form" class="UpperCaseInput" id="key1" name="key1" value="" size="5" maxlength="5" autocomplete="off"> -
+					<input form="form" class="UpperCaseInput" id="key1" name="key1" value="" size="5" maxlength="5" autocomplete="off" autofocus> -
 					<input form="form" class="UpperCaseInput" id="key2" name="key2" value="" size="5" maxlength="5" autocomplete="off"> -
 					<input form="form" class="UpperCaseInput" id="key3" name="key3" value="" size="5" maxlength="5" autocomplete="off"> -
 					<input form="form" class="UpperCaseInput" id="key4" name="key4" value="" size="5" maxlength="5" autocomplete="off">
 
 				{% else %}
-					<input form="form" class="UpperCaseInput" name="key" value="" autocomplete="off">
+					<input form="form" class="UpperCaseInput" name="key" value="" autocomplete="off" autofocus>
 				{% endif %}
 
 				{% if errors|length > 0 %}
