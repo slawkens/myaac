@@ -32,14 +32,16 @@
 			valid recovery key and would like to request the email with the confirmation key to
 			start connecting your {{ config.lua.serverName }} account to an authenticator app?<br><br><b>Enter your
 				recovery key:</b><br/>
+				<small>You can paste the whole key using CTRL + V</small>
 
 			<div style="margin-top: 15px; margin-bottom: 15px;">
 
 				{% if newRecoveryKeyFormat %}
 
-					<input form="form" class="UpperCaseInput" name="key1" value="" size="5" maxlength="5" autocomplete="off"> -
-					<input form="form" class="UpperCaseInput" name="key2" value="" size="5" maxlength="5" autocomplete="off"> - <input form="form" class="UpperCaseInput" name="key3" value="" size="5" maxlength="5" autocomplete="off"> -
-					<input form="form" class="UpperCaseInput" name="key4" value="" size="5" maxlength="5" autocomplete="off">
+					<input form="form" class="UpperCaseInput" id="key1" name="key1" value="" size="5" maxlength="5" autocomplete="off"> -
+					<input form="form" class="UpperCaseInput" id="key2" name="key2" value="" size="5" maxlength="5" autocomplete="off"> -
+					<input form="form" class="UpperCaseInput" id="key3" name="key3" value="" size="5" maxlength="5" autocomplete="off"> -
+					<input form="form" class="UpperCaseInput" id="key4" name="key4" value="" size="5" maxlength="5" autocomplete="off">
 
 				{% else %}
 					<input form="form" class="UpperCaseInput" name="key" value="" autocomplete="off">
@@ -99,3 +101,20 @@
 		text-transform: uppercase;
 	}
 </style>
+
+{% if newRecoveryKeyFormat %}
+	<script>
+		$("#key1, #key2, #key3, #key4").bind("paste", function(e) {
+			let pastedData = e.originalEvent.clipboardData.getData('text');
+
+			if (pastedData.includes('-')) {
+				let splittedData = pastedData.split('-');
+
+				$("#key1").val(splittedData[0]);
+				$("#key2").val(splittedData[1]);
+				$("#key3").val(splittedData[2]);
+				$("#key4").val(splittedData[3]);
+			}
+		});
+	</script>
+{% endif %}
