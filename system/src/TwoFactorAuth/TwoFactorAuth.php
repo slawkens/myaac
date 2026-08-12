@@ -85,12 +85,16 @@ class TwoFactorAuth
 			return true;
 		}
 
-		if (setting('core.mail_enabled')) {
+		// one mail per 10 minutes
+		$lastAttemptFailedEmail = getSession('2fa_last_attempt_failed_email') ?? 0;
+		if (setting('core.mail_enabled') && $lastAttemptFailedEmail < time() - 10 * 60) {
 			$mailBody = $twig->render('mail.account.2fa.email-code.wrong-attempt.html.twig');
 
 			if (!_mail($this->account->getEMail(), configLua('serverName') . ' - Failed Two-Factor Authentication Attempt', $mailBody)) {
 				error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
 			}
+
+			setSession('2fa_last_attempt_failed_email', time());
 		}
 
 		define('HIDE_LOGIN_BOX', true);
