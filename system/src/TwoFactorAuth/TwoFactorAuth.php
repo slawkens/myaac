@@ -47,7 +47,7 @@ class TwoFactorAuth
 		return self::$instance;
 	}
 
-	public function process($login_account, $login_password, $remember_me, $code): bool
+	public function process(string $login_account, string $login_password, bool $remember_me, string $code): bool
 	{
 		global $twig;
 
@@ -55,9 +55,14 @@ class TwoFactorAuth
 			return true;
 		}
 
-		$view = 'app';
+		$authTypeString = 'app';
 		if ($this->authType == self::TYPE_EMAIL) {
-			$view = 'email';
+			$authTypeString = 'email';
+		}
+
+		$view = "account/2fa/$authTypeString/login.html.twig";
+		if (defined('MYAAC_ADMIN')) {
+			$view = "account/2fa/admin.login.html.twig";
 		}
 
 		if (empty($code)) {
@@ -68,10 +73,11 @@ class TwoFactorAuth
 			}
 
 			define('HIDE_LOGIN_BOX', true);
-			$twig->display("account/2fa/$view/login.html.twig", [
+			$twig->display($view, [
 				'account_login' => $login_account,
 				'password_login' => $login_password,
 				'remember_me' => $remember_me,
+				'authTypeString' => $authTypeString,
 			]);
 
 			return false;
@@ -106,14 +112,18 @@ class TwoFactorAuth
 			$errors[] = 'Invalid E-Mail code!';
 		}
 
-		$twig->display('error_box.html.twig', ['errors' => $errors]);
+		if (!defined('MYAAC_ADMIN')) {
+			$twig->display('error_box.html.twig', ['errors' => $errors]);
+		}
 
-		$twig->display("account/2fa/$view/login.html.twig",
+		$twig->display($view,
 			[
 				'account_login' => $login_account,
 				'password_login' => $login_password,
 				'remember_me' => $remember_me,
 
+				'errors' => $errors,
+				'authTypeString' => $authTypeString,
 				'wrongCode' => true,
 			]);
 
@@ -216,7 +226,7 @@ class TwoFactorAuth
 		return $this->authGateway;
 	}
 
-	public function hasRecentEmailCode($since = self::EMAIL_CODE_VALID_UNTIL): bool {
+	public function hasRecentEmailCode(int $since = self::EMAIL_CODE_VALID_UNTIL): bool {
 		return AccountEMailCode::where('account_id', '=', $this->account->getId())->where('created_at', '>', time() - $since)->first() !== null;
 	}
 
