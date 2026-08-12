@@ -54,6 +54,7 @@ if(!empty($login_account) && !empty($login_password))
 				'You can resend the Email here: <a href="' . $link . '">' . $link . '</a>';
 		} else {
 			setSession('account', $account_logged->getId());
+			setSession('account_2fa_id', $account_logged->getId());
 
 			if (!$hooks->trigger(HOOK_ACCOUNT_LOGIN_PRE)) {
 				return;

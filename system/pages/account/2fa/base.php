@@ -12,8 +12,8 @@ $title = 'Two Factor Authentication';
  */
 $code = $_REQUEST['auth-code'] ?? '';
 
-if (!$account_logged->isLoaded()) {
-	$current_session = getSession('account');
+if (!isset($account_logged) || !$account_logged->isLoaded()) {
+	$current_session = getSession('account_2fa_id');
 	if($current_session) {
 		$account_logged = new OTS_Account();
 		$account_logged->load($current_session);
