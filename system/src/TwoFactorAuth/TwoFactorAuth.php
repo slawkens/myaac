@@ -51,7 +51,7 @@ class TwoFactorAuth
 	{
 		global $twig;
 
-		if (!$this->isActive()) {
+		if (!$this->isActive() || (!setting('core.account_2fa_app') && !setting('core.account_2fa_email'))) {
 			return true;
 		}
 
@@ -132,7 +132,7 @@ class TwoFactorAuth
 
 	public function processClientLogin($code, string &$error, &$errorCode): bool
 	{
-		if (!$this->isActive()) {
+		if (!$this->isActive() || (!setting('core.account_2fa_app') && !setting('core.account_2fa_email'))) {
 			return true;
 		}
 

@@ -3,10 +3,18 @@
 {% set content %}
 <table style="width:100%;">
 	<tbody>
-	{{ include(twoFactorViews[0]) }}
-	{{ include(twoFactorViews[1]) }}
+		{% if setting('core.account_2fa_app') %}
+			{{ include(twoFactorViews[0]) }}
+		{% endif %}
+
+		{% if setting('core.account_2fa_email') %}
+			{{ include(twoFactorViews[1]) }}
+		{% endif %}
 	</tbody>
 </table>
 {% endset %}
-{% include('tables.headline.html.twig') %}
-<br/>
+
+{% if setting('core.account_2fa_app') or setting('core.account_2fa_email') %}
+	{% include('tables.headline.html.twig') %}
+	<br/>
+{% endif %}

@@ -3,23 +3,21 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 require __DIR__ . '/../base.php';
 
-if ((!setting('core.mail_enabled'))) {
-	$twig->display('error_box.html.twig',  ['errors' => ['Account Two-Factor E-Mail Authentication disabled.']]);
-	return;
+if (!setting('core.mail_enabled') || !setting('core.account_2fa_email')) {
+	$errors[] = 'Account Two-Factor E-Mail Authentication disabled.';
+}
+elseif (!isRequestMethod('post')) {
+	$errors[] = 'This page cannot be accessed directly.';
+}
+elseif (!$account_logged->isLoaded()) {
+	$errors[] = 'Please login first.';
+}
+elseif (!$twoFactorAuth->isActive($twoFactorAuth::TYPE_EMAIL)) {
+	$errors[] = 'Your account does not have Two Factor E-Mail Authentication enabled.';
 }
 
-if (!isRequestMethod('post')) {
-	error('This page cannot be accessed directly.');
-	return;
-}
-
-if (!$account_logged->isLoaded()) {
-	error('Account not found!');
-	return;
-}
-
-if (!$twoFactorAuth->isActive($twoFactorAuth::TYPE_EMAIL)) {
-	error("Your account does not have Two Factor E-Mail Authentication enabled.");
+if (!empty($errors)) {
+	$twig->display('error_box.html.twig',  ['errors' => $errors]);
 	return;
 }
 

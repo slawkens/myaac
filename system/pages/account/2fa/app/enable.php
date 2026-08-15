@@ -7,15 +7,19 @@ require __DIR__ . '/../base.php';
 
 if (!extension_loaded('gd')) {
 	$errors[] = 'PHP GD extension is not loaded. Please contact the administrator.';
-	$twig->display('error_box.html.twig', ['errors' => $errors]);
-
-	return;
+}
+elseif (!$account_logged->isLoaded()) {
+	$errors[] = 'Please login first.';
+}
+elseif (!setting('core.account_2fa_app')) {
+	$errors[] = 'Two-factor authentication is not enabled on this server.';
+}
+elseif ($twoFactorAuth->isActive()) {
+	$errors[] = 'Two-factor authentication is already enabled on your account.';
 }
 
-if ($twoFactorAuth->isActive()) {
-	$errors[] = 'Two-factor authentication is already enabled on your account.';
+if (!empty($errors)) {
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
-
 	return;
 }
 
