@@ -1741,11 +1741,7 @@ function hasLastDayPremiumEndColumn(): bool
 	}
 
 	$serverConfig = ServerConfig::where('config', 'db_version')->first();
-	if (!$serverConfig) {
-		return false;
-	}
-
-	if ($serverConfig->value < 36) {
+	if (!$serverConfig || $serverConfig->value < 36) {
 		return false;
 	}
 
