@@ -165,8 +165,8 @@ class Settings implements \ArrayAccess
 		<div class="tab-content" id="tab-content">
 			<?php
 
-			$checkbox = function ($key, $type, $value) {
-				echo '<label><input type="radio" id="' . $key . '_' . ($type ? 'yes' : 'no') . '" name="settings[' . $key . ']" value="' . ($type ? 'true' : 'false') . '" ' . ($value === $type ? 'checked' : '') . '/>' . ($type ? 'Yes' : 'No') . '</label> ';
+			$checkbox = function ($key, $type, $value, $enabled = true) {
+				echo '<label><input type="radio" id="' . $key . '_' . ($type ? 'yes' : 'no') . '" name="settings[' . $key . ']" value="' . ($type ? 'true' : 'false') . '" ' . ($value === $type ? 'checked' : '') . ' ' . ($enabled ? '' : 'disabled') . '/>' . ($type ? 'Yes' : 'No') . '</label> ';
 			};
 
 			$i = 0;
@@ -232,8 +232,8 @@ class Settings implements \ArrayAccess
 						$value = ($setting['default'] ?? false);
 					}
 
-					$checkbox($key, true, $value);
-					$checkbox($key, false, $value);
+					$checkbox($key, true, $value, $setting['enabled'] ?? true);
+					$checkbox($key, false, $value, $setting['enabled'] ?? true);
 				}
 
 				else if (in_array($setting['type'], ['text', 'number', 'float', 'double', 'email', 'password'])) {
@@ -254,7 +254,9 @@ class Settings implements \ArrayAccess
 						echo '<div class="input-group" id="show-hide-' . $key . '">';
 					}
 
-					echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . escapeHtml($settingsDb[$key] ?? ($setting['default'] ?? '')) . '" id="' . $key . '"' . $min . $max . $step . '/>';
+					$enabled = $setting['enabled'] ?? true;
+
+					echo '<input class="form-control" type="' . $setting['type'] . '" name="settings[' . $key . ']" value="' . escapeHtml($settingsDb[$key] ?? ($setting['default'] ?? '')) . '" id="' . $key . '"' . $min . $max . $step . ' ' . ($enabled ? '' : 'disabled') . '/>';
 
 					if ($setting['type'] === 'password') {
 						echo '<div class="input-group-append input-group-text"><a href=""><i class="fas fa-eye-slash" ></i></a></div></div>';
@@ -272,7 +274,10 @@ class Settings implements \ArrayAccess
 					if ($rows < 2) {
 						$rows = 2; // always min 2 rows for textarea
 					}
-					echo '<textarea class="form-control" rows="' . $rows . '" name="settings[' . $key . ']" id="' . $key . '">' . escapeHtml($value) . '</textarea>';
+
+					$enabled = $setting['enabled'] ?? true;
+
+					echo '<textarea class="form-control" rows="' . $rows . '" name="settings[' . $key . ']" id="' . $key . '" ' . ($enabled ? '' : 'disabled') . '>' . escapeHtml($value) . '</textarea>';
 				}
 
 				else if ($setting['type'] === 'options') {
@@ -316,7 +321,9 @@ class Settings implements \ArrayAccess
 						}
 					}
 
-					echo '<select class="form-control" name="settings[' . $key . ']" id="' . $key . '">';
+					$enabled = $setting['enabled'] ?? true;
+
+					echo '<select class="form-control" name="settings[' . $key . ']" id="' . $key . '" ' . ($enabled ? '' : 'disabled') . '>';
 					foreach ($setting['options'] as $value => $option) {
 						$compareTo = ($settingsDb[$key] ?? ($setting['default'] ?? ''));
 						if($value === 'true') {
