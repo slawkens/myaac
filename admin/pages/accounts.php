@@ -141,6 +141,11 @@ else if (isset($_REQUEST['search'])) {
 				echo_error(Validator::getLastError());
 			}
 
+			$emailUsed = AccountModel::where('email', $email)->where('id', '!=', $account->getId())->first();
+			if ($emailUsed) {
+				echo_error('This e-mail is already used. Please choose another e-mail!');
+			}
+
 			// tibia coins
 			if (HAS_ACCOUNT_COINS) {
 				$t_coins = $_POST['t_coins'];
