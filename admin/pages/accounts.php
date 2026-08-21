@@ -107,7 +107,7 @@ else if (isset($_REQUEST['search'])) {
 				$name = $_POST['name'];
 
 				$account_db->find($name);
-				if ($account_db->isLoaded() && $account->getName() != $name)
+				if ($account_db->isLoaded() && strtolower($account->getName()) != strtolower($name))
 					echo_error('This name is already used. Please choose another name!');
 			}
 
@@ -140,6 +140,11 @@ else if (isset($_REQUEST['search'])) {
 			$email = $_POST['email'];
 			if (!Validator::email($email)) {
 				echo_error(Validator::getLastError());
+			}
+
+			$emailUsed = AccountModel::where('email', $email)->where('id', '!=', $account->getId())->first();
+			if ($emailUsed) {
+				echo_error('This e-mail is already used. Please choose another e-mail!');
 			}
 
 			// tibia coins
