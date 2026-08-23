@@ -110,6 +110,12 @@ return [
 			'desc' => 'Format: UA-XXXXXXX-X',
 			'default' => '',
 		],
+		'visitors_counter_ttl' => [
+			'name' => 'Visitors Counter TTL',
+			'type' => 'number',
+			'desc' => 'Time To Live for Visitors Counter. In other words - how long user will be marked as online. In Minutes',
+			'default' => 10,
+		],
 		[
 			'type' => 'section',
 			'title' => 'Template'
@@ -162,18 +168,27 @@ return [
 		'footer_load_time' => [
 			'name' => 'Load Time',
 			'type' => 'boolean',
-			'desc' => 'Display load time of the page in the footer',
+			'desc' => 'Display load time of the page in the footer?',
 			'default' => true,
 		],
-		// do we really want this? I'm leaving it for consideration
-		/*
+		'footer_visitors_counter' => [
+			'name' => 'Visitors Counter',
+			'type' => 'boolean',
+			'desc' => 'Show visitors counter in the footer? It still will be shown in admin panel',
+			'default' => true,
+		],
+		'footer_views_counter' => [
+			'name' => 'Views Counter',
+			'type' => 'boolean',
+			'desc' => 'Show Views Counter in the footer? It still will be shown in admin panel',
+			'default' => true,
+		],
 		'footer_powered_by' => [
-			'name' => 'Display Powered by MyAAC',
+			'name' => 'Powered by MyAAC',
 			'type' => 'boolean',
 			'desc' => 'Do you want to show <i>Powered by MyAAC</i> slogan in the footer?',
 			'default' => true,
 		],
-		*/
 		/*'language' => [
 			'name' => 'Language',
 			'type' => 'options',
@@ -187,31 +202,6 @@ return [
 			'default' => false,
 			'desc' => 'default language (currently only English available)'
 		],*/
-		[
-			'type' => 'section',
-			'title' => 'Counters'
-		],
-		'visitors_counter' => [
-			'name' => 'Visitors Counter',
-			'type' => 'boolean',
-			'desc' => 'Enable Visitors Counter? It will show list of online members on the website in Admin Panel',
-			'default' => true,
-		],
-		'visitors_counter_ttl' => [
-			'name' => 'Visitors Counter TTL',
-			'type' => 'number',
-			'desc' => 'Time To Live for Visitors Counter. In other words - how long user will be marked as online. In Minutes',
-			'default' => 10,
-			'show_if' => [
-				'visitors_counter', '=', 'true'
-			]
-		],
-		'views_counter' => [
-			'name' => 'Views Counter',
-			'type' => 'boolean',
-			'desc' => 'Enable Views Counter? It will show how many times the website has been viewed by users',
-			'default' => true,
-		],
 		[
 			'type' => 'section',
 			'title' => 'Misc'
