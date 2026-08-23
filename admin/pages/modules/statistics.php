@@ -14,7 +14,10 @@ $count = $eloquentConnection->query()
 		'total_guilds' => Guild::selectRaw('COUNT(id)'),
 		'total_monsters' => Monster::selectRaw('COUNT(id)'),
 		'total_houses' => House::selectRaw('COUNT(id)'),
-	])->first();
+	])->get();
+
+$count = $count->toArray();
+$count['views'] = getDatabaseConfig('views_counter');
 
 $twig->display('statistics.html.twig', array(
 	'count' => $count,
