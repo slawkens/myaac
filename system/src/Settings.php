@@ -233,7 +233,7 @@ class Settings implements \ArrayAccess
 					$checkbox($key, false, $value);
 				}
 
-				else if (in_array($setting['type'], ['text', 'number', 'float', 'double', 'email', 'password'])) {
+				else if (in_array($setting['type'], ['text', 'number', 'float', 'double', 'email', 'password', 'date', 'datetime-local', 'time'])) {
 					if (in_array($setting['type'], ['float', 'double'])) {
 						$setting['type'] = 'number';
 					}
