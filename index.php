@@ -118,13 +118,8 @@ if(setting('core.backward_support')) {
 		$config['status']['serverStatus_' . $key] = $value;
 }
 
-if(setting('core.views_counter')) {
-	require_once SYSTEM . 'counter.php';
-}
-
-if(setting('core.visitors_counter')) {
-	$visitors = new Visitors(setting('core.visitors_counter_ttl'));
-}
+require_once SYSTEM . 'counter.php';
+$visitors = new Visitors(setting('core.visitors_counter_ttl'));
 
 require_once SYSTEM . 'router.php';
 

@@ -572,13 +572,13 @@ function template_footer(): string
 		$footer[] = generateLink(ADMIN_URL, 'Admin Panel', true);
 	}
 
-	if(setting('core.visitors_counter')) {
+	if (setting('core.footer_visitors_counter')) {
 		global $visitors;
 		$amount = $visitors->getAmountVisitors();
 		$footer[] = 'Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
 	}
 
-	if(setting('core.views_counter')) {
+	if (setting('core.footer_views_counter')) {
 		global $views_counter;
 		$footer[] = 'Page has been viewed ' . $views_counter . ' times.';
 	}
