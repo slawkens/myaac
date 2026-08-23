@@ -592,8 +592,9 @@ function template_footer(): string
 		$footer[] = '' . $settingFooter;
 	}
 
-	// please respect my work and help spreading the word, thanks!
-	$footer[] = base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
+	if (setting('core.footer_powered_by')) {
+		$footer[] = 'Powered by <a href="https://my-aac.org" target="_blank">MyAAC</a>.';
+	}
 
 	global $hooks;
 	$hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);

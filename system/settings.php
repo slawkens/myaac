@@ -165,15 +165,12 @@ return [
 			'desc' => 'Display load time of the page in the footer',
 			'default' => true,
 		],
-		// do we really want this? I'm leaving it for consideration
-		/*
 		'footer_powered_by' => [
-			'name' => 'Display Powered by MyAAC',
+			'name' => 'Powered by MyAAC',
 			'type' => 'boolean',
 			'desc' => 'Do you want to show <i>Powered by MyAAC</i> slogan in the footer?',
 			'default' => true,
 		],
-		*/
 		/*'language' => [
 			'name' => 'Language',
 			'type' => 'options',
