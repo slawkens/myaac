@@ -103,7 +103,7 @@ if ($id > 0) {
 
 		$player_db = new OTS_Player();
 		$player_db->find($name);
-		if ($player_db->isLoaded() && $player->getName() != $name)
+		if ($player_db->isLoaded() && strtolower($player->getName()) != strtolower($name))
 			echo_error('This name is already used. Please choose another name!');
 
 		$account_id = $_POST['account_id'];
