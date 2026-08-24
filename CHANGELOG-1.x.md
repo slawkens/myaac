@@ -15,6 +15,8 @@
 * Make "Powered by MyAAC" configurable (https://github.com/slawkens/myaac/commit/4f5e466480f1a9165b6600040a69153377fbe4f5)
 * Make counters (visitors & views) always enabled, just configurable in footer (https://github.com/slawkens/myaac/commit/92a47f3b321ad81b5b3851d0348220cadcf36ee9)
 
+### Updates
+* Updated composer dependencies (https://github.com/slawkens/myaac/commit/e586fa8f92b5ff2438a4e9790ba2d8cb59b763b8)
 
 ## [1.9.2 - 11.08.2026]
 
