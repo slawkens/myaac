@@ -37,6 +37,8 @@ if [ $1 = "prepare" ]; then
 
 	cd $dir || exit
 
+	export COMPOSER_ALLOW_SUPERUSER=1
+
 	# dependencies
 	composer install --no-dev --prefer-dist --optimize-autoloader
 	npm install
