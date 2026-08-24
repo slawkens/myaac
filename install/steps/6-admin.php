@@ -20,6 +20,16 @@ if(!$error) {
 		'account' => $account,
 		'hasTablePlayers' => $db->hasTable('players'),
 		'errors' => isset($errors) ? $errors : null,
-		'buttons' => next_buttons(true, $error ? false : true)
+		'buttons' => next_buttons(true, !$error)
 	));
+}
+else {
+?>
+	<div class="text-center m-3">
+		<form action="<?php echo BASE_URL; ?>install/" method="post">
+			<input type="hidden" name="step" id="step" value="admin" />
+			<?= next_buttons(true, false);?>
+		</form>
+	</div>
+<?php
 }

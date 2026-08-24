@@ -13,4 +13,4 @@ $title = 'Method Not Allowed';
 header('HTTP/1.0 405 Method Not Allowed');
 ?>
 <h1>Method not allowed</h1>
-<p>The requested method: <?php echo $_SERVER['REQUEST_METHOD']; ?> for URL <?php echo $_SERVER['REQUEST_URI']; ?> was not found on this server.</p>
+<p>The requested method: <?= escapeHtml($_SERVER['REQUEST_METHOD']); ?> for URL <?= escapeHtml($_SERVER['REQUEST_URI']); ?> was not found on this server.</p>

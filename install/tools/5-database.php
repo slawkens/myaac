@@ -7,11 +7,6 @@ require SYSTEM . 'functions.php';
 require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 
-if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['saved'])) {
-	warning($locale['already_installed']);
-	return;
-}
-
 $error = false;
 require BASE . 'install/includes/config.php';
 
@@ -19,6 +14,11 @@ ini_set('max_execution_time', 300);
 
 @ob_end_flush();
 ob_implicit_flush();
+
+if(file_exists(BASE . 'install/install.lock')) {
+	warning($locale['already_installed']);
+	return;
+}
 
 header('X-Accel-Buffering: no');
 

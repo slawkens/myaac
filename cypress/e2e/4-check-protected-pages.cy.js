@@ -6,7 +6,7 @@ describe('Check Protected Pages', () => {
 	// character actions
 	it('Go to account character creation page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/account/character/create',
+			url: '/account/character/create',
 			method: 'GET',
 		})
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
@@ -14,7 +14,7 @@ describe('Check Protected Pages', () => {
 
 	it('Go to account character deletion page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/account/character/delete',
+			url: '/account/character/delete',
 			method: 'GET',
 		})
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
@@ -23,7 +23,7 @@ describe('Check Protected Pages', () => {
 	// account actions
 	it('Go to account email change page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/account/email',
+			url: '/account/email',
 			method: 'GET',
 		})
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
@@ -31,7 +31,7 @@ describe('Check Protected Pages', () => {
 
 	it('Go to account password change page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/account/password',
+			url: '/account/password',
 			method: 'GET',
 		})
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
@@ -39,7 +39,7 @@ describe('Check Protected Pages', () => {
 
 	it('Go to account info change page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/account/info',
+			url: '/account/info',
 			method: 'GET',
 		})
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
@@ -47,7 +47,7 @@ describe('Check Protected Pages', () => {
 
 	it('Go to account logout change page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/account/logout',
+			url: '/account/logout',
 			method: 'GET',
 		})
 		cy.contains(REQUIRED_LOGIN_MESSAGE)
@@ -56,7 +56,7 @@ describe('Check Protected Pages', () => {
 	// guild actions
 	it('Go to guild creation page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/?subtopic=guilds&action=create',
+			url: '/?subtopic=guilds&action=create',
 			method: 'GET',
 		})
 		cy.contains(YOU_ARE_NOT_LOGGEDIN)
@@ -64,7 +64,7 @@ describe('Check Protected Pages', () => {
 
 	it('Go to guilds cleanup players action page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/?subtopic=guilds&action=cleanup_players',
+			url: '/?subtopic=guilds&action=cleanup_players',
 			method: 'GET',
 		})
 		cy.contains(YOU_ARE_NOT_LOGGEDIN)
@@ -72,7 +72,7 @@ describe('Check Protected Pages', () => {
 
 	it('Go to guilds cleanup guilds action page', () => {
 		cy.visit({
-			url: Cypress.env('URL') + '/?subtopic=guilds&action=cleanup_guilds',
+			url: '/?subtopic=guilds&action=cleanup_guilds',
 			method: 'GET',
 		})
 		cy.contains(YOU_ARE_NOT_LOGGEDIN)

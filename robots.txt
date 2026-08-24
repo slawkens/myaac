@@ -1,2 +1,5 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /install/
+Disallow: /system/
+Disallow: /tools/

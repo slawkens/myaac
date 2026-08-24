@@ -24,11 +24,6 @@ if(setting('core.template_allow_change'))
 			//setcookie('template', $template_name, 0, BASE_DIR . '/', $_SERVER["SERVER_NAME"]);
 			$template_name = $_GET['template'];
 
-			$cache = Cache::getInstance();
-			if($cache->enabled()) {
-				$cache->delete('template_menus');
-			}
-
 			setSession('template', $template_name);
 
 			$newLocation = $lastUri = getSession('last_uri');

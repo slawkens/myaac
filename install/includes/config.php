@@ -4,6 +4,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 if(!isset($_SESSION['var_server_path'])) {
 	error($locale['step_database_error_config']);
 	$error = true;
+	return;
 }
 
 $config['server_path'] = $_SESSION['var_server_path'];

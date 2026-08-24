@@ -1,5 +1,7 @@
 <form action="{{ getLink('guilds') }}?action=leave&guild={{ guild_name }}" METHOD="post">
+
 	{{ csrf() }}
+
 	<input type="hidden" name="todo" value="save" />
 <table border="0" cellspacing="1" cellpadding="4" width="100%">
 	<tr bgcolor="{{ config.vdarkborder }}">
@@ -26,12 +28,14 @@
 			{{ include('buttons.submit.html.twig') }}
 		</td>
 		{% endif %}
-</form>
+
 		<td>
-			<form action="{{ getLink('guilds') }}?action=show&guild={{ guild_name }}" method="post">
-				{{ csrf() }}
-				{{ include('buttons.back.html.twig') }}
-			</form>
+			<a href="{{ getGuildLink(guild_name, false) }}">
+					{% set noSubmit = true %}
+					{% set button_name = "Back" %}
+					{{ include('buttons.base.html.twig') }}
+				</a>
 		</td>
 	</tr>
 </table>
+</form>

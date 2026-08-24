@@ -269,6 +269,8 @@ class Validator
 			return false;
 		}
 
+		$settingNameRequireVowels = setting('core.create_character_name_require_vowels');
+
 		foreach (explode(' ', $name) as $word) {
 			$wordCut = substr($word, 1, strlen($word));
 			$hasUpperCase = preg_match('/[A-Z]/', $wordCut);
@@ -282,10 +284,12 @@ class Validator
 				return false;
 			}
 
-			$hasVowel = preg_match('/[aeiouAEIOU]/', $word);
-			if (!$hasVowel) {
-				self::$lastError = 'This name contains a word without vowels. Please choose another name.';
-				return false;
+			if ($settingNameRequireVowels) {
+				$hasVowel = preg_match('/[aeiouAEIOU]/', $word);
+				if (!$hasVowel) {
+					self::$lastError = 'This name contains a word without vowels. Please choose another name.';
+					return false;
+				}
 			}
 		}
 

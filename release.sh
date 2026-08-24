@@ -22,7 +22,7 @@ if [ $1 = "prepare" ]; then
 	mkdir -p tmp
 
 	# get myaac from git archive
-	git archive --format zip --output tmp/myaac.zip main
+	git archive --format zip --output tmp/myaac.zip develop
 
 	cd tmp/ || exit
 
@@ -36,6 +36,8 @@ if [ $1 = "prepare" ]; then
 	rm myaac.zip
 
 	cd $dir || exit
+
+	export COMPOSER_ALLOW_SUPERUSER=1
 
 	# dependencies
 	composer install --no-dev --prefer-dist --optimize-autoloader

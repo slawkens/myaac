@@ -18,6 +18,15 @@ class Account extends Model {
 
 	public $timestamps = false;
 
+	protected $fillable = [
+		'name', 'number', 'email', 'password',
+		'key', 'created', 'rlname', 'location', 'country',
+		'web_lastlogin', 'web_flags',
+		'email_new', 'email_new_time', 'email_code',
+		'premium_points', 'coins', 'coins_transferable',
+		'premium_ends_at', 'premend', 'lastday', 'premdays',
+	];
+
 	protected $casts = [
 		'lastday' => 'integer',
 		'premdays' => 'integer',
@@ -38,7 +47,7 @@ class Account extends Model {
 	public function getPremiumDaysAttribute()
 	{
 		if(isset($this->premium_ends_at) || isset($this->premend) ||
-			(isCanary() && isset($this->lastday))) {
+			(hasLastDayPremiumEndColumn() && isset($this->lastday))) {
 				$col = (isset($this->premium_ends_at) ? 'premium_ends_at' : (isset($this->lastday) ? 'lastday' : 'premend'));
 				$ret = ceil(($this->{$col} - time()) / (24 * 60 * 60));
 				return max($ret, 0);
@@ -59,7 +68,7 @@ class Account extends Model {
 	public function getIsPremiumAttribute(): bool
 	{
 		if(isset($this->premium_ends_at) || isset($this->premend) ||
-			(isCanary() && isset($this->lastday))) {
+			(hasLastDayPremiumEndColumn() && isset($this->lastday))) {
 			$col = (isset($this->premium_ends_at) ? 'premium_ends_at' : (isset($this->lastday) ? 'lastday' : 'premend'));
 			return $this->{$col} > time();
 		}

@@ -19,8 +19,10 @@ use MyAAC\Models\Pages;
 use MyAAC\Models\Player;
 use MyAAC\Models\PlayerDeath;
 use MyAAC\Models\PlayerKillers;
+use MyAAC\Models\ServerConfig;
 use MyAAC\News;
 use MyAAC\Plugins;
+use MyAAC\Twig\EnvironmentBridge as MyAAC_Twig_EnvironmentBridge;
 use MyAAC\Settings;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -572,13 +574,13 @@ function template_footer(): string
 		$footer[] = generateLink(ADMIN_URL, 'Admin Panel', true);
 	}
 
-	if(setting('core.visitors_counter')) {
+	if (setting('core.footer_visitors_counter')) {
 		global $visitors;
 		$amount = $visitors->getAmountVisitors();
 		$footer[] = 'Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
 	}
 
-	if(setting('core.views_counter')) {
+	if (setting('core.footer_views_counter')) {
 		global $views_counter;
 		$footer[] = 'Page has been viewed ' . $views_counter . ' times.';
 	}
@@ -592,8 +594,9 @@ function template_footer(): string
 		$footer[] = '' . $settingFooter;
 	}
 
-	// please respect my work and help spreading the word, thanks!
-	$footer[] = base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
+	if (setting('core.footer_powered_by')) {
+		$footer[] = 'Powered by <a href="https://my-aac.org" target="_blank">MyAAC</a>.';
+	}
 
 	global $hooks;
 	$hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
@@ -893,11 +896,30 @@ function getWorldName($id)
  */
 function _mail(string $to, string $subject, string $body, string $altBody = ''): bool
 {
-	global $mailer, $config;
+	global $mailer, $config, $hooks;
 
 	if (!setting('core.mail_enabled')) {
 		log_append('mailer-error.log', '_mail() function has been used, but Mail Support is disabled.');
 		return false;
+	}
+
+	if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
+		log_append('mailer-error.log', '_mail() function has been used with invalid email address: ' . $to);
+		return false;
+	}
+
+	$args = [
+		'recipient' => $to,
+		'subject' => $subject,
+		'body' => $body,
+		'altBody' => $altBody,
+		'return' => null,
+	];
+
+	$hooks->triggerFilter(HOOK_FILTER_MAIL, $args);
+
+	if ($args['return'] !== null) {
+		return (bool) $args['return'];
 	}
 
 	if(!$mailer)
@@ -1075,20 +1097,6 @@ function str_replace_first($search,$replace, $subject) {
 	return $subject;
 }
 
-function get_browser_real_ip() {
-	if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
-		$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CF_CONNECTING_IP'];
-	}
-
-	if(isset($_SERVER['REMOTE_ADDR']) && !empty($_SERVER['REMOTE_ADDR']))
-		return $_SERVER['REMOTE_ADDR'];
-	else if(isset($_SERVER['HTTP_CLIENT_IP']) && !empty($_SERVER['HTTP_CLIENT_IP']))
-		return $_SERVER['HTTP_CLIENT_IP'];
-	else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR']))
-		return $_SERVER['HTTP_X_FORWARDED_FOR'];
-
-	return '0';
-}
 function setSession($key, $value = null): void {
 	if (!is_array($key)) {
 		$key = [$key => $value];
@@ -1469,6 +1477,9 @@ function getCustomPage($name, &$success): string
 			ob_end_clean();
 		}
 		else {
+			/**
+			 * @var MyAAC_Twig_EnvironmentBridge $twig
+			 **/
 			$content .= $twig->renderInline($page['body']);
 		}
 	}
@@ -1747,8 +1758,8 @@ function removeIfFirstSlash(&$text): void
 	}
 };
 
-function escapeHtml($html): string {
-	return htmlspecialchars($html);
+function escapeHtml(string $html): string {
+	return htmlspecialchars($html, ENT_QUOTES, 'UTF-8');
 }
 
 function getGuildNameById($id)
@@ -1806,8 +1817,19 @@ function getAccountIdentityColumn(): string
 	return 'id';
 }
 
-function isCanary(): bool
+function hasLastDayPremiumEndColumn(): bool
 {
+	global $db;
+
+	if (!$db->hasTable('server_config')) {
+		return false;
+	}
+
+	$serverConfig = ServerConfig::where('config', 'db_version')->first();
+	if (!$serverConfig || $serverConfig->value < 36) {
+		return false;
+	}
+
 	$dataPackDirectory = configLua('dataPackDirectory');
 	return isset($dataPackDirectory);
 }
@@ -1847,6 +1869,35 @@ function getStatusUptimeReadable(int $uptime): string
 	$min = floor($uptime / $fullMinute);
 
 	return "{$y}{$m}{$d}{$hours}h {$min}m";
+}
+
+
+function is_sub_dir(?string $path = NULL, string $parent_folder = BASE): bool|string
+{
+	//Get directory path minus last folder
+	$dir = dirname($path);
+	$folder = substr($path, strlen($dir));
+
+	//Check the base dir is valid
+	$dir = realpath($dir);
+
+	//Only allow valid filename characters
+	$folder = preg_replace('/[^a-z0-9\.\-_]/i', '', $folder);
+
+	//If this is a bad path or a bad end folder name
+	if( !$dir OR !$folder || $folder === '.') {
+		return false;
+	}
+
+	//Rebuild path
+	$path = $dir. '/' . $folder;
+
+	//If this path is higher than the parent folder
+	if( strcasecmp($path, $parent_folder) > 0 ) {
+		return $path;
+	}
+
+	return false;
 }
 
 // validator functions

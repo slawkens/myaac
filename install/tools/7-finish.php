@@ -14,12 +14,12 @@ ini_set('max_execution_time', 300);
 @ob_end_flush();
 ob_implicit_flush();
 
-header('X-Accel-Buffering: no');
-
-if(isset($config['installed']) && $config['installed'] && !isset($_SESSION['saved'])) {
+if(file_exists(BASE . 'install/install.lock')) {
 	warning($locale['already_installed']);
 	return;
 }
+
+header('X-Accel-Buffering: no');
 
 require SYSTEM . 'init.php';
 
@@ -64,13 +64,22 @@ foreach($_SESSION as $key => $value) {
 		unset($_SESSION[$key]);
 	}
 }
-unset($_SESSION['saved']);
+
 if(file_exists(CACHE . 'install.txt')) {
 	unlink(CACHE . 'install.txt');
 }
 
+$successOne = true;
 if(file_exists(BASE . 'install/ip.txt')) {
-	unlink(BASE . 'install/ip.txt');
+	$successOne = unlink(BASE . 'install/ip.txt');
+}
+
+$successTwo = file_put_contents(BASE . 'install/install.lock',
+	'This file is used to prevent the installation process from running again. You can delete it if you want to run the installer again.'
+);
+
+if (!$successOne && !$successTwo) {
+	error($locale['step_finish_fatal_error']);
 }
 
 $locale['step_finish_desc'] = str_replace('$ADMIN_PANEL$', generateLink(str_replace('tools/', '',ADMIN_URL), $locale['step_finish_admin_panel'], true), $locale['step_finish_desc']);

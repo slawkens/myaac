@@ -110,6 +110,12 @@ return [
 			'desc' => 'Format: UA-XXXXXXX-X',
 			'default' => '',
 		],
+		'visitors_counter_ttl' => [
+			'name' => 'Visitors Counter TTL',
+			'type' => 'number',
+			'desc' => 'Time To Live for Visitors Counter. In other words - how long user will be marked as online. In Minutes',
+			'default' => 10,
+		],
 		[
 			'type' => 'section',
 			'title' => 'Template'
@@ -162,18 +168,27 @@ return [
 		'footer_load_time' => [
 			'name' => 'Load Time',
 			'type' => 'boolean',
-			'desc' => 'Display load time of the page in the footer',
+			'desc' => 'Display load time of the page in the footer?',
 			'default' => true,
 		],
-		// do we really want this? I'm leaving it for consideration
-		/*
+		'footer_visitors_counter' => [
+			'name' => 'Visitors Counter',
+			'type' => 'boolean',
+			'desc' => 'Show visitors counter in the footer? It still will be shown in admin panel',
+			'default' => true,
+		],
+		'footer_views_counter' => [
+			'name' => 'Views Counter',
+			'type' => 'boolean',
+			'desc' => 'Show Views Counter in the footer? It still will be shown in admin panel',
+			'default' => true,
+		],
 		'footer_powered_by' => [
-			'name' => 'Display Powered by MyAAC',
+			'name' => 'Powered by MyAAC',
 			'type' => 'boolean',
 			'desc' => 'Do you want to show <i>Powered by MyAAC</i> slogan in the footer?',
 			'default' => true,
 		],
-		*/
 		/*'language' => [
 			'name' => 'Language',
 			'type' => 'options',
@@ -187,31 +202,6 @@ return [
 			'default' => false,
 			'desc' => 'default language (currently only English available)'
 		],*/
-		[
-			'type' => 'section',
-			'title' => 'Counters'
-		],
-		'visitors_counter' => [
-			'name' => 'Visitors Counter',
-			'type' => 'boolean',
-			'desc' => 'Enable Visitors Counter? It will show list of online members on the website in Admin Panel',
-			'default' => true,
-		],
-		'visitors_counter_ttl' => [
-			'name' => 'Visitors Counter TTL',
-			'type' => 'number',
-			'desc' => 'Time To Live for Visitors Counter. In other words - how long user will be marked as online. In Minutes',
-			'default' => 10,
-			'show_if' => [
-				'visitors_counter', '=', 'true'
-			]
-		],
-		'views_counter' => [
-			'name' => 'Views Counter',
-			'type' => 'boolean',
-			'desc' => 'Enable Views Counter? It will show how many times the website has been viewed by users',
-			'default' => true,
-		],
 		[
 			'type' => 'section',
 			'title' => 'Misc'
@@ -572,7 +562,7 @@ Sent by MyAAC,<br/>
 			]
 		],
 		'smtp_port' => [
-			'name' => 'SMTP Host',
+			'name' => 'SMTP Port',
 			'type' => 'number',
 			'desc' => '25 (default) / 587 (tls - GMail, Microsoft Outlook)',
 			'default' => 25,
@@ -879,6 +869,12 @@ Sent by MyAAC,<br/>
 					return array_map('trim', explode(',', $value));
 				},
 			],
+		],
+		'create_character_name_require_vowels' => [
+			'name' => 'Require Vowels',
+			'type' => 'boolean',
+			'desc' => 'Should character names be required to have vowels (a, e, i, o, u)?',
+			'default' => true,
 		],
 		'create_character_name_monsters_check' => [
 			'name' => 'Block Monsters Names',
@@ -1756,6 +1752,34 @@ Sent by MyAAC,<br/>
 				'<br/><strong>In minutes.</strong> 0 to disable.',
 			'default' => 10,
 		],
+
+		[
+			'type' => 'section',
+			'title' => 'PHP Session',
+		],
+
+		'session_samesite' => [
+			'name' => 'PHP Session SameSite',
+			'type' => 'options',
+			'options' => ['Lax' => 'Lax', 'Strict' => 'Strict', 'None' => 'None',],
+
+			'desc' => 'SameSite cookies allow you to declare if your cookie should be restricted to a first-party or same-site context. This provides some protection against cross-site request forgery attacks (CSRF).<br/>' .
+			'Recommended: <strong>Lax</strong><br/>' .
+			'<strong>Lax</strong> = Cookies are not sent on normal cross-site subrequests (for example to load images or frames into a third party site), but are sent when a user is navigating to the origin site (i.e., when following a link).' . '<br/>' .
+			'<strong>Strict</strong> = Cookies will only be sent in a first-party context and not be sent along with requests initiated by third party websites.<br/>' .
+			'In this mode, you will be logged out when you click a link from another site following to your site.' . '<br/>' .
+			'<strong>None</strong> = Cookies will be sent in all contexts, i.e., in responses to both first-party and cross-origin requests.<br/>' .
+			'This means zero security.' . '<br/><br/>' .
+			'Re-logout is needed to apply changes to this setting.<br/><br/>' .
+			'<strong>TL;DR</strong><br/>' .
+			'None means disabled<br/>' .
+	 		'Lax is recommended for most cases, Strict can cause problems with some browsers and features (like login from another site)<br/><br/>' .
+	 		'<strong style="color: red;">WARNING:</strong> Only change if you know what you are doing!<br/>',
+
+			'default' => 'Lax',
+			'is_config' => true,
+		],
+
 	],
 	'callbacks' => [
 		'beforeSave' => function(&$settings, &$values) {

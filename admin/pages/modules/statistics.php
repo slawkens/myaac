@@ -16,6 +16,11 @@ $count = $eloquentConnection->query()
 		'total_houses' => House::selectRaw('COUNT(id)'),
 	])->first();
 
+$count->views = getDatabaseConfig('views_counter');
+
+$visitors = new \MyAAC\Visitors(setting('core.visitors_counter_ttl'));
+$count->visitors = $visitors->getAmountVisitors();
+
 $twig->display('statistics.html.twig', array(
 	'count' => $count,
 ));

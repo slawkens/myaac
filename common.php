@@ -26,8 +26,8 @@
 if (version_compare(phpversion(), '8.1', '<')) die('PHP version 8.1 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '2.0-dev';
-const DATABASE_VERSION = 50;
+const MYAAC_VERSION = '2.0-alpha';
+const DATABASE_VERSION = 52;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -84,7 +84,6 @@ const TOOLS = BASE . 'tools/';
 const VENDOR = BASE . 'vendor/';
 
 // other dirs
-const SESSIONS_DIR = SYSTEM . 'php_sessions';
 const GUILD_IMAGES_DIR = 'images/guilds/';
 const EDITOR_IMAGES_DIR = 'images/editor/';
 const GALLERY_DIR = 'images/gallery/';
@@ -117,13 +116,23 @@ const SMTP_SECURITY_TLS = 2;
 
 const ACCOUNT_NUMBER_LENGTH = 8;
 
-if (!IS_CLI) {
-	session_save_path(SESSIONS_DIR);
-	session_start();
-}
-
 if (file_exists(BASE . 'config.local.php')) {
 	require BASE . 'config.local.php';
+}
+
+if (!IS_CLI) {
+	@ini_set('session.use_strict_mode', 1);
+
+	if (@$config['session_samesite'] == 'None') {
+		$config['session_samesite'] = '';
+	}
+
+	session_set_cookie_params([
+		'httponly' => true,
+		'samesite' => $config['session_samesite'] ?? 'Lax',
+	]);
+
+	session_start();
 }
 
 require SYSTEM . 'base.php';

@@ -22,7 +22,7 @@ csrfProtect();
 $hasPointsColumn = $db->hasColumn('accounts', 'premium_points');
 $freePremium = getBoolean(configLua('freePremium'));
 
-function admin_give_points($points): void
+function admin_give_points(int $points): void
 {
 	global $hasPointsColumn;
 
@@ -31,21 +31,22 @@ function admin_give_points($points): void
 		return;
 	}
 
-	if (!Account::query()->increment('premium_points', $points)) {
+	if (Account::query()->increment('premium_points', $points) === false) {
 		displayMessage('Failed to add points.');
 		return;
 	}
+
 	displayMessage($points . ' points added to all accounts.', true);
 }
 
-function admin_give_coins($coins): void
+function admin_give_coins(int $coins): void
 {
 	if (!HAS_ACCOUNT_COINS) {
 		displayMessage('Coins not supported.');
 		return;
 	}
 
-	if (!Account::query()->increment('coins', $coins)) {
+	if (Account::query()->increment('coins', $coins) === false) {
 		displayMessage('Failed to add coins.');
 		return;
 	}
@@ -53,7 +54,7 @@ function admin_give_coins($coins): void
 	displayMessage($coins . ' coins added to all accounts.', true);
 }
 
-function admin_give_premdays($days): void
+function admin_give_premdays(int $days): void
 {
 	global $db, $freePremium;
 
@@ -65,63 +66,61 @@ function admin_give_premdays($days): void
 	$value = $days * 86400;
 	$now = time();
 
-	// othire
-	if ($db->hasColumn('accounts', 'premend')) {
-		// append premend
-		if (Account::where('premend', '>', $now)->increment('premend', $value)) {
-			// set premend
-			if (Account::where('premend', '<=', $now)->update(['premend' => $now + $value])) {
+	// tfs 1.x & othire
+	if ($db->hasColumn('accounts', 'premium_ends_at') || $db->hasColumn('accounts', 'premend')) {
+		$column = $db->hasColumn('accounts', 'premium_ends_at') ? 'premium_ends_at' : 'premend';
+		// append column
+		if (Account::where($column, '>', $now)->increment($column, $value) !== false) {
+			// set column
+			if (Account::where($column, '<=', $now)->update([$column => $now + $value]) !== false) {
 				displayMessage($days . ' premium days added to all accounts.', true);
 			} else {
-				displayMessage('Failed to execute set query.');
+				displayMessage("Failed to execute update $column query.");
 			}
 		} else {
-			displayMessage('Failed to execute append query.');
+			displayMessage("Failed to execute increment $column query.");
 		}
 
 		return;
 	}
 
-	// tfs 0.x
 	if ($db->hasColumn('accounts', 'premdays')) {
-		// append premdays
-		if (Account::query()->update(['premdays' => $days])) {
-			// append lastday
-			if (Account::where('lastday', '>', $now)->increment('lastday', $value)) {
-				// set lastday
-				if (Account::where('lastday', '<=', $now)->update(['lastday' => $now + $value])) {
-					displayMessage($days . ' premium days added to all accounts.', true);
+		if (hasLastDayPremiumEndColumn()) {
+			// canary
+			if (Account::where('lastday', '>', $now)->increment('lastday', $value) !== false) {
+				if (Account::where('lastday', '<=', $now)->update(['lastday' => $now + $value]) !== false) {
+					if (Account::query()->increment('premdays', $days) !== false) {
+						displayMessage($days . ' premium days added to all accounts.', true);
+					}
+					else {
+						displayMessage('Failed to execute increment premdays query.');
+					}
 				} else {
-					displayMessage('Failed to execute set query.');
+					displayMessage('Failed to execute update lastday query.');
 				}
 			} else {
-				displayMessage('Failed to execute append query.');
+				displayMessage('Failed to execute increment lastday query.');
 			}
-		} else {
-			displayMessage('Failed to execute set days query.');
+
+			return;
 		}
-
-		return;
-	}
-
-	// tfs 1.x
-	if ($db->hasColumn('accounts', 'premium_ends_at')) {
-		// append premium_ends_at
-		if (Account::where('premium_ends_at', '>', $now)->increment('premium_ends_at', $value)) {
-			// set premium_ends_at
-			if (Account::where('premium_ends_at', '<=', $now)->update(['premium_ends_at' => $now + $value])) {
-				displayMessage($days . ' premium days added to all accounts.', true);
+		else {
+			// tfs 0.x
+			if (Account::query()->increment('premdays', $days) !== false) {
+				if (Account::query()->update(['lastday' => $now]) !== false) {
+					displayMessage($days . ' premium days added to all accounts.', true);
+				} else {
+					displayMessage('Failed to execute update lastday query.');
+				}
 			} else {
-				displayMessage('Failed to execute set query.');
+				displayMessage('Failed to execute increment premdays query.');
 			}
-		} else {
-			displayMessage('Failed to execute append query.');
 		}
 
 		return;
 	}
 
-	displayMessage('Premium Days not supported.');
+	displayMessage('Premium Days adding not supported for your OTS engine.');
 }
 
 if (!empty(ACTION) && isRequestMethod('post')) {
@@ -160,7 +159,7 @@ else {
 	));
 }
 
-function displayMessage($message, $success = false): void
+function displayMessage(string $message, bool $success = false): void
 {
 	global $twig, $hasPointsColumn, $freePremium;
 

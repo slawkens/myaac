@@ -46,6 +46,15 @@ if (!is_array($settingsFile)) {
 	return;
 }
 
+if (isset($_POST['reset']) && $_POST['reset'] == '1') {
+	$settings = Settings::getInstance();
+
+	$settings->deleteFromDatabase($settingsFile['key']);
+	$settings->clearCache();
+
+	success('Settings for this plugin has been reset.');
+}
+
 $settingsKeyName = ($plugin == 'core' ? $plugin : $settingsFile['key']);
 
 $title = ($plugin == 'core' ? 'Settings' : 'Plugin Settings - ' . $settingsFile['name']);
@@ -57,4 +66,5 @@ $twig->display('admin.settings.html.twig', [
 	'settings' => $settingsFile['settings'],
 	'script' => $settingsParsed['script'],
 	'settingsKeyName' => $settingsKeyName,
+	'pluginName' => $plugin,
 ]);

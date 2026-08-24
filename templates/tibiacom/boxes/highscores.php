@@ -1,15 +1,13 @@
 <?php
-
-$topPlayers = getTopPlayers(5);
-foreach($topPlayers as &$player) {
-	$outfit_url = '';
-	if (setting('core.online_outfit')) {
-		$outfit_url = setting('core.outfit_images_url') . '?id=' . $player['looktype']	. (!empty
-			($player['lookaddons']) ? '&addons=' . $player['lookaddons'] : '') . '&head=' . $player['lookhead'] . '&body=' . $player['lookbody'] . '&legs=' . $player['looklegs'] . '&feet=' . $player['lookfeet'];
-
-		$player['outfit'] = $outfit_url;
+$topPlayers = Cache::remember('tibiacom_highscores_top_players', 10 * 60, function() {
+	$topPlayers = getTopPlayers(5);
+	foreach($topPlayers as &$player) {
+		$player['outfit'] = $player['outfit_url'];
+		$player['link'] = getPlayerLink($player['id'], false);
 	}
-}
+
+	return $topPlayers;
+});
 
 $twig->display('highscores.html.twig', array(
 	'topPlayers' => $topPlayers
