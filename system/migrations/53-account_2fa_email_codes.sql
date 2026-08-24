@@ -1,4 +1,4 @@
-CREATE TABLE `myaac_account_email_codes`
+CREATE TABLE `myaac_account_2fa_email_codes`
 (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`account_id` int NOT NULL,

@@ -1,6 +1,6 @@
 <?php
 // 2fa
-// add the myaac_account_email_codes
+// add the myaac_account_2fa_email_codes
 
 /**
  * @var OTS_DB_MySQL $db
@@ -15,9 +15,9 @@ $up = function () use ($db) {
 		$db->addColumn('accounts', '2fa_secret', "varchar(16) NOT NULL DEFAULT '' AFTER `2fa_type`");
 	}
 
-	// add myaac_account_email_codes table
-	if (!$db->hasTable(TABLE_PREFIX . 'account_email_codes')) {
-		$db->exec(file_get_contents(__DIR__ . '/53-account_email_codes.sql'));
+	// add myaac_account_2fa_email_codes table
+	if (!$db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {
+		$db->exec(file_get_contents(__DIR__ . '/53-account_2fa_email_codes.sql'));
 	}
 };
 
@@ -30,7 +30,7 @@ $down = function () use ($db) {
 		$db->dropColumn('accounts', '2fa_secret');
 	}
 
-	if ($db->hasTable(TABLE_PREFIX . 'account_email_codes')) {
-		$db->dropTable(TABLE_PREFIX . 'account_email_codes');
+	if ($db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {
+		$db->dropTable(TABLE_PREFIX . 'account_2fa_email_codes');
 	}
 };

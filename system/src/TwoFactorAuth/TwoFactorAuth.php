@@ -4,7 +4,7 @@ namespace MyAAC\TwoFactorAuth;
 
 use BaconQrCode\Renderer\GDLibRenderer;
 use BaconQrCode\Writer;
-use MyAAC\Models\AccountEMailCode;
+use MyAAC\Models\AccountTwoFactorEMailCode;
 use MyAAC\TwoFactorAuth\Gateway\AppAuthGateway;
 use MyAAC\TwoFactorAuth\Gateway\EmailAuthGateway;
 use OTPHP\TOTP;
@@ -227,11 +227,11 @@ class TwoFactorAuth
 	}
 
 	public function hasRecentEmailCode(int $since = self::EMAIL_CODE_VALID_UNTIL): bool {
-		return AccountEMailCode::where('account_id', '=', $this->account->getId())->where('created_at', '>', time() - $since)->first() !== null;
+		return AccountTwoFactorEMailCode::where('account_id', '=', $this->account->getId())->where('created_at', '>', time() - $since)->first() !== null;
 	}
 
 	public function deleteOldCodes(): void {
-		AccountEMailCode::where('account_id', '=', $this->account->getId())->delete();
+		AccountTwoFactorEMailCode::where('account_id', '=', $this->account->getId())->delete();
 	}
 
 	public function initTOTP(string $secret): TOTP
@@ -278,7 +278,7 @@ class TwoFactorAuth
 			return;
 		}
 
-		AccountEMailCode::create([
+		AccountTwoFactorEMailCode::create([
 			'account_id' => $this->account->getId(),
 			'code' => $newCode,
 		]);
