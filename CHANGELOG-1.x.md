@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.9.3 - 24.08.2026]
+
+### Added
+* Add show views and visitors counter in admin dashboard (https://github.com/slawkens/myaac/commit/58eae138b831a23e2549004600a4bb109cea639a)
+
+### Fixed
+* Accounts Editor: Prevent duplicate emails (https://github.com/slawkens/myaac/commit/9cc44c1e1ff9f9e8475bd1a4c11a3a594ee9db71)
+* Admin Menus: Fix submenus ordering (https://github.com/slawkens/myaac/commit/51d20bce9405dbb122f26d56edbf77dac2a0b561)
+* Account Manage: Fix wrong recovery key generate price showed (https://github.com/slawkens/myaac/commit/e3158ce8833ab1d7e9c5f45296b527660f3b2952)
+* Accounts Editor: Make player rename check case-insensitive (https://github.com/slawkens/myaac/commit/50861897b4a7ce18a67775bb09fd9c8aa3cb8017)
+
+### Changed
+* Make "Powered by MyAAC" configurable (https://github.com/slawkens/myaac/commit/4f5e466480f1a9165b6600040a69153377fbe4f5)
+* Make counters (visitors & views) always enabled, just configurable in footer (https://github.com/slawkens/myaac/commit/92a47f3b321ad81b5b3851d0348220cadcf36ee9)
+
+
 ## [1.9.2 - 11.08.2026]
 
 ### Added
