@@ -14,10 +14,12 @@ $count = $eloquentConnection->query()
 		'total_guilds' => Guild::selectRaw('COUNT(id)'),
 		'total_monsters' => Monster::selectRaw('COUNT(id)'),
 		'total_houses' => House::selectRaw('COUNT(id)'),
-	])->get();
+	])->first();
 
-$count = $count->toArray();
-$count['views'] = getDatabaseConfig('views_counter');
+$count->views = getDatabaseConfig('views_counter');
+
+$visitors = new \MyAAC\Visitors(setting('core.visitors_counter_ttl'));
+$count->visitors = $visitors->getAmountVisitors();
 
 $twig->display('statistics.html.twig', array(
 	'count' => $count,
