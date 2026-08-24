@@ -54,16 +54,17 @@ $menus = [
 
 $hooks->trigger(HOOK_ADMIN_MENU);
 
-usort($menus, function ($a, $b) {
-	return $a['order'] - $b['order'];
-});
+$menuSortFunction = function ($a, $b) {
+	return $a['order'] <=> $b['order'];
+};
 
-foreach ($menus as $i => $menu) {
+usort($menus, $menuSortFunction);
+
+foreach ($menus as &$menu) {
 	if (isset($menu['link']) && is_array($menu['link'])) {
-		usort($menu['link'], function ($a, $b) {
-			return $a['order'] - $b['order'];
-		});
+		usort($menu['link'], $menuSortFunction);
 	}
 }
+unset($menu, $menuSortFunction);
 
 return $menus;

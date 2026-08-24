@@ -574,13 +574,13 @@ function template_footer(): string
 		$footer[] = generateLink(ADMIN_URL, 'Admin Panel', true);
 	}
 
-	if(setting('core.visitors_counter')) {
+	if (setting('core.footer_visitors_counter')) {
 		global $visitors;
 		$amount = $visitors->getAmountVisitors();
 		$footer[] = 'Currently there ' . ($amount > 1 ? 'are' : 'is') . ' ' . $amount . ' visitor' . ($amount > 1 ? 's' : '') . '.';
 	}
 
-	if(setting('core.views_counter')) {
+	if (setting('core.footer_views_counter')) {
 		global $views_counter;
 		$footer[] = 'Page has been viewed ' . $views_counter . ' times.';
 	}
@@ -594,8 +594,9 @@ function template_footer(): string
 		$footer[] = '' . $settingFooter;
 	}
 
-	// please respect my work and help spreading the word, thanks!
-	$footer[] = base64_decode('UG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vbXktYWFjLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPk15QUFDLjwvYT4=');
+	if (setting('core.footer_powered_by')) {
+		$footer[] = 'Powered by <a href="https://my-aac.org" target="_blank">MyAAC</a>.';
+	}
 
 	global $hooks;
 	$hooks->triggerFilter(HOOK_FILTER_THEME_FOOTER, $footer);
@@ -1650,11 +1651,7 @@ function hasLastDayPremiumEndColumn(): bool
 	}
 
 	$serverConfig = ServerConfig::where('config', 'db_version')->first();
-	if (!$serverConfig) {
-		return false;
-	}
-
-	if ($serverConfig->value < 36) {
+	if (!$serverConfig || $serverConfig->value < 36) {
 		return false;
 	}
 
