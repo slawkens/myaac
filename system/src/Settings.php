@@ -165,8 +165,8 @@ class Settings implements \ArrayAccess
 		<div class="tab-content" id="tab-content">
 			<?php
 
-			$checkbox = function ($key, $type, $value, $enabled = true) {
-				echo '<label><input type="radio" id="' . $key . '_' . ($type ? 'yes' : 'no') . '" name="settings[' . $key . ']" value="' . ($type ? 'true' : 'false') . '" ' . ($value === $type ? 'checked' : '') . ' ' . ($enabled ? '' : 'disabled') . '/>' . ($type ? 'Yes' : 'No') . '</label> ';
+			$checkbox = function ($key, $type, $value, $extraAttributes = '') {
+				echo '<label><input type="radio" id="' . $key . '_' . ($type ? 'yes' : 'no') . '" name="settings[' . $key . ']" value="' . ($type ? 'true' : 'false') . '" ' . ($value === $type ? 'checked' : '') . ' ' . $extraAttributes . '/>' . ($type ? 'Yes' : 'No') . '</label> ';
 			};
 
 			$i = 0;
@@ -211,6 +211,77 @@ class Settings implements \ArrayAccess
 							<?php
 				}
 
+				$extraAttributes = '';
+				$alreadyAdded = [];
+
+				foreach ([
+					'min',
+					'max',
+					'step',
+					'size',
+					'rows',
+					'cols',
+					'minlength',
+					'maxlength',
+					'placeholder',
+					'pattern',
+					'autocomplete'
+				] as $attr) {
+					if ($setting['type'] === 'textarea' && in_array($attr, ['rows', 'cols'])) {
+						continue;
+					}
+
+					$extraAttributes .= (isset($setting['attrs'][$attr]) ? ' ' . $attr . '="' . $setting['attrs'][$attr] . '"' : '');
+					$alreadyAdded[] = $attr;
+				}
+
+				$attrsDisabled = (isset($setting['attrs']['disabled']) && $setting['attrs']['disabled']);
+
+				foreach ([
+					'readonly',
+					'disabled',
+					'required',
+					'autofocus'
+				] as &$attr) {
+					if (isset($setting['attrs'][$attr]) && !is_bool($setting['attrs'][$attr])) {
+						throw new \RuntimeException("Setting $plugin.$key: attribute '$attr' must be boolean");
+					}
+
+					if ($attr === 'disabled') {
+						$enabled = $setting['enabled'] ?? !$attrsDisabled ?? true;
+
+						if (!$enabled) {
+							$extraAttributes .= (!$enabled ? ' ' . $attr : '');
+						}
+
+						$alreadyAdded[] = $attr;
+						continue;
+					}
+
+					$extraAttributes .= (isset($setting['attrs'][$attr]) && $setting['attrs'][$attr] ? ' ' . $attr : '');
+					$alreadyAdded[] = $attr;
+				}
+
+				foreach ($setting['attrs'] ?? [] as $attr => $value) {
+					if (in_array($attr, $alreadyAdded)) {
+						continue;
+					}
+
+					if (is_bool($value)) {
+						if ($value) {
+							$extraAttributes .= ' ' . $attr;
+						}
+					} else {
+						$extraAttributes .= ' ' . $attr . '="' . $value . '"';
+					}
+				}
+
+				$min = (isset($setting['min']) ? ' min="' . $setting['min'] . '"' : '');
+				$max = (isset($setting['max']) ? ' max="' . $setting['max'] . '"' : '');
+				$step = (isset($setting['step']) ? ' step="' . $setting['step'] . '"' : '');
+
+				$extraAttributes .= $min . $max . $step;
+
 				if (isset($setting['hidden']) && $setting['hidden']) {
 					$value = '';
 					if ($setting['type'] === 'boolean') {
@@ -233,8 +304,8 @@ class Settings implements \ArrayAccess
 						$value = ($setting['default'] ?? false);
 					}
 
-					$checkbox($key, true, $value, $setting['enabled'] ?? true);
-					$checkbox($key, false, $value, $setting['enabled'] ?? true);
+					$checkbox($key, true, $value, $extraAttributes);
+					$checkbox($key, false, $value, $extraAttributes);
 				}
 
 				elseif ($setting['type'] === 'textarea') {
@@ -243,15 +314,19 @@ class Settings implements \ArrayAccess
 					}
 
 					$value = ($settingsDb[$key] ?? ($setting['default'] ?? ''));
-					$valueWithSpaces = array_map('trim', preg_split('/\r\n|\r|\n/', trim($value)));
-					$rows = count($valueWithSpaces);
-					if ($rows < 2) {
-						$rows = 2; // always min 2 rows for textarea
+
+					if (!isset($setting['attrs']['rows'])) {
+						$valueWithSpaces = array_map('trim', preg_split('/\r\n|\r|\n/', trim($value)));
+						$rows = count($valueWithSpaces);
+						$rows = max($rows, 2); // always min 2 rows for textarea
+					}
+					else {
+						$rows = $setting['attrs']['rows'];
 					}
 
-					$enabled = $setting['enabled'] ?? true;
+					$cols = $setting['attrs']['cols'] ?? 50;
 
-					echo '<textarea class="form-control" rows="' . $rows . '" name="settings[' . $key . ']" id="' . $key . '" ' . ($enabled ? '' : 'disabled') . '>' . escapeHtml($value) . '</textarea>';
+					echo '<textarea class="form-control" rows="' . $rows . '" cols="' . $cols . '" name="settings[' . $key . ']" id="' . $key . '" ' . $extraAttributes . '>' . escapeHtml($value) . '</textarea>';
 				}
 
 				elseif ($setting['type'] === 'options' || $setting['type'] === 'select') {
@@ -295,9 +370,7 @@ class Settings implements \ArrayAccess
 						}
 					}
 
-					$enabled = $setting['enabled'] ?? true;
-
-					echo '<select class="form-control" name="settings[' . $key . ']" id="' . $key . '" ' . ($enabled ? '' : 'disabled') . '>';
+					echo '<select class="form-control" name="settings[' . $key . ']" id="' . $key . '" ' . $extraAttributes . '>';
 					foreach ($setting['options'] as $value => $option) {
 						$compareTo = ($settingsDb[$key] ?? ($setting['default'] ?? ''));
 						if($value === 'true') {
@@ -330,35 +403,6 @@ class Settings implements \ArrayAccess
 				else {
 					if (in_array($setting['type'], ['float', 'double', 'integer', 'int'])) {
 						$setting['type'] = 'number';
-					}
-
-					$extraAttributes = '';
-
-					foreach ([
-						'min',
-						'max',
-						'step',
-						'size',
-						'minlength',
-						'maxlength',
-						'placeholder',
-						'pattern',
-						'autocomplete'
-					] as $attr) {
-						$extraAttributes .= (isset($setting[$attr]) ? ' ' . $attr . '="' . $setting[$attr] . '"' : '');
-					}
-
-					foreach ([
-						'readonly',
-						'disabled',
-						'required',
-						'autofocus'
-					] as $attr) {
-						if (isset($setting[$attr]) && !is_bool($setting[$attr])) {
-							throw new \RuntimeException("Setting $plugin.$key: attribute '$attr' must be boolean");
-						}
-
-						$extraAttributes .= (isset($setting[$attr]) && $setting[$attr] ? ' ' . $attr : '');
 					}
 
 					if ($setting['type'] === 'password') {
