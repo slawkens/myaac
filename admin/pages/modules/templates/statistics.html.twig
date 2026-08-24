@@ -1,8 +1,17 @@
 <div class="col">
 	<div class="info-box">
+		<span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
+		<div class="info-box-content">
+			<span class="info-box-text" title="Amount of users currently browsing the site">Visitors:</span>
+			<span class="info-box-number">{{ count.visitors }}</span>
+		</div>
+	</div>
+</div>
+<div class="col">
+	<div class="info-box">
 		<span class="info-box-icon bg-success elevation-1"><i class="fas fa-chart-bar"></i></span>
 		<div class="info-box-content">
-			<span class="info-box-text">Views Counter:</span>
+			<span class="info-box-text" title="Total number of page views">Views:</span>
 			<span class="info-box-number">{{ count.views }}</span>
 		</div>
 	</div>
