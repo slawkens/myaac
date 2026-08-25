@@ -73,15 +73,6 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		if(Spells::loadFromXML()) {
-			success(self::$locale['step_database_loaded_spells'] . self::getLoadedTime());
-		}
-		else {
-			error(Spells::getLastError());
-		}
-
-		self::$startTime = microtime(true);
-
 		$cache = Cache::getInstance();
 		if ($cache->enabled()) {
 			$cache->delete('towns'); // will be reloaded after next page load

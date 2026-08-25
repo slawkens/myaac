@@ -892,7 +892,7 @@ Sent by MyAAC,<br/>
 		'create_character_name_spells_check' => [
 			'name' => 'Block Spells Names',
 			'type' => 'boolean',
-			'desc' => 'Should spells names and words be blocked when creating character?',
+			'desc' => 'Should spells names and words be blocked when creating character? The spells plugin needs to be installed',
 			'default' => true,
 		],
 		'use_character_sample_skills' => [

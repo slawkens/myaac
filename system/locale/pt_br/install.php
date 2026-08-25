@@ -83,7 +83,6 @@ $locale['step_database_loaded_items'] = 'Items foram carregados...';
 $locale['step_database_loaded_weapons'] = 'Weapons foram carregadas...';
 $locale['step_database_loaded_monsters'] = 'Monsters foram carregados...';
 $locale['step_database_error_monsters'] = 'Houve alguns problemas ao carregar seu arquivo monsters.xml. Por favor, verifique $LOG$ para mais informações.';
-$locale['step_database_loaded_spells'] = 'Spells foram carregadas...';
 $locale['step_database_created_account'] = 'Conta de administrador criada...';
 $locale['step_database_created_news'] = 'Notícias foram criadas...';
 

@@ -90,7 +90,6 @@ $locale['step_database_loaded_items'] = 'Items wurden geladen...';
 $locale['step_database_loaded_weapons'] = 'Waffen wurden geladen...';
 $locale['step_database_loaded_monsters'] = 'Monster wurden geladen...';
 $locale['step_database_error_monsters'] = 'Beim Laden der Datei monsters.xml sind einige Probleme aufgetreten. Bitte überprüfen Sie $LOG$ für weitere Informationen.';
-$locale['step_database_loaded_spells'] = 'Zauber wurden geladen...';
 $locale['step_database_loaded_towns'] = 'Städte wurden geladen...';
 $locale['step_database_error_towns'] = 'Beim Laden der Städte sind einige Probleme aufgetreten. Sie müssen diese manuell in den Einstellungen konfigurieren.';
 $locale['step_database_created_account'] = 'Administratorkonto wurde erstellt...';
