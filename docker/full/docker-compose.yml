@@ -1,3 +1,4 @@
+name: myaac-full
 services:
   web:
     environment:

@@ -39,7 +39,7 @@ RUN mkdir -p /config && chown -R www-data:www-data /config
 
 USER $user
 
-COPY --chown=www-data:www-data config.lua /home/$user/server
+COPY --chown=www-data:www-data docker/full/config.lua /home/$user/server
 
 WORKDIR /var/www/html
 
@@ -53,7 +53,7 @@ RUN echo '*' > install/ip.txt && composer install
 
 USER root
 
-COPY --chmod=755 entrypoint.sh /usr/local/bin/myaac-entrypoint
+COPY --chmod=755 docker/full/entrypoint.sh /usr/local/bin/myaac-entrypoint
 
 ENTRYPOINT ["myaac-entrypoint"]
 CMD ["bash", "-c", "sh /usr/local/bin/sync-windows-files.sh & apache2-foreground"]
