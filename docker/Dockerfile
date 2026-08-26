@@ -35,6 +35,8 @@ RUN mkdir -p /home/$user/.composer && \
 
 RUN chown -R www-data:www-data /var/www
 
+RUN mkdir -p /config && chown -R www-data:www-data /config
+
 USER $user
 
 COPY --chown=www-data:www-data docker/config.lua /home/$user/server
@@ -48,8 +50,6 @@ RUN rm -rf /var/www/html/node_modules \
 	&& chown -R www-data:www-data /var/www/html
 
 RUN echo '*' > install/ip.txt && composer install
-
-VOLUME /config /var/www/html/system/cache
 
 USER root
 
