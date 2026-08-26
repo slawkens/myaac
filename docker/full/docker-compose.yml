@@ -11,13 +11,13 @@ services:
         user: www-data
         uid: 33
       context: ../../
-      dockerfile: ./docker/full/Dockerfile
+      dockerfile: docker/full/Dockerfile
     restart: unless-stopped
     working_dir: /var/www/html
     depends_on:
       - db
     volumes:
-      - ./:/myaac-main-folder
+      - ../../:/myaac-main-folder
       - config:/config
     networks:
       - myaac-network
@@ -33,7 +33,7 @@ services:
       - 8003:3306
     build:
       context: ../../
-      dockerfile: ./docker/full/Dockerfile-db
+      dockerfile: docker/full/Dockerfile-db
     volumes:
       - db:/var/lib/mysql
     networks:

@@ -2,7 +2,7 @@ FROM docker.io/node:24-trixie-slim AS npm
 
 WORKDIR /myaac
 
-COPY . .
+COPY ../../ .
 RUN mv .htaccess.dist .htaccess && npm install
 
 FROM docker.io/php:8.4-apache-trixie
