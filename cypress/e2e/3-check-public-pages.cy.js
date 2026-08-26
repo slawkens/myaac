@@ -123,13 +123,6 @@ describe('Check Public Pages', () => {
 		})
 	})
 
-	it('Go to spells page', () => {
-		cy.visit({
-			url: '/spells',
-			method: 'GET',
-		})
-	})
-
 	it('Go to server info page', () => {
 		cy.visit({
 			url: '/ots-info',

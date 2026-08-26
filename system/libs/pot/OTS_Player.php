@@ -2,6 +2,7 @@
 
 use MyAAC\Models\PlayerStorage;
 use MyAAC\Models\Player as PlayerModel;
+use MyAAC\Models\PlayerSpell;
 
 /**#@+
  * @version 0.0.1
@@ -66,7 +67,6 @@ use MyAAC\Models\Player as PlayerModel;
  * @property-read OTS_House $house House which player rents.
  * @property-read OTS_Players_List $vipsList List of VIPs of player.
  * @property-read string $vocationName String vocation representation.
- * @property-read array $spellsList List of known spells.
  * @tutorial POT/Players.pkg
  */
 class OTS_Player extends OTS_Row_DAO
@@ -2955,109 +2955,43 @@ class OTS_Player extends OTS_Row_DAO
 		$this->db->query('DELETE FROM ' . $this->db->tableName('player_viplist') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('vip_id') . ' = ' . $player->getId() );
 	}
 
-/**
- * Returns list of known spells.
- *
- * <p>
- * You need global spells list resource loaded in order to use this method.
- * </p>
- *
- * @version 0.1.4
- * @since 0.1.4
- * @return array List of known spells.
- * @throws E_OTS_NotLoaded If player is not loaded.
- * @throws PDOException On PDO operation error.
- */
-	public function getSpellsList()
+	public function getSpells()
 	{
-		if( !isset($this->data['id']) )
-		{
+		if (!isset($this->data['id'])) {
 			throw new E_OTS_NotLoaded();
 		}
 
-		$spells = array();
-		$list = POT::getInstance()->getSpellsList();
-
-		// reads all known spells
-		foreach( $this->db->query('SELECT ' . $this->db->fieldName('name') . ' FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id']) as $spell)
-		{
-			// checks if there is rune, instant or conjure spell with given name
-
-			if( $list->hasRune($spell['name']) )
-			{
-				$spells[] = $list->getRune($spell['name']);
-			}
-
-			if( $list->hasInstance($spell['name']) )
-			{
-				$spells[] = $list->getInstance($spell['name']);
-			}
-
-			if( $list->hasConjure($spell['name']) )
-			{
-				$spells[] = $list->getConjure($spell['name']);
-			}
-		}
-
-		return $spells;
+		return PlayerSpell::where('player_id', $this->data['id'])->pluck('name')->toArray();
 	}
 
-/**
- * Checks if player knows given spell.
- *
- * @version 0.1.5
- * @since 0.1.4
- * @param OTS_Spell $spell Spell to be checked.
- * @return bool True if player knows given spell, false otherwise.
- * @throws E_OTS_NotLoaded If player is not loaded.
- * @throws PDOException On PDO operation error.
- */
-	public function hasSpell(OTS_Spell $spell)
+	public function hasSpell(string $name)
 	{
-		if( !isset($this->data['id']) )
-		{
+		if (!isset($this->data['id'])) {
 			throw new E_OTS_NotLoaded();
 		}
 
-		return $this->db->query('SELECT COUNT(' . $this->db->fieldName('name') . ') FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('name') . ' = ' . $this->db->quote( $spell->getName() ) )->fetchColumn() > 0;
+		return PlayerSpell::where('player_id', $this->data['id'])->where('name', $name)->exists();
 	}
 
-/**
- * Adds given spell to player's spell book (makes him knowing it).
- *
- * @version 0.1.4
- * @since 0.1.4
- * @param OTS_Spell $spell Spell to be learned.
- * @throws E_OTS_NotLoaded If player is not loaded.
- * @throws PDOException On PDO operation error.
- */
-	public function addSpell(OTS_Spell $spell)
+	public function addSpell(string $name)
 	{
-		if( !isset($this->data['id']) )
-		{
+		if (!isset($this->data['id'])) {
 			throw new E_OTS_NotLoaded();
 		}
 
-		$this->db->query('INSERT INTO ' . $this->db->tableName('player_spells') . ' (' . $this->db->fieldName('player_id') . ', ' . $this->db->fieldName('name') . ') VALUES (' . $this->data['id'] . ', ' . $this->db->quote( $spell->getName() ) . ')');
+		PlayerSpell::create([
+			'player_id' => $this->data['id'],
+			'name' => $name
+		]);
 	}
 
-/**
- * Removes given spell from player's spell book.
- *
- * @version 0.1.4
- * @since 0.1.4
- * @param OTS_Spell $spell Spell to be removed.
- * @throws E_OTS_NotLoaded If player is not loaded.
- * @throws PDOException On PDO operation error.
- */
-	public function deleteSpell(OTS_Spell $spell)
+	public function deleteSpell(string $name)
 	{
-		if( !isset($this->data['id']) )
-		{
+		if (!isset($this->data['id'])) {
 			throw new E_OTS_NotLoaded();
 		}
 
-		$this->db->query('DELETE FROM ' . $this->db->tableName('player_spells') . ' WHERE ' . $this->db->fieldName('player_id') . ' = ' . $this->data['id'] . ' AND ' . $this->db->fieldName('name') . ' = ' . $this->db->quote( $spell->getName() ) );
+		PlayerSpell::where('player_id', $this->data['id'])->where('name', $name)->delete();
 	}
 
 	public static function getPercentLevel($count, $nextLevelCount)
@@ -3238,8 +3172,8 @@ class OTS_Player extends OTS_Row_DAO
 			case 'vocationName':
 				return $this->getVocationName();
 
-			case 'spellsList':
-				return $this->getSpellsList();
+			case 'spells':
+				return $this->getSpells();
 
 			default:
 				throw new OutOfBoundsException();

@@ -27,6 +27,7 @@ namespace MyAAC;
 
 use MyAAC\Cache\Cache;
 use MyAAC\Models\Town;
+use MyAAC\Server\Items;
 
 class DataLoader
 {
@@ -40,7 +41,7 @@ class DataLoader
 	{
 		self::$startTime = microtime(true);
 
-		if(Items::loadFromXML()) {
+		if(Items::load()) {
 			success(self::$locale['step_database_loaded_items'] . self::getLoadedTime());
 		}
 		else {
@@ -68,15 +69,6 @@ class DataLoader
 		}
 		else {
 			error(self::$locale['step_database_error_npcs']);
-		}
-
-		self::$startTime = microtime(true);
-
-		if(Spells::loadFromXML()) {
-			success(self::$locale['step_database_loaded_spells'] . self::getLoadedTime());
-		}
-		else {
-			error(Spells::getLastError());
 		}
 
 		self::$startTime = microtime(true);

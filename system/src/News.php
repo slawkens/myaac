@@ -193,27 +193,4 @@ class News
 
 		return false;
 	}
-
-	static public function clearCache()
-	{
-		$cache = Cache::getInstance();
-		if (!$cache->enabled()) {
-			return;
-		}
-
-		$tmp = '';
-		foreach (get_templates() as $template) {
-			if ($cache->fetch('news_' . $template . '_' . NEWS, $tmp)) {
-				$cache->delete('news_' . $template . '_' . NEWS);
-			}
-
-			if ($cache->fetch('news_' . $template . '_' . TICKER, $tmp)) {
-				$cache->delete('news_' . $template . '_' . TICKER);
-			}
-
-			if ($cache->fetch('news_' . $template . '_' . ARTICLE, $tmp)) {
-				$cache->delete('news_' . $template . '_' . ARTICLE);
-			}
-		}
-	}
 }
