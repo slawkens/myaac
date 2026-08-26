@@ -18,7 +18,6 @@ services:
       - ./:/myaac-main-folder
 
   db:
-    image: mysql:8.0
     restart: unless-stopped # always?
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
@@ -27,10 +26,10 @@ services:
       MYSQL_USER: myaac
     ports:
       - 8003:3306
+    build:
+      dockerfile: ./docker/Dockerfile-db
     volumes:
       - db:/var/lib/mysql
-    pre_start:
-      - command: bash -c 'curl --output /docker-entrypoint-initdb.d/tfs_schema.sql "https://raw.githubusercontent.com/otland/forgottenserver/refs/heads/master/schema.sql"'
 
   phpmyadmin:
     image: phpmyadmin
