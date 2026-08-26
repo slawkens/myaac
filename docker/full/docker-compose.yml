@@ -9,8 +9,8 @@ services:
       args:
         user: www-data
         uid: 33
-      context: ./
-      dockerfile: ./docker/Dockerfile
+      context: ../../
+      dockerfile: ./docker/full/Dockerfile
     restart: unless-stopped
     working_dir: /var/www/html
     depends_on:
@@ -29,7 +29,8 @@ services:
     ports:
       - 8003:3306
     build:
-      dockerfile: ./docker/Dockerfile-db
+      context: ../../
+      dockerfile: ./docker/full/Dockerfile-db
     volumes:
       - db:/var/lib/mysql
 
