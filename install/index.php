@@ -1,11 +1,10 @@
 <?php
 
-use Twig\Environment as Twig_Environment;
-use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
-
 const MYAAC_INSTALL = true;
 
 require '../common.php';
+
+use MyAAC\Hooks;
 
 // includes
 require SYSTEM . 'functions.php';
@@ -13,14 +12,19 @@ require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 require SYSTEM . 'clients.conf.php';
 
+/**
+ * @var array $locale
+ */
 // ignore undefined index from Twig autoloader
 $config['env'] = 'prod';
 
-$twig_loader = new Twig_FilesystemLoader(SYSTEM . 'templates');
-$twig = new Twig_Environment($twig_loader, array(
-	'cache' => CACHE . 'twig/',
-	'auto_reload' => true
-));
+// event system
+global $hooks;
+$hooks = new Hooks();
+$hooks->load();
+$hooks->trigger(HOOK_INIT);
+
+require SYSTEM . 'twig.php';
 
 // load installation status
 $step = $_REQUEST['step'] ?? 'welcome';
