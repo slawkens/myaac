@@ -7,6 +7,9 @@ RUN mv .htaccess.dist .htaccess && npm install
 
 FROM docker.io/php:8.4-apache-trixie
 
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
 ARG APCU_VERSION=5.1.28
 
 # Arguments defined in docker-compose.yml
