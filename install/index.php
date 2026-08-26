@@ -25,7 +25,7 @@ $twig = new Twig_Environment($twig_loader, array(
 // load installation status
 $step = $_REQUEST['step'] ?? 'welcome';
 
-$allow = false;
+$allow = getenv('MYAAC_INSTALL_IGNORE_IP_CHECK') ?? false;
 if (file_exists(BASE . 'install/ip.txt')) {
 	$ip_file_content = trim(file_get_contents(BASE . 'install/ip.txt'));
 
@@ -58,6 +58,10 @@ if ($allow) {
 			$_SESSION['var_' . $key] = $value;
 		}
 	}
+}
+
+if (getenv('MYAAC_INSTALL_SERVER_PATH')) {
+	$config['server_path'] = getenv('MYAAC_INSTALL_SERVER_PATH');
 }
 
 if($step == 'finish' && (!isset($config['installed']) || !$config['installed'])) {
