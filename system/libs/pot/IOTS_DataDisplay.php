@@ -72,3 +72,4 @@ interface IOTS_DataDisplay
  * @return string String representation.
  */
     public function displayOTBMMap(OTS_OTBMFile $map);
+}
