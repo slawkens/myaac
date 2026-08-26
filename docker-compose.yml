@@ -29,8 +29,9 @@ services:
     ports:
       - 8003:3306
     volumes:
-      - ./docker/tfs_schema.sql:/docker-entrypoint-initdb.d/tfs_schema.sql
       - db:/var/lib/mysql
+    pre_start:
+      - command: bash -c 'curl --output /docker-entrypoint-initdb.d/tfs_schema.sql "https://raw.githubusercontent.com/otland/forgottenserver/refs/heads/master/schema.sql"'
 
   phpmyadmin:
     image: phpmyadmin
