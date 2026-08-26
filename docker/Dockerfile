@@ -1,4 +1,11 @@
-FROM php:8.2-apache
+FROM docker.io/node:24-trixie-slim AS npm
+
+WORKDIR /myaac
+
+COPY . .
+RUN mv .htaccess.dist .htaccess && npm install
+
+FROM docker.io/php:8.4-apache-trixie
 
 ARG APCU_VERSION=5.1.28
 
@@ -9,48 +16,37 @@ ARG uid
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
 	git \
-	curl \
 	libpng-dev \
-	libonig-dev \
-	libxml2-dev \
 	libzip-dev \
-	zip \
-	unzip \
-	nano \
-	vim \
-	rsync
-
-RUN apt-get install -y nodejs npm
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+	rsync \
+	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql gd zip opcache
-RUN docker-php-ext-configure opcache --enable-opcache
 RUN pecl install apcu-${APCU_VERSION} && docker-php-ext-enable apcu
 
-# Enable apache rewrite mod
-RUN a2enmod rewrite
-
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN a2enmod rewrite && docker-php-ext-install pdo_mysql gd zip
 
 # Create system user to run Composer Commands
 #RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-RUN chown -R www-data.www-data /var/www
-
 USER $user
 
 WORKDIR /home/$user
+#RUN mkdir -p forgottenserver
 RUN git clone https://github.com/otland/forgottenserver.git
+#ADD https://raw.githubusercontent.com/otland/forgottenserver/refs/heads/master/schema.sql /docker-entrypoint-initdb.d/tfs_schema.sql
 
 COPY --chown=www-data:www-data docker/config.lua /home/$user/forgottenserver
 
 WORKDIR /var/www/html
+
+COPY --from=npm --chown=www-data:www-data /myaac .
+COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer
+
+RUN rm -rf /var/www/html/node_modules \
+	&& chown -R www-data:www-data /var/www/html
 
 USER root
 RUN mkdir -p /myaac-main-folder
@@ -62,12 +58,7 @@ RUN echo 'done' >> sync-windows-files.sh
 
 USER $user
 
-COPY --chown=www-data:www-data . .
-
-RUN echo '*' > install/ip.txt
-
-RUN composer install
-RUN npm install
+RUN echo '*' > install/ip.txt && composer install
 
 USER root
 
