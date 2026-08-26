@@ -54,6 +54,8 @@ RUN rm -rf /var/www/html/node_modules \
 
 RUN echo '*' > install/ip.txt && composer install
 
+COPY docker/full/php.ini /usr/local/etc/php/conf.d/99-myaac.ini
+
 USER root
 
 COPY --chmod=755 docker/full/entrypoint.sh /usr/local/bin/myaac-entrypoint
