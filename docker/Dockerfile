@@ -63,6 +63,9 @@ RUN echo 'done' >> sync-windows-files.sh
 USER $user
 
 COPY --chown=www-data:www-data . .
+
+RUN echo '*' > install/ip.txt
+
 RUN composer install
 RUN npm install
 

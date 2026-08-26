@@ -29,13 +29,13 @@ require SYSTEM . 'twig.php';
 // load installation status
 $step = $_REQUEST['step'] ?? 'welcome';
 
-$allow = getenv('MYAAC_INSTALL_IGNORE_IP_CHECK') ?? false;
+$allow = false;
 if (file_exists(BASE . 'install/ip.txt')) {
 	$ip_file_content = trim(file_get_contents(BASE . 'install/ip.txt'));
 
 	$listIP = preg_split('/\s+/', $ip_file_content);
 	foreach($listIP as $ip) {
-		if($_SERVER['REMOTE_ADDR'] == $ip) {
+		if($ip == '*' || $_SERVER['REMOTE_ADDR'] == $ip) {
 			$allow = true;
 		}
 	}

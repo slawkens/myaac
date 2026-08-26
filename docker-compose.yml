@@ -1,7 +1,6 @@
 services:
   web:
     environment:
-      MYAAC_INSTALL_IGNORE_IP_CHECK: "yes"
       MYAAC_INSTALL_SERVER_PATH: "/home/www-data/forgottenserver"
     ports:
       - 8001:80
