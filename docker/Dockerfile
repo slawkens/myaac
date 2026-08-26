@@ -18,6 +18,8 @@ RUN apt-get update && apt-get install -y \
 	libpng-dev \
 	libzip-dev \
 	rsync \
+	zip \
+	unzip \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
@@ -30,6 +32,8 @@ RUN a2enmod rewrite && docker-php-ext-install pdo_mysql gd zip
 RUN mkdir -p /home/$user/.composer && \
 	mkdir -p /home/$user/server && \
 	chown -R $user:$user /home/$user
+
+RUN chown -R www-data:www-data /var/www
 
 USER $user
 
@@ -45,11 +49,11 @@ RUN rm -rf /var/www/html/node_modules \
 
 RUN echo '*' > install/ip.txt && composer install
 
+VOLUME /config /var/www/html/system/cache
+
 USER root
 
 COPY --chmod=755 docker/entrypoint.sh /usr/local/bin/myaac-entrypoint
-
-VOLUME /config /var/www/html/system/cache /var/www/html/system/logs /var/www/html/images/editor /var/www/html/images/guilds
 
 ENTRYPOINT ["myaac-entrypoint"]
 CMD ["bash", "-c", "sh /usr/local/bin/sync-windows-files.sh & apache2-foreground"]
