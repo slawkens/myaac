@@ -19,6 +19,8 @@ services:
     volumes:
       - ./:/myaac-main-folder
       - config:/config
+    networks:
+      - myaac-network
 
   db:
     restart: unless-stopped # always?
@@ -34,12 +36,16 @@ services:
       dockerfile: ./docker/full/Dockerfile-db
     volumes:
       - db:/var/lib/mysql
+    networks:
+      - myaac-network
 
   phpmyadmin:
     image: phpmyadmin
     restart: always
     ports:
       - 8002:80
+    networks:
+      - myaac-network
 
   mailpit:
     image: axllent/mailpit
@@ -54,8 +60,14 @@ services:
       MP_DATABASE: /data/mailpit.db
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - myaac-network
 
 volumes:
   db:
   config:
   mailpit-data:
+
+networks:
+  myaac-network:
+    driver: bridge
