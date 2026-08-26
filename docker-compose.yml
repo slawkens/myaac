@@ -2,6 +2,7 @@ services:
   web:
     environment:
       MYAAC_INSTALL_SERVER_PATH: "/home/www-data/server"
+      MYAAC_CONFIG_DIR: "/config"
     ports:
       - 8001:80
     build:

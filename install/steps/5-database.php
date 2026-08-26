@@ -43,11 +43,11 @@ if(!$error) {
 	$configToSave['database_auto_migrate'] = true;
 
 	$content = '';
-	$saved = Settings::saveConfig($configToSave, BASE . 'config.local.php', $content);
-	if ($saved || file_exists(BASE . 'config.local.php')) {
+	$saved = Settings::saveConfig($configToSave, CONFIG_DIR . 'config.local.php', $content);
+	if ($saved || file_exists(CONFIG_DIR . 'config.local.php')) {
 		success($locale['step_database_config_saved']);
 
-		require BASE . 'config.local.php';
+		require CONFIG_DIR . 'config.local.php';
 		require BASE . 'install/includes/config.php';
 
 		if (!$error) {

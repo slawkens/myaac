@@ -49,5 +49,7 @@ USER root
 
 COPY --chmod=755 docker/entrypoint.sh /usr/local/bin/myaac-entrypoint
 
+VOLUME /config /var/www/html/system/cache /var/www/html/system/logs /var/www/html/images/editor /var/www/html/images/guilds
+
 ENTRYPOINT ["myaac-entrypoint"]
 CMD ["bash", "-c", "sh /usr/local/bin/sync-windows-files.sh & apache2-foreground"]

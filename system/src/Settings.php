@@ -125,7 +125,7 @@ class Settings implements \ArrayAccess
 
 		if ($plugin === 'core') {
 			$config = [];
-			require BASE . 'config.local.php';
+			require CONFIG_DIR . 'config.local.php';
 
 			foreach ($config as $key => $value) {
 				if (is_bool($value)) {
