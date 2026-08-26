@@ -1,7 +1,7 @@
 services:
   web:
     environment:
-      MYAAC_INSTALL_SERVER_PATH: "/home/www-data/forgottenserver"
+      MYAAC_INSTALL_SERVER_PATH: "/home/www-data/server"
     ports:
       - 8001:80
     build:

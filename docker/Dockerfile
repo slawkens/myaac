@@ -15,7 +15,6 @@ ARG uid
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-	git \
 	libpng-dev \
 	libzip-dev \
 	rsync \
@@ -29,16 +28,12 @@ RUN a2enmod rewrite && docker-php-ext-install pdo_mysql gd zip
 # Create system user to run Composer Commands
 #RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
+	mkdir -p /home/$user/server && \
+	chown -R $user:$user /home/$user
 
 USER $user
 
-WORKDIR /home/$user
-#RUN mkdir -p forgottenserver
-RUN git clone https://github.com/otland/forgottenserver.git
-#ADD https://raw.githubusercontent.com/otland/forgottenserver/refs/heads/master/schema.sql /docker-entrypoint-initdb.d/tfs_schema.sql
-
-COPY --chown=www-data:www-data docker/config.lua /home/$user/forgottenserver
+COPY --chown=www-data:www-data docker/config.lua /home/$user/server
 
 WORKDIR /var/www/html
 
@@ -48,18 +43,11 @@ COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer
 RUN rm -rf /var/www/html/node_modules \
 	&& chown -R www-data:www-data /var/www/html
 
-USER root
-RUN mkdir -p /myaac-main-folder
-RUN echo "#!/bin/bash" > sync-windows-files.sh
-RUN echo 'while true; do' >> sync-windows-files.sh
-RUN echo '  rsync -au --exclude-from="/myaac-main-folder/.dockerignore" "/myaac-main-folder/" "/var/www/html"' >> sync-windows-files.sh
-RUN echo '  sleep 2;' >> sync-windows-files.sh
-RUN echo 'done' >> sync-windows-files.sh
-
-USER $user
-
 RUN echo '*' > install/ip.txt && composer install
 
 USER root
 
-CMD ["bash", "-c", "sh sync-windows-files.sh & apache2-foreground"]
+COPY --chmod=755 docker/entrypoint.sh /usr/local/bin/myaac-entrypoint
+
+ENTRYPOINT ["myaac-entrypoint"]
+CMD ["bash", "-c", "sh /usr/local/bin/sync-windows-files.sh & apache2-foreground"]
