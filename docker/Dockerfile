@@ -56,7 +56,7 @@ USER root
 RUN mkdir -p /myaac-main-folder
 RUN echo "#!/bin/bash" > sync-windows-files.sh
 RUN echo 'while true; do' >> sync-windows-files.sh
-RUN echo '  rsync -avu --exclude-from="/myaac-main-folder/.dockerignore" "/myaac-main-folder/" "/var/www/html"' >> sync-windows-files.sh
+RUN echo '  rsync -au --exclude-from="/myaac-main-folder/.dockerignore" "/myaac-main-folder/" "/var/www/html"' >> sync-windows-files.sh
 RUN echo '  sleep 2;' >> sync-windows-files.sh
 RUN echo 'done' >> sync-windows-files.sh
 
