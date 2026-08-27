@@ -34,6 +34,7 @@ cat > /usr/local/bin/sync-windows-files.sh <<'EOF'
 #!/bin/bash
 while true; do
   rsync -au --exclude-from="/myaac-main-folder/.dockerignore" "/myaac-main-folder/" "/var/www/html"
+  chown -R www-data:www-data /var/www/html
   sleep 2;
 done
 EOF
