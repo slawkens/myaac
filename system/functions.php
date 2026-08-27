@@ -1410,7 +1410,6 @@ function clearCache()
 
 	deleteDirectory(CACHE . 'signatures', ['index.html'], true);
 	deleteDirectory(CACHE . 'twig', ['index.html'], true);
-	deleteDirectory(CACHE . 'plugins', ['index.html'], true);
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html', 'persistent'], true);
 
 	global $hooks;
