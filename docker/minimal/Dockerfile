@@ -17,6 +17,8 @@ RUN a2enmod rewrite && docker-php-ext-install gd pdo_mysql zip
 
 WORKDIR /var/www/html
 
+RUN mkdir -p /config && chown -R www-data:www-data /config
+
 COPY --from=npm --chown=www-data:www-data /myaac .
 COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer
 RUN echo '*' > install/ip.txt && composer install
