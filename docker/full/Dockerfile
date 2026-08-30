@@ -23,6 +23,8 @@ RUN apt-get update && apt-get install -y \
 	rsync \
 	zip \
 	unzip \
+	libfreetype6-dev \
+	&& docker-php-ext-configure gd --with-freetype \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
