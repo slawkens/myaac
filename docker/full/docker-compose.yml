@@ -5,7 +5,7 @@ services:
       MYAAC_INSTALL_SERVER_PATH: "/home/www-data/server"
       MYAAC_CONFIG_DIR: "/config"
     ports:
-      - 8001:80
+      - 127.0.0.1:8001:80
     build:
       args:
         user: www-data
