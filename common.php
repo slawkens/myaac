@@ -117,7 +117,7 @@ const SMTP_SECURITY_TLS = 2;
 const ACCOUNT_NUMBER_LENGTH = 8;
 
 $configDir = getenv('MYAAC_CONFIG_DIR');
-define('CONFIG_DIR', $configDir ? rtrim($configDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : BASE);
+define('CONFIG_DIR', $configDir ? rtrim($configDir, "/\\") . DIRECTORY_SEPARATOR : BASE);
 if (file_exists(CONFIG_DIR . 'config.local.php')) {
 	require CONFIG_DIR . 'config.local.php';
 }
