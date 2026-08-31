@@ -40,7 +40,7 @@ services:
       - myaac-network
 
   phpmyadmin:
-    image: phpmyadmin
+    image: phpmyadmin:latest
     restart: always
     ports:
       - 8002:80
@@ -48,7 +48,7 @@ services:
       - myaac-network
 
   mailpit:
-    image: axllent/mailpit
+    image: axllent/mailpit:latest
     restart: unless-stopped
     volumes:
       - mailpit-data:/data
