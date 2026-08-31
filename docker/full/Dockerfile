@@ -53,8 +53,7 @@ WORKDIR /var/www/html
 COPY --from=npm --chown=www-data:www-data /myaac .
 COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer
 
-RUN rm -rf /var/www/html/node_modules \
-	&& chown -R www-data:www-data /var/www/html
+RUN rm -rf /var/www/html/node_modules
 
 RUN echo '*' > install/ip.txt && composer install
 
