@@ -30,7 +30,7 @@ services:
       MYSQL_PASSWORD: myaac
       MYSQL_USER: myaac
     ports:
-      - 8003:3306
+      - 127.0.0.1:8003:3306
     build:
       context: ../../
       dockerfile: docker/full/Dockerfile-db
