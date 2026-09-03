@@ -44,6 +44,11 @@ services:
     restart: always
     ports:
       - 8002:80
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: myaac
+      PMA_PASSWORD: myaac
     networks:
       - myaac-network
 
