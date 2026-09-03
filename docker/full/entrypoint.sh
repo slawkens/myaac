@@ -27,7 +27,7 @@ cat > /home/www-data/server/data/XML/groups.xml <<'EOF'
 EOF
 
 mkdir -p /home/www-data/server/data/items
-curl --fail --location --silent --show-error --retry 3 --retry-delay 1 --output /home/www-data/server/data/items/items.xml https://raw.githubusercontent.com/otland/forgottenserver/refs/heads/master/data/items/items.xml
+curl --fail --location --silent --show-error --retry 3 --retry-delay 1 --output /home/www-data/server/data/items/items.xml https://raw.githubusercontent.com/otland/forgottenserver/a4ba6bf3cd70437ad535827224804e0629105e72/data/items/items.xml
 
 mkdir -p /myaac-main-folder
 cat > /usr/local/bin/sync-windows-files.sh <<'EOF'
