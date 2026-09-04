@@ -43,12 +43,14 @@ services:
     image: phpmyadmin:latest
     restart: always
     ports:
-      - 8002:80
+      - 127.0.0.1:8002:80
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
       PMA_USER: myaac
       PMA_PASSWORD: myaac
+    depends_on:
+      - db
     networks:
       - myaac-network
 
