@@ -25,14 +25,11 @@ tmp
 install/install.lock
 config.local.php
 
-# all custom templates
-templates/*
-!templates/tibiacom
-!templates/kathrine
-
 # guild images
 images/guilds/*
 !images/guilds/default.gif
+
+plugins/*
 
 # editor images
 images/editor/*
@@ -52,7 +49,3 @@ system/cache/*
 # logs
 system/logs/*
 !system/logs/index.html
-
-# data
-system/data/*
-!system/data/index.html
