@@ -20,6 +20,9 @@ services:
       - ../../:/myaac-main-folder
       - config:/config
       - cache:/var/www/html/system/cache
+      - images-editor:/var/www/html/images/editor
+      - images-gallery:/var/www/html/images/gallery
+      - images-guilds:/var/www/html/images/guilds
       - logs:/var/www/html/system/logs
     networks:
       - myaac-network
@@ -75,9 +78,12 @@ services:
 volumes:
   db:
   config:
-  mailpit-data:
   cache:
+  images-editor:
+  images-gallery:
+  images-guilds:
   logs:
+  mailpit-data:
 
 networks:
   myaac-network:
