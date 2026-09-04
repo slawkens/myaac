@@ -6,11 +6,6 @@ WORKDIR /myaac
 COPY package*.json npm-post-install.js ./
 RUN npm install
 
-# Copy the rest of the app
-COPY . .
-
-RUN mv .htaccess.dist .htaccess
-
 FROM docker.io/php:8.4-apache-trixie
 
 # Use the default production configuration
@@ -57,8 +52,6 @@ WORKDIR /var/www/html
 
 COPY --from=npm --chown=www-data:www-data /myaac .
 COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer
-
-RUN echo '*' > install/ip.txt && composer install
 
 COPY docker/full/php.ini /usr/local/etc/php/conf.d/99-myaac.ini
 

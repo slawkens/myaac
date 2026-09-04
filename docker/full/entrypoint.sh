@@ -29,4 +29,7 @@ EOF
 mkdir -p /home/www-data/server/data/items
 curl --fail --location --silent --show-error --retry 3 --retry-delay 1 --output /home/www-data/server/data/items/items.xml https://raw.githubusercontent.com/otland/forgottenserver/a4ba6bf3cd70437ad535827224804e0629105e72/data/items/items.xml
 
+cd /var/www/html
+composer install
+
 exec "$@"
