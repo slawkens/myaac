@@ -2,8 +2,14 @@ FROM docker.io/node:24-trixie-slim AS npm
 
 WORKDIR /myaac
 
+# Install dependencies
+COPY package*.json npm-post-install.js ./
+RUN npm install
+
+# Copy the rest of the app
 COPY . .
-RUN mv .htaccess.dist .htaccess && npm install
+
+RUN mv .htaccess.dist .htaccess
 
 FROM docker.io/php:8.4-apache-trixie
 
@@ -42,7 +48,6 @@ RUN chown -R www-data:www-data /var/www
 
 RUN mkdir -p /config && chown -R www-data:www-data /config
 RUN mkdir -p /var/www/html/system/cache && chown -R www-data:www-data /var/www/html/system/cache
-VOLUME /var/www/html/system/cache
 
 USER $user
 
@@ -53,7 +58,6 @@ WORKDIR /var/www/html
 COPY --from=npm --chown=www-data:www-data /myaac .
 COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer
 
-RUN rm -rf /var/www/html/node_modules
 
 RUN echo '*' > install/ip.txt && composer install
 
