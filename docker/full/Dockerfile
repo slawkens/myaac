@@ -46,8 +46,8 @@ RUN mkdir -p /home/$user/.composer && \
 
 RUN chown -R www-data:www-data /var/www
 
-RUN mkdir -p /config && chown -R www-data:www-data /config
-RUN mkdir -p /var/www/html/system/cache && chown -R www-data:www-data /var/www/html/system/cache
+#RUN mkdir -p /config && chown -R www-data:www-data /config
+#RUN mkdir -p /var/www/html/system/cache && chown -R www-data:www-data /var/www/html/system/cache
 
 USER $user
 
