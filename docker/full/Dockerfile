@@ -46,8 +46,7 @@ RUN mkdir -p /home/$user/.composer && \
 
 RUN chown -R www-data:www-data /var/www
 
-#RUN mkdir -p /config && chown -R www-data:www-data /config
-#RUN mkdir -p /var/www/html/system/cache && chown -R www-data:www-data /var/www/html/system/cache
+RUN mkdir -p /config && chown -R www-data:www-data /config
 
 USER $user
 
@@ -58,7 +57,6 @@ WORKDIR /var/www/html
 COPY --from=npm --chown=www-data:www-data /myaac .
 COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer
 
-
 RUN echo '*' > install/ip.txt && composer install
 
 COPY docker/full/php.ini /usr/local/etc/php/conf.d/99-myaac.ini
@@ -68,4 +66,4 @@ USER root
 COPY --chmod=755 docker/full/entrypoint.sh /usr/local/bin/myaac-entrypoint
 
 ENTRYPOINT ["myaac-entrypoint"]
-CMD ["bash", "-c", "sh /usr/local/bin/sync-windows-files.sh & apache2-foreground"]
+CMD ["bash", "-c", "apache2-foreground"]

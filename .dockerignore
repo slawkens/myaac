@@ -24,28 +24,3 @@ tmp
 
 install/install.lock
 config.local.php
-
-# guild images
-images/guilds/*
-!images/guilds/default.gif
-
-plugins/*
-
-# editor images
-images/editor/*
-!images/editor/index.html
-
-# gallery images
-images/gallery/*
-
-# cache
-system/cache/*
-!system/cache/index.html
-!system/cache/twig/index.html
-!system/cache/signatures/index.html
-!system/cache/plugins/index.html
-!system/cache/persistent/index.html
-
-# logs
-system/logs/*
-!system/logs/index.html
