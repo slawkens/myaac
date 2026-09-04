@@ -19,6 +19,8 @@ services:
     volumes:
       - ../../:/myaac-main-folder
       - config:/config
+      - cache:/var/www/html/system/cache
+      - logs:/var/www/html/system/logs
     networks:
       - myaac-network
 
@@ -74,6 +76,8 @@ volumes:
   db:
   config:
   mailpit-data:
+  cache:
+  logs:
 
 networks:
   myaac-network:
