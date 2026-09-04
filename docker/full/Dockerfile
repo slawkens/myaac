@@ -6,7 +6,7 @@ WORKDIR /myaac
 COPY package*.json npm-post-install.js ./
 RUN npm install
 
-FROM docker.io/php:8.4-apache-trixie
+FROM docker.io/php:8.5-apache-trixie
 
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
