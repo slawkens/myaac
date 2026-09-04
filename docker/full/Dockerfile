@@ -47,6 +47,7 @@ RUN mkdir -p /home/$user/.composer && \
 RUN chown -R www-data:www-data /var/www
 
 RUN mkdir -p /config && chown -R www-data:www-data /config
+RUN mkdir -p /var/php/sessions && chown -R www-data:www-data /var/php/sessions
 
 USER $user
 

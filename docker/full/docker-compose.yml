@@ -21,6 +21,7 @@ services:
         source: ../../
         target: /var/www/html
       - config:/config
+      - php-sessions:/var/php/sessions
     networks:
       - myaac-network
 
@@ -76,6 +77,7 @@ volumes:
   db:
   config:
   mailpit-data:
+  php-sessions:
 
 networks:
   myaac-network:
