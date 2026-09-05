@@ -120,21 +120,6 @@ if (file_exists(BASE . 'config.local.php')) {
 	require BASE . 'config.local.php';
 }
 
-if (!IS_CLI) {
-	@ini_set('session.use_strict_mode', 1);
-
-	if (@$config['session_samesite'] == 'None') {
-		$config['session_samesite'] = '';
-	}
-
-	session_set_cookie_params([
-		'httponly' => true,
-		'samesite' => $config['session_samesite'] ?? 'Lax',
-	]);
-
-	session_start();
-}
-
 require SYSTEM . 'base.php';
 define('BASE_DIR', $baseDir);
 
@@ -175,6 +160,21 @@ if (!is_file($autoloadFile)) {
 }
 
 require $autoloadFile;
+
+if (!IS_CLI) {
+	@ini_set('session.use_strict_mode', 1);
+
+	if (@$config['session_samesite'] == 'None') {
+		$config['session_samesite'] = '';
+	}
+
+	session_set_cookie_params([
+		'httponly' => true,
+		'samesite' => $config['session_samesite'] ?? 'Lax',
+	]);
+
+	session_start() || throw new RuntimeException('Failed to start the session.');
+}
 
 function isHttps(): bool
 {
