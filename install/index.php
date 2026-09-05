@@ -35,7 +35,7 @@ if (file_exists(BASE . 'install/ip.txt')) {
 
 	$listIP = preg_split('/\s+/', $ip_file_content);
 	foreach($listIP as $ip) {
-		if($_SERVER['REMOTE_ADDR'] == $ip) {
+		if($ip == '*' || $_SERVER['REMOTE_ADDR'] == $ip) {
 			$allow = true;
 		}
 	}
@@ -62,6 +62,10 @@ if ($allow) {
 			$_SESSION['var_' . $key] = $value;
 		}
 	}
+}
+
+if (getenv('MYAAC_INSTALL_SERVER_PATH')) {
+	$config['server_path'] = getenv('MYAAC_INSTALL_SERVER_PATH');
 }
 
 if($step == 'finish' && (!isset($config['installed']) || !$config['installed'])) {
@@ -120,7 +124,7 @@ if($allow && $step == 'database') {
 	}
 }
 else if($allow && $step == 'admin') {
-	if(!file_exists(BASE . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
+	if(!file_exists(CONFIG_DIR . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
 		$step = 'database';
 	}
 }
