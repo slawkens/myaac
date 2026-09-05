@@ -147,6 +147,9 @@
 			{% include('buttons.base.html.twig') %}
 		</form>
 		<br/>
+
+		{{ include('account/2fa/main.html.twig') }}
+
 		{{ hook('HOOK_ACCOUNT_MANAGE_BEFORE_ACCOUNT_LOGS') }}
 		<a name="Account+Logs" ></a>
 		<h2>Account Logs</h2>

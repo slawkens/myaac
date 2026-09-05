@@ -37,7 +37,7 @@ else
 			if($points >= setting('core.account_generate_new_reckey_price'))
 			{
 				$show_form = false;
-				$new_rec_key = generateRandomString(10, false, true, true);
+				$new_rec_key = generateRecoveryKey();
 
 				$mailBody = $twig->render('mail.account.register.html.twig', array(
 					'recovery_key' => $new_rec_key

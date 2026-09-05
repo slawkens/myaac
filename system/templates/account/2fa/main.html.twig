@@ -1,0 +1,20 @@
+{% set title = 'Two-Factor Authentication' %}
+
+{% set content %}
+<table style="width:100%;">
+	<tbody>
+		{% if setting('core.account_2fa_app') %}
+			{{ include(twoFactorViews[0]) }}
+		{% endif %}
+
+		{% if setting('core.account_2fa_email') %}
+			{{ include(twoFactorViews[1]) }}
+		{% endif %}
+	</tbody>
+</table>
+{% endset %}
+
+{% if setting('core.account_2fa_app') or setting('core.account_2fa_email') %}
+	{% include('tables.headline.html.twig') %}
+	<br/>
+{% endif %}

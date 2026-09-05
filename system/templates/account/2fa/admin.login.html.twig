@@ -1,0 +1,47 @@
+<div class="login-page">
+	<div class="login-box">
+		<div class="login-logo"><b>My</b>AAC</div>
+		{% if errors %}
+			<div class="alert alert-danger"><strong>Errors:</strong><br/>
+				{% for error in errors %}
+					<li>{{ error|raw }}</li>
+				{% endfor %}
+			</div>
+		{% endif %}
+
+		<div class="card">
+			<div class="card-body">
+				<p class="login-box-msg">
+					{% if authTypeString == 'app' %}
+					Please enter code from your auth app.
+					{% else %}
+					We sent a code to your email address.<br/>Please enter it below.
+					{% endif %}
+				</p>
+
+				<form method="post">
+					{{ csrf() }}
+
+					<input type="hidden" name="account_login" value="{{ account_login ?? '' }}" />
+					<input type="hidden" name="password_login" value="{{ password_login ?? '' }}" />
+					{% if remember_me %}
+						<input type="hidden" name="remember_me" value="true" />
+					{% endif %}
+
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fa fa-lock"></i></span>
+						</div>
+						<input type="text" id="auth-code" name="auth-code" class="form-control" maxlength="6" autocomplete="off" required autofocus>
+					</div>
+					<div class="row">
+						<div class="col-4">
+							<input type="hidden" name="admin" value="1"/>
+							<button type="submit" class="btn btn-info btn-block">Continue</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

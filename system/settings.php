@@ -785,7 +785,26 @@ Sent by MyAAC,<br/>
 			'desc' => 'Max. number of characters per account',
 			'default' => 10,
 		],
-		'create_character' => [
+		[
+			'type' => 'section',
+			'title' => 'Two Factor Authentication (2FA)',
+		],
+		'account_2fa_app' => [
+			'name' => 'Account 2FA App',
+			'type' => 'boolean',
+			'desc' => 'Allow users to enable Two Factor Authentication (2FA) via App for their accounts?' . PHP_EOL .
+				'Requires PHP GD extension to be installed and enabled.',
+			'default' => true,
+			'enabled' => extension_loaded('gd'),
+		],
+		'account_2fa_email' => [
+			'name' => 'Account 2FA E-Mail',
+			'type' => 'boolean',
+			'desc' => 'Allow users to enable Two Factor Authentication (2FA) via E-Mail for their accounts?' . PHP_EOL .
+				'Requires Mailing to be enabled.',
+			'default' => true,
+		],
+		[
 			'type' => 'section',
 			'title' => 'Create Character',
 		],
