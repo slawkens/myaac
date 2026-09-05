@@ -1,11 +1,10 @@
 <?php
 
-use Twig\Environment as Twig_Environment;
-use Twig\Loader\FilesystemLoader as Twig_FilesystemLoader;
-
 const MYAAC_INSTALL = true;
 
 require '../common.php';
+
+use MyAAC\Hooks;
 
 // includes
 require SYSTEM . 'functions.php';
@@ -13,14 +12,19 @@ require BASE . 'install/includes/functions.php';
 require BASE . 'install/includes/locale.php';
 require SYSTEM . 'clients.conf.php';
 
+/**
+ * @var array $locale
+ */
 // ignore undefined index from Twig autoloader
 $config['env'] = 'prod';
 
-$twig_loader = new Twig_FilesystemLoader(SYSTEM . 'templates');
-$twig = new Twig_Environment($twig_loader, array(
-	'cache' => CACHE . 'twig/',
-	'auto_reload' => true
-));
+// event system
+global $hooks;
+$hooks = new Hooks();
+$hooks->load();
+$hooks->trigger(HOOK_INIT);
+
+require SYSTEM . 'twig.php';
 
 // load installation status
 $step = $_REQUEST['step'] ?? 'welcome';
@@ -31,7 +35,7 @@ if (file_exists(BASE . 'install/ip.txt')) {
 
 	$listIP = preg_split('/\s+/', $ip_file_content);
 	foreach($listIP as $ip) {
-		if($_SERVER['REMOTE_ADDR'] == $ip) {
+		if($ip == '*' || $_SERVER['REMOTE_ADDR'] == $ip) {
 			$allow = true;
 		}
 	}
@@ -58,6 +62,10 @@ if ($allow) {
 			$_SESSION['var_' . $key] = $value;
 		}
 	}
+}
+
+if (getenv('MYAAC_INSTALL_SERVER_PATH')) {
+	$config['server_path'] = getenv('MYAAC_INSTALL_SERVER_PATH');
 }
 
 if($step == 'finish' && (!isset($config['installed']) || !$config['installed'])) {
@@ -116,7 +124,7 @@ if($allow && $step == 'database') {
 	}
 }
 else if($allow && $step == 'admin') {
-	if(!file_exists(BASE . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
+	if(!file_exists(CONFIG_DIR . 'config.local.php') || !isset($config['installed']) || !$config['installed']) {
 		$step = 'database';
 	}
 }

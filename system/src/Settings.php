@@ -125,7 +125,7 @@ class Settings implements \ArrayAccess
 
 		if ($plugin === 'core') {
 			$config = [];
-			require BASE . 'config.local.php';
+			require CONFIG_DIR . 'config.local.php';
 
 			foreach ($config as $key => $value) {
 				if (is_bool($value)) {
@@ -657,7 +657,7 @@ class Settings implements \ArrayAccess
 			$content .= ';' . PHP_EOL;
 		}
 
-		$success = @file_put_contents($filename, $content);
+		$success = file_put_contents($filename, $content);
 
 		// we saved new config.php, need to revalidate cache (only if opcache is enabled)
 		if ($success && function_exists('opcache_invalidate')) {

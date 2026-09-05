@@ -1,0 +1,7 @@
+FROM mysql:8.4
+
+ADD https://raw.githubusercontent.com/otland/forgottenserver/404f369e7b5d6c5622bde9abff05dde76e0421dc/schema.sql /docker-entrypoint-initdb.d/tfs_schema.sql
+
+RUN chown -R mysql:mysql /docker-entrypoint-initdb.d/
+
+EXPOSE 3306

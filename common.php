@@ -116,23 +116,10 @@ const SMTP_SECURITY_TLS = 2;
 
 const ACCOUNT_NUMBER_LENGTH = 8;
 
-if (file_exists(BASE . 'config.local.php')) {
-	require BASE . 'config.local.php';
-}
-
-if (!IS_CLI) {
-	@ini_set('session.use_strict_mode', 1);
-
-	if (@$config['session_samesite'] == 'None') {
-		$config['session_samesite'] = '';
-	}
-
-	session_set_cookie_params([
-		'httponly' => true,
-		'samesite' => $config['session_samesite'] ?? 'Lax',
-	]);
-
-	session_start();
+$configDir = getenv('MYAAC_CONFIG_DIR');
+define('CONFIG_DIR', $configDir ? rtrim($configDir, "/\\") . DIRECTORY_SEPARATOR : BASE);
+if (file_exists(CONFIG_DIR . 'config.local.php')) {
+	require CONFIG_DIR . 'config.local.php';
 }
 
 require SYSTEM . 'base.php';
@@ -175,6 +162,21 @@ if (!is_file($autoloadFile)) {
 }
 
 require $autoloadFile;
+
+if (!IS_CLI) {
+	@ini_set('session.use_strict_mode', 1);
+
+	if (@$config['session_samesite'] == 'None') {
+		$config['session_samesite'] = '';
+	}
+
+	session_set_cookie_params([
+		'httponly' => true,
+		'samesite' => $config['session_samesite'] ?? 'Lax',
+	]);
+
+	session_start() || throw new RuntimeException('Failed to start the session.');
+}
 
 function isHttps(): bool
 {
