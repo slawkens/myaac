@@ -21,9 +21,9 @@ ARG uid
 RUN apt-get update && apt-get install -y \
 	libpng-dev \
 	libzip-dev \
-	rsync \
 	zip \
 	unzip \
+	nano \
 	libfreetype6-dev \
 	&& docker-php-ext-configure gd --with-freetype \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
