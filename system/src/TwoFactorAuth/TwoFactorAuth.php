@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * @package   MyAAC
+ * @author    Slawkens <slawkens@gmail.com>
+ * @copyright 2026 MyAAC
+ * @link      https://my-aac.org
+ */
 namespace MyAAC\TwoFactorAuth;
 
 use BaconQrCode\Renderer\GDLibRenderer;
@@ -7,6 +12,7 @@ use BaconQrCode\Writer;
 use MyAAC\Models\AccountTwoFactorEMailCode;
 use MyAAC\TwoFactorAuth\Gateway\AppAuthGateway;
 use MyAAC\TwoFactorAuth\Gateway\EmailAuthGateway;
+use MyAAC\TwoFactorAuth\TrustedDevice;
 use OTPHP\TOTP;
 
 class TwoFactorAuth
@@ -55,6 +61,15 @@ class TwoFactorAuth
 			return true;
 		}
 
+		if (TrustedDevice::isDeviceTrusted($this->account->getId())) {
+			// The device is trusted, no need for further 2FA checks.
+
+			TrustedDevice::clear(); // clear old entries, such as expired trusted devices
+			TrustedDevice::updateLastLogin($this->account->getId());
+
+			return true;
+		}
+
 		$authTypeString = 'app';
 		if ($this->authType == self::TYPE_EMAIL) {
 			$authTypeString = 'email';
@@ -86,6 +101,10 @@ class TwoFactorAuth
 		if ($this->getAuthGateway()->verifyCode($code)) {
 			if ($this->authType === self::TYPE_EMAIL) {
 				$this->deleteOldCodes();
+			}
+
+			if (isset($_POST['save-trusted-device']) && $_POST['save-trusted-device'] == '1') {
+				TrustedDevice::register($this->account->getId(), TrustedDevice::TYPE_WEBSITE);
 			}
 
 			return true;
@@ -208,6 +227,7 @@ class TwoFactorAuth
 		}
 
 		$this->account->setCustomField('2fa_secret', '');
+		TrustedDevice::removeAll($this->account->getId());
 	}
 
 	public function isActive(?int $authType = null): bool {
