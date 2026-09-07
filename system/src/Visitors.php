@@ -22,7 +22,7 @@ class Visitors
 
 	public function __construct($sessionTime = 10)
 	{
-		$this->cache = Cache::getInstance();
+		$this->cache = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
 
 		$this->cacheEnabled = $this->cache->enabled();
 		if($this->cacheEnabled)
