@@ -76,11 +76,11 @@ class TrustedDevice
 	 */
 	public static function updateLastLogin(int $accountId): void
 	{
-		$today = date('Y-m-d H:i:s');
+		$now = date('Y-m-d H:i:s');
 		AccountTrustedDevice::where('account_id', $accountId)
 			->where('user_agent', self::getUserAgent())
-			->where('expires_at', '>', $today)
-			->update(['updated_at' => $today]);
+			->where('expires_at', '>', $now)
+			->update(['updated_at' => $now]);
 	}
 
 	/**
