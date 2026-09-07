@@ -15,7 +15,7 @@
 								<div class="LabelV200" style="float:left;">Authenticator App Token:</div>
 								<input type="text" form="form" id="auth-code" name="auth-code" maxlength="6" autocomplete="off" required autofocus>
 
-								<label title="Skip asking for two factor authentication for the next 30 days."><input type="checkbox" form="form" name="save-trusted-device" value="1"> Trust this device</label>
+								<label title="Skip asking for two factor authentication for the next {{ trustedDeviceDurationDays }} days."><input type="checkbox" form="form" name="save-trusted-device" value="1"> Trust this device</label>
 							</div>
 						</td>
 					</tr>

@@ -50,7 +50,7 @@
 							<div style="margin-top: 15px; margin-bottom: 15px;">
 								<div class="LabelV150 {{ wrongCode ? 'red' : '' }}" style="float:left;"><label for="email-code">E-Mail Code:</label></div>
 								<input form="form" id="auth-code" name="auth-code" maxlength="15" autocomplete="off" required autofocus>
-								<label title="Skip asking for two factor authentication for the next 30 days."><input type="checkbox" form="form" name="save-trusted-device" value="1"> Trust this device</label>
+								<label title="Skip asking for two factor authentication for the next {{ trustedDeviceDurationDays }} days."><input type="checkbox" form="form" name="save-trusted-device" value="1"> Trust this device</label>
 								{% if wrongCode %}
 									<br/>
 									<div class="LabelV150" style="float:left;">&nbsp; </div>

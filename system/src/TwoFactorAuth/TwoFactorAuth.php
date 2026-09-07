@@ -80,6 +80,15 @@ class TwoFactorAuth
 			$view = "account/2fa/admin.login.html.twig";
 		}
 
+		$params = [
+			'account_login' => $login_account,
+			'password_login' => $login_password,
+			'remember_me' => $remember_me,
+
+			'authTypeString' => $authTypeString,
+			'trustedDeviceDurationDays' => TrustedDevice::DURATION_DAYS,
+		];
+
 		if (empty($code)) {
 			if ($this->authType == self::TYPE_EMAIL) {
 				if (!$this->hasRecentEmailCode(15 * 60)) {
@@ -88,12 +97,7 @@ class TwoFactorAuth
 			}
 
 			define('HIDE_LOGIN_BOX', true);
-			$twig->display($view, [
-				'account_login' => $login_account,
-				'password_login' => $login_password,
-				'remember_me' => $remember_me,
-				'authTypeString' => $authTypeString,
-			]);
+			$twig->display($view, $params);
 
 			return false;
 		}
@@ -135,16 +139,10 @@ class TwoFactorAuth
 			$twig->display('error_box.html.twig', ['errors' => $errors]);
 		}
 
-		$twig->display($view,
-			[
-				'account_login' => $login_account,
-				'password_login' => $login_password,
-				'remember_me' => $remember_me,
-
-				'errors' => $errors,
-				'authTypeString' => $authTypeString,
-				'wrongCode' => true,
-			]);
+		$twig->display($view, array_merge($params, [
+			'errors' => $errors,
+			'wrongCode' => true,
+		]));
 
 		return false;
 	}
