@@ -10,49 +10,51 @@
 
 namespace MyAAC;
 
-use MyAAC\Cache\Cache;
+use MyAAC\Cache\PHP as CachePHP;
 use MyAAC\Models\Visitor;
 
 class Visitors
 {
-	private $sessionTime; // time session will live
-	private $data; // cached data
-	private $cacheEnabled;
-	private $cache;
+	private int $sessionTime; // time session will live
+	private array $data = []; // cached data
+	private bool $cacheEnabled;
+	private CachePHP $cache;
 
-	public function __construct($sessionTime = 10)
+	public function __construct(int $sessionTime = 10)
 	{
 		$this->cache = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
 
 		$this->cacheEnabled = $this->cache->enabled();
-		if($this->cacheEnabled)
-		{
+		if($this->cacheEnabled) {
 			$tmp = '';
-			if($this->cache->fetch('visitors', $tmp))
+			if($this->cache->fetch('visitors', $tmp)) {
 				$this->data = unserialize($tmp);
-			else
-				$this->data = array();
+			} else {
+				$this->data = [];
+			}
 		}
 
 		$this->sessionTime = $sessionTime;
 		$this->cleanVisitors();
 
-		$ip = get_browser_real_ip();
+		$ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 		$userAgentShortened = substr($_SERVER['HTTP_USER_AGENT'] ?? 'unknown', 0, 255);
 
-		if($this->visitorExists($ip))
+		if($this->visitorExists($ip)) {
 			$this->updateVisitor($ip, $_SERVER['REQUEST_URI'], $userAgentShortened);
-		else
+		} else {
 			$this->addVisitor($ip, $_SERVER['REQUEST_URI'], $userAgentShortened);
+		}
 	}
 
 	public function __destruct()
 	{
-		if($this->cacheEnabled)
+		if($this->cacheEnabled) {
 			$this->cache->set('visitors', serialize($this->data), 120);
+		}
 	}
 
-	public function visitorExists($ip)
+	public function visitorExists(string $ip)
 	{
 		if($this->cacheEnabled) {
 			return isset($this->data[$ip]);
@@ -63,8 +65,7 @@ class Visitors
 
 	private function cleanVisitors()
 	{
-		if($this->cacheEnabled)
-		{
+		if($this->cacheEnabled) {
 			$timeNow = time();
 			foreach($this->data as $ip => $details)
 			{
@@ -78,20 +79,20 @@ class Visitors
 		Visitor::where('lastvisit', '<', (time() - $this->sessionTime * 60))->delete();
 	}
 
-	private function updateVisitor($ip, $page, $userAgent)
+	private function updateVisitor(string $ip, string $page, string $userAgent)
 	{
 		if($this->cacheEnabled) {
-			$this->data[$ip] = array('page' => $page, 'lastvisit' => time(), 'user_agent' => $userAgent);
+			$this->data[$ip] = ['page' => $page, 'lastvisit' => time(), 'user_agent' => $userAgent];
 			return;
 		}
 
 		Visitor::where('ip', $ip)->update(['lastvisit' => time(), 'page' => $page, 'user_agent' => $userAgent]);
 	}
 
-	private function addVisitor($ip, $page, $userAgent)
+	private function addVisitor(string $ip, string $page, string $userAgent)
 	{
 		if($this->cacheEnabled) {
-			$this->data[$ip] = array('page' => $page, 'lastvisit' => time(), 'user_agent' => $userAgent);
+			$this->data[$ip] = ['page' => $page, 'lastvisit' => time(), 'user_agent' => $userAgent];
 			return;
 		}
 
@@ -101,8 +102,9 @@ class Visitors
 	public function getVisitors()
 	{
 		if($this->cacheEnabled) {
-			foreach($this->data as $ip => &$details)
+			foreach($this->data as $ip => &$details) {
 				$details['ip'] = $ip;
+			}
 
 			return $this->data;
 		}
@@ -123,4 +125,3 @@ class Visitors
 		echo $this->getAmountVisitors();
 	}
 }
-?>
