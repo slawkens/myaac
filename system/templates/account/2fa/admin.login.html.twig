@@ -34,6 +34,12 @@
 						</div>
 						<input type="text" id="auth-code" name="auth-code" class="form-control" maxlength="6" autocomplete="off" required autofocus>
 					</div>
+					<div class="form-check mb-3">
+						<input class="form-check-input" type="checkbox" name="save-trusted-device" id="save-trusted-device" value="1">
+						<label class="form-check-label" for="save-trusted-device" title="Skip asking for two factor authentication for the next {{ trustedDeviceDurationDays }} days.">
+						Trust this device
+						</label>
+					</div>
 					<div class="row">
 						<div class="col-4">
 							<input type="hidden" name="admin" value="1"/>
