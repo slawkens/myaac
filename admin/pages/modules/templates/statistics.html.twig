@@ -3,7 +3,7 @@
 		<span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
 		<div class="info-box-content">
 			<span class="info-box-text" title="Amount of users currently browsing the site">Visitors:</span>
-			<span class="info-box-number">{{ count.visitors }}</span>
+			<span class="info-box-number"><a href="?p=visitors">{{ count.visitors }}</a></span>
 		</div>
 	</div>
 </div>
@@ -21,7 +21,7 @@
 		<span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-plus"></i></span>
 		<div class="info-box-content">
 			<span class="info-box-text">Accounts:</span>
-			<span class="info-box-number">{{ count.total_accounts }}</span>
+			<span class="info-box-number"><a href="?p=accounts">{{ count.total_accounts }}</a></span>
 		</div>
 	</div>
 </div>
@@ -30,7 +30,7 @@
 		<span class="info-box-icon bg-red elevation-1"><i class="fas fa-user-plus"></i></span>
 		<div class="info-box-content">
 			<span class="info-box-text">Players:</span>
-			<span class="info-box-number">{{ count.total_players }}</span>
+			<span class="info-box-number"><a href="?p=players">{{ count.total_players }}</a></span>
 		</div>
 	</div>
 </div>
