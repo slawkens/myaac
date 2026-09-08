@@ -4,9 +4,9 @@
 	</div>
 	<div class="card-body">
 		<div class="form-check mb-3">
-			<input class="filter form-check-input" type="checkbox" value="1" id="ignore-bots">
-			<label class="form-check-label" for="ignore-bots">
-				Ignore Bots
+			<input class="filter form-check-input" type="checkbox" value="1" id="hide-bots">
+			<label class="form-check-label" for="hide-bots">
+				Hide Bots
 			</label>
 		</div>
 
@@ -34,13 +34,13 @@
 </div>
 <script>
 	$(function () {
-		var ignoreBots = false;
+		var hideBots = false;
 		let table = $('#tb_visitors').DataTable({
 			initComplete: function () {
 				$.fn.dataTable.ext.search.push(
 					function( settings, searchData, index, rowData, counter ) {
-						// Don't display rows if ignoreBots is true and the row is a bot
-						if (ignoreBots && searchData[3].includes('(Bot)')) {
+						// Don't display rows if hideBots is true and the row is a bot
+						if (hideBots && searchData[3].includes('(Bot)')) {
 							return false;
 						}
 
@@ -51,8 +51,8 @@
 		});
 
 		$('.filter').on('change', function() {
-			// Update the ignoreBots flag based on the checkbox state
-			ignoreBots = $(this).prop('checked');
+			// Update the hideBots flag based on the checkbox state
+			hideBots = $(this).prop('checked');
 
 			table.draw();
 		});
