@@ -159,7 +159,7 @@ return [
 			'name' => 'Meta Favicon',
 			'type' => 'text',
 			'desc' => 'URL of the favicon used in the website',
-			'default' => 'images/favicon.png',
+			'default' => '/images/favicon.png',
 		],
 		'meta_favicon_type' => [
 			'name' => 'Meta Favicon Type',
@@ -177,7 +177,7 @@ return [
 			'name' => 'Meta og:image',
 			'type' => 'text',
 			'desc' => 'URL of the image used in Open Graph meta tags',
-			'default' => 'images/favicon.png',
+			'default' => '/images/favicon.png',
 		],
 		'meta_og_image_type' => [
 			'name' => 'Meta og:image Type',
