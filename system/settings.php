@@ -147,13 +147,37 @@ return [
 			'name' => 'Meta Description',
 			'type' => 'textarea',
 			'desc' => 'description of the site in ' . escapeHtml('<meta>'),
-			'default' => 'Tibia is a free massive multiplayer online role playing game (MMORPG).',
+			'default' => config('lua')['serverName'] . ' is a free massive multiplayer online role playing game (MMORPG).',
 		],
 		'meta_keywords' => [
 			'name' => 'Meta Keywords',
 			'type' => 'textarea',
 			'desc' => 'keywords list separated by commas',
 			'default' => 'free online game, free multiplayer game, ots, open tibia server',
+		],
+		'meta_og_description' => [
+			'name' => 'Meta og:description',
+			'type' => 'textarea',
+			'desc' => 'Description used in Open Graph meta tags',
+			'default' => config('lua')['serverName'] . ' is a free massive multiplayer online role playing game (MMORPG).',
+		],
+		'meta_og_image' => [
+			'name' => 'Meta og:image',
+			'type' => 'text',
+			'desc' => 'URL of the image used in Open Graph meta tags',
+			'default' => 'images/favicon.png',
+		],
+		'meta_og_image_type' => [
+			'name' => 'Meta og:image Type',
+			'type' => 'text',
+			'desc' => 'MIME type of the image used in Open Graph meta tags',
+			'default' => 'image/png',
+		],
+		'meta_og_image_dimensions' => [
+			'name' => 'Meta og:image Dimensions',
+			'type' => 'text',
+			'desc' => 'Dimensions of the image used in Open Graph meta tags (e.g., 1200x630)',
+			'default' => '64x64',
 		],
 		[
 			'type' => 'section',
