@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.9.4 - 10.09.2026]
+
+Compatible with PHP 8.1 - 8.5.
+
+### Added
+* Open Graph Tags (https://github.com/slawkens/myaac/commit/e5f5023f136b3ea363158934bd356243c23ba126)
+* Settings: Configurable favicon (https://github.com/slawkens/myaac/commit/f8b9e413a6940adcdb84d48b29b50f57db7a62b8, https://github.com/slawkens/myaac/commit/eea950730ec4c2b165b0b6101e9bd6aa86c430df)
+* Admin Visitors: Add "Hide Bots" checkbox (https://github.com/slawkens/myaac/commit/5ce7a9104852935ff4f0cc8f7d27d71042c16e7b, https://github.com/slawkens/myaac/commit/c4b7d867853b53c6c98f70c2ba4b018f4de75ca3)
+
+### Fixed
+* General: Throw exception if session cannot be started (https://github.com/slawkens/myaac/commit/0e05213cb42708925dfcc49de89a6cddf1b3306b)
+* Plugins: Fix upload when the plugin is disabled (https://github.com/slawkens/myaac/commit/c1885f594e5718ad97fa66aff1f1728559d3e78e)
+
+### Changed
+* Admin Dashboard: Make the statistics numbers clickable (https://github.com/slawkens/myaac/commit/dd856aeb3ff95ff7cfd785896665f18c9cd46159)
+* Visitors Counter: Use persistent cache (https://github.com/slawkens/myaac/commit/97857119a240ee7ac9ad53aa79a3a07894b44e4d)
+
 ## [1.9.3 - 24.08.2026]
 
 ### Added
