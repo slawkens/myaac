@@ -24,7 +24,7 @@ if($current_session)
 	}
 	else {
 		unsetSession('account');
-		unset($account_logged);
+		$account_logged = new OTS_Account();
 	}
 }
 

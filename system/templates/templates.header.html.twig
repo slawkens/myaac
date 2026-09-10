@@ -37,6 +37,12 @@
 {% endif %}
 
 <link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/messages.css" />
+
+{% if constant('MYAAC_ADMIN') is not defined %}
+	<link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/global.css" />
+	<script type="text/javascript" src="{{ constant('BASE_URL') }}tools/js/global.js"></script>
+{% endif %}
+
 <script type="text/javascript" src="{{ constant('BASE_URL') }}tools/ext/jquery/jquery.min.js"></script>
 <noscript>
 	<div class="warning" style="text-align: center; font-size: 14px;">

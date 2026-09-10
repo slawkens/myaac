@@ -8,6 +8,10 @@
  * @copyright 2019 MyAAC
  * @link      https://my-aac.org
  */
+
+use MyAAC\TwoFactorAuth\TwoFactorAuth;
+use MyAAC\TwoFactorAuth\TrustedDevice;
+
 defined('MYAAC') or die('Direct access not allowed!');
 
 $title = 'Account Management';
@@ -102,6 +106,19 @@ $actions = $account_logged->getActionsLog(1000);
 $account_players = $account_logged->getPlayersList();
 $account_players->orderBy('id');
 
+$trustedDevices = TrustedDevice::getAll($account_logged->getId());
+foreach ($trustedDevices as &$trustedDevice) {
+	$deviceDetector = new \DeviceDetector\DeviceDetector($trustedDevice['user_agent']);
+	$deviceDetector->parse();
+
+	$trustedDevice['client'] = $deviceDetector->getClient('name');
+	$trustedDevice['client_version'] = $deviceDetector->getClient('version');
+	$trustedDevice['os'] = $deviceDetector->getOs('name');
+	$trustedDevice['os_version'] = $deviceDetector->getOs('version');
+	$trustedDevice['is_mobile'] = $deviceDetector->isMobile();
+	$trustedDevice['type'] = $trustedDevice['type'] == TrustedDevice::TYPE_WEBSITE ? 'Website' : 'Client';
+}
+
 $twig->display('account.management.html.twig', array(
 	'welcome_message' => $welcome_message,
 	'recovery_key' => $recovery_key,
@@ -116,6 +133,11 @@ $twig->display('account.management.html.twig', array(
 	'account_registered' => $account_registered,
 	'account_rlname' => $account_rlname,
 	'account_location' => $account_location,
+
+	'twoFactorViews' => TwoFactorAuth::getInstance($account_logged)->getAccountManageViews(),
+	'trustedDevices' => $trustedDevices,
+	'deviceUserAgent' => TrustedDevice::getUserAgent(),
+
 	'actions' => $actions,
-	'players' => $account_players
+	'players' => $account_players,
 ));

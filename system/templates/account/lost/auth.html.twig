@@ -1,0 +1,84 @@
+<h2 style="text-align: center;">Email Address: slawkens@gmail.com</h2><br>
+<p>Please follow the instructions below to remove an authenticator app from your {{ config('lua')['serverName'] }} account.</p>
+<p><b>By Recovery Key</b></p>
+<ol>
+	<li>Enter your recovery key.</li>
+	<li>Click on "Submit".</li>
+	<li>If you have entered your recovery key correctly, the authenticator app will be removed from your {{ config('lua')['serverName'] }} account and you do not need to enter an authenticator app token upon login any longer.</li>
+</ol>
+
+{% set title = 'Remove Authenticator App' %}
+{% set tableClass = 'Table5' %}
+
+{% set content %}
+<table style="width:100%;">
+	<tbody>
+		<tr>
+			<td>
+				<div class="TableContentContainer ">
+					<table class="TableContent" width="100%"
+						style="border:1px solid #faf0d7;">
+						<tbody>
+							<tr>
+								<td colspan="2"><label>Yes, I want to remove an
+										<b>authenticator app</b> from my Tibia account
+										by</label><br></td>
+							</tr>
+							<tr>
+								<td>
+									<label>
+										<span style="margin-left: 50px;">
+											<input type="radio" name="step" form="form" value="auth-remove-by-key" id="auth-remove-by-key">Recovery
+											Key:</span></label></td>
+								<td>
+									{{ include('account.recovery-key.html.twig') }}
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<hr>
+									<label>
+										<input type="radio" name="step" form="form" value="key"> I have forgotten the recovery key of my Tibia account.</label>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+{% endset %}
+{{ include('tables.headline.html.twig')}}
+
+<table style="width:100%">
+	<tbody>
+		<tr align="center">
+			<td>
+				<form id="form" action="{{ getLink('account/lost') }}" method="post">
+
+					{{ csrf() }}
+
+					<input type="hidden" name="emailOrCharacter" value="{{ emailOrCharacter }}">
+
+					{{ include('buttons.base.html.twig', {'button_name': 'Submit', 'button_color': 'green'})}}
+				</form>
+			</td>
+			<td>
+				<form action="{{ getLink('account/lost') }}" method="post" style="padding:0px;margin:0px;">
+					<input type="hidden" name="step" value="problem">
+					<input type="hidden" name="emailOrCharacter" value="{{ emailOrCharacter }}">
+
+					{{ include('buttons.base.html.twig', {'button_name': 'Back'})}}
+				</form>
+			</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+
+<script>
+		$("#key1, #key2, #key3, #key4").bind("click", function(e) {
+			$('#auth-remove-by-key').prop('checked', true);
+		});
+	</script>
