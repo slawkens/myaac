@@ -71,5 +71,6 @@ $content .= ob_get_contents();
 ob_end_clean();
 
 // template
+$title_full =  (isset($title) ? $title . ' - ' : '') . $config['lua']['serverName'];
 $template_path = 'template/';
 require __DIR__ . '/' . $template_path . 'template.php';
