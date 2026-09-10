@@ -48,7 +48,7 @@ if (ACTION == 'request') {
 		return;
 	}
 	else {
-		if (empty($key)) {
+		if (strlen($key) < 4) {
 			$errors[] = 'Please enter the recovery key!';
 		}
 		else {

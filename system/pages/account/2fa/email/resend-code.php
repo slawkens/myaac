@@ -10,7 +10,7 @@ if (!setting('core.mail_enabled') || !setting('core.account_2fa_email')) {
 elseif (!$account_logged->isLoaded()) {
 	$errors[] = 'Please login first.';
 }
-elseif ($twoFactorAuth->isActive()) {
+elseif ($twoFactorAuth->isActive() && $from == 'enable') {
 	$errors[] = 'Two-factor authentication is already enabled on your account';
 }
 elseif ($twoFactorAuth->hasRecentEmailCode(30 * 60)) {
