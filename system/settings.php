@@ -147,7 +147,7 @@ return [
 			'name' => 'Meta Description',
 			'type' => 'textarea',
 			'desc' => 'description of the site in ' . escapeHtml('<meta>'),
-			'default' => config('lua')['serverName'] . ' is a free massive multiplayer online role playing game (MMORPG).',
+			'default' => (config('lua')['serverName'] ?? 'OTServ') . ' is a free massive multiplayer online role playing game (MMORPG).',
 		],
 		'meta_keywords' => [
 			'name' => 'Meta Keywords',
@@ -171,7 +171,7 @@ return [
 			'name' => 'Meta og:description',
 			'type' => 'textarea',
 			'desc' => 'Description used in Open Graph meta tags',
-			'default' => config('lua')['serverName'] . ' is a free massive multiplayer online role playing game (MMORPG).',
+			'default' => (config('lua')['serverName'] ?? 'OTServ') . ' is a free massive multiplayer online role playing game (MMORPG).',
 		],
 		'meta_og_image' => [
 			'name' => 'Meta og:image',
