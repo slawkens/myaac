@@ -31,6 +31,11 @@
 
 {% endif %}
 
+{% set favicon = setting('core.meta_favicon') %}
+{% if favicon is not empty %}
+	<link rel="shortcut icon" href="{{ favicon }}" type="{{ setting('core.meta_favicon_type') }}">
+{% endif %}
+
 <link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/messages.css" />
 <script type="text/javascript" src="{{ constant('BASE_URL') }}tools/ext/jquery/jquery.min.js"></script>
 <noscript>

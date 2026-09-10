@@ -155,6 +155,18 @@ return [
 			'desc' => 'keywords list separated by commas',
 			'default' => 'free online game, free multiplayer game, ots, open tibia server',
 		],
+		'meta_favicon' => [
+			'name' => 'Meta Favicon',
+			'type' => 'text',
+			'desc' => 'URL of the favicon used in the website',
+			'default' => 'images/favicon.png',
+		],
+		'meta_favicon_type' => [
+			'name' => 'Meta Favicon Type',
+			'type' => 'text',
+			'desc' => 'MIME type of the favicon used in the website',
+			'default' => 'image/png',
+		],
 		'meta_og_description' => [
 			'name' => 'Meta og:description',
 			'type' => 'textarea',
