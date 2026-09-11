@@ -29,7 +29,8 @@ class Cache
 	public static function getInstance()
 	{
 		if (!self::$instance) {
-			return self::generateInstance(config('cache_engine'), config('cache_prefix'));
+			$configCacheEngine = config('cache_engine');
+			return self::generateInstance($configCacheEngine ?? '', config('cache_prefix'));
 		}
 
 		return self::$instance;

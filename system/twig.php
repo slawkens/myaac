@@ -159,6 +159,10 @@ $filter = new TwigFilter('urlencode', function ($s) {
 $twig->addFilter($filter);
 unset($function, $filter);
 
-$hooks->trigger(HOOK_TWIG, ['twig' => $twig, 'twig_loader' => $twig_loader]);
+if (isset($hooks)) {
+	$hooks->trigger(HOOK_TWIG, ['twig' => $twig, 'twig_loader' => $twig_loader]);
+}
 
-$twig->addGlobal('cache', $cache);
+if (isset($cache)) {
+	$twig->addGlobal('cache', $cache);
+}

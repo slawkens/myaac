@@ -1,0 +1,26 @@
+Thumbs.db
+.DS_Store
+.idea
+
+#
+/.htaccess
+
+# composer
+composer.phar
+vendor
+
+# npm
+node_modules
+tools/ext
+
+# cypress
+cypress.env.json
+cypress/e2e/2-advanced-examples
+cypress/screenshots
+
+# created by release.sh
+releases
+tmp
+
+install/install.lock
+config.local.php

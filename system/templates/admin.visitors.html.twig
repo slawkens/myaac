@@ -3,6 +3,13 @@
 		<h5 class="m-0">Users active within last {{ config_visitors_counter_ttl }} minutes.</h5>
 	</div>
 	<div class="card-body">
+		<div class="form-check mb-3">
+			<input class="filter form-check-input" type="checkbox" value="1" id="hide-bots">
+			<label class="form-check-label" for="hide-bots">
+				Hide Bots
+			</label>
+		</div>
+
 		<table id="tb_visitors" class="table table-striped table-bordered table-responsive d-md-table">
 			<thead>
 			<tr>
@@ -27,6 +34,27 @@
 </div>
 <script>
 	$(function () {
-		$('#tb_visitors').DataTable()
-	})
+		var hideBots = false;
+		let table = $('#tb_visitors').DataTable({
+			initComplete: function () {
+				$.fn.dataTable.ext.search.push(
+					function( settings, searchData, index, rowData, counter ) {
+						// Don't display rows if hideBots is true and the row is a bot
+						if (hideBots && searchData[3].includes('(Bot)')) {
+							return false;
+						}
+
+						return true;
+					}
+				);
+			}
+		});
+
+		$('.filter').on('change', function() {
+			// Update the hideBots flag based on the checkbox state
+			hideBots = $(this).prop('checked');
+
+			table.draw();
+		});
+	});
 </script>

@@ -1,0 +1,84 @@
+name: myaac-full
+services:
+  web:
+    environment:
+      MYAAC_INSTALL_SERVER_PATH: "/home/www-data/server"
+      MYAAC_CONFIG_DIR: "/config"
+    ports:
+      - 127.0.0.1:8001:80
+    build:
+      args:
+        user: www-data
+        uid: 33
+      context: ../../
+      dockerfile: docker/full/Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www/html
+    depends_on:
+      - db
+    volumes:
+      - type: bind
+        source: ../../
+        target: /var/www/html
+      - config:/config
+      - php-sessions:/var/php/sessions
+    networks:
+      - myaac-network
+
+  db:
+    restart: unless-stopped # always?
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: myaac
+      MYSQL_PASSWORD: myaac
+      MYSQL_USER: myaac
+    ports:
+      - 127.0.0.1:8003:3306
+    build:
+      context: ../../
+      dockerfile: docker/full/Dockerfile-db
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - myaac-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 127.0.0.1:8002:80
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: myaac
+      PMA_PASSWORD: myaac
+    depends_on:
+      - db
+    networks:
+      - myaac-network
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    volumes:
+      - mailpit-data:/data
+    ports:
+      - 127.0.0.1:8025:8025
+      - 127.0.0.1:1025:1025
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - myaac-network
+
+volumes:
+  db:
+  config:
+  mailpit-data:
+  php-sessions:
+
+networks:
+  myaac-network:
+    driver: bridge

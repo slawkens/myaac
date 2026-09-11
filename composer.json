@@ -21,6 +21,7 @@
         "filp/whoops": "^2.15",
         "maximebf/debugbar": "1.*",
         "guzzlehttp/guzzle": "7.15.2",
+        "dragonmantank/cron-expression": "3.5",
         "devium/toml": "^1.0"
     },
     "require-dev": {

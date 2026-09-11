@@ -259,7 +259,7 @@ abstract class OTS_Base_List implements IOTS_DAO, Iterator, Countable
  *
  * @param OTS_SQLFilter|null $filter Filter for list.
  */
-    public function setFilter(OTS_SQLFilter $filter = null)
+    public function setFilter(?OTS_SQLFilter $filter = null)
     {
         $this->filter = $filter;
     }

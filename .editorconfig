@@ -12,7 +12,7 @@ insert_final_newline = true
 [*.md]
 trim_trailing_whitespace = false
 
-[{composer.json,package.json}]
+[{composer.json,package.json, *.yml}]
 indent_style = space
 
 [{package.json, *.yml}]
