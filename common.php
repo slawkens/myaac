@@ -89,6 +89,20 @@ const GUILD_IMAGES_DIR = 'images/guilds/';
 const EDITOR_IMAGES_DIR = 'images/editor/';
 const GALLERY_DIR = 'images/gallery/';
 
+// images mime types
+const IMAGES_MIME_TYPES = [
+	'apng' => 'image/apng',
+	'avif' => 'image/avif',
+	'bmp' => 'image/bmp',
+	'gif' => 'image/gif',
+	'ico' => 'image/x-icon',
+	'jpeg' => 'image/jpeg',
+	'jpg' => 'image/jpeg',
+	'png' => 'image/png',
+	'svg' => 'image/svg+xml',
+	'webp' => 'image/webp',
+];
+
 // menu categories
 const MENU_CATEGORY_NEWS = 1;
 const MENU_CATEGORY_ACCOUNT = 2;

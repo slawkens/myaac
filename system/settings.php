@@ -161,12 +161,6 @@ return [
 			'desc' => 'URL of the favicon used in the website',
 			'default' => '/images/favicon.png',
 		],
-		'meta_favicon_type' => [
-			'name' => 'Meta Favicon Type',
-			'type' => 'text',
-			'desc' => 'MIME type of the favicon used in the website',
-			'default' => 'image/png',
-		],
 		'meta_og_description' => [
 			'name' => 'Meta og:description',
 			'type' => 'textarea',
@@ -178,12 +172,6 @@ return [
 			'type' => 'text',
 			'desc' => 'URL of the image used in Open Graph meta tags',
 			'default' => '/images/favicon.png',
-		],
-		'meta_og_image_type' => [
-			'name' => 'Meta og:image Type',
-			'type' => 'text',
-			'desc' => 'MIME type of the image used in Open Graph meta tags',
-			'default' => 'image/png',
 		],
 		'meta_og_image_dimensions' => [
 			'name' => 'Meta og:image Dimensions',

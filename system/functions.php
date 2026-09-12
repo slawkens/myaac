@@ -552,11 +552,16 @@ function template_header($is_admin = false): string
 	global $title_full, $twig;
 	$charset = setting('core.charset') ?? 'utf-8';
 
+	$favicon = setting('core.meta_favicon') ?? '/images/favicon.png';
+
 	return $twig->render('templates.header.html.twig',
 		[
 			'charset' => $charset,
 			'title' => $title_full,
-			'is_admin' => $is_admin
+			'is_admin' => $is_admin,
+			'favicon' => $favicon,
+			'faviconType' => getImageMimeTypeByExtension($favicon),
+			'ogImageType' => getImageMimeTypeByExtension(setting('core.meta_og_image') ?? '/images/favicon.png'),
 		]
 	);
 }
@@ -1786,6 +1791,11 @@ function getStatusUptimeReadable(int $uptime): string
 	return "{$y}{$m}{$d}{$hours}h {$min}m";
 }
 
+function getImageMimeTypeByExtension(string $imagePath): ?string
+{
+	$extension = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
+	return IMAGES_MIME_TYPES[$extension] ?? null;
+}
 
 function is_sub_dir(?string $path = NULL, string $parent_folder = BASE): bool|string
 {

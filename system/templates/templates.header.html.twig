@@ -24,16 +24,17 @@
 	{% set ogImageDimensions = setting('core.meta_og_image_dimensions')|split('x') %}
 
 	<meta property="og:image" content="{{ ogImage }}"/>
-	<meta property="og:image:type" content="{{ setting('core.meta_og_image_type') }}" />
+	{% if ogImageType is not empty %}
+		<meta property="og:image:type" content="{{ ogImageType }}" />
+	{% endif %}
 	<meta property="og:image:width" content="{{ ogImageDimensions[0] }}" />
 	<meta property="og:image:height" content="{{ ogImageDimensions[1] }}" />
 	<meta property="og:image:alt" content="{{ config['lua']['serverName'] }} Logo" />
 
 {% endif %}
 
-{% set favicon = setting('core.meta_favicon') %}
 {% if favicon is not empty %}
-	<link rel="shortcut icon" href="{{ favicon }}" type="{{ setting('core.meta_favicon_type') }}">
+	<link rel="icon" href="{{ favicon }}" {% if faviconType is not empty %}type="{{ faviconType }}"{% endif %} />
 {% endif %}
 
 <link rel="stylesheet" type="text/css" href="{{ constant('BASE_URL') }}tools/css/messages.css" />
