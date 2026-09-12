@@ -27,6 +27,7 @@ namespace MyAAC;
 
 use MyAAC\Cache\Cache;
 use MyAAC\Models\Town;
+use MyAAC\Server\Items;
 
 class DataLoader
 {
@@ -40,25 +41,11 @@ class DataLoader
 	{
 		self::$startTime = microtime(true);
 
-		if(Items::loadFromXML()) {
+		if(Items::load()) {
 			success(self::$locale['step_database_loaded_items'] . self::getLoadedTime());
 		}
 		else {
 			error(Items::getError());
-		}
-
-		self::$startTime = microtime(true);
-
-		if(Monsters::loadFromXML()) {
-			success(self::$locale['step_database_loaded_monsters'] . self::getLoadedTime());
-
-			if(Monsters::getMonstersList()->hasErrors()) {
-				self::$locale['step_database_error_monsters'] = str_replace('$LOG$', 'system/logs/error.log', self::$locale['step_database_error_monsters']);
-				warning(self::$locale['step_database_error_monsters']);
-			}
-		}
-		else {
-			error(Monsters::getLastError());
 		}
 
 		self::$startTime = microtime(true);
@@ -68,15 +55,6 @@ class DataLoader
 		}
 		else {
 			error(self::$locale['step_database_error_npcs']);
-		}
-
-		self::$startTime = microtime(true);
-
-		if(Spells::loadFromXML()) {
-			success(self::$locale['step_database_loaded_spells'] . self::getLoadedTime());
-		}
-		else {
-			error(Spells::getLastError());
 		}
 
 		self::$startTime = microtime(true);

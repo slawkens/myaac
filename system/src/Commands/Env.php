@@ -2,6 +2,7 @@
 
 namespace MyAAC\Commands;
 
+use MyAAC\Server\Config;
 use POT;
 
 trait Env
@@ -21,7 +22,7 @@ trait Env
 		if($config['server_path'][strlen($config['server_path']) - 1] !== '/')
 			$config['server_path'] .= '/';
 
-		$config['lua'] = load_config_lua($config['server_path'] . 'config.lua');
+		$config['server'] = $config['lua'] = Config::get();
 
 		// POT
 		require_once SYSTEM . 'libs/pot/OTS.php';

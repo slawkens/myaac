@@ -11,7 +11,6 @@
 namespace MyAAC;
 
 use MyAAC\Models\Monster;
-use MyAAC\Models\Spell;
 
 class Validator
 {
@@ -336,19 +335,6 @@ class Validator
 		if ($monstersCheck) {
 			if (Monster::where('name', 'like', $name_lower)->exists()) {
 				self::$lastError = 'Your name cannot contains monster name.';
-				return false;
-			}
-		}
-
-		$spellsCheck = setting('core.create_character_name_spells_check');
-		if ($spellsCheck) {
-			if (Spell::where('name', 'like', $name_lower)->exists()) {
-				self::$lastError = 'Your name cannot contains spell name.';
-				return false;
-			}
-
-			if (Spell::where('words', $name_lower)->exists()) {
-				self::$lastError = 'Your name cannot contains spell name.';
 				return false;
 			}
 		}
