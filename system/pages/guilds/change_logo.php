@@ -42,10 +42,11 @@ if(empty($errors)) {
 
 		if($guild_leader) {
 			$max_image_size_b = setting('core.guild_image_size_kb') * 1024;
-			$allowed_ext = array('image/gif', 'image/jpg', 'image/pjpeg', 'image/jpeg', 'image/bmp', 'image/png', 'image/x-png', 'image/webp');
-			$ext_name = array('image/gif' => 'gif', 'image/jpg' => 'jpg', 'image/jpeg' => 'jpg', 'image/pjpeg' => 'jpg', 'image/bmp' => 'bmp', 'image/png' => 'png', 'image/x-png' => 'png', 'image/webp' => 'webp');
 			$save_file_name = str_replace(' ', '_', strtolower($guild->getName()));
 			$save_path = GUILD_IMAGES_DIR . $save_file_name;
+			$allowed_ext = array_keys(IMAGES_MIME_TYPES);
+			$allowedExtString = 'jpg, gif, png, bmp, webp, etc.';
+
 			if(isset($_POST['todo']) && $_POST['todo'] == 'save')
 			{
 				$file = $_FILES['newlogo'];
@@ -56,8 +57,8 @@ if(empty($errors)) {
 					}
 
 					$type = strtolower($file['type']);
-					if(!in_array($type, $allowed_ext)) {
-						$upload_errors[] = 'Your file type isn\' allowed. Allowed: <b>gif, jpg, bmp, png, webp</b>. Your file type: <b>'.$type.'</b> If it\'s valid image contact with admin.';
+					if(!in_array($type, IMAGES_MIME_TYPES)) {
+						$upload_errors[] = "Your file type is not allowed. Allowed file types: common image formats (<b>$allowedExtString</b>). Your file type: <b>$type</b>.";
 					}
 				}
 				else {
@@ -76,7 +77,7 @@ if(empty($errors)) {
 				}
 
 				if(empty($upload_errors)) {
-					$extension = $ext_name[$type];
+					$extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 					if(!move_uploaded_file($file['tmp_name'], $save_path.'.'.$extension)) {
 						$upload_errors[] = "Sorry! Can't save your image.";
 					}
@@ -113,7 +114,7 @@ if(empty($errors)) {
 			$twig->display('guilds.change_logo.html.twig', array(
 				'guild_logo' => $guild_logo,
 				'guild' => $guild,
-				//'max_image_size_b' => $max_image_size_b
+				'allowedExtString' => $allowedExtString,
 			));
 
 		}
