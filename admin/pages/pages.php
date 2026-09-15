@@ -80,6 +80,11 @@ if (!empty($action) && isRequestMethod('post')) {
 	} else if ($action == 'edit') {
 		if (isset($id) && !isset($_POST['name'])) {
 			$_page = Pages::get($id);
+			if (!$_page) {
+				error('Page not found.');
+				return;
+			}
+
 			$name = $_page['name'];
 			$p_title = $_page['title'];
 			$body = $_page['body'];
