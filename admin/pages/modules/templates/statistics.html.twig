@@ -1,5 +1,5 @@
-{% for el in elements %}
-<div class="col">
+{% for key, el in elements %}
+<div data-id="{{ key }}" class="col">
 	<div class="info-box">
 		<span class="info-box-icon {{ el.class }} elevation-1"><i class="{{ el.icon }}"></i></span>
 		<div class="info-box-content">
