@@ -63,7 +63,7 @@ class PHP
 		}
 
 		$content = include $file;
-		if (!isset($content) || $content['expires'] < time()) {
+		if (!isset($content) || !is_array($content) || $content['expires'] < time()) {
 			return false;
 		}
 
