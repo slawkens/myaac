@@ -20,44 +20,45 @@ $imageFolder = BASE . EDITOR_IMAGES_DIR;
 
 reset ($_FILES);
 $temp = current($_FILES);
-if (is_uploaded_file($temp['tmp_name'])) {
-	header('Access-Control-Allow-Credentials: true');
-	header('P3P: CP="There is no P3P policy."');
-
-	// Sanitize input
-	if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
-		header('HTTP/1.1 400 Invalid file name.');
-		return;
-	}
-
-	// Verify extension
-	$ext = strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION));
-	if (!in_array($ext, ['gif', 'jpg', 'png', 'bmp', 'webp'])) {
-		header('HTTP/1.1 400 Invalid extension.');
-		return;
-	}
-
-	$type = mime_content_type($temp['tmp_name']);
-	if (!strstr($type, 'image/')) {
-		header('HTTP/1.1 400 Invalid mime type.');
-		return;
-	}
-
-	if (extension_loaded('gd') && getimagesize($temp['tmp_name']) === false) {
-		header('HTTP/1.1 400 Invalid image file.');
-		return;
-	}
-
-	do {
-		$randomName = generateRandomString(8). ".$ext";
-		$fileToWrite = $imageFolder . $randomName;
-	} while (file_exists($fileToWrite));
-
-	move_uploaded_file($temp['tmp_name'], $fileToWrite);
-
-	$returnPathToImage = BASE_URL . EDITOR_IMAGES_DIR . $randomName;
-	echo json_encode(['location' => $returnPathToImage]);
-} else {
+if (!is_uploaded_file($temp['tmp_name'])) {
 	// Notify editor that the upload failed
 	header('HTTP/1.1 500 Server Error');
+	return;
 }
+
+header('Access-Control-Allow-Credentials: true');
+header('P3P: CP="There is no P3P policy."');
+
+// Sanitize input
+if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
+	header('HTTP/1.1 400 Invalid file name.');
+	return;
+}
+
+// Verify extension
+$ext = strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION));
+if (!in_array($ext, array_keys(IMAGES_MIME_TYPES))) {
+	header('HTTP/1.1 400 Invalid extension.');
+	return;
+}
+
+$type = mime_content_type($temp['tmp_name']);
+if (!strstr($type, 'image/')) {
+	header('HTTP/1.1 400 Invalid mime type.');
+	return;
+}
+
+if (extension_loaded('gd') && getimagesize($temp['tmp_name']) === false) {
+	header('HTTP/1.1 400 Invalid image file.');
+	return;
+}
+
+do {
+	$randomName = generateRandomString(8). ".$ext";
+	$fileToWrite = $imageFolder . $randomName;
+} while (file_exists($fileToWrite));
+
+move_uploaded_file($temp['tmp_name'], $fileToWrite);
+
+$returnPathToImage = BASE_URL . EDITOR_IMAGES_DIR . $randomName;
+echo json_encode(['location' => $returnPathToImage]);
