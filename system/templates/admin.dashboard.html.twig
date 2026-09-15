@@ -1,0 +1,74 @@
+<form method="post">
+	{{ csrf() }}
+	<button class="btn btn-secondary" id="reset-order" name="reset-order">Reset Order</button>
+</form>
+
+<script
+	src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.7/Sortable.min.js"
+	crossorigin="anonymous"
+></script>
+
+<script>
+	let sortable = new Sortable(document.querySelector('.connectedSortable'), {
+		group: 'admin-dashboard',
+		handle: '.sortable-handle',
+		animation: 150,
+		store: {
+			/**
+			 * Get the order of elements. Called once during initialization.
+			 * @param   {Sortable}  sortable
+			 * @returns {Array}
+			 */
+			get: function (sortable) {
+				var order = localStorage.getItem('admin-dashboard');
+				return order ? order.split('|') : [];
+			},
+
+			/**
+			 * Save the order of elements. Called onEnd (when the item is dropped).
+			 * @param {Sortable}  sortable
+			 */
+			set: function (sortable) {
+				var order = sortable.toArray();
+				console.log(order);
+				localStorage.setItem('admin-dashboard', order.join('|'));
+			}
+		}
+	});
+
+	document.addEventListener('DOMContentLoaded', function() {
+		// Select all close buttons
+		const closeButtons = document.querySelectorAll('.close-card');
+
+		closeButtons.forEach(function(button) {
+			button.addEventListener('click', function() {
+				// Find the nearest parent card element
+				const card = this.closest('.sortable-handle');
+				// Completely delete it from the DOM
+				console.log(card.dataset.id)
+				card.remove();
+
+				// Save the closed card ID to localStorage
+				if (!closedCards.includes(card.dataset.id)) {
+					closedCards.push(card.dataset.id);
+					localStorage.setItem('admin-dashboard-closed', JSON.stringify(closedCards));
+				}
+			});
+		});
+
+		const cardHeaders = document.querySelectorAll('.connectedSortable .card-header, .connectedSortable .sortable-handle');
+			cardHeaders.forEach((cardHeader) => {
+				cardHeader.style.cursor = 'move';
+			}
+		);
+
+		let closedCards = localStorage.getItem('admin-dashboard-closed') ? JSON.parse(localStorage.getItem('admin-dashboard-closed')) : [];
+		closedCards.forEach(function(cardId) {
+			document.querySelectorAll('[data-id]').forEach(function(card) {
+				if (closedCards.includes(card.dataset.id)) {
+					card.remove();
+				}
+			})
+		});
+	});
+</script>

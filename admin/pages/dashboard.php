@@ -42,6 +42,16 @@ if (isset($_POST['maintenance'])) {
 			registerDatabaseConfig('site_closed_message', $message);
 	}
 }
+elseif (isset($_POST['reset-order'])) {
+	success('Dashboard has been reset successfully.');
+	?>
+		<script>
+			localStorage.removeItem('admin-dashboard');
+			localStorage.removeItem('admin-dashboard-closed');
+		</script>
+	<?php
+}
+
 $is_closed = getDatabaseConfig('site_closed') == '1';
 
 $closed_message = 'Server is under maintenance, please visit later.';
@@ -51,7 +61,7 @@ if (fetchDatabaseConfig('site_closed_message', $tmp))
 
 $settingAdminPanelModules = setting('core.admin_panel_modules');
 if (count($settingAdminPanelModules) > 0) {
-	echo '<div class="row">';
+	echo '<div class="row connectedSortable">';
 	$twig_loader->prependPath(__DIR__ . '/modules/templates');
 	foreach ($settingAdminPanelModules as $box) {
 		$file = __DIR__ . '/modules/' . $box . '.php';
@@ -61,3 +71,5 @@ if (count($settingAdminPanelModules) > 0) {
 	}
 echo '</div>';
 }
+
+$twig->display('admin.dashboard.html.twig');

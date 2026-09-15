@@ -3,10 +3,22 @@ defined('MYAAC') or die('Direct access not allowed!');
 if (isset($status)) {
 
 	$error_icon = '<i class="fas fa-exclamation-circle text-danger"></i>'; ?>
-	<div class=" col-md-6 col-lg-6">
+	<div data-id="server_status" class="sortable-handle col-md-6 col-lg-6">
 		<div class="card card-info card-outline">
 			<div class="card-header border-bottom-0">
-				<span class="font-weight-bold m-0">Server Status</span> <span class="float-right small"><b>Last checked</b>: <?php echo(isset($status['lastCheck']) ? date("l, d.m.Y H:i:s", $status['lastCheck']) : $error_icon); ?></span>
+				<div class="row">
+					<div class="col">
+						<h5 class="font-weight-bold m-0">Server Status</h5>
+					</div>
+					<div class="col-6">
+						<span class="float-right small"><b>Last checked</b>: <?php echo(isset($status['lastCheck']) ? date("l, d.m.Y H:i:s", $status['lastCheck']) : $error_icon); ?></span>
+					</div>
+					<div class="col">
+						<button type="button" class="close close-card" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
 			</div>
 			<div class="card-body p-0 ">
 				<table class="table">
