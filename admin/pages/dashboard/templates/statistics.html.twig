@@ -7,6 +7,7 @@
 				<span class="info-box-text" title="{{ el.title ?? '' }}">{{ el.name }}:</span>
 				<span class="info-box-number">{% if el.link is defined %}<a href="{{ el.link }}">{{ el.value }}</a>{% else %}{{ el.value }}{% endif %}</span>
 			</div>
+			{{ include('_close_card_button.html.twig', {class: 'close-statistic'}) }}
 		</div>
 	</div>
 	{% endfor %}

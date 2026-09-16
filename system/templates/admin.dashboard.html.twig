@@ -1,6 +1,6 @@
 <form method="post">
 	{{ csrf() }}
-	<button class="btn btn-secondary" id="reset-order" name="reset-order">Reset Order</button>
+	<button class="btn btn-secondary" name="reset-order">Reset Order</button>
 </form>
 
 <script
@@ -45,23 +45,36 @@
 		store: store,
 	});
 
+	function close(that, el)
+	{
+		const card = that.closest(el);
+
+		card.remove();
+
+		// Save the closed card ID to localStorage
+		if (!closedCards.includes(card.dataset.id)) {
+			closedCards.push(card.dataset.id);
+			localStorage.setItem('admin-dashboard-closed', JSON.stringify(closedCards));
+		}
+	}
+
+	let closedCards = [];
+
 	document.addEventListener('DOMContentLoaded', function() {
 		// Select all close buttons
-		const closeButtons = document.querySelectorAll('.close-card');
+		const closeCardButtons = document.querySelectorAll('.close-card');
 
-		closeButtons.forEach(function(button) {
+		closeCardButtons.forEach(function(button) {
 			button.addEventListener('click', function() {
-				// Find the nearest parent card element
-				const card = this.closest('.sortable-handle');
-				// Completely delete it from the DOM
-				console.log(card.dataset.id)
-				card.remove();
+				close(this, '.sortable-handle')
+			});
+		});
 
-				// Save the closed card ID to localStorage
-				if (!closedCards.includes(card.dataset.id)) {
-					closedCards.push(card.dataset.id);
-					localStorage.setItem('admin-dashboard-closed', JSON.stringify(closedCards));
-				}
+		const closeStatisticsButtons = document.querySelectorAll('.close-statistic');
+
+		closeStatisticsButtons.forEach(function(button) {
+			button.addEventListener('click', function() {
+				close(this, '.statistics-item')
 			});
 		});
 
@@ -71,7 +84,7 @@
 			}
 		);
 
-		let closedCards = localStorage.getItem('admin-dashboard-closed') ? JSON.parse(localStorage.getItem('admin-dashboard-closed')) : [];
+		closedCards = localStorage.getItem('admin-dashboard-closed') ? JSON.parse(localStorage.getItem('admin-dashboard-closed')) : [];
 		closedCards.forEach(function(cardId) {
 			document.querySelectorAll('[data-id]').forEach(function(card) {
 				if (closedCards.includes(card.dataset.id)) {
