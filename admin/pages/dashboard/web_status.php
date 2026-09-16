@@ -1,7 +1,7 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
-$twig->display('web_status.twig', array(
+$twig->display('web_status.html.twig', array(
 	'is_closed' => $is_closed,
 	'closed_message' => $closed_message,
 	'status' => $status,
