@@ -1,15 +1,13 @@
 {% if accounts is iterable %}
-	<div data-id="created" class="col-md-6 col-lg-3">
+	<div data-id="created" class="sortable-handle col-md-6 col-lg-3">
 		<div class="card card-info card-outline">
-			<div class="card-header sortable-handle">
+			<div class="card-header">
 				<div class="row">
 					<div class="col">
 						<h5>Last 10 created</h5>
 					</div>
 					<div class="col">
-						<button type="button" class="close close-card" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
+						{{ include('_close_card_button.html.twig') }}
 					</div>
 				</div>
 			</div>
