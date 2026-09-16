@@ -10,6 +10,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Dashboard';
 
+use MyAAC\Plugins;
+
 csrfProtect();
 
 if (isset($_POST['clear_cache'])) {
@@ -59,26 +61,28 @@ $tmp = '';
 if (fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
 
-$twig_loader->prependPath(__DIR__ . '/modules/templates');
-$file = __DIR__ . '/modules/statistics.php';
+$twig_loader->prependPath(__DIR__ . '/dashboard/templates');
+
+$file = __DIR__ . '/dashboard/statistics.php';
 if (file_exists($file)) {
 	include($file);
 }
 
-$settingAdminPanelModules = setting('core.admin_panel_modules');
-if (count($settingAdminPanelModules) > 0) {
+$dashboardModules = Plugins::getAdminDashboardModules();
+var_dump($dashboardModules);
+if (count($dashboardModules) > 0) {
 	echo '<div class="row dashboard-sortable">';
 
-	foreach ($settingAdminPanelModules as $box) {
-		if ($box == 'statistics') {
+	foreach ($dashboardModules as $name => $file) {
+		if ($name == 'statistics') {
 			continue;
 		}
-		$file = __DIR__ . '/modules/' . $box . '.php';
+
 		if (file_exists($file)) {
 			include($file);
 		}
 	}
-echo '</div>';
+	echo '</div>';
 }
 
 $twig->display('admin.dashboard.html.twig');
