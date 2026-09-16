@@ -1,5 +1,8 @@
 <?php
 
+const SEX_FEMALE = 0;
+const SEX_MALE = 1;
+
 const SKILL_FRAGS = -1;
 const SKILL_BALANCE = -2;
 

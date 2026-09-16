@@ -90,12 +90,6 @@ WHERE TABLE_SCHEMA = "' . $config['database_name'] . '";');
 			$ret['monsters_size'] = $query['size'];
 		}
 
-		$query = $db->query('SELECT COUNT(`id`) as `size` FROM `' . TABLE_PREFIX . 'spells`;');
-		if($query->rowCount() == 1) {
-			$query = $query->fetch();
-			$ret['spells_size'] = $query['size'];
-		}
-
 		$ret['locales'] = get_locales();
 		$ret['plugins'] = array();
 		foreach(get_plugins() as $plugin) {
