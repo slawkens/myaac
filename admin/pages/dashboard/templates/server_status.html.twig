@@ -10,9 +10,7 @@
 						<span class="float-right small"><b>Last checked</b>: {{ status.lastCheck is defined ? status.lastCheck|date("l, d.m.Y H:i:s") : error_icon|raw }}</span>
 					</div>
 					<div class="col">
-						<button type="button" class="close close-card" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
+						{{ include('_close_card_button.html.twig') }}
 					</div>
 				</div>
 			</div>
