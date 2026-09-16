@@ -78,7 +78,7 @@ $args['elements'] = [
 
 $hooks->triggerFilter(HOOK_FILTER_ADMIN_DASHBOARD_STATISTICS, $args);
 
-usort($args['elements'], function ($a, $b) {
+uasort($args['elements'], function ($a, $b) {
 	return $a['order'] <=> $b['order'];
 });
 
