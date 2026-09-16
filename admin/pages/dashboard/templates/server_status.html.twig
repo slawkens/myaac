@@ -1,0 +1,87 @@
+{% set error_icon = '<i class="fas fa-exclamation-circle text-danger"></i>' %}
+	<div data-id="server_status" class="sortable-handle col-md-6 col-lg-6">
+		<div class="card card-info card-outline">
+			<div class="card-header border-bottom-0">
+				<div class="row">
+					<div class="col">
+						<h5 class="font-weight-bold m-0">Server Status</h5>
+					</div>
+					<div class="col-6">
+						<span class="float-right small"><b>Last checked</b>: {{ status.lastCheck is defined ? status.lastCheck|date("l, d.m.Y H:i:s") : error_icon|raw }}</span>
+					</div>
+					<div class="col">
+						<button type="button" class="close close-card" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="card-body p-0 ">
+				<table class="table">
+					<tbody>
+					<tr>
+						<th width="30%">Server</th>
+						<td>
+							{% if status.server is defined and status.serverVersion is defined %}
+								{{ status.server }} v {{ status.serverVersion }}
+							{% else %}
+								{{ error_icon|raw }}
+							{% endif %}
+						</td>
+
+					</tr>
+					<tr>
+						<th>Client</th>
+						<td>
+							{% if status.clientVersion is defined %}
+								{{ status.clientVersion }}
+							{% else %}
+								{{ error_icon|raw }}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<th>Map</th>
+						<td>
+							{% if status.mapName is defined and status.mapAuthor is defined and status.mapWidth is defined and status.mapHeight is defined %}
+								{{ status.mapName }} by <b>{{ status.mapAuthor }}</b><br/>{{ status.mapWidth }} x {{ status.mapHeight }}
+							{% else %}
+								{{ error_icon|raw }}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<th>Players</th>
+						<td>
+							{% if status.players is defined %}
+								{{ status.players }} ({{ status.playersMax is defined ? status.playersMax : '?' }})
+							{% else %}
+								{{ error_icon|raw }}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<th>Monsters</th>
+						<td>
+							{% if status.monsters is defined %}
+								{{ status.monsters }}
+							{% else %}
+								{{ error_icon|raw }}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<th>MOTD:</th>
+						<td>
+							{% if status.motd is defined %}
+								{{ status.motd }}
+							{% else %}
+								{{ error_icon|raw }}
+							{% endif %}
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
