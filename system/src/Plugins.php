@@ -76,6 +76,10 @@ class Plugins {
 				}
 			}
 
+			uksort($adminDashboardModules, function ($a, $b) {
+				return strcasecmp($a, $b);
+			});
+
 			return $adminDashboardModules;
 		});
 	}

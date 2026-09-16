@@ -69,7 +69,6 @@ if (file_exists($file)) {
 }
 
 $dashboardModules = Plugins::getAdminDashboardModules();
-var_dump($dashboardModules);
 if (count($dashboardModules) > 0) {
 	echo '<div class="row dashboard-sortable">';
 
