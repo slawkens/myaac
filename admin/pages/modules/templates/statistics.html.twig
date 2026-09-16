@@ -1,11 +1,13 @@
-{% for key, el in elements %}
-<div data-id="{{ key }}" class="col">
-	<div class="info-box">
-		<span class="info-box-icon {{ el.class }} elevation-1"><i class="{{ el.icon }}"></i></span>
-		<div class="info-box-content">
-			<span class="info-box-text" title="{{ el.title ?? '' }}">{{ el.name }}:</span>
-			<span class="info-box-number">{% if el.link is defined %}<a href="{{ el.link }}">{{ el.value }}</a>{% else %}{{ el.value }}{% endif %}</span>
+<div class="row dashboard-sortable-statistics">
+	{% for key, el in elements %}
+	<div data-id="{{ key }}" class="col statistics-item">
+		<div class="info-box">
+			<span class="info-box-icon {{ el.class }} elevation-1"><i class="{{ el.icon }}"></i></span>
+			<div class="info-box-content">
+				<span class="info-box-text" title="{{ el.title ?? '' }}">{{ el.name }}:</span>
+				<span class="info-box-number">{% if el.link is defined %}<a href="{{ el.link }}">{{ el.value }}</a>{% else %}{{ el.value }}{% endif %}</span>
+			</div>
 		</div>
 	</div>
+	{% endfor %}
 </div>
-{% endfor %}

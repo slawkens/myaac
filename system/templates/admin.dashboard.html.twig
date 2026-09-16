@@ -9,31 +9,40 @@
 ></script>
 
 <script>
-	let sortable = new Sortable(document.querySelector('.connectedSortable'), {
+	let store = {
+		/**
+		 * Get the order of elements. Called once during initialization.
+		 * @param   {Sortable}  sortable
+		 * @returns {Array}
+		 */
+		get: function (sortable) {
+			var order = localStorage.getItem('admin-dashboard');
+			return order ? order.split('|') : [];
+		},
+
+		/**
+		 * Save the order of elements. Called onEnd (when the item is dropped).
+		 * @param {Sortable}  sortable
+		 */
+		set: function (sortable) {
+			var order = sortable.toArray();
+			console.log(order);
+			localStorage.setItem('admin-dashboard', order.join('|'));
+		}
+	}
+
+	let sortable = new Sortable(document.querySelector('.dashboard-sortable'), {
 		group: 'admin-dashboard',
 		handle: '.sortable-handle',
 		animation: 150,
-		store: {
-			/**
-			 * Get the order of elements. Called once during initialization.
-			 * @param   {Sortable}  sortable
-			 * @returns {Array}
-			 */
-			get: function (sortable) {
-				var order = localStorage.getItem('admin-dashboard');
-				return order ? order.split('|') : [];
-			},
+		store: store,
+	});
 
-			/**
-			 * Save the order of elements. Called onEnd (when the item is dropped).
-			 * @param {Sortable}  sortable
-			 */
-			set: function (sortable) {
-				var order = sortable.toArray();
-				console.log(order);
-				localStorage.setItem('admin-dashboard', order.join('|'));
-			}
-		}
+	let sortableIcons = new Sortable(document.querySelector('.dashboard-sortable-statistics'), {
+		group: 'admin-dashboard-statistics',
+		handle: '.statistics-item',
+		animation: 150,
+		store: store,
 	});
 
 	document.addEventListener('DOMContentLoaded', function() {
@@ -56,7 +65,7 @@
 			});
 		});
 
-		const cardHeaders = document.querySelectorAll('.connectedSortable .card-header, .connectedSortable .sortable-handle');
+		const cardHeaders = document.querySelectorAll('.dashboard-sortable .card-header, .dashboard-sortable-statistics .statistics-item');
 			cardHeaders.forEach((cardHeader) => {
 				cardHeader.style.cursor = 'move';
 			}

@@ -59,11 +59,20 @@ $tmp = '';
 if (fetchDatabaseConfig('site_closed_message', $tmp))
 	$closed_message = $tmp;
 
+$twig_loader->prependPath(__DIR__ . '/modules/templates');
+$file = __DIR__ . '/modules/statistics.php';
+if (file_exists($file)) {
+	include($file);
+}
+
 $settingAdminPanelModules = setting('core.admin_panel_modules');
 if (count($settingAdminPanelModules) > 0) {
-	echo '<div class="row connectedSortable">';
-	$twig_loader->prependPath(__DIR__ . '/modules/templates');
+	echo '<div class="row dashboard-sortable">';
+
 	foreach ($settingAdminPanelModules as $box) {
+		if ($box == 'statistics') {
+			continue;
+		}
 		$file = __DIR__ . '/modules/' . $box . '.php';
 		if (file_exists($file)) {
 			include($file);
