@@ -16,6 +16,9 @@
 			images_upload_credentials: true,
 
 			relative_urls: true,
+			{% if mail_to is defined %}
+			convert_urls: false,
+			{% endif %}
 			document_base_url: "{{ constant('BASE_URL') }}",
 
 			table_class_list: [
