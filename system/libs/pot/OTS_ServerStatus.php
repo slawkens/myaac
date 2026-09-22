@@ -464,6 +464,7 @@ class OTS_ServerStatus
  */
 	public function getPlayers()
 	{
+		return $this->players;
 	}
 
 /**
