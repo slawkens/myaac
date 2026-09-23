@@ -27,59 +27,19 @@ if(setting('core.status_enabled') === false) {
 	return;
 }
 
-/**
- * @var array $config
- */
-$status_ip = $config['lua']['ip'];
-if(isset($config['lua']['statusProtocolPort'])) {
-	$config['lua']['loginPort'] = $config['lua']['statusProtocolPort'];
-	$config['lua']['statusPort'] = $config['lua']['statusProtocolPort'];
-	$status_port = $config['lua']['statusProtocolPort'];
-}
-else if(isset($config['lua']['status_port'])) {
-	$config['lua']['loginPort'] = $config['lua']['status_port'];
-	$config['lua']['statusPort'] = $config['lua']['status_port'];
-	$status_port = $config['lua']['status_port'];
-}
-
-// ip check
-$settingIP = setting('core.status_ip');
-if(isset($settingIP[0]))
-{
-	$status_ip = $settingIP;
-}
-elseif(!isset($status_ip[0])) // try localhost if no ip specified
-{
-	$status_ip = '127.0.0.1';
-}
-
-// port check
-$status_port = $config['lua']['statusPort'];
-$settingPort = setting('core.status_port');
-if(isset($settingPort[0])) {
-	$status_port = $settingPort;
-}
-elseif(!isset($status_port[0])) // try 7171 if no port specified
-{
-	$status_port = 7171;
-}
-
 $fetch_from_db = true;
 /**
  * @var Cache $cache
  */
-if($cache->enabled())
-{
+if($cache->enabled()) {
 	$tmp = '';
-	if($cache->fetch('status', $tmp))
-	{
+	if($cache->fetch('status', $tmp)) {
 		$status = unserialize($tmp);
 		$fetch_from_db = false;
 	}
 }
 
-if($fetch_from_db)
-{
+if($fetch_from_db) {
 	$status_query = Config::where('name', 'LIKE', '%status%')->get();
 	if (!$status_query || !$status_query->count()) {
 		foreach($status as $key => $value) {
@@ -92,8 +52,9 @@ if($fetch_from_db)
 	}
 }
 
-if(isset($config['lua']['statustimeout']))
+if(isset($config['lua']['statustimeout'])) {
 	$config['lua']['statusTimeout'] = $config['lua']['statustimeout'];
+}
 
 // get status timeout from server config
 $status_timeout = eval('return ' . $config['lua']['statusTimeout'] . ';') / 1000 + 1;
@@ -109,11 +70,12 @@ if($status['lastCheck'] + $status_timeout < time()) {
 	updateStatus();
 }
 
-function updateStatus() {
-	global $db, $cache, $config, $status, $status_ip, $status_port;
+function updateStatus()
+{
+	global $db, $cache, $status;
 
 	// get server status and save it to database
-	$serverInfo = new OTS_ServerInfo($status_ip, $status_port);
+	$serverInfo = new OTS_ServerInfo(setting('core.status_ip'), setting('core.status_port'));
 	$serverInfo->setTimeout(setting('core.status_timeout'));
 
 	$serverStatus = $serverInfo->status();
