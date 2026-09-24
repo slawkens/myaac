@@ -10,7 +10,7 @@
 
 ### Fixed
 * Settings: Improve "database manual" detection (https://github.com/slawkens/myaac/commit/7ea01d4955dc45b9c07a3a3bf1ba9f25ba801011)
-* Admin - Mailer: Fix sending images by paste (CTRL + V), the image was not correctly displayed (https://github.com/slawkens/myaac/commit/d4e8e26e4bc5e5f2cdd300a70fb781c5e303d019)
+* Admin - Mailer: Fix sending images by paste (CTRL + V), the images were not correctly displayed (https://github.com/slawkens/myaac/commit/d4e8e26e4bc5e5f2cdd300a70fb781c5e303d019)
 * Server Status: Add missing return in the ServerStatus->getPlayers (https://github.com/slawkens/myaac/commit/7c46a9191dd1adf712d9b40f457c986af16d1848)
 * Install: Fix PHP warning in install (config.lua not exist) (https://github.com/slawkens/myaac/commit/2fe4c7be55cee72c31da74cd5eb3d6b933284fb8)
 * Admin - Pages: Display error message if page cannot be found (edit) (https://github.com/slawkens/myaac/commit/0a2b01c1b07a41adbcb8591352b8329e5625961e)
