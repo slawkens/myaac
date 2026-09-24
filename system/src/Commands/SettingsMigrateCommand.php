@@ -143,11 +143,11 @@ class SettingsMigrateCommand extends Command
 
 		clearCache();
 
-		$io->success(count($this->migrated) . ' setting(s) migrated to Admin Panel settings.');
+		$io->success(count($this->migrated) . ' config(s) migrated to Admin Panel settings.');
 		//$io->table(['Setting', 'Value'], $this->tableRows($this->migrated));
 
 		if ($legacyConfig['recaptcha_enabled'] ?? false) {
-			$io->warning('Cannot migrate ReCaptcha settings. It needs to be installed as a plugin and re-configured.');
+			$io->warning('Cannot migrate ReCaptcha config. It needs to be installed as a plugin and re-configured.');
 		}
 
 		$impossibleToConvert = $this->getImpossibleToConvert($settingsFile['settings']);
