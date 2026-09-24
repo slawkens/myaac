@@ -4,4 +4,7 @@ if (!isset($status)) {
 	$status = [];
 }
 
-$twig->display('server_status.html.twig', ['status' => $status]);
+$twig->display('server_status.html.twig', [
+	'status' => $status,
+	'edit' => $edit,
+]);

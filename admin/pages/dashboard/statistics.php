@@ -84,4 +84,5 @@ uasort($args['elements'], function ($a, $b) {
 
 $twig->display('statistics.html.twig', array(
 	'elements' => $args['elements'],
+	'edit' => $edit,
 ));

@@ -12,4 +12,5 @@ if ($db->hasColumn('accounts', 'premium_points')) {
 
 $twig->display('points.html.twig', array(
 	'points' => $points,
+	'edit' => $edit,
 ));

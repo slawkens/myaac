@@ -11,5 +11,6 @@ if ($db->hasColumn('players', 'balance')) {
 }
 
 $twig->display('balance.html.twig', array(
-	'balance' => $balance
+	'balance' => $balance,
+	'edit' => $edit,
 ));

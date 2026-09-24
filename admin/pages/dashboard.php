@@ -44,7 +44,7 @@ if (isset($_POST['maintenance'])) {
 			registerDatabaseConfig('site_closed_message', $message);
 	}
 }
-elseif (isset($_POST['reset-order'])) {
+elseif (isset($_POST['reset'])) {
 	success('Dashboard has been reset successfully.');
 	?>
 		<script>
@@ -60,6 +60,17 @@ $closed_message = 'Server is under maintenance, please visit later.';
 $tmp = '';
 if (fetchDatabaseConfig('site_closed_message', $tmp)) {
 	$closed_message = $tmp;
+}
+
+$edit = isset($_GET['edit']) ? ($_GET['edit'] == '1') : false;
+
+$twig->display('admin.dashboard.start.html.twig', [
+	'edit' => $edit,
+]);
+
+if ($edit) {
+	info('You are in edit mode. Changes are saved automatically and locally in your browser.<br/>
+	Hint: You can drag and drop the dashboard modules to rearrange them.');
 }
 
 $twig_loader->prependPath(__DIR__ . '/dashboard/templates');
@@ -85,4 +96,6 @@ if (count($dashboardModules) > 0) {
 	echo '</div>';
 }
 
-$twig->display('admin.dashboard.html.twig');
+$twig->display('admin.dashboard.html.twig', [
+	'edit' => $edit,
+]);

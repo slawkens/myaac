@@ -1,8 +1,3 @@
-<form method="post">
-	{{ csrf() }}
-	<button class="btn btn-secondary" name="reset-order">Reset Order</button>
-</form>
-
 <script
 	src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.7/Sortable.min.js"
 	crossorigin="anonymous"
@@ -16,7 +11,7 @@
 		 * @returns {Array}
 		 */
 		get: function (sortable) {
-			var order = localStorage.getItem('admin-dashboard');
+			var order = localStorage.getItem(sortable.options.group.name);
 			return order ? order.split('|') : [];
 		},
 
@@ -26,8 +21,8 @@
 		 */
 		set: function (sortable) {
 			var order = sortable.toArray();
-			console.log(order);
-			localStorage.setItem('admin-dashboard', order.join('|'));
+			//console.log(order);
+			localStorage.setItem(sortable.options.group.name, order.join('|'));
 		}
 	}
 
@@ -36,6 +31,9 @@
 		handle: '.sortable-handle',
 		animation: 150,
 		store: store,
+		{% if not edit %}
+		disabled: true,
+		{% endif %}
 	});
 
 	let sortableIcons = new Sortable(document.querySelector('.dashboard-sortable-statistics'), {
@@ -43,11 +41,18 @@
 		handle: '.statistics-item',
 		animation: 150,
 		store: store,
+		{% if not edit %}
+		disabled: true,
+		{% endif %}
 	});
+
+{% if edit %}
 
 	function close(that, el)
 	{
-		const card = that.closest(el);
+		let card = that.closest(el);
+
+		console.log(el);
 
 		card.remove();
 
@@ -60,7 +65,8 @@
 
 	let closedCards = [];
 
-	document.addEventListener('DOMContentLoaded', function() {
+	document.addEventListener('DOMContentLoaded', function()
+	{
 		// Select all close buttons
 		const closeCardButtons = document.querySelectorAll('.close-card');
 
@@ -83,7 +89,11 @@
 				cardHeader.style.cursor = 'move';
 			}
 		);
+	});
+{% endif %}
 
+	document.addEventListener('DOMContentLoaded', function()
+	{
 		closedCards = localStorage.getItem('admin-dashboard-closed') ? JSON.parse(localStorage.getItem('admin-dashboard-closed')) : [];
 		closedCards.forEach(function(cardId) {
 			document.querySelectorAll('[data-id]').forEach(function(card) {
@@ -93,4 +103,5 @@
 			})
 		});
 	});
+
 </script>
