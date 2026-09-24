@@ -319,7 +319,9 @@ return [
 						}
 
 						$explode = explode('=', $town);
-						$ret[$explode[0]] = $explode[1];
+						if (count($explode) > 1) {
+							$ret[$explode[0]] = $explode[1];
+						}
 					}
 
 					return $ret;
