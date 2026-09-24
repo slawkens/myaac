@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.9.5 - 23.09.2026]
+
+### Added
+* Admin Panel: New hook for dashboard: statistics, allows to customize the icons (https://github.com/slawkens/myaac/commit/1f4c439d047afe2b2826adcaae936ec908dcdd48)
+
+### Changed
+* Settings: Auto detect mime type for favicon and og:image (https://github.com/slawkens/myaac/commit/6f10c6a2ec50f91ec19012ce93c152e037627fc2)
+
+### Fixed
+* Settings: Improve "database manual" detection (https://github.com/slawkens/myaac/commit/7ea01d4955dc45b9c07a3a3bf1ba9f25ba801011)
+* Admin - Mailer: Fix sending images by paste (CTRL + V), the images were not correctly displayed (https://github.com/slawkens/myaac/commit/d4e8e26e4bc5e5f2cdd300a70fb781c5e303d019)
+* Server Status: Add missing return in the ServerStatus->getPlayers (https://github.com/slawkens/myaac/commit/7c46a9191dd1adf712d9b40f457c986af16d1848)
+* Install: Fix PHP warning in install (config.lua not exist) (https://github.com/slawkens/myaac/commit/2fe4c7be55cee72c31da74cd5eb3d6b933284fb8)
+* Admin - Pages: Display error message if page cannot be found (edit) (https://github.com/slawkens/myaac/commit/0a2b01c1b07a41adbcb8591352b8329e5625961e)
+
 ## [1.9.4 - 10.09.2026]
 
 Compatible with PHP 8.1 - 8.5.
