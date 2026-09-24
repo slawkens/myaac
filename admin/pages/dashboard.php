@@ -58,8 +58,9 @@ $is_closed = getDatabaseConfig('site_closed') == '1';
 
 $closed_message = 'Server is under maintenance, please visit later.';
 $tmp = '';
-if (fetchDatabaseConfig('site_closed_message', $tmp))
+if (fetchDatabaseConfig('site_closed_message', $tmp)) {
 	$closed_message = $tmp;
+}
 
 $twig_loader->prependPath(__DIR__ . '/dashboard/templates');
 
@@ -73,7 +74,7 @@ if (count($dashboardModules) > 0) {
 	echo '<div class="row dashboard-sortable">';
 
 	foreach ($dashboardModules as $name => $file) {
-		if ($name == 'statistics') {
+		if ($name === 'statistics') { // statistics is already loaded separately above
 			continue;
 		}
 
