@@ -60,22 +60,6 @@ if (isset($_POST['reset']) && $_POST['reset'] == '1') {
 	else {
 		success('Settings for this plugin has been reset.');
 	}
-
-}
-
-if (isset($_POST['reset']) && $_POST['reset'] == '1') {
-	$settings = Settings::getInstance();
-
-	$settings->deleteFromDatabase($settingsKeyName);
-	$settings->clearCache();
-
-	if ($plugin === 'core') {
-		success('MyAAC core settings has been reset.');
-	}
-	else {
-		success('Settings for this plugin has been reset.');
-	}
-
 }
 
 $title = ($plugin == 'core' ? 'Settings' : $settingsFile['name'] . ' - Settings');
