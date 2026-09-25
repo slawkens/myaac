@@ -18,7 +18,11 @@ class ItemsParser
 		$parse = '';
 
 		while (($line = fgets($handle)) !== false) {
-			if (str_contains($line, '[[items]]') && $i++ != 0) {
+			if (trim($line) === '[[items]]') {
+				if ($i++ === 0) {
+					continue;
+				}
+
 				//global $whoopsHandler;
 				//$whoopsHandler->addDataTable('ini', [$parse]);
 
