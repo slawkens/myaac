@@ -436,7 +436,7 @@ foreach($config['menu_categories'] as $id => $cat) {
         </div>
         <div id="ThemeboxesColumn">
           <div id="RightArtwork">
-            <img id="Monster" src="images/monsters/<?php echo logo_monster() ?>.gif" onClick="window.location = '?subtopic=creatures&creature=<?php echo $config['logo_monster'] ?>';" alt="Monster of the Week" />
+            <img id="Monster" src="<?php echo logo_monster() ?>" onClick="window.location = '<?= getMonsterLink(config('logo_monster')['name'] ?? '', false) ?>';" alt="Monster of the Week" />
             <img id="PedestalAndOnline" src="<?php echo $template_path; ?>/images/header/pedestal-and-online.gif" alt="Monster Pedestal and Players Online Box"/>
           <div id="PlayersOnline" onClick="window.location = '<?php echo getLink('online'); ?>'">
 		  <?php
@@ -474,6 +474,19 @@ foreach($config['menu_categories'] as $id => $cat) {
 <?php
 function logo_monster()
 {
-	global $config;
-	return str_replace(" ", "", trim(strtolower($config['logo_monster'])));
+	$outfit = config('logo_monster');
+	if (!empty($outfit['typeEx'])) {
+		return setting('core.item_images_url') . $outfit['typeEx'] . setting('core.item_images_extension');
+	}
+
+	if (isset($outfit['type'])) {
+		$getValue = function ($val) use ($outfit) {
+			return (!empty($outfit[$val])
+				? '&' . $val . '=' . $outfit[$val] : '');
+		};
+
+		return setting('core.outfit_images_url') . '?id=' . $outfit['type'] . $getValue('addons') . $getValue('head') . $getValue('body') . $getValue('legs') . $getValue('feet');
+	}
+
+	return 'images/knight.png';
 }

@@ -48,10 +48,6 @@ $up();
 require_once SYSTEM . 'migrations/53.php';
 $up();
 
-// new monster columns
-require_once SYSTEM . 'migrations/31.php';
-$up();
-
 // rules page
 require_once SYSTEM . 'migrations/45.php';
 $up();

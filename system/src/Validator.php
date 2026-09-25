@@ -10,8 +10,6 @@
 
 namespace MyAAC;
 
-use MyAAC\Models\Monster;
-
 class Validator
 {
 	private static $lastError = '';
@@ -327,14 +325,6 @@ class Validator
 			$namelock = $db->query('SELECT `player_id` FROM `player_namelocks` WHERE `name` = ' . $db->quote($name));
 			if($namelock->rowCount() > 0) {
 				self::$lastError =  'Character with this name has been namelocked.';
-				return false;
-			}
-		}
-
-		$monstersCheck = setting('core.create_character_name_monsters_check');
-		if ($monstersCheck) {
-			if (Monster::where('name', 'like', $name_lower)->exists()) {
-				self::$lastError = 'Your name cannot contains monster name.';
 				return false;
 			}
 		}

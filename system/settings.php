@@ -906,7 +906,7 @@ Sent by MyAAC,<br/>
 		'create_character_name_monsters_check' => [
 			'name' => 'Block Monsters Names',
 			'type' => 'boolean',
-			'desc' => 'Should monsters names be blocked when creating character?',
+			'desc' => 'Should monsters names be blocked when creating character? The monsters plugin needs to be installed',
 			'default' => true,
 		],
 		'create_character_name_npc_check' => [
@@ -1418,28 +1418,6 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
-			'title' => 'Monsters Page'
-		],
-		'monsters_images_preview' => [
-			'name' => 'Monsters Images Preview',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to allow picture previews for creatures',
-			'default' => false,
-		],
-		'monsters_items_url' => [
-			'name' => 'Monsters Items URL',
-			'type' => 'text',
-			'desc' => 'Set to website which shows details about items',
-			'default' => 'https://tibia.fandom.com/wiki/',
-		],
-		'monsters_loot_percentage' => [
-			'name' => 'Monsters Loot Percentage',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to show the loot tooltip percent',
-			'default' => true,
-		],
-		[
-			'type' => 'section',
 			'title' => 'Bans Page'
 		],
 		'bans_per_page' => [
@@ -1544,22 +1522,6 @@ Sent by MyAAC,<br/>
 			'type' => 'text',
 			'desc' => 'Set to animoutfit.php for animated outfit',
 			'default' => 'https://outfit-images.ots.me/latest/outfit.php',
-		],
-		[
-			'type' => 'section',
-			'title' => 'Monster Images'
-		],
-		'monsters_images_url' => [
-			'name' => 'Monsters Images URL',
-			'type' => 'text',
-			'desc' => 'Set to <i>images/monsters/</i> if you host your own creatures in images folder',
-			'default' => 'images/monsters/',
-		],
-		'monsters_images_extension' => [
-			'name' => 'Monsters Images File Extension',
-			'type' => 'text',
-			'desc' => '',
-			'default' => '.gif',
 		],
 		// this is hidden, because no implemented yet
 		'multiworld' => [

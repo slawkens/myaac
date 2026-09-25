@@ -25,7 +25,6 @@ return [
 		'Team' => 'team',
 	],
 	MENU_CATEGORY_LIBRARY => [
-		'Monsters' => 'monsters',
 		'Server Info' => 'ots-info',
 		'Commands' => 'commands',
 		'Exp Stages' => 'exp-stages',

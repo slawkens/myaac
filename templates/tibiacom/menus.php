@@ -27,7 +27,6 @@ return [
 		'Forum' => 'forum',
 	],
 	MENU_CATEGORY_LIBRARY => [
-		'Monsters' => 'monsters',
 		'Commands' => 'commands',
 		'Exp Stages' => 'exp-stages',
 		'Gallery' => 'gallery',

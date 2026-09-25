@@ -83,11 +83,6 @@ $function = new TwigFunction('getPlayerLink', function ($s, $p = true, $colored 
 });
 $twig->addFunction($function);
 
-$function = new TwigFunction('getMonsterLink', function ($s, $p = true) {
-	return getMonsterLink($s, $p);
-});
-$twig->addFunction($function);
-
 $function = new TwigFunction('getGuildLink', function ($s, $p = true) {
     return getGuildLink($s, $p);
 });

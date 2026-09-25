@@ -51,20 +51,7 @@ interface IOTS_DataDisplay
  * @return string String representation.
  */
     public function displayItemType(OTS_ItemType $itemType);
-/**
- * Displays monster.
- *
- * @param OTS_Monster $monster Monster to be displayed.
- * @return string String representation.
- */
-    public function displayMonster(OTS_Monster $monster);
-/**
- * Displays monsters list.
- *
- * @param OTS_MonstersList $monstersList List to be displayed.
- * @return string String representation.
- */
-    public function displayMonstersList(OTS_MonstersList $monstersList);
+
 /**
  * Displays OTBM map info.
  *

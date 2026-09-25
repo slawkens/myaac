@@ -115,14 +115,6 @@ describe('Check Public Pages', () => {
 		})
 	})
 
-	// library
-	it('Go to monsters page', () => {
-		cy.visit({
-			url: '/monsters',
-			method: 'GET',
-		})
-	})
-
 	it('Go to server info page', () => {
 		cy.visit({
 			url: '/ots-info',
