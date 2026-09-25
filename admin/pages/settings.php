@@ -60,10 +60,9 @@ if (isset($_POST['reset']) && $_POST['reset'] == '1') {
 	else {
 		success('Settings for this plugin has been reset.');
 	}
-
 }
 
-$title = ($plugin == 'core' ? 'Settings' : 'Plugin Settings - ' . $settingsFile['name']);
+$title = ($plugin == 'core' ? 'Settings' : $settingsFile['name'] . ' - Settings');
 
 $settingsParsed = Settings::display($settingsKeyName, $settingsFile['settings']);
 
