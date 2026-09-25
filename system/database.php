@@ -30,7 +30,7 @@ if(!$config['database_overwrite']) {
 		}
 		$config['database_encryption'] = 'sha1';
 	}
-	if(isset($config['lua']['sqlType'])) {// tfs 0.3
+	elseif (isset($config['lua']['sqlType'])) {// tfs 0.3
 		if(isset($config['lua']['mysqlHost'])) {// tfs 0.2
 			$config['otserv_version'] = TFS_02;
 			$config['database_type'] = 'mysql';
