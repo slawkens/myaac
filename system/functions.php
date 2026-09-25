@@ -514,6 +514,8 @@ function template_place_holder($type): string
 	if($type === 'head_start') {
 		$ret .= template_header();
 		if (isset($debugBar)) {
+			$debugBarRenderer->disableVendor('jquery');
+			$debugBarRenderer->setEnableJqueryNoConflict(false);
 			$ret .= $debugBarRenderer->renderHead();
 		}
 	}
