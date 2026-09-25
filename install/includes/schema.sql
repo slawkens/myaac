@@ -185,12 +185,3 @@ CREATE TABLE IF NOT EXISTS `myaac_visitors`
 	`user_agent` varchar(255) NOT NULL DEFAULT '',
 	UNIQUE (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `myaac_weapons`
-(
-	`id` int NOT NULL,
-	`level` int NOT NULL DEFAULT 0,
-	`maglevel` int NOT NULL DEFAULT 0,
-	`vocations` varchar(100) NOT NULL DEFAULT '',
-	PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;

@@ -91,7 +91,6 @@ $locale['step_database_modifying_field'] = 'Modyfikacja pola';
 $locale['step_database_changing_field'] = 'Zmiana $FIELD$ na $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Importowanie schematów graczy...';
 $locale['step_database_loaded_items'] = 'Załadowano przedmioty (items)...';
-$locale['step_database_loaded_weapons'] = 'Załadowano bronie (weapons)...';
 $locale['step_database_loaded_npcs'] = 'Załadowano NPCs...';
 $locale['step_database_error_npcs'] = 'Wystąpił problem podczas ładowania NPCs';
 $locale['step_database_loaded_towns'] = 'Załadowano miasta (towns)...';

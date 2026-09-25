@@ -92,7 +92,6 @@ $locale['step_database_modifying_field'] = 'Modifying field';
 $locale['step_database_changing_field'] = 'Changing $FIELD$ to $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Player samples has been imported...';
 $locale['step_database_loaded_items'] = 'Items has been loaded...';
-$locale['step_database_loaded_weapons'] = 'Weapons has been loaded...';
 $locale['step_database_loaded_npcs'] = 'NPCs has been loaded...';
 $locale['step_database_error_npcs'] = 'There were some problems loading your NPCs';
 $locale['step_database_loaded_towns'] = 'Towns has been loaded...';

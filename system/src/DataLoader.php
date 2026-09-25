@@ -71,15 +71,6 @@ class DataLoader
 		else {
 			warning(self::$locale['step_database_error_towns']);
 		}
-
-		self::$startTime = microtime(true);
-
-		if(Weapons::loadFromXML()) {
-			success(self::$locale['step_database_loaded_weapons'] . self::getLoadedTime());
-		}
-		else {
-			error(Weapons::getError());
-		}
 	}
 
 	public static function setLocale($locale) {

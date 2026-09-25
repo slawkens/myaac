@@ -80,7 +80,6 @@ $locale['step_database_modifying_field'] = 'Modificando campo';
 $locale['step_database_changing_field'] = 'Alterarando $FIELD$ para $FIELD_NEW$...';
 $locale['step_database_imported_players'] = 'Player samples foram importadas...';
 $locale['step_database_loaded_items'] = 'Items foram carregados...';
-$locale['step_database_loaded_weapons'] = 'Weapons foram carregadas...';
 $locale['step_database_created_account'] = 'Conta de administrador criada...';
 $locale['step_database_created_news'] = 'Notícias foram criadas...';
 
