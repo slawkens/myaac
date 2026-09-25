@@ -50,6 +50,7 @@ elseif (isset($_POST['reset'])) {
 		<script>
 			localStorage.removeItem('admin-dashboard');
 			localStorage.removeItem('admin-dashboard-closed');
+			localStorage.removeItem('admin-dashboard-statistics');
 		</script>
 	<?php
 }
