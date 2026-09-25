@@ -1,0 +1,30 @@
+<div class="row mb-2">
+
+	<div class="col-3 col-md-1 align-self-center">
+		<form method="get">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="edit" value="1" id="edit" {{ edit ? 'checked' : '' }} >
+				<label class="form-check-label" for="edit">
+					Edit Mode
+				</label>
+			</div>
+		</form>
+	</div>
+
+	<div class="col-6 col-md-10"></div>
+
+	<div class="col-3 col-md-1 align-self-center">
+		<form method="post" action="{{ constant('ADMIN_URL') }}">
+			{{ csrf() }}
+			<button class="btn btn-secondary" name="reset">Reset</button>
+		</form>
+	</div>
+</div>
+
+<script>
+	$(function() {
+		$('input[name="edit"]').change(function() {
+			$(this).closest('form').submit();
+		});
+	});
+</script>

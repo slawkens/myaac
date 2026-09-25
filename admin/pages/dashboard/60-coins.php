@@ -16,5 +16,6 @@ if (HAS_ACCOUNT_COINS) {
 }
 
 $twig->display('coins.html.twig', array(
-	'coins' => $coins
+	'coins' => $coins,
+	'edit' => $edit,
 ));

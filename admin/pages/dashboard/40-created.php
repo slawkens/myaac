@@ -12,4 +12,5 @@ if ($db->hasColumn('accounts', 'created')) {
 
 $twig->display('created.html.twig', array(
 	'accounts' => $accounts,
+	'edit' => $edit,
 ));
