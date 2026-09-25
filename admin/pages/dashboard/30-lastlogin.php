@@ -12,4 +12,5 @@ if ($db->hasColumn('players', 'lastlogin')) {
 
 $twig->display('lastlogin.html.twig', array(
 	'players' => $players,
+	'edit' => $edit,
 ));

@@ -1,12 +1,14 @@
-<div class="col-12 col-md-6">
+<div data-id="web_status" class="sortable-handle col-12 col-md-6">
 	<div class="card card-warning card-outline">
 		<div class="card-header">
-			<span class="m-0">Website Status<span class="float-right">
-			<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-				<input form="maintenance-form" type="checkbox" class="custom-control-input" name="status" id="status" value="true" {% if not is_closed %} checked{% endif %}>
-				<label id="status-label" class="custom-control-label" for="status"> {% if is_closed %}Closed{% else %}Open{% endif %}</label>
-			</div></span>
-			</span>
+			<div class="row">
+				<div class="col">
+					<h5>Website Status</h5>
+				</div>
+				<div class="col">
+					{{ include('_close_card_button.html.twig') }}
+				</div>
+			</div>
 		</div>
 		<div class="card-body p-2">
 			<div class="col-sm-12">
@@ -16,11 +18,17 @@
 			</div>
 		</div>
 		<div class="card-footer">
+			<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success mb-3 mx-2">
+				<input form="maintenance-form" type="checkbox" class="custom-control-input" name="status" id="status" value="true" {% if not is_closed %} checked{% endif %}>
+				<label id="status-label" class="custom-control-label" for="status"> {% if is_closed %}Closed{% else %}Open{% endif %}</label>
+			</div>
+
 			<form id="maintenance-form" method="post" action="?p=dashboard" class="float-left">
 				{{ csrf() }}
 				<input type="hidden" name="maintenance" value="1" />
 				<button type="submit" class="btn btn-info"><i class="far fa-update"></i> Update</button>
 			</form>
+
 			<form method="post" action="?p=dashboard" class="float-right">
 				{{ csrf() }}
 				<input type="hidden" name="clear_cache" value="1" />

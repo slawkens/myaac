@@ -327,7 +327,9 @@ return [
 						}
 
 						$explode = explode('=', $town);
-						$ret[$explode[0]] = $explode[1];
+						if (count($explode) > 1) {
+							$ret[$explode[0]] = $explode[1];
+						}
 					}
 
 					return $ret;
@@ -1639,17 +1641,6 @@ Sent by MyAAC,<br/>
 			'type' => 'boolean',
 			'desc' => 'You can disable support for plain php pages in admin panel, for security.<br/>Existing pages still will be working, so you need to delete them manually',
 			'default' => false,
-		],
-		'admin_panel_modules' => [
-			'name' => 'Modules Enabled',
-			'type' => 'textarea',
-			'desc' => 'What modules will be shown on Admin Panel Dashboard page',
-			'default' => 'statistics,web_status,server_status,lastlogin,created,points,coins,balance',
-			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
-				},
-			],
 		],
 		[
 			'type' => 'category',
