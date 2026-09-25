@@ -1507,7 +1507,9 @@ Sent by MyAAC,<br/>
 		'item_images_url' => [
 			'name' => 'Item Images URL',
 			'type' => 'text',
-			'desc' => 'Set to <strong>images/items</strong> if you host your own items in images folder',
+			'desc' => 'Set to <strong>images/items</strong> if you host your own items in images folder.' . PHP_EOL .
+				'For canary (item client ids) you can use: https://item-images.ots.me/latest_otbr/' . PHP_EOL .
+				'Generate your own at: https://item-images.ots.me/generator/',
 			'default' => 'https://item-images.ots.me/1092/',
 		],
 		'item_images_extension' => [
