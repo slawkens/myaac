@@ -71,14 +71,12 @@ $newRecoveryKeyFormat = (count($explodeRecoveryKey) == 4);
 
 switch ($step) {
 	case 'problem':
-		if (empty($errors)) {
-			$twig->display('account/lost/problem.html.twig', [
-				'email' => str_contains($emailOrCharacter, '@') ? $emailOrCharacter : '',
-				'character' => !str_contains($emailOrCharacter, '@') ? $emailOrCharacter : '',
-				'emailOrCharacter' => $emailOrCharacter,
-				//'errors' => $errors,
-			]);
-		}
+		$twig->display('account/lost/problem.html.twig', [
+			'email' => str_contains($emailOrCharacter, '@') ? $emailOrCharacter : '',
+			'character' => !str_contains($emailOrCharacter, '@') ? $emailOrCharacter : '',
+			'emailOrCharacter' => $emailOrCharacter,
+			//'errors' => $errors,
+		]);
 
 		break;
 
