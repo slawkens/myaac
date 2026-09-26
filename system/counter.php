@@ -50,7 +50,7 @@ else
 		registerDatabaseConfig('views_counter', 1); // save in the database
 	else
 	{
-		$views_counter = $value + 1;
+		$views_counter = (int) $value + 1;
 		updateDatabaseConfig('views_counter', $views_counter); // update counter
 	}
 }
