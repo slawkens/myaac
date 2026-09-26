@@ -39,6 +39,8 @@ class DataLoader
 	 */
 	public static function load()
 	{
+		global $hooks;
+
 		self::$startTime = microtime(true);
 
 		if(Items::load()) {
@@ -71,6 +73,8 @@ class DataLoader
 		else {
 			warning(self::$locale['step_database_error_towns']);
 		}
+
+		$hooks->trigger(HOOK_ADMIN_SERVER_DATA_RELOAD);
 	}
 
 	public static function setLocale($locale) {
