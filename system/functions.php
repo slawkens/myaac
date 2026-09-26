@@ -1297,7 +1297,9 @@ function clearCache()
 	deleteDirectory(CACHE, ['signatures', 'twig', 'plugins', 'index.html', 'persistent'], true);
 
 	global $hooks;
-	$hooks->trigger(HOOK_CACHE_CLEAR, ['cache' => Cache::getInstance()]);
+	if (isset($hooks)) {
+		$hooks->trigger(HOOK_CACHE_CLEAR, ['cache' => Cache::getInstance()]);
+	}
 
 	return true;
 }
