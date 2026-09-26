@@ -13,8 +13,13 @@ $title = 'Login';
 csrfProtect();
 
 require PAGES . 'account/login.php';
+
 if ($logged) {
 	header('Location: ' . (admin() ? ADMIN_URL : BASE_URL));
+	return;
+}
+
+if (defined('HIDE_LOGIN_BOX') && HIDE_LOGIN_BOX) {
 	return;
 }
 

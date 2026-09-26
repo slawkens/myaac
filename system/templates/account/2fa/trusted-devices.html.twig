@@ -1,0 +1,89 @@
+{% set title = 'Trusted Devices' %}
+{% set tableClass = 'Table3' %}
+
+{% set content %}
+	<table style="width:100%;">
+		<tbody>
+			<tr>
+				<td>
+					<div class="TableContentContainer">
+						<table class="myaac-table" width="100%">
+							<tbody>
+								<tr>
+									<td><strong>Created</strong></td>
+									<td><strong>System</strong></td>
+									<td><strong>Last Login</strong></td>
+									<td><strong>Type</strong></td>
+									<td></td>
+								</tr>
+
+								{% if trustedDevices is empty %}
+									<tr>
+										<td colspan="5" style="text-align:center;">No trusted devices found.</td>
+									</tr>
+								{% endif %}
+
+								{% for device in trustedDevices %}
+								<tr>
+									<td>{{ device.created_at|date('M d, Y') }},<br/>
+										{{ device.created_at|date('H:i:s T') }}
+									</td>
+
+									<td>
+										{% if device.is_mobile %}
+											📱 <!-- Smartphone Icon -->
+										{% else %}
+											💻 <!-- Desktop Icon -->
+										{% endif %}
+
+										{{ device.client }} {{ device.client_version }} ({{ device.os }} {{ device.os_version }})
+									{% if deviceUserAgent == device.user_agent %}
+										<br/><span style="font-weight: bold; color: green;">(Current Device)</span>
+									{% endif %}
+
+									</td>
+
+									<td>{{ device.updated_at|date('M d, Y') }},<br/>
+										{{ device.updated_at|date('H:i:s T') }}
+									</td>
+									<td>{{ device.type }}</td>
+									<td>
+										<div style="white-space: nowrap;text-align:center;">[<a
+												href="{{ getLink('account/2fa/remove-single-device?device_id=' ~ device.id) }}">Remove</a>]
+										</div>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</td>
+			</tr>
+			{% if trustedDevices is not empty %}
+			<tr>
+				<td class="trusted-devices-remove-all">
+					<form
+						action="{{ getLink('account/2fa/remove-all-devices') }}"
+						method="post" style="padding:0px;margin:0px;">
+
+						{{ csrf() }}
+
+						{{ include('buttons.base.html.twig', {'button_name': 'Remove All'})}}
+					</form>
+				</td>
+			</tr>
+			{% endif %}
+		</tbody>
+	</table>
+{% endset %}
+{% include('tables.headline.html.twig') %}
+<br/>
+
+<style>
+	.trusted-devices-remove-all {
+		float: right;
+		width: 135px;
+		margin-left: 20px;
+		margin-right: 10px;
+	}
+</style>

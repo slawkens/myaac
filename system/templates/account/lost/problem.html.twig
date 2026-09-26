@@ -1,0 +1,128 @@
+
+<h2 style="text-align: center;">
+	{% if character is not empty %}
+	Character Name: {{ character }}
+	{% elseif email is not empty %}
+	Email Address: {{ email }}
+	{% endif %}
+</h2>
+
+<br/>
+
+<p>The Lost Account Interface can help you to solve all problems listed below. Please select your problem and click
+	on "Submit".</p>
+<p>If your problem is not listed here, you might be able to find the answer on our website. Answers to the most
+	common questions about {{ config('lua')['serverName'] }} can be found in the <a href="{{ getLink('faq') }}">FAQ</a>.</p>
+
+<form action="{{ getLink('account/lost') }}" method="post">
+
+	{{ csrf() }}
+
+	{% set title = 'Specify Your Problem' %}
+	{% set tableClass = 'Table5' %}
+
+	{% set content %}
+		<table style="width:100%;">
+			<tbody>
+				<tr>
+					<td>
+						<div class="TableContentContainer ">
+							<table class="TableContent" width="100%">
+								<tbody>
+									<tr>
+										<td><b>Password</b><br>
+											<hr class="inner-table-separator">
+											<label>
+												<input type="radio" name="step" value="password"> I have forgotten my password.
+											</label>
+											<br/>
+											<label>
+												<input type="radio"name="step" value="hacked"> My account hasbeen hacked.
+											</label>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="TableContentContainer ">
+							<table class="TableContent" width="100%">
+								<tbody>
+									<tr>
+										<td><b>E-Mail</b><br>
+											<hr class="inner-table-separator">
+											<span style="margin-left: 5px;">I want to change the email address of my account instantly:</span><br/>
+											<label>
+												<input type="radio" name="step" value="email"> I have a recovery key
+											</label>
+											<br/>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="TableContentContainer ">
+							<table class="TableContent" width="100%">
+								<tbody>
+									<tr>
+										<td><b>Recovery Key</b><br>
+											<hr class="inner-table-separator">
+											<label><input type="radio" name="step" value="key"> I need a new recovery key.</label><br>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="TableContentContainer ">
+							<table class="TableContent" width="100%">
+								<tbody>
+									<tr>
+										<td><b>Authenticator</b><br>
+											<hr class="inner-table-separator">
+											<label>
+												<input type="radio" name="step" value="auth"> I want to remove an authenticator app from my {{ config('lua')['serverName'] }} account.
+											</label>
+											<br/>
+											<label>
+												<input type="radio" name="step" value="emailcode"> I want to deactivate the email code authentication for my {{ config('lua')['serverName'] }} account.
+											</label>
+											<br/>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	{% endset %}
+	{{ include('tables.headline.html.twig') }}
+
+	<br/>
+
+	<table style="width:100%">
+		<tbody>
+			<tr align="center">
+				<td>
+					<input type="hidden" name="nametype" value="2">
+
+					<input type="hidden" name="emailOrCharacter" value="{{ emailOrCharacter }}">
+
+					{{ include('buttons.base.html.twig', {'button_name': 'Submit', 'button_color': 'green'}) }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
