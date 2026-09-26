@@ -45,9 +45,7 @@ require_once SYSTEM . 'migrations/27.php';
 $up();
 require_once SYSTEM . 'migrations/30.php';
 $up();
-
-// new monster columns
-require_once SYSTEM . 'migrations/31.php';
+require_once SYSTEM . 'migrations/53.php';
 $up();
 
 // rules page

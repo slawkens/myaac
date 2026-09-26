@@ -27,6 +27,7 @@ parameters:
 		- '#Variable \$player might not be defined#'
 		- '#Variable \$guild might not be defined#'
 		- '#Variable \$[a-zA-Z0-9\\_]+ might not be defined#'
+		- '#Class Lua constructor invoked with 0 parameters, 1 required#'
 		# Eloquent models
 		- '#Call to an undefined method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\)#'
 		- '#Call to an undefined static method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\)#'

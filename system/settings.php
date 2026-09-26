@@ -12,6 +12,7 @@
  */
 
 use MyAAC\Cache;
+use MyAAC\Server\Config;
 use MyAAC\Settings;
 
 $templates = Cache::remember('templates', 5 * 60, function () {
@@ -905,19 +906,19 @@ Sent by MyAAC,<br/>
 		'create_character_name_monsters_check' => [
 			'name' => 'Block Monsters Names',
 			'type' => 'boolean',
-			'desc' => 'Should monsters names be blocked when creating character?',
+			'desc' => 'Should monsters names be blocked when creating character? The monsters plugin needs to be installed',
 			'default' => true,
 		],
 		'create_character_name_npc_check' => [
 			'name' => 'Block NPC Names',
 			'type' => 'boolean',
-			'desc' => 'Should NPC names be blocked when creating character?',
+			'desc' => 'Should NPC names be blocked when creating character? The NPCs plugin needs to be installed',
 			'default' => true,
 		],
 		'create_character_name_spells_check' => [
 			'name' => 'Block Spells Names',
 			'type' => 'boolean',
-			'desc' => 'Should spells names and words be blocked when creating character?',
+			'desc' => 'Should spells names and words be blocked when creating character? The spells plugin needs to be installed',
 			'default' => true,
 		],
 		'use_character_sample_skills' => [
@@ -1417,28 +1418,6 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
-			'title' => 'Monsters Page'
-		],
-		'monsters_images_preview' => [
-			'name' => 'Monsters Images Preview',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to allow picture previews for creatures',
-			'default' => false,
-		],
-		'monsters_items_url' => [
-			'name' => 'Monsters Items URL',
-			'type' => 'text',
-			'desc' => 'Set to website which shows details about items',
-			'default' => 'https://tibia.fandom.com/wiki/',
-		],
-		'monsters_loot_percentage' => [
-			'name' => 'Monsters Loot Percentage',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to show the loot tooltip percent',
-			'default' => true,
-		],
-		[
-			'type' => 'section',
 			'title' => 'Bans Page'
 		],
 		'bans_per_page' => [
@@ -1545,22 +1524,6 @@ Sent by MyAAC,<br/>
 			'type' => 'text',
 			'desc' => 'Set to animoutfit.php for animated outfit',
 			'default' => 'https://outfit-images.ots.me/latest/outfit.php',
-		],
-		[
-			'type' => 'section',
-			'title' => 'Monster Images'
-		],
-		'monsters_images_url' => [
-			'name' => 'Monsters Images URL',
-			'type' => 'text',
-			'desc' => 'Set to <i>images/monsters/</i> if you host your own creatures in images folder',
-			'default' => 'images/monsters/',
-		],
-		'monsters_images_extension' => [
-			'name' => 'Monsters Images File Extension',
-			'type' => 'text',
-			'desc' => '',
-			'default' => '.gif',
 		],
 		// this is hidden, because no implemented yet
 		'multiworld' => [
@@ -1841,10 +1804,10 @@ Sent by MyAAC,<br/>
 			if($server_path[strlen($server_path) - 1] != '/')
 				$server_path .= '/';
 
-			// test config.lua existence
+			// test config.lua or config/server.toml existence
 			// if fail - revert the setting and inform the user
-			if (!file_exists($server_path . 'config.lua')) {
-				error('Server Path is invalid - cannot find config.lua in the directory. Setting have been reverted.');
+			if (!Config::exists()) {
+				error('Server Path is invalid - cannot find config.lua or config/server.toml in the directory. Setting have been reverted.');
 				$configToSave['server_path'] = $configOriginal['server_path'];
 			}
 

@@ -10,9 +10,6 @@
 
 namespace MyAAC;
 
-use MyAAC\Models\Monster;
-use MyAAC\Models\Spell;
-
 class Validator
 {
 	private static $lastError = '';
@@ -329,40 +326,6 @@ class Validator
 			if($namelock->rowCount() > 0) {
 				self::$lastError =  'Character with this name has been namelocked.';
 				return false;
-			}
-		}
-
-		$monstersCheck = setting('core.create_character_name_monsters_check');
-		if ($monstersCheck) {
-			if (Monster::where('name', 'like', $name_lower)->exists()) {
-				self::$lastError = 'Your name cannot contains monster name.';
-				return false;
-			}
-		}
-
-		$spellsCheck = setting('core.create_character_name_spells_check');
-		if ($spellsCheck) {
-			if (Spell::where('name', 'like', $name_lower)->exists()) {
-				self::$lastError = 'Your name cannot contains spell name.';
-				return false;
-			}
-
-			if (Spell::where('words', $name_lower)->exists()) {
-				self::$lastError = 'Your name cannot contains spell name.';
-				return false;
-			}
-		}
-
-		$npcCheck = setting('core.create_character_name_npc_check');
-		if ($npcCheck) {
-			NPCs::load();
-			if(NPCs::$npcs) {
-				foreach (NPCs::$npcs as $npc) {
-					if(str_contains($name_lower, $npc)) {
-						self::$lastError = 'Your name cannot contains NPC name.';
-						return false;
-					}
-				}
 			}
 		}
 
