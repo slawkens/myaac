@@ -912,7 +912,7 @@ Sent by MyAAC,<br/>
 		'create_character_name_npc_check' => [
 			'name' => 'Block NPC Names',
 			'type' => 'boolean',
-			'desc' => 'Should NPC names be blocked when creating character?',
+			'desc' => 'Should NPC names be blocked when creating character? The NPCs plugin needs to be installed',
 			'default' => true,
 		],
 		'create_character_name_spells_check' => [
