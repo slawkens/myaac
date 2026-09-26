@@ -1,5 +1,8 @@
 <?php
 
+const SEX_FEMALE = 0;
+const SEX_MALE = 1;
+
 const SKILL_FRAGS = -1;
 const SKILL_BALANCE = -2;
 
@@ -102,6 +105,7 @@ define('HOOK_ADMIN_LOGIN_AFTER_ACCOUNT', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_PASSWORD', ++$i);
 define('HOOK_ADMIN_LOGIN_AFTER_SIGN_IN', ++$i);
 define('HOOK_ADMIN_ACCOUNTS_SAVE_POST', ++$i);
+define('HOOK_ADMIN_SERVER_DATA_RELOAD', ++$i);
 define('HOOK_ADMIN_SETTINGS_BEFORE_SAVE', ++$i);
 define('HOOK_CRONJOB', ++$i);
 define('HOOK_EMAIL_CONFIRMED', ++$i);
@@ -123,6 +127,7 @@ define('HOOK_FILTER_TWIG_DISPLAY', ++$i);
 define('HOOK_FILTER_TWIG_RENDER', ++$i);
 define('HOOK_FILTER_THEME_FOOTER', ++$i);
 define('HOOK_FILTER_VALIDATE_CHARACTER_NEW_NAME', ++$i);
+define('HOOK_FILTER_ADMIN_DASHBOARD_STATISTICS', ++$i);
 
 const HOOK_FIRST = HOOK_INIT;
 define('HOOK_LAST', $i);

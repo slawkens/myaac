@@ -12,6 +12,7 @@
  */
 
 use MyAAC\Cache;
+use MyAAC\Server\Config;
 use MyAAC\Settings;
 
 $templates = Cache::remember('templates', 5 * 60, function () {
@@ -147,7 +148,7 @@ return [
 			'name' => 'Meta Description',
 			'type' => 'textarea',
 			'desc' => 'description of the site in ' . escapeHtml('<meta>'),
-			'default' => config('lua')['serverName'] . ' is a free massive multiplayer online role playing game (MMORPG).',
+			'default' => (config('lua')['serverName'] ?? 'OTServ') . ' is a free massive multiplayer online role playing game (MMORPG).',
 		],
 		'meta_keywords' => [
 			'name' => 'Meta Keywords',
@@ -161,29 +162,17 @@ return [
 			'desc' => 'URL of the favicon used in the website',
 			'default' => '/images/favicon.png',
 		],
-		'meta_favicon_type' => [
-			'name' => 'Meta Favicon Type',
-			'type' => 'text',
-			'desc' => 'MIME type of the favicon used in the website',
-			'default' => 'image/png',
-		],
 		'meta_og_description' => [
 			'name' => 'Meta og:description',
 			'type' => 'textarea',
 			'desc' => 'Description used in Open Graph meta tags',
-			'default' => config('lua')['serverName'] . ' is a free massive multiplayer online role playing game (MMORPG).',
+			'default' => (config('lua')['serverName'] ?? 'OTServ') . ' is a free massive multiplayer online role playing game (MMORPG).',
 		],
 		'meta_og_image' => [
 			'name' => 'Meta og:image',
 			'type' => 'text',
 			'desc' => 'URL of the image used in Open Graph meta tags',
 			'default' => '/images/favicon.png',
-		],
-		'meta_og_image_type' => [
-			'name' => 'Meta og:image Type',
-			'type' => 'text',
-			'desc' => 'MIME type of the image used in Open Graph meta tags',
-			'default' => 'image/png',
 		],
 		'meta_og_image_dimensions' => [
 			'name' => 'Meta og:image Dimensions',
@@ -338,7 +327,9 @@ return [
 						}
 
 						$explode = explode('=', $town);
-						$ret[$explode[0]] = $explode[1];
+						if (count($explode) > 1) {
+							$ret[$explode[0]] = $explode[1];
+						}
 					}
 
 					return $ret;
@@ -934,19 +925,19 @@ Sent by MyAAC,<br/>
 		'create_character_name_monsters_check' => [
 			'name' => 'Block Monsters Names',
 			'type' => 'boolean',
-			'desc' => 'Should monsters names be blocked when creating character?',
+			'desc' => 'Should monsters names be blocked when creating character? The monsters plugin needs to be installed',
 			'default' => true,
 		],
 		'create_character_name_npc_check' => [
 			'name' => 'Block NPC Names',
 			'type' => 'boolean',
-			'desc' => 'Should NPC names be blocked when creating character?',
+			'desc' => 'Should NPC names be blocked when creating character? The NPCs plugin needs to be installed',
 			'default' => true,
 		],
 		'create_character_name_spells_check' => [
 			'name' => 'Block Spells Names',
 			'type' => 'boolean',
-			'desc' => 'Should spells names and words be blocked when creating character?',
+			'desc' => 'Should spells names and words be blocked when creating character? The spells plugin needs to be installed',
 			'default' => true,
 		],
 		'use_character_sample_skills' => [
@@ -1446,28 +1437,6 @@ Sent by MyAAC,<br/>
 		],
 		[
 			'type' => 'section',
-			'title' => 'Monsters Page'
-		],
-		'monsters_images_preview' => [
-			'name' => 'Monsters Images Preview',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to allow picture previews for creatures',
-			'default' => false,
-		],
-		'monsters_items_url' => [
-			'name' => 'Monsters Items URL',
-			'type' => 'text',
-			'desc' => 'Set to website which shows details about items',
-			'default' => 'https://tibia.fandom.com/wiki/',
-		],
-		'monsters_loot_percentage' => [
-			'name' => 'Monsters Loot Percentage',
-			'type' => 'boolean',
-			'desc' => 'Set to yes to show the loot tooltip percent',
-			'default' => true,
-		],
-		[
-			'type' => 'section',
 			'title' => 'Bans Page'
 		],
 		'bans_per_page' => [
@@ -1554,7 +1523,9 @@ Sent by MyAAC,<br/>
 		'item_images_url' => [
 			'name' => 'Item Images URL',
 			'type' => 'text',
-			'desc' => 'Set to <strong>images/items</strong> if you host your own items in images folder',
+			'desc' => 'Set to <strong>images/items</strong> if you host your own items in images folder.' . PHP_EOL .
+				'For canary (item client ids) you can use: https://item-images.ots.me/latest_otbr/' . PHP_EOL .
+				'Generate your own at: https://item-images.ots.me/generator/',
 			'default' => 'https://item-images.ots.me/1092/',
 		],
 		'item_images_extension' => [
@@ -1572,22 +1543,6 @@ Sent by MyAAC,<br/>
 			'type' => 'text',
 			'desc' => 'Set to animoutfit.php for animated outfit',
 			'default' => 'https://outfit-images.ots.me/latest/outfit.php',
-		],
-		[
-			'type' => 'section',
-			'title' => 'Monster Images'
-		],
-		'monsters_images_url' => [
-			'name' => 'Monsters Images URL',
-			'type' => 'text',
-			'desc' => 'Set to <i>images/monsters/</i> if you host your own creatures in images folder',
-			'default' => 'images/monsters/',
-		],
-		'monsters_images_extension' => [
-			'name' => 'Monsters Images File Extension',
-			'type' => 'text',
-			'desc' => '',
-			'default' => '.gif',
 		],
 		// this is hidden, because no implemented yet
 		'multiworld' => [
@@ -1669,17 +1624,6 @@ Sent by MyAAC,<br/>
 			'type' => 'boolean',
 			'desc' => 'You can disable support for plain php pages in admin panel, for security.<br/>Existing pages still will be working, so you need to delete them manually',
 			'default' => false,
-		],
-		'admin_panel_modules' => [
-			'name' => 'Modules Enabled',
-			'type' => 'textarea',
-			'desc' => 'What modules will be shown on Admin Panel Dashboard page',
-			'default' => 'statistics,web_status,server_status,lastlogin,created,points,coins,balance',
-			'callbacks' => [
-				'get' => function ($value) {
-					return array_map('trim', explode(',', $value));
-				},
-			],
 		],
 		[
 			'type' => 'category',
@@ -1879,10 +1823,10 @@ Sent by MyAAC,<br/>
 			if($server_path[strlen($server_path) - 1] != '/')
 				$server_path .= '/';
 
-			// test config.lua existence
+			// test config.lua or config/server.toml existence
 			// if fail - revert the setting and inform the user
-			if (!file_exists($server_path . 'config.lua')) {
-				error('Server Path is invalid - cannot find config.lua in the directory. Setting have been reverted.');
+			if (!Config::exists()) {
+				error('Server Path is invalid - cannot find config.lua or config/server.toml in the directory. Setting have been reverted.');
 				$configToSave['server_path'] = $configOriginal['server_path'];
 			}
 

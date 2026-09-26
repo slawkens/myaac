@@ -50,6 +50,40 @@ class Plugins {
 		});
 	}
 
+	public static function getAdminDashboardModules()
+	{
+		return Cache::remember('plugins_admin_dashboard_modules', 10 * 60, function () {
+			$adminDashboardModules = [];
+			foreach(self::getAllPluginsJson() as $plugin) {
+				if (!self::getAutoLoadOption($plugin, 'admin-dashboard', true)) {
+					continue;
+				}
+
+				// Get core modules
+				$pluginAdminPages = glob(ADMIN . 'pages/dashboard/*.php');
+				foreach ($pluginAdminPages as $file) {
+					$name = pathinfo($file, PATHINFO_FILENAME);
+
+					$adminDashboardModules[$name] = $file;
+				}
+
+				// Get all plugins/*/admin-dashboard/*.php modules
+				$pluginAdminPages = glob(PLUGINS . $plugin['filename'] . '/admin-dashboard/*.php');
+				foreach ($pluginAdminPages as $file) {
+					$name = pathinfo($file, PATHINFO_FILENAME);
+
+					$adminDashboardModules[$name] = $file;
+				}
+			}
+
+			uksort($adminDashboardModules, function ($a, $b) {
+				return strcasecmp($a, $b);
+			});
+
+			return $adminDashboardModules;
+		});
+	}
+
 	public static function getAdminPages()
 	{
 		return Cache::remember('plugins_admin_pages', 10 * 60, function () {

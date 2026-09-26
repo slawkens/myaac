@@ -16,9 +16,21 @@ if (!isset($config['database_overwrite'])) {
 	$config['database_overwrite'] = false;
 }
 
-if(!$config['database_overwrite'] && !isset($config['database_user'][0], $config['database_password'][0], $config['database_name'][0]))
-{
-	if(isset($config['lua']['sqlType'])) {// tfs 0.3
+if(!$config['database_overwrite']) {
+	if (isset($config['server']['database']['mysql'])) { // BlackTek
+		$config['otserv_version'] = BLACKTEK;
+		$config['database_type'] = 'mysql';
+		$config['database_host'] = $config['server']['database']['mysql']['host'];
+		$config['database_port'] = $config['server']['database']['mysql']['port'];
+		$config['database_user'] = $config['server']['database']['mysql']['user'];
+		$config['database_password'] = $config['server']['database']['mysql']['pass'];
+		$config['database_name'] = $config['server']['database']['mysql']['database'];
+		if(!isset($config['database_socket'][0]) && !empty(trim($config['server']['database']['mysql']['socket']))) {
+			$config['database_socket'] = trim($config['server']['database']['mysql']['socket']);
+		}
+		$config['database_encryption'] = 'sha1';
+	}
+	elseif (isset($config['lua']['sqlType'])) {// tfs 0.3
 		if(isset($config['lua']['mysqlHost'])) {// tfs 0.2
 			$config['otserv_version'] = TFS_02;
 			$config['database_type'] = 'mysql';
@@ -93,7 +105,6 @@ if(!isset($config['database_log'])) {
 if(!isset($config['database_socket'])) {
 	$config['database_socket'] = '';
 }
-
 
 try {
 	$ots->connect(array(

@@ -1,36 +1,30 @@
 <?php
-// 2fa
-// add the myaac_account_2fa_email_codes
-
 /**
  * @var OTS_DB_MySQL $db
  */
 
+use MyAAC\Models\Pages;
+
 $up = function () use ($db) {
-	if (!$db->hasColumn('accounts', '2fa_type')) {
-		$db->addColumn('accounts', '2fa_type', "tinyint NOT NULL DEFAULT 0 AFTER `web_flags`");
-	}
-
-	if (!$db->hasColumn('accounts', '2fa_secret')) {
-		$db->addColumn('accounts', '2fa_secret', "varchar(16) NOT NULL DEFAULT '' AFTER `2fa_type`");
-	}
-
-	// add myaac_account_2fa_email_codes table
-	if (!$db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {
-		$db->exec(file_get_contents(__DIR__ . '/53-account_2fa_email_codes.sql'));
+	$otsInfoModel = Pages::where('name', 'ots-info')->first();
+	if (!$otsInfoModel) {
+		$db->insert(TABLE_PREFIX . 'pages', [
+			'name' => 'ots-info',
+			'title' => 'OTS Info',
+			'body' => file_get_contents(__DIR__ . '/53-ots-info.html'),
+			'date' => time(),
+			'player_id' => 1,
+			'php' => 0,
+			'enable_tinymce' => 1,
+			'access' => 0,
+			($db->hasColumn(TABLE_PREFIX . 'pages', 'hide') ? 'hide' : 'hidden') => 0,
+		]);
 	}
 };
 
-$down = function () use ($db) {
-	if ($db->hasColumn('accounts', '2fa_type')) {
-		$db->dropColumn('accounts', '2fa_type');
-	}
-
-	if ($db->hasColumn('accounts', '2fa_secret')) {
-		$db->dropColumn('accounts', '2fa_secret');
-	}
-
-	if ($db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {
-		$db->dropTable(TABLE_PREFIX . 'account_2fa_email_codes');
+$down = function () {
+	$otsInfoModel = Pages::where('name', 'ots-info')->first();
+	if ($otsInfoModel) {
+		$otsInfoModel->delete();
 	}
 };

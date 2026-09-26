@@ -26,8 +26,8 @@
 if (version_compare(phpversion(), '8.1', '<')) die('PHP version 8.1 or higher is required.');
 
 const MYAAC = true;
-const MYAAC_VERSION = '2.0-alpha';
-const DATABASE_VERSION = 53;
+const MYAAC_VERSION = '3.0-dev';
+const DATABASE_VERSION = 54;
 const TABLE_PREFIX = 'myaac_';
 define('START_TIME', microtime(true));
 define('MYAAC_OS', stripos(PHP_OS, 'WIN') === 0 ? 'WINDOWS' : (strtoupper(PHP_OS) === 'DARWIN' ? 'MAC' : 'LINUX'));
@@ -88,6 +88,20 @@ const GUILD_IMAGES_DIR = 'images/guilds/';
 const EDITOR_IMAGES_DIR = 'images/editor/';
 const GALLERY_DIR = 'images/gallery/';
 
+// images mime types
+const IMAGES_MIME_TYPES = [
+	'apng' => 'image/apng',
+	'avif' => 'image/avif',
+	'bmp' => 'image/bmp',
+	'gif' => 'image/gif',
+	'ico' => 'image/x-icon',
+	'jpeg' => 'image/jpeg',
+	'jpg' => 'image/jpeg',
+	'png' => 'image/png',
+	'svg' => 'image/svg+xml',
+	'webp' => 'image/webp',
+];
+
 // menu categories
 const MENU_CATEGORY_NEWS = 1;
 const MENU_CATEGORY_ACCOUNT = 2;
@@ -103,6 +117,8 @@ const OTSERV_FIRST = OTSERV;
 const OTSERV_LAST = OTSERV_06;
 const TFS_02 = 3;
 const TFS_03 = 4;
+const BLACKTEK_2 = 5;
+const BLACKTEK = 6;
 const TFS_FIRST = TFS_02;
 const TFS_LAST = TFS_03;
 

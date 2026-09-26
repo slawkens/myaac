@@ -123,39 +123,6 @@ CREATE TABLE IF NOT EXISTS `myaac_menu`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `myaac_monsters` (
-	`id` int NOT NULL AUTO_INCREMENT,
-	`hide` tinyint NOT NULL DEFAULT 0,
-	`name` varchar(255) NOT NULL,
-	`mana` int NOT NULL DEFAULT 0,
-	`exp` int NOT NULL,
-	`health` int NOT NULL,
-	`look` varchar(255) NOT NULL DEFAULT '',
-	`speed_lvl` int NOT NULL DEFAULT 1,
-	`use_haste` tinyint NOT NULL,
-	`voices` text NOT NULL,
-	`immunities` varchar(255) NOT NULL,
-	`elements` text NOT NULL,
-	`summonable` tinyint NOT NULL,
-	`convinceable` tinyint NOT NULL,
-	`pushable` tinyint NOT NULL DEFAULT 0,
-	`canpushitems` tinyint NOT NULL DEFAULT 0,
-	`canwalkonenergy` tinyint NOT NULL DEFAULT 0,
-	`canwalkonpoison` tinyint NOT NULL DEFAULT 0,
-	`canwalkonfire` tinyint NOT NULL DEFAULT 0,
-	`runonhealth` tinyint NOT NULL DEFAULT 0,
-	`hostile` tinyint NOT NULL DEFAULT 0,
-	`attackable` tinyint NOT NULL DEFAULT 0,
-	`rewardboss` tinyint NOT NULL DEFAULT 0,
-	`defense` int NOT NULL DEFAULT 0,
-	`armor` int NOT NULL DEFAULT 0,
-	`canpushcreatures` tinyint NOT NULL DEFAULT 0,
-	`race` varchar(255) NOT NULL,
-	`loot` text NOT NULL,
-	`summons` text NOT NULL,
-	PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
-
 CREATE TABLE IF NOT EXISTS `myaac_news`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -220,29 +187,6 @@ CREATE TABLE IF NOT EXISTS `myaac_settings`
 	KEY `key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `myaac_spells`
-(
-	`id` int NOT NULL AUTO_INCREMENT,
-	`spell` varchar(255) NOT NULL DEFAULT '',
-	`name` varchar(255) NOT NULL,
-	`words` varchar(255) NOT NULL DEFAULT '',
-	`category` tinyint NOT NULL DEFAULT 0 COMMENT '1 - attack, 2 - healing, 3 - summon, 4 - supply, 5 - support',
-	`type` tinyint NOT NULL DEFAULT 0 COMMENT '1 - instant, 2 - conjure, 3 - rune',
-	`level` int NOT NULL DEFAULT 0,
-	`maglevel` int NOT NULL DEFAULT 0,
-	`mana` int NOT NULL DEFAULT 0,
-	`soul` tinyint NOT NULL DEFAULT 0,
-	`conjure_id` int NOT NULL DEFAULT 0,
-	`conjure_count` tinyint NOT NULL DEFAULT 0,
-	`reagent` int NOT NULL DEFAULT 0,
-	`item_id` int NOT NULL DEFAULT 0,
-	`premium` tinyint NOT NULL DEFAULT 0,
-	`vocations` varchar(100) NOT NULL DEFAULT '',
-	`hide` tinyint NOT NULL DEFAULT 0,
-	PRIMARY KEY (`id`),
-	UNIQUE (`name`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
-
 CREATE TABLE IF NOT EXISTS `myaac_visitors`
 (
 	`ip` varchar(45) NOT NULL,
@@ -250,13 +194,4 @@ CREATE TABLE IF NOT EXISTS `myaac_visitors`
 	`page` varchar(2048) NOT NULL,
 	`user_agent` varchar(255) NOT NULL DEFAULT '',
 	UNIQUE (`ip`)
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `myaac_weapons`
-(
-	`id` int NOT NULL,
-	`level` int NOT NULL DEFAULT 0,
-	`maglevel` int NOT NULL DEFAULT 0,
-	`vocations` varchar(100) NOT NULL DEFAULT '',
-	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;

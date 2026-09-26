@@ -27,6 +27,7 @@ namespace MyAAC;
 
 use MyAAC\Cache\Cache;
 use MyAAC\Models\Town;
+use MyAAC\Server\Items;
 
 class DataLoader
 {
@@ -38,45 +39,15 @@ class DataLoader
 	 */
 	public static function load()
 	{
+		global $hooks;
+
 		self::$startTime = microtime(true);
 
-		if(Items::loadFromXML()) {
-			success(self::$locale['step_database_loaded_items'] . self::getLoadedTime());
+		if(Items::load()) {
+			success(sprintf(self::$locale['step_database_loaded_items'], count(Items::getAll())) . self::getLoadedTime());
 		}
 		else {
 			error(Items::getError());
-		}
-
-		self::$startTime = microtime(true);
-
-		if(Monsters::loadFromXML()) {
-			success(self::$locale['step_database_loaded_monsters'] . self::getLoadedTime());
-
-			if(Monsters::getMonstersList()->hasErrors()) {
-				self::$locale['step_database_error_monsters'] = str_replace('$LOG$', 'system/logs/error.log', self::$locale['step_database_error_monsters']);
-				warning(self::$locale['step_database_error_monsters']);
-			}
-		}
-		else {
-			error(Monsters::getLastError());
-		}
-
-		self::$startTime = microtime(true);
-
-		if(NPCs::loadFromXML()) {
-			success(self::$locale['step_database_loaded_npcs'] . self::getLoadedTime());
-		}
-		else {
-			error(self::$locale['step_database_error_npcs']);
-		}
-
-		self::$startTime = microtime(true);
-
-		if(Spells::loadFromXML()) {
-			success(self::$locale['step_database_loaded_spells'] . self::getLoadedTime());
-		}
-		else {
-			error(Spells::getLastError());
 		}
 
 		self::$startTime = microtime(true);
@@ -88,20 +59,13 @@ class DataLoader
 
 		global $db;
 		if ($db->hasTable('towns') && Town::count() > 0) {
-			success(self::$locale['step_database_loaded_towns'] . self::getLoadedTime());
+			success(sprintf(self::$locale['step_database_loaded_towns'], Town::count()) . self::getLoadedTime());
 		}
 		else {
 			warning(self::$locale['step_database_error_towns']);
 		}
 
-		self::$startTime = microtime(true);
-
-		if(Weapons::loadFromXML()) {
-			success(self::$locale['step_database_loaded_weapons'] . self::getLoadedTime());
-		}
-		else {
-			error(Weapons::getError());
-		}
+		$hooks->trigger(HOOK_ADMIN_SERVER_DATA_RELOAD);
 	}
 
 	public static function setLocale($locale) {
@@ -110,7 +74,7 @@ class DataLoader
 
 	private static function getLoadedTime()
 	{
-		$endTime = round(microtime(true) - self::$startTime, 3);
-		return ' (' . str_replace('$TIME$', $endTime, self::$locale['loaded_in_ms']) . ')';
+		$endTime = round(microtime(true) - self::$startTime, 4);
+		return ' (' . str_replace('$TIME$', $endTime, self::$locale['loaded_in_seconds']) . ')';
 	}
 }

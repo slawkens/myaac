@@ -10,6 +10,8 @@
 defined('MYAAC') or die('Direct access not allowed!');
 $title = 'Dashboard';
 
+use MyAAC\Plugins;
+
 csrfProtect();
 
 if (isset($_POST['clear_cache'])) {
@@ -42,22 +44,59 @@ if (isset($_POST['maintenance'])) {
 			registerDatabaseConfig('site_closed_message', $message);
 	}
 }
+elseif (isset($_POST['reset'])) {
+	success('Dashboard has been reset successfully.');
+	?>
+		<script>
+			localStorage.removeItem('admin-dashboard');
+			localStorage.removeItem('admin-dashboard-closed');
+			localStorage.removeItem('admin-dashboard-statistics');
+		</script>
+	<?php
+}
+
 $is_closed = getDatabaseConfig('site_closed') == '1';
 
 $closed_message = 'Server is under maintenance, please visit later.';
 $tmp = '';
-if (fetchDatabaseConfig('site_closed_message', $tmp))
+if (fetchDatabaseConfig('site_closed_message', $tmp)) {
 	$closed_message = $tmp;
+}
 
-$settingAdminPanelModules = setting('core.admin_panel_modules');
-if (count($settingAdminPanelModules) > 0) {
-	echo '<div class="row">';
-	$twig_loader->prependPath(__DIR__ . '/modules/templates');
-	foreach ($settingAdminPanelModules as $box) {
-		$file = __DIR__ . '/modules/' . $box . '.php';
+$edit = isset($_GET['edit']) ? ($_GET['edit'] == '1') : false;
+
+$twig->display('admin.dashboard.start.html.twig', [
+	'edit' => $edit,
+]);
+
+if ($edit) {
+	info('You are in edit mode. Changes are saved automatically and locally in your browser.<br/>
+	Hint: You can drag and drop the dashboard modules to rearrange them.');
+}
+
+$twig_loader->prependPath(__DIR__ . '/dashboard/templates');
+
+$file = __DIR__ . '/dashboard/statistics.php';
+if (file_exists($file)) {
+	include($file);
+}
+
+$dashboardModules = Plugins::getAdminDashboardModules();
+if (count($dashboardModules) > 0) {
+	echo '<div class="row dashboard-sortable">';
+
+	foreach ($dashboardModules as $name => $file) {
+		if ($name === 'statistics') { // statistics is already loaded separately above
+			continue;
+		}
+
 		if (file_exists($file)) {
 			include($file);
 		}
 	}
-echo '</div>';
+	echo '</div>';
 }
+
+$twig->display('admin.dashboard.html.twig', [
+	'edit' => $edit,
+]);

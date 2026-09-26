@@ -3,8 +3,6 @@
  * @var OTS_DB_MySQL $db
  */
 
-use MyAAC\Models\Spell;
-
 $up = function () use ($db) {
 	// add new item_id field for runes
 	if (!$db->hasColumn(TABLE_PREFIX . 'spells', 'item_id')) {
@@ -30,16 +28,6 @@ $up = function () use ($db) {
 
 	// modify vocations to support json data
 	$db->modifyColumn(TABLE_PREFIX . 'spells', 'vocations', "VARCHAR(100) NOT NULL DEFAULT ''");
-
-	$spells = Spell::select('id', 'vocations')->get();
-	foreach ($spells as $spell) {
-		$tmp = explode(',', $spell->vocations);
-		foreach ($tmp as &$v) {
-			$v = (int)$v;
-		}
-
-		Spell::where('id', $spell->id)->update(['vocations' => json_encode($tmp)]);
-	}
 };
 
 $down = function () use ($db) {
@@ -54,12 +42,4 @@ $down = function () use ($db) {
 
 	$db->dropTable(TABLE_PREFIX . 'items');
 	$db->dropTable(TABLE_PREFIX . 'weapons');
-
-	$spells = Spell::select('id', 'vocations')->get();
-	// modify vocations to use vocation separated by comma
-	foreach ($spells as $spell) {
-		$vocations = empty($spell->vocations) ? [] : json_decode($spell->vocations);
-
-		Spell::where('id', $spell->id)->update(['vocations' => implode(',', $vocations)]);
-	}
 };

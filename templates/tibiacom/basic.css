@@ -184,8 +184,8 @@ img {
   position: absolute;
   height: 80px;
   width: 80px;
-  top: -137px;
-  left: 8px;
+  top: -147px;
+  left: -6px;
   z-index: 15;
   cursor: pointer;
 }

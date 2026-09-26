@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.9.5 - 23.09.2026]
+
+### Added
+* Admin Panel: New hook for dashboard: statistics, allows to customize the icons (https://github.com/slawkens/myaac/commit/1f4c439d047afe2b2826adcaae936ec908dcdd48)
+
+### Changed
+* Settings: Auto detect mime type for favicon and og:image (https://github.com/slawkens/myaac/commit/6f10c6a2ec50f91ec19012ce93c152e037627fc2)
+
+### Fixed
+* Settings: Improve "database manual" detection (https://github.com/slawkens/myaac/commit/7ea01d4955dc45b9c07a3a3bf1ba9f25ba801011)
+* Admin - Mailer: Fix sending images by paste (CTRL + V), the images were not correctly displayed (https://github.com/slawkens/myaac/commit/d4e8e26e4bc5e5f2cdd300a70fb781c5e303d019)
+* Server Status: Add missing return in the ServerStatus->getPlayers (https://github.com/slawkens/myaac/commit/7c46a9191dd1adf712d9b40f457c986af16d1848)
+* Install: Fix PHP warning in install (config.lua not exist) (https://github.com/slawkens/myaac/commit/2fe4c7be55cee72c31da74cd5eb3d6b933284fb8)
+* Admin - Pages: Display error message if page cannot be found (edit) (https://github.com/slawkens/myaac/commit/0a2b01c1b07a41adbcb8591352b8329e5625961e)
+
+## [1.9.4 - 10.09.2026]
+
+Compatible with PHP 8.1 - 8.5.
+
+### Added
+* Open Graph Tags (https://github.com/slawkens/myaac/commit/e5f5023f136b3ea363158934bd356243c23ba126)
+* Settings: Configurable favicon (https://github.com/slawkens/myaac/commit/f8b9e413a6940adcdb84d48b29b50f57db7a62b8, https://github.com/slawkens/myaac/commit/eea950730ec4c2b165b0b6101e9bd6aa86c430df)
+* Admin Visitors: Add "Hide Bots" checkbox (https://github.com/slawkens/myaac/commit/5ce7a9104852935ff4f0cc8f7d27d71042c16e7b, https://github.com/slawkens/myaac/commit/c4b7d867853b53c6c98f70c2ba4b018f4de75ca3)
+
+### Fixed
+* General: Throw exception if session cannot be started (https://github.com/slawkens/myaac/commit/0e05213cb42708925dfcc49de89a6cddf1b3306b)
+* Plugins: Fix upload when the plugin is disabled (https://github.com/slawkens/myaac/commit/c1885f594e5718ad97fa66aff1f1728559d3e78e)
+
+### Changed
+* Admin Dashboard: Make the statistics numbers clickable (https://github.com/slawkens/myaac/commit/dd856aeb3ff95ff7cfd785896665f18c9cd46159)
+* Visitors Counter: Use persistent cache (https://github.com/slawkens/myaac/commit/97857119a240ee7ac9ad53aa79a3a07894b44e4d)
+
 ## [1.9.3 - 24.08.2026]
 
 ### Added
