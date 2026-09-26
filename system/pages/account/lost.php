@@ -129,9 +129,7 @@ switch ($step) {
 			$errors[] = 'You have entered an incorrect recovery key! Please enter a valid recovery key.';
 		}
 
-		if (!empty($errors)) {
-			$twig->display('error_box.html.twig',  ['errors' => $errors]);
-		}
+		$twig->display('error_box.html.twig',  ['errors' => $errors]);
 
 		$twig->display('account/lost/auth.html.twig', [
 			'newRecoveryKeyFormat' => $newRecoveryKeyFormat,
