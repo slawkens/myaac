@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de1219601202cf55861809fd69c5feb4",
+    "content-hash": "bed8ee56de6c638bf8a13a636c601fe7",
     "packages": [
         {
             "name": "brick/math",
@@ -210,25 +210,25 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-20T19:15:30+00:00"
+            "time": "2026-09-24T14:38:51+00:00"
         },
         {
             "name": "devium/toml",
-            "version": "1.0.6",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vanodevium/toml.git",
-                "reference": "190882f9d92e88f8031285129ba9df501da899a6"
+                "reference": "a20d8cc05b029295217179396d421a579de8bfa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vanodevium/toml/zipball/190882f9d92e88f8031285129ba9df501da899a6",
-                "reference": "190882f9d92e88f8031285129ba9df501da899a6",
+                "url": "https://api.github.com/repos/vanodevium/toml/zipball/a20d8cc05b029295217179396d421a579de8bfa5",
+                "reference": "a20d8cc05b029295217179396d421a579de8bfa5",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=8.1",
+                "php": ">=8.2",
                 "php-ds/php-ds": "^1.5",
                 "symfony/polyfill-mbstring": "^1.30"
             },
@@ -262,7 +262,7 @@
                     "email": "vano@devium.me"
                 }
             ],
-            "description": "A PHP encoder/decoder for TOML compatible with specification 1.0.0",
+            "description": "A PHP encoder/decoder for TOML compatible with 1.0.0 and 1.1.0",
             "keywords": [
                 "decode",
                 "encode",
@@ -271,7 +271,7 @@
             ],
             "support": {
                 "issues": "https://github.com/vanodevium/toml/issues",
-                "source": "https://github.com/vanodevium/toml/tree/v1.0.6"
+                "source": "https://github.com/vanodevium/toml/tree/v1.1.0"
             },
             "funding": [
                 {
@@ -279,7 +279,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-22T18:10:54+00:00"
+            "time": "2026-04-04T11:56:34+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1693,27 +1693,26 @@
         },
         {
             "name": "php-ds/php-ds",
-            "version": "v1.7.0",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-ds/polyfill.git",
-                "reference": "017fb5cdfa52a1f13126c94987b04b884c44f9cd"
+                "reference": "2e1c133b99aaa1a5fa2318257a6e2501b9082b55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-ds/polyfill/zipball/017fb5cdfa52a1f13126c94987b04b884c44f9cd",
-                "reference": "017fb5cdfa52a1f13126c94987b04b884c44f9cd",
+                "url": "https://api.github.com/repos/php-ds/polyfill/zipball/2e1c133b99aaa1a5fa2318257a6e2501b9082b55",
+                "reference": "2e1c133b99aaa1a5fa2318257a6e2501b9082b55",
                 "shasum": ""
             },
             "require": {
-                "ext-json": "*",
-                "php": ">=7.4"
+                "php": ">=8.2"
             },
             "provide": {
                 "ext-ds": "1.5.0"
             },
             "require-dev": {
-                "php-ds/tests": "^1.5"
+                "php-ds/tests": "^1.8"
             },
             "suggest": {
                 "ext-ds": "to improve performance and reduce memory usage"
@@ -1743,9 +1742,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-ds/polyfill/issues",
-                "source": "https://github.com/php-ds/polyfill/tree/v1.7.0"
+                "source": "https://github.com/php-ds/polyfill/tree/v1.8.0"
             },
-            "time": "2025-05-18T04:50:53+00:00"
+            "time": "2026-04-10T23:35:50+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -3499,6 +3498,7 @@
         "ext-pdo_mysql": "*",
         "ext-json": "*",
         "ext-xml": "*",
+        "ext-simplexml": "*",
         "ext-dom": "*"
     },
     "platform-dev": {},
