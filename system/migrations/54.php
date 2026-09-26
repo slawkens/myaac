@@ -17,7 +17,11 @@ $up = function () use ($db) {
 
 	// add myaac_account_2fa_email_codes table
 	if (!$db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {
-		$db->exec(file_get_contents(__DIR__ . '/53-account_2fa_email_codes.sql'));
+		$db->exec(file_get_contents(__DIR__ . '/54-account_2fa_email_codes.sql'));
+	}
+
+	if (!$db->hasTable(TABLE_PREFIX . 'account_2fa_trusted_devices')) {
+		$db->exec(file_get_contents(__DIR__ . '/54-account_2fa_trusted_devices.sql'));
 	}
 };
 
@@ -30,7 +34,11 @@ $down = function () use ($db) {
 		$db->dropColumn('accounts', '2fa_secret');
 	}
 
-	if ($db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {
-		$db->dropTable(TABLE_PREFIX . 'account_2fa_email_codes');
-	}
+	//if ($db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {
+	//	$db->dropTable(TABLE_PREFIX . 'account_2fa_email_codes');
+	//}
+
+	//if ($db->hasTable(TABLE_PREFIX . 'account_2fa_trusted_devices')) {
+	//	$db->dropTable(TABLE_PREFIX . 'account_2fa_trusted_devices');
+	//}
 };
