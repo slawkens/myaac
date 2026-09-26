@@ -7,6 +7,7 @@ use MyAAC\Cache\PHP as CachePHP;
 class Items
 {
 	private string $error = '';
+	private array $items = [];
 
 	const FILE = 'items/items.toml';
 
@@ -28,7 +29,6 @@ class Items
 		$itemsParser = new ItemsParser();
 		$itemsParsed = $itemsParser->parse($file);
 
-		$items = [];
 		foreach ($itemsParsed as $item) {
 			$attributes = array_filter($item, function ($key) {
 				return !in_array($key, ['id', 'article', 'name', 'plural']);
@@ -39,7 +39,7 @@ class Items
 				continue;
 			}
 
-			$items[$id] = [
+			$this->items[$id] = [
 				'article' => $item['article'] ?? '',
 				'name' => $item['name'] ?? '',
 				'plural' => $item['plural'] ?? '',
@@ -48,7 +48,11 @@ class Items
 		}
 
 		$cache_php = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
-		$cache_php->set('items', $items, 5 * 365 * 24 * 60 * 60);
+		$cache_php->set('items', $this->items, 5 * 365 * 24 * 60 * 60);
 		return true;
+	}
+
+	public function getItems(): array {
+		return $this->items;
 	}
 }

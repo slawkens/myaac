@@ -7,6 +7,7 @@ use MyAAC\Cache\PHP as CachePHP;
 class Items
 {
 	private string $error = '';
+	private array $items = [];
 
 	const FILE = 'items/items.xml';
 
@@ -22,8 +23,6 @@ class Items
 			return false;
 		}
 
-		$items = [];
-
 		try {
 			$xml = new \SimpleXMLElement(file_get_contents($file));
 		} catch (\Exception $e) {
@@ -36,16 +35,16 @@ class Items
 			if ($item->attributes()->fromid) {
 				for ($id = (int)$item->attributes()->fromid; $id <= (int)$item->attributes()->toid; $id++) {
 					$tmp = $this->parseNode($id, $item);
-					$items[$tmp['id']] = $tmp['content'];
+					$this->items[$tmp['id']] = $tmp['content'];
 				}
 			} else {
 				$tmp = $this->parseNode($item->attributes()->id, $item);
-				$items[$tmp['id']] = $tmp['content'];
+				$this->items[$tmp['id']] = $tmp['content'];
 			}
 		}
 
 		$cache_php = new CachePHP(config('cache_prefix'), CACHE . 'persistent/');
-		$cache_php->set('items', $items, 5 * 365 * 24 * 60 * 60);
+		$cache_php->set('items', $this->items, 5 * 365 * 24 * 60 * 60);
 		return true;
 	}
 
@@ -75,5 +74,9 @@ class Items
 				'attributes' => $attributes
 			],
 		];
+	}
+
+	public function getItems(): array {
+		return $this->items;
 	}
 }

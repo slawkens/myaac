@@ -16,12 +16,7 @@ use MyAAC\Cache\PHP as CachePHP;
 class Items
 {
 	public static array $items = [];
-
 	private static string $error = '';
-
-	public static function getError(): string {
-		return self::$error;
-	}
 
 	public static function load(): bool {
 		if (file_exists(config('data_path') . TOML\Items::FILE)) {
@@ -40,6 +35,7 @@ class Items
 			return false;
 		}
 
+		self::$items = $items->getItems();
 		return true;
 	}
 
@@ -55,5 +51,14 @@ class Items
 	public static function get(int $id) {
 		self::init();
 		return self::$items[$id] ?? [];
+	}
+
+	public static function getError(): string {
+		return self::$error;
+	}
+
+	public static function getAll(): array {
+		self::init();
+		return self::$items;
 	}
 }

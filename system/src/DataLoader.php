@@ -44,7 +44,7 @@ class DataLoader
 		self::$startTime = microtime(true);
 
 		if(Items::load()) {
-			success(self::$locale['step_database_loaded_items'] . self::getLoadedTime());
+			success(sprintf(self::$locale['step_database_loaded_items'], count(Items::getAll())) . self::getLoadedTime());
 		}
 		else {
 			error(Items::getError());
@@ -59,7 +59,7 @@ class DataLoader
 
 		global $db;
 		if ($db->hasTable('towns') && Town::count() > 0) {
-			success(self::$locale['step_database_loaded_towns'] . self::getLoadedTime());
+			success(sprintf(self::$locale['step_database_loaded_towns'], Town::count()) . self::getLoadedTime());
 		}
 		else {
 			warning(self::$locale['step_database_error_towns']);
