@@ -52,15 +52,6 @@ class DataLoader
 
 		self::$startTime = microtime(true);
 
-		if(NPCs::loadFromXML()) {
-			success(self::$locale['step_database_loaded_npcs'] . self::getLoadedTime());
-		}
-		else {
-			error(self::$locale['step_database_error_npcs']);
-		}
-
-		self::$startTime = microtime(true);
-
 		$cache = Cache::getInstance();
 		if ($cache->enabled()) {
 			$cache->delete('towns'); // will be reloaded after next page load

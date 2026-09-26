@@ -329,19 +329,6 @@ class Validator
 			}
 		}
 
-		$npcCheck = setting('core.create_character_name_npc_check');
-		if ($npcCheck) {
-			NPCs::load();
-			if(NPCs::$npcs) {
-				foreach (NPCs::$npcs as $npc) {
-					if(str_contains($name_lower, $npc)) {
-						self::$lastError = 'Your name cannot contains NPC name.';
-						return false;
-					}
-				}
-			}
-		}
-
 		global $hooks;
 
 		$params = ['name' => $name, 'error' => ''];
