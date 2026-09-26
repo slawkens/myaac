@@ -88,15 +88,15 @@ $locale['step_database_success_import_data'] = 'Pomyślnie załadowano bazowe da
 $locale['step_database_error_file'] = '$FILE$ nie mógł zostać otwarty. Proszę skopiować zawartość pola tekstowego i wkleić do tego pliku:';
 $locale['step_database_adding_field'] = 'Dodawanie pola';
 $locale['step_database_modifying_field'] = 'Modyfikacja pola';
-$locale['step_database_changing_field'] = 'Zmiana $FIELD$ na $FIELD_NEW$...';
-$locale['step_database_imported_players'] = 'Importowanie schematów graczy...';
-$locale['step_database_loaded_items'] = 'Załadowano przedmioty (items)...';
-$locale['step_database_loaded_npcs'] = 'Załadowano NPCs...';
+$locale['step_database_changing_field'] = 'Zmiana $FIELD$ na $FIELD_NEW$.';
+$locale['step_database_imported_players'] = 'Importowanie schematów graczy.';
+$locale['step_database_loaded_items'] = 'Załadowano przedmioty (items).';
+$locale['step_database_loaded_npcs'] = 'Załadowano NPCs.';
 $locale['step_database_error_npcs'] = 'Wystąpił problem podczas ładowania NPCs';
-$locale['step_database_loaded_towns'] = 'Załadowano miasta (towns)...';
+$locale['step_database_loaded_towns'] = 'Załadowano miasta (towns).';
 $locale['step_database_error_towns'] = 'Wystąpił problem podczas ładowania miast. Trzeba będzie je skonfigurować manualnie w ustawieniach.';
-$locale['step_database_created_account'] = 'Utworzono konto admina...';
-$locale['step_database_created_news'] = 'Utworzono newsy...';
+$locale['step_database_created_account'] = 'Utworzono konto admina.';
+$locale['step_database_created_news'] = 'Utworzono newsy.';
 
 // admin account
 $locale['step_admin'] = 'Konto Admina';

@@ -84,6 +84,6 @@ class DataLoader
 	private static function getLoadedTime()
 	{
 		$endTime = round(microtime(true) - self::$startTime, 3);
-		return ' (' . str_replace('$TIME$', $endTime, self::$locale['loaded_in_ms']) . ')';
+		return ' (' . str_replace('$TIME$', $endTime, self::$locale['loaded_in_seconds']) . ')';
 	}
 }

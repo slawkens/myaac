@@ -89,15 +89,15 @@ $locale['step_database_success_import_data'] = 'Successfully imported base data 
 $locale['step_database_error_file'] = '$FILE$ couldn\'t be opened. Please copy this content and paste there:';
 $locale['step_database_adding_field'] = 'Adding field';
 $locale['step_database_modifying_field'] = 'Modifying field';
-$locale['step_database_changing_field'] = 'Changing $FIELD$ to $FIELD_NEW$...';
-$locale['step_database_imported_players'] = 'Player samples has been imported...';
-$locale['step_database_loaded_items'] = 'Items has been loaded...';
-$locale['step_database_loaded_npcs'] = 'NPCs has been loaded...';
+$locale['step_database_changing_field'] = 'Changing $FIELD$ to $FIELD_NEW$.';
+$locale['step_database_imported_players'] = 'Player samples have been imported.';
+$locale['step_database_loaded_items'] = 'Items have been loaded.';
+$locale['step_database_loaded_npcs'] = 'NPCs have been loaded.';
 $locale['step_database_error_npcs'] = 'There were some problems loading your NPCs';
-$locale['step_database_loaded_towns'] = 'Towns has been loaded...';
+$locale['step_database_loaded_towns'] = 'Towns have been loaded.';
 $locale['step_database_error_towns'] = 'There were some problems loading your towns. You will need to configure them manually in Settings.';
-$locale['step_database_created_account'] = 'Created admin account...';
-$locale['step_database_created_news'] = 'Newses has been created...';
+$locale['step_database_created_account'] = 'Created admin account.';
+$locale['step_database_created_news'] = 'News have been created.';
 
 // admin account
 $locale['step_admin'] = 'Admin Account';

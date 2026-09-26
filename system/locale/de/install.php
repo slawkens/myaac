@@ -84,13 +84,13 @@ $locale['step_database_success_import_data'] = 'Import von Daten für Tabellen w
 $locale['step_database_error_file'] = '$FILE$ konnte nicht geöffnet werden. Bitte kopieren Sie diesen Inhalt und fügen Sie ihn dort ein:';
 $locale['step_database_adding_field'] = 'Folgendes Feld wurde hinzugefügt: ';
 $locale['step_database_modifying_field'] = 'Folgendes Feld wurde geändert: ';
-$locale['step_database_changing_field'] = 'Änderung von $FIELD$ zu $FIELD_NEW$...';
-$locale['step_database_imported_players'] = 'Spielerproben wurden importiert...';
-$locale['step_database_loaded_items'] = 'Items wurden geladen...';
-$locale['step_database_loaded_towns'] = 'Städte wurden geladen...';
+$locale['step_database_changing_field'] = 'Änderung von $FIELD$ zu $FIELD_NEW$.';
+$locale['step_database_imported_players'] = 'Spielerproben wurden importiert.';
+$locale['step_database_loaded_items'] = 'Items wurden geladen.';
+$locale['step_database_loaded_towns'] = 'Städte wurden geladen.';
 $locale['step_database_error_towns'] = 'Beim Laden der Städte sind einige Probleme aufgetreten. Sie müssen diese manuell in den Einstellungen konfigurieren.';
-$locale['step_database_created_account'] = 'Administratorkonto wurde erstellt...';
-$locale['step_database_created_news'] = 'Neuigkeiten wurden erstellt...';
+$locale['step_database_created_account'] = 'Administratorkonto wurde erstellt.';
+$locale['step_database_created_news'] = 'Neuigkeiten wurden erstellt.';
 
 // admin account
 $locale['step_admin'] = 'Administratorkonto';
