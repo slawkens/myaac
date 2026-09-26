@@ -1000,7 +1000,7 @@ function _mail(string $to, string $subject, string $body, string $altBody = ''):
 function convert_bytes($size)
 {
 	$unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
-	return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
+	return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[(int)$i];
 }
 
 function log_append($file, $str, array $params = [])
