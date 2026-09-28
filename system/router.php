@@ -133,14 +133,8 @@ $dispatcher = FastRoute\cachedDispatcher(function (FastRoute\RouteCollector $r) 
 	}
 
 	// sort required for the next step (filter)
-	usort($routesFinal, function ($a, $b)
-	{
-		// key 3 is priority
-		if ($a[3] == $b[3]) {
-			return 0;
-		}
-
-		return ($a[3] < $b[3]) ? -1 : 1;
+	usort($routesFinal, function ($a, $b) {
+		return $a[3] <=> $b[3];
 	});
 
 	$aliases = [
