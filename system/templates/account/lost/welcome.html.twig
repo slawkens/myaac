@@ -1,0 +1,90 @@
+<h2>Welcome to the Lost Account Interface!</h2>
+<p>If you have lost access to your account, this interface can help you. Of course, you need to prove that your
+	claim to the account is justified. Enter the requested data and follow the instructions carefully. Please
+	understand there is no way to get access to your lost account if the interface cannot help you. Further options
+	to change account data are available if you have a registered account.</p>
+<p>By using the Lost Account Interface you can</p>
+<ul>
+	<li>get a new password if you have lost the current password,</li>
+	<li>get your account back if it has been hacked,</li>
+	<li>change the email address of your account instantly (only possible with a valid recovery key),</li>
+	<li>request a new recovery key (only available to registered accounts),</li>
+	<li>remove an authenticator app from your account (only possible with a valid recovery key),</li>
+	<li>disable email code authentication for your account (only available to accounts with a valid recovery key).
+	</li>
+</ul>
+<p></p>
+<p>As a first step to use the Lost Account Interface, please enter the name of a character or the email address of
+	your account and click on "Submit".</p>
+<form action="{{ getLink('account/lost') }}" method="post">
+
+	{{ csrf() }}
+
+	<input type="hidden" name="step" value="problem"/>
+
+	{% set title = 'Recover by Email or Character Name' %}
+	{% set tableClass = 'Table5' %}
+	{% set content %}
+		<table style="width:100%;">
+			<tbody>
+				<tr>
+					<td>
+						<div class="TableContentContainer ">
+							<table class="TableContent" width="100%"
+								style="border:1px solid #faf0d7;">
+								<tbody>
+									<tr>
+										<td>
+											<div class="three-columns-form">
+												<div class="LabelV three-columns-form-cell">Primary
+													Email Address/Character Name:
+												</div>
+												<div class="three-columns-form-input-cell three-columns-form-cell">
+													<input class="w-100" name="emailOrCharacter" maxlength="50">
+												</div>
+												<div class="three-columns-form-cell three-columns-form-button">
+													{{ include('buttons.base.html.twig', {'button_name': 'Submit'}) }}
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	{% endset %}
+	{% include 'tables.headline.html.twig' %}
+
+	<br/>
+
+	{% set title = 'Get Email by Account Name' %}
+	{% set content %}
+		<table style="width:100%;">
+			<tbody>
+				<tr>
+					<td>
+						<div class="TableContentContainer ">
+							<table class="TableContent" width="100%"
+								style="border:1px solid #faf0d7;">
+								<tbody>
+									<tr>
+										<td>You have <b>forgotten</b> your <b>email address</b>
+											but you still <b>know</b> the <b>account name</b>
+											which had been used for your {{ config('lua')['serverName'] }} account?<br>Get
+											your email address here: <a
+												href="{{ getLink('account/lost/forgotten-email') }}">link</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	{% endset %}
+	{% include 'tables.headline.html.twig' %}
+</form>

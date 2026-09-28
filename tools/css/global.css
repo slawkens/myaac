@@ -1,0 +1,65 @@
+.upper-case-input {
+	text-transform: uppercase;
+}
+
+.inner-table-separator {
+	border-style: inset;
+	border-top: 1px solid #5A2800;
+	border-bottom: 0px;
+	border-bottom: none;
+	border-left: none;
+}
+
+.w-100 {
+	width: 100% !important;
+}
+
+.three-columns-form {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.three-columns-form .three-columns-form-cell {
+	flex-basis: 120px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-right: 5px;
+	flex-grow: 0;
+}
+
+.three-columns-form .three-columns-form-input-cell select, .Content .three-columns-form .three-columns-form-input-cell input {
+	width: 100% !important;
+	margin-right: 5px;
+}
+
+.three-columns-form .three-columns-form-input-cell {
+	flex-basis: 200px;
+	flex-grow: 2;
+}
+
+.password-toggle[aria-pressed="false"] {
+	background-image: url(/images/icon-password-hide.png);
+}
+.password-toggle[aria-pressed="true"] {
+	background-image: url(/images/icon-password-show.png);
+}
+
+.password-toggle {
+	position: absolute;
+	right: 0;
+	top: 0;
+	transform: translateY(15%);
+	width: 24px;
+	height: 16px;
+	border: none;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+.password-wrapper {
+	position: relative;
+	display: inline-block;
+	width: fit-content;
+}

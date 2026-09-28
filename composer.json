@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
         "ext-json": "*",
@@ -21,7 +21,8 @@
         "filp/whoops": "^2.15",
         "maximebf/debugbar": "1.*",
         "guzzlehttp/guzzle": "7.15.2",
-        "dragonmantank/cron-expression": "3.5",
+        "spomky-labs/otphp": "^11.3",
+        "bacon/bacon-qr-code": "3.0",
         "devium/toml": "^1.0"
     },
     "require-dev": {

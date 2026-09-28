@@ -2,6 +2,7 @@
 
 namespace MyAAC\Models;
 
+use MyAAC\Models\AccountTrustedDevice;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -78,6 +79,10 @@ class Account extends Model {
 		}
 
 		return ($this->premdays - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->lastday))) - date("z", $this->lastday)) > 0);
+	}
+
+	public function trustedDevices() {
+		return $this->hasMany(AccountTrustedDevice::class);
 	}
 
 }
