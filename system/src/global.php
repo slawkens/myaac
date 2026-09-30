@@ -120,6 +120,7 @@ define('HOOK_INSTALL_FINISH', ++$i);
 define('HOOK_INSTALL_FINISH_END', ++$i);
 
 // hook filters
+define('HOOK_FILTER_ADMIN_PERMISSIONS', ++$i);
 define('HOOK_FILTER_MAIL', ++$i);
 define('HOOK_FILTER_ROUTES', ++$i);
 define('HOOK_FILTER_TWIG_DISPLAY', ++$i);
