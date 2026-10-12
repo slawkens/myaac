@@ -35,8 +35,7 @@ The recommended version to install is **1.x**, which can be found at releases pa
 
 ### Installation
 
-	Just decompress and untar the source (which you should have done by now,
-	if you're reading this), into your webserver's document root.
+	Just decompress and untar the source (which you should have done by now, if you're reading this), into your webserver's document root.
 
 	MyAAC needs proper permissions to handle files correctly.
 	If you're using apache2, then your directory needs to have owner set to: www-data, you can do it by using following command:
