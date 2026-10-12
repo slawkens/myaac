@@ -12,13 +12,14 @@ Official website: https://my-aac.org
 
 | Version | Status                 | Branch  | Requirements   |
 |:--------|:-----------------------|:--------|:---------------|
-| 2.x     | Experimental features  | develop | PHP >= 8.1     |
-| **1.x** | **Active development** | main    | **PHP >= 8.1** |
+| 3.x     | Experimental features  | develop | PHP >= 8.2     |
+| 2.x     | Next stable            | 2.x     | PHP >= 8.1     |
+| **1.x** | **Stable**             | main    | **PHP >= 8.1** |
 | 0.9.x   | Not developed anymore  | 0.9     | PHP >= 7.2.5   |
 | 0.8.x   | Active support         | 0.8     | PHP >= 7.2.5   |
 | 0.7.x   | End Of Life            | 0.7     | PHP >= 5.3.3   |
 
-The recommended version to install is 1.x, which can be found at releases page - [https://github.com/slawkens/myaac/releases](https://github.com/slawkens/myaac/releases).
+The recommended version to install is **1.x**, which can be found at releases page - [https://github.com/slawkens/myaac/releases](https://github.com/slawkens/myaac/releases).
 
 ### Documentation
 * [docs.my-aac.org](https://docs.my-aac.org)
