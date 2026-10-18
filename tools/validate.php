@@ -69,10 +69,6 @@ else if(isset($_GET['name']))
 		error_(Validator::getLastError());
 	}
 
-	if(!admin() && !Validator::newCharacterName($name)) {
-		error_(Validator::getLastError());
-	}
-
 	$createCharacter = new CreateCharacter();
 	if (!$createCharacter->checkName($name, $errors)) {
 		error_($errors['name']);
