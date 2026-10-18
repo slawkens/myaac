@@ -22,13 +22,13 @@
 							<form method="post">
 								{{ csrf() }}
 								<input type="hidden" name="disable" value="{{ plugin.file }}" />
-								<button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to disable plugin {{ plugin.name }}?');" title="Disable"><i class="fas fa-check"></i> Enabled</button>
+								<button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to disable plugin {{ plugin.name }}?');" title="Click to disable"><i class="fas fa-check"></i> Enabled</button>
 							</form>
 						{% else %}
 							<form method="post">
 								{{ csrf() }}
 								<input type="hidden" name="enable" value="{{ plugin.file }}" />
-								<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to enable plugin {{ plugin.name }}?');" title="Enable"><i class="fas fa-ban"></i> Disabled</button>
+								<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to enable plugin {{ plugin.name }}?');" title="Click to enable"><i class="fas fa-ban"></i> Disabled</button>
 							</form>
 						{% endif %}
 					</td>
