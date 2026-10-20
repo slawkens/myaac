@@ -56,11 +56,10 @@ elseif(!isset($status_ip[0])) // try localhost if no ip specified
 // port check
 $status_port = $config['lua']['statusPort'];
 $settingPort = setting('core.status_port');
-if(isset($settingPort[0])) {
+if (!empty($settingPort)) {
 	$status_port = $settingPort;
 }
-elseif(!isset($status_port[0])) // try 7171 if no port specified
-{
+elseif (empty($status_port)) { // try 7171 if no port specified
 	$status_port = 7171;
 }
 
