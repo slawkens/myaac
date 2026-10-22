@@ -504,7 +504,7 @@ class Settings implements \ArrayAccess
 
 				case 'double':
 				case 'float':
-					$ret['value'] = (double)($ret['value']);
+					$ret['value'] = (float)($ret['value']);
 					break;
 
 				default:
