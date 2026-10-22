@@ -118,17 +118,24 @@ class Validator
 			return false;
 		}
 
+		if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+			self::$lastError = 'Invalid e-mail format.';
+			return false;
+		}
+
+		$explode = explode('@', $email);
 		if(setting('core.account_mail_block_plus_sign')) {
-			$explode = explode('@', $email);
 			if(isset($explode[0]) && (strpos($explode[0],'+') !== false)) {
 				self::$lastError = 'Please do not use plus (+) sign in your e-mail.';
 				return false;
 			}
 		}
 
-		if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-			self::$lastError = 'Invalid e-mail format.';
-			return false;
+		if (setting('core.mail_dns_check')) {
+			if (!empty($explode[1]) && !checkdnsrr($explode[1], 'MX')) {
+				self::$lastError = 'E-mail domain does not exist.';
+				return false;
+			}
 		}
 
 		return true;

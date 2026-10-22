@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
 }
 if (!empty($mail_to)) {
 	if(!Validator::email($mail_to)) {
-		warning('E-Mail is invalid.');
+		warning(Validator::getLastError());
 	}
 	else {
 		if (!empty($mail_content) && !empty($mail_subject)) {
