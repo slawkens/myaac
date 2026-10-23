@@ -2,6 +2,8 @@
 
 ## [1.9.6 - 23.10.2026]
 
+Compatible with PHP 8.1 - 8.5.
+
 ### Added
 * Commands: Add settings:migrate command (to migrate 0.8 config.php into settings) (https://github.com/slawkens/myaac/commit/8372c63a74945f942d00bcc75a31e2b916019c4a)
 
