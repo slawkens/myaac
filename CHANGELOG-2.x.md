@@ -37,7 +37,7 @@ Compatible with PHP 8.2 - 8.5.
 * Validator: Better email verification method (https://github.com/slawkens/myaac/commit/f51d63b65c6b49a1274c3bbdd666a99fe00d98f0)
 
 ### Updates
-* Updated composer dependencies (https://github.com/slawkens/myaac/commit/e586fa8f92b5ff2438a4e9790ba2d8cb59b763b8)
+* Updated composer dependencies (https://github.com/slawkens/myaac/commit/e586fa8f92b5ff2438a4e9790ba2d8cb59b763b8, https://github.com/slawkens/myaac/commit/a4245c4ebc869d790baafa4fd817d05da2200d13)
 * (dev) Upgrade phpstan to v2 (https://github.com/slawkens/myaac/commit/c2be9640b619e75a6e5f96967249904ea93f9c69)
 
 ## [2.0-alpha - 11.08.2026]
