@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.9.6 - 23.10.2026]
+
+### Added
+* Commands: Add settings:migrate command (to migrate 0.8 config.php into settings) (https://github.com/slawkens/myaac/commit/8372c63a74945f942d00bcc75a31e2b916019c4a)
+
+### Changed
+* Validator: Better email verification method (https://github.com/slawkens/myaac/commit/f51d63b65c6b49a1274c3bbdd666a99fe00d98f0)
+
+### Fixed
+* Status: Fixed #394 status_port detection problems (https://github.com/slawkens/myaac/commit/8dd31ffa08dfdd64ae19ec5845080590ae97fb56)
+* DebugBar: Prevent debugbar jquery conflict #392 (https://github.com/slawkens/myaac/commit/1d6a746383cf64abdd6bec2456c24159e65226b3)
+* Validator: Fixed duplicate call of Validator::newCharacterName (https://github.com/slawkens/myaac/commit/4d737927b2e23701371bc13a8466f9a2c103ec35)
+* Images: New changelog type icons (https://github.com/slawkens/myaac/commit/31e66d09bea2324a8b5ad9f2f8def7bd9cbc1414)
+* PHP: Fixed deprecation warnings (https://github.com/slawkens/myaac/commit/64a3857109ee18be3d24246e0055ab5ff7010c0a, https://github.com/slawkens/myaac/commit/0d9b3f6894b722b964ba649563e3838a20dc3c5a)
+
+### Dependencies
+* (dev) Upgrade phpstan to v2 (https://github.com/slawkens/myaac/commit/c2be9640b619e75a6e5f96967249904ea93f9c69)
+
 ## [1.9.5 - 23.09.2026]
 
 ### Added
