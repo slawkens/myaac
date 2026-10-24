@@ -397,6 +397,14 @@ function getDatabasePages($withHidden = false): array
 
 function loadPageFromFileSystem($page, &$found): string
 {
+	$explode = explode('/', $page);
+	foreach ($explode as $part) {
+		if (str_starts_with($part, '_')) {
+			$found = false;
+			return '404';
+		}
+	}
+
 	// feature: load pages from templates/ dir
 	global $template_path;
 	$file = $template_path . '/pages/' . $page . '.php';
