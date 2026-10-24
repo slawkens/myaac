@@ -273,6 +273,14 @@ return [
 			'desc' => 'Allow MyAAC to report anonymous usage statistics to developers? The data is sent only once per 30 days and is fully confidential. It won\'t affect the performance of your website',
 			'default' => true,
 		],
+		'mail_dns_check' => [
+			'name' => 'Mail DNS Check',
+			'type' => 'boolean',
+			'desc' => 'Should the mail domain be verified by DNS MX check?' . PHP_EOL .
+				"It's checked in the account creation process, and many more places." . PHP_EOL .
+				'Warning: Experimental feature',
+			'default' => false,
+		],
 		[
 			'type' => 'section',
 			'title' => 'Custom HTML',

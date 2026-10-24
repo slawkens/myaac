@@ -66,7 +66,7 @@ class MailSendCommand extends Command
 		}
 
 		if(!\Validator::email($email_account_name)) {
-			$io->error('Invalid E-Mail format');
+			$io->error(\Validator::getLastError());
 			return 4;
 		}
 

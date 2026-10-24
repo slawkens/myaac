@@ -118,17 +118,24 @@ class Validator
 			return false;
 		}
 
+		if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+			self::$lastError = 'Invalid e-mail format.';
+			return false;
+		}
+
+		$explode = explode('@', $email);
 		if(setting('core.account_mail_block_plus_sign')) {
-			$explode = explode('@', $email);
 			if(isset($explode[0]) && (strpos($explode[0],'+') !== false)) {
 				self::$lastError = 'Please do not use plus (+) sign in your e-mail.';
 				return false;
 			}
 		}
 
-		if(!preg_match('/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[A-z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/', $email)) {
-			self::$lastError = 'Invalid e-mail format.';
-			return false;
+		if (setting('core.mail_dns_check')) {
+			if (!empty($explode[1]) && !checkdnsrr($explode[1], 'MX')) {
+				self::$lastError = 'E-mail domain does not exist.';
+				return false;
+			}
 		}
 
 		return true;
