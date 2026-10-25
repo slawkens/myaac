@@ -17,8 +17,6 @@ else {
 	$key = $_POST['key'];
 }
 
-require __DIR__ . '/../2fa/base.php';
-
 if (($newRecoveryKeyFormat && strlen($key) < 4) || empty($key)) {
 	$errors[] = 'Please enter the recovery key!';
 }
