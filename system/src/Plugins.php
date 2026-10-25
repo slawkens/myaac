@@ -234,6 +234,10 @@ class Plugins {
 					$file = str_replace(PLUGINS, 'plugins/', $file);
 					$name = pathinfo($file, PATHINFO_FILENAME);
 
+					if (self::startsWithUnderscore($file)) {
+						continue;
+					}
+
 					$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
 				}
 			}
@@ -252,6 +256,10 @@ class Plugins {
 						$file = str_replace(PLUGINS, 'plugins/', $file);
 						$name = $folderName . '/' . pathinfo($file, PATHINFO_FILENAME);
 
+						if (self::startsWithUnderscore($file)) {
+							continue;
+						}
+
 						$routes[] = [['get', 'post'], $name, $file, $pagesDefaultPriority];
 					}
 
@@ -263,6 +271,10 @@ class Plugins {
 						foreach ($subSubFiles as $subSubFile) {
 							$subSubFile = str_replace(PLUGINS, 'plugins/', $subSubFile);
 							$name = $folderName . '/' . $subFolderName . '/' . pathinfo($subSubFile, PATHINFO_FILENAME);
+
+							if (self::startsWithUnderscore($subSubFile)) {
+								continue;
+							}
 
 							$routes[] = [['get', 'post'], $name, $subSubFile, $pagesDefaultPriority];
 						}
@@ -1050,5 +1062,17 @@ class Plugins {
 		}
 
 		return $default;
+	}
+
+	private static function startsWithUnderscore(string $string): bool
+	{
+		$explode = explode('/', $string);
+		foreach ($explode as $part) {
+			if (str_starts_with($part, '_')) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
