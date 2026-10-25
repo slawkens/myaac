@@ -35,7 +35,7 @@ jobs:
         - name: Checkout MyAAC
           uses: actions/checkout@v6
           with:
-            ref: blacktek-toml
+            ref: develop
 
         - uses: actions/setup-node@v6
           with:
