@@ -153,6 +153,22 @@ jobs:
             path: cypress/videos
             if-no-files-found: ignore
 
+        - name: Scan PHP log for warnings
+          if: always()
+          run: |
+            LABEL="PHP ${{ matrix.php-versions }} / ${{ matrix.ots }}"
+            PATTERN="PHP (Warning|Notice|Deprecated|Fatal error|Parse error)"
+            if [ -f php.log ] && grep -qiE "$PATTERN" php.log; then
+              echo "::group::[$LABEL] PHP warnings found in php.log"
+              grep -iE "$PATTERN" php.log | sort | uniq -c | sort -rn
+              echo "::endgroup::"
+              grep -iE "PHP Warning" php.log | sort -u | while read -r line; do
+                echo "::warning title=PHP Warning [$LABEL]::$line"
+              done
+            else
+              echo "[$LABEL] No PHP warnings found in php.log"
+            fi
+
         - name: Upload PHP Logs
           uses: actions/upload-artifact@v7
           if: always()
