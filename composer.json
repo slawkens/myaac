@@ -22,7 +22,7 @@
         "maximebf/debugbar": "1.*",
         "guzzlehttp/guzzle": "7.15.2",
         "spomky-labs/otphp": "^11.3",
-        "bacon/bacon-qr-code": "3.0",
+        "bacon/bacon-qr-code": "^3.0",
         "devium/toml": "^1.0"
     },
     "require-dev": {
