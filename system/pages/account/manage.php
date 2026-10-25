@@ -134,7 +134,7 @@ $twig->display('account.management.html.twig', array(
 	'account_rlname' => $account_rlname,
 	'account_location' => $account_location,
 
-	'twoFactorViews' => TwoFactorAuth::getInstance($account_logged)->getAccountManageViews(),
+	'twoFactorViews' => TwoFactorAuth::getInstance($account_logged->getId())->getAccountManageViews(),
 	'trustedDevices' => $trustedDevices,
 	'deviceUserAgent' => TrustedDevice::getUserAgent(),
 

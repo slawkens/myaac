@@ -60,7 +60,7 @@ if(!empty($login_account) && !empty($login_password))
 				return;
 			}
 
-			$twoFactorAuth = TwoFactorAuth::getInstance($account_logged);
+			$twoFactorAuth = TwoFactorAuth::getInstance($account_logged->getId());
 			if (!$twoFactorAuth->process($login_account, $login_password, $remember_me, $_POST['auth-code'] ?? '')) {
 				return;
 			}

@@ -24,6 +24,7 @@ class Account extends Model {
 		'key', 'created', 'rlname', 'location', 'country',
 		'web_lastlogin', 'web_flags',
 		'email_new', 'email_new_time', 'email_code',
+		'2fa_type', '2fa_secret', 'secret',
 		'premium_points', 'coins', 'coins_transferable',
 		'premium_ends_at', 'premend', 'lastday', 'premdays',
 	];

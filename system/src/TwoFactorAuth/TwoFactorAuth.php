@@ -9,6 +9,7 @@ namespace MyAAC\TwoFactorAuth;
 
 use BaconQrCode\Renderer\GDLibRenderer;
 use BaconQrCode\Writer;
+use MyAAC\Models\Account;
 use MyAAC\Models\AccountTwoFactorEMailCode;
 use MyAAC\TwoFactorAuth\Gateway\AppAuthGateway;
 use MyAAC\TwoFactorAuth\Gateway\EmailAuthGateway;
@@ -27,20 +28,26 @@ class TwoFactorAuth
 
 	private static self $instance;
 
-	private \OTS_Account $account;
+	private Account $account;
 	private int $authType;
 	private EmailAuthGateway|AppAuthGateway $authGateway;
 
-	public function __construct(\OTS_Account|int $account) {
+	public function __construct(Account|int $account) {
+		global $db;
+
 		if (is_int($account)) {
-			$this->account = new \OTS_Account();
-			$this->account->load($account);
+			$load = ['id', 'email', '2fa_type', '2fa_secret'];
+			if ($db->hasColumn('accounts', 'secret')) {
+				$load[] = 'secret';
+			}
+
+			$this->account = Account::find($account, $load);
 		}
 		else {
 			$this->account = $account;
 		}
 
-		$this->authType = (int)$this->account->getCustomField('2fa_type');
+		$this->authType = (int)$this->account->{'2fa_type'};
 		$this->setAuthGateway($this->authType);
 	}
 
@@ -61,11 +68,11 @@ class TwoFactorAuth
 			return true;
 		}
 
-		if (TrustedDevice::isDeviceTrusted($this->account->getId())) {
+		if (TrustedDevice::isDeviceTrusted($this->account->getKey())) {
 			// The device is trusted, no need for further 2FA checks.
 
 			TrustedDevice::clear(); // clear old entries, such as expired trusted devices
-			TrustedDevice::updateLastLogin($this->account->getId());
+			TrustedDevice::updateLastLogin($this->account->getKey());
 
 			return true;
 		}
@@ -108,7 +115,7 @@ class TwoFactorAuth
 			}
 
 			if (isset($_POST['save-trusted-device']) && $_POST['save-trusted-device'] == '1') {
-				TrustedDevice::register($this->account->getId(), TrustedDevice::TYPE_WEBSITE);
+				TrustedDevice::register($this->account->getKey(), TrustedDevice::TYPE_WEBSITE);
 			}
 
 			return true;
@@ -119,7 +126,7 @@ class TwoFactorAuth
 		if (setting('core.mail_enabled') && $lastAttemptFailedEmail < time() - 10 * 60) {
 			$mailBody = $twig->render('mail.account.2fa.email-code.wrong-attempt.html.twig');
 
-			if (!_mail($this->account->getEMail(), configLua('serverName') . ' - Failed Two-Factor Authentication Attempt', $mailBody)) {
+			if (!_mail($this->account->email, configLua('serverName') . ' - Failed Two-Factor Authentication Attempt', $mailBody)) {
 				error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
 			}
 
@@ -210,8 +217,11 @@ class TwoFactorAuth
 		return [$twoFactorView, $twoFactorView2];
 	}
 
-	public function enable(int $type): void {
-		$this->account->setCustomField('2fa_type', $type);
+	public function enable(int $type): void
+	{
+		$this->account->{'2fa_type'} = $type;
+		$this->account->save();
+
 		$this->authType = $type;
 	}
 
@@ -219,14 +229,16 @@ class TwoFactorAuth
 	{
 		global $db;
 
-		$this->account->setCustomField('2fa_type', self::TYPE_NONE);
-
 		if ($db->hasColumn('accounts', 'secret')) {
-			$this->account->setCustomField('secret', null);
+			$this->account->secret = null;
 		}
 
-		$this->account->setCustomField('2fa_secret', '');
-		TrustedDevice::removeAll($this->account->getId());
+		$this->account->{'2fa_type'} = self::TYPE_NONE;
+		$this->account->{'2fa_secret'} = '';
+
+		$this->account->save();
+
+		TrustedDevice::removeAll($this->account->getKey());
 		$this->authType = self::TYPE_NONE;
 	}
 
@@ -247,18 +259,18 @@ class TwoFactorAuth
 	}
 
 	public function hasRecentEmailCode(int $since = self::EMAIL_CODE_VALID_UNTIL): bool {
-		return AccountTwoFactorEMailCode::where('account_id', '=', $this->account->getId())->where('created_at', '>', time() - $since)->first() !== null;
+		return AccountTwoFactorEMailCode::where('account_id', '=', $this->account->getKey())->where('created_at', '>', time() - $since)->first() !== null;
 	}
 
 	public function deleteOldCodes(): void {
-		AccountTwoFactorEMailCode::where('account_id', '=', $this->account->getId())->delete();
+		AccountTwoFactorEMailCode::where('account_id', '=', $this->account->getKey())->delete();
 	}
 
 	public function initTOTP(string $secret): TOTP
 	{
 		$otp = TOTP::createFromSecret($secret);
 
-		$otp->setLabel($this->account->getEmail());
+		$otp->setLabel($this->account->email);
 		$otp->setIssuer(configLua('serverName'));
 
 		return $otp;
@@ -293,13 +305,13 @@ class TwoFactorAuth
 			'code' => $newCode,
 		]);
 
-		if (!_mail($this->account->getEMail(), configLua('serverName') . ' - Requested Authentication Email Code', $mailBody)) {
+		if (!_mail($this->account->email, configLua('serverName') . ' - Requested Authentication Email Code', $mailBody)) {
 			error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
 			return;
 		}
 
 		AccountTwoFactorEMailCode::create([
-			'account_id' => $this->account->getId(),
+			'account_id' => $this->account->getKey(),
 			'code' => $newCode,
 		]);
 	}

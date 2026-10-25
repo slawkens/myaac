@@ -9,7 +9,7 @@ class AppAuthGateway extends BaseAuthGateway implements AuthGatewayInterface
 {
 	public function verifyCode(string $code): bool
 	{
-		$otp = $this->twoFactorAuth->initTOTP($this->account->getCustomField('2fa_secret'));
+		$otp = $this->twoFactorAuth->initTOTP($this->account->{'2fa_secret'});
 
 		$timestamp = time();
 		$period = $otp->getPeriod();

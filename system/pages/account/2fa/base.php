@@ -20,7 +20,7 @@ if (!$account_logged->isLoaded()) {
 	}
 }
 
-$twoFactorAuth = TwoFactorAuth::getInstance($account_logged);
+$twoFactorAuth = TwoFactorAuth::getInstance($account_logged->getId());
 $twig->addGlobal('account_logged', $account_logged);
 
 /**
