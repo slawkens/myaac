@@ -1,4 +1,14 @@
-<h2 style="text-align: center;">Email Address: slawkens@gmail.com</h2><br>
+<h2 style="text-align: center;">
+	{% if '@' in character %}
+	Email Address: {{ character }}
+	{% elseif character is not empty %}
+	Character Name: {{ character }}
+	{% endif %}
+</h2>
+
+<br/>
+
+{% if step == 'auth-app-remove' %}
 <p>Please follow the instructions below to remove an authenticator app from your {{ config('lua')['serverName'] }} account.</p>
 <p><b>By Recovery Key</b></p>
 <ol>
@@ -6,9 +16,21 @@
 	<li>Click on "Submit".</li>
 	<li>If you have entered your recovery key correctly, the authenticator app will be removed from your {{ config('lua')['serverName'] }} account and you do not need to enter an authenticator app token upon login any longer.</li>
 </ol>
+{% else %}
+<p>Please follow the instructions below to deactivate the <b>Email Code Authentication</b> for your {{ config('lua')['serverName'] }} account.</p>
+<ol>
+	<li>Select "Yes, I want to deactivate the <b>Email Code Authentication</b> for my {{ config('lua')['serverName'] }} account.".</li>
+	<li>Enter your recovery key.</li>
+	<li>Click on "Submit". </li>
+	<li>If you have entered your recovery key correctly, the <b>Email Code Authentication</b> will be removed from your {{ config('lua')['serverName'] }} account and you do not need to enter an <b>email code</b> upon login any longer.</li>
+</ol>
+{% endif %}
 
 {% set title = 'Remove Authenticator App' %}
 {% set tableClass = 'Table5' %}
+
+<input type="hidden" name="step" form="form" value="auth-remove-by-key">
+<input type="hidden" name="type" form="form" value="{{ step }}">
 
 {% set content %}
 <table style="width:100%;">
@@ -21,24 +43,16 @@
 						<tbody>
 							<tr>
 								<td colspan="2"><label>Yes, I want to remove an
-										<b>authenticator app</b> from my Tibia account
+										<b>{% if step == 'auth-app-remove' %}authenticator app{% else %}Email Code Authentication{% endif %}</b> from my {{ config('lua')['serverName'] }} account
 										by</label><br></td>
 							</tr>
 							<tr>
 								<td>
 									<label>
 										<span style="margin-left: 50px;">
-											<input type="radio" name="step" form="form" value="auth-remove-by-key" id="auth-remove-by-key">Recovery
-											Key:</span></label></td>
+											Recovery Key:</span></label></td>
 								<td>
 									{{ include('account.recovery-key.html.twig') }}
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<hr>
-									<label>
-										<input type="radio" name="step" form="form" value="key"> I have forgotten the recovery key of my Tibia account.</label>
 								</td>
 							</tr>
 						</tbody>
@@ -59,15 +73,18 @@
 
 					{{ csrf() }}
 
-					<input type="hidden" name="emailOrCharacter" value="{{ emailOrCharacter }}">
+					<input type="hidden" name="character" value="{{ character }}">
 
 					{{ include('buttons.base.html.twig', {'button_name': 'Submit', 'button_color': 'green'})}}
 				</form>
 			</td>
 			<td>
 				<form action="{{ getLink('account/lost') }}" method="post" style="padding:0px;margin:0px;">
+
+					{{ csrf() }}
+
 					<input type="hidden" name="step" value="problem">
-					<input type="hidden" name="emailOrCharacter" value="{{ emailOrCharacter }}">
+					<input type="hidden" name="character" value="{{ character }}">
 
 					{{ include('buttons.base.html.twig', {'button_name': 'Back'})}}
 				</form>

@@ -26,7 +26,7 @@ if(!setting('core.mail_enabled')) {
 	return;
 }
 
-$emailOrCharacter = $_POST['emailOrCharacter'] ?? '';
+$character = $_POST['character'] ?? '';
 
 $step = $_POST['step'] ?? null;
 if (empty($step)) {
@@ -34,19 +34,22 @@ if (empty($step)) {
 	return;
 }
 
-if (empty($emailOrCharacter)) {
+if (!isRequestMethod('post')) {
+	$errors[] = 'This page cannot be accessed directly.';
+}
+elseif (empty($character)) {
 	$errors[] = 'Please enter the name of a character on the lost account. If your account does not contain any characters, please create a new account.';
 }
-elseif (str_contains($emailOrCharacter, '@')) {
-	$account = Account::where('email', $emailOrCharacter)->first();
+elseif (str_contains($character, '@')) {
+	$account = Account::where('email', $character)->first();
 	if (!$account) {
-		$errors[] = "Email address <strong>$emailOrCharacter</strong> does not exist. Please make sure to enter the email address correctly. Note that email addresses may be deleted automatically if they have not been used for a long time.";
+		$errors[] = "Email address <strong>$character</strong> does not exist. Please make sure to enter the email address correctly. Note that email addresses may be deleted automatically if they have not been used for a long time.";
 	}
 }
 else {
-	$player = Player::where('name', $emailOrCharacter)->first();
+	$player = Player::where('name', $character)->first();
 	if (!$player) {
-		$errors[] = "Character with name <strong>$emailOrCharacter</strong> does not exist. Please make sure to enter the character name correctly. Note that characters may be deleted automatically if they have not been used for a long time.";
+		$errors[] = "Character with name <strong>$character</strong> does not exist. Please make sure to enter the character name correctly. Note that characters may be deleted automatically if they have not been used for a long time.";
 	}
 	else {
 		$account = $player->account()->first();
@@ -72,77 +75,50 @@ $newRecoveryKeyFormat = (count($explodeRecoveryKey) == 4);
 switch ($step) {
 	case 'problem':
 		$twig->display('account/lost/problem.html.twig', [
-			'email' => str_contains($emailOrCharacter, '@') ? $emailOrCharacter : '',
-			'character' => !str_contains($emailOrCharacter, '@') ? $emailOrCharacter : '',
-			'emailOrCharacter' => $emailOrCharacter,
+			'character' => $character,
 			//'errors' => $errors,
 		]);
 
 		break;
 
-	case 'auth':
+	case 'auth-app-remove':
+	case 'auth-email-remove':
 		$twig->display('account/lost/auth.html.twig', [
 			'newRecoveryKeyFormat' => $newRecoveryKeyFormat,
-			'emailOrCharacter' => $emailOrCharacter,
+			'character' => $character,
+			'step' => $step,
 		]);
 
 		break;
 
 	case 'auth-remove-by-key':
-		if ($newRecoveryKeyFormat) {
-			$key = $_POST['key1'] . '-' . $_POST['key2'] . '-' . $_POST['key3'] . '-' . $_POST['key4'];
-		}
-		else {
-			$key = $_POST['key'];
-		}
+		require __DIR__ . '/lost/_disable-2fa.php';
 
-		require __DIR__ . '/2fa/base.php';
+		break;
 
-		if (strlen($key) < 4) {
-			$errors[] = 'Please enter the recovery key!';
-		}
-		elseif (!setting('core.mail_enabled') || !setting('core.account_2fa_email')) {
-			$errors[] = 'Account Two-Factor E-Mail Authentication disabled.';
-		}
-		elseif (!isRequestMethod('post')) {
-			$errors[] = 'This page cannot be accessed directly.';
-		}
-		elseif (!$twoFactorAuth->isActive($twoFactorAuth::TYPE_APP)) {
-			$errors[] = 'There is no two-factor authenticator app activated for your account.';
-		}
-
-		$accountKey = $account->key;
-		if (!empty($key) && $key == $accountKey) {
-			$twoFactorAuth->disable();
-			$twoFactorAuth->deleteOldCodes();
-
-			$twig->display('success.html.twig',
-				[
-					'title' => 'Authenticator App Disabled',
-					'description' => 'You have successfully <strong>disabled</strong> the <b>Authenticator App</b> for your account.'
-				]
-			);
-
-			return;
-		}
-		elseif (empty($errors)) {
-			$errors[] = 'You have entered an incorrect recovery key! Please enter a valid recovery key.';
-		}
-
-		$twig->display('error_box.html.twig',  ['errors' => $errors]);
-
-		$twig->display('account/lost/auth.html.twig', [
-			'newRecoveryKeyFormat' => $newRecoveryKeyFormat,
-			'key' => $key,
-			'emailOrCharacter' => $emailOrCharacter,
-			'errors' => $errors,
+	case 'email':
+		$twig->display('account/lost/email.html.twig', [
+			'character' => $character,
 		]);
 
 		break;
 
-	case 'reset':
-		$twig->display('account/lost/reset.html.twig');
+	case 'email2':
+		$twig->display('account/lost/email2.html.twig', [
+			'character' => $character,
+			'email' => $_POST['email'] ?? '',
+		]);
+
 		break;
+
+	case 'email3':
+		$twig->display('account/lost/email3.html.twig', [
+			'character' => $character,
+			'email' => $_POST['email'] ?? '',
+		]);
+
+		break;
+
 	default:
 		$twig->display('account/lost/welcome.html.twig');
 		break;

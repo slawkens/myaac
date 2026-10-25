@@ -1,9 +1,8 @@
-
 <h2 style="text-align: center;">
-	{% if character is not empty %}
+	{% if '@' in character %}
+	Email Address: {{ character }}
+	{% elseif character is not empty %}
 	Character Name: {{ character }}
-	{% elseif email is not empty %}
-	Email Address: {{ email }}
 	{% endif %}
 </h2>
 
@@ -37,7 +36,7 @@
 											</label>
 											<br/>
 											<label>
-												<input type="radio"name="step" value="hacked"> My account hasbeen hacked.
+												<input type="radio"name="step" value="hacked"> My account has been hacked.
 											</label>
 										</td>
 									</tr>
@@ -72,30 +71,14 @@
 							<table class="TableContent" width="100%">
 								<tbody>
 									<tr>
-										<td><b>Recovery Key</b><br>
-											<hr class="inner-table-separator">
-											<label><input type="radio" name="step" value="key"> I need a new recovery key.</label><br>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="TableContentContainer ">
-							<table class="TableContent" width="100%">
-								<tbody>
-									<tr>
 										<td><b>Authenticator</b><br>
 											<hr class="inner-table-separator">
 											<label>
-												<input type="radio" name="step" value="auth"> I want to remove an authenticator app from my {{ config('lua')['serverName'] }} account.
+												<input type="radio" name="step" value="auth-app-remove"> I want to remove an authenticator app from my {{ config('lua')['serverName'] }} account.
 											</label>
 											<br/>
 											<label>
-												<input type="radio" name="step" value="emailcode"> I want to deactivate the email code authentication for my {{ config('lua')['serverName'] }} account.
+												<input type="radio" name="step" value="auth-email-remove"> I want to deactivate the email code authentication for my {{ config('lua')['serverName'] }} account.
 											</label>
 											<br/>
 										</td>
@@ -118,7 +101,7 @@
 				<td>
 					<input type="hidden" name="nametype" value="2">
 
-					<input type="hidden" name="emailOrCharacter" value="{{ emailOrCharacter }}">
+					<input type="hidden" name="character" value="{{ character }}">
 
 					{{ include('buttons.base.html.twig', {'button_name': 'Submit', 'button_color': 'green'}) }}
 				</td>

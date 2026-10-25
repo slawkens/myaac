@@ -212,6 +212,7 @@ class TwoFactorAuth
 
 	public function enable(int $type): void {
 		$this->account->setCustomField('2fa_type', $type);
+		$this->authType = $type;
 	}
 
 	public function disable(): void
@@ -226,6 +227,7 @@ class TwoFactorAuth
 
 		$this->account->setCustomField('2fa_secret', '');
 		TrustedDevice::removeAll($this->account->getId());
+		$this->authType = self::TYPE_NONE;
 	}
 
 	public function isActive(?int $authType = null): bool {

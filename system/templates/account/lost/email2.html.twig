@@ -1,0 +1,58 @@
+
+<h2 style="text-align: center">Email Address: slawkens@gmail.com</h2>
+<br />
+<p>Please follow the instructions below to change your email address to <b>{{ email }}</b>.</p>
+<ol>
+	<li>Enter the recovery key of your Tibia account in the corresponding field below.</li>
+	<li>Click on "Submit".</li>
+	<li>
+		Within a short time you will receive an email with a link and a confirmation key. Click on the given link,
+		or copy and paste it into your internet browser.
+	</li>
+	<li>
+		The link will take you to a page on which <b>you need to choose a new password</b> to complete the email
+		change. Please note that you need to <b>use this link within 24 hours</b>. Otherwise, the confirmation key
+		will become invalid, the email change will be cancelled and you will have to request a new confirmation key.
+	</li>
+</ol>
+
+{% set title = 'Confirm Request for New Email Address' %}
+{% set tableClass = 'Table5' %}
+
+{% set content %}
+<table style="width: 100%">
+	<tbody>
+		<tr>
+			<td>
+				<div class="TableContentContainer">
+					<table
+						class="TableContent"
+						width="100%"
+						style="border: 1px solid #faf0d7"
+					>
+						<tbody>
+							<tr>
+								<td>
+									<span style="margin-left: 50px">Recovery key:</span>
+								</td>
+								<td>
+									{{ include('account.recovery-key.html.twig') }}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+{% endset %}
+{{ include('tables.headline.html.twig')}}
+<br />
+<center>
+	<form action="{{ getLink('account/lost') }}" method="post">
+		<input type="hidden" name="character" value="{{ character }}" />
+		<input type="hidden" name="email" value="{{ email }}" />
+		{{ include('buttons.base.html.twig', {'button_name': 'Submit'}) }}
+	</form>
+</center>
