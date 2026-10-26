@@ -507,7 +507,7 @@ else if (isset($_REQUEST['search'])) {
 						<div class="tab-pane fade" id="accounts-chars">
 							<div class="row">
 								<?php
-								if (isset($account) && $account->isLoaded()) {
+								if ($account->isLoaded()) {
 									$account_players = Player::where('account_id', $account->getId())->orderBy('id')->get();
 									if (isset($account_players)) { ?>
 										<table class="table table-striped table-condensed table-responsive d-md-table">
