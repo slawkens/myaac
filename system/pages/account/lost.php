@@ -41,8 +41,8 @@ elseif (empty($character)) {
 	$errors[] = 'Please enter the name of a character on the lost account. If your account does not contain any characters, please create a new account.';
 }
 elseif (str_contains($character, '@')) {
-	$account = Account::where('email', $character)->first();
-	if (!$account) {
+	$accountLost = Account::where('email', $character)->first();
+	if (!$accountLost) {
 		$errors[] = "Email address <strong>$character</strong> does not exist. Please make sure to enter the email address correctly. Note that email addresses may be deleted automatically if they have not been used for a long time.";
 	}
 }
@@ -52,8 +52,8 @@ else {
 		$errors[] = "Character with name <strong>$character</strong> does not exist. Please make sure to enter the character name correctly. Note that characters may be deleted automatically if they have not been used for a long time.";
 	}
 	else {
-		$account = $player->account()->first();
-		setSession('account_2fa_id', $account->getKey());
+		$accountLost = $player->account()->first();
+		setSession('account_2fa_id', $accountLost->getKey());
 	}
 }
 
@@ -69,7 +69,7 @@ if (!empty($errors)) {
 	return;
 }
 
-$explodeRecoveryKey = explode('-', $account->key);
+$explodeRecoveryKey = explode('-', $accountLost->key);
 $newRecoveryKeyFormat = (count($explodeRecoveryKey) == 4);
 
 switch ($step) {
@@ -81,7 +81,6 @@ switch ($step) {
 
 		$twig->display('account/lost/problem.html.twig', [
 			'character' => $character,
-			//'errors' => $errors,
 		]);
 
 		break;

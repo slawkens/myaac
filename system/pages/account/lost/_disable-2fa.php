@@ -3,12 +3,13 @@
  * Disable Two-Factor Authentication using a recovery key.
  *
  * @var bool $newRecoveryKeyFormat Indicates if the new recovery key format is used.
+ * @var \MyAAC\Models\Account $accountLost The currently selected account.
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
 use MyAAC\TwoFactorAuth\TwoFactorAuth;
 
-$twoFactorAuth = TwoFactorAuth::getInstance($account->getKey());
+$twoFactorAuth = TwoFactorAuth::getInstance($accountLost->getKey());
 
 if ($newRecoveryKeyFormat) {
 	$key = $_POST['key1'] . '-' . $_POST['key2'] . '-' . $_POST['key3'] . '-' . $_POST['key4'];
@@ -27,9 +28,9 @@ elseif (!$twoFactorAuth->isActive()) {
 	$errors[] = 'Two-Factor Authentication is not active for your account.';
 }
 
-$accountKey = $account->key;
+$accountKey = $accountLost->key;
 if (empty($errors) && !empty($key) && $key == $accountKey) {
-	$isEmail2FA = $twoFactorAuth->isActive($twoFactorAuth::TYPE_EMAIL);
+	$isEmailAuth = $twoFactorAuth->isActive($twoFactorAuth::TYPE_EMAIL);
 
 	$twoFactorAuth->disable();
 	$twoFactorAuth->deleteOldCodes();
@@ -38,7 +39,7 @@ if (empty($errors) && !empty($key) && $key == $accountKey) {
 		[
 			'title' => 'Two-Factor Authentication Disabled',
 			'description' => 'You have successfully <strong>disabled</strong> the Two-Factor <b>'
-				. ($isEmail2FA ? 'Email Code Authentication' : 'App Authentication')
+				. ($isEmailAuth ? 'Email Code Authentication' : 'App Authentication')
 				 . '</b> for your account.'
 		]
 	);
