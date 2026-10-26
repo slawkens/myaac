@@ -131,5 +131,3 @@
 	}
 
 	imagepng($img, SIGNATURES_CACHE . $player->getID() . '.png');
-	imagedestroy($img);
-?>
