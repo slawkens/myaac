@@ -228,7 +228,7 @@ switch ($action) {
 		if (!fieldExist('istutorial', 'players')) {
 			$sessionKey .= "\n";
 		}
-		$sessionKey .= ($twoFactorAuth->isActive() && strlen($account->{'2fa_secret'}) > 5) ? $account->{'2fa_secret'} : '';
+		$sessionKey .= ($twoFactorAuth->isActive() && strlen($account->two_factor_secret) > 5) ? $account->two_factor_secret : '';
 
 		// this is workaround to distinguish between TFS 1.x and otservbr
 		// TFS 1.x requires the number in session key

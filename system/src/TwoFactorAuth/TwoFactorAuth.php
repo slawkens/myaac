@@ -36,7 +36,7 @@ class TwoFactorAuth
 		global $db;
 
 		if (is_int($account)) {
-			$load = ['id', 'email', '2fa_type', '2fa_secret'];
+			$load = ['id', 'email', 'two_factor_type', 'two_factor_secret'];
 			if ($db->hasColumn('accounts', 'secret')) {
 				$load[] = 'secret';
 			}
@@ -47,7 +47,7 @@ class TwoFactorAuth
 			$this->account = $account;
 		}
 
-		$this->authType = (int)$this->account->{'2fa_type'};
+		$this->authType = (int)$this->account->two_factor_type;
 		$this->setAuthGateway($this->authType);
 	}
 
@@ -219,7 +219,7 @@ class TwoFactorAuth
 
 	public function enable(int $type): void
 	{
-		$this->account->{'2fa_type'} = $type;
+		$this->account->two_factor_type = $type;
 		$this->account->save();
 
 		$this->authType = $type;
@@ -233,8 +233,8 @@ class TwoFactorAuth
 			$this->account->secret = null;
 		}
 
-		$this->account->{'2fa_type'} = self::TYPE_NONE;
-		$this->account->{'2fa_secret'} = '';
+		$this->account->two_factor_type = self::TYPE_NONE;
+		$this->account->two_factor_secret = '';
 
 		$this->account->save();
 

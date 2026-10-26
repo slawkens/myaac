@@ -7,12 +7,18 @@
  */
 
 $up = function () use ($db) {
-	if (!$db->hasColumn('accounts', '2fa_type')) {
-		$db->addColumn('accounts', '2fa_type', "tinyint NOT NULL DEFAULT 0 AFTER `web_flags`");
+	if ($db->hasColumn('accounts', '2fa_type')) {
+		$db->changeColumn('accounts', '2fa_type', 'two_factor_type', "tinyint NOT NULL DEFAULT 0");
+	}
+	elseif (!$db->hasColumn('accounts', 'two_factor_type')) {
+		$db->addColumn('accounts', 'two_factor_type', "tinyint NOT NULL DEFAULT 0 AFTER `web_flags`");
 	}
 
-	if (!$db->hasColumn('accounts', '2fa_secret')) {
-		$db->addColumn('accounts', '2fa_secret', "varchar(16) NOT NULL DEFAULT '' AFTER `2fa_type`");
+	if ($db->hasColumn('accounts', '2fa_secret')) {
+		$db->changeColumn('accounts', '2fa_secret', 'two_factor_secret', "varchar(16) NOT NULL DEFAULT ''");
+	}
+	elseif (!$db->hasColumn('accounts', 'two_factor_secret')) {
+		$db->addColumn('accounts', 'two_factor_secret', "varchar(16) NOT NULL DEFAULT '' AFTER `two_factor_type`");
 	}
 
 	// add myaac_account_2fa_email_codes table
@@ -26,12 +32,12 @@ $up = function () use ($db) {
 };
 
 $down = function () use ($db) {
-	if ($db->hasColumn('accounts', '2fa_type')) {
-		$db->dropColumn('accounts', '2fa_type');
+	if ($db->hasColumn('accounts', 'two_factor_type')) {
+		$db->dropColumn('accounts', 'two_factor_type');
 	}
 
-	if ($db->hasColumn('accounts', '2fa_secret')) {
-		$db->dropColumn('accounts', '2fa_secret');
+	if ($db->hasColumn('accounts', 'two_factor_secret')) {
+		$db->dropColumn('accounts', 'two_factor_secret');
 	}
 
 	//if ($db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {

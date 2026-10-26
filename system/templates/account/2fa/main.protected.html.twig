@@ -1,4 +1,4 @@
-{% if logged and account_logged.getCustomField('2fa_type') == 1 %}
+{% if logged and account_logged.getCustomField('two_factor_type') == 1 %}
 	{% set header = 'Two-Factor Email Code Authentication' %}
 	{% set text =  'Your account is currently protected by email code authentication. If you prefer to use a <strong>two-factor authentication app</strong>, you have to "Disable" email code authentication first.' %}
 {% else %}

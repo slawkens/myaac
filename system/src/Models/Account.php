@@ -6,6 +6,26 @@ use MyAAC\Models\AccountTrustedDevice;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property string $name
+ * @property int $number
+ * @property string $email
+ * @property string $password
+ * @property string $key
+ * @property int $created
+ * @property string $rlname
+ * @property string $location
+ * @property string $country
+ * @property int $web_lastlogin
+ * @property int $web_flags
+ * @property string $email_new
+ * @property int $email_new_time
+ * @property string $email_code
+ * @property ?string $secret
+ * @property int $two_factor_type
+ * @property string $two_factor_secret
+ * @property int $premium_points
+ * @property int $coins
+ * @property int $coins_transferable
  * @property integer $premium_ends_at
  * @property integer $premend
  * @property integer $lastday
@@ -24,12 +44,15 @@ class Account extends Model {
 		'key', 'created', 'rlname', 'location', 'country',
 		'web_lastlogin', 'web_flags',
 		'email_new', 'email_new_time', 'email_code',
-		'2fa_type', '2fa_secret', 'secret',
+		'two_factor_type', 'two_factor_secret', 'secret',
 		'premium_points', 'coins', 'coins_transferable',
 		'premium_ends_at', 'premend', 'lastday', 'premdays',
 	];
 
 	protected $casts = [
+		'created' => 'integer',
+		'web_lastlogin' => 'integer',
+		'web_flags' => 'integer',
 		'lastday' => 'integer',
 		'premdays' => 'integer',
 		'premend' => 'integer',
