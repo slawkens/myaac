@@ -1,7 +1,7 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
-require __DIR__ . '/../base.php';
+require __DIR__ . '/../_base.php';
 
 $from = $_POST['from'] ?? 'login';
 if (!setting('core.mail_enabled') || !setting('core.account_2fa_email')) {

@@ -4,7 +4,7 @@ use MyAAC\TwoFactorAuth\TwoFactorAuth;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
-require __DIR__ . '/../base.php';
+require __DIR__ . '/../_base.php';
 
 if (!setting('core.mail_enabled') || !setting('core.account_2fa_email')) {
 	$errors[] = 'Two-factor authentication is not enabled on this server.';

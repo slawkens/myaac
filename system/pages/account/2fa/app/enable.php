@@ -3,7 +3,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 use MyAAC\TwoFactorAuth\TwoFactorAuth;
 
-require __DIR__ . '/../base.php';
+require __DIR__ . '/../_base.php';
 
 if (!extension_loaded('gd')) {
 	$errors[] = 'PHP GD extension is not loaded. Please contact the administrator.';
