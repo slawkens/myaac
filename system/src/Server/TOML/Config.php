@@ -62,7 +62,7 @@ class Config
 		$this->config['rateSkill'] = $this->config['rates']['rates']['skill'] ?? 1;
 		$this->config['rateLoot'] = $this->config['rates']['rates']['loot'] ?? 1;
 		$this->config['rateSpawn'] = $this->config['rates']['rates']['spawn'] ?? 1;
-		$this->config['statusTimeout'] = $this->config['server']['network']['status_timeout'] ?? 30;
+		$this->config['statusTimeout'] = $this->config['server']['network']['status_timeout'] ?? 5000;
 	}
 
 	public function get(): array {
