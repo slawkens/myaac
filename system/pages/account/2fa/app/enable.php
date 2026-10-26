@@ -37,10 +37,10 @@ if (ACTION == 'request') {
 
 	$accountKey = $account_logged->getCustomField('key');
 	if (!empty($key) && $key == $accountKey) {
-		$secret = getSession('two_factor_secret ');
+		$secret = getSession('two_factor_secret');
 		if ($secret === null) {
 			$secret = generateRandom2faSecret();
-			setSession('two_factor_secret ', $secret);
+			setSession('two_factor_secret', $secret);
 		}
 
 		$twoFactorAuth->appDisplayEnable($secret);
@@ -58,7 +58,7 @@ if (ACTION == 'request') {
 }
 
 if (ACTION == 'link') {
-	$secret = getSession('two_factor_secret ');
+	$secret = getSession('two_factor_secret');
 
 	if ($secret === null) {
 		$twig->display('error_box.html.twig', ['errors' => ['Secret not set. Go back and try again.']]);
