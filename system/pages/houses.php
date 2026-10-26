@@ -30,11 +30,12 @@ $state = '';
 $order = '';
 $type = '';
 
-if(isset($_REQUEST['name']))
+if(isset($_REQUEST['name']) || isset($_REQUEST['house']))
 {
+	$requestName = $_REQUEST['name'] ?? $_REQUEST['house'] ?? '';
 	$beds = array("", "one", "two", "three", "fourth", "fifth");
-	$houseName = urldecode($_REQUEST['name']);
-	$houseId = (Validator::number($_REQUEST['name']) ? $_REQUEST['name'] : -1);
+	$houseName = urldecode($requestName);
+	$houseId = (Validator::number($requestName) ? $requestName : -1);
 	$selectHouse = $db->query('SELECT * FROM ' . $db->tableName('houses') . ' WHERE ' . $db->fieldName('name') . ' LIKE ' . $db->quote($houseName) . ' OR `id` = ' . $db->quote($houseId));
 
 	$house = array();

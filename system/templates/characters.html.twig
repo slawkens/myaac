@@ -107,8 +107,10 @@
 							<td>
 								<form action="?subtopic=houses&page=view" method="post">
 									{{ csrf() }}
+
 									<input type="hidden" name="house" value="{{ house.name }}">
-									<input type="image" name="View" alt="View" src="{{ template_path }}/images/global/buttons/sbutton_view.gif" border="0" width="120">
+
+									{{ include('buttons.base.html.twig', {'button_name': 'View'}) }}
 								</form>
 							</td>
 						</tr>
