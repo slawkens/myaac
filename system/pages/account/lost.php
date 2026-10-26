@@ -74,6 +74,11 @@ $newRecoveryKeyFormat = (count($explodeRecoveryKey) == 4);
 
 switch ($step) {
 	case 'problem':
+		if (isset($_POST['submitted']) && $_POST['submitted'] == '1') {
+			$errors[] = 'Please select a problem.';
+			$twig->display('error_box.html.twig', ['errors' => $errors]);
+		}
+
 		$twig->display('account/lost/problem.html.twig', [
 			'character' => $character,
 			//'errors' => $errors,

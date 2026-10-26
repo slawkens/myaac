@@ -15,6 +15,9 @@
 
 <form action="{{ getLink('account/lost') }}" method="post">
 
+	<input type="hidden" name="step" value="problem" />
+	<input type="hidden" name="submitted" value="1">
+
 	{{ csrf() }}
 
 	{% set title = 'Specify Your Problem' %}
@@ -99,7 +102,7 @@
 		<tbody>
 			<tr align="center">
 				<td>
-					<input type="hidden" name="nametype" value="2">
+					<!--input type="hidden" name="nametype" value="2"-->
 
 					<input type="hidden" name="character" value="{{ character }}">
 
