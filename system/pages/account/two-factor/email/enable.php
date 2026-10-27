@@ -51,4 +51,4 @@ if (!empty($errors)) {
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
 }
 
-$twig->display('account/two-factor-auth/email/enable.html.twig', ['wrongCode' => count($errors) > 0]);
+$twig->display('account/two-factor/email/enable.html.twig', ['wrongCode' => count($errors) > 0]);

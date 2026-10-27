@@ -82,9 +82,9 @@ class TwoFactorAuth
 			$authTypeString = 'email';
 		}
 
-		$view = "account/two-factor-auth/$authTypeString/login.html.twig";
+		$view = "account/two-factor/$authTypeString/login.html.twig";
 		if (defined('MYAAC_ADMIN')) {
-			$view = "account/two-factor-auth/admin.login.html.twig";
+			$view = "account/two-factor/admin.login.html.twig";
 		}
 
 		$params = [
@@ -124,7 +124,7 @@ class TwoFactorAuth
 		// one mail per 10 minutes
 		$lastAttemptFailedEmail = getSession('two_factor_last_attempt_failed_email') ?? 0;
 		if (setting('core.mail_enabled') && $lastAttemptFailedEmail < time() - 10 * 60) {
-			$mailBody = $twig->render('mail.account.two-factor-auth.email-code.wrong-attempt.html.twig');
+			$mailBody = $twig->render('mail.account.two-factor.email-code.wrong-attempt.html.twig');
 
 			if (!_mail($this->account->email, configLua('serverName') . ' - Failed Two-Factor Authentication Attempt', $mailBody)) {
 				error('An error occurred while sending email. For Admin: More info can be found in system/logs/mailer-error.log');
@@ -202,16 +202,16 @@ class TwoFactorAuth
 	public function getAccountManageViews(): array
 	{
 		if ($this->authType == self::TYPE_EMAIL) {
-			$twoFactorView = 'account/two-factor-auth/main.protected.html.twig';
-			$twoFactorView2 = 'account/two-factor-auth/email/manage.connected.html.twig';
+			$twoFactorView = 'account/two-factor/main.protected.html.twig';
+			$twoFactorView2 = 'account/two-factor/email/manage.connected.html.twig';
 		}
 		elseif ($this->authType == self::TYPE_APP) {
-			$twoFactorView = 'account/two-factor-auth/app/manage.connected.html.twig';
-			$twoFactorView2 = 'account/two-factor-auth/main.protected.html.twig';
+			$twoFactorView = 'account/two-factor/app/manage.connected.html.twig';
+			$twoFactorView2 = 'account/two-factor/main.protected.html.twig';
 		}
 		else {
-			$twoFactorView = 'account/two-factor-auth/app/manage.enable.html.twig';
-			$twoFactorView2 = 'account/two-factor-auth/email/manage.enable.html.twig';
+			$twoFactorView = 'account/two-factor/app/manage.enable.html.twig';
+			$twoFactorView2 = 'account/two-factor/email/manage.enable.html.twig';
 		}
 
 		return [$twoFactorView, $twoFactorView2];
@@ -288,7 +288,7 @@ class TwoFactorAuth
 		$writer = new Writer($renderer);
 		$qr = $writer->writeString($otp->getProvisioningUri());
 
-		$twig->display('account/two-factor-auth/app/enable.html.twig', [
+		$twig->display('account/two-factor/app/enable.html.twig', [
 			'qr' => base64_encode($qr),
 			'secret' => $secret,
 			'errors' => $errors,
@@ -301,7 +301,7 @@ class TwoFactorAuth
 
 		$newCode = generateRandomString(6, true, false, true);
 
-		$mailBody = $twig->render('mail.account.two-factor-auth.email-code.html.twig', [
+		$mailBody = $twig->render('mail.account.two-factor.email-code.html.twig', [
 			'code' => $newCode,
 		]);
 

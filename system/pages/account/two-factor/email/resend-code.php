@@ -32,7 +32,7 @@ $login_account = $_POST['account_login'] ?? '';
 $login_password = $_POST['password_login'] ?? '';
 $remember_me = isset($_POST['remember_me']);
 
-$twig->display("account/two-factor-auth/email/$from.html.twig", [
+$twig->display("account/two-factor/email/$from.html.twig", [
 	'account_login' => $login_account,
 	'password_login' => $login_password,
 	'remember_me' => $remember_me,

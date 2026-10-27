@@ -113,7 +113,7 @@ if (!empty($errors)) {
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
 }
 
-$twig->display('account/two-factor-auth/app/enable.warning.html.twig',
+$twig->display('account/two-factor/app/enable.warning.html.twig',
 	[
 		'newRecoveryKeyFormat' => $newRecoveryKeyFormat,
 		'errors' => $errors ?? [],
