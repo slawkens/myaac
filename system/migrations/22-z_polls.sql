@@ -1,4 +1,4 @@
-CREATE TABLE `z_polls` (
+CREATE TABLE IF NOT EXISTS `z_polls` (
 	`id` int(11) NOT NULL auto_increment,
 	`question` varchar(255) NOT NULL,
 	`description` varchar(255) NOT NULL,

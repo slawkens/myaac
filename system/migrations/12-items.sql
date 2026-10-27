@@ -1,4 +1,4 @@
-CREATE TABLE `myaac_items`
+CREATE TABLE IF NOT EXISTS `myaac_items`
 (
 	`id` INT(11) NOT NULL,
 	`article` VARCHAR(5) NOT NULL DEFAULT '',

@@ -1,4 +1,4 @@
-CREATE TABLE `myaac_menu`
+CREATE TABLE IF NOT EXISTS `myaac_menu`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`template` VARCHAR(255) NOT NULL,
