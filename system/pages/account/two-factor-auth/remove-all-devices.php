@@ -10,7 +10,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 require __DIR__ . '/_base.php';
 use MyAAC\TwoFactorAuth\TrustedDevice;
 
-if (!setting('core.mail_enabled') || (!setting('core.account_2fa_app') && !setting('core.account_2fa_email'))) {
+if (!setting('core.mail_enabled') || (!setting('core.account_two_factor_app') && !setting('core.account_two_factor_email'))) {
 	$errors[] = 'Two-factor authentication is not enabled on this server.';
 }
 elseif (!$account_logged->isLoaded()) {
@@ -19,8 +19,8 @@ elseif (!$account_logged->isLoaded()) {
 elseif (!$twoFactorAuth->isActive()) {
 	$errors[] = 'Two-factor authentication is not enabled on your account.';
 }
-elseif (!TrustedDevice::get($account_logged->getId(), $_GET['device_id'] ?? 0)) {
-	$errors[] = 'The selected trusted device does not exist.';
+elseif (!isRequestMethod('post')) {
+	$errors[] = 'This page cannot be accessed directly.';
 }
 
 if (!empty($errors)) {
@@ -28,9 +28,9 @@ if (!empty($errors)) {
 	return;
 }
 
-TrustedDevice::remove($account_logged->getId(), $_GET['device_id'] ?? 0);
+TrustedDevice::removeAll($account_logged->getId());
 
 $twig->display('success.html.twig', [
-	'title' => 'Device Removed',
-	'description' => 'The selected trusted device has been removed from your account.'
+	'title' => 'All Known Devices Removed',
+	'description' => 'All trusted devices have been removed from your account.'
 ]);

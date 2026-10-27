@@ -11,7 +11,7 @@ if (!extension_loaded('gd')) {
 elseif (!$account_logged->isLoaded()) {
 	$errors[] = 'Please login first.';
 }
-elseif (!setting('core.account_2fa_app')) {
+elseif (!setting('core.account_two_factor_app')) {
 	$errors[] = 'Two-factor authentication is not enabled on this server.';
 }
 elseif ($twoFactorAuth->isActive()) {
@@ -39,7 +39,7 @@ if (ACTION == 'request') {
 	if (!empty($key) && $key == $accountKey) {
 		$secret = getSession('two_factor_secret');
 		if ($secret === null) {
-			$secret = generateRandom2faSecret();
+			$secret = generateRandomTwoFactorSecret();
 			setSession('two_factor_secret', $secret);
 		}
 
@@ -113,7 +113,7 @@ if (!empty($errors)) {
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
 }
 
-$twig->display('account/2fa/app/enable.warning.html.twig',
+$twig->display('account/two-factor-auth/app/enable.warning.html.twig',
 	[
 		'newRecoveryKeyFormat' => $newRecoveryKeyFormat,
 		'errors' => $errors ?? [],

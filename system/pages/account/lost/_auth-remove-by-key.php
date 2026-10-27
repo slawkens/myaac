@@ -21,7 +21,7 @@ else {
 if (($newRecoveryKeyFormat && strlen($key) < 4) || empty($key)) {
 	$errors[] = 'Please enter the recovery key!';
 }
-elseif (!setting('core.mail_enabled') || (!setting('core.account_2fa_email') && !setting('core.account_2fa_app'))) {
+elseif (!setting('core.mail_enabled') || (!setting('core.account_two_factor_email') && !setting('core.account_two_factor_app'))) {
 	$errors[] = 'Account Two-Factor Authentication disabled.';
 }
 elseif (!$twoFactorAuth->isActive()) {

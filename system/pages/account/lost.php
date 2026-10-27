@@ -53,7 +53,7 @@ else {
 	}
 	else {
 		$accountLost = $player->account()->first();
-		setSession('account_2fa_id', $accountLost->getKey());
+		setSession('account_two_factor_id', $accountLost->getKey());
 	}
 }
 
@@ -96,7 +96,7 @@ switch ($step) {
 		break;
 
 	case 'auth-remove-by-key':
-		require __DIR__ . '/lost/_disable-2fa.php';
+		require __DIR__ . '/lost/_auth-remove-by-key.php';
 
 		break;
 

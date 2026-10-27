@@ -824,7 +824,7 @@ Sent by MyAAC,<br/>
 			'type' => 'section',
 			'title' => 'Two Factor Authentication (2FA)',
 		],
-		'account_2fa_app' => [
+		'account_two_factor_app' => [
 			'name' => 'Account 2FA App',
 			'type' => 'boolean',
 			'desc' => 'Allow users to enable Two Factor Authentication (2FA) via App for their accounts?' . PHP_EOL .
@@ -832,7 +832,7 @@ Sent by MyAAC,<br/>
 			'default' => true,
 			'enabled' => extension_loaded('gd'),
 		],
-		'account_2fa_email' => [
+		'account_two_factor_email' => [
 			'name' => 'Account 2FA E-Mail',
 			'type' => 'boolean',
 			'desc' => 'Allow users to enable Two Factor Authentication (2FA) via E-Mail for their accounts?' . PHP_EOL .

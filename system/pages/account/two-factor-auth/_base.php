@@ -13,7 +13,7 @@ $title = 'Two Factor Authentication';
 $code = $_REQUEST['auth-code'] ?? '';
 
 if (!$account_logged->isLoaded()) {
-	$current_session = getSession('account_2fa_id');
+	$current_session = getSession('account_two_factor_id');
 	if($current_session) {
 		$account_logged = new OTS_Account();
 		$account_logged->load($current_session);
@@ -27,7 +27,7 @@ $twig->addGlobal('account_logged', $account_logged);
  * Took from ZnoteAAC
  * @author Znote
  */
-function generateRandom2faSecret($length = 16): string
+function generateRandomTwoFactorSecret($length = 16): string
 {
 	$characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 	$charactersLength = strlen($characters);

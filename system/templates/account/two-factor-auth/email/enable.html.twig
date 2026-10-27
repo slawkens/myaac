@@ -31,7 +31,7 @@
 					<tr>
 						<td>
 							<div style="float: right;">
-								<form action="{{ getLink('account/2fa/email/resend-code') }}"
+								<form action="{{ getLink('account/two-factor-auth/email/resend-code') }}"
 									method="post" style="padding:0;margin:0;">
 									{{ csrf() }}
 
@@ -89,7 +89,7 @@
 	<tbody>
 	<tr align="center" valign="top">
 		<td>
-			<form id="form" action="{{ getLink('account/2fa/email/enable') }}" method="post" style="padding:0;margin:0;">
+			<form id="form" action="{{ getLink('account/two-factor-auth/email/enable') }}" method="post" style="padding:0;margin:0;">
 				{{ csrf() }}
 
 				<input type="hidden" name="save" value="1">

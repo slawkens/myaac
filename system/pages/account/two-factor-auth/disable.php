@@ -18,8 +18,8 @@ elseif (!$twoFactorAuth->isActive()) {
 else {
 	$isEmailAuth = $twoFactorAuth->isActive($twoFactorAuth::TYPE_EMAIL);
 
-	if ($isEmailAuth && (!setting('core.mail_enabled') || !setting('core.account_2fa_email'))
-		|| (!$isEmailAuth && !setting('core.account_2fa_app'))) {
+	if ($isEmailAuth && (!setting('core.mail_enabled') || !setting('core.account_two_factor_email'))
+		|| (!$isEmailAuth && !setting('core.account_two_factor_app'))) {
 		$errors[] = 'Account Two-Factor Authentication is disabled.';
 	}
 }

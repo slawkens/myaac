@@ -7,7 +7,7 @@
  */
 namespace MyAAC\TwoFactorAuth;
 
-use MyAAC\Models\AccountTrustedDevice;
+use MyAAC\Models\AccountTwoFactorTrustedDevice;
 
 class TrustedDevice
 {
@@ -32,7 +32,7 @@ class TrustedDevice
 		$expiresAt = date('Y-m-d H:i:s', $expiryTime);
 		$userAgent = self::getUserAgent();
 
-		AccountTrustedDevice::create([
+		AccountTwoFactorTrustedDevice::create([
 			'account_id' => $accountId,
 			'device_token_hash' => $hash,
 			'user_agent' => $userAgent,
@@ -62,7 +62,7 @@ class TrustedDevice
 		$userAgent = self::getUserAgent();
 
 		// Token und User-Agent in der Datenbank prüfen
-		$trustedDevice = AccountTrustedDevice::where('account_id', $accountId)
+		$trustedDevice = AccountTwoFactorTrustedDevice::where('account_id', $accountId)
 			->where('device_token_hash', $hash)
 			->where('user_agent', $userAgent)
 			->where('expires_at', '>', date('Y-m-d H:i:s'))
@@ -77,7 +77,7 @@ class TrustedDevice
 	public static function updateLastLogin(int $accountId): void
 	{
 		$now = date('Y-m-d H:i:s');
-		AccountTrustedDevice::where('account_id', $accountId)
+		AccountTwoFactorTrustedDevice::where('account_id', $accountId)
 			->where('user_agent', self::getUserAgent())
 			->where('expires_at', '>', $now)
 			->update(['updated_at' => $now]);
@@ -88,7 +88,7 @@ class TrustedDevice
 	 */
 	public static function getAll(int $accountId): array
 	{
-		return AccountTrustedDevice::where('account_id', $accountId)
+		return AccountTwoFactorTrustedDevice::where('account_id', $accountId)
 			->where('expires_at', '>', date('Y-m-d H:i:s'))
 			->get()
 			->toArray();
@@ -99,7 +99,7 @@ class TrustedDevice
 	 */
 	public static function get(int $accountId, int $id): ?array
 	{
-		$device = AccountTrustedDevice::where('account_id', $accountId)
+		$device = AccountTwoFactorTrustedDevice::where('account_id', $accountId)
 			->where('id', $id)
 			->first();
 
@@ -110,7 +110,7 @@ class TrustedDevice
 	 * Removes a single trusted device by id.
 	 */
 	public static function remove(int $accountId, int $id): void {
-		AccountTrustedDevice::where('account_id', $accountId)
+		AccountTwoFactorTrustedDevice::where('account_id', $accountId)
 			->where('id', $id)
 			->delete();
 	}
@@ -119,14 +119,14 @@ class TrustedDevice
 	 * Removes all trusted devices for the given account.
 	 */
 	public static function removeAll(int $accountId): void {
-		AccountTrustedDevice::where('account_id', $accountId)->delete();
+		AccountTwoFactorTrustedDevice::where('account_id', $accountId)->delete();
 	}
 
 	/**
 	 * Clears all expired trusted devices from the database.
 	 */
 	public static function clear(): void {
-		AccountTrustedDevice::where('expires_at', '<', date('Y-m-d H:i:s'))->delete();
+		AccountTwoFactorTrustedDevice::where('expires_at', '<', date('Y-m-d H:i:s'))->delete();
 	}
 
 	public static function getUserAgent(): string {

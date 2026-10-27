@@ -4,7 +4,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 require __DIR__ . '/../_base.php';
 
 $from = $_POST['from'] ?? 'login';
-if (!setting('core.mail_enabled') || !setting('core.account_2fa_email')) {
+if (!setting('core.mail_enabled') || !setting('core.account_two_factor_email')) {
 	$errors[] = 'Account Two-Factor E-Mail Authentication disabled.';
 }
 elseif (!$account_logged->isLoaded()) {
@@ -32,7 +32,7 @@ $login_account = $_POST['account_login'] ?? '';
 $login_password = $_POST['password_login'] ?? '';
 $remember_me = isset($_POST['remember_me']);
 
-$twig->display("account/2fa/email/$from.html.twig", [
+$twig->display("account/two-factor-auth/email/$from.html.twig", [
 	'account_login' => $login_account,
 	'password_login' => $login_password,
 	'remember_me' => $remember_me,

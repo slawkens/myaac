@@ -6,7 +6,7 @@ defined('MYAAC') or die('Direct access not allowed!');
 
 require __DIR__ . '/../_base.php';
 
-if (!setting('core.mail_enabled') || !setting('core.account_2fa_email')) {
+if (!setting('core.mail_enabled') || !setting('core.account_two_factor_email')) {
 	$errors[] = 'Two-factor authentication is not enabled on this server.';
 }
 elseif (!$account_logged->isLoaded()) {
@@ -51,4 +51,4 @@ if (!empty($errors)) {
 	$twig->display('error_box.html.twig', ['errors' => $errors]);
 }
 
-$twig->display('account/2fa/email/enable.html.twig', ['wrongCode' => count($errors) > 0]);
+$twig->display('account/two-factor-auth/email/enable.html.twig', ['wrongCode' => count($errors) > 0]);

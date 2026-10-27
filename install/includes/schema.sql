@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `myaac_account_actions`
 	INDEX `myaac_account_actions_ip` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `myaac_account_2fa_email_codes`
+CREATE TABLE IF NOT EXISTS `myaac_account_two_factor_email_codes`
 (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`account_id` int NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `myaac_account_2fa_email_codes`
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `myaac_account_2fa_trusted_devices`
+CREATE TABLE IF NOT EXISTS `myaac_account_two_factor_trusted_devices`
 (
 	`id` int AUTO_INCREMENT PRIMARY KEY,
 	`account_id` int NOT NULL,

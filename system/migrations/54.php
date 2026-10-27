@@ -1,6 +1,5 @@
 <?php
-// 2fa
-// add the myaac_account_2fa_email_codes
+// Two-factor authentication (2FA)
 
 /**
  * @var OTS_DB_MySQL $db
@@ -21,13 +20,13 @@ $up = function () use ($db) {
 		$db->addColumn('accounts', 'two_factor_secret', "varchar(16) NOT NULL DEFAULT '' AFTER `two_factor_type`");
 	}
 
-	// add myaac_account_2fa_email_codes table
-	if (!$db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {
-		$db->exec(file_get_contents(__DIR__ . '/54-account_2fa_email_codes.sql'));
+	// add myaac_account_two_factor_email_codes table
+	if (!$db->hasTable(TABLE_PREFIX . 'account_two_factor_email_codes')) {
+		$db->exec(file_get_contents(__DIR__ . '/54-account_two_factor_email_codes.sql'));
 	}
 
-	if (!$db->hasTable(TABLE_PREFIX . 'account_2fa_trusted_devices')) {
-		$db->exec(file_get_contents(__DIR__ . '/54-account_2fa_trusted_devices.sql'));
+	if (!$db->hasTable(TABLE_PREFIX . 'account_two_factor_trusted_devices')) {
+		$db->exec(file_get_contents(__DIR__ . '/54-account_two_factor_trusted_devices.sql'));
 	}
 };
 
@@ -40,11 +39,11 @@ $down = function () use ($db) {
 		$db->dropColumn('accounts', 'two_factor_secret');
 	}
 
-	//if ($db->hasTable(TABLE_PREFIX . 'account_2fa_email_codes')) {
-	//	$db->dropTable(TABLE_PREFIX . 'account_2fa_email_codes');
+	//if ($db->hasTable(TABLE_PREFIX . 'account_two_factor_email_codes')) {
+	//	$db->dropTable(TABLE_PREFIX . 'account_two_factor_email_codes');
 	//}
 
-	//if ($db->hasTable(TABLE_PREFIX . 'account_2fa_trusted_devices')) {
-	//	$db->dropTable(TABLE_PREFIX . 'account_2fa_trusted_devices');
+	//if ($db->hasTable(TABLE_PREFIX . 'account_two_factor_trusted_devices')) {
+	//	$db->dropTable(TABLE_PREFIX . 'account_two_factor_trusted_devices');
 	//}
 };

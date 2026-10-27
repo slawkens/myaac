@@ -2,7 +2,7 @@
 
 namespace MyAAC\Models;
 
-use MyAAC\Models\AccountTrustedDevice;
+use MyAAC\Models\AccountTwoFactorTrustedDevice;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -106,7 +106,7 @@ class Account extends Model {
 	}
 
 	public function trustedDevices() {
-		return $this->hasMany(AccountTrustedDevice::class);
+		return $this->hasMany(AccountTwoFactorTrustedDevice::class);
 	}
 
 }

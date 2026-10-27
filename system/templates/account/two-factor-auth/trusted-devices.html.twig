@@ -49,7 +49,7 @@
 									<td>{{ device.type }}</td>
 									<td>
 										<div style="white-space: nowrap;text-align:center;">[<a
-												href="{{ getLink('account/2fa/remove-single-device?device_id=' ~ device.id) }}">Remove</a>]
+												href="{{ getLink('account/two-factor-auth/remove-single-device?device_id=' ~ device.id) }}">Remove</a>]
 										</div>
 									</td>
 								</tr>
@@ -63,7 +63,7 @@
 			<tr>
 				<td class="trusted-devices-remove-all">
 					<form
-						action="{{ getLink('account/2fa/remove-all-devices') }}"
+						action="{{ getLink('account/two-factor-auth/remove-all-devices') }}"
 						method="post" style="padding:0px;margin:0px;">
 
 						{{ csrf() }}
