@@ -1,4 +1,4 @@
-CREATE TABLE `myaac_account_2fa_trusted_devices`
+CREATE TABLE IF NOT EXISTS `myaac_account_2fa_trusted_devices`
 (
 	`id` int AUTO_INCREMENT PRIMARY KEY,
 	`account_id` int NOT NULL,
