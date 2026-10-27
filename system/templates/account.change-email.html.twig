@@ -8,7 +8,7 @@ Please enter your password and the new email address. Make sure that you enter a
 				<label for="new_email">New Email Address:</label>
 			</td>
 			<td style="width:90%;">
-				<input type="text" form="form" id="new_email" name="new_email" value="{% if new_email is defined %}{{ new_email }}{% endif %}" size="30" maxlength="50" autofocus/>
+				<input type="email" form="form" id="new_email" name="new_email" value="{% if new_email is defined %}{{ new_email }}{% endif %}" size="30" maxlength="50" autofocus/>
 			</td>
 		</tr>
 		<tr>
