@@ -65,7 +65,8 @@
 															<div style="width: 2px; height: 2px;" ></div>
 															<a href="{{ getLink('account/lost') }}" style="padding:0;margin:0;" >
 																{% set noSubmit = true %}
-																{{ include('buttons.account_lost.html.twig') }}
+																{% set button_name = 'Account lost?' %}
+																{% include('buttons.base.html.twig') %}
 															</a>
 														</div>
 													</td>

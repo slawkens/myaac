@@ -77,7 +77,9 @@ Please enter your account {{ account|lower }} and your password.<br/><a href="{{
 					<tr>
 						<td style="border:0;">
 							<a href="{{ getLink('account/lost') }}">
-								{{ include('buttons.account_lost.html.twig') }}
+								{% set noSubmit = true %}
+								{% set button_name = 'Account lost?' %}
+								{% include('buttons.base.html.twig') %}
 							</a>
 						</td>
 					</tr>

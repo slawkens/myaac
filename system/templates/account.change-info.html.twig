@@ -8,7 +8,7 @@ Here you can tell other players about yourself. This information will be display
 			<label for="info_rlname">Real Name:</label>
 		</td>
 		<td style="width:90%;" >
-			<input form="form" id="info_rlname" name="info_rlname" value="{{ account_rlname }}" size="30" maxlength="50" >
+			<input type="text" form="form" id="info_rlname" name="info_rlname" value="{{ account_rlname }}" size="30" maxlength="50" >
 		</td>
 	</tr>
 	<tr>
@@ -16,7 +16,7 @@ Here you can tell other players about yourself. This information will be display
 			<label for="info_location">Location:</label>
 		</td>
 		<td>
-			<input form="form" id="info_location" name="info_location" value="{{ account_location }}" size="30" maxlength="50" >
+			<input type="text" form="form" id="info_location" name="info_location" value="{{ account_location }}" size="30" maxlength="50" >
 		</td>
 	</tr>
 	{% if setting('core.account_country') %}

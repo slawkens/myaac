@@ -5,8 +5,13 @@
 
 $up = function () use ($db) {
 	// rename database tables
-	$db->renameTable(TABLE_PREFIX . 'screenshots', TABLE_PREFIX . 'gallery');
-	$db->renameTable(TABLE_PREFIX . 'movies', TABLE_PREFIX . 'videos');
+	if ($db->hasTable(TABLE_PREFIX . 'screenshots')) {
+		$db->renameTable(TABLE_PREFIX . 'screenshots', TABLE_PREFIX . 'gallery');
+	}
+
+	if ($db->hasTable(TABLE_PREFIX . 'movies')) {
+		$db->renameTable(TABLE_PREFIX . 'movies', TABLE_PREFIX . 'videos');
+	}
 
 	// rename images dir
 	if (file_exists(BASE . 'images/screenshots') && !file_exists(BASE . GALLERY_DIR)) {

@@ -1,4 +1,4 @@
-CREATE TABLE `myaac_settings`
+CREATE TABLE IF NOT EXISTS `myaac_settings`
 (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
