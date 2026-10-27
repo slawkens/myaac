@@ -45,7 +45,6 @@
 		public function save($player_id)
 		{
 			imagepng($this->instance, SIGNATURES_CACHE . $player_id . '.png');
-			imagedestroy($this->instance);
 		}
 		/**
 		 * @access public
@@ -214,7 +213,6 @@
 				{
 					imagepng( $this->instance, $path, 9 );
 				}
-				imagedestroy( $this->instance );
 				unset( $this->instance );
 			}
 		}

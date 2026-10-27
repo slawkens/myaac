@@ -1,4 +1,4 @@
-CREATE TABLE `myaac_account_emails_verify`
+CREATE TABLE IF NOT EXISTS `myaac_account_emails_verify`
 (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`account_id` int NOT NULL,

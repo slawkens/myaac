@@ -60,7 +60,7 @@ class News
 			$params + ['id' => $newsModel->id],
 		);
 
-		self::clearCache();
+		clearCache();
 		return true;
 	}
 
@@ -99,7 +99,7 @@ class News
 			$params + ['id' => $id]
 		);
 
-		self::clearCache();
+		clearCache();
 		return true;
 	}
 
@@ -134,7 +134,7 @@ class News
 			return false;
 		}
 
-		self::clearCache();
+		clearCache();
 		return true;
 	}
 
@@ -174,7 +174,7 @@ class News
 			return false;
 		}
 
-		self::clearCache();
+		clearCache();
 		return true;
 	}
 

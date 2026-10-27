@@ -4,6 +4,11 @@
  * Previously it was utf8 (utf8mb3)
  * utf8 will become utf8mb4 in future releases of mysql
  */
+
+/**
+ * @var OTS_DB_MySQL $db
+ */
+
 $tables = [
 	'account_actions', 'admin_menu',
 	'changelog', 'config',

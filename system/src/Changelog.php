@@ -34,7 +34,7 @@ class Changelog
 		$row->where = $where;
 		$row->player_id = $player_id ?? 0;
 		if ($row->save()) {
-			self::clearCache();
+			clearCache();
 			return true;
 		}
 
@@ -57,7 +57,7 @@ class Changelog
 			'player_id' => $player_id ?? 0,
 			'date' => $date
 		])) {
-			self::clearCache();
+			clearCache();
 			return true;
 		}
 
@@ -84,7 +84,7 @@ class Changelog
 			return false;
 		}
 
-		self::clearCache();
+		clearCache();
 		return true;
 	}
 
@@ -111,40 +111,7 @@ class Changelog
 			return false;
 		}
 
-		self::clearCache();
+		clearCache();
 		return true;
-	}
-
-	static public function getCached($type)
-	{
-		global $template_name;
-
-		$cache = Cache::getInstance();
-		if ($cache->enabled())
-		{
-			$tmp = '';
-			if ($cache->fetch('changelog_' . $template_name, $tmp) && isset($tmp[0])) {
-				return $tmp;
-			}
-		}
-
-		return false;
-	}
-
-	static public function clearCache()
-	{
-		global $template_name;
-		$cache = Cache::getInstance();
-		if (!$cache->enabled()) {
-			return;
-		}
-
-		$tmp = '';
-		foreach (get_templates() as $template) {
-			if ($cache->fetch('changelog_' . $template_name, $tmp)) {
-				$cache->delete('changelog_' . $template_name);
-			}
-
-		}
 	}
 }

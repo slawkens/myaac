@@ -46,7 +46,7 @@
 	$vocation = 'Unknown';
 	if(isset($config['vocations'][$player->getVocation()]))
 		$vocation = $config['vocations'][$player->getVocation()];
-	
+
 	imagettftext($img, $fontsize, 0, 15, 62, $text, $font, 'Vocation');
 	imagettftext($img, $fontsize, 0, 100, 62, $text, $font, $vocation);
 
@@ -100,10 +100,10 @@
 
 	imagefilledrectangle($img, 225, 40, 225, 130, $title); //seperator
 	$posy = 50;
-	
+
 	if($db->hasColumn('players', 'skill_fist')) {// tfs 1.0+
 		$skills_db = $db->query('SELECT `skill_fist`, `skill_club`, `skill_sword`, `skill_axe`, `skill_dist`, `skill_shielding`, `skill_fishing` FROM `players` WHERE `id` = ' . $player->getId())->fetch();
-		
+
 		$skill_ids = array(
 			POT::SKILL_FIST => 'skill_fist',
 			POT::SKILL_CLUB => 'skill_club',
@@ -113,7 +113,7 @@
 			POT::SKILL_SHIELD => 'skill_shielding',
 			POT::SKILL_FISH => 'skill_fishing',
 		);
-		
+
 		$skills = array();
 		foreach($skill_ids as $skillid => $field_name) {
 			$skills[] = array('skillid' => $skillid, 'value' => $skills_db[$field_name]);
@@ -131,5 +131,3 @@
 	}
 
 	imagepng($img, SIGNATURES_CACHE . $player->getID() . '.png');
-	imagedestroy($img);
-?>
