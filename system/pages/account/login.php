@@ -73,14 +73,14 @@ if(!empty($login_account) && !empty($login_password))
 				$account_logged->setCustomField('web_lastlogin', time());
 			}
 
-			$hooks->trigger(HOOK_LOGIN, array('account' => $account_logged, 'password' => $login_password, 'remember_me' => $remember_me));
+			$hooks->trigger(HOOK_LOGIN, array('account' => $account_logged, 'remember_me' => $remember_me));
 		}
 
 		$limiter->reset($ip);
 	}
 	else
 	{
-		$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
+		$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'remember_me' => $remember_me));
 
 		$errorMessage = getAccountLoginByLabel() . ' or password is not correct.';
 		$limiter->increment($ip);
@@ -95,7 +95,7 @@ if(!empty($login_account) && !empty($login_password))
 else {
 	$errors[] = 'Please enter your ' . getAccountLoginByLabel() . ' and password.';
 
-	$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'password' => $login_password, 'remember_me' => $remember_me));
+	$hooks->trigger(HOOK_LOGIN_ATTEMPT, array('account' => $login_account, 'remember_me' => $remember_me));
 }
 
 $hooks->trigger(HOOK_ACCOUNT_LOGIN_POST);
