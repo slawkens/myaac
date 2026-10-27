@@ -23,13 +23,13 @@
 		</tr>
 		<tr bgcolor="{{ config.lightborder }}">
 			<td><b>Topic:</b></td>
-			<td><input type="text" value="{{ post_topic|raw }}" name="topic" size="40" maxlength="60" /> (Optional)</td>
+			<td><input type="text" value="{{ post_topic }}" name="topic" size="40" maxlength="60" /> (Optional)</td>
 		</tr>
 		<tr bgcolor="{{ config.darkborder }}">
 			<td valign="top"><b>Message:</b><span style="font-size: 10px"><br/>You can use:<br/>[player]Nick[/player]<br />[url]http://address.com/[/url]<br />[img]http://images.com/images3.gif[/img]<br />[code]Code[/code]<br />[b]<b>Text</b>[/b]<br />[i]<i>Text</i>[/i]<br/>[u]<u>Text</u>[/u]<br />and smileys:<br />;) , :) , :D , :( , :rolleyes:<br />:cool: , :eek: , :o , :p</span>
 			</td>
 			<td>
-				<textarea rows="10" cols="60" name="text">{{ post_text|raw }}</textarea><br />(Max. 15,000 letters)
+				<textarea rows="10" cols="60" name="text">{{ post_text }}</textarea><br />(Max. 15,000 letters)
 			</td>
 		</tr>
 		<tr bgcolor="{{ config.lightborder }}">

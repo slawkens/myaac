@@ -1,4 +1,4 @@
-CREATE TABLE `myaac_hooks`
+CREATE TABLE IF NOT EXISTS `myaac_hooks`
 (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(30) NOT NULL DEFAULT '',

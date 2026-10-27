@@ -1,4 +1,4 @@
-CREATE TABLE `myaac_weapons`
+CREATE TABLE IF NOT EXISTS `myaac_weapons`
 (
 	`id` INT(11) NOT NULL,
 	`level` INT(11) NOT NULL DEFAULT 0,
