@@ -42,17 +42,6 @@ if (!in_array($ext, array_keys(IMAGES_MIME_TYPES))) {
 	return;
 }
 
-$type = mime_content_type($temp['tmp_name']);
-if (!strstr($type, 'image/')) {
-	header('HTTP/1.1 400 Invalid mime type.');
-	return;
-}
-
-if (extension_loaded('gd') && getimagesize($temp['tmp_name']) === false) {
-	header('HTTP/1.1 400 Invalid image file.');
-	return;
-}
-
 do {
 	$randomName = generateRandomString(8). ".$ext";
 	$fileToWrite = $imageFolder . $randomName;

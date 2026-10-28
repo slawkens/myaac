@@ -56,29 +56,17 @@ if(empty($errors)) {
 						$upload_errors[] = 'Uploaded image is too big. Size: <b>'.$file['size'].' bytes</b>, Max. size: <b>'.$max_image_size_b.' bytes</b>.';
 					}
 
-					$type = strtolower($file['type']);
-					if(!in_array($type, IMAGES_MIME_TYPES)) {
-						$upload_errors[] = "Your file type is not allowed. Allowed file types: common image formats (<b>$allowedExtString</b>). Your file type: <b>$type</b>.";
+					$ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+					if(!in_array($ext, $allowed_ext)) {
+						$upload_errors[] = "Your file type is not allowed. Allowed file types: common image formats (<b>$allowedExtString</b>). Your file type: <b>$ext</b>.";
 					}
 				}
 				else {
 					$upload_errors[] = 'You didn\'t send file or file is too big. Limit: <b>'.setting('core.guild_image_size_kb').' KB</b>.';
 				}
 
-				if (empty($upload_errors)) {
-					$_type = mime_content_type($file['tmp_name']);
-					if (!strstr($_type, 'image/')) {
-						$upload_errors[] = 'Invalid mime type.';
-					}
-
-					if (extension_loaded('gd') && getimagesize($file['tmp_name']) === false) {
-						$upload_errors[] = 'Invalid image file.';
-					}
-				}
-
 				if(empty($upload_errors)) {
-					$extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-					if(!move_uploaded_file($file['tmp_name'], $save_path.'.'.$extension)) {
+					if(!move_uploaded_file($file['tmp_name'], $save_path.'.'.$ext)) {
 						$upload_errors[] = "Sorry! Can't save your image.";
 					}
 				}
@@ -91,7 +79,7 @@ if(empty($errors)) {
 						$guild_logo = "default.gif";
 					}
 
-					if($guild_logo != "default.gif" && $guild_logo != $save_file_name.'.'.$extension) {
+					if($guild_logo != "default.gif" && $guild_logo != $save_file_name.'.'.$ext) {
 						unlink(GUILD_IMAGES_DIR . $guild_logo);
 					}
 				}
@@ -102,7 +90,7 @@ if(empty($errors)) {
 				}
 				else {
 					success('Logo has been changed.');
-					$guild->setCustomField('logo_name', $save_file_name.'.'.$extension);
+					$guild->setCustomField('logo_name', $save_file_name.'.'.$ext);
 				}
 			}
 
