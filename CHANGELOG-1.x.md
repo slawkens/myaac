@@ -12,7 +12,7 @@ Compatible with PHP 8.1 - 8.5.
 
 ### Fixed
 * Fix - Security - Admin Logs: Fix vulnerability of reading sensitive files (Thanks @gesior) (https://github.com/slawkens/myaac/commit/9636a5763faea2c74119a2477a4e0b01ba9a8b69)
-* Fix - Security: Admin Editor/Guilds: Fix issue with images upload (https://github.com/slawkens/myaac/commit/5f52c8ec004ac4ec879d007660dce161ee8743c0)
+* Fix - Security - Admin Editor/Guilds: Fix issue with images upload (https://github.com/slawkens/myaac/commit/5f52c8ec004ac4ec879d007660dce161ee8743c0)
 * Fix - Security - Forum: Missing escape in moderator edit post page (#399) (Thanks @Yescrypt)
 * Fix - Security - Hooks: Don't pass the password as argument to login hooks (https://github.com/slawkens/myaac/commit/580fa47f5a97138031d5293492814adda115dd30)
 * Default Theme: Fix not working "Account lost?" button on create account page (https://github.com/slawkens/myaac/commit/54b5d8f8eb4d553bd2418aa19ba076e737e4a622)
