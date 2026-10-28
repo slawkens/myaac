@@ -265,7 +265,7 @@ function generateRandomString($length, $lowCase = true, $upCase = false, $numeri
 
 	$ret = '';
 	for($i = 0; $i < $length; $i++)
-		$ret .= $characters[mt_rand(0, $characters_length)];
+		$ret .= $characters[random_int(0, $characters_length)];
 
     return $ret;
 }
