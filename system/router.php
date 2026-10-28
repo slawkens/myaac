@@ -283,6 +283,8 @@ else {
 			extract($vars);
 
 			if (str_contains($path, '__database__/')) {
+				$found = false;
+
 				$pageName = str_replace('__database__/', '', $path);
 
 				$success = false;
