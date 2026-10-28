@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.9.7 - 28.10.2026]
+
+Especially adviced to upgrade are users who previously used v1.9.5 and v1.9.6, because an important bug fix for those versions has been introduced.
+
+Compatible with PHP 8.1 - 8.5.
+
+### Changed
+* Characters: Change old-styled button for house link (https://github.com/slawkens/myaac/commit/6d74b2fb304bf035f03f5ab78379e25659ed786e)
+* Houses: Support for old $_REQUEST['house'] param - so the old links still works (https://github.com/slawkens/myaac/commit/452653b59edf4621a7e4a07dfbac51e8c29f4fc3)
+
+### Fixed
+* Fix - Security - Admin Logs: Fix vulnerability of reading sensitive files (Thanks @gesior) (https://github.com/slawkens/myaac/commit/9636a5763faea2c74119a2477a4e0b01ba9a8b69)
+* Fix - Security: Admin Editor/Guilds: Fix issue with images upload (https://github.com/slawkens/myaac/commit/5f52c8ec004ac4ec879d007660dce161ee8743c0)
+* Fix - Security - Forum: Missing escape in moderator edit post page (#399) (Thanks @Yescrypt)
+* Fix - Security - Hooks: Don't pass the password as argument to login hooks (https://github.com/slawkens/myaac/commit/580fa47f5a97138031d5293492814adda115dd30)
+* Default Theme: Fix not working "Account lost?" button on create account page (https://github.com/slawkens/myaac/commit/54b5d8f8eb4d553bd2418aa19ba076e737e4a622)
+* Fix - Security - Functions: Use random_int in generateRandomString function (https://github.com/slawkens/myaac/commit/6861eb83b94cb032a4b23ff88a9b42b3dc85959a)
+* Fix: Deprecation warning in imagedestroy (php 8.5) (https://github.com/slawkens/myaac/commit/76729547e4e4262711f156c334642e68f8da7cd9)
+* Make migrations idempotent (https://github.com/slawkens/myaac/commit/470e5cd2050dd92e075b9d1b68d9345973f3d127)
+
 ## [1.9.6 - 23.10.2026]
 
 Compatible with PHP 8.1 - 8.5.
