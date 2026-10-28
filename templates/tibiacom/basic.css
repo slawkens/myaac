@@ -1287,6 +1287,9 @@ img {
   background-color: #d4c0a1;
   padding: 0px;
 }
+.TableContentContainer .TableContent {
+  border: 1px solid #faf0d7;
+}
 .TableContent {
   width: 100%;
   border-collapse: collapse;
