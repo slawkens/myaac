@@ -5,24 +5,25 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-$nick = $_REQUEST['nick'] ?? '';
+require __DIR__ . '/_base.php';
+
 $key = $_REQUEST['key'] ?? '';
 
-if($account->isLoaded()) {
-	$account_key = $account->getCustomField('key');
+if(!$accountLost) {
+	$errors[] = "Player or account of player <b>" . escapeHtml($character) . "</b> doesn't exist.";
+}
+else {
+	$account_key = $accountLost->key;
 
 	if(!empty($account_key)) {
 		$twig->display('account/lost/recovery-key.step-1.html.twig', [
-			'nick' => $nick,
+			'character' => $character,
 			'key' => $key,
 		]);
 	}
 	else {
 		$errors[] = 'Account of this character has no recovery key!';
 	}
-}
-else {
-	$errors[] = "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
 }
 
 if (!empty($errors)) {

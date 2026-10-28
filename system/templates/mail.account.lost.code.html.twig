@@ -3,7 +3,7 @@ You asked to reset your {{ config('lua')['serverName'] }} password.<br/>
 <br/>
 To do so, please click this link:
 <p>
-	<a href="{{ getLink('account/lost/check-code') }}?code={{ newCode }}&character={{ nick|urlencode }}">{{ getLink('account/lost/check-code') }}?code={{ newCode }}&character={{ nick|urlencode }}</a>
+	<a href="{{ getLink('account/lost/check-code') }}?code={{ newCode }}&character={{ character|urlencode }}">{{ getLink('account/lost/check-code') }}?code={{ newCode }}&character={{ character|urlencode }}</a>
 </p>
 <p>or open page: <i>{{ getLink('account/lost/check-code') }}</i> and in field "code" write <b>{{ newCode }}</b></p>
 <br/>

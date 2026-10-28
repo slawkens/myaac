@@ -29,9 +29,6 @@
 {% set title = 'Remove Authenticator App' %}
 {% set tableClass = 'Table5' %}
 
-<input type="hidden" name="step" form="form" value="auth-remove-by-key">
-<input type="hidden" name="type" form="form" value="{{ step }}">
-
 {% set content %}
 <table style="width:100%;">
 	<tbody>
@@ -68,7 +65,7 @@
 	<tbody>
 		<tr align="center">
 			<td>
-				<form id="form" action="{{ getLink('account/lost') }}" method="post">
+				<form id="form" action="{{ getLink('account/lost/two-factor/disable') }}" method="post">
 
 					{{ csrf() }}
 
@@ -81,9 +78,6 @@
 				<form action="{{ getLink('account/lost') }}" method="post" style="padding:0px;margin:0px;">
 
 					{{ csrf() }}
-
-					<input type="hidden" name="step" value="problem">
-					<input type="hidden" name="character" value="{{ character }}">
 
 					{{ include('buttons.base.html.twig', {'button_name': 'Back'})}}
 				</form>

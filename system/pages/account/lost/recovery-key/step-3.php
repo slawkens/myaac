@@ -9,14 +9,14 @@ csrfProtect();
 $title = 'Lost Account';
 
 $key = $_POST['key'];
-$nick = $_POST['nick'] ?? '';
+$character = $_POST['character'] ?? '';
 $newPassword = $_POST['password'] ?? '';
 $passwordRepeat = $_POST['password_repeat'] ?? '';
 $newEmail = $_POST['email'] ?? '';
 
 $player = new OTS_Player();
 $account = new OTS_Account();
-$player->find($nick);
+$player->find($character);
 if($player->isLoaded()) {
 	$account = $player->getAccount();
 }
@@ -101,7 +101,7 @@ if($account->isLoaded()) {
 	}
 }
 else {
-	$errors[] = "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+	$errors[] = "Player or account of player <b>" . escapeHtml($character) . "</b> doesn't exist.";
 }
 
 if (!empty($errors)) {
@@ -113,5 +113,5 @@ if (!empty($errors)) {
 $twig->display('account.back_button.html.twig', [
 	'new_line' => true,
 	'center' => true,
-	'action' => getLink('account/lost/recovery-key/step-2') . '?nick=' . urlencode($nick) . '&key=' . urlencode($key),
+	'action' => getLink('account/lost/recovery-key/step-2') . '?nick=' . urlencode($character) . '&key=' . urlencode($key),
 ]);

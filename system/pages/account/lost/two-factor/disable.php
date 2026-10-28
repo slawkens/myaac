@@ -7,6 +7,8 @@
  */
 defined('MYAAC') or die('Direct access not allowed!');
 
+require __DIR__ . '/../_base.php';
+
 use MyAAC\TwoFactorAuth\TwoFactorAuth;
 
 $twoFactorAuth = TwoFactorAuth::getInstance($accountLost->getKey());
@@ -57,5 +59,4 @@ $twig->display('account/lost/auth.html.twig', [
 	'key' => $key,
 	'character' => $character,
 	'errors' => $errors,
-	'step' => $_POST['type'] ?? '',
 ]);

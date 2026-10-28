@@ -1,26 +1,19 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
-require __DIR__ . '/../base.php';
-
 csrfProtect();
 
 $title = 'Lost Account';
 
-$nick = $_REQUEST['nick'] ?? '';
+require __DIR__ . '/../_base.php';
 
-if($account->isLoaded()) {
-	if($account->getCustomField('email_next') < time()) {
-		$twig->display('account/lost/email.html.twig', [
-			'nick' => $nick,
-		]);
-	}
-	else {
-		lostAccountWriteCooldown($nick, (int)$account->getCustomField('email_next'));
-	}
+if (!$accountLost)  {
+	$errors[] = "Account not found.";
 }
 else {
-	$errors[] = "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+	$twig->display('account/lost/email.html.twig', [
+		'character' => $character,
+	]);
 }
 
 if (!empty($errors)) {

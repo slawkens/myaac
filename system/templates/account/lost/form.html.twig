@@ -1,38 +1,71 @@
-The Lost Account Interface can help you to get back your account name and password. Please enter your character name and select what you want to do.<br/>
+The Lost Account Interface can help you to get back your account name and password. Please enter your email address or character name and select what you want to do.<br/>
+<br/>
 <form action="{{ getLink('account/lost/step-1') }}" method="post">
 
 	{{ csrf() }}
 
-	<input type="hidden" name="character" value="">
-	<table class="myaac-table" style="width: 100%">
-		<thead>
-		<tr>
-			<th><b>Please enter your character name</b></th>
-		</tr>
-		</thead>
+
+	{% set title = 'Primary Email Address/Character Name' %}
+	{% set content %}
+	<table style="width:100%;">
 		<tbody>
 			<tr>
 				<td>
-					<input type="text" name="nick" size="40" autofocus/><br>
+					<div class="TableContentContainer ">
+						<table class="TableContent" width="100%">
+							<tbody>
+							<tr>
+								<td>
+									<input type="text" name="character" size="40" autofocus/><br>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	<table class="myaac-table" style="width: 100%; border-spacing: 1px">
-		<thead>
-		<tr>
-			<th><b>What do you want?</b></th>
-		</tr>
-		</thead>
-		<tr>
-			<td style="padding: 4px;">
-				<input type="radio" name="action" id="action_type_email" value="email">
-				<label for="action_type_email"> Send me new password and my account name to account e-mail address.</label><br/>
-				<input type=radio name="action" id="action_type_key" value="recovery-key">
-				<label for="action_type_key"> I got <b>recovery key</b> and want set new password and e-mail address to my account.</label><br/>
-			</td>
-		</tr>
+	{% endset %}
+	{% include 'tables.headline.html.twig' %}
+	<br/>
+
+	{% set title = 'What do you want?' %}
+	{% set content %}
+	<table style="width:100%;">
+		<tbody>
+			<tr>
+				<td>
+					<div class="TableContentContainer ">
+						<table class="TableContent" width="100%">
+							<tbody>
+							<tr>
+								<td style="padding: 4px;">
+									<input type="radio" name="action" id="action_type_email" value="email">
+									<label for="action_type_email"> Send me new password and my account name to account e-mail address.</label>
+
+									<br/>
+
+									<input type=radio name="action" id="action_type_key" value="recovery-key">
+									<label for="action_type_key"> I got <b>recovery key</b> and want set new password and e-mail address to my account.</label>
+
+									<br/>
+
+									<input type=radio name="action" id="action_type_remove_authenticator" value="two-factor">
+									<label for="action_type_remove_authenticator"> I want to remove the Two Factor Authentication from my account.</label>
+									<br/>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</tbody>
 	</table>
+	{% endset %}
+	{% include 'tables.headline.html.twig' %}
+
 	<br/>
 	<table style="width: 100%">
 		<tr>
@@ -42,4 +75,35 @@ The Lost Account Interface can help you to get back your account name and passwo
 			</td>
 		</tr>
 	</table>
+
+	<br/>
+
+	{% if not setting('core.account_login_by_email_fallback') %}
+		{% set title = 'Get Email by Account Name' %}
+		{% set content %}
+			<table style="width:100%;">
+				<tbody>
+					<tr>
+						<td>
+							<div class="TableContentContainer ">
+								<table class="TableContent" width="100%">
+									<tbody>
+									<tr>
+										<td>You have <b>forgotten</b> your <b>email address</b>
+											but you still <b>know</b> the <b>account name</b>
+											which had been used for your {{ config('lua')['serverName'] }} account?<br>Get
+											your email address here: <a
+												href="{{ getLink('account/lost/forgotten-email') }}">link</a>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		{% endset %}
+		{% include 'tables.headline.html.twig' %}
+	{% endif %}
 </form>

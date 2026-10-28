@@ -6,11 +6,11 @@ csrfProtect();
 $title = 'Lost Account';
 
 $key = $_REQUEST['key'] ?? '';
-$nick = $_REQUEST['nick'] ?? '';
+$character = $_REQUEST['character'] ?? '';
 
 $player = new OTS_Player();
 $account = new OTS_Account();
-$player->find($nick);
+$player->find($character);
 if($player->isLoaded()) {
 	$account = $player->getAccount();
 }
@@ -20,7 +20,7 @@ if($account->isLoaded()) {
 	if(!empty($accountKey)) {
 		if($accountKey == $key) {
 			$twig->display('account/lost/recovery-key.step-2.html.twig', [
-				'nick' => $nick,
+				'character' => $character,
 				'key' => $key,
 			]);
 		}
@@ -33,7 +33,7 @@ if($account->isLoaded()) {
 	}
 }
 else {
-	$errors[] = "Player or account of player <b>" . escapeHtml($nick) . "</b> doesn't exist.";
+	$errors[] = "Player or account of player <b>" . escapeHtml($character) . "</b> doesn't exist.";
 }
 
 if (!empty($errors)) {
@@ -45,5 +45,5 @@ if (!empty($errors)) {
 $twig->display('account.back_button.html.twig', [
 	'new_line' => true,
 	'center' => true,
-	'action' => getLink('account/lost/step-1') . '?action=recovery-key&nick=' . urlencode($nick) . '&key=' . urlencode($key),
+	'action' => getLink('account/lost/step-1') . '?action=recovery-key&nick=' . urlencode($character) . '&key=' . urlencode($key),
 ]);
