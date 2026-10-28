@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $email_new
  * @property int $email_new_time
  * @property string $email_code
+ * @property int $email_next
  * @property ?string $secret
  * @property int $two_factor_type
  * @property string $two_factor_secret
@@ -43,7 +44,7 @@ class Account extends Model {
 		'name', 'number', 'email', 'password',
 		'key', 'created', 'rlname', 'location', 'country',
 		'web_lastlogin', 'web_flags',
-		'email_new', 'email_new_time', 'email_code',
+		'email_new', 'email_new_time', 'email_code', 'email_next',
 		'two_factor_type', 'two_factor_secret', 'secret',
 		'premium_points', 'coins', 'coins_transferable',
 		'premium_ends_at', 'premend', 'lastday', 'premdays',
