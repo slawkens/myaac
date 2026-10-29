@@ -350,17 +350,20 @@ class Settings implements \ArrayAccess
 								echo '<br/>';
 								echo '<strong>Default:</strong> ';
 
+								$out = '';
 								if ($setting['type'] === 'boolean') {
-									echo ($setting['default'] ? 'Yes' : 'No');
+									$out = ($setting['default'] ? 'Yes' : 'No');
 								}
 								else if (in_array($setting['type'], ['text', 'number', 'float', 'double', 'email', 'password', 'textarea'])) {
-									echo $setting['default'];
+									$out = $setting['default'];
 								}
 								else if ($setting['type'] === 'options') {
 									if (is_int($setting['default']) || !empty($setting['default'])) {
-										echo $setting['options'][$setting['default']];
+										$out = $setting['options'][$setting['default']];
 									}
 								}
+
+								echo escapeHtml($out);
 								?></div>
 						</td>
 					</tr>

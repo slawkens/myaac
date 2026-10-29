@@ -554,9 +554,9 @@ https://my-aac.org',
 			'name' => 'Mail Signature (HTML)',
 			'type' => 'textarea',
 			'desc' => 'Signature that will be included at the end of every message sent.<br/><b>In HTML Format!</b>',
-			'default' => escapeHtml('<br/>
+			'default' => '<br/>
 Sent by MyAAC,<br/>
-<a href="https://my-aac.org">my-aac.org</a>'),
+<a href="https://my-aac.org">my-aac.org</a>',
 			'show_if' => [
 				'mail_enabled', '=', 'true'
 			]
