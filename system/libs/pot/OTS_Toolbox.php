@@ -13,7 +13,7 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.txt GNU Lesser General Public License, Version 3
  */
 
-use MyAAC\Server\XML\Vocations;
+use MyAAC\Server\Vocations;
 
 /**
  * Toolbox for common operations.
