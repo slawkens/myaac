@@ -5,6 +5,7 @@ namespace MyAAC;
 class Hooks
 {
 	private static array $_hooks = [];
+	private static bool $loaded = false;
 
 	public function register($hook, $type = '', $file = null): void
 	{
@@ -66,10 +67,15 @@ class Hooks
 
 	public function load(): void
 	{
+		if (self::$loaded) {
+			return;
+		}
+
 		foreach(Plugins::getHooks() as $hook) {
 			$this->register($hook['name'], $hook['type'], $hook['file']);
 		}
 
 		Plugins::clearWarnings();
+		self::$loaded = true;
 	}
 }
