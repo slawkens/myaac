@@ -75,8 +75,17 @@ if (!empty($errors)) {
 	]);
 }
 
+$queryString = '';
+if (!empty($character)) {
+	$queryString .= '&character=' . urlencode($character);
+}
+
+if (!empty($email)) {
+	$queryString .= '&email=' . urlencode($email);
+}
+
 $twig->display('account.back_button.html.twig', [
 	'new_line' => true,
 	'center' => true,
-	'action' => getLink('account/lost/step-1') . '?action=email&character=' . (urlencode(empty($character) ? $email : $character)),
+	'action' => getLink('account/lost/step-1') . '?action=email' . $queryString,
 ]);

@@ -4,7 +4,6 @@ The Lost Account Interface can help you to get back your account name and passwo
 
 	{{ csrf() }}
 
-
 	{% set title = 'Primary Email Address/Character Name' %}
 	{% set content %}
 	<table style="width:100%;">
@@ -46,13 +45,13 @@ The Lost Account Interface can help you to get back your account name and passwo
 
 									<br/>
 
-									<input type=radio name="action" id="action_type_key" value="recovery-key">
-									<label for="action_type_key"> I got <b>recovery key</b> and want set new password and e-mail address to my account.</label>
+									<input type="radio" name="action" id="action_type_key" value="recovery-key">
+									<label for="action_type_key"> I got <strong>recovery key</strong> and want set new password and e-mail address to my account.</label>
 
 									<br/>
 
-									<input type=radio name="action" id="action_type_remove_authenticator" value="two-factor">
-									<label for="action_type_remove_authenticator"> I want to remove the Two Factor Authentication from my account.</label>
+									<input type="radio" name="action" id="action_type_remove_authenticator" value="two-factor">
+									<label for="action_type_remove_authenticator"> I want to remove the <strong>Two Factor Authentication</strong> from my account.</label>
 									<br/>
 								</td>
 							</tr>
@@ -78,7 +77,7 @@ The Lost Account Interface can help you to get back your account name and passwo
 
 	<br/>
 
-	{% if not setting('core.account_login_by_email_fallback') %}
+	{% if setting('core.account_login_by_email') and not setting('core.account_login_by_email_fallback') %}
 		{% set title = 'Get Email by Account Name' %}
 		{% set content %}
 			<table style="width:100%;">
@@ -107,3 +106,9 @@ The Lost Account Interface can help you to get back your account name and passwo
 		{% include 'tables.headline.html.twig' %}
 	{% endif %}
 </form>
+
+<style>
+	label {
+		cursor: pointer;
+	}
+</style>

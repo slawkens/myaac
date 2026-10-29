@@ -8,7 +8,7 @@
 
 <br/>
 
-{% if step == 'auth-app-remove' %}
+{% if authType == 'auth-app' %}
 <p>Please follow the instructions below to remove an authenticator app from your {{ config('lua')['serverName'] }} account.</p>
 <p><b>By Recovery Key</b></p>
 <ol>
@@ -26,7 +26,7 @@
 </ol>
 {% endif %}
 
-{% set title = 'Remove Authenticator App' %}
+{% set title = 'Remove ' ~ (authType == 'auth-app' ? 'Authenticator App' : 'Email Code Authentication') %}
 {% set tableClass = 'Table5' %}
 
 {% set content %}
@@ -39,7 +39,7 @@
 						<tbody>
 							<tr>
 								<td colspan="2"><label>Yes, I want to remove an
-										<b>{% if step == 'auth-app-remove' %}authenticator app{% else %}Email Code Authentication{% endif %}</b> from my {{ config('lua')['serverName'] }} account
+										<b>{% if authType == 'auth-app' %}authenticator app{% else %}Email Code Authentication{% endif %}</b> from my {{ config('lua')['serverName'] }} account
 										by</label><br></td>
 							</tr>
 							<tr>
@@ -61,6 +61,7 @@
 {% endset %}
 {{ include('tables.headline.html.twig')}}
 
+<br/>
 <table style="width:100%">
 	<tbody>
 		<tr align="center">
@@ -75,7 +76,7 @@
 				</form>
 			</td>
 			<td>
-				<form action="{{ getLink('account/lost') }}" method="post" style="padding:0px;margin:0px;">
+				<form action="{{ getLink('account/lost') }}" method="post">
 
 					{{ csrf() }}
 

@@ -7,6 +7,11 @@ csrfProtect();
 
 $title = 'Lost Account';
 
+if (!setting('core.account_login_by_email') || setting('core.account_login_by_email_fallback')) {
+	error('Forgotten email feature is not available.');
+	return;
+}
+
 if (!isRequestMethod('post')) {
 	$twig->display('account/lost/forgotten-email.html.twig');
 	return;

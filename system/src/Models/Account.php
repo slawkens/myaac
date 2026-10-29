@@ -41,7 +41,7 @@ class Account extends Model {
 	public $timestamps = false;
 
 	protected $fillable = [
-		'name', 'number', 'email', 'password',
+		'name', 'number', 'email', 'password', 'salt',
 		'key', 'created', 'rlname', 'location', 'country',
 		'web_lastlogin', 'web_flags',
 		'email_new', 'email_new_time', 'email_code', 'email_next',

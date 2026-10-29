@@ -15,6 +15,10 @@ else if (ACTION == 'two-factor') {
 	require __DIR__ . '/two-factor/step-1.php';
 }
 else {
+	$twig->display('error_box.html.twig', [
+		'errors' => ["Please select action."],
+	]);
+
 	$twig->display('account/lost/no-action.html.twig');
 }
 

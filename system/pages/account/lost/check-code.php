@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\Models\Player;
+
 csrfProtect();
 
 $title = 'Lost Account';
@@ -15,15 +17,14 @@ if(empty($code) || empty($character)) {
 	]);
 }
 else {
-	$player = new OTS_Player();
-	$account = new OTS_Account();
-	$player->find($character);
-	if($player->isLoaded()) {
-		$account = $player->getAccount();
+	$player = Player::where('name', $character)->first();
+	$account = null;
+	if($player) {
+		$account = $player->account()->first();
 	}
 
-	if($account->isLoaded()) {
-		if($account->getCustomField('email_code') == $code) {
+	if($account) {
+		if($account->email_code == $code) {
 			$twig->display('account/lost/check-code.finish.html.twig', [
 				'character' => $character,
 				'code' => $code,

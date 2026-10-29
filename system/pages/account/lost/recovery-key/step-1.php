@@ -5,7 +5,7 @@ csrfProtect();
 
 $title = 'Lost Account';
 
-require __DIR__ . '/_base.php';
+require __DIR__ . '/../_base.php';
 
 $key = $_REQUEST['key'] ?? '';
 
@@ -19,6 +19,7 @@ else {
 		$twig->display('account/lost/recovery-key.step-1.html.twig', [
 			'character' => $character,
 			'key' => $key,
+			'newRecoveryKeyFormat' => $newRecoveryKeyFormat,
 		]);
 	}
 	else {
@@ -30,10 +31,10 @@ if (!empty($errors)) {
 	$twig->display('error_box.html.twig', [
 		'errors' => $errors,
 	]);
-}
 
-$twig->display('account.back_button.html.twig', [
-	'new_line' => true,
-	'center' => true,
-	'action' => getLink('account/lost'),
-]);
+	$twig->display('account.back_button.html.twig', [
+		'new_line' => true,
+		'center' => true,
+		'action' => getLink('account/lost'),
+	]);
+}
