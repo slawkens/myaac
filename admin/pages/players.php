@@ -11,7 +11,7 @@
 use MyAAC\Forum;
 use MyAAC\Models\Player;
 use MyAAC\Server\Outfits;
-use MyAAC\Server\XML\Vocations;
+use MyAAC\Server\Vocations;
 
 defined('MYAAC') or die('Direct access not allowed!');
 
