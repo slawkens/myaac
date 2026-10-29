@@ -181,7 +181,6 @@ if(!isset($_SESSION['installed'])) {
 			curl_setopt($curl, CURLOPT_URL, $report_url);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 			curl_exec($curl);
-			curl_close($curl);
 		}
 		else if (ini_get('allow_url_fopen') ) {
 			file_get_contents($report_url);
