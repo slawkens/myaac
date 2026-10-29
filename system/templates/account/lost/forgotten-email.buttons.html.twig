@@ -1,0 +1,16 @@
+<table style="width: 100%;">
+	<tbody>
+		<tr align="center" valign="top">
+			<td>
+				<form method="post" action="{{ getLink('account/manage') }}">
+					{{ include('buttons.base.html.twig', {'button_name': 'Login', 'button_color': 'green'}) }}
+				</form>
+			</td>
+			<td>
+				<form action="{{ getLink('account/lost/forgotten-email') }}">
+					{{ include('buttons.base.html.twig', {'button_name': 'Back'}) }}
+				</form>
+			</td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,62 @@
+<?php
+/**
+ * Disable Two-Factor Authentication using a recovery key.
+ *
+ * @var bool $newRecoveryKeyFormat Indicates if the new recovery key format is used.
+ * @var \MyAAC\Models\Account $accountLost The currently selected account.
+ */
+defined('MYAAC') or die('Direct access not allowed!');
+
+require __DIR__ . '/../_base.php';
+
+use MyAAC\TwoFactorAuth\TwoFactorAuth;
+
+$twoFactorAuth = TwoFactorAuth::getInstance($accountLost->getKey());
+
+if ($newRecoveryKeyFormat) {
+	$key = $_POST['key1'] . '-' . $_POST['key2'] . '-' . $_POST['key3'] . '-' . $_POST['key4'];
+}
+else {
+	$key = $_POST['key'];
+}
+
+if (($newRecoveryKeyFormat && strlen($key) < 4) || empty($key)) {
+	$errors[] = 'Please enter the recovery key!';
+}
+elseif (!setting('core.mail_enabled') || (!setting('core.account_two_factor_email') && !setting('core.account_two_factor_app'))) {
+	$errors[] = 'Account Two-Factor Authentication disabled.';
+}
+elseif (!$twoFactorAuth->isActive()) {
+	$errors[] = 'Two-Factor Authentication is not active for your account.';
+}
+
+$accountKey = $accountLost->key;
+if (empty($errors) && !empty($key) && $key == $accountKey) {
+	$isEmailAuth = $twoFactorAuth->isActive($twoFactorAuth::TYPE_EMAIL);
+
+	$twoFactorAuth->disable();
+	$twoFactorAuth->deleteOldCodes();
+
+	$twig->display('success.html.twig',
+		[
+			'title' => 'Two-Factor Authentication Disabled',
+			'description' => 'You have successfully <strong>disabled</strong> the Two-Factor <b>'
+				. ($isEmailAuth ? 'Email Code Authentication' : 'App Authentication')
+				 . '</b> for your account.'
+		]
+	);
+
+	return;
+}
+elseif (empty($errors)) {
+	$errors[] = 'You have entered an incorrect recovery key! Please enter a valid recovery key.';
+}
+
+$twig->display('error_box.html.twig',  ['errors' => $errors]);
+
+$twig->display('account/lost/auth.html.twig', [
+	'newRecoveryKeyFormat' => $newRecoveryKeyFormat,
+	'key' => $key,
+	'character' => $character,
+	'errors' => $errors,
+]);

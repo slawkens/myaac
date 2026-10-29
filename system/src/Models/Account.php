@@ -2,9 +2,31 @@
 
 namespace MyAAC\Models;
 
+use MyAAC\Models\AccountTwoFactorTrustedDevice;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property string $name
+ * @property int $number
+ * @property string $email
+ * @property string $password
+ * @property string $key
+ * @property int $created
+ * @property string $rlname
+ * @property string $location
+ * @property string $country
+ * @property int $web_lastlogin
+ * @property int $web_flags
+ * @property string $email_new
+ * @property int $email_new_time
+ * @property string $email_code
+ * @property int $email_next
+ * @property ?string $secret
+ * @property int $two_factor_type
+ * @property string $two_factor_secret
+ * @property int $premium_points
+ * @property int $coins
+ * @property int $coins_transferable
  * @property integer $premium_ends_at
  * @property integer $premend
  * @property integer $lastday
@@ -19,15 +41,19 @@ class Account extends Model {
 	public $timestamps = false;
 
 	protected $fillable = [
-		'name', 'number', 'email', 'password',
+		'name', 'number', 'email', 'password', 'salt',
 		'key', 'created', 'rlname', 'location', 'country',
 		'web_lastlogin', 'web_flags',
-		'email_new', 'email_new_time', 'email_code',
+		'email_new', 'email_new_time', 'email_code', 'email_next',
+		'two_factor_type', 'two_factor_secret', 'secret',
 		'premium_points', 'coins', 'coins_transferable',
 		'premium_ends_at', 'premend', 'lastday', 'premdays',
 	];
 
 	protected $casts = [
+		'created' => 'integer',
+		'web_lastlogin' => 'integer',
+		'web_flags' => 'integer',
 		'lastday' => 'integer',
 		'premdays' => 'integer',
 		'premend' => 'integer',
@@ -78,6 +104,10 @@ class Account extends Model {
 		}
 
 		return ($this->premdays - (date("z", time()) + (365 * (date("Y", time()) - date("Y", $this->lastday))) - date("z", $this->lastday)) > 0);
+	}
+
+	public function trustedDevices() {
+		return $this->hasMany(AccountTwoFactorTrustedDevice::class);
 	}
 
 }
