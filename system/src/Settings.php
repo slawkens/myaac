@@ -435,8 +435,10 @@ class Settings implements \ArrayAccess
 									}
 								}
 								else {
-									echo $setting['default'] ?? '';
+									$out = $setting['default'] ?? '';
 								}
+
+								echo escapeHtml($out);
 								?></div>
 						</td>
 					</tr>
