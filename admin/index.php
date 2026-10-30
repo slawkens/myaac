@@ -31,6 +31,7 @@ require __DIR__ . '/includes/debugbar.php';
 require SYSTEM . 'status.php';
 require SYSTEM . 'login.php';
 require __DIR__ . '/includes/functions.php';
+require __DIR__ . '/includes/permissions.php';
 
 $twig->addGlobal('config', $config);
 $twig->addGlobal('status', $status);
