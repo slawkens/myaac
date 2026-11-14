@@ -28,7 +28,7 @@ jobs:
     steps:
         - name: 📌 MySQL Start & init & show db
           run: |
-            sudo /etc/init.d/mysql start
+            sudo service mysql start
             mysql -e 'CREATE DATABASE myaac;' -uroot -proot
             mysql -e "SHOW DATABASES" -uroot -proot
 
