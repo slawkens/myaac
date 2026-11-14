@@ -20,6 +20,11 @@ if (!$account_logged->isLoaded()) {
 	}
 }
 
+if (!$account_logged->isLoaded()) {
+	error('Account not loaded.');
+	return;
+}
+
 $twoFactorAuth = TwoFactorAuth::getInstance($account_logged->getId());
 $twig->addGlobal('account_logged', $account_logged);
 
