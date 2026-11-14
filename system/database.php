@@ -17,7 +17,7 @@ if (!isset($config['database_overwrite'])) {
 }
 
 if(!$config['database_overwrite']) {
-	if(isset($config['lua']['sqlType'])) {// tfs 0.3
+	if(isset($config['lua']['sqlType']) || isset($config['lua']['sqlHost'])) {// tfs 0.3
 		if(isset($config['lua']['mysqlHost'])) {// tfs 0.2
 			$config['otserv_version'] = TFS_02;
 			$config['database_type'] = 'mysql';
@@ -30,7 +30,7 @@ if(!$config['database_overwrite']) {
 		}
 		else {
 			$config['otserv_version'] = TFS_03;
-			$config['database_type'] = $config['lua']['sqlType'];
+			$config['database_type'] = $config['lua']['sqlType'] ?? 'mysql';
 			$config['database_host'] = $config['lua']['sqlHost'];
 			$config['database_port'] = $config['lua']['sqlPort'];
 			$config['database_user'] = $config['lua']['sqlUser'];
@@ -97,6 +97,7 @@ if(!isset($config['database_socket'])) {
 try {
 	$ots->connect(array(
 		'host' => $config['database_host'],
+		'port' => $config['database_port'] ?? 3306,
 		'user' => $config['database_user'],
 		'password' => $config['database_password'],
 		'database' => $config['database_name'],
