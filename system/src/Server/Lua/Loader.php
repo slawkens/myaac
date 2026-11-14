@@ -37,7 +37,7 @@ class Loader
 					if(!str_starts_with($key, '--')) {
 						$value = trim($tmp_exp[1]);
 						if(str_contains($value, '--')) {// found some deep comment
-							$value = preg_replace('/--.*$/i', '', $value);
+							$value = trim(preg_replace('/--.*$/i', '', $value));
 						}
 
 						if(is_numeric($value))
