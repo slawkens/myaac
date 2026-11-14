@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `myaac_account_two_factor_trusted_devices`
 	`id` int AUTO_INCREMENT PRIMARY KEY,
 	`account_id` int NOT NULL,
 	`device_token_hash` varchar(64) NOT NULL,
-	`user_agent` varchar(255) NOT NULL,
+	`system` varchar(255) NOT NULL,
 	`expires_at` timestamp NOT NULL,
 	`type` tinyint NOT NULL COMMENT '1 - website, 2 - client, 0 - unknown',
 	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

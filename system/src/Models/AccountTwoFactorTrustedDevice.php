@@ -15,7 +15,7 @@ class AccountTwoFactorTrustedDevice extends Model {
 
 	protected $table = TABLE_PREFIX . 'account_two_factor_trusted_devices';
 
-	protected $fillable = ['account_id', 'device_token_hash', 'user_agent', 'expires_at', 'type'];
+	protected $fillable = ['account_id', 'device_token_hash', 'system', 'expires_at', 'type'];
 
 	protected $casts = [
 		'expires_at' => 'datetime',

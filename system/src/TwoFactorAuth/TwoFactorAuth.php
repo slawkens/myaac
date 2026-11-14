@@ -68,11 +68,11 @@ class TwoFactorAuth
 			return true;
 		}
 
-		if (TrustedDevice::isDeviceTrusted($this->account->getKey())) {
+		if (TrustedDevice::isBrowserTrusted($this->account->getKey())) {
 			// The device is trusted, no need for further 2FA checks.
 
 			TrustedDevice::clear(); // clear old entries, such as expired trusted devices
-			TrustedDevice::updateLastLogin($this->account->getKey());
+			TrustedDevice::updateLastLogin($this->account->getKey(), null, TrustedDevice::getUserAgent());
 
 			return true;
 		}
@@ -154,9 +154,18 @@ class TwoFactorAuth
 		return false;
 	}
 
-	public function processClientLogin($code, string &$error, &$errorCode): bool
+	public function processClientLogin($code, string $trustedDeviceToken, string $operatingSystem, string &$error, &$errorCode): bool
 	{
 		if (!$this->isActive() || (!setting('core.account_two_factor_app') && !setting('core.account_two_factor_email'))) {
+			return true;
+		}
+
+		if (TrustedDevice::isClientTrusted($this->account->getKey(), $trustedDeviceToken, $operatingSystem)) {
+			// The device is trusted, no need for further 2FA checks.
+
+			TrustedDevice::clear(); // clear old entries, such as expired trusted devices
+			TrustedDevice::updateLastLogin($this->account->getKey(), $trustedDeviceToken, $operatingSystem);
+
 			return true;
 		}
 
@@ -184,6 +193,10 @@ class TwoFactorAuth
 
 		if ($this->authType === self::TYPE_EMAIL) {
 			$this->deleteOldCodes();
+		}
+
+		if (!empty($trustedDeviceToken) & !empty($operatingSystem)) {
+			TrustedDevice::register($this->account->getKey(), TrustedDevice::TYPE_CLIENT, $trustedDeviceToken, $operatingSystem);
 		}
 
 		return true;

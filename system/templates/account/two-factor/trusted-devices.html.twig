@@ -29,24 +29,29 @@
 										{{ device.created_at|date('H:i:s T') }}
 									</td>
 
-									<td>
-										{% if device.is_mobile %}
-											📱 <!-- Smartphone Icon -->
-										{% else %}
-											💻 <!-- Desktop Icon -->
-										{% endif %}
+									{% if device.type == 2 %}
+										<td>{{ device.os }}</td>
+									{% else %}
+										<td>
+											{% if device.is_mobile %}
+												📱 <!-- Smartphone Icon -->
+											{% else %}
+												💻 <!-- Desktop Icon -->
+											{% endif %}
 
-										{{ device.client }} {{ device.client_version }} ({{ device.os }} {{ device.os_version }})
-									{% if deviceUserAgent == device.user_agent %}
-										<br/><span style="font-weight: bold; color: green;">(Current Device)</span>
+											{{ device.client }} {{ device.client_version }} ({{ device.os }} {{ device.os_version }})
+
+											{% if deviceUserAgent == device.system %}
+												<br/><span style="font-weight: bold; color: green;">(Current Device)</span>
+											{% endif %}
+
+										</td>
 									{% endif %}
-
-									</td>
 
 									<td>{{ device.updated_at|date('M d, Y') }},<br/>
 										{{ device.updated_at|date('H:i:s T') }}
 									</td>
-									<td>{{ device.type }}</td>
+									<td>{{ device.typeAsString }}</td>
 									<td>
 										<div style="white-space: nowrap;text-align:center;">[<a
 												href="{{ getLink('account/two-factor/remove-single-device?device_id=' ~ device.id) }}">Remove</a>]

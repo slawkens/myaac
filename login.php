@@ -172,7 +172,7 @@ switch ($action) {
 			sendError(($inputEmail ? 'Email' : 'Account name') . ' or password is not correct.');
 		}
 
-		$twoFactorAuth = TwoFactorAuth::getInstance($account->id);
+		$twoFactorAuth = TwoFactorAuth::getInstance($account);
 
 		$code = '';
 		if ($twoFactorAuth->isActive()) {
@@ -184,9 +184,12 @@ switch ($action) {
 			}
 		}
 
+		$trusteDeviceToken = $request->trusteddevicetoken ?? '';
+		$operatingSystem = $request->operatingsystem ?? '';
+
 		$error = '';
 		$errorCode = 6;
-		if (!$twoFactorAuth->processClientLogin($code, $error, $errorCode)) {
+		if (!$twoFactorAuth->processClientLogin($code, $trusteDeviceToken, $operatingSystem, $error, $errorCode)) {
 			$limiter->increment($ip);
 			if ($limiter->exceeded($ip)) {
 				sendError($ban_msg);

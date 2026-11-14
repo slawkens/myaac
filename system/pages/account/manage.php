@@ -108,7 +108,14 @@ $account_players->orderBy('id');
 
 $trustedDevices = TrustedDevice::getAll($account_logged->getId());
 foreach ($trustedDevices as &$trustedDevice) {
-	$deviceDetector = new \DeviceDetector\DeviceDetector($trustedDevice['user_agent']);
+	$trustedDevice['typeAsString'] = ($trustedDevice['type'] == TrustedDevice::TYPE_WEBSITE ? 'Website' : 'Client');
+
+	if ($trustedDevice['type'] == TrustedDevice::TYPE_CLIENT) {
+		$trustedDevice['os'] = $trustedDevice['system'];
+		continue;
+	}
+
+	$deviceDetector = new \DeviceDetector\DeviceDetector($trustedDevice['system']);
 	$deviceDetector->parse();
 
 	$trustedDevice['client'] = $deviceDetector->getClient('name');
@@ -116,7 +123,6 @@ foreach ($trustedDevices as &$trustedDevice) {
 	$trustedDevice['os'] = $deviceDetector->getOs('name');
 	$trustedDevice['os_version'] = $deviceDetector->getOs('version');
 	$trustedDevice['is_mobile'] = $deviceDetector->isMobile();
-	$trustedDevice['type'] = $trustedDevice['type'] == TrustedDevice::TYPE_WEBSITE ? 'Website' : 'Client';
 }
 
 $twig->display('account.management.html.twig', array(

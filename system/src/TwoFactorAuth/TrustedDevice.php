@@ -21,21 +21,27 @@ class TrustedDevice
 	/**
 	 * Registers a new trusted device after successful 2FA.
 	 */
-	public static function register(int $accountId, int $type = 0): void
+	public static function register(int $accountId, int $type = 0, ?string $token = null, ?string $userAgent = null): void
 	{
-		// 1. Generate secure token
-		$token = bin2hex(random_bytes(32));
+		// 1. Generate secure token if not provided
+		if ($token === null) {
+			$token = bin2hex(random_bytes(32));
+		}
+
 		$hash = hash('sha256', $token);
 
 		// 2. Calculate expiry date (e.g., 30 days)
 		$expiryTime = time() + (self::DURATION_DAYS * 24 * 60 * 60);
 		$expiresAt = date('Y-m-d H:i:s', $expiryTime);
-		$userAgent = self::getUserAgent();
+
+		if ($userAgent === null) {
+			$userAgent = self::getUserAgent();
+		}
 
 		AccountTwoFactorTrustedDevice::create([
 			'account_id' => $accountId,
 			'device_token_hash' => $hash,
-			'user_agent' => $userAgent,
+			'system' => $userAgent,
 			'expires_at' => $expiresAt,
 			'type' => $type
 		]);
@@ -48,23 +54,34 @@ class TrustedDevice
 		]);
 	}
 
-	/**
-	 * Checks whether the user's current device is trusted.
-	 */
-	public static function isDeviceTrusted(int $accountId): bool {
+	public static function isClientTrusted(int $accountId, string $token, string $operatingSystem): bool {
+		return self::isDeviceTrusted($accountId, $token, $operatingSystem);
+	}
+
+	public static function isBrowserTrusted(int $accountId): bool
+	{
 		// If no cookie exists, the device is not trusted
 		if (empty($_COOKIE[self::COOKIE_NAME])) {
 			return false;
 		}
 
 		$token = $_COOKIE[self::COOKIE_NAME];
-		$hash = hash('sha256', $token);
 		$userAgent = self::getUserAgent();
+
+		return self::isDeviceTrusted($accountId, $token, $userAgent);
+	}
+
+	/**
+	 * Checks whether the user's current device is trusted.
+	 */
+	public static function isDeviceTrusted(int $accountId, string $token, string $userAgent): bool
+	{
+		$hash = hash('sha256', $token);
 
 		// Token und User-Agent in der Datenbank prüfen
 		$trustedDevice = AccountTwoFactorTrustedDevice::where('account_id', $accountId)
 			->where('device_token_hash', $hash)
-			->where('user_agent', $userAgent)
+			->where('system', $userAgent)
 			->where('expires_at', '>', date('Y-m-d H:i:s'))
 			->exists();
 
@@ -74,11 +91,23 @@ class TrustedDevice
 	/**
 	 * Updates the last login timestamp for the trusted device in the database.
 	 */
-	public static function updateLastLogin(int $accountId): void
+	public static function updateLastLogin(int $accountId, ?string $token, ?string $system = null): void
 	{
+		if ($token === null) {
+			$token = $_COOKIE[self::COOKIE_NAME];
+		}
+
+		$hash = hash('sha256', $token);
+
+		if ($system === null) {
+			$system = self::getUserAgent();
+		}
+
 		$now = date('Y-m-d H:i:s');
+
 		AccountTwoFactorTrustedDevice::where('account_id', $accountId)
-			->where('user_agent', self::getUserAgent())
+			->where('system', $system)
+			->where('device_token_hash', $hash)
 			->where('expires_at', '>', $now)
 			->update(['updated_at' => $now]);
 	}
