@@ -62,7 +62,7 @@ jobs:
           uses: actions/checkout@v6
           if: matrix.ots == 'tfs-0.3'
           with:
-              repository: otland/tfs-old-svn
+              repository: slawkens/tfs-old-svn
               ref: 0.3
               path: ots
 
