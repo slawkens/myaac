@@ -1,6 +1,8 @@
 <?php
 defined('MYAAC') or die('Direct access not allowed!');
 
+use MyAAC\Models\Player;
+
 csrfProtect();
 
 $title = 'Lost Account';
@@ -46,17 +48,16 @@ if (empty($newPassword) || empty($passwordRepeat)) {
 	return;
 }
 
-$player = new OTS_Player();
-$account = new OTS_Account();
-$player->find($character);
-if($player->isLoaded()) {
-	$account = $player->getAccount();
+$player = Player::where('name', $character)->first();
+$account = null;
+if($player) {
+	$account = $player->account()->first();
 }
 
 $passwordFailed = false;
 
-if($account->isLoaded()) {
-	if($account->getCustomField('email_code') == $code) {
+if($account) {
+	if($account->email_code == $code) {
 		if ($newPassword == $passwordRepeat) {
 			if (Validator::password($newPassword)) {
 
@@ -67,12 +68,12 @@ if($account->isLoaded()) {
 					if (USE_ACCOUNT_SALT) {
 						$salt = generateRandomString(10, false, true, true);
 						$tmp_new_pass = $salt . $newPassword;
-						$account->setCustomField('salt', $salt);
+						$account->salt = $salt;
 					}
 
-					$account->setPassword(encrypt($tmp_new_pass));
+					$account->password = encrypt($tmp_new_pass);
+					$account->email_code = '';
 					$account->save();
-					$account->setCustomField('email_code', '');
 
 					$mailBody = $twig->render('mail.account.lost.new-password.html.twig', [
 						'account' => $account,
@@ -80,7 +81,7 @@ if($account->isLoaded()) {
 					]);
 
 					$statusMsg = '';
-					if (_mail($account->getCustomField('email'), configLua('serverName') . ' - Your new password', $mailBody)) {
+					if (_mail($account->email, configLua('serverName') . ' - Your new password', $mailBody)) {
 						$statusMsg = '<br /><small>New password work! Sent e-mail with your password and account name. You should receive this e-mail in 15 minutes. You can login now with new password!';
 					} else {
 						$statusMsg = '<br /><p class="error">New password work! An error occurred while sending email! You will not receive e-mail with new password. For Admin: More info can be found in system/logs/mailer-error.log';

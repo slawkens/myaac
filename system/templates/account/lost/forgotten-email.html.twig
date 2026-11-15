@@ -1,0 +1,79 @@
+<form method="post" action="{{ getLink('account/lost/forgotten-email') }}">
+
+	{{ csrf() }}
+
+	{% set title = 'Request Email' %}
+	{% set tableClass = 'Table4' %}
+	{% set content %}
+		<table style="width:100%;">
+			<tbody>
+				<tr>
+					<td>
+						<div class="TableContentContainer ">
+							<table class="myaac-table" width="100%">
+								<tbody>
+									<tr class="odd">
+										<td>
+											<p>Enter your password and the account name which had
+												been used for your {{ config('lua')['serverName'] }} account.</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="TableContentContainer ">
+							<table class="myaac-table" width="100%">
+								<tbody>
+									<tr class="odd">
+										<td class="LabelV150"><span>Account {% if constant('USE_ACCOUNT_NAME') %}Name{% else %}Number{% endif %}:</span></td>
+										<td>
+											<div class="password-wrapper"><input
+												type="password" name="account"
+												maxlength="30" size="30" required autofocus><button type="button"
+												class="password-toggle" aria-pressed="false"
+												aria-label="show password"
+												onclick="togglePassword(this)"></button>
+											</div>
+										</td>
+									</tr>
+									<tr class="odd">
+										<td class="LabelV120"><span>Password:</span></td>
+										<td>
+											<div class="password-wrapper"><input
+												type="password" name="password"
+												maxlength="29" size="30" required><button type="button"
+												class="password-toggle" aria-pressed="false"
+												aria-label="show password"
+												onclick="togglePassword(this)"></button>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table style="width: 100%;">
+			<tbody>
+				<tr align="center" valign="top">
+					<td>
+						{{ include('buttons.base.html.twig', {'button_name': 'Submit'}) }}
+					</td>
+					<td>
+						<a href="{{ getLink('account/manage') }}">
+							{{ include('buttons.base.html.twig', {'button_name': 'Back', 'noSubmit': true}) }}
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	{% endset %}
+	{% include 'tables.headline.html.twig' %}
+</form>

@@ -98,6 +98,16 @@ if(!$db->hasColumn('accounts', 'web_flags')) {
 		success($locale['step_database_adding_field'] . ' accounts.web_flags...');
 }
 
+if(!$db->hasColumn('accounts', 'two_factor_type')) {
+	if(query("ALTER TABLE `accounts` ADD `two_factor_type` tinyint NOT NULL DEFAULT 0 AFTER `web_flags`;"))
+		success($locale['step_database_adding_field'] . ' accounts.two_factor_type...');
+}
+
+if(!$db->hasColumn('accounts', 'two_factor_secret')) {
+	if(query("ALTER TABLE `accounts` ADD `two_factor_secret` varchar(16) NOT NULL DEFAULT '' AFTER `two_factor_type`;"))
+		success($locale['step_database_adding_field'] . ' accounts.two_factor_secret...');
+}
+
 if(!$db->hasColumn('accounts', 'email_verified')) {
 	if(query("ALTER TABLE `accounts` ADD `email_verified` TINYINT(1) NOT NULL DEFAULT 0 AFTER `web_flags`;"))
 		success($locale['step_database_adding_field'] . ' accounts.email_verified...');
