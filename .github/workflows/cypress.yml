@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:8.4
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: myaac
@@ -28,7 +28,7 @@ jobs:
     steps:
         - name: 📌 MySQL Start & init & show db
           run: |
-            sudo /etc/init.d/mysql start
+            sudo service mysql start
             mysql -e 'CREATE DATABASE myaac;' -uroot -proot
             mysql -e "SHOW DATABASES" -uroot -proot
 
@@ -62,7 +62,7 @@ jobs:
           uses: actions/checkout@v6
           if: matrix.ots == 'tfs-0.3'
           with:
-              repository: otland/tfs-old-svn
+              repository: slawkens/tfs-old-svn
               ref: 0.3
               path: ots
 
