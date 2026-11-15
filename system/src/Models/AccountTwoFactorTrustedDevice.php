@@ -11,6 +11,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use MyAAC\Models\Account;
 
+/**
+ * @property string $id
+ * @property int $account_id
+ * @property string $device_token_hash
+ * @property string $system
+ * @property \DateTime $expires_at
+ * @property int $type
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
+ */
 class AccountTwoFactorTrustedDevice extends Model {
 
 	protected $table = TABLE_PREFIX . 'account_two_factor_trusted_devices';

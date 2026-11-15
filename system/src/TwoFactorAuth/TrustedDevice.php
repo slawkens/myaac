@@ -32,7 +32,7 @@ class TrustedDevice
 
 		// 2. Calculate expiry date (e.g., 30 days)
 		$expiryTime = time() + (self::DURATION_DAYS * 24 * 60 * 60);
-		$expiresAt = date('Y-m-d H:i:s', $expiryTime);
+		$expiresAt = \DateTime::createFromFormat('U', $expiryTime);
 
 		if ($userAgent === null) {
 			$userAgent = self::getUserAgent();
