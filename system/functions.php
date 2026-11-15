@@ -1738,6 +1738,33 @@ function is_sub_dir(?string $path = NULL, string $parent_folder = BASE): bool|st
 	return false;
 }
 
+// uuidv7 see https://www.rfc-editor.org/rfc/rfc9562#name-uuid-version-7
+function uuidv7() {
+	// current timestamp in ms
+	$timestamp = intval(microtime(true) * 1000);
+
+	return sprintf(
+		'%02x%02x%02x%02x-%02x%02x-%04x-%04x-%012x',
+		// first 48 bits are timestamp based
+		($timestamp >> 40) & 0xFF,
+		($timestamp >> 32) & 0xFF,
+		($timestamp >> 24) & 0xFF,
+		($timestamp >> 16) & 0xFF,
+		($timestamp >> 8) & 0xFF,
+		$timestamp & 0xFF,
+
+		// 16 bits: 4 bits for version (7) and 12 bits for rand_a
+		random_int(0, 0x0FFF) | 0x7000,
+
+		// 16 bits: 4 bits for variant where 2 bits are fixed 10 and next 2 are random to get (8-9, a-b)
+		// next 12 are random
+		random_int(0, 0x3FFF) | 0x8000,
+
+		// random 48 bits
+		random_int(0, 0xFFFFFFFFFFFF),
+	);
+}
+
 // validator functions
 require_once SYSTEM . 'compat/base.php';
 

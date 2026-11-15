@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `myaac_account_two_factor_email_codes`
 
 CREATE TABLE IF NOT EXISTS `myaac_account_two_factor_trusted_devices`
 (
-	`id` int AUTO_INCREMENT PRIMARY KEY,
+	`id` char(36) PRIMARY KEY,
 	`account_id` int NOT NULL,
 	`device_token_hash` varchar(64) NOT NULL,
 	`system` varchar(255) NOT NULL,

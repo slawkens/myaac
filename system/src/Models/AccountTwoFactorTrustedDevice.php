@@ -21,6 +21,9 @@ class AccountTwoFactorTrustedDevice extends Model {
 		'expires_at' => 'datetime',
 	];
 
+	protected $keyType = 'string';
+	public $incrementing = false;
+
 	public function account(): BelongsTo {
 		return $this->belongsTo(Account::class);
 	}

@@ -38,13 +38,14 @@ class TrustedDevice
 			$userAgent = self::getUserAgent();
 		}
 
-		AccountTwoFactorTrustedDevice::create([
-			'account_id' => $accountId,
-			'device_token_hash' => $hash,
-			'system' => $userAgent,
-			'expires_at' => $expiresAt,
-			'type' => $type
-		]);
+		$twoFactorDevice = new AccountTwoFactorTrustedDevice();
+		$twoFactorDevice->id = uuidv7();
+		$twoFactorDevice->account_id = $accountId;
+		$twoFactorDevice->device_token_hash = $hash;
+		$twoFactorDevice->system = $userAgent;
+		$twoFactorDevice->expires_at = $expiresAt;
+		$twoFactorDevice->type = $type;
+		$twoFactorDevice->save();
 
 		setcookie(self::COOKIE_NAME, $token, [
 			'expires' => $expiryTime,
@@ -126,7 +127,7 @@ class TrustedDevice
 	/**
 	 * Retrieves a single trusted device by id.
 	 */
-	public static function get(int $accountId, int $id): ?array
+	public static function get(int $accountId, string $id): ?array
 	{
 		$device = AccountTwoFactorTrustedDevice::where('account_id', $accountId)
 			->where('id', $id)
@@ -138,7 +139,7 @@ class TrustedDevice
 	/**
 	 * Removes a single trusted device by id.
 	 */
-	public static function remove(int $accountId, int $id): void {
+	public static function remove(int $accountId, string $id): void {
 		AccountTwoFactorTrustedDevice::where('account_id', $accountId)
 			->where('id', $id)
 			->delete();
