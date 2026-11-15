@@ -50,6 +50,7 @@ $menus = [
 			['name' => 'Visitors', 'link' => 'visitors', 'icon' => 'user', 'order' => 30],
 		],
 	],
+	['name' => 'Permissions', 'icon' => 'shield-alt', 'order' => 120, 'link' => 'permissions'],
 ];
 
 $hooks->trigger(HOOK_ADMIN_MENU);
