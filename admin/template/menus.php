@@ -1,4 +1,5 @@
 <?php
+defined('MYAAC') or die('Direct access not allowed!');
 
 $menus = [
 	['name' => 'Dashboard', 'icon' => 'tachometer-alt', 'order' => 10, 'link' => 'dashboard'],
