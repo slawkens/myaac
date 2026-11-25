@@ -224,11 +224,14 @@ class OTS_Monster extends DOMDocument
 				}
 
 				$id = $item->getAttribute('id');
-				if(empty($id)) {
-					$id = $item->getAttribute('name');
+				$name = $item->getAttribute('name');
+
+				$item = ['id' => $id, 'count' => $count, 'chance' => $chance];
+				if (!empty($name)) {
+					$item['name'] = strtolower($name);
 				}
 
-				$loot[] = array('id' => $id, 'count' => $count, 'chance' => $chance);
+				$loot[] = $item;
 			}
 		}
 

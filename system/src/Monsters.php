@@ -118,12 +118,14 @@ class Monsters {
 			$summons = $monster->getSummons();
 			$loot = $monster->getLoot();
 			foreach($loot as &$item) {
-				if(!\Validator::number($item['id'])) {
-					if(isset($items[$item['id']])) {
-						$item['id'] = $items[$item['id']];
+				if (isset($item['name']) && empty($item['id'])) {
+					if(isset($items[$item['name']])) {
+						$item['id'] = $items[$item['name']];
+						unset($item['name']);
 					}
 				}
 			}
+
 			if(!in_array($name, $names_added)) {
 				try {
 					Monster::create(array(
