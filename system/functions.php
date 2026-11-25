@@ -1804,7 +1804,7 @@ function displayErrorBoxWithBackButton($errors, $action = null): void
 }
 
 function makeLinksClickable($text, $blank = true) {
-	return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1"' . (!$blank ?: ' target="_blank"') . '>$1</a>', $text);
+	return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я0-9@:%_+.~#?&;//=]+)!i', '<a href="$1"' . (!$blank ?: ' target="_blank"') . '>$1</a>', $text);
 }
 
 function isRequestMethod(string $method): bool {
